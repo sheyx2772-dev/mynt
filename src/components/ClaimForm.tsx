@@ -18,7 +18,7 @@ export default function ClaimForm({
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
 
   const inputClass =
-    "w-full rounded-xl border border-black/10 px-4 py-2.5 text-sm outline-none focus:border-black/30";
+    "w-full rounded-xl border border-black/10 bg-black/[0.02] px-4 py-2.5 text-sm outline-none transition-colors focus:border-mynt-black/30 focus:bg-white";
 
   return (
     <form action={formAction} className="mt-8 space-y-3 text-left">
@@ -35,7 +35,7 @@ export default function ClaimForm({
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-mynt-black transition-transform hover:scale-[1.01] disabled:opacity-60"
+        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-mynt-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01] disabled:opacity-60"
       >
         {isPending ? "Yuborilmoqda..." : `${priceLabel} — Band qilish`}
       </button>

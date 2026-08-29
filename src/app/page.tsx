@@ -1,3 +1,16 @@
+import {
+  Link2,
+  Nfc,
+  Sparkles,
+  BarChart3,
+  Users,
+  Target,
+  RefreshCw,
+  TrendingUp,
+  Check,
+  Minus,
+  ChevronDown,
+} from "lucide-react";
 import PricingCalculator from "@/components/PricingCalculator";
 import { formatNumber } from "@/lib/format";
 
@@ -5,18 +18,22 @@ const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
 
 const consumerFeatures = [
   {
+    icon: Link2,
     title: "Shaxsiy profil",
     desc: "mynt.uz/HANDLE — barcha havolalaringiz, ijtimoiy tarmoqlaringiz va vizit ma'lumotlaringiz bitta sahifada.",
   },
   {
+    icon: Nfc,
     title: "NFC karta",
     desc: "Telefoningizni bir marta tegizib, profilingizni ulashing. NFC yo'q qurilmalar uchun QR-kod zaxira variant.",
   },
   {
+    icon: Sparkles,
     title: "Kamyob handle",
     desc: "3 harf + 3 raqam — cheklangan miqdor. Kamdan-kam kombinatsiyalar qimmatroq, shaffof narx bilan.",
   },
   {
+    icon: BarChart3,
     title: "Analitika",
     desc: "Profilingizga necha marta qaralgani, havolalar bosilishi va tashrif buyurgan hududlar statistikasi.",
   },
@@ -24,18 +41,22 @@ const consumerFeatures = [
 
 const businessFeatures = [
   {
+    icon: Users,
     title: "Jamoa uchun kartalar",
     desc: "Butun jamoangizga bir xil brend bilan handle va NFC kartalarni ommaviy tarzda chiqaring.",
   },
   {
+    icon: Target,
     title: "Lead yig'ish",
     desc: "Tadbirlarda va uchrashuvlarda bir tegish bilan mijoz kontaktini lead sifatida saqlang.",
   },
   {
+    icon: RefreshCw,
     title: "CRM integratsiya",
     desc: "HubSpot va Salesforce bilan ikki tomonlama sinxronizatsiya — maydonlarni o'zingiz moslashtiring.",
   },
   {
+    icon: TrendingUp,
     title: "Jamoa analitikasi",
     desc: "Har bir xodim va butun jamoa bo'yicha lead'lar, tashriflar va konversiya statistikasi.",
   },
@@ -62,7 +83,7 @@ const faqs = [
   },
   {
     q: "Biznes uchun qancha xodim qo'shsam bo'ladi?",
-    a: "Jamoa tarifida xodimlar sonига cheklov yo'q — narx xodimlar soniga qarab (per-seat) hisoblanadi.",
+    a: "Jamoa tarifida xodimlar soniga cheklov yo'q — narx xodimlar soniga qarab (per-seat) hisoblanadi.",
   },
   {
     q: "To'lovni qanday amalga oshiraman?",
@@ -72,23 +93,26 @@ const faqs = [
 
 export default function Home() {
   return (
-    <div className="flex min-h-full flex-col">
-      <header className="sticky top-0 z-20 border-b border-black/5 bg-white/80 backdrop-blur">
+    <div className="flex min-h-full flex-col overflow-x-clip">
+      <header className="sticky top-0 z-30 border-b border-black/5 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="font-display text-xl font-semibold tracking-tight">
-            mynt<span className="text-lime">.</span>
+          <div className="flex items-center gap-2 font-display text-xl font-semibold tracking-tight">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-mynt-black">
+              <span className="h-2 w-2 rounded-full bg-lime" />
+            </span>
+            mynt
           </div>
-          <nav className="hidden gap-8 text-sm text-mynt-black/70 sm:flex">
-            <a href="#narx" className="hover:text-mynt-black">
+          <nav className="hidden gap-8 text-sm font-medium text-mynt-black/60 sm:flex">
+            <a href="#narx" className="transition-colors hover:text-mynt-black">
               Narxlash
             </a>
-            <a href="#individual" className="hover:text-mynt-black">
+            <a href="#individual" className="transition-colors hover:text-mynt-black">
               Shaxsiy
             </a>
-            <a href="#biznes" className="hover:text-mynt-black">
+            <a href="#biznes" className="transition-colors hover:text-mynt-black">
               Biznes
             </a>
-            <a href="#savollar" className="hover:text-mynt-black">
+            <a href="#savollar" className="transition-colors hover:text-mynt-black">
               Savollar
             </a>
           </nav>
@@ -103,48 +127,78 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="mx-auto max-w-6xl px-6 pt-16 pb-20 sm:pt-24">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div>
-              <p className="mb-4 inline-block rounded-full bg-lime/20 px-3 py-1 text-xs font-medium tracking-wide text-mynt-black/80 uppercase">
-                Raqamli shaxsingiz. Bir tegish.
-              </p>
-              <h1 className="font-display text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-                O&apos;z shaxsingizni <span className="text-lime bg-mynt-black px-2">mint</span> qiling.
-              </h1>
-              <p className="mt-6 max-w-md text-lg text-mynt-black/70">
-                Mynt — noyob raqamli handle, shaxsiy vizit-karta sahifasi va NFC karta orqali
-                shaxsingizni ulashing. Jamoangiz uchun esa — tadbirlarda lead yig&apos;ish va CRM
-                bilan sinxronizatsiya.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <a
-                  href="#narx"
-                  className="rounded-full bg-lime px-6 py-3 font-medium text-mynt-black transition-transform hover:scale-[1.02]"
-                >
-                  Narxni hisoblang
-                </a>
-                <a
-                  href="#biznes"
-                  className="rounded-full border border-black/15 px-6 py-3 font-medium text-mynt-black transition-colors hover:bg-black/5"
-                >
-                  Biznes uchun
-                </a>
+        <section className="relative overflow-hidden">
+          <div className="bg-dot-grid absolute inset-0 [mask-image:radial-gradient(ellipse_65%_55%_at_50%_0%,black,transparent)]" />
+          <div className="absolute -top-32 right-[-6rem] h-96 w-96 rounded-full bg-lime/25 blur-[100px]" />
+
+          <div className="relative mx-auto max-w-6xl px-6 pt-20 pb-24 sm:pt-28">
+            <div className="grid items-center gap-16 lg:grid-cols-2">
+              <div>
+                <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-medium tracking-wide text-mynt-black/70 uppercase shadow-sm">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
+                  Raqamli shaxsingiz. Bir tegish.
+                </p>
+                <h1 className="font-display text-5xl font-semibold leading-[0.98] tracking-tight sm:text-6xl lg:text-[4.5rem]">
+                  O&apos;z shaxsingizni
+                  <br />
+                  <span className="relative inline-block px-1">
+                    <span className="relative z-10">mint</span>
+                    <span className="marker-stroke absolute inset-x-0 bottom-[6px] -z-0 h-[0.4em] rounded-sm bg-lime/80" />
+                  </span>{" "}
+                  qiling.
+                </h1>
+                <p className="mt-7 max-w-md text-lg leading-relaxed text-mynt-black/65">
+                  Mynt — noyob raqamli handle, shaxsiy vizit-karta sahifasi va NFC karta orqali
+                  shaxsingizni ulashing. Jamoangiz uchun esa — tadbirlarda lead yig&apos;ish va
+                  CRM bilan sinxronizatsiya.
+                </p>
+                <div className="mt-9 flex flex-wrap gap-4">
+                  <a
+                    href="#narx"
+                    className="rounded-full bg-lime px-7 py-3.5 font-medium text-mynt-black shadow-[0_12px_30px_-8px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.03]"
+                  >
+                    Narxni hisoblang
+                  </a>
+                  <a
+                    href="#biznes"
+                    className="rounded-full border border-black/15 px-7 py-3.5 font-medium text-mynt-black transition-colors hover:bg-black/5"
+                  >
+                    Biznes uchun
+                  </a>
+                </div>
               </div>
-            </div>
-            <div className="flex justify-center lg:justify-end">
-              <div className="w-full max-w-sm rounded-3xl bg-mynt-black p-8 text-white shadow-xl">
-                <div className="flex items-center justify-between text-xs text-white/50">
-                  <span>MYNT ID</span>
-                  <span className="h-2 w-2 rounded-full bg-lime" />
+
+              <div className="relative flex justify-center lg:justify-end">
+                <div className="absolute -left-4 top-2 z-20 hidden -rotate-6 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-xl sm:block">
+                  <p className="text-[10px] font-medium tracking-wide text-mynt-black/40 uppercase">
+                    Bu hafta
+                  </p>
+                  <p className="font-display text-lg font-semibold">2 481 tashrif</p>
                 </div>
-                <div className="mt-10 font-display text-3xl font-semibold tracking-tight">
-                  MYN<span className="text-lime">042</span>
+                <div className="absolute -bottom-5 right-4 z-20 hidden rotate-3 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-xl sm:block">
+                  <p className="flex items-center gap-1.5 text-xs font-medium text-mynt-black/70">
+                    <span className="h-1.5 w-1.5 rounded-full bg-lime" />
+                    NFC ulandi
+                  </p>
                 </div>
-                <div className="mt-1 text-sm text-white/60">mynt.uz/MYN042</div>
-                <div className="mt-10 flex items-center justify-between text-xs text-white/50">
-                  <span>Tap to share</span>
-                  <span className="font-tabular">NFC</span>
+
+                <div className="absolute -inset-10 -z-10 rounded-[3rem] bg-lime/20 blur-[70px]" />
+
+                <div className="grain card-sheen relative aspect-[1.586/1] w-80 overflow-hidden rounded-[1.75rem] bg-mynt-black p-7 text-white shadow-[0_35px_70px_-20px_rgba(14,10,27,0.55)]">
+                  <div className="relative flex items-start justify-between">
+                    <div className="h-6 w-9 rounded-md bg-gradient-to-br from-lime/90 to-lime/30" />
+                    <Nfc className="h-5 w-5 text-white/40" />
+                  </div>
+                  <div className="relative mt-12 font-display text-3xl font-semibold tracking-tight">
+                    MYN<span className="text-lime">042</span>
+                  </div>
+                  <p className="relative mt-1 font-tabular text-sm text-white/45">
+                    mynt.uz/MYN042
+                  </p>
+                  <div className="relative mt-9 flex items-center justify-between text-[11px] font-medium tracking-wide text-white/40 uppercase">
+                    <span>Tap to share</span>
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -163,12 +217,15 @@ export default function Home() {
         </section>
 
         {/* Pricing calculator */}
-        <section id="narx" className="mx-auto max-w-6xl px-6 py-20">
-          <div className="mb-10 max-w-lg">
-            <h2 className="font-display text-3xl font-semibold tracking-tight">
+        <section id="narx" className="mx-auto max-w-6xl px-6 py-24">
+          <div className="mb-12 max-w-lg">
+            <p className="mb-3 text-xs font-semibold tracking-widest text-lime/80 uppercase [-webkit-text-stroke:0.3px_rgba(14,10,27,0.4)]">
+              Narxlash
+            </p>
+            <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
               Narx — to&apos;liq shaffof
             </h2>
-            <p className="mt-3 text-mynt-black/70">
+            <p className="mt-3 text-mynt-black/65">
               Har bir handle narxi ochiq formula bilan hisoblanadi: bazaviy narx &times; harf
               kamyobligi &times; raqam kamyobligi. Pastda o&apos;zingiz sinab ko&apos;ring.
             </p>
@@ -177,17 +234,25 @@ export default function Home() {
         </section>
 
         {/* Individual features */}
-        <section id="individual" className="border-t border-black/5 bg-black/[0.02] py-20">
+        <section id="individual" className="border-t border-black/5 bg-black/[0.02] py-24">
           <div className="mx-auto max-w-6xl px-6">
-            <h2 className="font-display text-3xl font-semibold tracking-tight">
+            <p className="mb-3 text-xs font-semibold tracking-widest text-mynt-black/40 uppercase">
+              Shaxsiy
+            </p>
+            <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
               Shaxsiy foydalanuvchilar uchun
             </h2>
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {consumerFeatures.map((f) => (
-                <div key={f.title} className="rounded-2xl border border-black/10 bg-white p-6">
-                  <div className="mb-3 h-8 w-8 rounded-lg bg-lime" />
+                <div
+                  key={f.title}
+                  className="group rounded-2xl border border-black/10 bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[0_20px_40px_-16px_rgba(14,10,27,0.25)]"
+                >
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-lime shadow-[0_8px_20px_-6px_rgba(171,255,9,0.6)]">
+                    <f.icon className="h-5 w-5 text-mynt-black" strokeWidth={2} />
+                  </div>
                   <h3 className="font-display text-lg font-semibold">{f.title}</h3>
-                  <p className="mt-2 text-sm text-mynt-black/65">{f.desc}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-mynt-black/60">{f.desc}</p>
                 </div>
               ))}
             </div>
@@ -195,20 +260,26 @@ export default function Home() {
         </section>
 
         {/* Business features */}
-        <section id="biznes" className="py-20">
-          <div className="mx-auto max-w-6xl px-6">
-            <h2 className="font-display text-3xl font-semibold tracking-tight">
+        <section id="biznes" className="grain relative overflow-hidden bg-mynt-black py-24">
+          <div className="bg-dot-grid-light absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
+          <div className="relative mx-auto max-w-6xl px-6">
+            <p className="mb-3 text-xs font-semibold tracking-widest text-lime/70 uppercase">
+              Biznes
+            </p>
+            <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
               Biznes va jamoalar uchun
             </h2>
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {businessFeatures.map((f) => (
                 <div
                   key={f.title}
-                  className="rounded-2xl bg-mynt-black p-6 text-white"
+                  className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-lime/30 hover:bg-white/[0.06]"
                 >
-                  <div className="mb-3 h-8 w-8 rounded-lg bg-lime" />
-                  <h3 className="font-display text-lg font-semibold">{f.title}</h3>
-                  <p className="mt-2 text-sm text-white/65">{f.desc}</p>
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-lime shadow-[0_8px_20px_-6px_rgba(171,255,9,0.5)]">
+                    <f.icon className="h-5 w-5 text-mynt-black" strokeWidth={2} />
+                  </div>
+                  <h3 className="font-display text-lg font-semibold text-white">{f.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/55">{f.desc}</p>
                 </div>
               ))}
             </div>
@@ -216,68 +287,171 @@ export default function Home() {
         </section>
 
         {/* Differentiation table */}
-        <section className="border-t border-black/5 bg-black/[0.02] py-20">
+        <section className="border-t border-black/5 bg-black/[0.02] py-24">
           <div className="mx-auto max-w-4xl px-6">
-            <h2 className="font-display text-3xl font-semibold tracking-tight text-center">
+            <p className="mb-3 text-center text-xs font-semibold tracking-widest text-mynt-black/40 uppercase">
+              Taqqoslash
+            </p>
+            <h2 className="text-center font-display text-3xl font-semibold tracking-tight sm:text-4xl">
               Nega Mynt?
             </h2>
-            <div className="mt-10 overflow-x-auto rounded-2xl border border-black/10 bg-white">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-black/10 text-left text-mynt-black/50">
-                    <th className="px-4 py-3 font-medium">Xususiyat</th>
-                    <th className="px-4 py-3 font-medium text-center">UNQX</th>
-                    <th className="px-4 py-3 font-medium text-center">Popl</th>
-                    <th className="px-4 py-3 font-medium text-center text-mynt-black">Mynt</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {comparison.map((row) => (
-                    <tr key={row.label} className="border-b border-black/5 last:border-0">
-                      <td className="px-4 py-3">{row.label}</td>
-                      <td className="px-4 py-3 text-center">{row.unqx ? "✓" : "—"}</td>
-                      <td className="px-4 py-3 text-center">{row.popl ? "✓" : "—"}</td>
-                      <td className="px-4 py-3 text-center font-semibold">
-                        {row.mynt ? <span className="text-lime bg-mynt-black rounded px-1.5 py-0.5">✓</span> : "—"}
-                      </td>
+            <div className="mt-10 overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_20px_50px_-24px_rgba(14,10,27,0.2)]">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-black/10 text-left text-mynt-black/45">
+                      <th className="px-5 py-4 font-medium">Xususiyat</th>
+                      <th className="px-5 py-4 text-center font-medium">UNQX</th>
+                      <th className="px-5 py-4 text-center font-medium">Popl</th>
+                      <th className="bg-lime/10 px-5 py-4 text-center font-semibold text-mynt-black">
+                        Mynt
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {comparison.map((row, i) => (
+                      <tr
+                        key={row.label}
+                        className={`border-b border-black/5 last:border-0 ${i % 2 === 1 ? "bg-black/[0.015]" : ""}`}
+                      >
+                        <td className="px-5 py-4">{row.label}</td>
+                        <td className="px-5 py-4 text-center">
+                          {row.unqx ? (
+                            <Check className="mx-auto h-4 w-4 text-mynt-black/50" />
+                          ) : (
+                            <Minus className="mx-auto h-4 w-4 text-mynt-black/20" />
+                          )}
+                        </td>
+                        <td className="px-5 py-4 text-center">
+                          {row.popl ? (
+                            <Check className="mx-auto h-4 w-4 text-mynt-black/50" />
+                          ) : (
+                            <Minus className="mx-auto h-4 w-4 text-mynt-black/20" />
+                          )}
+                        </td>
+                        <td className="bg-lime/10 px-5 py-4 text-center">
+                          {row.mynt ? (
+                            <span className="mx-auto flex h-6 w-6 items-center justify-center rounded-full bg-lime">
+                              <Check className="h-4 w-4 text-mynt-black" strokeWidth={3} />
+                            </span>
+                          ) : (
+                            <Minus className="mx-auto h-4 w-4 text-mynt-black/20" />
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </section>
 
         {/* FAQ */}
-        <section id="savollar" className="mx-auto max-w-3xl px-6 py-20">
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-center">
+        <section id="savollar" className="mx-auto max-w-3xl px-6 py-24">
+          <p className="mb-3 text-center text-xs font-semibold tracking-widest text-mynt-black/40 uppercase">
+            Savollar
+          </p>
+          <h2 className="text-center font-display text-3xl font-semibold tracking-tight sm:text-4xl">
             Savol-javob
           </h2>
           <div className="mt-10 space-y-3">
             {faqs.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-xl border border-black/10 bg-white p-5 open:bg-black/[0.02]"
+                className="group rounded-2xl border border-black/10 bg-white p-5 open:shadow-[0_12px_30px_-16px_rgba(14,10,27,0.2)]"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
+                <summary className="flex cursor-pointer list-none items-center justify-between font-medium marker:content-none">
                   {item.q}
-                  <span className="text-mynt-black/40 transition-transform group-open:rotate-45">
-                    +
-                  </span>
+                  <ChevronDown className="h-4 w-4 text-mynt-black/40 transition-transform duration-300 group-open:rotate-180" />
                 </summary>
-                <p className="mt-3 text-sm text-mynt-black/70">{item.a}</p>
+                <p className="mt-3 text-sm leading-relaxed text-mynt-black/65">{item.a}</p>
               </details>
             ))}
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-black/5 py-10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 text-sm text-mynt-black/50 sm:flex-row">
-          <div className="font-display font-semibold text-mynt-black">
-            mynt<span className="text-lime">.</span>
+      <footer className="grain relative overflow-hidden bg-mynt-black pt-16 pb-10 text-white">
+        <div className="bg-dot-grid-light absolute inset-0 opacity-20 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]" />
+        <div className="relative mx-auto max-w-6xl px-6">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <div className="flex items-center gap-2 font-display text-xl font-semibold">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-lime">
+                  <span className="h-2 w-2 rounded-full bg-mynt-black" />
+                </span>
+                mynt
+              </div>
+              <p className="mt-3 max-w-[220px] text-sm text-white/50">
+                Raqamli shaxsingiz. Bir tegish bilan ulashing.
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
+                Mahsulot
+              </p>
+              <ul className="mt-4 space-y-2.5 text-sm text-white/60">
+                <li>
+                  <a href="#narx" className="transition-colors hover:text-white">
+                    Narxlash
+                  </a>
+                </li>
+                <li>
+                  <a href="#individual" className="transition-colors hover:text-white">
+                    Shaxsiy profil
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="transition-colors hover:text-white">
+                    MYNT CARD
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
+                Biznes
+              </p>
+              <ul className="mt-4 space-y-2.5 text-sm text-white/60">
+                <li>
+                  <a href="#biznes" className="transition-colors hover:text-white">
+                    Jamoa kartalari
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="transition-colors hover:text-white">
+                    CRM integratsiya
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="transition-colors hover:text-white">
+                    Tadbir rejimi
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
+                Kompaniya
+              </p>
+              <ul className="mt-4 space-y-2.5 text-sm text-white/60">
+                <li>
+                  <a href="#savollar" className="transition-colors hover:text-white">
+                    Savollar
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="transition-colors hover:text-white">
+                    Aloqa
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-          <p>&copy; {new Date().getFullYear()} Mynt. Barcha huquqlar himoyalangan.</p>
+          <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-white/40 sm:flex-row">
+            <p>&copy; {new Date().getFullYear()} Mynt. Barcha huquqlar himoyalangan.</p>
+          </div>
         </div>
       </footer>
     </div>
