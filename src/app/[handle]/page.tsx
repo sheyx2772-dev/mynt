@@ -2,23 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { parseHandle, priceForHandle, letterRarity, digitRarity } from "@/lib/pricing";
 import { formatUZS } from "@/lib/format";
+import { getClaimedProfile } from "@/lib/handles";
 import SaveContactButton from "@/components/SaveContactButton";
-
-// Demo dataset — stands in for a real profile database until one exists.
-const DEMO_PROFILES: Record<
-  string,
-  { name: string; bio: string; links: { label: string; href: string }[] }
-> = {
-  MYN042: {
-    name: "Aziz Karimov",
-    bio: "Mynt asoschisi. Raqamli shaxs va networking bilan shug'ullanaman.",
-    links: [
-      { label: "Telegram", href: "https://t.me/azizkarimov" },
-      { label: "Instagram", href: "https://instagram.com/azizkarimov" },
-      { label: "Veb-sayt", href: "https://mynt.uz" },
-    ],
-  },
-};
 
 type Params = { handle: string };
 
@@ -50,7 +35,7 @@ export default async function HandlePage({ params }: { params: Promise<Params> }
   }
 
   const normalized = `${parsed.letters}${parsed.digits}`;
-  const demo = DEMO_PROFILES[normalized];
+  const demo = await getClaimedProfile(normalized);
 
   if (demo) {
     return (
