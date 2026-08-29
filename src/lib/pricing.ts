@@ -43,3 +43,10 @@ export function parseHandle(raw: string): { letters: string; digits: string } | 
 export function priceForHandle(letters: string, digits: string): number {
   return BASE_PRICE * letterRarity(letters).multiplier * digitRarity(digits).multiplier;
 }
+
+// Genesis cards: pure 6-digit manufacturing serials (000001, 000002, ...) —
+// a separate, parallel series from the AAA000 vanity handles above.
+export function parseGenesisSerial(raw: string): string | null {
+  const match = raw.match(/^\d{6}$/);
+  return match ? match[0] : null;
+}
