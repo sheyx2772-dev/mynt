@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+:root {
+  --color-lime: #abff09;
+  --color-mynt-black: #0e0a1b;
+  --background: #ffffff;
+  --foreground: #0e0a1b;
+}
+
+@theme inline {
+  --color-lime: var(--color-lime);
+  --color-mynt-black: var(--color-mynt-black);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-display: var(--font-space-grotesk);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-tabular {
+  font-variant-numeric: tabular-nums;
+}
