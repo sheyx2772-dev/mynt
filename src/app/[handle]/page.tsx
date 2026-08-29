@@ -4,6 +4,7 @@ import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRar
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import SaveContactButton from "@/components/SaveContactButton";
+import ClaimForm from "@/components/ClaimForm";
 
 type Params = { handle: string };
 
@@ -123,13 +124,7 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
           </div>
         </div>
 
-        <button
-          disabled
-          title="Sotib olish oqimi tez orada ishga tushadi"
-          className="mt-8 w-full cursor-not-allowed rounded-full bg-black/10 px-6 py-3 font-medium text-mynt-black/40"
-        >
-          Sotib olish — tez orada
-        </button>
+        <ClaimForm letters={letters} digits={digits} priceLabel={formatUZS(price)} />
       </div>
     </div>
   );
