@@ -1,4 +1,4 @@
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { pool, isDbConfigured } from "@/lib/db";
 
 export type ClaimedProfile = {
   name: string;
@@ -6,7 +6,7 @@ export type ClaimedProfile = {
   links: { label: string; href: string }[];
 };
 
-// Local fallback so the profile page works before a Supabase project is connected.
+// Local fallback so the profile page works before the Postgres container is up.
 const DEMO_PROFILES: Record<string, ClaimedProfile> = {
   MYN042: {
     name: "Aziz Karimov",
@@ -20,23 +20,21 @@ const DEMO_PROFILES: Record<string, ClaimedProfile> = {
 };
 
 export async function getClaimedProfile(normalized: string): Promise<ClaimedProfile | null> {
-  if (!isSupabaseConfigured || !supabase) {
+  if (!isDbConfigured || !pool) {
     return DEMO_PROFILES[normalized] ?? null;
   }
 
-  const { data } = await supabase
-    .from("handles")
-    .select("owner_name, bio, links, status")
-    .eq("normalized", normalized)
-    .eq("status", "claimed")
-    .maybeSingle();
-
-  if (!data) return null;
+  const { rows } = await pool.query(
+    `select owner_name, bio, links from handles where normalized = $1 and status = 'claimed'`,
+    [normalized]
+  );
+  const row = rows[0];
+  if (!row) return null;
 
   return {
-    name: data.owner_name ?? normalized,
-    bio: data.bio ?? "",
-    links: Array.isArray(data.links) ? data.links : [],
+    name: row.owner_name ?? normalized,
+    bio: row.bio ?? "",
+    links: Array.isArray(row.links) ? row.links : [],
   };
 }
 
@@ -48,7 +46,7 @@ export type GenesisCard = {
   mintedAt: string | null;
 };
 
-// Local fallback: card #000001 exists as a demo before Supabase is connected.
+// Local fallback: card #000001 exists as a demo before the Postgres container is up.
 const DEMO_GENESIS: Record<string, GenesisCard> = {
   "000001": {
     serial: "000001",
@@ -60,23 +58,22 @@ const DEMO_GENESIS: Record<string, GenesisCard> = {
 };
 
 export async function getGenesisCard(serial: string): Promise<GenesisCard | null> {
-  if (!isSupabaseConfigured || !supabase) {
+  if (!isDbConfigured || !pool) {
     return DEMO_GENESIS[serial] ?? null;
   }
 
-  const { data } = await supabase
-    .from("genesis_cards")
-    .select("normalized, status, owner_name, owner_handle, minted_at")
-    .eq("normalized", serial)
-    .maybeSingle();
-
-  if (!data) return null;
+  const { rows } = await pool.query(
+    `select normalized, status, owner_name, owner_handle, minted_at from genesis_cards where normalized = $1`,
+    [serial]
+  );
+  const row = rows[0];
+  if (!row) return null;
 
   return {
-    serial: data.normalized,
-    status: data.status,
-    ownerName: data.owner_name,
-    ownerHandle: data.owner_handle,
-    mintedAt: data.minted_at,
+    serial: row.normalized,
+    status: row.status,
+    ownerName: row.owner_name,
+    ownerHandle: row.owner_handle,
+    mintedAt: row.minted_at instanceof Date ? row.minted_at.toISOString().slice(0, 10) : row.minted_at,
   };
 }
