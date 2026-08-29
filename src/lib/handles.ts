@@ -1,16 +1,18 @@
-import { pool, isDbConfigured } from "@/lib/db";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 export type ClaimedProfile = {
   name: string;
   bio: string;
+  avatarUrl: string | null;
   links: { label: string; href: string }[];
 };
 
-// Local fallback so the profile page works before the Postgres container is up.
+// Local fallback so the profile page works before a Supabase project is connected.
 const DEMO_PROFILES: Record<string, ClaimedProfile> = {
   MYN042: {
     name: "Aziz Karimov",
     bio: "Mynt asoschisi. Raqamli shaxs va networking bilan shug'ullanaman.",
+    avatarUrl: null,
     links: [
       { label: "Telegram", href: "https://t.me/azizkarimov" },
       { label: "Instagram", href: "https://instagram.com/azizkarimov" },
@@ -20,21 +22,24 @@ const DEMO_PROFILES: Record<string, ClaimedProfile> = {
 };
 
 export async function getClaimedProfile(normalized: string): Promise<ClaimedProfile | null> {
-  if (!isDbConfigured || !pool) {
+  if (!isSupabaseConfigured || !supabase) {
     return DEMO_PROFILES[normalized] ?? null;
   }
 
-  const { rows } = await pool.query(
-    `select owner_name, bio, links from handles where normalized = $1 and status = 'claimed'`,
-    [normalized]
-  );
-  const row = rows[0];
-  if (!row) return null;
+  const { data } = await supabase
+    .from("handles")
+    .select("owner_name, bio, avatar_url, links")
+    .eq("normalized", normalized)
+    .eq("status", "claimed")
+    .maybeSingle();
+
+  if (!data) return null;
 
   return {
-    name: row.owner_name ?? normalized,
-    bio: row.bio ?? "",
-    links: Array.isArray(row.links) ? row.links : [],
+    name: data.owner_name ?? normalized,
+    bio: data.bio ?? "",
+    avatarUrl: data.avatar_url,
+    links: Array.isArray(data.links) ? data.links : [],
   };
 }
 
@@ -46,7 +51,7 @@ export type GenesisCard = {
   mintedAt: string | null;
 };
 
-// Local fallback: card #000001 exists as a demo before the Postgres container is up.
+// Local fallback: card #000001 exists as a demo before Supabase is connected.
 const DEMO_GENESIS: Record<string, GenesisCard> = {
   "000001": {
     serial: "000001",
@@ -58,22 +63,23 @@ const DEMO_GENESIS: Record<string, GenesisCard> = {
 };
 
 export async function getGenesisCard(serial: string): Promise<GenesisCard | null> {
-  if (!isDbConfigured || !pool) {
+  if (!isSupabaseConfigured || !supabase) {
     return DEMO_GENESIS[serial] ?? null;
   }
 
-  const { rows } = await pool.query(
-    `select normalized, status, owner_name, owner_handle, minted_at from genesis_cards where normalized = $1`,
-    [serial]
-  );
-  const row = rows[0];
-  if (!row) return null;
+  const { data } = await supabase
+    .from("genesis_cards")
+    .select("normalized, status, owner_name, owner_handle, minted_at")
+    .eq("normalized", serial)
+    .maybeSingle();
+
+  if (!data) return null;
 
   return {
-    serial: row.normalized,
-    status: row.status,
-    ownerName: row.owner_name,
-    ownerHandle: row.owner_handle,
-    mintedAt: row.minted_at instanceof Date ? row.minted_at.toISOString().slice(0, 10) : row.minted_at,
+    serial: data.normalized,
+    status: data.status,
+    ownerName: data.owner_name,
+    ownerHandle: data.owner_handle,
+    mintedAt: data.minted_at,
   };
 }

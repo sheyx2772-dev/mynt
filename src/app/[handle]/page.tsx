@@ -70,12 +70,21 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
     return (
       <PageShell>
         <div className="grain card-sheen relative overflow-hidden rounded-[1.75rem] bg-mynt-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
-          <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-lime font-display text-xl font-semibold text-mynt-black shadow-[0_10px_24px_-8px_rgba(171,255,9,0.6)]">
-            {profile.name
-              .split(" ")
-              .map((p) => p[0])
-              .join("")}
-          </div>
+          {profile.avatarUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
+            <img
+              src={profile.avatarUrl}
+              alt={profile.name}
+              className="relative h-16 w-16 rounded-full object-cover shadow-[0_10px_24px_-8px_rgba(171,255,9,0.6)]"
+            />
+          ) : (
+            <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-lime font-display text-xl font-semibold text-mynt-black shadow-[0_10px_24px_-8px_rgba(171,255,9,0.6)]">
+              {profile.name
+                .split(" ")
+                .map((p) => p[0])
+                .join("")}
+            </div>
+          )}
           <h1 className="relative mt-5 font-display text-2xl font-semibold">{profile.name}</h1>
           <p className="relative mt-1 font-tabular text-sm text-white/50">mynt.uz/{normalized}</p>
           <p className="relative mt-4 text-sm text-white/70">{profile.bio}</p>

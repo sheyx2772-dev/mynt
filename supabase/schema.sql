@@ -1,6 +1,5 @@
--- Mynt: local Postgres schema.
--- Applied automatically on first `docker compose up` via
--- docker-entrypoint-initdb.d (see docker-compose.yml).
+-- Mynt: Supabase (Postgres) schema.
+-- Run this once in your Supabase project's SQL editor.
 
 create table if not exists handles (
   id uuid primary key default gen_random_uuid(),
@@ -10,6 +9,7 @@ create table if not exists handles (
   status text not null default 'available' check (status in ('available', 'claimed')),
   owner_name text,
   bio text,
+  avatar_url text,
   links jsonb not null default '[]',
   price_paid bigint,
   created_at timestamptz not null default now(),
@@ -17,6 +17,15 @@ create table if not exists handles (
 );
 
 create index if not exists handles_normalized_idx on handles (normalized);
+
+alter table handles enable row level security;
+
+create policy "handles are publicly readable"
+  on handles for select
+  using (true);
+
+-- Writes (claiming a handle) go through the server using the service_role
+-- key, which bypasses RLS — no insert/update policy is defined for anon.
 
 -- Genesis cards: sequential serial numbers assigned to physical NFC cards
 -- as they're manufactured (mynt.uz/000001, mynt.uz/000002, ...). This is a
@@ -36,3 +45,9 @@ create table if not exists genesis_cards (
 );
 
 create index if not exists genesis_cards_normalized_idx on genesis_cards (normalized);
+
+alter table genesis_cards enable row level security;
+
+create policy "genesis cards are publicly readable"
+  on genesis_cards for select
+  using (true);

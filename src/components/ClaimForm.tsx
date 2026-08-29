@@ -22,6 +22,10 @@ export default function ClaimForm({
 
   return (
     <form action={formAction} className="mt-8 space-y-3 text-left">
+      <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/15 bg-black/[0.02] px-4 py-2.5 text-sm text-mynt-black/50">
+        <span>Profil rasmi (ixtiyoriy)</span>
+        <input type="file" name="avatar" accept="image/*" className="max-w-[45%] text-xs" />
+      </label>
       <input name="name" placeholder="Ismingiz *" required className={inputClass} />
       <textarea name="bio" placeholder="Qisqa bio (ixtiyoriy)" rows={2} className={inputClass} />
       <div className="grid grid-cols-2 gap-3">
