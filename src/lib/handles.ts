@@ -80,6 +80,6 @@ export async function getGenesisCard(serial: string): Promise<GenesisCard | null
     status: data.status,
     ownerName: data.owner_name,
     ownerHandle: data.owner_handle,
-    mintedAt: data.minted_at,
+    mintedAt: data.minted_at ? String(data.minted_at).slice(0, 10) : null,
   };
 }
