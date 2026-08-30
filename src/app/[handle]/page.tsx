@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Nfc } from "lucide-react";
 import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRarity } from "@/lib/pricing";
@@ -11,7 +12,22 @@ import { getUser } from "@/lib/auth";
 
 export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
-  return { title: `${handle.toUpperCase()} — mynt.uz` };
+  const title = `${handle.toUpperCase()} — mynt.uz`;
+
+  // Only pages with a real person or a real card behind them are worth
+  // indexing. An unclaimed handle is a price quote, and there are 17.5M of
+  // them — letting crawlers in would bury the profiles that matter.
+  const serial = parseGenesisSerial(handle);
+  if (serial) {
+    const card = await getGenesisCard(serial);
+    return { title, robots: card ? undefined : { index: false } };
+  }
+
+  const parsed = parseHandle(handle);
+  if (!parsed) return { title, robots: { index: false } };
+
+  const profile = await getClaimedProfile(`${parsed.letters}${parsed.digits}`);
+  return { title, robots: profile ? undefined : { index: false } };
 }
 
 export default async function HandlePage(props: PageProps<"/[handle]">) {
@@ -23,19 +39,9 @@ export default async function HandlePage(props: PageProps<"/[handle]">) {
   }
 
   const parsed = parseHandle(handle);
-  if (!parsed) {
-    return (
-      <PageShell>
-        <div className="flex flex-1 flex-col items-center justify-center text-center">
-          <p className="text-mynt-black/60">
-            &quot;{handle}&quot; noto&apos;g&apos;ri format. Shaxsiy handle 3 harf + 3 raqamdan
-            (masalan MYN042), MYNT CARD seriya raqami esa 6 ta raqamdan iborat bo&apos;ladi
-            (masalan 000001).
-          </p>
-        </div>
-      </PageShell>
-    );
-  }
+  // Neither a handle nor a serial — render the 404 page with a 404 status
+  // rather than a 200 that invites crawlers to index every typo.
+  if (!parsed) notFound();
 
   return <VanityHandlePage letters={parsed.letters} digits={parsed.digits} />;
 }

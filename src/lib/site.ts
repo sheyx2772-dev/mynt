@@ -2,6 +2,10 @@ import "server-only";
 
 import { headers } from "next/headers";
 
+// Canonical production origin. Used where there is no request to read a host
+// from — sitemap, robots, and metadata generated at build time.
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://mynt.uz").replace(/\/$/, "");
+
 // Absolute origin for links that leave the app and come back (magic links).
 // Prefers the configured public URL; falls back to the request's own host so
 // local development and preview deploys work without extra configuration.

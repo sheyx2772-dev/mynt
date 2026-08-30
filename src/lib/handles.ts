@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createServerSupabase } from "@/lib/supabase/server";
 
 export type ClaimedProfile = {
@@ -23,7 +24,7 @@ const DEMO_PROFILES: Record<string, ClaimedProfile> = {
   },
 };
 
-export async function getClaimedProfile(normalized: string): Promise<ClaimedProfile | null> {
+export const getClaimedProfile = cache(async (normalized: string): Promise<ClaimedProfile | null> => {
   const supabase = await createServerSupabase();
   if (!supabase) {
     return DEMO_PROFILES[normalized] ?? null;
@@ -45,7 +46,7 @@ export async function getClaimedProfile(normalized: string): Promise<ClaimedProf
     avatarUrl: data.avatar_url,
     links: Array.isArray(data.links) ? data.links : [],
   };
-}
+});
 
 export type GenesisCard = {
   serial: string;
@@ -66,7 +67,7 @@ const DEMO_GENESIS: Record<string, GenesisCard> = {
   },
 };
 
-export async function getGenesisCard(serial: string): Promise<GenesisCard | null> {
+export const getGenesisCard = cache(async (serial: string): Promise<GenesisCard | null> => {
   const supabase = await createServerSupabase();
   if (!supabase) {
     return DEMO_GENESIS[serial] ?? null;
@@ -87,4 +88,27 @@ export async function getGenesisCard(serial: string): Promise<GenesisCard | null
     ownerHandle: data.owner_handle,
     mintedAt: data.minted_at ? String(data.minted_at).slice(0, 10) : null,
   };
+});
+
+export type PublicHandle = { normalized: string; updatedAt: string | null };
+
+// Claimed handles, for the sitemap. Capped so the query stays bounded as the
+// namespace fills up; split into a sitemap index if it ever nears the limit.
+export async function listPublicHandles(): Promise<PublicHandle[]> {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [];
+
+  const { data } = await supabase
+    .from("handles")
+    .select("normalized, updated_at")
+    .eq("status", "claimed")
+    .order("claimed_at", { ascending: false })
+    .limit(10_000);
+
+  if (!data) return [];
+
+  return data.map((row) => ({
+    normalized: row.normalized,
+    updatedAt: row.updated_at ?? null,
+  }));
 }

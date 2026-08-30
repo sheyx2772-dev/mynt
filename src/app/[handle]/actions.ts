@@ -8,40 +8,12 @@ import { uploadImage, isStorageConfigured } from "@/lib/storage";
 import { checkAvatar } from "@/lib/uploads";
 import { getUser } from "@/lib/auth";
 import { checkClaimRateLimit, recordClaimAttempt, getClientIp } from "@/lib/rate-limit";
+import { buildProfileLinks } from "@/lib/links";
 
 export type ClaimResult =
   | { ok: true }
   | { ok: false; error: string }
   | { ok: false; error: string; needsAuth: true };
-
-type Link = { label: string; href: string };
-
-// Usernames go straight into a URL path, so they're restricted to the
-// characters the platforms actually allow.
-const USERNAME = /^[A-Za-z0-9._]{1,64}$/;
-
-function socialLink(label: string, raw: string, base: string): Link | null {
-  const value = raw.trim().replace(/^@/, "");
-  if (!value) return null;
-  if (!USERNAME.test(value)) return null;
-  return { label, href: `${base}${value}` };
-}
-
-function websiteLink(raw: string): Link | null {
-  const value = raw.trim();
-  if (!value) return null;
-
-  try {
-    const url = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`);
-    // Anything other than http(s) — javascript:, data:, mailto: — is rejected
-    // rather than rendered as a clickable link on a public profile.
-    if (url.protocol !== "http:" && url.protocol !== "https:") return null;
-    if (!url.hostname.includes(".")) return null;
-    return { label: "Veb-sayt", href: url.toString() };
-  } catch {
-    return null;
-  }
-}
 
 export async function claimHandle(
   rawHandle: string,
@@ -85,11 +57,11 @@ export async function claimHandle(
     return { ok: false, error: "Ism kiritish shart." };
   }
 
-  const links = [
-    socialLink("Telegram", String(formData.get("telegram") ?? ""), "https://t.me/"),
-    socialLink("Instagram", String(formData.get("instagram") ?? ""), "https://instagram.com/"),
-    websiteLink(String(formData.get("website") ?? "")),
-  ].filter((l): l is Link => l !== null);
+  const links = buildProfileLinks({
+    telegram: String(formData.get("telegram") ?? ""),
+    instagram: String(formData.get("instagram") ?? ""),
+    website: String(formData.get("website") ?? ""),
+  });
 
   let avatarUrl: string | null = null;
   const avatar = formData.get("avatar");
