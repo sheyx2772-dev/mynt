@@ -24,7 +24,9 @@ export async function GET(request: NextRequest) {
   const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
 
   if (error) {
-    // Expired or already-used links land here.
+    // Expired or already-used links land here. Logged because a link that
+    // should have worked is a bug, not a user mistake.
+    console.error("auth/confirm verifyOtp failed:", error.status, error.code, error.message);
     return NextResponse.redirect(`${origin}/kirish?xato=havola`);
   }
 
