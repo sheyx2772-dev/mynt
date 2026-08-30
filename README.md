@@ -39,13 +39,18 @@ serves demo profiles, and with no R2 keys avatar uploads are skipped.
 
 ### Database
 
-Migrations are plain SQL in [`supabase/migrations`](supabase/migrations), run
-in filename order from the Supabase dashboard's SQL editor.
+Migrations are plain SQL in [`supabase/migrations`](supabase/migrations),
+applied in filename order by `npm run db:migrate`. Each file runs once and is
+recorded in a `schema_migrations` table, so re-running is safe. The runner
+needs `SUPABASE_ACCESS_TOKEN` in `.env.local` — create one under
+[account tokens](https://supabase.com/dashboard/account/tokens). Use
+`npm run db:status` to see what is pending without applying it.
 
 | Migration | What it adds |
 | --- | --- |
 | `0001_initial.sql` | `handles` and `genesis_cards` tables, public-read RLS |
 | `0002_auth_and_ownership.sql` | claim ownership, format constraints, rate limiting |
+| `0003_payments.sql` | orders, Click/Payme transactions, handle reservations |
 
 ### Auth
 
@@ -64,4 +69,7 @@ Supabase dashboard.
 | `npm run dev` | Development server |
 | `npm run build` | Production build |
 | `npm run lint` | ESLint |
-| `npx tsc --noEmit` | Type check |
+| `npm test` | Unit tests (Vitest) |
+| `npm run typecheck` | Type check |
+| `npm run db:migrate` | Apply pending database migrations |
+| `npm run db:status` | Show pending migrations without applying |
