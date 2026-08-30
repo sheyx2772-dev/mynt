@@ -70,6 +70,31 @@ and intended for testing; connect a real SMTP provider before launch.
 Phone/SMS sign-in is not enabled: it needs an SMS provider configured in the
 Supabase dashboard.
 
+### Installable app (PWA)
+
+The site installs to a phone's home screen and opens in its own window, which
+covers the app-shaped part of the product without a second codebase or an app
+store. `src/app/manifest.ts` declares it; an installed copy starts on
+`/kabinet` rather than the marketing page.
+
+`public/sw.js` caches the immutable build output and falls back to `/oflayn`
+when a navigation cannot reach the network. Profile pages are deliberately not
+cached — a handle can be claimed, edited or released at any moment, and a
+stale profile is worse than an honest offline notice. Nothing under `/api`,
+`/auth` or `/kabinet` is cached either. The worker is registered only in
+production builds; in development it would serve stale code across hot
+reloads.
+
+`npm run icons` regenerates the manifest icons from the brand mark. It
+rasterises and encodes the PNGs directly, which keeps an image-processing
+dependency out of the tree for four files that change approximately never. The
+Apple touch icon lives at `src/app/apple-icon.png`, not in `public/` — Next
+only emits `<link rel="apple-touch-icon">` for the file convention, and
+without that link iOS screenshots the page instead of using the mark.
+
+To try it locally, PWA features need a production build: `npm run build && npm
+run start`.
+
 ### The cabinet
 
 `/kabinet` lists what the signed-in user owns and holds. Each handle can be
@@ -137,3 +162,4 @@ project, creating and then removing its own rows.
 | `npm run db:migrate` | Apply pending database migrations |
 | `npm run db:status` | Show pending migrations without applying |
 | `npm run db:test` | Replay migrations on a local Postgres and check constraints |
+| `npm run icons` | Regenerate the PWA icons from the brand mark |

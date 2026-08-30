@@ -4,7 +4,19 @@
     {
       "name": "mynt-web",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "autoPort": true
+    },
+    {
+      "name": "mynt-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "start"
+      ],
       "autoPort": true
     }
   ]

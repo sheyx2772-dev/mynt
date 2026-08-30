@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Pencil, QrCode, Clock } from "lucide-react";
 import PageShell from "@/components/PageShell";
 import SignOutButton from "@/components/SignOutButton";
+import InstallHint from "@/components/InstallHint";
 import { requireUser } from "@/lib/auth";
 import { listHandlesForUser } from "@/lib/handles";
 import { formatUZS } from "@/lib/format";
@@ -25,6 +26,8 @@ export default async function CabinetPage() {
         </div>
         <SignOutButton />
       </div>
+
+      <InstallHint />
 
       {handles.length === 0 ? (
         <div className="rounded-[1.75rem] border border-dashed border-black/15 p-8 text-center">
