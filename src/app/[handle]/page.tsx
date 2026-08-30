@@ -6,38 +6,16 @@ import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import SaveContactButton from "@/components/SaveContactButton";
 import ClaimForm from "@/components/ClaimForm";
+import PageShell from "@/components/PageShell";
+import { getUser } from "@/lib/auth";
 
-type Params = { handle: string };
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<Params>;
-}): Promise<Metadata> {
-  const { handle } = await params;
+export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
+  const { handle } = await props.params;
   return { title: `${handle.toUpperCase()} — mynt.uz` };
 }
 
-function PageShell({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="relative min-h-full overflow-hidden">
-      <div className="bg-dot-grid absolute inset-0 [mask-image:radial-gradient(ellipse_60%_45%_at_50%_0%,black,transparent)]" />
-      <div className="absolute -top-24 right-[-4rem] h-72 w-72 rounded-full bg-lime/20 blur-[90px]" />
-      <div className="relative mx-auto flex min-h-full max-w-md flex-col px-6 py-16">
-        <Link href="/" className="mb-10 flex items-center gap-2 self-start font-display text-lg font-semibold">
-          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-mynt-black">
-            <span className="h-1.5 w-1.5 rounded-full bg-lime" />
-          </span>
-          mynt
-        </Link>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-export default async function HandlePage({ params }: { params: Promise<Params> }) {
-  const { handle } = await params;
+export default async function HandlePage(props: PageProps<"/[handle]">) {
+  const { handle } = await props.params;
 
   const genesisSerial = parseGenesisSerial(handle);
   if (genesisSerial) {
@@ -115,6 +93,7 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
   const price = priceForHandle(letters, digits);
   const lr = letterRarity(letters);
   const dr = digitRarity(digits);
+  const isSignedIn = Boolean(await getUser());
 
   return (
     <PageShell>
@@ -140,7 +119,7 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
           </div>
         </div>
 
-        <ClaimForm letters={letters} digits={digits} priceLabel={formatUZS(price)} />
+        <ClaimForm handle={normalized} priceLabel={formatUZS(price)} isSignedIn={isSignedIn} />
       </div>
     </PageShell>
   );

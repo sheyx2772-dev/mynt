@@ -1,6 +1,7 @@
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { createServerSupabase } from "@/lib/supabase/server";
 
 export type ClaimedProfile = {
+  userId: string | null;
   name: string;
   bio: string;
   avatarUrl: string | null;
@@ -10,6 +11,7 @@ export type ClaimedProfile = {
 // Local fallback so the profile page works before a Supabase project is connected.
 const DEMO_PROFILES: Record<string, ClaimedProfile> = {
   MYN042: {
+    userId: null,
     name: "Aziz Karimov",
     bio: "Mynt asoschisi. Raqamli shaxs va networking bilan shug'ullanaman.",
     avatarUrl: null,
@@ -22,13 +24,14 @@ const DEMO_PROFILES: Record<string, ClaimedProfile> = {
 };
 
 export async function getClaimedProfile(normalized: string): Promise<ClaimedProfile | null> {
-  if (!isSupabaseConfigured || !supabase) {
+  const supabase = await createServerSupabase();
+  if (!supabase) {
     return DEMO_PROFILES[normalized] ?? null;
   }
 
   const { data } = await supabase
     .from("handles")
-    .select("owner_name, bio, avatar_url, links")
+    .select("user_id, owner_name, bio, avatar_url, links")
     .eq("normalized", normalized)
     .eq("status", "claimed")
     .maybeSingle();
@@ -36,6 +39,7 @@ export async function getClaimedProfile(normalized: string): Promise<ClaimedProf
   if (!data) return null;
 
   return {
+    userId: data.user_id ?? null,
     name: data.owner_name ?? normalized,
     bio: data.bio ?? "",
     avatarUrl: data.avatar_url,
@@ -63,7 +67,8 @@ const DEMO_GENESIS: Record<string, GenesisCard> = {
 };
 
 export async function getGenesisCard(serial: string): Promise<GenesisCard | null> {
-  if (!isSupabaseConfigured || !supabase) {
+  const supabase = await createServerSupabase();
+  if (!supabase) {
     return DEMO_GENESIS[serial] ?? null;
   }
 

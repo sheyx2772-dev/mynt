@@ -1,33 +1,61 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { claimHandle, type ClaimResult } from "@/app/[handle]/actions";
 
 const initialState: ClaimResult = { ok: false, error: "" };
 
 export default function ClaimForm({
-  letters,
-  digits,
+  handle,
   priceLabel,
+  isSignedIn,
 }: {
-  letters: string;
-  digits: string;
+  handle: string;
   priceLabel: string;
+  isSignedIn: boolean;
 }) {
-  const boundAction = claimHandle.bind(null, letters, digits);
+  const boundAction = claimHandle.bind(null, handle);
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
 
   const inputClass =
     "w-full rounded-xl border border-black/10 bg-black/[0.02] px-4 py-2.5 text-sm outline-none transition-colors focus:border-mynt-black/30 focus:bg-white";
 
+  if (!isSignedIn) {
+    return (
+      <div className="mt-8">
+        <Link
+          href={`/kirish?keyin=${encodeURIComponent(`/${handle}`)}`}
+          className="block w-full rounded-full bg-lime px-6 py-3 text-center font-medium text-mynt-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+        >
+          Kirib, band qilish
+        </Link>
+        <p className="mt-3 text-center text-xs text-mynt-black/40">
+          Handle sizga biriktirilishi uchun hisob kerak.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <form action={formAction} className="mt-8 space-y-3 text-left">
       <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/15 bg-black/[0.02] px-4 py-2.5 text-sm text-mynt-black/50">
         <span>Profil rasmi (ixtiyoriy)</span>
-        <input type="file" name="avatar" accept="image/*" className="max-w-[45%] text-xs" />
+        <input
+          type="file"
+          name="avatar"
+          accept="image/jpeg,image/png,image/webp"
+          className="max-w-[45%] text-xs"
+        />
       </label>
-      <input name="name" placeholder="Ismingiz *" required className={inputClass} />
-      <textarea name="bio" placeholder="Qisqa bio (ixtiyoriy)" rows={2} className={inputClass} />
+      <input name="name" placeholder="Ismingiz *" required maxLength={80} className={inputClass} />
+      <textarea
+        name="bio"
+        placeholder="Qisqa bio (ixtiyoriy)"
+        rows={2}
+        maxLength={280}
+        className={inputClass}
+      />
       <div className="grid grid-cols-2 gap-3">
         <input name="telegram" placeholder="Telegram @username" className={inputClass} />
         <input name="instagram" placeholder="Instagram @username" className={inputClass} />

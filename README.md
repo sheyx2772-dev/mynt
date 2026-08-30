@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mynt
 
-## Getting Started
+Digital identity and networking for Uzbekistan: a rare handle, a public
+profile page, and an NFC card that opens it with one tap.
 
-First, run the development server:
+`mynt.uz/MYN042` is someone's profile. `mynt.uz/000001` is a physical card.
+
+## How the two namespaces work
+
+**Vanity handles** — three letters plus three digits (`AAA000`). Price is a
+base amount multiplied by two rarity factors, one for the letters and one for
+the digits, so `AAA777` costs far more than `QXZ483`. The rules live in
+[`src/lib/pricing.ts`](src/lib/pricing.ts) and the site shows the full
+breakdown before anyone pays.
+
+**Genesis cards** — six-digit manufacturing serials (`000001`, `000002`, …).
+A separate collectible series where the low number itself is the scarce thing,
+independent of who owns it. The NFC chip carries only the URL; ownership and
+profile data live in the database.
+
+## Stack
+
+Next.js 16 (App Router) · React 19 · Tailwind v4 · Supabase (Postgres + Auth)
+· Cloudflare R2 for images.
+
+Note that Next.js 16 renamed `middleware.ts` to `proxy.ts` — see
+[`src/proxy.ts`](src/proxy.ts), which keeps the Supabase auth session fresh.
+
+## Getting started
 
 ```bash
+npm install
+cp .env.example .env.local   # then fill in the values
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app degrades gracefully without credentials: with no Supabase keys it
+serves demo profiles, and with no R2 keys avatar uploads are skipped.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Database
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Migrations are plain SQL in [`supabase/migrations`](supabase/migrations), run
+in filename order from the Supabase dashboard's SQL editor.
 
-## Learn More
+| Migration | What it adds |
+| --- | --- |
+| `0001_initial.sql` | `handles` and `genesis_cards` tables, public-read RLS |
+| `0002_auth_and_ownership.sql` | claim ownership, format constraints, rate limiting |
 
-To learn more about Next.js, take a look at the following resources:
+### Auth
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Sign-in is a one-time email link — Supabase creates the account on first use,
+so there is no separate registration step. Enable the email provider in
+Authentication → Providers. Supabase's built-in mail service is rate-limited
+and intended for testing; connect a real SMTP provider before launch.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Phone/SMS sign-in is not enabled: it needs an SMS provider configured in the
+Supabase dashboard.
 
-## Deploy on Vercel
+## Commands
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm run lint` | ESLint |
+| `npx tsc --noEmit` | Type check |
