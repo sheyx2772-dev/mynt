@@ -68,6 +68,7 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
             city: owned.city ?? "",
             contactEmail: owned.contactEmail ?? "",
             tags: owned.tags.join(", "),
+            cardDesign: owned.cardDesign,
           }}
         />
       </div>

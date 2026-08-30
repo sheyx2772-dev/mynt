@@ -2,6 +2,8 @@
 
 import { useActionState } from "react";
 import { updateProfile, type UpdateResult } from "@/app/kabinet/[handle]/actions";
+import CardDesignPicker from "@/components/CardDesignPicker";
+import type { CardDesignId } from "@/lib/card-designs";
 
 const initialState: UpdateResult = { ok: false };
 
@@ -19,6 +21,7 @@ export default function EditProfileForm({
     city: string;
     contactEmail: string;
     tags: string;
+    cardDesign: CardDesignId;
   };
 }) {
   const boundAction = updateProfile.bind(null, handle);
@@ -160,6 +163,8 @@ export default function EditProfileForm({
       <p className="text-xs text-mynt-black/35">
         Shahar va email profilda ochiq ko&apos;rinadi.
       </p>
+
+      <CardDesignPicker handle={handle} value={defaults.cardDesign} />
 
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
       {state.saved && <p className="text-sm text-mynt-black/60">Saqlandi.</p>}

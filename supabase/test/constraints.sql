@@ -317,4 +317,22 @@ begin
   raise notice '  ok   deleting an account orphans the handle and clears its rows';
 end $$;
 
+-- card designs --------------------------------------------------------------
+
+select assert_rejected(
+  $q$update handles set card_design = 'porsche' where normalized = 'QQQ483'$q$,
+  'a card design the renderer does not know');
+
+do $$
+declare design text;
+begin
+  select card_design into design from handles where normalized = 'QQQ483';
+  if design <> 'genesis' then
+    raise exception 'default card design was %, expected genesis', design;
+  end if;
+
+  update handles set card_design = 'naqsh' where normalized = 'QQQ483';
+  raise notice '  ok   card_design defaults to genesis and accepts a known design';
+end $$;
+
 drop function assert_rejected(text, text);

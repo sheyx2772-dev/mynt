@@ -62,6 +62,7 @@ credentials, so schema changes can be checked before they reach the project.
 | `0006_social_profile.sql` | city, tags, last seen, public view count, leaderboard |
 | `0007_posts_and_follows.sql` | posts, follows, counter triggers |
 | `0008_account_deletion.sql` | privileges for cascades, orphaned-handle handling |
+| `0009_card_designs.sql` | per-handle card design, restricted to the known set |
 
 ### Auth
 
@@ -107,6 +108,19 @@ from `/{handle}/qr`, for phones without NFC and for printing on the card.
 Ownership is enforced in the query rather than in the page: the row is read
 and written with a `user_id` filter, so a guessed URL is a 404 and a forged
 request updates nothing.
+
+### Cards
+
+`/kartalar` shows the six card designs, each drawn in CSS at a bank card's
+aspect ratio rather than shipped as an image, so a preview stays sharp at any
+size and shows the viewer's own handle. Owners pick one in the cabinet; the
+set is closed by a check constraint, so a stored design can never be one the
+renderer cannot draw.
+
+Every design is original. Cards carrying someone else's logo — a car marque,
+a cartoon character, a tournament — infringe the moment they are sold, and
+they are not a differentiator either: a logo can be copied by anyone. A low
+genesis serial cannot.
 
 ### Posts and following
 

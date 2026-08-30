@@ -5,6 +5,7 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { parseHandle } from "@/lib/pricing";
 import { getUser } from "@/lib/auth";
 import { readProfileForm } from "@/lib/profile-form";
+import { isCardDesign, DEFAULT_CARD_DESIGN } from "@/lib/card-designs";
 
 export type UpdateResult = { ok: boolean; error?: string; saved?: true };
 
@@ -35,6 +36,7 @@ export async function updateProfile(
 
   if (!existing) return { ok: false, error: "Bu handle sizga tegishli emas." };
 
+  const design = String(formData.get("cardDesign") ?? "");
   const read = await readProfileForm(formData, normalized, existing.avatar_url);
   if (!read.ok) return { ok: false, error: read.error };
 
@@ -48,6 +50,9 @@ export async function updateProfile(
       city: read.profile.city,
       contact_email: read.profile.contactEmail,
       tags: read.profile.tags,
+      // Anything the renderer does not know is refused here and by a check
+      // constraint, so a card can never reference a design that cannot draw.
+      card_design: isCardDesign(design) ? design : DEFAULT_CARD_DESIGN,
     })
     .eq("normalized", normalized)
     .eq("user_id", user.id);
