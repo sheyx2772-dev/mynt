@@ -87,7 +87,9 @@ async function main() {
     `create table if not exists schema_migrations (
        version text primary key,
        applied_at timestamptz not null default now()
-     );`
+     );
+     -- No policy is defined, so only the service_role key can read this.
+     alter table schema_migrations enable row level security;`
   );
 
   const applied = await runQuery(ref, token, "select version from schema_migrations;");
