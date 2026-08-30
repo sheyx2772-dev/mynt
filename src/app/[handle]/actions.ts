@@ -160,3 +160,62 @@ export async function claimHandle(
 
   return { ok: true, checkout };
 }
+
+export type FollowResult = { following: boolean; error?: string; needsAuth?: true };
+
+// Follow or unfollow, decided by what is already stored rather than by what
+// the client claims the current state is.
+export async function toggleFollow(rawHandle: string): Promise<FollowResult> {
+  const parsed = parseHandle(rawHandle);
+  if (!parsed) return { following: false, error: "Handle formati noto'g'ri." };
+
+  const normalized = `${parsed.letters}${parsed.digits}`;
+
+  const user = await getUser();
+  if (!user) {
+    return { following: false, needsAuth: true, error: "Obuna uchun hisobingizga kiring." };
+  }
+  if (!supabaseAdmin) return { following: false, error: "Baza ulanmagan." };
+
+  // Only a claimed handle can be followed, and nobody follows themselves.
+  const { data: target } = await supabaseAdmin
+    .from("handles")
+    .select("user_id")
+    .eq("normalized", normalized)
+    .eq("status", "claimed")
+    .maybeSingle();
+
+  if (!target) return { following: false, error: "Bunday profil yo'q." };
+  if (target.user_id === user.id) {
+    return { following: false, error: "O'zingizga obuna bo'lolmaysiz." };
+  }
+
+  const { data: existing } = await supabaseAdmin
+    .from("follows")
+    .select("followed_handle")
+    .eq("follower_user_id", user.id)
+    .eq("followed_handle", normalized)
+    .maybeSingle();
+
+  if (existing) {
+    await supabaseAdmin
+      .from("follows")
+      .delete()
+      .eq("follower_user_id", user.id)
+      .eq("followed_handle", normalized);
+    revalidatePath(`/${normalized}`);
+    return { following: false };
+  }
+
+  const { error } = await supabaseAdmin
+    .from("follows")
+    .insert({ follower_user_id: user.id, followed_handle: normalized });
+
+  // A duplicate means a double click landed twice; the end state is the same.
+  if (error && error.code !== "23505") {
+    return { following: false, error: "Xatolik yuz berdi." };
+  }
+
+  revalidatePath(`/${normalized}`);
+  return { following: true };
+}

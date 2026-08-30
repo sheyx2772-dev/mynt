@@ -12,6 +12,8 @@ export type ClaimedProfile = {
   tags: string[];
   lastSeenAt: string | null;
   viewCount: number;
+  followerCount: number;
+  postCount: number;
 };
 
 // Local fallback so the profile page works before a Supabase project is connected.
@@ -23,6 +25,8 @@ const DEMO_PROFILES: Record<string, ClaimedProfile> = {
     tags: ["Startup"],
     lastSeenAt: null,
     viewCount: 0,
+    followerCount: 0,
+    postCount: 0,
     name: "Aziz Karimov",
     bio: "Mynt asoschisi. Raqamli shaxs va networking bilan shug'ullanaman.",
     avatarUrl: null,
@@ -43,7 +47,7 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
   const { data } = await supabase
     .from("handles")
     .select(
-      "user_id, owner_name, bio, avatar_url, links, city, contact_email, tags, last_seen_at, view_count"
+      "user_id, owner_name, bio, avatar_url, links, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count"
     )
     .eq("normalized", normalized)
     .eq("status", "claimed")
@@ -62,6 +66,8 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
     tags: Array.isArray(data.tags) ? data.tags : [],
     lastSeenAt: data.last_seen_at ?? null,
     viewCount: Number(data.view_count ?? 0),
+    followerCount: Number(data.follower_count ?? 0),
+    postCount: Number(data.post_count ?? 0),
   };
 });
 

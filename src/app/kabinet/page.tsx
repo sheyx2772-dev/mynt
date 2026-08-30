@@ -29,7 +29,15 @@ export default async function CabinetPage() {
           <h1 className="font-display text-2xl font-semibold tracking-tight">Kabinet</h1>
           <p className="mt-1 text-sm text-mynt-black/50">{user.email}</p>
         </div>
-        <SignOutButton />
+        <div className="flex items-center gap-2">
+          <Link
+            href="/lenta"
+            className="rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-mynt-black/60 transition-colors hover:bg-black/[0.03]"
+          >
+            Lenta
+          </Link>
+          <SignOutButton />
+        </div>
       </div>
 
       <InstallHint />

@@ -223,4 +223,98 @@ begin
   raise notice '  ok   only claimed handles reach the leaderboard';
 end $$;
 
+-- posts and follows ---------------------------------------------------------
+
+select assert_rejected(
+  $q$insert into posts (handle, user_id, body)
+     values ('QQQ483','11111111-1111-1111-1111-111111111111','')$q$,
+  'empty post body');
+
+select assert_rejected(
+  $q$insert into posts (handle, user_id, body)
+     values ('QQQ483','11111111-1111-1111-1111-111111111111', repeat('x', 1001))$q$,
+  'post body over the limit');
+
+-- Counters are kept by triggers, so they must track inserts and deletes.
+do $$
+declare c bigint;
+begin
+  insert into posts (handle, user_id, body)
+    values ('QQQ483','11111111-1111-1111-1111-111111111111','birinchi post');
+  insert into posts (handle, user_id, body)
+    values ('QQQ483','11111111-1111-1111-1111-111111111111','ikkinchi post');
+
+  select post_count into c from handles where normalized = 'QQQ483';
+  if c <> 2 then raise exception 'post_count was %, expected 2', c; end if;
+
+  delete from posts where body = 'ikkinchi post';
+  select post_count into c from handles where normalized = 'QQQ483';
+  if c <> 1 then raise exception 'post_count was % after delete, expected 1', c; end if;
+
+  raise notice '  ok   post_count follows inserts and deletes';
+end $$;
+
+do $$
+declare c bigint;
+begin
+  insert into follows (follower_user_id, followed_handle)
+    values ('11111111-1111-1111-1111-111111111111','QQQ483');
+
+  select follower_count into c from handles where normalized = 'QQQ483';
+  if c <> 1 then raise exception 'follower_count was %, expected 1', c; end if;
+
+  delete from follows where followed_handle = 'QQQ483';
+  select follower_count into c from handles where normalized = 'QQQ483';
+  if c <> 0 then raise exception 'follower_count was % after unfollow, expected 0', c; end if;
+
+  raise notice '  ok   follower_count follows follows and unfollows';
+end $$;
+
+-- Following the same handle twice is one relationship, not two.
+do $$
+begin
+  insert into follows (follower_user_id, followed_handle)
+    values ('11111111-1111-1111-1111-111111111111','QQQ483');
+  begin
+    insert into follows (follower_user_id, followed_handle)
+      values ('11111111-1111-1111-1111-111111111111','QQQ483');
+    raise exception 'a duplicate follow was accepted';
+  exception when unique_violation then
+    raise notice '  ok   rejected: following the same handle twice';
+  end;
+end $$;
+
+-- account deletion ----------------------------------------------------------
+-- A handle is a paid asset: deleting the account must orphan it, not destroy
+-- it, and must not be blocked by the claimed-needs-an-owner rule.
+
+do $$
+declare orphan_user uuid := '99999999-9999-9999-9999-999999999999';
+declare owner_id uuid; deleted_at timestamptz; still_claimed text;
+begin
+  insert into auth.users (id, email) values (orphan_user, 'leaving@mynt.uz');
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('BYE','001','claimed', orphan_user, now());
+  insert into posts (handle, user_id, body) values ('BYE001', orphan_user, 'xayr');
+  insert into follows (follower_user_id, followed_handle) values (orphan_user, 'QQQ483');
+
+  delete from auth.users where id = orphan_user;
+
+  select user_id, owner_deleted_at, status into owner_id, deleted_at, still_claimed
+    from handles where normalized = 'BYE001';
+
+  if owner_id is not null then raise exception 'owner was not cleared'; end if;
+  if deleted_at is null then raise exception 'owner_deleted_at was not stamped'; end if;
+  if still_claimed <> 'claimed' then raise exception 'the handle stopped being claimed'; end if;
+
+  if exists (select 1 from posts where user_id = orphan_user) then
+    raise exception 'posts survived the account';
+  end if;
+  if exists (select 1 from follows where follower_user_id = orphan_user) then
+    raise exception 'follows survived the account';
+  end if;
+
+  raise notice '  ok   deleting an account orphans the handle and clears its rows';
+end $$;
+
 drop function assert_rejected(text, text);

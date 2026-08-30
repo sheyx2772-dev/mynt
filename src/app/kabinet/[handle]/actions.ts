@@ -60,3 +60,84 @@ export async function updateProfile(
 
   return { ok: true, saved: true };
 }
+
+export type PostResult = { ok: boolean; error?: string };
+
+// A generous ceiling that still stops a script from filling the feed.
+const POSTS_PER_HOUR = 20;
+
+export async function createPost(
+  rawHandle: string,
+  _prevState: PostResult,
+  formData: FormData
+): Promise<PostResult> {
+  const parsed = parseHandle(rawHandle);
+  if (!parsed) return { ok: false, error: "Handle formati noto'g'ri." };
+
+  const normalized = `${parsed.letters}${parsed.digits}`;
+
+  const user = await getUser();
+  if (!user) return { ok: false, error: "Avval hisobingizga kiring." };
+  if (!supabaseAdmin) return { ok: false, error: "Baza ulanmagan." };
+
+  const body = String(formData.get("body") ?? "").trim().slice(0, 1000);
+  if (!body) return { ok: false, error: "Post bo'sh bo'lmasligi kerak." };
+
+  // Only a claimed handle can post: a reservation is an unfinished purchase.
+  const { data: owned } = await supabaseAdmin
+    .from("handles")
+    .select("normalized")
+    .eq("normalized", normalized)
+    .eq("user_id", user.id)
+    .eq("status", "claimed")
+    .maybeSingle();
+
+  if (!owned) return { ok: false, error: "Bu handle sizga tegishli emas." };
+
+  const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const { count } = await supabaseAdmin
+    .from("posts")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .gte("created_at", since);
+
+  if ((count ?? 0) >= POSTS_PER_HOUR) {
+    return { ok: false, error: "Bir soatda juda ko'p post. Birozdan so'ng urining." };
+  }
+
+  const { error } = await supabaseAdmin
+    .from("posts")
+    .insert({ handle: normalized, user_id: user.id, body });
+
+  if (error) return { ok: false, error: "Post saqlanmadi. Qaytadan urinib ko'ring." };
+
+  revalidatePath(`/${normalized}`);
+  revalidatePath(`/kabinet/${normalized}`);
+  revalidatePath("/lenta");
+
+  return { ok: true };
+}
+
+export async function deletePost(postId: string): Promise<PostResult> {
+  const user = await getUser();
+  if (!user) return { ok: false, error: "Avval hisobingizga kiring." };
+  if (!supabaseAdmin) return { ok: false, error: "Baza ulanmagan." };
+
+  // The author filter is the authorization check: someone else's post simply
+  // matches nothing.
+  const { data } = await supabaseAdmin
+    .from("posts")
+    .delete()
+    .eq("id", postId)
+    .eq("user_id", user.id)
+    .select("handle")
+    .maybeSingle();
+
+  if (!data) return { ok: false, error: "Post topilmadi." };
+
+  revalidatePath(`/${data.handle}`);
+  revalidatePath(`/kabinet/${data.handle}`);
+  revalidatePath("/lenta");
+
+  return { ok: true };
+}

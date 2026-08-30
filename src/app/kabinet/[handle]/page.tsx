@@ -9,6 +9,9 @@ import { getOwnedHandle } from "@/lib/handles";
 import { parseHandle } from "@/lib/pricing";
 import { linkFieldValue } from "@/lib/profile-form";
 import StatsPanel from "@/components/StatsPanel";
+import PostComposer from "@/components/PostComposer";
+import PostList from "@/components/PostList";
+import { listPostsForHandle } from "@/lib/posts";
 import { getHandleStats } from "@/lib/analytics";
 
 export async function generateMetadata(
@@ -33,7 +36,10 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
   if (!owned) notFound();
 
   // Only reached once ownership is established above.
-  const stats = await getHandleStats(normalized);
+  const [stats, posts] = await Promise.all([
+    getHandleStats(normalized),
+    listPostsForHandle(normalized),
+  ]);
 
   return (
     <PageShell>
@@ -65,6 +71,27 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
           }}
         />
       </div>
+
+      <section className="mt-6 rounded-[1.75rem] border border-black/10 bg-white p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+        <h2 className="font-display text-lg font-semibold tracking-tight">Postlar</h2>
+        <p className="mt-1 mb-5 text-sm text-mynt-black/50">
+          Obunachilaringiz lentasida va profilingizda ko&apos;rinadi.
+        </p>
+
+        {owned.status === "claimed" ? (
+          <PostComposer handle={normalized} />
+        ) : (
+          <p className="rounded-xl border border-dashed border-black/15 px-4 py-5 text-center text-sm text-mynt-black/45">
+            To&apos;lov yakunlangach post joylashingiz mumkin bo&apos;ladi.
+          </p>
+        )}
+
+        {posts.length > 0 && (
+          <div className="mt-6">
+            <PostList posts={posts} canDelete />
+          </div>
+        )}
+      </section>
 
       <div className="mt-6">
         <StatsPanel stats={stats} />

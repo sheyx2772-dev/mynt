@@ -60,6 +60,8 @@ credentials, so schema changes can be checked before they reach the project.
 | `0004_analytics.sql` | profile views, link clicks, aggregation functions |
 | `0005_lock_down_stats_functions.sql` | revoke stats functions from the public roles |
 | `0006_social_profile.sql` | city, tags, last seen, public view count, leaderboard |
+| `0007_posts_and_follows.sql` | posts, follows, counter triggers |
+| `0008_account_deletion.sql` | privileges for cascades, orphaned-handle handling |
 
 ### Auth
 
@@ -105,6 +107,31 @@ from `/{handle}/qr`, for phones without NFC and for printing on the card.
 Ownership is enforced in the query rather than in the page: the row is read
 and written with a `user_id` filter, so a guessed URL is a 404 and a forged
 request updates nothing.
+
+### Posts and following
+
+Handles can post, and accounts can follow handles. `/lenta` shows the posts of
+everything the signed-in account follows; a profile carries a Vizitka/Postlar
+tab pair, driven by a query parameter so both stay server-rendered.
+
+Follower and post counts are moved by database triggers rather than by
+application code, so they cannot drift from the rows they count no matter
+which path removes a post or a follow. `follows` is readable only by the
+account that owns the row; posts are public by design.
+
+### Known issue: deleting an account
+
+Deleting a user through Supabase's admin API fails with "Database error
+deleting user" whenever that user still has rows in a table referencing
+`auth.users`. Migration 0008 fixed two contributing causes — the deleting role
+held no DELETE or UPDATE privilege on any of those tables, and the SET NULL on
+`handles` tripped the claimed-needs-an-owner constraint — but the failure
+persists and the remaining cause has not been identified. Row level security
+was ruled out by test.
+
+The app exposes no account-deletion flow, so nothing user-facing is blocked.
+Removing a user's posts, follows and handles first and then deleting the
+account does work. Diagnosing this properly needs the project's auth logs.
 
 ### Residents and the public profile
 

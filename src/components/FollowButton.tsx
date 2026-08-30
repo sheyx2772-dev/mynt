@@ -1,0 +1,64 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { UserPlus, UserCheck } from "lucide-react";
+import { toggleFollow } from "@/app/[handle]/actions";
+
+export default function FollowButton({
+  handle,
+  initialFollowing,
+}: {
+  handle: string;
+  initialFollowing: boolean;
+}) {
+  const [following, setFollowing] = useState(initialFollowing);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+  const router = useRouter();
+
+  function onClick() {
+    setError(null);
+    startTransition(async () => {
+      const result = await toggleFollow(handle);
+
+      if (result.needsAuth) {
+        router.push(`/kirish?keyin=${encodeURIComponent(`/${handle}`)}`);
+        return;
+      }
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+      // The server decides the resulting state, not this component.
+      setFollowing(result.following);
+    });
+  }
+
+  return (
+    <div>
+      <button
+        onClick={onClick}
+        disabled={pending}
+        className={
+          following
+            ? "flex w-full items-center justify-center gap-1.5 rounded-full border border-white/20 px-6 py-2.5 text-sm font-medium text-white/70 transition-colors hover:bg-white/5 disabled:opacity-60"
+            : "flex w-full items-center justify-center gap-1.5 rounded-full bg-lime px-6 py-2.5 text-sm font-medium text-mynt-black transition-transform hover:scale-[1.01] disabled:opacity-60"
+        }
+      >
+        {following ? (
+          <>
+            <UserCheck className="h-4 w-4" />
+            Obuna bo&apos;lingan
+          </>
+        ) : (
+          <>
+            <UserPlus className="h-4 w-4" />
+            Obuna bo&apos;lish
+          </>
+        )}
+      </button>
+      {error && <p className="mt-2 text-center text-xs text-red-400">{error}</p>}
+    </div>
+  );
+}

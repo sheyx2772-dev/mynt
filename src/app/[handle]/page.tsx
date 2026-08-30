@@ -13,6 +13,10 @@ import { getUser } from "@/lib/auth";
 import { isAnyProviderConfigured } from "@/lib/payments/config";
 import { readVisitorContext, recordProfileView } from "@/lib/analytics";
 import { timeAgo } from "@/lib/relative-time";
+import { listPostsForHandle } from "@/lib/posts";
+import { countFollowing, isFollowing } from "@/lib/follows";
+import FollowButton from "@/components/FollowButton";
+import PostList from "@/components/PostList";
 
 export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
@@ -36,6 +40,7 @@ export async function generateMetadata(props: PageProps<"/[handle]">): Promise<M
 
 export default async function HandlePage(props: PageProps<"/[handle]">) {
   const { handle } = await props.params;
+  const { bolim } = await props.searchParams;
 
   const genesisSerial = parseGenesisSerial(handle);
   if (genesisSerial) {
@@ -47,10 +52,24 @@ export default async function HandlePage(props: PageProps<"/[handle]">) {
   // rather than a 200 that invites crawlers to index every typo.
   if (!parsed) notFound();
 
-  return <VanityHandlePage letters={parsed.letters} digits={parsed.digits} />;
+  return (
+    <VanityHandlePage
+      letters={parsed.letters}
+      digits={parsed.digits}
+      tab={bolim === "postlar" ? "postlar" : "vizitka"}
+    />
+  );
 }
 
-async function VanityHandlePage({ letters, digits }: { letters: string; digits: string }) {
+async function VanityHandlePage({
+  letters,
+  digits,
+  tab,
+}: {
+  letters: string;
+  digits: string;
+  tab: "vizitka" | "postlar";
+}) {
   const normalized = `${letters}${digits}`;
   const profile = await getClaimedProfile(normalized);
 
@@ -66,6 +85,12 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
     }
 
     const lastSeen = timeAgo(profile.lastSeenAt);
+
+    const [following, followingCount, posts] = await Promise.all([
+      viewer ? isFollowing(viewer.id, normalized) : Promise.resolve(false),
+      profile.userId ? countFollowing(profile.userId) : Promise.resolve(0),
+      tab === "postlar" ? listPostsForHandle(normalized) : Promise.resolve([]),
+    ]);
 
     return (
       <PageShell>
@@ -107,63 +132,127 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
             </div>
           )}
 
-          <p className="relative mt-5 flex items-center gap-1.5 text-xs text-white/35">
-            <Eye className="h-3.5 w-3.5" />
-            <span className="font-tabular">{profile.viewCount}</span> marta ko&apos;rilgan
-          </p>
+          <div className="relative mt-6 flex gap-6 border-t border-white/10 pt-5">
+            <div>
+              <p className="font-display text-lg font-semibold tabular-nums">
+                {profile.followerCount}
+              </p>
+              <p className="text-xs text-white/40">Obunachi</p>
+            </div>
+            <div>
+              <p className="font-display text-lg font-semibold tabular-nums">{followingCount}</p>
+              <p className="text-xs text-white/40">Obuna</p>
+            </div>
+            <div>
+              <p className="font-display text-lg font-semibold tabular-nums">
+                {profile.viewCount}
+              </p>
+              <p className="flex items-center gap-1 text-xs text-white/40">
+                <Eye className="h-3 w-3" />
+                Ko&apos;rish
+              </p>
+            </div>
+          </div>
+
+          {!isOwner && (
+            <div className="relative mt-5">
+              <FollowButton handle={normalized} initialFollowing={following} />
+            </div>
+          )}
         </div>
 
-        <div className="mt-6">
-          <SaveContactButton fullName={profile.name} handle={normalized} bio={profile.bio} />
-        </div>
-
-        {isOwner && (
+        <div className="mt-6 flex gap-6 border-b border-black/10 text-sm">
           <Link
-            href={`/kabinet/${normalized}`}
-            className="mt-3 block rounded-full border border-black/10 px-6 py-3 text-center text-sm font-medium transition-colors hover:bg-black/[0.03]"
+            href={`/${normalized}`}
+            className={
+              tab === "vizitka"
+                ? "-mb-px border-b-2 border-mynt-black pb-2.5 font-medium"
+                : "-mb-px border-b-2 border-transparent pb-2.5 text-mynt-black/45 transition-colors hover:text-mynt-black"
+            }
           >
-            Profilni tahrirlash
+            Vizitka
           </Link>
-        )}
-
-        <div className="mt-6 space-y-3">
-          {profile.links.map((link, index) => (
-            <a
-              key={link.href}
-              // Routed through /go so the click is counted; the destination is
-              // resolved from this index server-side, not from the URL.
-              href={`/${normalized}/go?to=${index}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block rounded-xl border border-black/10 bg-white px-5 py-3 text-center font-medium shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
-            >
-              {link.label}
-            </a>
-          ))}
+          <Link
+            href={`/${normalized}?bolim=postlar`}
+            className={
+              tab === "postlar"
+                ? "-mb-px flex items-center gap-1.5 border-b-2 border-mynt-black pb-2.5 font-medium"
+                : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-mynt-black/45 transition-colors hover:text-mynt-black"
+            }
+          >
+            Postlar
+            {profile.postCount > 0 && (
+              <span className="font-tabular text-xs text-mynt-black/35">{profile.postCount}</span>
+            )}
+          </Link>
         </div>
 
-        {(profile.city || profile.contactEmail) && (
-          <div className="mt-6 rounded-xl border border-black/10 bg-white px-5 py-4">
-            <p className="mb-3 text-xs font-medium tracking-wide text-mynt-black/40 uppercase">
-              Kontaktlar
-            </p>
-            {profile.city && (
-              <p className="flex items-center gap-2 text-sm text-mynt-black/70">
-                <MapPin className="h-4 w-4 text-mynt-black/35" />
-                {profile.city}
+        {tab === "vizitka" ? (
+          <>
+          <div className="mt-6">
+            <SaveContactButton fullName={profile.name} handle={normalized} bio={profile.bio} />
+          </div>
+
+          {isOwner && (
+            <Link
+              href={`/kabinet/${normalized}`}
+              className="mt-3 block rounded-full border border-black/10 px-6 py-3 text-center text-sm font-medium transition-colors hover:bg-black/[0.03]"
+            >
+              Profilni tahrirlash
+            </Link>
+          )}
+
+          <div className="mt-6 space-y-3">
+            {profile.links.map((link, index) => (
+              <a
+                key={link.href}
+                // Routed through /go so the click is counted; the destination is
+                // resolved from this index server-side, not from the URL.
+                href={`/${normalized}/go?to=${index}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-xl border border-black/10 bg-white px-5 py-3 text-center font-medium shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          {(profile.city || profile.contactEmail) && (
+            <div className="mt-6 rounded-xl border border-black/10 bg-white px-5 py-4">
+              <p className="mb-3 text-xs font-medium tracking-wide text-mynt-black/40 uppercase">
+                Kontaktlar
               </p>
-            )}
-            {profile.contactEmail && (
-              <p className="mt-2 flex items-center gap-2 text-sm">
-                <Mail className="h-4 w-4 text-mynt-black/35" />
-                <a
-                  href={`mailto:${profile.contactEmail}`}
-                  className="text-mynt-black/70 underline-offset-2 hover:underline"
-                >
-                  {profile.contactEmail}
-                </a>
-              </p>
-            )}
+              {profile.city && (
+                <p className="flex items-center gap-2 text-sm text-mynt-black/70">
+                  <MapPin className="h-4 w-4 text-mynt-black/35" />
+                  {profile.city}
+                </p>
+              )}
+              {profile.contactEmail && (
+                <p className="mt-2 flex items-center gap-2 text-sm">
+                  <Mail className="h-4 w-4 text-mynt-black/35" />
+                  <a
+                    href={`mailto:${profile.contactEmail}`}
+                    className="text-mynt-black/70 underline-offset-2 hover:underline"
+                  >
+                    {profile.contactEmail}
+                  </a>
+                </p>
+              )}
+            </div>
+          )}
+          </>
+        ) : (
+          <div className="mt-6">
+            <PostList
+              posts={posts}
+              emptyMessage={
+                isOwner
+                  ? "Hali post yozmadingiz. Kabinetdan birinchi postni joylang."
+                  : "Bu profilda hali post yo'q."
+              }
+            />
           </div>
         )}
       </PageShell>
