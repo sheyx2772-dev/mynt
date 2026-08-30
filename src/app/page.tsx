@@ -118,6 +118,9 @@ export default function Home() {
             </a>
             {/* Signed-out visitors are sent to sign-in from there, which keeps
                 this page static rather than making it depend on a session. */}
+            <Link href="/rezidentlar" className="transition-colors hover:text-mynt-black">
+              Rezidentlar
+            </Link>
             <Link href="/kabinet" className="transition-colors hover:text-mynt-black">
               Kabinet
             </Link>

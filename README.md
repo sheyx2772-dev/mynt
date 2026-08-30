@@ -59,6 +59,7 @@ credentials, so schema changes can be checked before they reach the project.
 | `0003_payments.sql` | orders, Click/Payme transactions, handle reservations |
 | `0004_analytics.sql` | profile views, link clicks, aggregation functions |
 | `0005_lock_down_stats_functions.sql` | revoke stats functions from the public roles |
+| `0006_social_profile.sql` | city, tags, last seen, public view count, leaderboard |
 
 ### Auth
 
@@ -104,6 +105,21 @@ from `/{handle}/qr`, for phones without NFC and for printing on the card.
 Ownership is enforced in the query rather than in the page: the row is read
 and written with a `user_id` filter, so a guessed URL is a 404 and a forged
 request updates nothing.
+
+### Residents and the public profile
+
+`/rezidentlar` is the public directory: claimed handles ranked by views, with
+search across handle, name and city, and a three-day leaderboard above it.
+Reserved handles never appear in either — a reservation is an unfinished
+purchase, not a resident, and traffic to one does not earn a place in the
+ranking.
+
+A profile shows its own view count, when the owner was last active, their
+city, contact email and tags. The count is denormalised onto the handle row:
+`profile_views` itself stays closed, because its rows carry visitor hashes and
+referrers that belong to the owner alone. The leaderboard reads that table
+through a `security definer` function that returns the aggregate and nothing
+else.
 
 ### Analytics
 

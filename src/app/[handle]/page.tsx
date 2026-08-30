@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { after } from "next/server";
 import type { Metadata } from "next";
-import { Nfc } from "lucide-react";
+import { Nfc, Eye, MapPin, Mail } from "lucide-react";
 import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRarity } from "@/lib/pricing";
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
@@ -12,6 +12,7 @@ import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
 import { isAnyProviderConfigured } from "@/lib/payments/config";
 import { readVisitorContext, recordProfileView } from "@/lib/analytics";
+import { timeAgo } from "@/lib/relative-time";
 
 export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
@@ -64,6 +65,8 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
       after(() => recordProfileView(normalized, visitor));
     }
 
+    const lastSeen = timeAgo(profile.lastSeenAt);
+
     return (
       <PageShell>
         <div className="grain card-sheen relative overflow-hidden rounded-[1.75rem] bg-mynt-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
@@ -84,7 +87,30 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
           )}
           <h1 className="relative mt-5 font-display text-2xl font-semibold">{profile.name}</h1>
           <p className="relative mt-1 font-tabular text-sm text-white/50">mynt.uz/{normalized}</p>
-          <p className="relative mt-4 text-sm text-white/70">{profile.bio}</p>
+
+          {lastSeen && (
+            <p className="relative mt-2 text-xs text-white/40">Oxirgi faollik: {lastSeen}</p>
+          )}
+
+          {profile.bio && <p className="relative mt-4 text-sm text-white/70">{profile.bio}</p>}
+
+          {profile.tags.length > 0 && (
+            <div className="relative mt-4 flex flex-wrap gap-2">
+              {profile.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-white/15 px-2.5 py-1 text-xs text-white/60"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <p className="relative mt-5 flex items-center gap-1.5 text-xs text-white/35">
+            <Eye className="h-3.5 w-3.5" />
+            <span className="font-tabular">{profile.viewCount}</span> marta ko&apos;rilgan
+          </p>
         </div>
 
         <div className="mt-6">
@@ -115,6 +141,31 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
             </a>
           ))}
         </div>
+
+        {(profile.city || profile.contactEmail) && (
+          <div className="mt-6 rounded-xl border border-black/10 bg-white px-5 py-4">
+            <p className="mb-3 text-xs font-medium tracking-wide text-mynt-black/40 uppercase">
+              Kontaktlar
+            </p>
+            {profile.city && (
+              <p className="flex items-center gap-2 text-sm text-mynt-black/70">
+                <MapPin className="h-4 w-4 text-mynt-black/35" />
+                {profile.city}
+              </p>
+            )}
+            {profile.contactEmail && (
+              <p className="mt-2 flex items-center gap-2 text-sm">
+                <Mail className="h-4 w-4 text-mynt-black/35" />
+                <a
+                  href={`mailto:${profile.contactEmail}`}
+                  className="text-mynt-black/70 underline-offset-2 hover:underline"
+                >
+                  {profile.contactEmail}
+                </a>
+              </p>
+            )}
+          </div>
+        )}
       </PageShell>
     );
   }

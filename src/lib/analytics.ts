@@ -57,6 +57,9 @@ export async function recordProfileView(handle: string, context: VisitorContext)
       visitor_hash: context.visitorHash,
       referrer_host: context.referrerHost,
     });
+    // The public counter is kept on the handle row so a profile page can show
+    // it without opening profile_views, whose rows are the owner's business.
+    await supabaseAdmin.rpc("increment_view_count", { p_handle: handle });
   } catch {
     // Swallowed deliberately.
   }

@@ -59,6 +59,9 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
             telegram: linkFieldValue(owned.links, "Telegram"),
             instagram: linkFieldValue(owned.links, "Instagram"),
             website: linkFieldValue(owned.links, "Veb-sayt"),
+            city: owned.city ?? "",
+            contactEmail: owned.contactEmail ?? "",
+            tags: owned.tags.join(", "),
           }}
         />
       </div>

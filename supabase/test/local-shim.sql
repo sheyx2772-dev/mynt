@@ -3,6 +3,22 @@
 -- throwaway Postgres container to check the SQL before it reaches the real
 -- project. Never applied to Supabase itself, which provides these already.
 
+-- Supabase ships these roles; migrations grant to them by name. Creating them
+-- here keeps the test database close enough that a grant does not have to be
+-- wrapped in an existence check just to survive the local run.
+do $$
+begin
+  if not exists (select 1 from pg_roles where rolname = 'anon') then
+    create role anon nologin;
+  end if;
+  if not exists (select 1 from pg_roles where rolname = 'authenticated') then
+    create role authenticated nologin;
+  end if;
+  if not exists (select 1 from pg_roles where rolname = 'service_role') then
+    create role service_role nologin bypassrls;
+  end if;
+end $$;
+
 create schema if not exists auth;
 
 create table if not exists auth.users (

@@ -7,12 +7,22 @@ export type ClaimedProfile = {
   bio: string;
   avatarUrl: string | null;
   links: { label: string; href: string }[];
+  city: string | null;
+  contactEmail: string | null;
+  tags: string[];
+  lastSeenAt: string | null;
+  viewCount: number;
 };
 
 // Local fallback so the profile page works before a Supabase project is connected.
 const DEMO_PROFILES: Record<string, ClaimedProfile> = {
   MYN042: {
     userId: null,
+    city: "Toshkent",
+    contactEmail: null,
+    tags: ["Startup"],
+    lastSeenAt: null,
+    viewCount: 0,
     name: "Aziz Karimov",
     bio: "Mynt asoschisi. Raqamli shaxs va networking bilan shug'ullanaman.",
     avatarUrl: null,
@@ -32,7 +42,9 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
 
   const { data } = await supabase
     .from("handles")
-    .select("user_id, owner_name, bio, avatar_url, links")
+    .select(
+      "user_id, owner_name, bio, avatar_url, links, city, contact_email, tags, last_seen_at, view_count"
+    )
     .eq("normalized", normalized)
     .eq("status", "claimed")
     .maybeSingle();
@@ -45,6 +57,11 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
     bio: data.bio ?? "",
     avatarUrl: data.avatar_url,
     links: Array.isArray(data.links) ? data.links : [],
+    city: data.city ?? null,
+    contactEmail: data.contact_email ?? null,
+    tags: Array.isArray(data.tags) ? data.tags : [],
+    lastSeenAt: data.last_seen_at ?? null,
+    viewCount: Number(data.view_count ?? 0),
   };
 });
 
@@ -123,6 +140,10 @@ export type OwnedHandle = {
   pricePaid: number | null;
   claimedAt: string | null;
   reservedUntil: string | null;
+  city: string | null;
+  contactEmail: string | null;
+  tags: string[];
+  viewCount: number;
 };
 
 function rowToOwned(row: Record<string, unknown>): OwnedHandle {
@@ -136,11 +157,17 @@ function rowToOwned(row: Record<string, unknown>): OwnedHandle {
     pricePaid: row.price_paid === null || row.price_paid === undefined ? null : Number(row.price_paid),
     claimedAt: (row.claimed_at as string) ?? null,
     reservedUntil: (row.reserved_until as string) ?? null,
+    city: (row.city as string) ?? null,
+    contactEmail: (row.contact_email as string) ?? null,
+    tags: Array.isArray(row.tags) ? (row.tags as string[]) : [],
+    viewCount: Number(row.view_count ?? 0),
   };
 }
 
+// One string literal, not a concatenation: Supabase infers the row type from
+// this text, and a joined expression makes it give up and return an error type.
 const OWNED_COLUMNS =
-  "normalized, status, owner_name, bio, avatar_url, links, price_paid, claimed_at, reserved_until";
+  "normalized, status, owner_name, bio, avatar_url, links, price_paid, claimed_at, reserved_until, city, contact_email, tags, view_count";
 
 // Everything the signed-in user owns or is currently holding.
 export async function listHandlesForUser(userId: string): Promise<OwnedHandle[]> {
@@ -173,4 +200,106 @@ export async function getOwnedHandle(
     .maybeSingle();
 
   return data ? rowToOwned(data) : null;
+}
+
+export type Resident = {
+  normalized: string;
+  name: string;
+  bio: string;
+  avatarUrl: string | null;
+  city: string | null;
+  tags: string[];
+  viewCount: number;
+  lastSeenAt: string | null;
+};
+
+const RESIDENT_COLUMNS =
+  "normalized, owner_name, bio, avatar_url, city, tags, view_count, last_seen_at";
+
+function rowToResident(row: Record<string, unknown>): Resident {
+  return {
+    normalized: row.normalized as string,
+    name: (row.owner_name as string) ?? (row.normalized as string),
+    bio: (row.bio as string) ?? "",
+    avatarUrl: (row.avatar_url as string) ?? null,
+    city: (row.city as string) ?? null,
+    tags: Array.isArray(row.tags) ? (row.tags as string[]) : [],
+    viewCount: Number(row.view_count ?? 0),
+    lastSeenAt: (row.last_seen_at as string) ?? null,
+  };
+}
+
+// The public directory. Only claimed handles appear — a reservation is an
+// unfinished purchase, not a resident.
+export async function listResidents(query = "", limit = 60): Promise<Resident[]> {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [];
+
+  let request = supabase
+    .from("handles")
+    .select(RESIDENT_COLUMNS)
+    .eq("status", "claimed")
+    .order("view_count", { ascending: false })
+    .limit(limit);
+
+  const term = query.trim();
+  if (term) {
+    // Escaped so a comma or parenthesis in the term cannot alter the filter
+    // expression PostgREST parses.
+    const safe = term.replace(/[,()\\]/g, " ").slice(0, 40);
+    request = request.or(`normalized.ilike.%${safe}%,owner_name.ilike.%${safe}%,city.ilike.%${safe}%`);
+  }
+
+  const { data } = await request;
+  return (data ?? []).map(rowToResident);
+}
+
+export type TopHandle = {
+  normalized: string;
+  name: string;
+  avatarUrl: string | null;
+  views: number;
+};
+
+// Most-viewed claimed handles over the last few days.
+export async function getTopHandles(days = 3, limit = 3): Promise<TopHandle[]> {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [];
+
+  const { data } = await supabase.rpc("top_handles", { p_days: days, p_limit: limit });
+
+  return (data ?? []).map((row: Record<string, unknown>) => ({
+    normalized: String(row.normalized),
+    name: (row.owner_name as string) ?? String(row.normalized),
+    avatarUrl: (row.avatar_url as string) ?? null,
+    views: Number(row.views),
+  }));
+}
+
+export type DirectoryCounts = { claimed: number; namespace: number };
+
+// Headline counts for the directory. 26^3 * 10^3 is the whole AAA000 space.
+export async function getDirectoryCounts(): Promise<DirectoryCounts> {
+  const supabase = await createServerSupabase();
+  const namespace = 26 * 26 * 26 * 10 * 10 * 10;
+  if (!supabase) return { claimed: 0, namespace };
+
+  const { count } = await supabase
+    .from("handles")
+    .select("normalized", { count: "exact", head: true })
+    .eq("status", "claimed");
+
+  return { claimed: count ?? 0, namespace };
+}
+
+// Stamps the owner's handles as recently active. Called from the cabinet,
+// which is the one page only an owner loads.
+export async function touchLastSeen(userId: string): Promise<void> {
+  const supabase = await createServerSupabase();
+  if (!supabase) return;
+
+  await supabase
+    .from("handles")
+    .update({ last_seen_at: new Date().toISOString() })
+    .eq("user_id", userId);
 }

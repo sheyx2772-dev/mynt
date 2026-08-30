@@ -26,10 +26,21 @@ docker run -d --name "$CONTAINER" \
   -e POSTGRES_PASSWORD=test -e POSTGRES_DB="$DB" \
   -p 55432:5432 "$IMAGE" >/dev/null
 
+# pg_isready reports success while the server is still finishing its own
+# start-up, so wait on a query that actually needs the database to be up.
+ready=false
 for _ in $(seq 1 60); do
-  docker exec "$CONTAINER" pg_isready -U postgres >/dev/null 2>&1 && break
+  if docker exec "$CONTAINER" psql -U postgres -d "$DB" -c 'select 1' >/dev/null 2>&1; then
+    ready=true
+    break
+  fi
   sleep 1
 done
+
+if [ "$ready" != true ]; then
+  echo "Postgres did not become ready in time." >&2
+  exit 1
+fi
 
 run() { docker exec -i "$CONTAINER" psql -U postgres -d "$DB" -v ON_ERROR_STOP=1 -q; }
 

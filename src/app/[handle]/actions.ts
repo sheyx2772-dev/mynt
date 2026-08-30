@@ -92,6 +92,9 @@ export async function claimHandle(
     bio: profile.bio,
     avatar_url: profile.avatarUrl,
     links: profile.links,
+    city: profile.city,
+    contact_email: profile.contactEmail,
+    tags: profile.tags,
     price_paid: price,
     claimed_at: settleNow ? new Date().toISOString() : null,
     reserved_until: settleNow

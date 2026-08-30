@@ -45,6 +45,9 @@ export async function updateProfile(
       bio: read.profile.bio,
       links: read.profile.links,
       avatar_url: read.profile.avatarUrl,
+      city: read.profile.city,
+      contact_email: read.profile.contactEmail,
+      tags: read.profile.tags,
     })
     .eq("normalized", normalized)
     .eq("user_id", user.id);

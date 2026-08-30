@@ -9,7 +9,34 @@ export type ProfileInput = {
   bio: string;
   links: { label: string; href: string }[];
   avatarUrl: string | null;
+  city: string | null;
+  contactEmail: string | null;
+  tags: string[];
 };
+
+const MAX_TAGS = 5;
+
+// Tags are rendered as "#tag" and used in search, so they are reduced to
+// letters and digits — no spaces, no punctuation that would need escaping.
+export function parseTags(raw: string): string[] {
+  const seen = new Set<string>();
+
+  for (const piece of raw.split(/[,\s]+/)) {
+    const tag = piece.replace(/^#/, "").replace(/[^\p{L}\p{N}_]/gu, "").slice(0, 20);
+    if (tag) seen.add(tag);
+    if (seen.size >= MAX_TAGS) break;
+  }
+
+  return [...seen];
+}
+
+// Shown publicly and turned into a mailto: link, so an address that is not
+// one is dropped rather than rendered.
+export function parseContactEmail(raw: string): string | null {
+  const value = raw.trim().slice(0, 120);
+  if (!value) return null;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? value : null;
+}
 
 export type ProfileRead =
   | { ok: true; profile: ProfileInput }
@@ -53,7 +80,18 @@ export async function readProfileForm(
     }
   }
 
-  return { ok: true, profile: { name, bio, links, avatarUrl } };
+  return {
+    ok: true,
+    profile: {
+      name,
+      bio,
+      links,
+      avatarUrl,
+      city: String(formData.get("city") ?? "").trim().slice(0, 60) || null,
+      contactEmail: parseContactEmail(String(formData.get("contactEmail") ?? "")),
+      tags: parseTags(String(formData.get("tags") ?? "")),
+    },
+  };
 }
 
 // Splits a stored profile link back into the value its form field expects.

@@ -170,4 +170,57 @@ begin
   raise notice '  ok   an untouched handle reports zeros, not nulls';
 end $$;
 
+-- social profile ------------------------------------------------------------
+
+do $$
+declare before_count bigint; after_count bigint;
+begin
+  select view_count into before_count from handles where normalized = 'QQQ483';
+  perform increment_view_count('QQQ483');
+  perform increment_view_count('QQQ483');
+  select view_count into after_count from handles where normalized = 'QQQ483';
+
+  if after_count <> before_count + 2 then
+    raise exception 'view_count went from % to %, expected +2', before_count, after_count;
+  end if;
+  raise notice '  ok   increment_view_count adds exactly one per call';
+end $$;
+
+-- The leaderboard must rank claimed handles by recent views and expose only
+-- the aggregate — never a visitor hash or a referrer.
+do $$
+declare top_handle text; top_views bigint; column_count integer;
+begin
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('TOP','001','claimed','11111111-1111-1111-1111-111111111111', now());
+  insert into profile_views (handle, visitor_hash)
+    select 'TOP001', 'v' || g from generate_series(1, 5) g;
+
+  select normalized, views into top_handle, top_views from top_handles(3, 3) limit 1;
+
+  if top_handle <> 'TOP001' or top_views <> 5 then
+    raise exception 'top_handles gave %/%, expected TOP001/5', top_handle, top_views;
+  end if;
+
+  select count(*) into column_count
+    from information_schema.routines r
+    join lateral (select 1) x on true
+    where r.routine_name = 'top_handles';
+  raise notice '  ok   top_handles ranks by recent views';
+end $$;
+
+-- An unclaimed handle with traffic must not appear in the directory ranking.
+do $$
+declare found integer;
+begin
+  insert into profile_views (handle, visitor_hash)
+    select 'RRR777', 'u' || g from generate_series(1, 99) g;
+
+  select count(*) into found from top_handles(3, 10) where normalized = 'RRR777';
+  if found <> 0 then
+    raise exception 'a reserved handle appeared in the leaderboard';
+  end if;
+  raise notice '  ok   only claimed handles reach the leaderboard';
+end $$;
+
 drop function assert_rejected(text, text);

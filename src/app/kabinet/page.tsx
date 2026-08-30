@@ -1,11 +1,12 @@
 import Link from "next/link";
+import { after } from "next/server";
 import type { Metadata } from "next";
 import { Pencil, QrCode, Clock } from "lucide-react";
 import PageShell from "@/components/PageShell";
 import SignOutButton from "@/components/SignOutButton";
 import InstallHint from "@/components/InstallHint";
 import { requireUser } from "@/lib/auth";
-import { listHandlesForUser } from "@/lib/handles";
+import { listHandlesForUser, touchLastSeen } from "@/lib/handles";
 import { formatUZS } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -16,6 +17,10 @@ export const metadata: Metadata = {
 export default async function CabinetPage() {
   const user = await requireUser("/kabinet");
   const handles = await listHandlesForUser(user.id);
+
+  // The cabinet is the one page only an owner loads, which makes it the
+  // natural place to stamp activity. Deferred so it never delays the render.
+  after(() => touchLastSeen(user.id));
 
   return (
     <PageShell>

@@ -16,6 +16,9 @@ export default function EditProfileForm({
     telegram: string;
     instagram: string;
     website: string;
+    city: string;
+    contactEmail: string;
+    tags: string;
   };
 }) {
   const boundAction = updateProfile.bind(null, handle);
@@ -110,6 +113,53 @@ export default function EditProfileForm({
           className={inputClass}
         />
       </div>
+
+      <div>
+        <label className={labelClass} htmlFor="tags">
+          Yo&apos;nalishlar
+        </label>
+        <input
+          id="tags"
+          name="tags"
+          placeholder="Startup, dizayn, IT"
+          defaultValue={defaults.tags}
+          className={inputClass}
+        />
+        <p className="mt-1 text-xs text-mynt-black/35">
+          Vergul bilan ajrating, 5 tagacha. Profilda #teg ko&apos;rinishida chiqadi.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass} htmlFor="city">
+            Shahar
+          </label>
+          <input
+            id="city"
+            name="city"
+            placeholder="Toshkent"
+            defaultValue={defaults.city}
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className={labelClass} htmlFor="contactEmail">
+            Email
+          </label>
+          <input
+            id="contactEmail"
+            name="contactEmail"
+            type="email"
+            placeholder="siz@email.com"
+            defaultValue={defaults.contactEmail}
+            className={inputClass}
+          />
+        </div>
+      </div>
+      <p className="text-xs text-mynt-black/35">
+        Shahar va email profilda ochiq ko&apos;rinadi.
+      </p>
 
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
       {state.saved && <p className="text-sm text-mynt-black/60">Saqlandi.</p>}
