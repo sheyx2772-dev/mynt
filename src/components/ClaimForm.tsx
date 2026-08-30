@@ -10,10 +10,12 @@ export default function ClaimForm({
   handle,
   priceLabel,
   isSignedIn,
+  paymentEnabled,
 }: {
   handle: string;
   priceLabel: string;
   isSignedIn: boolean;
+  paymentEnabled: boolean;
 }) {
   const boundAction = claimHandle.bind(null, handle);
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
@@ -32,6 +34,37 @@ export default function ClaimForm({
         </Link>
         <p className="mt-3 text-center text-xs text-mynt-black/40">
           Handle sizga biriktirilishi uchun hisob kerak.
+        </p>
+      </div>
+    );
+  }
+
+  // The order exists and the handle is held; the buyer now picks a provider.
+  if (state.ok && state.checkout) {
+    return (
+      <div className="mt-8 space-y-3">
+        <p className="text-sm text-mynt-black/60">
+          <span className="font-medium text-mynt-black">{handle}</span> siz uchun 30 daqiqaga
+          band qilindi. To&apos;lovni yakunlang:
+        </p>
+        {state.checkout.click && (
+          <a
+            href={state.checkout.click}
+            className="block rounded-full bg-mynt-black px-6 py-3 text-center font-medium text-white transition-transform hover:scale-[1.01]"
+          >
+            Click orqali to&apos;lash — {priceLabel}
+          </a>
+        )}
+        {state.checkout.payme && (
+          <a
+            href={state.checkout.payme}
+            className="block rounded-full bg-lime px-6 py-3 text-center font-medium text-mynt-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+          >
+            Payme orqali to&apos;lash — {priceLabel}
+          </a>
+        )}
+        <p className="text-center text-xs text-mynt-black/40">
+          To&apos;lov tasdiqlangach handle butunlay sizniki bo&apos;ladi.
         </p>
       </div>
     );
@@ -69,10 +102,16 @@ export default function ClaimForm({
         disabled={isPending}
         className="w-full rounded-full bg-lime px-6 py-3 font-medium text-mynt-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01] disabled:opacity-60"
       >
-        {isPending ? "Yuborilmoqda..." : `${priceLabel} — Band qilish`}
+        {isPending
+          ? "Yuborilmoqda..."
+          : paymentEnabled
+            ? `${priceLabel} — To'lovga o'tish`
+            : `${priceLabel} — Band qilish`}
       </button>
       <p className="text-center text-xs text-mynt-black/40">
-        Hozircha to&apos;lov tizimi ulanmagan — bu demo/test rejimida bepul band qilish.
+        {paymentEnabled
+          ? "Keyingi qadamda Click yoki Payme tanlaysiz."
+          : "Hozircha to'lov tizimi ulanmagan — bu demo/test rejimida bepul band qilish."}
       </p>
     </form>
   );

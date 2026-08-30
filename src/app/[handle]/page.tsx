@@ -9,6 +9,7 @@ import SaveContactButton from "@/components/SaveContactButton";
 import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
+import { isAnyProviderConfigured } from "@/lib/payments/config";
 
 export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
@@ -125,7 +126,12 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
           </div>
         </div>
 
-        <ClaimForm handle={normalized} priceLabel={formatUZS(price)} isSignedIn={isSignedIn} />
+        <ClaimForm
+          handle={normalized}
+          priceLabel={formatUZS(price)}
+          isSignedIn={isSignedIn}
+          paymentEnabled={isAnyProviderConfigured}
+        />
       </div>
     </PageShell>
   );

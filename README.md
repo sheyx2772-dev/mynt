@@ -68,6 +68,33 @@ and intended for testing; connect a real SMTP provider before launch.
 Phone/SMS sign-in is not enabled: it needs an SMS provider configured in the
 Supabase dashboard.
 
+### Payments
+
+A handle is reserved for 30 minutes while an order is paid for, and only
+becomes claimed once Click or Payme confirms. The reservation reuses the
+unique index on `normalized`, so two buyers cannot race for one handle.
+
+With no provider keys the site still works: the claim completes immediately
+and free, which is what development and preview environments want.
+
+Both providers call back to this app, so their merchant cabinets need these
+endpoints:
+
+| Provider | Setting | URL |
+| --- | --- | --- |
+| Click | Prepare | `https://mynt.uz/api/click/prepare` |
+| Click | Complete | `https://mynt.uz/api/click/complete` |
+| Payme | Endpoint | `https://mynt.uz/api/payme` |
+
+The protocol logic lives in [`src/lib/payments`](src/lib/payments) and is
+tested against an in-memory store, including the cases Payme's sandbox
+certification checks: repeated calls returning identical timestamps, the
+12-hour transaction timeout, and cancel-before-perform (-1) versus
+cancel-after-perform (-2).
+
+`RUN_DB_TESTS=1 npm test` additionally runs the store against the live
+project, creating and then removing its own rows.
+
 ## Commands
 
 | Command | Purpose |
