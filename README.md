@@ -46,6 +46,12 @@ needs `SUPABASE_ACCESS_TOKEN` in `.env.local` — create one under
 [account tokens](https://supabase.com/dashboard/account/tokens). Use
 `npm run db:status` to see what is pending without applying it.
 
+`npm run db:test` replays every migration against a throwaway Postgres
+container and asserts that the schema rejects bad data on its own — wrong
+handle formats, claimed handles with no owner, negative order amounts, a
+second live transaction for one order. It needs Docker but no Supabase
+credentials, so schema changes can be checked before they reach the project.
+
 | Migration | What it adds |
 | --- | --- |
 | `0001_initial.sql` | `handles` and `genesis_cards` tables, public-read RLS |
@@ -73,3 +79,4 @@ Supabase dashboard.
 | `npm run typecheck` | Type check |
 | `npm run db:migrate` | Apply pending database migrations |
 | `npm run db:status` | Show pending migrations without applying |
+| `npm run db:test` | Replay migrations on a local Postgres and check constraints |
