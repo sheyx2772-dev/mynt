@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { after } from "next/server";
 import type { Metadata } from "next";
 import { Nfc } from "lucide-react";
 import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRarity } from "@/lib/pricing";
@@ -10,6 +11,7 @@ import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
 import { isAnyProviderConfigured } from "@/lib/payments/config";
+import { readVisitorContext, recordProfileView } from "@/lib/analytics";
 
 export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
@@ -55,6 +57,13 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
     const viewer = await getUser();
     const isOwner = Boolean(viewer && profile.userId && viewer.id === profile.userId);
 
+    // Owners looking at their own page would otherwise inflate their numbers.
+    // Recorded after the response so it never delays the profile.
+    if (!isOwner) {
+      const visitor = await readVisitorContext();
+      after(() => recordProfileView(normalized, visitor));
+    }
+
     return (
       <PageShell>
         <div className="grain card-sheen relative overflow-hidden rounded-[1.75rem] bg-mynt-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
@@ -92,10 +101,12 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
         )}
 
         <div className="mt-6 space-y-3">
-          {profile.links.map((link) => (
+          {profile.links.map((link, index) => (
             <a
               key={link.href}
-              href={link.href}
+              // Routed through /go so the click is counted; the destination is
+              // resolved from this index server-side, not from the URL.
+              href={`/${normalized}/go?to=${index}`}
               target="_blank"
               rel="noopener noreferrer"
               className="block rounded-xl border border-black/10 bg-white px-5 py-3 text-center font-medium shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"

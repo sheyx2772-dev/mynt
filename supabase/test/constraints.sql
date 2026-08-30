@@ -120,4 +120,54 @@ begin
   raise notice '  ok   updated_at advances on update';
 end $$;
 
+-- analytics -----------------------------------------------------------------
+
+insert into profile_views (handle, visitor_hash) values
+  ('QQQ483','visitor-a'), ('QQQ483','visitor-a'), ('QQQ483','visitor-b');
+insert into link_clicks (handle, label, visitor_hash) values
+  ('QQQ483','Telegram','visitor-a'), ('QQQ483','Telegram','visitor-b'),
+  ('QQQ483','Veb-sayt','visitor-a');
+
+do $$
+declare row_count integer; today_views bigint; today_visitors bigint; today_clicks bigint;
+begin
+  select count(*) into row_count from handle_stats('QQQ483', 30);
+  if row_count <> 30 then
+    raise exception 'handle_stats returned % rows, expected a zero-filled 30', row_count;
+  end if;
+  raise notice '  ok   handle_stats zero-fills the whole window';
+
+  select views, visitors, clicks into today_views, today_visitors, today_clicks
+    from handle_stats('QQQ483', 30) where day = current_date;
+
+  if today_views <> 3 then raise exception 'views was %, expected 3', today_views; end if;
+  -- Three visits from two people.
+  if today_visitors <> 2 then raise exception 'visitors was %, expected 2', today_visitors; end if;
+  if today_clicks <> 3 then raise exception 'clicks was %, expected 3', today_clicks; end if;
+  raise notice '  ok   handle_stats counts views, unique visitors and clicks';
+end $$;
+
+do $$
+declare top_label text; top_clicks bigint;
+begin
+  select label, clicks into top_label, top_clicks
+    from handle_link_stats('QQQ483', 30) limit 1;
+
+  if top_label <> 'Telegram' or top_clicks <> 2 then
+    raise exception 'link stats gave %/%, expected Telegram/2', top_label, top_clicks;
+  end if;
+  raise notice '  ok   handle_link_stats ranks links by clicks';
+end $$;
+
+-- A handle with no traffic must still produce a full, empty series.
+do $$
+declare total bigint;
+begin
+  select sum(views) into total from handle_stats('ZZZ999', 30);
+  if coalesce(total, 0) <> 0 then
+    raise exception 'expected no views for an untouched handle, got %', total;
+  end if;
+  raise notice '  ok   an untouched handle reports zeros, not nulls';
+end $$;
+
 drop function assert_rejected(text, text);

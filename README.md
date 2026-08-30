@@ -57,6 +57,8 @@ credentials, so schema changes can be checked before they reach the project.
 | `0001_initial.sql` | `handles` and `genesis_cards` tables, public-read RLS |
 | `0002_auth_and_ownership.sql` | claim ownership, format constraints, rate limiting |
 | `0003_payments.sql` | orders, Click/Payme transactions, handle reservations |
+| `0004_analytics.sql` | profile views, link clicks, aggregation functions |
+| `0005_lock_down_stats_functions.sql` | revoke stats functions from the public roles |
 
 ### Auth
 
@@ -77,6 +79,24 @@ from `/{handle}/qr`, for phones without NFC and for printing on the card.
 Ownership is enforced in the query rather than in the page: the row is read
 and written with a `user_id` filter, so a guessed URL is a 404 and a forged
 request updates nothing.
+
+### Analytics
+
+Profile visits and link clicks are counted per handle and shown in the
+cabinet: headline totals, a 30-day column chart of daily visits, and clicks
+broken down by link.
+
+Nothing that identifies a visitor is stored. A visit records a salted hash of
+the day, address and user agent — enough to tell repeat visits apart within a
+day, worthless the next morning because the day is part of the hash. The salt
+comes from `ANALYTICS_SALT`, falling back to the service role key; without a
+salt, a hash of an IPv4 address is reversible by trying all of them. Referrers
+are truncated to the host.
+
+Clicks are counted by routing links through `/{handle}/go?to={index}`. The
+index selects from the profile's own stored links, so the route cannot be
+handed an arbitrary URL and turned into an open redirect. Owners viewing their
+own profile are not counted.
 
 ### Payments
 

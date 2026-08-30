@@ -8,6 +8,8 @@ import { requireUser } from "@/lib/auth";
 import { getOwnedHandle } from "@/lib/handles";
 import { parseHandle } from "@/lib/pricing";
 import { linkFieldValue } from "@/lib/profile-form";
+import StatsPanel from "@/components/StatsPanel";
+import { getHandleStats } from "@/lib/analytics";
 
 export async function generateMetadata(
   props: PageProps<"/kabinet/[handle]">
@@ -29,6 +31,9 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
   // 404 rather than someone else's edit form.
   const owned = await getOwnedHandle(normalized, user.id);
   if (!owned) notFound();
+
+  // Only reached once ownership is established above.
+  const stats = await getHandleStats(normalized);
 
   return (
     <PageShell>
@@ -56,6 +61,10 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
             website: linkFieldValue(owned.links, "Veb-sayt"),
           }}
         />
+      </div>
+
+      <div className="mt-6">
+        <StatsPanel stats={stats} />
       </div>
 
       <div
