@@ -112,3 +112,65 @@ export async function listPublicHandles(): Promise<PublicHandle[]> {
     updatedAt: row.updated_at ?? null,
   }));
 }
+
+export type OwnedHandle = {
+  normalized: string;
+  status: "available" | "reserved" | "claimed";
+  name: string;
+  bio: string;
+  avatarUrl: string | null;
+  links: { label: string; href: string }[];
+  pricePaid: number | null;
+  claimedAt: string | null;
+  reservedUntil: string | null;
+};
+
+function rowToOwned(row: Record<string, unknown>): OwnedHandle {
+  return {
+    normalized: row.normalized as string,
+    status: row.status as OwnedHandle["status"],
+    name: (row.owner_name as string) ?? "",
+    bio: (row.bio as string) ?? "",
+    avatarUrl: (row.avatar_url as string) ?? null,
+    links: Array.isArray(row.links) ? (row.links as OwnedHandle["links"]) : [],
+    pricePaid: row.price_paid === null || row.price_paid === undefined ? null : Number(row.price_paid),
+    claimedAt: (row.claimed_at as string) ?? null,
+    reservedUntil: (row.reserved_until as string) ?? null,
+  };
+}
+
+const OWNED_COLUMNS =
+  "normalized, status, owner_name, bio, avatar_url, links, price_paid, claimed_at, reserved_until";
+
+// Everything the signed-in user owns or is currently holding.
+export async function listHandlesForUser(userId: string): Promise<OwnedHandle[]> {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [];
+
+  const { data } = await supabase
+    .from("handles")
+    .select(OWNED_COLUMNS)
+    .eq("user_id", userId)
+    .order("claimed_at", { ascending: false, nullsFirst: false });
+
+  return (data ?? []).map(rowToOwned);
+}
+
+// Ownership is re-checked in the query itself, so a guessed handle in the URL
+// cannot open someone else's profile for editing.
+export async function getOwnedHandle(
+  normalized: string,
+  userId: string
+): Promise<OwnedHandle | null> {
+  const supabase = await createServerSupabase();
+  if (!supabase) return null;
+
+  const { data } = await supabase
+    .from("handles")
+    .select(OWNED_COLUMNS)
+    .eq("normalized", normalized)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  return data ? rowToOwned(data) : null;
+}

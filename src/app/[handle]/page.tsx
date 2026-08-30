@@ -52,6 +52,9 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
   const profile = await getClaimedProfile(normalized);
 
   if (profile) {
+    const viewer = await getUser();
+    const isOwner = Boolean(viewer && profile.userId && viewer.id === profile.userId);
+
     return (
       <PageShell>
         <div className="grain card-sheen relative overflow-hidden rounded-[1.75rem] bg-mynt-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
@@ -78,6 +81,15 @@ async function VanityHandlePage({ letters, digits }: { letters: string; digits: 
         <div className="mt-6">
           <SaveContactButton fullName={profile.name} handle={normalized} bio={profile.bio} />
         </div>
+
+        {isOwner && (
+          <Link
+            href={`/kabinet/${normalized}`}
+            className="mt-3 block rounded-full border border-black/10 px-6 py-3 text-center text-sm font-medium transition-colors hover:bg-black/[0.03]"
+          >
+            Profilni tahrirlash
+          </Link>
+        )}
 
         <div className="mt-6 space-y-3">
           {profile.links.map((link) => (

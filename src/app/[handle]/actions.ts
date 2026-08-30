@@ -4,12 +4,10 @@ import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { parseHandle, priceForHandle } from "@/lib/pricing";
-import { uploadImage, isStorageConfigured } from "@/lib/storage";
-import { checkAvatar } from "@/lib/uploads";
 import { getUser } from "@/lib/auth";
 import { getSiteOrigin } from "@/lib/site";
 import { checkClaimRateLimit, recordClaimAttempt, getClientIp } from "@/lib/rate-limit";
-import { buildProfileLinks } from "@/lib/links";
+import { readProfileForm } from "@/lib/profile-form";
 import { clickCheckoutUrl } from "@/lib/payments/click";
 import { paymeCheckoutUrl } from "@/lib/payments/payme";
 import {
@@ -28,47 +26,6 @@ export type Checkout = { click?: string; payme?: string };
 export type ClaimResult =
   | { ok: true; checkout?: Checkout }
   | { ok: false; error: string; needsAuth?: true };
-
-type ProfileInput = {
-  name: string;
-  bio: string;
-  links: { label: string; href: string }[];
-  avatarUrl: string | null;
-};
-
-async function readProfile(
-  formData: FormData,
-  normalized: string
-): Promise<{ ok: true; profile: ProfileInput } | { ok: false; error: string }> {
-  const name = String(formData.get("name") ?? "").trim().slice(0, 80);
-  const bio = String(formData.get("bio") ?? "").trim().slice(0, 280);
-
-  if (!name) return { ok: false, error: "Ism kiritish shart." };
-
-  const links = buildProfileLinks({
-    telegram: String(formData.get("telegram") ?? ""),
-    instagram: String(formData.get("instagram") ?? ""),
-    website: String(formData.get("website") ?? ""),
-  });
-
-  let avatarUrl: string | null = null;
-  const avatar = formData.get("avatar");
-  if (avatar instanceof File && avatar.size > 0) {
-    const check = checkAvatar(avatar);
-    if (!check.ok) return { ok: false, error: check.error };
-
-    if (isStorageConfigured) {
-      const buffer = Buffer.from(await avatar.arrayBuffer());
-      avatarUrl = await uploadImage(
-        `handles/${normalized}.${check.extension}`,
-        buffer,
-        check.contentType
-      );
-    }
-  }
-
-  return { ok: true, profile: { name, bio, links, avatarUrl } };
-}
 
 export async function claimHandle(
   rawHandle: string,
@@ -104,7 +61,7 @@ export async function claimHandle(
     return { ok: false, error: verdict.reason };
   }
 
-  const read = await readProfile(formData, normalized);
+  const read = await readProfileForm(formData, normalized);
   if (!read.ok) {
     await recordClaimAttempt(user.id, ip, normalized, false);
     return { ok: false, error: read.error };

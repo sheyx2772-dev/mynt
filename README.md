@@ -68,6 +68,16 @@ and intended for testing; connect a real SMTP provider before launch.
 Phone/SMS sign-in is not enabled: it needs an SMS provider configured in the
 Supabase dashboard.
 
+### The cabinet
+
+`/kabinet` lists what the signed-in user owns and holds. Each handle can be
+edited there — name, bio, links, avatar — and carries a QR code served as SVG
+from `/{handle}/qr`, for phones without NFC and for printing on the card.
+
+Ownership is enforced in the query rather than in the page: the row is read
+and written with a `user_id` filter, so a guessed URL is a 404 and a forged
+request updates nothing.
+
 ### Payments
 
 A handle is reserved for 30 minutes while an order is paid for, and only

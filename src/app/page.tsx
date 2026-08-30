@@ -11,6 +11,7 @@ import {
   Minus,
   ChevronDown,
 } from "lucide-react";
+import Link from "next/link";
 import PricingCalculator from "@/components/PricingCalculator";
 import { formatNumber } from "@/lib/format";
 
@@ -115,6 +116,11 @@ export default function Home() {
             <a href="#savollar" className="transition-colors hover:text-mynt-black">
               Savollar
             </a>
+            {/* Signed-out visitors are sent to sign-in from there, which keeps
+                this page static rather than making it depend on a session. */}
+            <Link href="/kabinet" className="transition-colors hover:text-mynt-black">
+              Kabinet
+            </Link>
           </nav>
           <a
             href="#narx"
