@@ -13,6 +13,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import PricingCalculator from "@/components/PricingCalculator";
+import ProfilePreview from "@/components/ProfilePreview";
+import PhoneFrame from "@/components/PhoneFrame";
+import CardFace from "@/components/CardFace";
+import type { CardDesignId } from "@/lib/card-designs";
 import { formatNumber } from "@/lib/format";
 
 const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
@@ -181,27 +185,27 @@ export default function Home() {
               </div>
 
               <div className="relative flex justify-center lg:justify-end">
-                <div className="absolute -left-4 top-2 z-20 hidden -rotate-6 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-xl sm:block">
+                <div className="absolute -left-10 -top-6 z-20 hidden -rotate-6 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-xl sm:block lg:-left-16">
                   <p className="text-[10px] font-medium tracking-wide text-flex-black/40 uppercase">
                     Bu hafta
                   </p>
                   <p className="font-display text-lg font-semibold">2 481 tashrif</p>
                 </div>
-                <div className="absolute -bottom-5 right-4 z-20 hidden rotate-3 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-xl sm:block">
+                <div className="absolute -bottom-7 -right-6 z-20 hidden rotate-3 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-xl sm:block">
                   <p className="flex items-center gap-1.5 text-xs font-medium text-flex-black/70">
                     <span className="h-1.5 w-1.5 rounded-full bg-lime" />
                     NFC ulandi
                   </p>
                 </div>
 
-                <div className="absolute -inset-10 -z-10 rounded-[3rem] bg-lime/20 blur-[70px]" />
+                <div className="absolute -inset-14 -z-10 rounded-[3rem] bg-lime/25 blur-[90px]" />
 
-                <div className="grain card-sheen relative aspect-[1.586/1] w-80 overflow-hidden rounded-[1.75rem] bg-flex-black p-7 text-white shadow-[0_35px_70px_-20px_rgba(14,10,27,0.55)]">
+                <div className="grain card-sheen relative aspect-[1.586/1] w-[20rem] rotate-[-3deg] overflow-hidden rounded-[1.75rem] bg-flex-black p-7 text-white shadow-[0_45px_90px_-25px_rgba(14,10,27,0.6)] transition-transform duration-500 hover:rotate-0 sm:w-[25rem] lg:w-[27rem]">
                   <div className="relative flex items-start justify-between">
                     <div className="h-6 w-9 rounded-md bg-gradient-to-br from-lime/90 to-lime/30" />
                     <Nfc className="h-5 w-5 text-white/40" />
                   </div>
-                  <div className="relative mt-12 font-display text-3xl font-semibold tracking-tight">
+                  <div className="relative mt-14 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
                     MYN<span className="text-lime">042</span>
                   </div>
                   <p className="relative mt-1 font-tabular text-sm text-white/45">
@@ -217,14 +221,82 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Scarcity strip */}
-        <section className="border-y border-black/5 bg-black/[0.02] py-6">
-          <div className="mx-auto max-w-6xl px-6 text-center text-sm text-flex-black/60 font-tabular">
-            Jami{" "}
-            <span className="font-semibold text-flex-black">
+        {/* How it works */}
+        <section className="mx-auto max-w-6xl px-6 py-24">
+          <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+            Qanday ishlaydi
+          </p>
+          <h2 className="max-w-lg font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+            Uch qadam, o&apos;n daqiqa
+          </h2>
+
+          <ol className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-3">
+            <li>
+              <div className="flex h-40 items-center justify-center rounded-2xl border border-black/8 bg-white">
+                <div className="flex overflow-hidden rounded-xl border-2 border-flex-black/90 font-display text-xl font-semibold">
+                  <span className="px-3 py-2">MYN</span>
+                  <span className="w-px bg-black/10" />
+                  <span className="bg-lime/15 px-3 py-2 font-tabular">042</span>
+                </div>
+              </div>
+              <p className="mt-5 font-tabular text-xs text-flex-black/35">01</p>
+              <h3 className="mt-1 font-display text-lg font-semibold">Handle tanlang</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
+                3 harf + 3 raqam. Narx darhol ko&apos;rinadi &mdash; yashirin to&apos;lov yo&apos;q.
+              </p>
+            </li>
+
+            <li>
+              <div className="flex h-40 items-center justify-center rounded-2xl border border-black/8 bg-white">
+                <div className="grain relative w-40 overflow-hidden rounded-xl bg-flex-black p-3 text-white shadow-[0_16px_32px_-18px_rgba(14,10,27,0.7)]">
+                  <span className="relative text-[7px] tracking-[0.16em] text-white/50 uppercase">
+                    Flex card
+                  </span>
+                  <p className="relative mt-6 font-display text-sm font-semibold">
+                    MYN<span className="text-lime">042</span>
+                  </p>
+                </div>
+              </div>
+              <p className="mt-5 font-tabular text-xs text-flex-black/35">02</p>
+              <h3 className="mt-1 font-display text-lg font-semibold">Kartangizni oling</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
+                NFC chip va QR-kod bilan. Dizaynni o&apos;zingiz tanlaysiz.
+              </p>
+            </li>
+
+            <li>
+              <div className="relative flex h-40 items-center justify-center overflow-hidden rounded-2xl border border-black/8 bg-white">
+                {/* Concentric rings: the tap, drawn. */}
+                <span className="absolute h-16 w-16 rounded-full border border-lime-ink/25" />
+                <span className="absolute h-28 w-28 rounded-full border border-lime-ink/15" />
+                <span className="absolute h-40 w-40 rounded-full border border-lime-ink/10" />
+                <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-lime">
+                  <Nfc className="h-4 w-4 text-flex-black" />
+                </span>
+              </div>
+              <p className="mt-5 font-tabular text-xs text-flex-black/35">03</p>
+              <h3 className="mt-1 font-display text-lg font-semibold">Tegizing</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
+                Telefonga tegizasiz, profilingiz ochiladi. Hech kim ilova o&apos;rnatmaydi.
+              </p>
+            </li>
+          </ol>
+        </section>
+
+        {/* Scarcity */}
+        <section className="grain relative overflow-hidden bg-flex-black py-20 sm:py-28">
+          <div className="bg-dot-grid-light absolute inset-0 opacity-30 [mask-image:radial-gradient(ellipse_50%_60%_at_50%_50%,black,transparent)]" />
+          <div className="relative mx-auto max-w-6xl px-6">
+            <p className="text-xs font-semibold tracking-widest text-lime/70 uppercase">
+              Cheklangan miqdor
+            </p>
+            <p className="mt-5 font-display text-[clamp(2.75rem,11vw,7.5rem)] leading-[0.85] font-semibold tracking-tight text-white tabular-nums">
               {formatNumber(NAMESPACE_SIZE)}
-            </span>{" "}
-            ta mumkin bo&apos;lgan handle — har biri faqat bitta odamga tegishli bo&apos;ladi.
+            </p>
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-white/55">
+              Mumkin bo&apos;lgan handle&rsquo;lar soni. Boshqa yo&apos;q &mdash; har biri
+              faqat bitta odamga tegishli bo&apos;ladi va qayta sotilmaydi.
+            </p>
           </div>
         </section>
 
@@ -245,60 +317,114 @@ export default function Home() {
           <PricingCalculator />
         </section>
 
-        {/* Individual features */}
+        {/* What a profile actually looks like */}
         <section id="individual" className="border-t border-black/5 bg-black/[0.02] py-24">
-          <div className="mx-auto max-w-6xl px-6">
-            <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
-              Shaxsiy
-            </p>
-            <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-              Shaxsiy foydalanuvchilar uchun
-            </h2>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {consumerFeatures.map((f) => (
-                <div
-                  key={f.title}
-                  className="group rounded-2xl border border-black/10 bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[0_20px_40px_-16px_rgba(14,10,27,0.25)]"
-                >
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-lime shadow-[0_8px_20px_-6px_rgba(171,255,9,0.6)]">
-                    <f.icon className="h-5 w-5 text-flex-black" strokeWidth={2} />
+          <div className="mx-auto grid max-w-6xl gap-14 px-6 lg:grid-cols-[1fr_320px] lg:gap-20">
+            <div>
+              <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+                Shaxsiy
+              </p>
+              <h2 className="max-w-md font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+                Bir tegish &mdash; va sizni to&apos;liq ko&apos;radi
+              </h2>
+              <p className="mt-4 max-w-md text-flex-black/65">
+                Kartani tegizasiz, brauzer o&apos;zi ochiladi. Hech kim hech narsa
+                o&apos;rnatmaydi.
+              </p>
+
+              <dl className="mt-10 divide-y divide-black/8 border-y border-black/8">
+                {consumerFeatures.map((f) => (
+                  <div key={f.title} className="flex gap-5 py-5">
+                    <f.icon
+                      className="mt-0.5 h-5 w-5 shrink-0 text-flex-black/35"
+                      strokeWidth={1.75}
+                    />
+                    <div>
+                      <dt className="font-display font-semibold">{f.title}</dt>
+                      <dd className="mt-1 text-sm leading-relaxed text-flex-black/60">
+                        {f.desc}
+                      </dd>
+                    </div>
                   </div>
-                  <h3 className="font-display text-lg font-semibold">{f.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-flex-black/60">{f.desc}</p>
-                </div>
-              ))}
+                ))}
+              </dl>
+            </div>
+
+            <div className="lg:pt-4">
+              <PhoneFrame>
+                <ProfilePreview />
+              </PhoneFrame>
             </div>
           </div>
         </section>
 
-        {/* Business features */}
+        {/* The cards themselves */}
+        <section className="mx-auto max-w-6xl px-6 py-24">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+                Kartalar
+              </p>
+              <h2 className="max-w-md font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+                Har bir dizayn Flex uchun chizilgan
+              </h2>
+            </div>
+            <Link
+              href="/kartalar"
+              className="rounded-full border border-black/10 px-5 py-2.5 text-sm font-medium transition-colors hover:bg-black/[0.03]"
+            >
+              Hammasini ko&apos;rish
+            </Link>
+          </div>
+
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {["genesis", "naqsh", "lime"].map((design) => (
+              <CardFace key={design} design={design as CardDesignId} handle="MYN042" />
+            ))}
+          </div>
+        </section>
+
+        {/* Business */}
         <section id="biznes" className="grain relative overflow-hidden bg-flex-black py-24">
           <div className="bg-dot-grid-light absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
           <div className="relative mx-auto max-w-6xl px-6">
-            <p className="mb-3 text-xs font-semibold tracking-widest text-lime/70 uppercase">
-              Biznes
-            </p>
-            <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Biznes va jamoalar uchun
-            </h2>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="max-w-xl">
+              <p className="mb-3 text-xs font-semibold tracking-widest text-lime/70 uppercase">
+                Biznes
+              </p>
+              <h2 className="font-display text-3xl font-semibold tracking-tight text-balance text-white sm:text-4xl">
+                Bitta karta emas &mdash; butun jamoa
+              </h2>
+              <p className="mt-4 text-white/55">
+                Xodimlaringizga bir xil brend bilan handle va NFC karta chiqaring, tadbirlarda
+                yig&apos;ilgan kontaktlar to&apos;g&apos;ridan-to&apos;g&apos;ri CRM&apos;ingizga tushsin.
+              </p>
+            </div>
+
+            <div className="mt-14 grid gap-x-14 border-t border-white/10 sm:grid-cols-2">
               {businessFeatures.map((f) => (
                 <div
                   key={f.title}
-                  className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-lime/30 hover:bg-white/[0.06]"
+                  className="flex gap-5 border-b border-white/10 py-7"
                 >
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-lime shadow-[0_8px_20px_-6px_rgba(171,255,9,0.5)]">
-                    <f.icon className="h-5 w-5 text-flex-black" strokeWidth={2} />
+                  <f.icon className="mt-0.5 h-5 w-5 shrink-0 text-lime" strokeWidth={1.75} />
+                  <div>
+                    <h3 className="font-display font-semibold text-white">{f.title}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-white/55">{f.desc}</p>
                   </div>
-                  <h3 className="font-display text-lg font-semibold text-white">{f.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/55">{f.desc}</p>
                 </div>
               ))}
             </div>
+
+            <a
+              href="#savollar"
+              className="mt-12 inline-block rounded-full bg-lime px-7 py-3.5 font-medium text-flex-black shadow-[0_14px_34px_-12px_rgba(171,255,9,0.7)] transition-transform hover:scale-[1.02]"
+            >
+              Jamoangiz uchun hisob-kitob
+            </a>
           </div>
         </section>
 
-        {/* Differentiation table */}
         <section className="border-t border-black/5 bg-black/[0.02] py-24">
           <div className="mx-auto max-w-4xl px-6">
             <p className="mb-3 text-center text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
