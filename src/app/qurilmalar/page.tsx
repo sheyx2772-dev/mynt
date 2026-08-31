@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import DeviceFace from "@/components/DeviceFace";
+import CardFan from "@/components/CardFan";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { CARD_DESIGNS } from "@/lib/card-designs";
 
@@ -61,6 +62,8 @@ export default function DevicesPage() {
             Dizaynni bir marta tanlaysiz va u tanlagan buyumingizga tushadi. Kabinetdan
             istalgan vaqtda almashtirasiz.
           </p>
+
+          <CardFan handle={SAMPLE} />
 
           <div className="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {CARD_DESIGNS.map((design) => (

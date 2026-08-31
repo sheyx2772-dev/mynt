@@ -110,6 +110,23 @@ Ownership is enforced in the query rather than in the page: the row is read
 and written with a `user_id` filter, so a guessed URL is a 404 and a forged
 request updates nothing.
 
+### Product photography
+
+`public/mahsulot/` is where real photographs go — the card, the ring, the
+bracelet, and someone tapping one against a phone. It is empty, and until it
+is not, every device on the site is drawn in CSS.
+
+Only photographs of Flex's own products belong there. Images of other
+companies' products, supplier catalogue shots and stock photos are all
+somebody else's copyright, frequently carry somebody else's trademark, and
+show a product Flex does not sell — a customer who orders from a picture of
+another company's ring has been misled.
+
+Reference photography is useful for a different purpose and is used that way
+here: the recessed disc the NFC mark sits in, the specular sweep across a ring
+band, and the fanned arrangement a supplier catalogue uses to show a range all
+came from looking at how these objects are actually made and photographed.
+
 ### Devices
 
 What Flex sells is the number. Which object carries it — a card, a ring or a

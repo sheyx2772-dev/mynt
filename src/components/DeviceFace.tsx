@@ -24,7 +24,16 @@ function Card({ design, handle, compact }: FaceProps) {
           >
             FLEX
           </span>
-          <Nfc className={`${compact ? "h-2.5 w-2.5" : "h-4 w-4"} ${skin.muted}`} />
+          {/* The NFC mark sits in a recessed disc, as it does on a real card. */}
+          <span
+            className={`flex items-center justify-center rounded-full ${compact ? "h-3.5 w-3.5" : "h-7 w-7"}`}
+            style={{
+              background: "rgba(0,0,0,0.35)",
+              boxShadow: "inset 0 1px 2px rgba(0,0,0,0.6), 0 0.5px 0 rgba(255,255,255,0.08)",
+            }}
+          >
+            <Nfc className={`${compact ? "h-2 w-2" : "h-3.5 w-3.5"} ${skin.muted}`} />
+          </span>
         </div>
         <div>
           <div className={`flex items-center ${compact ? "gap-1" : "gap-2"}`}>
@@ -61,12 +70,20 @@ function Ring({ design, handle, compact }: FaceProps) {
           }}
         >
           {skin.overlay && <div className="absolute inset-0 -z-10" style={skin.overlay} />}
-          {/* A highlight arc, so the band reads as a curved surface. */}
+          {/* Curvature: a specular sweep across the band, the inner wall in
+              shadow, and a bright rim where the metal turns over. */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                "conic-gradient(from 200deg, rgba(255,255,255,0.28), transparent 25%, transparent 70%, rgba(255,255,255,0.14))",
+                "conic-gradient(from 205deg, rgba(255,255,255,0.34), rgba(255,255,255,0.04) 22%, transparent 46%, rgba(255,255,255,0.10) 68%, rgba(255,255,255,0.30) 88%, rgba(255,255,255,0.34))",
+            }}
+          />
+          <div
+            className="absolute inset-0 rounded-full"
+            style={{
+              boxShadow:
+                "inset 0 0 0 1px rgba(255,255,255,0.16), inset 0 -6px 12px rgba(0,0,0,0.55)",
             }}
           />
         </div>
