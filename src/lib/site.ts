@@ -2,19 +2,33 @@ import "server-only";
 
 import { headers } from "next/headers";
 
-// Canonical production origin. Used where there is no request to read a host
-// from — sitemap, robots, and metadata generated at build time.
+// Canonical production origin. Everything that builds an absolute link starts
+// from here, and it never comes from a request.
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://mynt.uz").replace(/\/$/, "");
 
-// Absolute origin for links that leave the app and come back (magic links).
-// Prefers the configured public URL; falls back to the request's own host so
-// local development and preview deploys work without extra configuration.
+// A request's Host and X-Forwarded-Host headers are set by whoever sent the
+// request. Reading an origin from them lets an attacker post a sign-in form
+// with someone else's address and a forged host, so the one-time link that
+// arrives in that person's inbox points at the attacker's server — the token
+// is handed over and the account with it.
+//
+// So the header is only consulted for local development, where there is no
+// deployment to impersonate, and only for hosts that cannot be anything else.
+function isLocalHost(host: string): boolean {
+  const name = host.split(":")[0];
+  return name === "localhost" || name === "127.0.0.1" || name === "[::1]";
+}
+
 export async function getSiteOrigin(): Promise<string> {
-  const configured = process.env.NEXT_PUBLIC_SITE_URL;
-  if (configured) return configured.replace(/\/$/, "");
+  // Configured deployments never look at a header at all.
+  if (process.env.NEXT_PUBLIC_SITE_URL) return SITE_URL;
 
   const h = await headers();
-  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
-  const protocol = h.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
-  return `${protocol}://${host}`;
+  const host = (h.get("x-forwarded-host") ?? h.get("host") ?? "").trim();
+
+  if (host && isLocalHost(host)) return `http://${host}`;
+
+  // Unset in production, or a host we do not recognise: fall back to the
+  // canonical origin rather than trusting what the request claimed to be.
+  return SITE_URL;
 }

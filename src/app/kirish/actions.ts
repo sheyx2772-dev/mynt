@@ -2,6 +2,7 @@
 
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getSiteOrigin } from "@/lib/site";
+import { safePath } from "@/lib/safe-path";
 
 export type SignInResult = { sent: false; error: string } | { sent: true; email: string };
 
@@ -24,9 +25,7 @@ export async function sendSignInLink(
   }
 
   const origin = await getSiteOrigin();
-  // Only relative paths are echoed back into the redirect, so a crafted link
-  // can't bounce the user to another site after signing in.
-  const safeNext = next.startsWith("/") && !next.startsWith("//") ? next : "/";
+  const safeNext = safePath(next);
 
   const { error } = await supabase.auth.signInWithOtp({
     email,

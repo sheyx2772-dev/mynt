@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import SignInForm from "@/components/SignInForm";
 import { getUser } from "@/lib/auth";
+import { safePath } from "@/lib/safe-path";
 
 export const metadata: Metadata = {
   title: "Kirish — mynt.uz",
@@ -17,8 +18,7 @@ const ERRORS: Record<string, string> = {
 export default async function SignInPage(props: PageProps<"/kirish">) {
   const { keyin, xato } = await props.searchParams;
 
-  const rawNext = typeof keyin === "string" ? keyin : "/";
-  const next = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/";
+  const next = safePath(keyin);
 
   // Already signed in — no reason to show the form.
   const user = await getUser();
