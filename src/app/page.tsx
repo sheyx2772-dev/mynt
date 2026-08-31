@@ -124,7 +124,7 @@ export default function Home() {
             {/* Signed-out visitors are sent to sign-in from there, which keeps
                 this page static rather than making it depend on a session. */}
             <Link href="/qurilmalar" className="transition-colors hover:text-flex-black">
-              Kartalar
+              Qurilmalar
             </Link>
             <Link href="/rezidentlar" className="transition-colors hover:text-flex-black">
               Rezidentlar
@@ -156,8 +156,7 @@ export default function Home() {
                   Raqamli shaxsingiz. Bir tegish.
                 </p>
                 <h1 className="font-display text-5xl font-semibold leading-[0.98] tracking-tight text-balance sm:text-6xl lg:text-[4.5rem]">
-                  Noyob handle &mdash;
-                  <br />
+                  Noyob raqam,{" "}
                   <span className="relative inline-block px-1">
                     <span className="relative z-10">umrbod</span>
                     <span className="marker-stroke absolute inset-x-0 bottom-[6px] -z-0 h-[0.4em] rounded-sm bg-lime/80" />
@@ -165,9 +164,9 @@ export default function Home() {
                   sizniki.
                 </h1>
                 <p className="mt-7 max-w-md text-lg leading-relaxed text-flex-black/65">
-                  Flex — noyob raqamli handle, shaxsiy vizit-karta sahifasi va NFC karta orqali
-                  shaxsingizni ulashing. Jamoangiz uchun esa — tadbirlarda lead yig&apos;ish va
-                  CRM bilan sinxronizatsiya.
+                  Siz noyob raqam sotib olasiz &mdash; u umrbod sizniki. Uni karta, uzuk yoki
+                  braslet ko&apos;rinishida olib yurasiz, tanlov sizniki. Har biri bitta
+                  profilni ochadi.
                 </p>
                 <HandleChecker />
 
