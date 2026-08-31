@@ -63,6 +63,7 @@ credentials, so schema changes can be checked before they reach the project.
 | `0007_posts_and_follows.sql` | posts, follows, counter triggers |
 | `0008_account_deletion.sql` | privileges for cascades, orphaned-handle handling |
 | `0009_card_designs.sql` | per-handle card design, restricted to the known set |
+| `0010_device_types.sql` | which form factor an owner chose |
 
 ### Auth
 
@@ -108,6 +109,22 @@ from `/{handle}/qr`, for phones without NFC and for printing on the card.
 Ownership is enforced in the query rather than in the page: the row is read
 and written with a `user_id` filter, so a guessed URL is a 404 and a forged
 request updates nothing.
+
+### Devices
+
+What Flex sells is the number. Which object carries it — a card, a ring or a
+bracelet — is the buyer's choice, and all three open the same profile.
+`/qurilmalar` presents the three forms and the six designs, which apply
+across all of them; owners pick both in the cabinet.
+
+Each form is drawn in CSS at its own proportions rather than shipped as an
+image, so a preview shows the viewer's own handle and stays sharp at any size.
+`DeviceFace` takes a `compact` variant because the cabinet picker renders
+cells about 90px wide, where type sized for a 300px showcase overflows.
+
+Deliberately not modelled yet: one person owning several items. That is a
+fulfilment concern and there are no orders. `handles.device_type` records the
+chosen form; when someone buys a card and a ring together it becomes a table.
 
 ### Cards
 

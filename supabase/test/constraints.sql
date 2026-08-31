@@ -335,4 +335,21 @@ begin
   raise notice '  ok   card_design defaults to genesis and accepts a known design';
 end $$;
 
+-- device types --------------------------------------------------------------
+
+select assert_rejected(
+  $q$update handles set device_type = 'watch' where normalized = 'QQQ483'$q$,
+  'a form factor that is not sold');
+
+do $$
+declare t text;
+begin
+  select device_type into t from handles where normalized = 'QQQ483';
+  if t <> 'card' then raise exception 'default device_type was %, expected card', t; end if;
+
+  update handles set device_type = 'ring' where normalized = 'QQQ483';
+  update handles set device_type = 'bracelet' where normalized = 'QQQ483';
+  raise notice '  ok   device_type defaults to card and accepts ring and bracelet';
+end $$;
+
 drop function assert_rejected(text, text);

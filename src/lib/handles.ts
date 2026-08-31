@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { DEFAULT_CARD_DESIGN, isCardDesign, type CardDesignId } from "@/lib/card-designs";
+import { DEFAULT_DEVICE_TYPE, isDeviceType, type DeviceTypeId } from "@/lib/devices";
 import { createServerSupabase } from "@/lib/supabase/server";
 
 export type ClaimedProfile = {
@@ -152,6 +153,7 @@ export type OwnedHandle = {
   tags: string[];
   viewCount: number;
   cardDesign: CardDesignId;
+  deviceType: DeviceTypeId;
 };
 
 function rowToOwned(row: Record<string, unknown>): OwnedHandle {
@@ -170,13 +172,14 @@ function rowToOwned(row: Record<string, unknown>): OwnedHandle {
     tags: Array.isArray(row.tags) ? (row.tags as string[]) : [],
     viewCount: Number(row.view_count ?? 0),
     cardDesign: isCardDesign(row.card_design) ? row.card_design : DEFAULT_CARD_DESIGN,
+    deviceType: isDeviceType(row.device_type) ? row.device_type : DEFAULT_DEVICE_TYPE,
   };
 }
 
 // One string literal, not a concatenation: Supabase infers the row type from
 // this text, and a joined expression makes it give up and return an error type.
 const OWNED_COLUMNS =
-  "normalized, status, owner_name, bio, avatar_url, links, price_paid, claimed_at, reserved_until, city, contact_email, tags, view_count, card_design";
+  "normalized, status, owner_name, bio, avatar_url, links, price_paid, claimed_at, reserved_until, city, contact_email, tags, view_count, card_design, device_type";
 
 // Everything the signed-in user owns or is currently holding.
 export async function listHandlesForUser(userId: string): Promise<OwnedHandle[]> {

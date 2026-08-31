@@ -16,8 +16,8 @@ import PricingCalculator from "@/components/PricingCalculator";
 import ProfilePreview from "@/components/ProfilePreview";
 import PhoneFrame from "@/components/PhoneFrame";
 import HandleChecker from "@/components/HandleChecker";
-import CardFace from "@/components/CardFace";
-import type { CardDesignId } from "@/lib/card-designs";
+import DeviceFace from "@/components/DeviceFace";
+import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber } from "@/lib/format";
 
 const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
@@ -30,8 +30,8 @@ const consumerFeatures = [
   },
   {
     icon: Nfc,
-    title: "NFC karta",
-    desc: "Telefoningizni bir marta tegizib, profilingizni ulashing. NFC yo'q qurilmalar uchun QR-kod zaxira variant.",
+    title: "Qurilmani o'zingiz tanlaysiz",
+    desc: "Karta, uzuk yoki braslet — uchalasi ham bir tegishda o'sha profilni ochadi. NFC yo'q telefonlar uchun QR-kod zaxira variant.",
   },
   {
     icon: Sparkles,
@@ -48,8 +48,8 @@ const consumerFeatures = [
 const businessFeatures = [
   {
     icon: Users,
-    title: "Jamoa uchun kartalar",
-    desc: "Butun jamoangizga bir xil brend bilan handle va NFC kartalarni ommaviy tarzda chiqaring.",
+    title: "Jamoa uchun raqamlar",
+    desc: "Butun jamoangizga bir xil brend bilan raqam va qurilma chiqaring — har bir xodim o'ziga qulayini tanlaydi.",
   },
   {
     icon: Target,
@@ -84,8 +84,8 @@ const faqs = [
     a: "Handle — 3 harf + 3 raqamdan iborat noyob kod (masalan MYN042), sizning shaxsiy profilingiz manzili bo'ladi. Narx bazaviy summadan, harflar va raqamlarning kamyobligiga qarab ko'payadigan koeffitsientlardan hisoblanadi. Yuqorida hisob-kitobni o'zingiz sinab ko'rishingiz mumkin.",
   },
   {
-    q: "NFC karta qanday ishlaydi?",
-    a: "Kartani boshqa telefonga tegizganingizda, sizning flex.uz profilingiz avtomatik ochiladi. NFC qo'llamaydigan qurilmalar uchun kartada QR-kod ham bo'ladi.",
+    q: "NFC qurilma qanday ishlaydi?",
+    a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, sizning flex.uz profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC qo'llamaydigan telefonlar uchun QR-kod zaxira variant sifatida ishlaydi.",
   },
   {
     q: "Biznes uchun qancha xodim qo'shsam bo'ladi?",
@@ -123,7 +123,7 @@ export default function Home() {
             </a>
             {/* Signed-out visitors are sent to sign-in from there, which keeps
                 this page static rather than making it depend on a session. */}
-            <Link href="/kartalar" className="transition-colors hover:text-flex-black">
+            <Link href="/qurilmalar" className="transition-colors hover:text-flex-black">
               Kartalar
             </Link>
             <Link href="/rezidentlar" className="transition-colors hover:text-flex-black">
@@ -261,9 +261,9 @@ export default function Home() {
                 </div>
               </div>
               <p className="mt-5 font-tabular text-xs text-flex-black/35">02</p>
-              <h3 className="mt-1 font-display text-lg font-semibold">Kartangizni oling</h3>
+              <h3 className="mt-1 font-display text-lg font-semibold">Qurilmani tanlang</h3>
               <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
-                NFC chip va QR-kod bilan. Dizaynni o&apos;zingiz tanlaysiz.
+                Karta, uzuk yoki braslet. Dizaynni ham o&apos;zingiz tanlaysiz.
               </p>
             </li>
 
@@ -366,23 +366,29 @@ export default function Home() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
-                Kartalar
+                Qurilmalar
               </p>
               <h2 className="max-w-md font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-                Har bir dizayn Flex uchun chizilgan
+                Bitta raqam, uchta shakl
               </h2>
             </div>
             <Link
-              href="/kartalar"
+              href="/qurilmalar"
               className="rounded-full border border-black/10 px-5 py-2.5 text-sm font-medium transition-colors hover:bg-black/[0.03]"
             >
               Hammasini ko&apos;rish
             </Link>
           </div>
 
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {["genesis", "naqsh", "lime"].map((design) => (
-              <CardFace key={design} design={design as CardDesignId} handle="MYN042" />
+          <div className="mt-10 grid gap-8 sm:grid-cols-3">
+            {DEVICE_TYPES.map((device) => (
+              <div key={device.id}>
+                <div className="rounded-2xl border border-black/8 bg-white p-5">
+                  <DeviceFace type={device.id} design="genesis" handle="MYN042" />
+                </div>
+                <h3 className="mt-4 font-display font-semibold">{device.name}</h3>
+                <p className="mt-1 text-sm text-flex-black/55">{device.tagline}</p>
+              </div>
             ))}
           </div>
         </section>

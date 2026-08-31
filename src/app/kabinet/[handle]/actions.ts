@@ -6,6 +6,7 @@ import { parseHandle } from "@/lib/pricing";
 import { getUser } from "@/lib/auth";
 import { readProfileForm } from "@/lib/profile-form";
 import { isCardDesign, DEFAULT_CARD_DESIGN } from "@/lib/card-designs";
+import { isDeviceType, DEFAULT_DEVICE_TYPE } from "@/lib/devices";
 
 export type UpdateResult = { ok: boolean; error?: string; saved?: true };
 
@@ -37,6 +38,7 @@ export async function updateProfile(
   if (!existing) return { ok: false, error: "Bu handle sizga tegishli emas." };
 
   const design = String(formData.get("cardDesign") ?? "");
+  const device = String(formData.get("deviceType") ?? "");
   const read = await readProfileForm(formData, normalized, existing.avatar_url);
   if (!read.ok) return { ok: false, error: read.error };
 
@@ -53,6 +55,7 @@ export async function updateProfile(
       // Anything the renderer does not know is refused here and by a check
       // constraint, so a card can never reference a design that cannot draw.
       card_design: isCardDesign(design) ? design : DEFAULT_CARD_DESIGN,
+      device_type: isDeviceType(device) ? device : DEFAULT_DEVICE_TYPE,
     })
     .eq("normalized", normalized)
     .eq("user_id", user.id);
