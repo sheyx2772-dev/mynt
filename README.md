@@ -183,20 +183,29 @@ any link already shared.
 
 ### Before deploying
 
-Two settings must change or sign-in will not work in production, and one of
-them is also a security boundary.
+**Supabase → Authentication → URL Configuration is done.** Site URL is
+`https://flex.com.uz`, and the allow-list holds only the endpoint the app
+actually redirects to:
 
-1. **`NEXT_PUBLIC_SITE_URL=https://flex.com.uz`** in the deployed environment. When
-   it is set, `getSiteOrigin()` never reads a request header. When it is not,
-   the code falls back to the canonical origin rather than trusting the
-   header — a `Host` or `X-Forwarded-Host` an attacker controls would
-   otherwise end up inside the one-time sign-in link mailed to a victim.
-2. **Supabase → Authentication → URL Configuration.** Site URL is still
-   `http://localhost:3000` and the Redirect URL allow-list is empty, so every
-   sign-in link would point at localhost. Set the Site URL to
-   `https://flex.com.uz` and add the redirect URLs the app uses. Keep the
-   allow-list specific — a wildcard removes the second line of defence behind
-   the one above.
+| Entry | Why |
+|-------|-----|
+| `https://flex.com.uz/auth/confirm*` | the only target `signInWithOtp` is given |
+| `http://localhost:*/auth/confirm*` | same endpoint in development, where the port varies |
+
+The list is deliberately not `https://flex.com.uz/**`. The app has exactly one
+redirect target, so widening the pattern to every path would give up the second
+line of defence for nothing.
+
+**Still outstanding: `NEXT_PUBLIC_SITE_URL=https://flex.com.uz` in the deployed
+environment.** When it is set, `getSiteOrigin()` never reads a request header.
+When it is not, the code falls back to the canonical origin rather than trusting
+the header — a `Host` or `X-Forwarded-Host` an attacker controls would otherwise
+end up inside the one-time sign-in link mailed to a victim. Leaving it unset is
+safe but leaves the guarantee resting on the fallback instead of on config.
+
+Set `ANALYTICS_SALT` there too, to any long random string, and then never change
+it: the visitor hash is salted with it, so rotating it silently breaks the
+continuity of every profile's view count.
 
 ### Known issue: deleting an account
 
