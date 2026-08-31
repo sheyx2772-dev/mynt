@@ -15,25 +15,25 @@ type Skin = {
 
 const SKINS: Record<CardDesignId, Skin> = {
   genesis: {
-    shell: "grain bg-mynt-black",
+    shell: "grain bg-flex-black",
     ink: "text-white",
     muted: "text-white/45",
     accent: "bg-lime",
   },
   lime: {
     shell: "bg-lime",
-    ink: "text-mynt-black",
-    muted: "text-mynt-black/50",
-    accent: "bg-mynt-black",
+    ink: "text-flex-black",
+    muted: "text-flex-black/50",
+    accent: "bg-flex-black",
   },
   grid: {
-    shell: "bg-mynt-black bg-dot-grid-light",
+    shell: "bg-flex-black bg-dot-grid-light",
     ink: "text-white",
     muted: "text-white/45",
     accent: "bg-lime",
   },
   sheen: {
-    shell: "card-sheen bg-mynt-black",
+    shell: "card-sheen bg-flex-black",
     ink: "text-white",
     muted: "text-white/45",
     accent: "bg-lime",
@@ -43,7 +43,7 @@ const SKINS: Record<CardDesignId, Skin> = {
     },
   },
   naqsh: {
-    shell: "bg-mynt-black",
+    shell: "bg-flex-black",
     ink: "text-white",
     muted: "text-white/40",
     accent: "bg-lime",
@@ -61,16 +61,16 @@ const SKINS: Record<CardDesignId, Skin> = {
   },
   paper: {
     shell: "border border-black/12 bg-[#fbfbf9]",
-    ink: "text-mynt-black",
-    muted: "text-mynt-black/40",
-    accent: "bg-mynt-black",
+    ink: "text-flex-black",
+    muted: "text-flex-black/40",
+    accent: "bg-flex-black",
   },
 };
 
 export default function CardFace({
   design,
   handle,
-  label = "MYNT CARD",
+  label = "FLEX CARD",
 }: {
   design: CardDesignId;
   handle: string;
@@ -99,7 +99,7 @@ export default function CardFace({
               {handle}
             </span>
           </div>
-          <p className={`mt-1 font-tabular text-[11px] ${skin.muted}`}>mynt.uz/{handle}</p>
+          <p className={`mt-1 font-tabular text-[11px] ${skin.muted}`}>flex.uz/{handle}</p>
         </div>
       </div>
     </div>

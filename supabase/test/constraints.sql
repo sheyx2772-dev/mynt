@@ -20,7 +20,7 @@ end;
 $$ language plpgsql;
 
 insert into auth.users (id, email)
-  values ('11111111-1111-1111-1111-111111111111', 'test@mynt.uz')
+  values ('11111111-1111-1111-1111-111111111111', 'test@flex.uz')
   on conflict do nothing;
 
 -- handles ------------------------------------------------------------------
@@ -292,7 +292,7 @@ do $$
 declare orphan_user uuid := '99999999-9999-9999-9999-999999999999';
 declare owner_id uuid; deleted_at timestamptz; still_claimed text;
 begin
-  insert into auth.users (id, email) values (orphan_user, 'leaving@mynt.uz');
+  insert into auth.users (id, email) values (orphan_user, 'leaving@flex.uz');
   insert into handles (letters, digits, status, user_id, claimed_at)
     values ('BYE','001','claimed', orphan_user, now());
   insert into posts (handle, user_id, body) values ('BYE001', orphan_user, 'xayr');

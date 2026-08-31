@@ -12,10 +12,10 @@ export default function PageShell({ children }: { children: React.ReactNode }) {
           href="/"
           className="mb-10 flex items-center gap-2 self-start font-display text-lg font-semibold"
         >
-          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-mynt-black">
+          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-flex-black">
             <span className="h-1.5 w-1.5 rounded-full bg-lime" />
           </span>
-          mynt
+          flex
         </Link>
         {children}
       </div>

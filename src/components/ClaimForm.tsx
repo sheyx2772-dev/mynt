@@ -21,18 +21,18 @@ export default function ClaimForm({
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
 
   const inputClass =
-    "w-full rounded-xl border border-black/10 bg-black/[0.02] px-4 py-2.5 text-sm outline-none transition-colors focus:border-mynt-black/30 focus:bg-white";
+    "w-full rounded-xl border border-black/10 bg-black/[0.02] px-4 py-2.5 text-sm outline-none transition-colors focus:border-flex-black/30 focus:bg-white";
 
   if (!isSignedIn) {
     return (
       <div className="mt-8">
         <Link
           href={`/kirish?keyin=${encodeURIComponent(`/${handle}`)}`}
-          className="block w-full rounded-full bg-lime px-6 py-3 text-center font-medium text-mynt-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+          className="block w-full rounded-full bg-lime px-6 py-3 text-center font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
         >
           Kirib, band qilish
         </Link>
-        <p className="mt-3 text-center text-xs text-mynt-black/40">
+        <p className="mt-3 text-center text-xs text-flex-black/40">
           Handle sizga biriktirilishi uchun hisob kerak.
         </p>
       </div>
@@ -43,14 +43,14 @@ export default function ClaimForm({
   if (state.ok && state.checkout) {
     return (
       <div className="mt-8 space-y-3">
-        <p className="text-sm text-mynt-black/60">
-          <span className="font-medium text-mynt-black">{handle}</span> siz uchun 30 daqiqaga
+        <p className="text-sm text-flex-black/60">
+          <span className="font-medium text-flex-black">{handle}</span> siz uchun 30 daqiqaga
           band qilindi. To&apos;lovni yakunlang:
         </p>
         {state.checkout.click && (
           <a
             href={state.checkout.click}
-            className="block rounded-full bg-mynt-black px-6 py-3 text-center font-medium text-white transition-transform hover:scale-[1.01]"
+            className="block rounded-full bg-flex-black px-6 py-3 text-center font-medium text-white transition-transform hover:scale-[1.01]"
           >
             Click orqali to&apos;lash — {priceLabel}
           </a>
@@ -58,12 +58,12 @@ export default function ClaimForm({
         {state.checkout.payme && (
           <a
             href={state.checkout.payme}
-            className="block rounded-full bg-lime px-6 py-3 text-center font-medium text-mynt-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+            className="block rounded-full bg-lime px-6 py-3 text-center font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
           >
             Payme orqali to&apos;lash — {priceLabel}
           </a>
         )}
-        <p className="text-center text-xs text-mynt-black/40">
+        <p className="text-center text-xs text-flex-black/40">
           To&apos;lov tasdiqlangach handle butunlay sizniki bo&apos;ladi.
         </p>
       </div>
@@ -72,7 +72,7 @@ export default function ClaimForm({
 
   return (
     <form action={formAction} className="mt-8 space-y-3 text-left">
-      <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/15 bg-black/[0.02] px-4 py-2.5 text-sm text-mynt-black/50">
+      <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/15 bg-black/[0.02] px-4 py-2.5 text-sm text-flex-black/50">
         <span>Profil rasmi (ixtiyoriy)</span>
         <input
           type="file"
@@ -100,7 +100,7 @@ export default function ClaimForm({
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-mynt-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01] disabled:opacity-60"
+        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01] disabled:opacity-60"
       >
         {isPending
           ? "Yuborilmoqda..."
@@ -108,7 +108,7 @@ export default function ClaimForm({
             ? `${priceLabel} — To'lovga o'tish`
             : `${priceLabel} — Band qilish`}
       </button>
-      <p className="text-center text-xs text-mynt-black/40">
+      <p className="text-center text-xs text-flex-black/40">
         {paymentEnabled
           ? "Keyingi qadamda Click yoki Payme tanlaysiz."
           : "Hozircha to'lov tizimi ulanmagan — bu demo/test rejimida bepul band qilish."}

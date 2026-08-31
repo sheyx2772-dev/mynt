@@ -1,4 +1,4 @@
-// Mynt service worker.
+// Flex service worker.
 //
 // Two rules, and a deliberate refusal to cache anything else:
 //   - Static build output is immutable, so serve it from the cache first.
@@ -10,8 +10,8 @@
 // session state or money.
 
 const VERSION = "v1";
-const SHELL = `mynt-shell-${VERSION}`;
-const STATIC = `mynt-static-${VERSION}`;
+const SHELL = `flex-shell-${VERSION}`;
+const STATIC = `flex-static-${VERSION}`;
 const OFFLINE_URL = "/oflayn";
 
 const PRECACHE = [OFFLINE_URL, "/icon-192.png", "/icon-512.png"];

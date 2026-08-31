@@ -7,9 +7,9 @@
 
 set -euo pipefail
 
-CONTAINER=mynt-pg-test
+CONTAINER=flex-pg-test
 IMAGE=postgres:16-alpine
-DB=mynt
+DB=flex
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 cleanup() { docker rm -f "$CONTAINER" >/dev/null 2>&1 || true; }

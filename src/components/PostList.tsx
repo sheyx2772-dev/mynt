@@ -11,7 +11,7 @@ function Avatar({ name, url }: { name: string; url: string | null }) {
     );
   }
   return (
-    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-lime font-display text-xs font-semibold text-mynt-black">
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-lime font-display text-xs font-semibold text-flex-black">
       {name
         .split(" ")
         .map((p) => p[0])
@@ -34,7 +34,7 @@ export default function PostList({
 }) {
   if (posts.length === 0) {
     return (
-      <p className="rounded-2xl border border-dashed border-black/15 px-5 py-10 text-center text-sm text-mynt-black/45">
+      <p className="rounded-2xl border border-dashed border-black/15 px-5 py-10 text-center text-sm text-flex-black/45">
         {emptyMessage}
       </p>
     );
@@ -60,19 +60,19 @@ export default function PostList({
                   <Link href={`/${post.handle}`} className="font-medium hover:underline">
                     {post.author?.name ?? post.handle}
                   </Link>{" "}
-                  <span className="font-tabular text-xs text-mynt-black/35">
-                    mynt.uz/{post.handle}
+                  <span className="font-tabular text-xs text-flex-black/35">
+                    flex.uz/{post.handle}
                   </span>
                 </p>
               )}
 
               {/* User text: rendered as plain text, and wrapped so a long
                   unbroken string cannot stretch the layout. */}
-              <p className="mt-1 text-sm break-words whitespace-pre-wrap text-mynt-black/80">
+              <p className="mt-1 text-sm break-words whitespace-pre-wrap text-flex-black/80">
                 {post.body}
               </p>
 
-              <p className="mt-2 text-xs text-mynt-black/30">{timeAgo(post.createdAt)}</p>
+              <p className="mt-2 text-xs text-flex-black/30">{timeAgo(post.createdAt)}</p>
             </div>
 
             {canDelete && <DeletePostButton postId={post.id} />}

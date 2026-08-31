@@ -5,7 +5,7 @@ import { Share, X, Download } from "lucide-react";
 
 type InstallEvent = Event & { prompt: () => Promise<void> };
 
-const DISMISSED_KEY = "mynt.install-hint.dismissed";
+const DISMISSED_KEY = "flex.install-hint.dismissed";
 
 // Whether to offer installation is a question about the browser and about a
 // stored preference — both external to React. Reading them through a store
@@ -99,24 +99,24 @@ export default function InstallHint() {
       <button
         onClick={dismissForever}
         aria-label="Yopish"
-        className="absolute top-3 right-3 text-mynt-black/30 transition-colors hover:text-mynt-black/60"
+        className="absolute top-3 right-3 text-flex-black/30 transition-colors hover:text-flex-black/60"
       >
         <X className="h-4 w-4" />
       </button>
 
-      <p className="text-sm font-medium">Mynt&apos;ni telefoningizga o&apos;rnating</p>
+      <p className="text-sm font-medium">Flex&apos;ni telefoningizga o&apos;rnating</p>
 
       {showIos ? (
-        <p className="mt-1.5 flex flex-wrap items-center gap-1 text-xs text-mynt-black/55">
+        <p className="mt-1.5 flex flex-wrap items-center gap-1 text-xs text-flex-black/55">
           Safari&apos;da
           <Share className="inline h-3.5 w-3.5" />
           tugmasini bosing, so&apos;ng
-          <span className="font-medium text-mynt-black/75">&quot;Add to Home Screen&quot;</span>
+          <span className="font-medium text-flex-black/75">&quot;Add to Home Screen&quot;</span>
           ni tanlang.
         </p>
       ) : (
         <>
-          <p className="mt-1.5 text-xs text-mynt-black/55">
+          <p className="mt-1.5 text-xs text-flex-black/55">
             Bosh ekrandan bir bosishda ochiladi va internetsiz ham yuklanadi.
           </p>
           <button
@@ -124,7 +124,7 @@ export default function InstallHint() {
               await prompt?.prompt();
               setPrompt(null);
             }}
-            className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-mynt-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-mynt-black/85"
+            className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-flex-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-flex-black/85"
           >
             <Download className="h-3.5 w-3.5" />
             O&apos;rnatish

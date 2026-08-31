@@ -18,7 +18,7 @@ export default function PostComposer({ handle }: { handle: string }) {
         required
         maxLength={MAX_POST_LENGTH}
         placeholder="Nima yangilik?"
-        className="w-full rounded-xl border border-black/10 bg-black/[0.02] px-4 py-3 text-sm outline-none transition-colors focus:border-mynt-black/30 focus:bg-white"
+        className="w-full rounded-xl border border-black/10 bg-black/[0.02] px-4 py-3 text-sm outline-none transition-colors focus:border-flex-black/30 focus:bg-white"
       />
 
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
@@ -26,7 +26,7 @@ export default function PostComposer({ handle }: { handle: string }) {
       <button
         type="submit"
         disabled={isPending}
-        className="rounded-full bg-mynt-black px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-mynt-black/85 disabled:opacity-60"
+        className="rounded-full bg-flex-black px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-flex-black/85 disabled:opacity-60"
       >
         {isPending ? "Yuborilmoqda..." : "Joylash"}
       </button>

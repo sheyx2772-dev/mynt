@@ -6,8 +6,8 @@ import { formatNumber } from "@/lib/format";
 import { timeAgo } from "@/lib/relative-time";
 
 export const metadata: Metadata = {
-  title: "Rezidentlar — mynt.uz",
-  description: "Mynt handle egalari: shaxsiy profillar, shaharlar va yo'nalishlar.",
+  title: "Rezidentlar — flex.uz",
+  description: "Flex handle egalari: shaxsiy profillar, shaharlar va yo'nalishlar.",
 };
 
 function Avatar({ name, url }: { name: string; url: string | null }) {
@@ -18,7 +18,7 @@ function Avatar({ name, url }: { name: string; url: string | null }) {
     );
   }
   return (
-    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-lime font-display text-sm font-semibold text-mynt-black">
+    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-lime font-display text-sm font-semibold text-flex-black">
       {name
         .split(" ")
         .map((p) => p[0])
@@ -45,33 +45,33 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
       <div className="relative mx-auto max-w-3xl px-6 py-16">
         <Link href="/" className="mb-10 flex items-center gap-2 font-display text-lg font-semibold">
-          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-mynt-black">
+          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-flex-black">
             <span className="h-1.5 w-1.5 rounded-full bg-lime" />
           </span>
-          mynt
+          flex
         </Link>
 
         <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
           Rezidentlar
         </h1>
-        <p className="mt-2 font-tabular text-sm text-mynt-black/50">
+        <p className="mt-2 font-tabular text-sm text-flex-black/50">
           {formatNumber(counts.claimed)} ta handle band ·{" "}
           {formatNumber(counts.namespace - counts.claimed)} ta bo&apos;sh
         </p>
 
         <form className="mt-7 flex gap-2">
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-mynt-black/30" />
+            <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-flex-black/30" />
             <input
               name="q"
               defaultValue={query}
               placeholder="Ism, handle yoki shahar"
-              className="w-full rounded-full border border-black/10 bg-white py-3 pr-4 pl-11 text-sm outline-none transition-colors focus:border-mynt-black/30"
+              className="w-full rounded-full border border-black/10 bg-white py-3 pr-4 pl-11 text-sm outline-none transition-colors focus:border-flex-black/30"
             />
           </div>
           <button
             type="submit"
-            className="rounded-full bg-mynt-black px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-mynt-black/85"
+            className="rounded-full bg-flex-black px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-flex-black/85"
           >
             Qidirish
           </button>
@@ -79,7 +79,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
         {top.length > 0 && !query && (
           <section className="mt-10">
-            <h2 className="mb-4 flex items-center gap-2 text-xs font-medium tracking-wide text-mynt-black/45 uppercase">
+            <h2 className="mb-4 flex items-center gap-2 text-xs font-medium tracking-wide text-flex-black/45 uppercase">
               <Trophy className="h-3.5 w-3.5" />
               So&apos;nggi 3 kun eng ko&apos;p ko&apos;rilganlar
             </h2>
@@ -88,12 +88,12 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
                 <Link
                   key={entry.normalized}
                   href={`/${entry.normalized}`}
-                  className="grain card-sheen relative overflow-hidden rounded-2xl bg-mynt-black p-5 text-white transition-transform hover:-translate-y-0.5"
+                  className="grain card-sheen relative overflow-hidden rounded-2xl bg-flex-black p-5 text-white transition-transform hover:-translate-y-0.5"
                 >
                   <span className="relative font-display text-xs text-lime">#{index + 1}</span>
                   <p className="relative mt-3 font-display font-semibold">{entry.name}</p>
                   <p className="relative font-tabular text-xs text-white/45">
-                    mynt.uz/{entry.normalized}
+                    flex.uz/{entry.normalized}
                   </p>
                   <p className="relative mt-3 flex items-center gap-1.5 font-tabular text-xs text-white/35">
                     <Eye className="h-3 w-3" />
@@ -108,14 +108,14 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
         <section className="mt-10">
           {residents.length === 0 ? (
             <div className="rounded-[1.5rem] border border-dashed border-black/15 px-6 py-14 text-center">
-              <p className="text-sm text-mynt-black/55">
+              <p className="text-sm text-flex-black/55">
                 {query
                   ? `"${query}" bo'yicha hech kim topilmadi.`
                   : "Hali rezidentlar yo'q. Birinchi bo'lib handle oling."}
               </p>
               <Link
                 href={query ? "/rezidentlar" : "/#narx"}
-                className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-mynt-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+                className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
               >
                 {query ? "Hammasini ko'rish" : "Handle tanlash"}
               </Link>
@@ -134,11 +134,11 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
                       <div className="min-w-0 flex-1">
                         <p className="truncate font-medium">{resident.name}</p>
-                        <p className="font-tabular text-xs text-mynt-black/40">
-                          mynt.uz/{resident.normalized}
+                        <p className="font-tabular text-xs text-flex-black/40">
+                          flex.uz/{resident.normalized}
                         </p>
                         {resident.tags.length > 0 && (
-                          <p className="mt-1 truncate text-xs text-mynt-black/45">
+                          <p className="mt-1 truncate text-xs text-flex-black/45">
                             {resident.tags.map((tag) => `#${tag}`).join(" ")}
                           </p>
                         )}
@@ -146,16 +146,16 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
                       <div className="shrink-0 text-right">
                         {resident.city && (
-                          <p className="flex items-center justify-end gap-1 text-xs text-mynt-black/50">
+                          <p className="flex items-center justify-end gap-1 text-xs text-flex-black/50">
                             <MapPin className="h-3 w-3" />
                             {resident.city}
                           </p>
                         )}
-                        <p className="mt-1 flex items-center justify-end gap-1 font-tabular text-xs text-mynt-black/35">
+                        <p className="mt-1 flex items-center justify-end gap-1 font-tabular text-xs text-flex-black/35">
                           <Eye className="h-3 w-3" />
                           {resident.viewCount}
                         </p>
-                        {seen && <p className="mt-1 text-[11px] text-mynt-black/25">{seen}</p>}
+                        {seen && <p className="mt-1 text-[11px] text-flex-black/25">{seen}</p>}
                       </div>
                     </Link>
                   </li>

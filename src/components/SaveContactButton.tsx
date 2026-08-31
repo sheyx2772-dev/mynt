@@ -13,7 +13,7 @@ export default function SaveContactButton({ fullName, handle, bio }: Props) {
       "VERSION:3.0",
       `FN:${fullName}`,
       `NOTE:${bio ?? ""}`,
-      `URL:https://mynt.uz/${handle}`,
+      `URL:https://flex.uz/${handle}`,
       "END:VCARD",
     ].join("\n");
 
@@ -31,7 +31,7 @@ export default function SaveContactButton({ fullName, handle, bio }: Props) {
   return (
     <button
       onClick={handleSave}
-      className="w-full rounded-full bg-lime px-6 py-3 text-center font-medium text-mynt-black transition-transform hover:scale-[1.01]"
+      className="w-full rounded-full bg-lime px-6 py-3 text-center font-medium text-flex-black transition-transform hover:scale-[1.01]"
     >
       Kontaktni saqlash
     </button>

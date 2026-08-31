@@ -18,7 +18,7 @@ export default function CardDesignPicker({
 
   return (
     <fieldset>
-      <legend className="mb-1.5 block text-xs font-medium tracking-wide text-mynt-black/50 uppercase">
+      <legend className="mb-1.5 block text-xs font-medium tracking-wide text-flex-black/50 uppercase">
         Karta dizayni
       </legend>
 
@@ -30,7 +30,7 @@ export default function CardDesignPicker({
               key={design.id}
               className={
                 active
-                  ? "relative cursor-pointer rounded-2xl p-1.5 ring-2 ring-mynt-black"
+                  ? "relative cursor-pointer rounded-2xl p-1.5 ring-2 ring-flex-black"
                   : "relative cursor-pointer rounded-2xl p-1.5 ring-1 ring-black/10 transition-colors hover:ring-black/25"
               }
             >
@@ -52,7 +52,7 @@ export default function CardDesignPicker({
         })}
       </div>
 
-      <p className="mt-2 text-xs text-mynt-black/35">
+      <p className="mt-2 text-xs text-flex-black/35">
         Dizayn kartangizga bosiladi. Istalgan vaqtda almashtirishingiz mumkin.
       </p>
     </fieldset>

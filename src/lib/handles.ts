@@ -29,12 +29,12 @@ const DEMO_PROFILES: Record<string, ClaimedProfile> = {
     followerCount: 0,
     postCount: 0,
     name: "Aziz Karimov",
-    bio: "Mynt asoschisi. Raqamli shaxs va networking bilan shug'ullanaman.",
+    bio: "Flex asoschisi. Raqamli shaxs va networking bilan shug'ullanaman.",
     avatarUrl: null,
     links: [
       { label: "Telegram", href: "https://t.me/azizkarimov" },
       { label: "Instagram", href: "https://instagram.com/azizkarimov" },
-      { label: "Veb-sayt", href: "https://mynt.uz" },
+      { label: "Veb-sayt", href: "https://flex.uz" },
     ],
   },
 };

@@ -8,7 +8,7 @@ import { listFeed } from "@/lib/posts";
 import { touchLastSeen } from "@/lib/handles";
 
 export const metadata: Metadata = {
-  title: "Lenta — mynt.uz",
+  title: "Lenta — flex.uz",
   robots: { index: false },
 };
 
@@ -22,7 +22,7 @@ export default async function FeedPage() {
     <PageShell>
       <div className="mb-7 flex items-baseline justify-between gap-4">
         <h1 className="font-display text-2xl font-semibold tracking-tight">Lenta</h1>
-        <Link href="/rezidentlar" className="text-sm text-mynt-black/45 hover:text-mynt-black">
+        <Link href="/rezidentlar" className="text-sm text-flex-black/45 hover:text-flex-black">
           Rezidentlar
         </Link>
       </div>

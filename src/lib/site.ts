@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 
 // Canonical production origin. Everything that builds an absolute link starts
 // from here, and it never comes from a request.
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://mynt.uz").replace(/\/$/, "");
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://flex.uz").replace(/\/$/, "");
 
 // A request's Host and X-Forwarded-Host headers are set by whoever sent the
 // request. Reading an origin from them lets an attacker post a sign-in form

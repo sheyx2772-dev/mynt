@@ -45,7 +45,7 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
     <PageShell>
       <Link
         href="/kabinet"
-        className="mb-6 inline-flex items-center gap-1.5 self-start text-sm text-mynt-black/50 transition-colors hover:text-mynt-black"
+        className="mb-6 inline-flex items-center gap-1.5 self-start text-sm text-flex-black/50 transition-colors hover:text-flex-black"
       >
         <ArrowLeft className="h-4 w-4" />
         Kabinet
@@ -53,8 +53,8 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
 
       <div className="rounded-[1.75rem] border border-black/10 bg-white p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <h1 className="font-display text-2xl font-semibold tracking-tight">{normalized}</h1>
-        <p className="mt-1 mb-7 font-tabular text-sm text-mynt-black/40">
-          mynt.uz/{normalized}
+        <p className="mt-1 mb-7 font-tabular text-sm text-flex-black/40">
+          flex.uz/{normalized}
         </p>
 
         <EditProfileForm
@@ -75,14 +75,14 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
 
       <section className="mt-6 rounded-[1.75rem] border border-black/10 bg-white p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <h2 className="font-display text-lg font-semibold tracking-tight">Postlar</h2>
-        <p className="mt-1 mb-5 text-sm text-mynt-black/50">
+        <p className="mt-1 mb-5 text-sm text-flex-black/50">
           Obunachilaringiz lentasida va profilingizda ko&apos;rinadi.
         </p>
 
         {owned.status === "claimed" ? (
           <PostComposer handle={normalized} />
         ) : (
-          <p className="rounded-xl border border-dashed border-black/15 px-4 py-5 text-center text-sm text-mynt-black/45">
+          <p className="rounded-xl border border-dashed border-black/15 px-4 py-5 text-center text-sm text-flex-black/45">
             To&apos;lov yakunlangach post joylashingiz mumkin bo&apos;ladi.
           </p>
         )}
@@ -103,7 +103,7 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
         className="mt-6 scroll-mt-6 rounded-[1.75rem] border border-black/10 bg-white p-7 text-center shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]"
       >
         <h2 className="font-display text-lg font-semibold tracking-tight">QR-kod</h2>
-        <p className="mt-1 text-sm text-mynt-black/50">
+        <p className="mt-1 text-sm text-flex-black/50">
           NFC ishlamaydigan telefonlar uchun zaxira. Kartaga bosish uchun ham shu kod.
         </p>
 

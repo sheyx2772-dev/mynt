@@ -3,7 +3,7 @@ import { WifiOff } from "lucide-react";
 import PageShell from "@/components/PageShell";
 
 export const metadata: Metadata = {
-  title: "Internet yo'q — mynt.uz",
+  title: "Internet yo'q — flex.uz",
   robots: { index: false },
 };
 
@@ -14,12 +14,12 @@ export default function OfflinePage() {
     <PageShell>
       <div className="flex flex-1 flex-col items-center justify-center text-center">
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-black/[0.04]">
-          <WifiOff className="h-6 w-6 text-mynt-black/40" />
+          <WifiOff className="h-6 w-6 text-flex-black/40" />
         </div>
         <h1 className="mt-5 font-display text-2xl font-semibold tracking-tight">
           Internet yo&apos;q
         </h1>
-        <p className="mt-2 text-sm text-mynt-black/60">
+        <p className="mt-2 text-sm text-flex-black/60">
           Ulanishni tekshirib, qaytadan urinib ko&apos;ring. Profil sahifalari doim eng so&apos;nggi
           holatda ko&apos;rsatilishi uchun ular oflayn saqlanmaydi.
         </p>

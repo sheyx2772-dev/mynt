@@ -30,7 +30,7 @@ describe.skipIf(!enabled)("SupabasePaymentStore against the live project", () =>
     store = new SupabasePaymentStore();
 
     const created = await admin.auth.admin.createUser({
-      email: `store-test-${Date.now()}@mynt.uz`,
+      email: `store-test-${Date.now()}@flex.uz`,
       email_confirm: true,
     });
     userId = created.data.user!.id;

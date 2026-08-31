@@ -20,7 +20,7 @@ import PostList from "@/components/PostList";
 
 export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
-  const title = `${handle.toUpperCase()} — mynt.uz`;
+  const title = `${handle.toUpperCase()} — flex.uz`;
 
   // Only pages with a real person or a real card behind them are worth
   // indexing. An unclaimed handle is a price quote, and there are 17.5M of
@@ -94,7 +94,7 @@ async function VanityHandlePage({
 
     return (
       <PageShell>
-        <div className="grain card-sheen relative overflow-hidden rounded-[1.75rem] bg-mynt-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
+        <div className="grain card-sheen relative overflow-hidden rounded-[1.75rem] bg-flex-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
           {profile.avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
             <img
@@ -103,7 +103,7 @@ async function VanityHandlePage({
               className="relative h-16 w-16 rounded-full object-cover shadow-[0_10px_24px_-8px_rgba(171,255,9,0.6)]"
             />
           ) : (
-            <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-lime font-display text-xl font-semibold text-mynt-black shadow-[0_10px_24px_-8px_rgba(171,255,9,0.6)]">
+            <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-lime font-display text-xl font-semibold text-flex-black shadow-[0_10px_24px_-8px_rgba(171,255,9,0.6)]">
               {profile.name
                 .split(" ")
                 .map((p) => p[0])
@@ -111,7 +111,7 @@ async function VanityHandlePage({
             </div>
           )}
           <h1 className="relative mt-5 font-display text-2xl font-semibold">{profile.name}</h1>
-          <p className="relative mt-1 font-tabular text-sm text-white/50">mynt.uz/{normalized}</p>
+          <p className="relative mt-1 font-tabular text-sm text-white/50">flex.uz/{normalized}</p>
 
           {lastSeen && (
             <p className="relative mt-2 text-xs text-white/40">Oxirgi faollik: {lastSeen}</p>
@@ -166,8 +166,8 @@ async function VanityHandlePage({
             href={`/${normalized}`}
             className={
               tab === "vizitka"
-                ? "-mb-px border-b-2 border-mynt-black pb-2.5 font-medium"
-                : "-mb-px border-b-2 border-transparent pb-2.5 text-mynt-black/45 transition-colors hover:text-mynt-black"
+                ? "-mb-px border-b-2 border-flex-black pb-2.5 font-medium"
+                : "-mb-px border-b-2 border-transparent pb-2.5 text-flex-black/45 transition-colors hover:text-flex-black"
             }
           >
             Vizitka
@@ -176,13 +176,13 @@ async function VanityHandlePage({
             href={`/${normalized}?bolim=postlar`}
             className={
               tab === "postlar"
-                ? "-mb-px flex items-center gap-1.5 border-b-2 border-mynt-black pb-2.5 font-medium"
-                : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-mynt-black/45 transition-colors hover:text-mynt-black"
+                ? "-mb-px flex items-center gap-1.5 border-b-2 border-flex-black pb-2.5 font-medium"
+                : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-flex-black/45 transition-colors hover:text-flex-black"
             }
           >
             Postlar
             {profile.postCount > 0 && (
-              <span className="font-tabular text-xs text-mynt-black/35">{profile.postCount}</span>
+              <span className="font-tabular text-xs text-flex-black/35">{profile.postCount}</span>
             )}
           </Link>
         </div>
@@ -220,21 +220,21 @@ async function VanityHandlePage({
 
           {(profile.city || profile.contactEmail) && (
             <div className="mt-6 rounded-xl border border-black/10 bg-white px-5 py-4">
-              <p className="mb-3 text-xs font-medium tracking-wide text-mynt-black/40 uppercase">
+              <p className="mb-3 text-xs font-medium tracking-wide text-flex-black/40 uppercase">
                 Kontaktlar
               </p>
               {profile.city && (
-                <p className="flex items-center gap-2 text-sm text-mynt-black/70">
-                  <MapPin className="h-4 w-4 text-mynt-black/35" />
+                <p className="flex items-center gap-2 text-sm text-flex-black/70">
+                  <MapPin className="h-4 w-4 text-flex-black/35" />
                   {profile.city}
                 </p>
               )}
               {profile.contactEmail && (
                 <p className="mt-2 flex items-center gap-2 text-sm">
-                  <Mail className="h-4 w-4 text-mynt-black/35" />
+                  <Mail className="h-4 w-4 text-flex-black/35" />
                   <a
                     href={`mailto:${profile.contactEmail}`}
-                    className="text-mynt-black/70 underline-offset-2 hover:underline"
+                    className="text-flex-black/70 underline-offset-2 hover:underline"
                   >
                     {profile.contactEmail}
                   </a>
@@ -268,11 +268,11 @@ async function VanityHandlePage({
   return (
     <PageShell>
       <div className="relative rounded-[1.75rem] border border-black/10 bg-white p-8 text-center shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
-        <p className="inline-block rounded-full bg-lime/20 px-3 py-1 text-xs font-semibold tracking-wide text-mynt-black/70 uppercase">
+        <p className="inline-block rounded-full bg-lime/20 px-3 py-1 text-xs font-semibold tracking-wide text-flex-black/70 uppercase">
           Bo&apos;sh
         </p>
         <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">{normalized}</h1>
-        <p className="mt-1 text-sm text-mynt-black/50">mynt.uz/{normalized}</p>
+        <p className="mt-1 text-sm text-flex-black/50">flex.uz/{normalized}</p>
 
         <div className="mt-8 space-y-1 text-left font-tabular text-sm">
           <div className="flex justify-between border-b border-black/5 py-2.5">
@@ -305,15 +305,15 @@ async function GenesisCardPage({ serial }: { serial: string }) {
 
   return (
     <PageShell>
-      <div className="grain card-sheen relative overflow-hidden rounded-[1.75rem] bg-mynt-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
+      <div className="grain card-sheen relative overflow-hidden rounded-[1.75rem] bg-flex-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
         <div className="relative flex items-center justify-between text-xs text-white/50">
-          <span className="font-medium tracking-wide uppercase">MYNT CARD</span>
+          <span className="font-medium tracking-wide uppercase">FLEX CARD</span>
           <Nfc className="h-5 w-5 text-white/40" />
         </div>
         <div className="relative mt-10 font-display text-4xl font-semibold tracking-tight">
           #<span className="text-lime">{serial}</span>
         </div>
-        <p className="relative mt-1 font-tabular text-sm text-white/50">mynt.uz/{serial}</p>
+        <p className="relative mt-1 font-tabular text-sm text-white/50">flex.uz/{serial}</p>
 
         {card?.status === "claimed" ? (
           <div className="relative mt-8 border-t border-white/10 pt-6">
@@ -335,14 +335,14 @@ async function GenesisCardPage({ serial }: { serial: string }) {
       {card?.status === "claimed" && card.ownerHandle && (
         <Link
           href={`/${card.ownerHandle.toLowerCase()}`}
-          className="mt-6 block rounded-full bg-lime px-6 py-3 text-center font-medium text-mynt-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+          className="mt-6 block rounded-full bg-lime px-6 py-3 text-center font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
         >
           Profilni ko&apos;rish
         </Link>
       )}
 
-      <p className="mt-6 text-center text-xs text-mynt-black/40">
-        MYNT CARD — ishlab chiqarilish tartibidagi noyob seriya raqami. Har bir karta faqat
+      <p className="mt-6 text-center text-xs text-flex-black/40">
+        FLEX CARD — ishlab chiqarilish tartibidagi noyob seriya raqami. Har bir karta faqat
         bitta marta chiqariladi va qayta ishlab chiqarilmaydi.
       </p>
     </PageShell>

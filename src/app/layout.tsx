@@ -15,13 +15,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Mynt — Mint your identity.",
+  title: "Flex — raqamli shaxsingiz",
   description:
-    "Mynt is a digital identity and networking platform. Claim a rare handle, get your NFC card, and turn every tap into a lead.",
+    "Noyob handle, shaxsiy vizit-karta sahifasi va NFC karta. Bir tegish bilan shaxsingizni ulashing, jamoangiz uchun esa tadbirlarda lead yig'ing.",
   // iOS reads these rather than the manifest when added to the home screen.
   appleWebApp: {
     capable: true,
-    title: "Mynt",
+    title: "Flex",
     statusBarStyle: "black-translucent",
   },
 };
@@ -37,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${spaceGrotesk.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white text-mynt-black">
+      <body className="min-h-full flex flex-col bg-white text-flex-black">
         {children}
         <ServiceWorkerRegistrar />
       </body>

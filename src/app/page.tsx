@@ -21,7 +21,7 @@ const consumerFeatures = [
   {
     icon: Link2,
     title: "Shaxsiy profil",
-    desc: "mynt.uz/HANDLE — barcha havolalaringiz, ijtimoiy tarmoqlaringiz va vizit ma'lumotlaringiz bitta sahifada.",
+    desc: "flex.uz/HANDLE — barcha havolalaringiz, ijtimoiy tarmoqlaringiz va vizit ma'lumotlaringiz bitta sahifada.",
   },
   {
     icon: Nfc,
@@ -64,13 +64,13 @@ const businessFeatures = [
 ];
 
 const comparison = [
-  { label: "Kamyob/kolleksion handle", unqx: true, popl: false, mynt: true },
-  { label: "Shaffof narx dvijoki", unqx: true, popl: false, mynt: true },
-  { label: "Jismoniy NFC karta", unqx: true, popl: true, mynt: true },
-  { label: "Jamoa/biznes tarif", unqx: false, popl: true, mynt: true },
-  { label: "CRM sinxronizatsiya", unqx: false, popl: true, mynt: true },
-  { label: "Tadbirda lead yig'ish", unqx: false, popl: true, mynt: true },
-  { label: "Click / Payme to'lovlari", unqx: true, popl: false, mynt: true },
+  { label: "Kamyob/kolleksion handle", unqx: true, popl: false, flex: true },
+  { label: "Shaffof narx dvijoki", unqx: true, popl: false, flex: true },
+  { label: "Jismoniy NFC karta", unqx: true, popl: true, flex: true },
+  { label: "Jamoa/biznes tarif", unqx: false, popl: true, flex: true },
+  { label: "CRM sinxronizatsiya", unqx: false, popl: true, flex: true },
+  { label: "Tadbirda lead yig'ish", unqx: false, popl: true, flex: true },
+  { label: "Click / Payme to'lovlari", unqx: true, popl: false, flex: true },
 ];
 
 const faqs = [
@@ -80,7 +80,7 @@ const faqs = [
   },
   {
     q: "NFC karta qanday ishlaydi?",
-    a: "Kartani boshqa telefonga tegizganingizda, sizning mynt.uz profilingiz avtomatik ochiladi. NFC qo'llamaydigan qurilmalar uchun kartada QR-kod ham bo'ladi.",
+    a: "Kartani boshqa telefonga tegizganingizda, sizning flex.uz profilingiz avtomatik ochiladi. NFC qo'llamaydigan qurilmalar uchun kartada QR-kod ham bo'ladi.",
   },
   {
     q: "Biznes uchun qancha xodim qo'shsam bo'ladi?",
@@ -98,39 +98,39 @@ export default function Home() {
       <header className="sticky top-0 z-30 border-b border-black/5 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2 font-display text-xl font-semibold tracking-tight">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-mynt-black">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-flex-black">
               <span className="h-2 w-2 rounded-full bg-lime" />
             </span>
-            mynt
+            flex
           </div>
-          <nav className="hidden gap-8 text-sm font-medium text-mynt-black/60 sm:flex">
-            <a href="#narx" className="transition-colors hover:text-mynt-black">
+          <nav className="hidden gap-8 text-sm font-medium text-flex-black/60 sm:flex">
+            <a href="#narx" className="transition-colors hover:text-flex-black">
               Narxlash
             </a>
-            <a href="#individual" className="transition-colors hover:text-mynt-black">
+            <a href="#individual" className="transition-colors hover:text-flex-black">
               Shaxsiy
             </a>
-            <a href="#biznes" className="transition-colors hover:text-mynt-black">
+            <a href="#biznes" className="transition-colors hover:text-flex-black">
               Biznes
             </a>
-            <a href="#savollar" className="transition-colors hover:text-mynt-black">
+            <a href="#savollar" className="transition-colors hover:text-flex-black">
               Savollar
             </a>
             {/* Signed-out visitors are sent to sign-in from there, which keeps
                 this page static rather than making it depend on a session. */}
-            <Link href="/kartalar" className="transition-colors hover:text-mynt-black">
+            <Link href="/kartalar" className="transition-colors hover:text-flex-black">
               Kartalar
             </Link>
-            <Link href="/rezidentlar" className="transition-colors hover:text-mynt-black">
+            <Link href="/rezidentlar" className="transition-colors hover:text-flex-black">
               Rezidentlar
             </Link>
-            <Link href="/kabinet" className="transition-colors hover:text-mynt-black">
+            <Link href="/kabinet" className="transition-colors hover:text-flex-black">
               Kabinet
             </Link>
           </nav>
           <a
             href="#narx"
-            className="rounded-full bg-mynt-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-mynt-black/85"
+            className="rounded-full bg-flex-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-flex-black/85"
           >
             Handle oling
           </a>
@@ -146,34 +146,34 @@ export default function Home() {
           <div className="relative mx-auto max-w-6xl px-6 pt-20 pb-24 sm:pt-28">
             <div className="grid items-center gap-16 lg:grid-cols-2">
               <div>
-                <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-medium tracking-wide text-mynt-black/70 uppercase shadow-sm">
+                <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-medium tracking-wide text-flex-black/70 uppercase shadow-sm">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
                   Raqamli shaxsingiz. Bir tegish.
                 </p>
                 <h1 className="font-display text-5xl font-semibold leading-[0.98] tracking-tight sm:text-6xl lg:text-[4.5rem]">
-                  O&apos;z shaxsingizni
+                  O&apos;zingizni
                   <br />
                   <span className="relative inline-block px-1">
-                    <span className="relative z-10">mint</span>
+                    <span className="relative z-10">flex</span>
                     <span className="marker-stroke absolute inset-x-0 bottom-[6px] -z-0 h-[0.4em] rounded-sm bg-lime/80" />
                   </span>{" "}
                   qiling.
                 </h1>
-                <p className="mt-7 max-w-md text-lg leading-relaxed text-mynt-black/65">
-                  Mynt — noyob raqamli handle, shaxsiy vizit-karta sahifasi va NFC karta orqali
+                <p className="mt-7 max-w-md text-lg leading-relaxed text-flex-black/65">
+                  Flex — noyob raqamli handle, shaxsiy vizit-karta sahifasi va NFC karta orqali
                   shaxsingizni ulashing. Jamoangiz uchun esa — tadbirlarda lead yig&apos;ish va
                   CRM bilan sinxronizatsiya.
                 </p>
                 <div className="mt-9 flex flex-wrap gap-4">
                   <a
                     href="#narx"
-                    className="rounded-full bg-lime px-7 py-3.5 font-medium text-mynt-black shadow-[0_12px_30px_-8px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.03]"
+                    className="rounded-full bg-lime px-7 py-3.5 font-medium text-flex-black shadow-[0_12px_30px_-8px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.03]"
                   >
                     Narxni hisoblang
                   </a>
                   <a
                     href="#biznes"
-                    className="rounded-full border border-black/15 px-7 py-3.5 font-medium text-mynt-black transition-colors hover:bg-black/5"
+                    className="rounded-full border border-black/15 px-7 py-3.5 font-medium text-flex-black transition-colors hover:bg-black/5"
                   >
                     Biznes uchun
                   </a>
@@ -182,13 +182,13 @@ export default function Home() {
 
               <div className="relative flex justify-center lg:justify-end">
                 <div className="absolute -left-4 top-2 z-20 hidden -rotate-6 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-xl sm:block">
-                  <p className="text-[10px] font-medium tracking-wide text-mynt-black/40 uppercase">
+                  <p className="text-[10px] font-medium tracking-wide text-flex-black/40 uppercase">
                     Bu hafta
                   </p>
                   <p className="font-display text-lg font-semibold">2 481 tashrif</p>
                 </div>
                 <div className="absolute -bottom-5 right-4 z-20 hidden rotate-3 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-xl sm:block">
-                  <p className="flex items-center gap-1.5 text-xs font-medium text-mynt-black/70">
+                  <p className="flex items-center gap-1.5 text-xs font-medium text-flex-black/70">
                     <span className="h-1.5 w-1.5 rounded-full bg-lime" />
                     NFC ulandi
                   </p>
@@ -196,7 +196,7 @@ export default function Home() {
 
                 <div className="absolute -inset-10 -z-10 rounded-[3rem] bg-lime/20 blur-[70px]" />
 
-                <div className="grain card-sheen relative aspect-[1.586/1] w-80 overflow-hidden rounded-[1.75rem] bg-mynt-black p-7 text-white shadow-[0_35px_70px_-20px_rgba(14,10,27,0.55)]">
+                <div className="grain card-sheen relative aspect-[1.586/1] w-80 overflow-hidden rounded-[1.75rem] bg-flex-black p-7 text-white shadow-[0_35px_70px_-20px_rgba(14,10,27,0.55)]">
                   <div className="relative flex items-start justify-between">
                     <div className="h-6 w-9 rounded-md bg-gradient-to-br from-lime/90 to-lime/30" />
                     <Nfc className="h-5 w-5 text-white/40" />
@@ -205,7 +205,7 @@ export default function Home() {
                     MYN<span className="text-lime">042</span>
                   </div>
                   <p className="relative mt-1 font-tabular text-sm text-white/45">
-                    mynt.uz/MYN042
+                    flex.uz/MYN042
                   </p>
                   <div className="relative mt-9 flex items-center justify-between text-[11px] font-medium tracking-wide text-white/40 uppercase">
                     <span>Tap to share</span>
@@ -219,9 +219,9 @@ export default function Home() {
 
         {/* Scarcity strip */}
         <section className="border-y border-black/5 bg-black/[0.02] py-6">
-          <div className="mx-auto max-w-6xl px-6 text-center text-sm text-mynt-black/60 font-tabular">
+          <div className="mx-auto max-w-6xl px-6 text-center text-sm text-flex-black/60 font-tabular">
             Jami{" "}
-            <span className="font-semibold text-mynt-black">
+            <span className="font-semibold text-flex-black">
               {formatNumber(NAMESPACE_SIZE)}
             </span>{" "}
             ta mumkin bo&apos;lgan handle — har biri faqat bitta odamga tegishli bo&apos;ladi.
@@ -237,7 +237,7 @@ export default function Home() {
             <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
               Narx — to&apos;liq shaffof
             </h2>
-            <p className="mt-3 text-mynt-black/65">
+            <p className="mt-3 text-flex-black/65">
               Har bir handle narxi ochiq formula bilan hisoblanadi: bazaviy narx &times; harf
               kamyobligi &times; raqam kamyobligi. Pastda o&apos;zingiz sinab ko&apos;ring.
             </p>
@@ -248,7 +248,7 @@ export default function Home() {
         {/* Individual features */}
         <section id="individual" className="border-t border-black/5 bg-black/[0.02] py-24">
           <div className="mx-auto max-w-6xl px-6">
-            <p className="mb-3 text-xs font-semibold tracking-widest text-mynt-black/40 uppercase">
+            <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
               Shaxsiy
             </p>
             <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -261,10 +261,10 @@ export default function Home() {
                   className="group rounded-2xl border border-black/10 bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[0_20px_40px_-16px_rgba(14,10,27,0.25)]"
                 >
                   <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-lime shadow-[0_8px_20px_-6px_rgba(171,255,9,0.6)]">
-                    <f.icon className="h-5 w-5 text-mynt-black" strokeWidth={2} />
+                    <f.icon className="h-5 w-5 text-flex-black" strokeWidth={2} />
                   </div>
                   <h3 className="font-display text-lg font-semibold">{f.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-mynt-black/60">{f.desc}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-flex-black/60">{f.desc}</p>
                 </div>
               ))}
             </div>
@@ -272,7 +272,7 @@ export default function Home() {
         </section>
 
         {/* Business features */}
-        <section id="biznes" className="grain relative overflow-hidden bg-mynt-black py-24">
+        <section id="biznes" className="grain relative overflow-hidden bg-flex-black py-24">
           <div className="bg-dot-grid-light absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
           <div className="relative mx-auto max-w-6xl px-6">
             <p className="mb-3 text-xs font-semibold tracking-widest text-lime/70 uppercase">
@@ -288,7 +288,7 @@ export default function Home() {
                   className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-lime/30 hover:bg-white/[0.06]"
                 >
                   <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-lime shadow-[0_8px_20px_-6px_rgba(171,255,9,0.5)]">
-                    <f.icon className="h-5 w-5 text-mynt-black" strokeWidth={2} />
+                    <f.icon className="h-5 w-5 text-flex-black" strokeWidth={2} />
                   </div>
                   <h3 className="font-display text-lg font-semibold text-white">{f.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-white/55">{f.desc}</p>
@@ -301,22 +301,22 @@ export default function Home() {
         {/* Differentiation table */}
         <section className="border-t border-black/5 bg-black/[0.02] py-24">
           <div className="mx-auto max-w-4xl px-6">
-            <p className="mb-3 text-center text-xs font-semibold tracking-widest text-mynt-black/40 uppercase">
+            <p className="mb-3 text-center text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
               Taqqoslash
             </p>
             <h2 className="text-center font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-              Nega Mynt?
+              Nega Flex?
             </h2>
             <div className="mt-10 overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_20px_50px_-24px_rgba(14,10,27,0.2)]">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-black/10 text-left text-mynt-black/45">
+                    <tr className="border-b border-black/10 text-left text-flex-black/45">
                       <th className="px-5 py-4 font-medium">Xususiyat</th>
                       <th className="px-5 py-4 text-center font-medium">UNQX</th>
                       <th className="px-5 py-4 text-center font-medium">Popl</th>
-                      <th className="bg-lime/10 px-5 py-4 text-center font-semibold text-mynt-black">
-                        Mynt
+                      <th className="bg-lime/10 px-5 py-4 text-center font-semibold text-flex-black">
+                        Flex
                       </th>
                     </tr>
                   </thead>
@@ -329,25 +329,25 @@ export default function Home() {
                         <td className="px-5 py-4">{row.label}</td>
                         <td className="px-5 py-4 text-center">
                           {row.unqx ? (
-                            <Check className="mx-auto h-4 w-4 text-mynt-black/50" />
+                            <Check className="mx-auto h-4 w-4 text-flex-black/50" />
                           ) : (
-                            <Minus className="mx-auto h-4 w-4 text-mynt-black/20" />
+                            <Minus className="mx-auto h-4 w-4 text-flex-black/20" />
                           )}
                         </td>
                         <td className="px-5 py-4 text-center">
                           {row.popl ? (
-                            <Check className="mx-auto h-4 w-4 text-mynt-black/50" />
+                            <Check className="mx-auto h-4 w-4 text-flex-black/50" />
                           ) : (
-                            <Minus className="mx-auto h-4 w-4 text-mynt-black/20" />
+                            <Minus className="mx-auto h-4 w-4 text-flex-black/20" />
                           )}
                         </td>
                         <td className="bg-lime/10 px-5 py-4 text-center">
-                          {row.mynt ? (
+                          {row.flex ? (
                             <span className="mx-auto flex h-6 w-6 items-center justify-center rounded-full bg-lime">
-                              <Check className="h-4 w-4 text-mynt-black" strokeWidth={3} />
+                              <Check className="h-4 w-4 text-flex-black" strokeWidth={3} />
                             </span>
                           ) : (
-                            <Minus className="mx-auto h-4 w-4 text-mynt-black/20" />
+                            <Minus className="mx-auto h-4 w-4 text-flex-black/20" />
                           )}
                         </td>
                       </tr>
@@ -361,7 +361,7 @@ export default function Home() {
 
         {/* FAQ */}
         <section id="savollar" className="mx-auto max-w-3xl px-6 py-24">
-          <p className="mb-3 text-center text-xs font-semibold tracking-widest text-mynt-black/40 uppercase">
+          <p className="mb-3 text-center text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
             Savollar
           </p>
           <h2 className="text-center font-display text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -375,25 +375,25 @@ export default function Home() {
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between font-medium marker:content-none">
                   {item.q}
-                  <ChevronDown className="h-4 w-4 text-mynt-black/40 transition-transform duration-300 group-open:rotate-180" />
+                  <ChevronDown className="h-4 w-4 text-flex-black/40 transition-transform duration-300 group-open:rotate-180" />
                 </summary>
-                <p className="mt-3 text-sm leading-relaxed text-mynt-black/65">{item.a}</p>
+                <p className="mt-3 text-sm leading-relaxed text-flex-black/65">{item.a}</p>
               </details>
             ))}
           </div>
         </section>
       </main>
 
-      <footer className="grain relative overflow-hidden bg-mynt-black pt-16 pb-10 text-white">
+      <footer className="grain relative overflow-hidden bg-flex-black pt-16 pb-10 text-white">
         <div className="bg-dot-grid-light absolute inset-0 opacity-20 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]" />
         <div className="relative mx-auto max-w-6xl px-6">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <div className="flex items-center gap-2 font-display text-xl font-semibold">
                 <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-lime">
-                  <span className="h-2 w-2 rounded-full bg-mynt-black" />
+                  <span className="h-2 w-2 rounded-full bg-flex-black" />
                 </span>
-                mynt
+                flex
               </div>
               <p className="mt-3 max-w-[220px] text-sm text-white/50">
                 Raqamli shaxsingiz. Bir tegish bilan ulashing.
@@ -416,7 +416,7 @@ export default function Home() {
                 </li>
                 <li>
                   <a href="#" className="transition-colors hover:text-white">
-                    MYNT CARD
+                    FLEX CARD
                   </a>
                 </li>
               </ul>
@@ -462,7 +462,7 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-white/40 sm:flex-row">
-            <p>&copy; {new Date().getFullYear()} Mynt. Barcha huquqlar himoyalangan.</p>
+            <p>&copy; {new Date().getFullYear()} Flex. Barcha huquqlar himoyalangan.</p>
           </div>
         </div>
       </footer>

@@ -10,7 +10,7 @@ import { listHandlesForUser, touchLastSeen } from "@/lib/handles";
 import { formatUZS } from "@/lib/format";
 
 export const metadata: Metadata = {
-  title: "Kabinet — mynt.uz",
+  title: "Kabinet — flex.uz",
   robots: { index: false },
 };
 
@@ -27,12 +27,12 @@ export default async function CabinetPage() {
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-semibold tracking-tight">Kabinet</h1>
-          <p className="mt-1 text-sm text-mynt-black/50">{user.email}</p>
+          <p className="mt-1 text-sm text-flex-black/50">{user.email}</p>
         </div>
         <div className="flex items-center gap-2">
           <Link
             href="/lenta"
-            className="rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-mynt-black/60 transition-colors hover:bg-black/[0.03]"
+            className="rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-flex-black/60 transition-colors hover:bg-black/[0.03]"
           >
             Lenta
           </Link>
@@ -44,13 +44,13 @@ export default async function CabinetPage() {
 
       {handles.length === 0 ? (
         <div className="rounded-[1.75rem] border border-dashed border-black/15 p-8 text-center">
-          <p className="text-sm text-mynt-black/60">
+          <p className="text-sm text-flex-black/60">
             Hali handle olmagansiz. Bosh sahifadagi hisoblagichda narxni ko&apos;rib, o&apos;zingizga
             mos kombinatsiyani tanlang.
           </p>
           <Link
             href="/#narx"
-            className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-mynt-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+            className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
           >
             Handle tanlash
           </Link>
@@ -67,8 +67,8 @@ export default async function CabinetPage() {
                   <p className="font-display text-xl font-semibold tracking-tight">
                     {h.normalized}
                   </p>
-                  <p className="font-tabular text-xs text-mynt-black/40">
-                    mynt.uz/{h.normalized}
+                  <p className="font-tabular text-xs text-flex-black/40">
+                    flex.uz/{h.normalized}
                   </p>
                 </div>
                 {h.status === "reserved" ? (
@@ -77,14 +77,14 @@ export default async function CabinetPage() {
                     To&apos;lov kutilmoqda
                   </span>
                 ) : (
-                  <span className="rounded-full bg-lime/25 px-3 py-1 text-xs font-medium text-mynt-black/70">
+                  <span className="rounded-full bg-lime/25 px-3 py-1 text-xs font-medium text-flex-black/70">
                     Sizniki
                   </span>
                 )}
               </div>
 
               {h.pricePaid !== null && (
-                <p className="mt-3 font-tabular text-sm text-mynt-black/50">
+                <p className="mt-3 font-tabular text-sm text-flex-black/50">
                   {formatUZS(h.pricePaid)}
                 </p>
               )}

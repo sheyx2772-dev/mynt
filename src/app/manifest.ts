@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Mynt — raqamli shaxs",
-    short_name: "Mynt",
+    name: "Flex — raqamli shaxs",
+    short_name: "Flex",
     description:
       "Noyob raqamli handle, shaxsiy vizit-karta sahifasi va NFC karta orqali shaxsingizni ulashing.",
     lang: "uz",

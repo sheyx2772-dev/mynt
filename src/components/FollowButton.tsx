@@ -43,7 +43,7 @@ export default function FollowButton({
         className={
           following
             ? "flex w-full items-center justify-center gap-1.5 rounded-full border border-white/20 px-6 py-2.5 text-sm font-medium text-white/70 transition-colors hover:bg-white/5 disabled:opacity-60"
-            : "flex w-full items-center justify-center gap-1.5 rounded-full bg-lime px-6 py-2.5 text-sm font-medium text-mynt-black transition-transform hover:scale-[1.01] disabled:opacity-60"
+            : "flex w-full items-center justify-center gap-1.5 rounded-full bg-lime px-6 py-2.5 text-sm font-medium text-flex-black transition-transform hover:scale-[1.01] disabled:opacity-60"
         }
       >
         {following ? (

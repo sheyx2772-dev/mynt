@@ -1,9 +1,9 @@
-# Mynt
+# Flex
 
 Digital identity and networking for Uzbekistan: a rare handle, a public
 profile page, and an NFC card that opens it with one tap.
 
-`mynt.uz/MYN042` is someone's profile. `mynt.uz/000001` is a physical card.
+`flex.uz/MYN042` is someone's profile. `flex.uz/000001` is a physical card.
 
 ## How the two namespaces work
 
@@ -133,12 +133,26 @@ application code, so they cannot drift from the rows they count no matter
 which path removes a post or a follow. `follows` is readable only by the
 account that owns the row; posts are public by design.
 
+### The name
+
+The project was called Mynt until 31 August 2026. It was renamed to Flex
+because "Mynt" was heard as a coarse word by Russian speakers, and the site's
+whole distribution runs on people saying the name out loud.
+
+Migrations under `supabase/migrations` still say Mynt in their comments. They
+are the record of what was applied to the database, so they are left as
+written rather than rewritten after the fact.
+
+The seed rows `MYN042` and `SIR555` keep their old handles; only their text
+was updated. Renaming a handle would break `genesis_cards.owner_handle` and
+any link already shared.
+
 ### Before deploying
 
 Two settings must change or sign-in will not work in production, and one of
 them is also a security boundary.
 
-1. **`NEXT_PUBLIC_SITE_URL=https://mynt.uz`** in the deployed environment. When
+1. **`NEXT_PUBLIC_SITE_URL=https://flex.uz`** in the deployed environment. When
    it is set, `getSiteOrigin()` never reads a request header. When it is not,
    the code falls back to the canonical origin rather than trusting the
    header — a `Host` or `X-Forwarded-Host` an attacker controls would
@@ -146,7 +160,7 @@ them is also a security boundary.
 2. **Supabase → Authentication → URL Configuration.** Site URL is still
    `http://localhost:3000` and the Redirect URL allow-list is empty, so every
    sign-in link would point at localhost. Set the Site URL to
-   `https://mynt.uz` and add the redirect URLs the app uses. Keep the
+   `https://flex.uz` and add the redirect URLs the app uses. Keep the
    allow-list specific — a wildcard removes the second line of defence behind
    the one above.
 
@@ -211,9 +225,9 @@ endpoints:
 
 | Provider | Setting | URL |
 | --- | --- | --- |
-| Click | Prepare | `https://mynt.uz/api/click/prepare` |
-| Click | Complete | `https://mynt.uz/api/click/complete` |
-| Payme | Endpoint | `https://mynt.uz/api/payme` |
+| Click | Prepare | `https://flex.uz/api/click/prepare` |
+| Click | Complete | `https://flex.uz/api/click/complete` |
+| Payme | Endpoint | `https://flex.uz/api/payme` |
 
 The protocol logic lives in [`src/lib/payments`](src/lib/payments) and is
 tested against an in-memory store, including the cases Payme's sandbox

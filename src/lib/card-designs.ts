@@ -1,4 +1,4 @@
-// The card designs Mynt issues. Every one is drawn here in CSS — there are no
+// The card designs Flex issues. Every one is drawn here in CSS — there are no
 // image files to license, and nothing reproduces a mark owned by anyone else.
 // A card carrying a borrowed logo is an infringement the moment it is sold and
 // is not a differentiator either, since a logo can be copied. A low genesis
@@ -9,7 +9,7 @@ export const CARD_DESIGNS = [
     id: "genesis",
     name: "Genesis",
     description:
-      "Asosiy karta. Chuqur qora fon, donador tekstura va lime nuqta — MYNT CARD seriyasining o'zi.",
+      "Asosiy karta. Chuqur qora fon, donador tekstura va lime nuqta — FLEX CARD seriyasining o'zi.",
   },
   {
     id: "lime",

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Renders the Mynt mark to PNG for the web app manifest.
+// Renders the Flex mark to PNG for the web app manifest.
 //
 // The mark is a rounded square in the brand ink with a lime dot — simple
 // enough to rasterise directly, which keeps an image-processing dependency

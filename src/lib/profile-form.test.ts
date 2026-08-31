@@ -34,11 +34,11 @@ describe("parseTags", () => {
 
 describe("parseContactEmail", () => {
   it("accepts an address", () => {
-    expect(parseContactEmail(" aziz@mynt.uz ")).toBe("aziz@mynt.uz");
+    expect(parseContactEmail(" aziz@flex.uz ")).toBe("aziz@flex.uz");
   });
 
   it("rejects anything that is not one", () => {
-    for (const bad of ["aziz", "aziz@", "@mynt.uz", "aziz@mynt", "a b@c.uz"]) {
+    for (const bad of ["aziz", "aziz@", "@flex.uz", "aziz@flex", "a b@c.uz"]) {
       expect(parseContactEmail(bad), bad).toBeNull();
     }
   });
@@ -52,7 +52,7 @@ describe("parseContactEmail", () => {
 describe("linkFieldValue", () => {
   const links = [
     { label: "Telegram", href: "https://t.me/aziz" },
-    { label: "Veb-sayt", href: "https://mynt.uz/" },
+    { label: "Veb-sayt", href: "https://flex.uz/" },
   ];
 
   it("recovers the username a social field expects", () => {
@@ -60,7 +60,7 @@ describe("linkFieldValue", () => {
   });
 
   it("returns the full URL for the website field", () => {
-    expect(linkFieldValue(links, "Veb-sayt")).toBe("https://mynt.uz/");
+    expect(linkFieldValue(links, "Veb-sayt")).toBe("https://flex.uz/");
   });
 
   it("returns an empty string when the link is absent", () => {

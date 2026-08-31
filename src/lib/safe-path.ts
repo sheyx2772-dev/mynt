@@ -10,7 +10,7 @@
 // Parsing is used instead of more string rules because the browser parses
 // too, and only the parser knows every form that resolves off-site.
 
-const BASE = "https://mynt.invalid";
+const BASE = "https://flex.invalid";
 
 export function safePath(raw: unknown, fallback = "/"): string {
   if (typeof raw !== "string" || raw === "") return fallback;

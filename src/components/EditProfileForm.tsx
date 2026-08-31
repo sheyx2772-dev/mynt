@@ -28,14 +28,14 @@ export default function EditProfileForm({
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
 
   const inputClass =
-    "w-full rounded-xl border border-black/10 bg-black/[0.02] px-4 py-2.5 text-sm outline-none transition-colors focus:border-mynt-black/30 focus:bg-white";
-  const labelClass = "mb-1.5 block text-xs font-medium tracking-wide text-mynt-black/50 uppercase";
+    "w-full rounded-xl border border-black/10 bg-black/[0.02] px-4 py-2.5 text-sm outline-none transition-colors focus:border-flex-black/30 focus:bg-white";
+  const labelClass = "mb-1.5 block text-xs font-medium tracking-wide text-flex-black/50 uppercase";
 
   return (
     <form action={formAction} className="space-y-4 text-left">
       <div>
         <span className={labelClass}>Profil rasmi</span>
-        <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/15 bg-black/[0.02] px-4 py-2.5 text-sm text-mynt-black/50">
+        <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/15 bg-black/[0.02] px-4 py-2.5 text-sm text-flex-black/50">
           <span>Yangi rasm tanlang</span>
           <input
             type="file"
@@ -44,7 +44,7 @@ export default function EditProfileForm({
             className="max-w-[45%] text-xs"
           />
         </label>
-        <p className="mt-1 text-xs text-mynt-black/35">
+        <p className="mt-1 text-xs text-flex-black/35">
           Bo&apos;sh qoldirsangiz hozirgi rasm saqlanadi. JPG, PNG yoki WEBP, 2 MB gacha.
         </p>
       </div>
@@ -111,7 +111,7 @@ export default function EditProfileForm({
         <input
           id="website"
           name="website"
-          placeholder="mynt.uz"
+          placeholder="flex.uz"
           defaultValue={defaults.website}
           className={inputClass}
         />
@@ -128,7 +128,7 @@ export default function EditProfileForm({
           defaultValue={defaults.tags}
           className={inputClass}
         />
-        <p className="mt-1 text-xs text-mynt-black/35">
+        <p className="mt-1 text-xs text-flex-black/35">
           Vergul bilan ajrating, 5 tagacha. Profilda #teg ko&apos;rinishida chiqadi.
         </p>
       </div>
@@ -160,19 +160,19 @@ export default function EditProfileForm({
           />
         </div>
       </div>
-      <p className="text-xs text-mynt-black/35">
+      <p className="text-xs text-flex-black/35">
         Shahar va email profilda ochiq ko&apos;rinadi.
       </p>
 
       <CardDesignPicker handle={handle} value={defaults.cardDesign} />
 
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
-      {state.saved && <p className="text-sm text-mynt-black/60">Saqlandi.</p>}
+      {state.saved && <p className="text-sm text-flex-black/60">Saqlandi.</p>}
 
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-mynt-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01] disabled:opacity-60"
+        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01] disabled:opacity-60"
       >
         {isPending ? "Saqlanmoqda..." : "Saqlash"}
       </button>

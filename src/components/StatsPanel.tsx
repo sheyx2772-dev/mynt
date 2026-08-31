@@ -9,7 +9,7 @@ function StatTile({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-3">
       <p className="font-display text-2xl font-semibold tracking-tight tabular-nums">{value}</p>
-      <p className="mt-0.5 text-xs text-mynt-black/45">{label}</p>
+      <p className="mt-0.5 text-xs text-flex-black/45">{label}</p>
     </div>
   );
 }
@@ -26,7 +26,7 @@ export default function StatsPanel({ stats }: { stats: HandleStats }) {
   return (
     <section className="rounded-[1.75rem] border border-black/10 bg-white p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
       <h2 className="font-display text-lg font-semibold tracking-tight">Statistika</h2>
-      <p className="mt-1 text-sm text-mynt-black/50">So&apos;nggi 30 kun.</p>
+      <p className="mt-1 text-sm text-flex-black/50">So&apos;nggi 30 kun.</p>
 
       <div className="mt-6 grid grid-cols-3 gap-3">
         <StatTile label="Tashrif" value={stats.totalViews} />
@@ -35,18 +35,18 @@ export default function StatsPanel({ stats }: { stats: HandleStats }) {
       </div>
 
       {peak === 0 ? (
-        <p className="mt-7 rounded-2xl border border-dashed border-black/12 px-4 py-6 text-center text-sm text-mynt-black/45">
+        <p className="mt-7 rounded-2xl border border-dashed border-black/12 px-4 py-6 text-center text-sm text-flex-black/45">
           Hali tashrif yo&apos;q. Profilingizni ulashganingizdan keyin bu yerda kunlik
           statistika paydo bo&apos;ladi.
         </p>
       ) : (
         <figure className="mt-7">
-          <figcaption className="mb-3 text-xs text-mynt-black/45">
+          <figcaption className="mb-3 text-xs text-flex-black/45">
             Kunlik tashriflar
             {busiest && (
               <>
                 {" — eng ko'p "}
-                <span className="font-medium text-mynt-black/70">
+                <span className="font-medium text-flex-black/70">
                   {dayLabel(busiest.day)} kuni {peak} ta
                 </span>
               </>
@@ -74,7 +74,7 @@ export default function StatsPanel({ stats }: { stats: HandleStats }) {
             ))}
           </div>
 
-          <div className="mt-2 flex justify-between font-tabular text-[11px] text-mynt-black/35">
+          <div className="mt-2 flex justify-between font-tabular text-[11px] text-flex-black/35">
             <span>{dayLabel(stats.daily[0]!.day)}</span>
             <span>{dayLabel(stats.daily[stats.daily.length - 1]!.day)}</span>
           </div>
@@ -83,14 +83,14 @@ export default function StatsPanel({ stats }: { stats: HandleStats }) {
 
       {stats.links.length > 0 && (
         <div className="mt-7">
-          <h3 className="mb-3 text-xs font-medium tracking-wide text-mynt-black/45 uppercase">
+          <h3 className="mb-3 text-xs font-medium tracking-wide text-flex-black/45 uppercase">
             Havolalar bo&apos;yicha
           </h3>
           <table className="w-full text-sm">
             <tbody>
               {stats.links.map((link) => (
                 <tr key={link.label} className="border-t border-black/5">
-                  <td className="py-2.5 text-mynt-black/70">{link.label}</td>
+                  <td className="py-2.5 text-flex-black/70">{link.label}</td>
                   <td className="py-2.5 text-right font-tabular font-medium">{link.clicks}</td>
                 </tr>
               ))}
@@ -101,12 +101,12 @@ export default function StatsPanel({ stats }: { stats: HandleStats }) {
 
       {peak > 0 && (
         <details className="mt-6">
-          <summary className="cursor-pointer text-xs text-mynt-black/45">
+          <summary className="cursor-pointer text-xs text-flex-black/45">
             Kunlik raqamlar jadvali
           </summary>
           <table className="mt-3 w-full font-tabular text-xs">
             <thead>
-              <tr className="text-mynt-black/45">
+              <tr className="text-flex-black/45">
                 <th className="py-1 text-left font-medium">Kun</th>
                 <th className="py-1 text-right font-medium">Tashrif</th>
                 <th className="py-1 text-right font-medium">Bosish</th>
