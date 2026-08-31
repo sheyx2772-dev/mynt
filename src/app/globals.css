@@ -65,16 +65,25 @@ body {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
-@keyframes marker-in {
+/* The highlight is a real background on the word, wiped in with clip-path.
+   An earlier version painted a bar behind black text: until the bar arrived
+   the word was black on a black hero, i.e. invisible. Clipping the whole
+   thing means the word and its ground always appear together. */
+@keyframes marker-reveal {
   from {
-    transform: scaleX(0);
+    clip-path: inset(0 100% 0 0);
   }
   to {
-    transform: scaleX(1);
+    clip-path: inset(0 0 0 0);
   }
 }
 
-.marker-stroke {
-  animation: marker-in 0.5s cubic-bezier(0.65, 0, 0.35, 1) 0.2s both;
-  transform-origin: left;
+.marker-reveal {
+  animation: marker-reveal 0.5s cubic-bezier(0.65, 0, 0.35, 1) 0.2s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker-reveal {
+    animation: none;
+  }
 }

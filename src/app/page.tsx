@@ -16,6 +16,8 @@ import PricingCalculator from "@/components/PricingCalculator";
 import ProfilePreview from "@/components/ProfilePreview";
 import PhoneFrame from "@/components/PhoneFrame";
 import HandleChecker from "@/components/HandleChecker";
+import HeroStage from "@/components/HeroStage";
+import { productShot } from "@/lib/product-shots";
 import DeviceFace from "@/components/DeviceFace";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber } from "@/lib/format";
@@ -100,42 +102,42 @@ const faqs = [
 export default function Home() {
   return (
     <div className="flex min-h-full flex-col overflow-x-clip">
-      <header className="sticky top-0 z-30 border-b border-black/5 bg-white/80 backdrop-blur-md">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-flex-black/85 text-white backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2 font-display text-xl font-semibold tracking-tight">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-flex-black">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/15 bg-white/5">
               <span className="h-2 w-2 rounded-full bg-lime" />
             </span>
             flex
           </div>
-          <nav className="hidden gap-8 text-sm font-medium text-flex-black/60 sm:flex">
-            <a href="#narx" className="transition-colors hover:text-flex-black">
+          <nav className="hidden gap-8 text-sm font-medium text-white/55 sm:flex">
+            <a href="#narx" className="transition-colors hover:text-white">
               Narxlash
             </a>
-            <a href="#individual" className="transition-colors hover:text-flex-black">
+            <a href="#individual" className="transition-colors hover:text-white">
               Shaxsiy
             </a>
-            <a href="#biznes" className="transition-colors hover:text-flex-black">
+            <a href="#biznes" className="transition-colors hover:text-white">
               Biznes
             </a>
-            <a href="#savollar" className="transition-colors hover:text-flex-black">
+            <a href="#savollar" className="transition-colors hover:text-white">
               Savollar
             </a>
             {/* Signed-out visitors are sent to sign-in from there, which keeps
                 this page static rather than making it depend on a session. */}
-            <Link href="/qurilmalar" className="transition-colors hover:text-flex-black">
+            <Link href="/qurilmalar" className="transition-colors hover:text-white">
               Qurilmalar
             </Link>
-            <Link href="/rezidentlar" className="transition-colors hover:text-flex-black">
+            <Link href="/rezidentlar" className="transition-colors hover:text-white">
               Rezidentlar
             </Link>
-            <Link href="/kabinet" className="transition-colors hover:text-flex-black">
+            <Link href="/kabinet" className="transition-colors hover:text-white">
               Kabinet
             </Link>
           </nav>
           <a
             href="#narx"
-            className="rounded-full bg-flex-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-flex-black/85"
+            className="rounded-full bg-lime px-4 py-2 text-sm font-medium text-flex-black transition-colors hover:bg-lime/85"
           >
             Handle oling
           </a>
@@ -144,42 +146,41 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative overflow-hidden">
-          <div className="bg-dot-grid absolute inset-0 [mask-image:radial-gradient(ellipse_65%_55%_at_50%_0%,black,transparent)]" />
-          <div className="absolute -top-32 right-[-6rem] h-96 w-96 rounded-full bg-lime/25 blur-[100px]" />
+        <section className="grain relative overflow-hidden bg-flex-black text-white">
+          <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]" />
+          <div className="absolute -top-40 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-lime/[0.13] blur-[140px]" />
 
-          <div className="relative mx-auto max-w-6xl px-6 pt-20 pb-24 sm:pt-28">
+          <div className="relative mx-auto max-w-6xl px-6 pt-20 pb-28 sm:pt-28">
             <div className="grid items-center gap-16 lg:grid-cols-2">
               <div>
-                <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-medium tracking-wide text-flex-black/70 uppercase shadow-sm">
+                <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-xs font-medium tracking-wide text-white/70 uppercase backdrop-blur-sm">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
                   Raqamli shaxsingiz. Bir tegish.
                 </p>
                 <h1 className="font-display text-5xl font-semibold leading-[0.98] tracking-tight text-balance sm:text-6xl lg:text-[4.5rem]">
                   Noyob raqam,{" "}
-                  <span className="relative inline-block px-1">
-                    <span className="relative z-10">umrbod</span>
-                    <span className="marker-stroke absolute inset-x-0 bottom-[6px] -z-0 h-[0.4em] rounded-sm bg-lime/80" />
+                  <span className="marker-reveal inline-block rounded-md bg-lime px-2 text-flex-black">
+                    umrbod
                   </span>{" "}
                   sizniki.
                 </h1>
-                <p className="mt-7 max-w-md text-lg leading-relaxed text-flex-black/65">
+                <p className="mt-7 max-w-md text-lg leading-relaxed text-white/60">
                   Siz noyob raqam sotib olasiz &mdash; u umrbod sizniki. Uni karta, uzuk yoki
                   braslet ko&apos;rinishida olib yurasiz, tanlov sizniki. Har biri bitta
                   profilni ochadi.
                 </p>
-                <HandleChecker />
+                <HandleChecker tone="dark" />
 
                 <div className="mt-6 flex flex-wrap gap-4">
                   <a
                     href="#narx"
-                    className="rounded-full bg-lime px-7 py-3.5 font-medium text-flex-black shadow-[0_12px_30px_-8px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.03]"
+                    className="rounded-full bg-lime px-7 py-3.5 font-medium text-flex-black shadow-[0_12px_36px_-8px_rgba(171,255,9,0.5)] transition-transform hover:scale-[1.03]"
                   >
                     Narxni hisoblang
                   </a>
                   <a
                     href="#biznes"
-                    className="rounded-full border border-black/15 px-7 py-3.5 font-medium text-flex-black transition-colors hover:bg-black/5"
+                    className="rounded-full border border-white/20 px-7 py-3.5 font-medium text-white transition-colors hover:bg-white/10"
                   >
                     Biznes uchun
                   </a>
@@ -187,40 +188,26 @@ export default function Home() {
               </div>
 
               <div className="relative flex justify-center lg:justify-end">
-                <div className="absolute -left-10 -top-6 z-20 hidden -rotate-6 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-xl sm:block lg:-left-16">
-                  <p className="text-[10px] font-medium tracking-wide text-flex-black/40 uppercase">
+                <div className="absolute -top-6 -left-10 z-20 hidden -rotate-6 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 backdrop-blur-md sm:block lg:-left-16">
+                  <p className="text-[10px] font-medium tracking-wide text-white/40 uppercase">
                     Bu hafta
                   </p>
                   <p className="font-display text-lg font-semibold">2 481 tashrif</p>
                 </div>
-                <div className="absolute -bottom-7 -right-6 z-20 hidden rotate-3 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-xl sm:block">
-                  <p className="flex items-center gap-1.5 text-xs font-medium text-flex-black/70">
+                <div className="absolute -right-6 -bottom-4 z-20 hidden rotate-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 backdrop-blur-md sm:block">
+                  <p className="flex items-center gap-1.5 text-xs font-medium text-white/75">
                     <span className="h-1.5 w-1.5 rounded-full bg-lime" />
                     NFC ulandi
                   </p>
                 </div>
 
-                <div className="absolute -inset-14 -z-10 rounded-[3rem] bg-lime/25 blur-[90px]" />
-
-                <div className="grain card-sheen relative aspect-[1.586/1] w-[20rem] rotate-[-3deg] overflow-hidden rounded-[1.75rem] bg-flex-black p-7 text-white shadow-[0_45px_90px_-25px_rgba(14,10,27,0.6)] transition-transform duration-500 hover:rotate-0 sm:w-[25rem] lg:w-[27rem]">
-                  <div className="relative flex items-start justify-between">
-                    <div className="h-6 w-9 rounded-md bg-gradient-to-br from-lime/90 to-lime/30" />
-                    <Nfc className="h-5 w-5 text-white/40" />
-                  </div>
-                  <div className="relative mt-14 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-                    MYN<span className="text-lime">042</span>
-                  </div>
-                  <p className="relative mt-1 font-tabular text-sm text-white/45">
-                    flex.uz/MYN042
-                  </p>
-                  <div className="relative mt-9 flex items-center justify-between text-[11px] font-medium tracking-wide text-white/40 uppercase">
-                    <span>Tap to share</span>
-                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
-                  </div>
-                </div>
+                <HeroStage shot={productShot("karta")} />
               </div>
             </div>
           </div>
+
+          {/* The dark section ends on the page ground rather than a hard edge. */}
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-white" />
         </section>
 
         {/* How it works */}
