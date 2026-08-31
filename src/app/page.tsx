@@ -102,6 +102,7 @@ const faqs = [
 
 export default function Home() {
   const tapShot = productShot("tegizish");
+  const familyShot = productShot("oila");
 
   return (
     <div className="flex min-h-full flex-col overflow-x-clip">
@@ -117,7 +118,10 @@ export default function Home() {
             <a href="#narx" className="transition-colors hover:text-white">
               Narxlash
             </a>
-            <a href="#individual" className="transition-colors hover:text-white">
+            <a
+              href="#individual"
+              className="transition-colors hover:text-white"
+            >
               Shaxsiy
             </a>
             <a href="#biznes" className="transition-colors hover:text-white">
@@ -128,13 +132,22 @@ export default function Home() {
             </a>
             {/* Signed-out visitors are sent to sign-in from there, which keeps
                 this page static rather than making it depend on a session. */}
-            <Link href="/qurilmalar" className="transition-colors hover:text-white">
+            <Link
+              href="/qurilmalar"
+              className="transition-colors hover:text-white"
+            >
               Qurilmalar
             </Link>
-            <Link href="/rezidentlar" className="transition-colors hover:text-white">
+            <Link
+              href="/rezidentlar"
+              className="transition-colors hover:text-white"
+            >
               Rezidentlar
             </Link>
-            <Link href="/kabinet" className="transition-colors hover:text-white">
+            <Link
+              href="/kabinet"
+              className="transition-colors hover:text-white"
+            >
               Kabinet
             </Link>
           </nav>
@@ -168,9 +181,9 @@ export default function Home() {
                   sizniki.
                 </h1>
                 <p className="mt-7 max-w-md text-lg leading-relaxed text-white/60">
-                  Siz noyob raqam sotib olasiz &mdash; u umrbod sizniki. Uni karta, uzuk yoki
-                  braslet ko&apos;rinishida olib yurasiz, tanlov sizniki. Har biri bitta
-                  profilni ochadi.
+                  Siz noyob raqam sotib olasiz &mdash; u umrbod sizniki. Uni
+                  karta, uzuk yoki braslet ko&apos;rinishida olib yurasiz,
+                  tanlov sizniki. Har biri bitta profilni ochadi.
                 </p>
                 <HandleChecker tone="dark" />
 
@@ -195,7 +208,9 @@ export default function Home() {
                   <p className="text-[10px] font-medium tracking-wide text-white/40 uppercase">
                     Bu hafta
                   </p>
-                  <p className="font-display text-lg font-semibold">2 481 tashrif</p>
+                  <p className="font-display text-lg font-semibold">
+                    2 481 tashrif
+                  </p>
                 </div>
                 <div className="absolute -right-6 -bottom-4 z-20 hidden rotate-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 backdrop-blur-md sm:block">
                   <p className="flex items-center gap-1.5 text-xs font-medium text-white/75">
@@ -228,33 +243,56 @@ export default function Home() {
                 <div className="relative flex overflow-hidden rounded-xl border border-white/15 font-display text-xl font-semibold text-white">
                   <span className="px-3 py-2">MYN</span>
                   <span className="w-px bg-white/15" />
-                  <span className="bg-lime px-3 py-2 font-tabular text-flex-black">042</span>
+                  <span className="bg-lime px-3 py-2 font-tabular text-flex-black">
+                    042
+                  </span>
                 </div>
               </div>
-              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-flex-black/30">01</p>
-              <h3 className="mt-1 font-display text-lg font-semibold">Handle tanlang</h3>
+              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-flex-black/30">
+                01
+              </p>
+              <h3 className="mt-1 font-display text-lg font-semibold">
+                Handle tanlang
+              </h3>
               <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
-                3 harf + 3 raqam. Narx darhol ko&apos;rinadi &mdash; yashirin to&apos;lov yo&apos;q.
+                3 harf + 3 raqam. Narx darhol ko&apos;rinadi &mdash; yashirin
+                to&apos;lov yo&apos;q.
               </p>
             </li>
 
             <li>
               <div className="grain relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
-                <div className="absolute inset-x-0 -top-8 h-32 bg-lime/10 blur-3xl" />
-                {/* Card, ring, bracelet — three silhouettes, each given one
+                {familyShot ? (
+                  <Image
+                    src={familyShot}
+                    alt="Flex karta, uzuk va braslet"
+                    fill
+                    sizes="(min-width: 640px) 20rem, 100vw"
+                    className="object-cover"
+                  />
+                ) : (
+                  <>
+                    <div className="absolute inset-x-0 -top-8 h-32 bg-lime/10 blur-3xl" />
+                    {/* Card, ring, bracelet — three silhouettes, each given one
                     lime mark so a black object stays legible on a black stage. */}
-                <div className="relative flex items-center gap-4">
-                  <span className="relative h-16 w-24 rotate-[-8deg] rounded-lg border border-white/20 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
-                    <span className="absolute bottom-2 left-2 h-1 w-6 rounded-full bg-lime" />
-                  </span>
-                  <span className="h-16 w-16 rounded-full border-[6px] border-white/20 bg-[linear-gradient(140deg,#312653,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95),inset_0_0_0_2px_rgba(171,255,9,0.5)]" />
-                  <span className="relative h-20 w-9 rotate-[6deg] rounded-full border border-white/20 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
-                    <span className="absolute top-1/2 left-1/2 h-6 w-4 -translate-x-1/2 -translate-y-1/2 rounded-[40%] bg-black ring-1 ring-lime/60" />
-                  </span>
-                </div>
+                    <div className="relative flex items-center gap-4">
+                      <span className="relative h-16 w-24 rotate-[-8deg] rounded-lg border border-white/20 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
+                        <span className="absolute bottom-2 left-2 h-1 w-6 rounded-full bg-lime" />
+                      </span>
+                      <span className="h-16 w-16 rounded-full border-[6px] border-white/20 bg-[linear-gradient(140deg,#312653,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95),inset_0_0_0_2px_rgba(171,255,9,0.5)]" />
+                      <span className="relative h-20 w-9 rotate-[6deg] rounded-full border border-white/20 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
+                        <span className="absolute top-1/2 left-1/2 h-6 w-4 -translate-x-1/2 -translate-y-1/2 rounded-[40%] bg-black ring-1 ring-lime/60" />
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
-              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-flex-black/30">02</p>
-              <h3 className="mt-1 font-display text-lg font-semibold">Qurilmani tanlang</h3>
+              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-flex-black/30">
+                02
+              </p>
+              <h3 className="mt-1 font-display text-lg font-semibold">
+                Qurilmani tanlang
+              </h3>
               <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
                 Karta, uzuk yoki braslet. Dizaynni ham o&apos;zingiz tanlaysiz.
               </p>
@@ -282,10 +320,15 @@ export default function Home() {
                   </>
                 )}
               </div>
-              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-flex-black/30">03</p>
-              <h3 className="mt-1 font-display text-lg font-semibold">Tegizing</h3>
+              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-flex-black/30">
+                03
+              </p>
+              <h3 className="mt-1 font-display text-lg font-semibold">
+                Tegizing
+              </h3>
               <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
-                Telefonga tegizasiz, profilingiz ochiladi. Hech kim ilova o&apos;rnatmaydi.
+                Telefonga tegizasiz, profilingiz ochiladi. Hech kim ilova
+                o&apos;rnatmaydi.
               </p>
             </li>
           </ol>
@@ -302,8 +345,9 @@ export default function Home() {
               {formatNumber(NAMESPACE_SIZE)}
             </p>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-white/55">
-              Mumkin bo&apos;lgan handle&rsquo;lar soni. Boshqa yo&apos;q &mdash; har biri
-              faqat bitta odamga tegishli bo&apos;ladi va qayta sotilmaydi.
+              Mumkin bo&apos;lgan handle&rsquo;lar soni. Boshqa yo&apos;q
+              &mdash; har biri faqat bitta odamga tegishli bo&apos;ladi va qayta
+              sotilmaydi.
             </p>
           </div>
         </section>
@@ -318,15 +362,19 @@ export default function Home() {
               Narx — to&apos;liq shaffof
             </h2>
             <p className="mt-3 text-flex-black/65">
-              Har bir handle narxi ochiq formula bilan hisoblanadi: bazaviy narx &times; harf
-              kamyobligi &times; raqam kamyobligi. Pastda o&apos;zingiz sinab ko&apos;ring.
+              Har bir handle narxi ochiq formula bilan hisoblanadi: bazaviy narx
+              &times; harf kamyobligi &times; raqam kamyobligi. Pastda
+              o&apos;zingiz sinab ko&apos;ring.
             </p>
           </div>
           <PricingCalculator />
         </section>
 
         {/* What a profile actually looks like */}
-        <section id="individual" className="border-t border-black/5 bg-black/[0.02] py-24">
+        <section
+          id="individual"
+          className="border-t border-black/5 bg-black/[0.02] py-24"
+        >
           <div className="mx-auto grid max-w-6xl gap-14 px-6 lg:grid-cols-[1fr_320px] lg:gap-20">
             <div>
               <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
@@ -336,8 +384,8 @@ export default function Home() {
                 Bir tegish &mdash; va sizni to&apos;liq ko&apos;radi
               </h2>
               <p className="mt-4 max-w-md text-flex-black/65">
-                Kartani tegizasiz, brauzer o&apos;zi ochiladi. Hech kim hech narsa
-                o&apos;rnatmaydi.
+                Kartani tegizasiz, brauzer o&apos;zi ochiladi. Hech kim hech
+                narsa o&apos;rnatmaydi.
               </p>
 
               <dl className="mt-10 divide-y divide-black/8 border-y border-black/8">
@@ -389,15 +437,22 @@ export default function Home() {
             {DEVICE_TYPES.map((device) => (
               <div key={device.id}>
                 <DeviceTile type={device.id} alt={`Flex ${device.name}`} />
-                <h3 className="mt-4 font-display font-semibold">{device.name}</h3>
-                <p className="mt-1 text-sm text-flex-black/55">{device.tagline}</p>
+                <h3 className="mt-4 font-display font-semibold">
+                  {device.name}
+                </h3>
+                <p className="mt-1 text-sm text-flex-black/55">
+                  {device.tagline}
+                </p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Business */}
-        <section id="biznes" className="grain relative overflow-hidden bg-flex-black py-24">
+        <section
+          id="biznes"
+          className="grain relative overflow-hidden bg-flex-black py-24"
+        >
           <div className="bg-dot-grid-light absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
           <div className="relative mx-auto max-w-6xl px-6">
             <div className="max-w-xl">
@@ -408,8 +463,9 @@ export default function Home() {
                 Bitta karta emas &mdash; butun jamoa
               </h2>
               <p className="mt-4 text-white/55">
-                Xodimlaringizga bir xil brend bilan handle va NFC karta chiqaring, tadbirlarda
-                yig&apos;ilgan kontaktlar to&apos;g&apos;ridan-to&apos;g&apos;ri CRM&apos;ingizga tushsin.
+                Xodimlaringizga bir xil brend bilan handle va NFC karta
+                chiqaring, tadbirlarda yig&apos;ilgan kontaktlar
+                to&apos;g&apos;ridan-to&apos;g&apos;ri CRM&apos;ingizga tushsin.
               </p>
             </div>
 
@@ -419,10 +475,17 @@ export default function Home() {
                   key={f.title}
                   className="flex gap-5 border-b border-white/10 py-7"
                 >
-                  <f.icon className="mt-0.5 h-5 w-5 shrink-0 text-lime" strokeWidth={1.75} />
+                  <f.icon
+                    className="mt-0.5 h-5 w-5 shrink-0 text-lime"
+                    strokeWidth={1.75}
+                  />
                   <div>
-                    <h3 className="font-display font-semibold text-white">{f.title}</h3>
-                    <p className="mt-1.5 text-sm leading-relaxed text-white/55">{f.desc}</p>
+                    <h3 className="font-display font-semibold text-white">
+                      {f.title}
+                    </h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-white/55">
+                      {f.desc}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -451,8 +514,12 @@ export default function Home() {
                   <thead>
                     <tr className="border-b border-black/10 text-left text-flex-black/45">
                       <th className="px-5 py-4 font-medium">Xususiyat</th>
-                      <th className="px-5 py-4 text-center font-medium">UNQX</th>
-                      <th className="px-5 py-4 text-center font-medium">Popl</th>
+                      <th className="px-5 py-4 text-center font-medium">
+                        UNQX
+                      </th>
+                      <th className="px-5 py-4 text-center font-medium">
+                        Popl
+                      </th>
                       <th className="bg-lime/10 px-5 py-4 text-center font-semibold text-flex-black">
                         Flex
                       </th>
@@ -482,7 +549,10 @@ export default function Home() {
                         <td className="bg-lime/10 px-5 py-4 text-center">
                           {row.flex ? (
                             <span className="mx-auto flex h-6 w-6 items-center justify-center rounded-full bg-lime">
-                              <Check className="h-4 w-4 text-flex-black" strokeWidth={3} />
+                              <Check
+                                className="h-4 w-4 text-flex-black"
+                                strokeWidth={3}
+                              />
                             </span>
                           ) : (
                             <Minus className="mx-auto h-4 w-4 text-flex-black/20" />
@@ -515,7 +585,9 @@ export default function Home() {
                   {item.q}
                   <ChevronDown className="h-4 w-4 text-flex-black/40 transition-transform duration-300 group-open:rotate-180" />
                 </summary>
-                <p className="mt-3 text-sm leading-relaxed text-flex-black/65">{item.a}</p>
+                <p className="mt-3 text-sm leading-relaxed text-flex-black/65">
+                  {item.a}
+                </p>
               </details>
             ))}
           </div>
@@ -543,12 +615,18 @@ export default function Home() {
               </p>
               <ul className="mt-4 space-y-2.5 text-sm text-white/60">
                 <li>
-                  <a href="#narx" className="transition-colors hover:text-white">
+                  <a
+                    href="#narx"
+                    className="transition-colors hover:text-white"
+                  >
                     Narxlash
                   </a>
                 </li>
                 <li>
-                  <a href="#individual" className="transition-colors hover:text-white">
+                  <a
+                    href="#individual"
+                    className="transition-colors hover:text-white"
+                  >
                     Shaxsiy profil
                   </a>
                 </li>
@@ -565,7 +643,10 @@ export default function Home() {
               </p>
               <ul className="mt-4 space-y-2.5 text-sm text-white/60">
                 <li>
-                  <a href="#biznes" className="transition-colors hover:text-white">
+                  <a
+                    href="#biznes"
+                    className="transition-colors hover:text-white"
+                  >
                     Jamoa kartalari
                   </a>
                 </li>
@@ -587,7 +668,10 @@ export default function Home() {
               </p>
               <ul className="mt-4 space-y-2.5 text-sm text-white/60">
                 <li>
-                  <a href="#savollar" className="transition-colors hover:text-white">
+                  <a
+                    href="#savollar"
+                    className="transition-colors hover:text-white"
+                  >
                     Savollar
                   </a>
                 </li>
@@ -600,7 +684,10 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-white/40 sm:flex-row">
-            <p>&copy; {new Date().getFullYear()} Flex. Barcha huquqlar himoyalangan.</p>
+            <p>
+              &copy; {new Date().getFullYear()} Flex. Barcha huquqlar
+              himoyalangan.
+            </p>
           </div>
         </div>
       </footer>

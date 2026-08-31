@@ -10,7 +10,7 @@ import path from "node:path";
 const DIR = path.join(process.cwd(), "public", "mahsulot");
 const EXTENSIONS = ["jpg", "jpeg", "png", "webp"] as const;
 
-export type ShotName = "karta" | "uzuk" | "braslet" | "tegizish";
+export type ShotName = "karta" | "uzuk" | "braslet" | "oila" | "tegizish";
 
 export function productShot(name: ShotName): string | null {
   for (const ext of EXTENSIONS) {

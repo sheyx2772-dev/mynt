@@ -8,7 +8,7 @@ import { Nfc } from "lucide-react";
 export default function HeroStage({ shot }: { shot: string | null }) {
   if (shot) {
     return (
-      <div className="relative">
+      <div className="relative w-full max-w-[34rem]">
         <div className="absolute -inset-16 -z-10 rounded-full bg-lime/20 blur-[110px]" />
         <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_60px_120px_-40px_rgba(0,0,0,0.9)]">
           <Image

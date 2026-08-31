@@ -4,12 +4,13 @@ Bularni istalgan AI rasm generatoriga (ChatGPT / Gemini / Midjourney / Leonardo)
 qo'ying. Chiqqan rasmni quyidagi nom bilan `public/mahsulot/` papkasiga tashlang —
 sayt uni o'zi topib ishlatadi, kod o'zgartirish shart emas.
 
-| Fayl nomi              | Nima uchun              | Nisbat |
-|------------------------|-------------------------|--------|
-| `karta.jpg`            | Bosh sahifa hero        | 16:9   |
-| `uzuk.jpg`             | Qurilmalar bo'limi      | 1:1    |
-| `braslet.jpg`          | Qurilmalar bo'limi      | 1:1    |
-| `tegizish.jpg`         | "Qanday ishlaydi"       | 16:9   |
+| Fayl nomi              | Nima uchun              | Nisbat | Holat |
+|------------------------|-------------------------|--------|-------|
+| `karta.jpg`            | Bosh sahifa hero        | 16:10  | bor   |
+| `uzuk.jpg`             | Qurilmalar              | 1:1    | bor   |
+| `braslet.jpg`          | Qurilmalar              | 1:1    | bor   |
+| `oila.jpg`             | "Qurilmani tanlang"     | 16:9   | bor   |
+| `tegizish.jpg`         | "Tegizing"              | 16:9   | yo'q  |
 
 Ranglar butun sayt bo'ylab ikkitagina: chuqur qora `#0e0a1b` va kislotali
 yashil `#abff09`. Promptlarda shu ikkisidan boshqa rang so'ralmagan — shuning
@@ -62,6 +63,11 @@ uchun rasmlar saytga o'zi yopishadi.
 
 ## Tushirgandan keyin
 
-Fayllarni `public/mahsulot/` ichiga yuqoridagi nomlar bilan tashlang, xolos.
-`.jpg`, `.png` yoki `.webp` — farqi yo'q, sayt uchalasini ham qabul qiladi.
-Rasm yo'q bo'lsa sayt hozirgi chizilgan variantni ko'rsatib turaveradi, sinmaydi.
+`scripts/prep-shots.py` rasmni kesadi, o'lchamini keltiradi va yashil rangni
+brend lime'iga suradi. Generator yashilni zumrad (~153°) qilib chiqaradi, brend
+esa ~80° — faqat yashil diapazon suriladi, shuning uchun kadrdagi issiq marmar
+va yog'och (~29°) tegilmay qoladi.
+
+Fayllarni `public/mahsulot/` ichiga yuqoridagi nomlar bilan qo'lda tashlasangiz
+ham bo'ladi. `.jpg`, `.png` yoki `.webp` — farqi yo'q. Rasm yo'q bo'lsa sayt
+chizilgan variantni ko'rsatib turaveradi, sinmaydi.

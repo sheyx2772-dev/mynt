@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import DeviceFace from "@/components/DeviceFace";
+import DeviceTile from "@/components/DeviceTile";
 import CardFan from "@/components/CardFan";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { CARD_DESIGNS } from "@/lib/card-designs";
@@ -39,9 +40,7 @@ export default function DevicesPage() {
         <div className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-3">
           {DEVICE_TYPES.map((device) => (
             <div key={device.id}>
-              <div className="rounded-2xl border border-black/8 bg-white p-5">
-                <DeviceFace type={device.id} design="genesis" handle={SAMPLE} />
-              </div>
+              <DeviceTile type={device.id} alt={`Flex ${device.name}`} />
               <h2 className="mt-5 font-display text-lg font-semibold">{device.name}</h2>
               <p className="mt-0.5 text-xs tracking-wide text-flex-black/40 uppercase">
                 {device.tagline}
