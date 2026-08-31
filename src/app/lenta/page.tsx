@@ -8,7 +8,7 @@ import { listFeed } from "@/lib/posts";
 import { touchLastSeen } from "@/lib/handles";
 
 export const metadata: Metadata = {
-  title: "Lenta — flex.uz",
+  title: "Lenta — flex.com.uz",
   robots: { index: false },
 };
 

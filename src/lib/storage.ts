@@ -4,7 +4,7 @@ const accountId = process.env.R2_ACCOUNT_ID;
 const accessKeyId = process.env.R2_ACCESS_KEY_ID;
 const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
 const bucket = process.env.R2_BUCKET_NAME;
-const publicUrl = process.env.R2_PUBLIC_URL; // e.g. https://images.flex.uz or the r2.dev URL
+const publicUrl = process.env.R2_PUBLIC_URL; // e.g. https://images.flex.com.uz or the r2.dev URL
 
 export const isStorageConfigured = Boolean(accountId && accessKeyId && secretAccessKey && bucket);
 

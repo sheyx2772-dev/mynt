@@ -29,7 +29,7 @@ const consumerFeatures = [
   {
     icon: Link2,
     title: "Shaxsiy profil",
-    desc: "flex.uz/HANDLE — barcha havolalaringiz, ijtimoiy tarmoqlaringiz va vizit ma'lumotlaringiz bitta sahifada.",
+    desc: "flex.com.uz/HANDLE — barcha havolalaringiz, ijtimoiy tarmoqlaringiz va vizit ma'lumotlaringiz bitta sahifada.",
   },
   {
     icon: Nfc,
@@ -88,7 +88,7 @@ const faqs = [
   },
   {
     q: "NFC qurilma qanday ishlaydi?",
-    a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, sizning flex.uz profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC qo'llamaydigan telefonlar uchun QR-kod zaxira variant sifatida ishlaydi.",
+    a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, sizning flex.com.uz profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC qo'llamaydigan telefonlar uchun QR-kod zaxira variant sifatida ishlaydi.",
   },
   {
     q: "Biznes uchun qancha xodim qo'shsam bo'ladi?",

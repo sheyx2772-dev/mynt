@@ -46,7 +46,7 @@ export default function PricingCalculator() {
             />
           </div>
           <span className="font-tabular text-sm text-black/40">
-            flex.uz/{cleanLetters}
+            flex.com.uz/{cleanLetters}
             {cleanDigits}
           </span>
         </div>

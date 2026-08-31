@@ -21,13 +21,13 @@ afterEach(() => {
 
 describe("getSiteOrigin", () => {
   it("uses the configured origin and ignores the request entirely", async () => {
-    process.env.NEXT_PUBLIC_SITE_URL = "https://flex.uz";
+    process.env.NEXT_PUBLIC_SITE_URL = "https://flex.com.uz";
     const { getSiteOrigin } = await loadSite();
 
     headerStore.set("x-forwarded-host", "evil.com");
     headerStore.set("host", "evil.com");
 
-    await expect(getSiteOrigin()).resolves.toBe("https://flex.uz");
+    await expect(getSiteOrigin()).resolves.toBe("https://flex.com.uz");
   });
 
   // The attack this guards: a forged host would otherwise end up inside the
@@ -37,11 +37,11 @@ describe("getSiteOrigin", () => {
     const { getSiteOrigin } = await loadSite();
 
     headerStore.set("x-forwarded-host", "evil.com");
-    await expect(getSiteOrigin()).resolves.toBe("https://flex.uz");
+    await expect(getSiteOrigin()).resolves.toBe("https://flex.com.uz");
 
     headerStore.clear();
-    headerStore.set("host", "flex.uz.evil.com");
-    await expect(getSiteOrigin()).resolves.toBe("https://flex.uz");
+    headerStore.set("host", "flex.com.uz.evil.com");
+    await expect(getSiteOrigin()).resolves.toBe("https://flex.com.uz");
   });
 
   it("still works on localhost for development", async () => {
@@ -61,12 +61,12 @@ describe("getSiteOrigin", () => {
     const { getSiteOrigin } = await loadSite();
 
     headerStore.set("host", "localhost.evil.com");
-    await expect(getSiteOrigin()).resolves.toBe("https://flex.uz");
+    await expect(getSiteOrigin()).resolves.toBe("https://flex.com.uz");
   });
 
   it("trims a trailing slash from the configured origin", async () => {
-    process.env.NEXT_PUBLIC_SITE_URL = "https://flex.uz/";
+    process.env.NEXT_PUBLIC_SITE_URL = "https://flex.com.uz/";
     const { SITE_URL } = await loadSite();
-    expect(SITE_URL).toBe("https://flex.uz");
+    expect(SITE_URL).toBe("https://flex.com.uz");
   });
 });

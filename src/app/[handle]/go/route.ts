@@ -10,7 +10,7 @@ import { SITE_URL } from "@/lib/site";
 // The destination is chosen by index into the profile's own stored links,
 // never taken from the query string. A route that redirected to whatever URL
 // it was handed would be an open redirect, usable to make a phishing link
-// look like it came from flex.uz.
+// look like it came from flex.com.uz.
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ handle: string }> }

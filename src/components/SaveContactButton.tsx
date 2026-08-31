@@ -13,7 +13,7 @@ export default function SaveContactButton({ fullName, handle, bio }: Props) {
       "VERSION:3.0",
       `FN:${fullName}`,
       `NOTE:${bio ?? ""}`,
-      `URL:https://flex.uz/${handle}`,
+      `URL:https://flex.com.uz/${handle}`,
       "END:VCARD",
     ].join("\n");
 

@@ -7,7 +7,7 @@ import { DEVICE_TYPES } from "@/lib/devices";
 import { CARD_DESIGNS } from "@/lib/card-designs";
 
 export const metadata: Metadata = {
-  title: "Qurilmalar — flex.uz",
+  title: "Qurilmalar — flex.com.uz",
   description:
     "Flex raqamingizni karta, uzuk yoki braslet ko'rinishida olib yuring. Shaklni o'zingiz tanlaysiz.",
 };

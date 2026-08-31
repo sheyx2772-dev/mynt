@@ -54,7 +54,7 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
       <div className="rounded-[1.75rem] border border-black/10 bg-white p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <h1 className="font-display text-2xl font-semibold tracking-tight">{normalized}</h1>
         <p className="mt-1 mb-7 font-tabular text-sm text-flex-black/40">
-          flex.uz/{normalized}
+          flex.com.uz/{normalized}
         </p>
 
         <EditProfileForm

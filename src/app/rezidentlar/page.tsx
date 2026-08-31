@@ -6,7 +6,7 @@ import { formatNumber } from "@/lib/format";
 import { timeAgo } from "@/lib/relative-time";
 
 export const metadata: Metadata = {
-  title: "Rezidentlar — flex.uz",
+  title: "Rezidentlar — flex.com.uz",
   description: "Flex handle egalari: shaxsiy profillar, shaharlar va yo'nalishlar.",
 };
 
@@ -93,7 +93,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
                   <span className="relative font-display text-xs text-lime">#{index + 1}</span>
                   <p className="relative mt-3 font-display font-semibold">{entry.name}</p>
                   <p className="relative font-tabular text-xs text-white/45">
-                    flex.uz/{entry.normalized}
+                    flex.com.uz/{entry.normalized}
                   </p>
                   <p className="relative mt-3 flex items-center gap-1.5 font-tabular text-xs text-white/35">
                     <Eye className="h-3 w-3" />
@@ -135,7 +135,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
                       <div className="min-w-0 flex-1">
                         <p className="truncate font-medium">{resident.name}</p>
                         <p className="font-tabular text-xs text-flex-black/40">
-                          flex.uz/{resident.normalized}
+                          flex.com.uz/{resident.normalized}
                         </p>
                         {resident.tags.length > 0 && (
                           <p className="mt-1 truncate text-xs text-flex-black/45">

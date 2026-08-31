@@ -30,12 +30,12 @@ describe("socialLink", () => {
 
 describe("websiteLink", () => {
   it("adds https:// when the scheme is missing", () => {
-    expect(websiteLink("flex.uz")?.href).toBe("https://flex.uz/");
+    expect(websiteLink("flex.com.uz")?.href).toBe("https://flex.com.uz/");
   });
 
   it("keeps an explicit http or https scheme", () => {
-    expect(websiteLink("http://flex.uz")?.href).toBe("http://flex.uz/");
-    expect(websiteLink("https://flex.uz/path")?.href).toBe("https://flex.uz/path");
+    expect(websiteLink("http://flex.com.uz")?.href).toBe("http://flex.com.uz/");
+    expect(websiteLink("https://flex.com.uz/path")?.href).toBe("https://flex.com.uz/path");
   });
 
   // These would otherwise become clickable anchors on a public profile.
@@ -51,9 +51,9 @@ describe("websiteLink", () => {
     }
   });
 
-  // "https://flex.uz@evil.com" reads as flex.uz but resolves to evil.com.
+  // "https://flex.com.uz@evil.com" reads as flex.com.uz but resolves to evil.com.
   it("rejects URLs carrying credentials in the authority", () => {
-    expect(websiteLink("https://flex.uz@evil.com")).toBeNull();
+    expect(websiteLink("https://flex.com.uz@evil.com")).toBeNull();
     expect(websiteLink("https://user:pass@evil.com")).toBeNull();
   });
 
@@ -71,10 +71,10 @@ describe("websiteLink", () => {
 describe("buildProfileLinks", () => {
   it("keeps order and drops invalid entries", () => {
     expect(
-      buildProfileLinks({ telegram: "@aziz", instagram: "../evil", website: "flex.uz" })
+      buildProfileLinks({ telegram: "@aziz", instagram: "../evil", website: "flex.com.uz" })
     ).toEqual([
       { label: "Telegram", href: "https://t.me/aziz" },
-      { label: "Veb-sayt", href: "https://flex.uz/" },
+      { label: "Veb-sayt", href: "https://flex.com.uz/" },
     ]);
   });
 

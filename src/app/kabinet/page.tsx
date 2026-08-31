@@ -10,7 +10,7 @@ import { listHandlesForUser, touchLastSeen } from "@/lib/handles";
 import { formatUZS } from "@/lib/format";
 
 export const metadata: Metadata = {
-  title: "Kabinet — flex.uz",
+  title: "Kabinet — flex.com.uz",
   robots: { index: false },
 };
 
@@ -68,7 +68,7 @@ export default async function CabinetPage() {
                     {h.normalized}
                   </p>
                   <p className="font-tabular text-xs text-flex-black/40">
-                    flex.uz/{h.normalized}
+                    flex.com.uz/{h.normalized}
                   </p>
                 </div>
                 {h.status === "reserved" ? (

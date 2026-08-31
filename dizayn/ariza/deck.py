@@ -82,7 +82,7 @@ c.setFillColor(WHITE); c.setFont("Helvetica", 20)
 c.drawString(60, 268, "Raqamli shaxsingiz. Bir tegish.")
 c.setFillColor(GREY); c.setFont("Helvetica", 13)
 c.drawString(60, 236, "NFC orqali ochiladigan shaxsiy profil va noyob raqamlar bozori")
-c.drawString(60, 214, "flex.uz  |  President Tech Award 2026  |  Best Startup Project")
+c.drawString(60, 214, "flex.com.uz  |  President Tech Award 2026  |  Best Startup Project")
 shot("karta-hero.jpg", 520, 150, 380)
 page()
 
@@ -161,7 +161,7 @@ page()
 ground(); mark(); eyebrow("Reja")
 title("Keyingi 12 oy")
 bullets([
-    ("1-3 oy - ishga tushirish", "flex.uz ochiladi, to'lovlar yoqiladi, birinchi 500 foydalanuvchi."),
+    ("1-3 oy - ishga tushirish", "flex.com.uz ochiladi, to'lovlar yoqiladi, birinchi 500 foydalanuvchi."),
     ("4-6 oy - qurilma ishlab chiqarish", "Karta, uzuk, braslet uchun yetkazib beruvchi bilan shartnoma."),
     ("7-9 oy - biznes tarifi", "Jamoalar uchun tarif, CRM integratsiyasi, lead yig'ish."),
     ("10-12 oy - viloyatlar", "Toshkentdan keyin Samarqand, Buxoro, Namangan."),
@@ -179,7 +179,7 @@ body([
     "        jamoani kengaytirishga yo'naltiriladi.",
     "",
     "Kod:    github.com/sheyx2772-dev/mynt",
-    "Sayt:   flex.uz",
+    "Sayt:   flex.com.uz",
 ], False, y=H - 250)
 c.setFillColor(LIME); c.rect(60, 90, 300, 5, stroke=0, fill=1)
 c.setFillColor(BLACK); c.setFont("Helvetica-Bold", 16)

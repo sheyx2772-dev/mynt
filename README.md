@@ -3,7 +3,7 @@
 Digital identity and networking for Uzbekistan: a rare handle, a public
 profile page, and an NFC card that opens it with one tap.
 
-`flex.uz/MYN042` is someone's profile. `flex.uz/000001` is a physical card.
+`flex.com.uz/MYN042` is someone's profile. `flex.com.uz/000001` is a physical card.
 
 ## How the two namespaces work
 
@@ -186,7 +186,7 @@ any link already shared.
 Two settings must change or sign-in will not work in production, and one of
 them is also a security boundary.
 
-1. **`NEXT_PUBLIC_SITE_URL=https://flex.uz`** in the deployed environment. When
+1. **`NEXT_PUBLIC_SITE_URL=https://flex.com.uz`** in the deployed environment. When
    it is set, `getSiteOrigin()` never reads a request header. When it is not,
    the code falls back to the canonical origin rather than trusting the
    header — a `Host` or `X-Forwarded-Host` an attacker controls would
@@ -194,7 +194,7 @@ them is also a security boundary.
 2. **Supabase → Authentication → URL Configuration.** Site URL is still
    `http://localhost:3000` and the Redirect URL allow-list is empty, so every
    sign-in link would point at localhost. Set the Site URL to
-   `https://flex.uz` and add the redirect URLs the app uses. Keep the
+   `https://flex.com.uz` and add the redirect URLs the app uses. Keep the
    allow-list specific — a wildcard removes the second line of defence behind
    the one above.
 
@@ -259,9 +259,9 @@ endpoints:
 
 | Provider | Setting | URL |
 | --- | --- | --- |
-| Click | Prepare | `https://flex.uz/api/click/prepare` |
-| Click | Complete | `https://flex.uz/api/click/complete` |
-| Payme | Endpoint | `https://flex.uz/api/payme` |
+| Click | Prepare | `https://flex.com.uz/api/click/prepare` |
+| Click | Complete | `https://flex.com.uz/api/click/complete` |
+| Payme | Endpoint | `https://flex.com.uz/api/payme` |
 
 The protocol logic lives in [`src/lib/payments`](src/lib/payments) and is
 tested against an in-memory store, including the cases Payme's sandbox

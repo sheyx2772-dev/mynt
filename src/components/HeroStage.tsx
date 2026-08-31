@@ -71,7 +71,7 @@ function Face() {
       <div className="relative mt-12 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
         MYN<span className="text-lime">042</span>
       </div>
-      <p className="relative mt-1 font-tabular text-sm text-white/40">flex.uz/MYN042</p>
+      <p className="relative mt-1 font-tabular text-sm text-white/40">flex.com.uz/MYN042</p>
 
       <div className="relative mt-8 flex items-center justify-between text-[11px] font-medium tracking-wide text-white/35 uppercase">
         <span>Tegizing</span>

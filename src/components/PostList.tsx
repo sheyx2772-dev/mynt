@@ -61,7 +61,7 @@ export default function PostList({
                     {post.author?.name ?? post.handle}
                   </Link>{" "}
                   <span className="font-tabular text-xs text-flex-black/35">
-                    flex.uz/{post.handle}
+                    flex.com.uz/{post.handle}
                   </span>
                 </p>
               )}

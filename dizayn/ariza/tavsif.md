@@ -8,7 +8,7 @@ sotuvchi yoki mutaxassis o'zini bir joyda — portfolio, ijtimoiy tarmoq, kontak
 kompaniya ma'lumoti bilan — ko'rsatadigan professional vosita yo'q.
 
 **Yechim.** Foydalanuvchi noyob raqam sotib oladi: 3 harf + 3 raqam (masalan
-FLX007). U raqam umrbod uniki bo'ladi va qayta sotilmaydi. Raqam flex.uz/FLX007
+FLX007). U raqam umrbod uniki bo'ladi va qayta sotilmaydi. Raqam flex.com.uz/FLX007
 manzilida shaxsiy profilni ochadi. Uni qanday olib yurish — karta, uzuk yoki
 braslet ko'rinishida — foydalanuvchining o'z tanlovi; uchalasi ham bitta profilni
 ochadi. Telefonga tegizish yetarli, hech kim ilova o'rnatmaydi. NFC qo'llamaydigan

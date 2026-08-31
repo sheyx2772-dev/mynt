@@ -113,7 +113,7 @@ export default function EditProfileForm({
         <input
           id="website"
           name="website"
-          placeholder="flex.uz"
+          placeholder="flex.com.uz"
           defaultValue={defaults.website}
           className={inputClass}
         />

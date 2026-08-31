@@ -20,7 +20,7 @@ import PostList from "@/components/PostList";
 
 export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
-  const title = `${handle.toUpperCase()} — flex.uz`;
+  const title = `${handle.toUpperCase()} — flex.com.uz`;
 
   // Only pages with a real person or a real card behind them are worth
   // indexing. An unclaimed handle is a price quote, and there are 17.5M of
@@ -111,7 +111,7 @@ async function VanityHandlePage({
             </div>
           )}
           <h1 className="relative mt-5 font-display text-2xl font-semibold">{profile.name}</h1>
-          <p className="relative mt-1 font-tabular text-sm text-white/50">flex.uz/{normalized}</p>
+          <p className="relative mt-1 font-tabular text-sm text-white/50">flex.com.uz/{normalized}</p>
 
           {lastSeen && (
             <p className="relative mt-2 text-xs text-white/40">Oxirgi faollik: {lastSeen}</p>
@@ -272,7 +272,7 @@ async function VanityHandlePage({
           Bo&apos;sh
         </p>
         <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">{normalized}</h1>
-        <p className="mt-1 text-sm text-flex-black/50">flex.uz/{normalized}</p>
+        <p className="mt-1 text-sm text-flex-black/50">flex.com.uz/{normalized}</p>
 
         <div className="mt-8 space-y-1 text-left font-tabular text-sm">
           <div className="flex justify-between border-b border-black/5 py-2.5">
@@ -313,7 +313,7 @@ async function GenesisCardPage({ serial }: { serial: string }) {
         <div className="relative mt-10 font-display text-4xl font-semibold tracking-tight">
           #<span className="text-lime">{serial}</span>
         </div>
-        <p className="relative mt-1 font-tabular text-sm text-white/50">flex.uz/{serial}</p>
+        <p className="relative mt-1 font-tabular text-sm text-white/50">flex.com.uz/{serial}</p>
 
         {card?.status === "claimed" ? (
           <div className="relative mt-8 border-t border-white/10 pt-6">

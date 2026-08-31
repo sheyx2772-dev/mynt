@@ -47,7 +47,7 @@ function Card({ design, handle, compact }: FaceProps) {
             </span>
           </div>
           {!compact && (
-            <p className={`mt-1 font-tabular text-[11px] ${skin.muted}`}>flex.uz/{handle}</p>
+            <p className={`mt-1 font-tabular text-[11px] ${skin.muted}`}>flex.com.uz/{handle}</p>
           )}
         </div>
       </div>

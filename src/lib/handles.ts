@@ -35,7 +35,7 @@ const DEMO_PROFILES: Record<string, ClaimedProfile> = {
     links: [
       { label: "Telegram", href: "https://t.me/azizkarimov" },
       { label: "Instagram", href: "https://instagram.com/azizkarimov" },
-      { label: "Veb-sayt", href: "https://flex.uz" },
+      { label: "Veb-sayt", href: "https://flex.com.uz" },
     ],
   },
 };

@@ -42,7 +42,7 @@ export default function HandleChecker({ tone = "light" }: { tone?: "light" | "da
                 : "pl-3 font-tabular text-sm text-flex-black/40"
             }
           >
-            flex.uz/
+            flex.com.uz/
           </span>
           <input
             aria-label="Harflar"

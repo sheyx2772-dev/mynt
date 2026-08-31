@@ -11,7 +11,7 @@ export default function ProfilePreview() {
           AR
         </div>
         <p className="relative mt-4 font-display text-xl font-semibold">Aziza Rahimova</p>
-        <p className="relative mt-0.5 font-tabular text-xs text-white/45">flex.uz/TOS001</p>
+        <p className="relative mt-0.5 font-tabular text-xs text-white/45">flex.com.uz/TOS001</p>
         <p className="relative mt-3 text-sm text-white/70">UX dizayner, Toshkent</p>
 
         <div className="relative mt-4 flex gap-2">
