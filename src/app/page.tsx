@@ -17,8 +17,9 @@ import ProfilePreview from "@/components/ProfilePreview";
 import PhoneFrame from "@/components/PhoneFrame";
 import HandleChecker from "@/components/HandleChecker";
 import HeroStage from "@/components/HeroStage";
+import Image from "next/image";
 import { productShot } from "@/lib/product-shots";
-import DeviceFace from "@/components/DeviceFace";
+import DeviceTile from "@/components/DeviceTile";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber } from "@/lib/format";
 
@@ -100,6 +101,8 @@ const faqs = [
 ];
 
 export default function Home() {
+  const tapShot = productShot("tegizish");
+
   return (
     <div className="flex min-h-full flex-col overflow-x-clip">
       <header className="sticky top-0 z-30 border-b border-white/10 bg-flex-black/85 text-white backdrop-blur-md">
@@ -221,14 +224,14 @@ export default function Home() {
 
           <ol className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-3">
             <li>
-              <div className="flex h-40 items-center justify-center rounded-2xl border border-black/8 bg-white">
-                <div className="flex overflow-hidden rounded-xl border-2 border-flex-black/90 font-display text-xl font-semibold">
+              <div className="grain relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
+                <div className="relative flex overflow-hidden rounded-xl border border-white/15 font-display text-xl font-semibold text-white">
                   <span className="px-3 py-2">MYN</span>
-                  <span className="w-px bg-black/10" />
-                  <span className="bg-lime/15 px-3 py-2 font-tabular">042</span>
+                  <span className="w-px bg-white/15" />
+                  <span className="bg-lime px-3 py-2 font-tabular text-flex-black">042</span>
                 </div>
               </div>
-              <p className="mt-5 font-tabular text-xs text-flex-black/35">01</p>
+              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-flex-black/30">01</p>
               <h3 className="mt-1 font-display text-lg font-semibold">Handle tanlang</h3>
               <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
                 3 harf + 3 raqam. Narx darhol ko&apos;rinadi &mdash; yashirin to&apos;lov yo&apos;q.
@@ -236,17 +239,21 @@ export default function Home() {
             </li>
 
             <li>
-              <div className="flex h-40 items-center justify-center rounded-2xl border border-black/8 bg-white">
-                <div className="grain relative w-40 overflow-hidden rounded-xl bg-flex-black p-3 text-white shadow-[0_16px_32px_-18px_rgba(14,10,27,0.7)]">
-                  <span className="relative text-[7px] tracking-[0.16em] text-white/50 uppercase">
-                    Flex card
+              <div className="grain relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
+                <div className="absolute inset-x-0 -top-8 h-32 bg-lime/10 blur-3xl" />
+                {/* Card, ring, bracelet — three silhouettes, each given one
+                    lime mark so a black object stays legible on a black stage. */}
+                <div className="relative flex items-center gap-4">
+                  <span className="relative h-16 w-24 rotate-[-8deg] rounded-lg border border-white/20 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
+                    <span className="absolute bottom-2 left-2 h-1 w-6 rounded-full bg-lime" />
                   </span>
-                  <p className="relative mt-6 font-display text-sm font-semibold">
-                    MYN<span className="text-lime">042</span>
-                  </p>
+                  <span className="h-16 w-16 rounded-full border-[6px] border-white/20 bg-[linear-gradient(140deg,#312653,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95),inset_0_0_0_2px_rgba(171,255,9,0.5)]" />
+                  <span className="relative h-20 w-9 rotate-[6deg] rounded-full border border-white/20 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
+                    <span className="absolute top-1/2 left-1/2 h-6 w-4 -translate-x-1/2 -translate-y-1/2 rounded-[40%] bg-black ring-1 ring-lime/60" />
+                  </span>
                 </div>
               </div>
-              <p className="mt-5 font-tabular text-xs text-flex-black/35">02</p>
+              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-flex-black/30">02</p>
               <h3 className="mt-1 font-display text-lg font-semibold">Qurilmani tanlang</h3>
               <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
                 Karta, uzuk yoki braslet. Dizaynni ham o&apos;zingiz tanlaysiz.
@@ -254,16 +261,28 @@ export default function Home() {
             </li>
 
             <li>
-              <div className="relative flex h-40 items-center justify-center overflow-hidden rounded-2xl border border-black/8 bg-white">
-                {/* Concentric rings: the tap, drawn. */}
-                <span className="absolute h-16 w-16 rounded-full border border-lime-ink/25" />
-                <span className="absolute h-28 w-28 rounded-full border border-lime-ink/15" />
-                <span className="absolute h-40 w-40 rounded-full border border-lime-ink/10" />
-                <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-lime">
-                  <Nfc className="h-4 w-4 text-flex-black" />
-                </span>
+              <div className="grain relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
+                {tapShot ? (
+                  <Image
+                    src={tapShot}
+                    alt="Kartani telefonga tegizish"
+                    fill
+                    sizes="(min-width: 640px) 20rem, 100vw"
+                    className="object-cover"
+                  />
+                ) : (
+                  <>
+                    {/* Concentric rings: the tap, drawn. */}
+                    <span className="absolute h-16 w-16 rounded-full border border-lime/25" />
+                    <span className="absolute h-28 w-28 rounded-full border border-lime/15" />
+                    <span className="absolute h-44 w-44 rounded-full border border-lime/10" />
+                    <span className="relative flex h-11 w-11 items-center justify-center rounded-full bg-lime shadow-[0_0_40px_rgba(171,255,9,0.5)]">
+                      <Nfc className="h-5 w-5 text-flex-black" />
+                    </span>
+                  </>
+                )}
               </div>
-              <p className="mt-5 font-tabular text-xs text-flex-black/35">03</p>
+              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-flex-black/30">03</p>
               <h3 className="mt-1 font-display text-lg font-semibold">Tegizing</h3>
               <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
                 Telefonga tegizasiz, profilingiz ochiladi. Hech kim ilova o&apos;rnatmaydi.
@@ -369,9 +388,7 @@ export default function Home() {
           <div className="mt-10 grid gap-8 sm:grid-cols-3">
             {DEVICE_TYPES.map((device) => (
               <div key={device.id}>
-                <div className="rounded-2xl border border-black/8 bg-white p-5">
-                  <DeviceFace type={device.id} design="genesis" handle="MYN042" />
-                </div>
+                <DeviceTile type={device.id} alt={`Flex ${device.name}`} />
                 <h3 className="mt-4 font-display font-semibold">{device.name}</h3>
                 <p className="mt-1 text-sm text-flex-black/55">{device.tagline}</p>
               </div>
