@@ -15,6 +15,7 @@ import Link from "next/link";
 import PricingCalculator from "@/components/PricingCalculator";
 import ProfilePreview from "@/components/ProfilePreview";
 import PhoneFrame from "@/components/PhoneFrame";
+import HandleChecker from "@/components/HandleChecker";
 import CardFace from "@/components/CardFace";
 import type { CardDesignId } from "@/lib/card-designs";
 import { formatNumber } from "@/lib/format";
@@ -154,21 +155,23 @@ export default function Home() {
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
                   Raqamli shaxsingiz. Bir tegish.
                 </p>
-                <h1 className="font-display text-5xl font-semibold leading-[0.98] tracking-tight sm:text-6xl lg:text-[4.5rem]">
-                  O&apos;zingizni
+                <h1 className="font-display text-5xl font-semibold leading-[0.98] tracking-tight text-balance sm:text-6xl lg:text-[4.5rem]">
+                  Noyob handle &mdash;
                   <br />
                   <span className="relative inline-block px-1">
-                    <span className="relative z-10">flex</span>
+                    <span className="relative z-10">umrbod</span>
                     <span className="marker-stroke absolute inset-x-0 bottom-[6px] -z-0 h-[0.4em] rounded-sm bg-lime/80" />
                   </span>{" "}
-                  qiling.
+                  sizniki.
                 </h1>
                 <p className="mt-7 max-w-md text-lg leading-relaxed text-flex-black/65">
                   Flex — noyob raqamli handle, shaxsiy vizit-karta sahifasi va NFC karta orqali
                   shaxsingizni ulashing. Jamoangiz uchun esa — tadbirlarda lead yig&apos;ish va
                   CRM bilan sinxronizatsiya.
                 </p>
-                <div className="mt-9 flex flex-wrap gap-4">
+                <HandleChecker />
+
+                <div className="mt-6 flex flex-wrap gap-4">
                   <a
                     href="#narx"
                     className="rounded-full bg-lime px-7 py-3.5 font-medium text-flex-black shadow-[0_12px_30px_-8px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.03]"
