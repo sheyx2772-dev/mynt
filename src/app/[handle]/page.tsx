@@ -152,6 +152,9 @@ async function VanityHandlePage({
 
     return (
       <PageShell>
+        {/* Keeps the app bar off somebody else's card. */}
+        <span data-no-app-bar hidden />
+
         <div
           style={{ "--accent": PLAN_ACCENT[profile.plan] } as React.CSSProperties}
           className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0B0B0F] text-white shadow-[0_40px_80px_-30px_rgba(0,0,0,0.75)]"

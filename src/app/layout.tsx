@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { site } from "@/lib/i18n";
+import { getLang } from "@/lib/lang";
+import BottomNav from "@/components/BottomNav";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
@@ -33,14 +35,27 @@ export const viewport: Viewport = {
   themeColor: "#0e0a1b",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const lang = await getLang();
+  const t = site(lang);
+
   return (
     <html
-      lang="en"
+      lang={lang}
       className={`${spaceGrotesk.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white text-flex-black">
+      {/* The bar is fixed, so the page needs room under it. Phones only —
+          `pb-16` is undone at the breakpoint where the bar disappears. */}
+      <body className="flex min-h-full flex-col bg-white pb-16 text-flex-black lg:pb-0">
         {children}
+        <BottomNav
+          labels={{
+            home: t.navHome,
+            residents: t.navResidents,
+            feed: t.navFeed,
+            cabinet: t.navCabinet,
+          }}
+        />
         <ServiceWorkerRegistrar />
       </body>
     </html>

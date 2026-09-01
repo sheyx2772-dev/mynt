@@ -87,3 +87,14 @@ body {
     animation: none;
   }
 }
+
+/* A page that carries somebody else's card asks for the app bar to stay away,
+   and for the space the bar reserves to come back. Answered in CSS so it is
+   settled before hydration rather than after it. */
+body:has([data-no-app-bar]) .app-bar {
+  display: none;
+}
+
+body:has([data-no-app-bar]) {
+  padding-bottom: 0;
+}

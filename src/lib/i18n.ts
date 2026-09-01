@@ -281,6 +281,8 @@ const SITE = {
     takenWord: "raqam band",
     leftWord: "bo'sh qoldi",
     latestWord: "so'nggi",
+    navHome: "Bosh sahifa",
+    navFeed: "Lenta",
     langName: "O'zbekcha",
   },
   ru: {
@@ -381,6 +383,8 @@ const SITE = {
     takenWord: "номеров занято",
     leftWord: "свободно",
     latestWord: "последние",
+    navHome: "Главная",
+    navFeed: "Лента",
     langName: "Русский",
   },
   en: {
@@ -481,6 +485,8 @@ const SITE = {
     takenWord: "handles taken",
     leftWord: "still free",
     latestWord: "latest",
+    navHome: "Home",
+    navFeed: "Feed",
     langName: "English",
   },
 } as const;
