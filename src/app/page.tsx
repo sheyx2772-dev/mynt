@@ -11,6 +11,7 @@ import {
   Minus,
   ChevronDown,
 } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Mark from "@/components/Mark";
 import PricingCalculator from "@/components/PricingCalculator";
@@ -50,6 +51,14 @@ const COMPARISON = [
   { unqx: true, popl: false, flex: true },
 ];
 
+
+export async function generateMetadata({
+  searchParams,
+}: PageProps<"/">): Promise<Metadata> {
+  const { til } = await searchParams;
+  const t = site(await getLang(til));
+  return { title: `Flex — ${t.tagline}`, description: t.metaDescription };
+}
 
 export default async function Home({ searchParams }: PageProps<"/">) {
   const { til } = await searchParams;
@@ -439,7 +448,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <div className="relative mx-auto max-w-6xl px-6">
             <div className="max-w-xl">
               <p className="mb-3 text-xs font-semibold tracking-widest text-lime/70 uppercase">
-                Biznes
+                {s.navBusiness}
               </p>
               <h2 className="font-display text-3xl font-semibold tracking-tight text-balance text-white sm:text-4xl">
                 {s.notOneCard}
@@ -621,12 +630,12 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 flex
               </div>
               <p className="mt-3 max-w-[220px] text-sm text-white/50">
-                {s.footerTagline}
+                {s.tagline}
               </p>
             </div>
             <div>
               <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
-                Mahsulot
+                {s.product}
               </p>
               <ul className="mt-4 space-y-2.5 text-sm text-white/60">
                 <li>
@@ -634,7 +643,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                     href="#narx"
                     className="transition-colors hover:text-white"
                   >
-                    Narxlash
+                    {s.navPricing}
                   </a>
                 </li>
                 <li>
@@ -654,7 +663,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             </div>
             <div>
               <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
-                Biznes
+                {s.navBusiness}
               </p>
               <ul className="mt-4 space-y-2.5 text-sm text-white/60">
                 <li>
@@ -687,7 +696,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                     href="#savollar"
                     className="transition-colors hover:text-white"
                   >
-                    Savollar
+                    {s.navFaq}
                   </a>
                 </li>
                 <li>

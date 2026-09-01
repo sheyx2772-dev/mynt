@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { site } from "@/lib/i18n";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
@@ -15,9 +16,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Flex — raqamli shaxsingiz",
-  description:
-    "Noyob handle, shaxsiy vizit-karta sahifasi va NFC karta. Bir tegish bilan shaxsingizni ulashing, jamoangiz uchun esa tadbirlarda lead yig'ing.",
+  // The default for pages that set none. The landing page overrides both in
+  // the reader's language; this is the Uzbek fallback.
+  title: `Flex — ${site("uz").tagline}`,
+  description: site("uz").metaDescription,
   // iOS reads these rather than the manifest when added to the home screen.
   appleWebApp: {
     capable: true,

@@ -243,6 +243,9 @@ const SITE = {
     handleCounts: (taken: string, free: string) => `${taken} ta handle band · ${free} ta bo'sh`,
     offerTitle: "Ommaviy oferta",
     offerAuthority: "Ushbu hujjatning asl matni o'zbek tilida tuzilgan. Rus va ingliz tilidagi versiyalar qulaylik uchun berilgan; nizo yuzaga kelganda o'zbek tilidagi matn hisobga olinadi.",
+    tagline: "Cheksiz imkoniyatlaringiz",
+    metaDescription: "Noyob raqam, shaxsiy profil va NFC karta. Bir tegish bilan shaxsingizni ulashing; jamoangiz uchun raqamlar chiqaring va kontakt yig'ing.",
+    product: "Mahsulot",
     langName: "O'zbekcha",
   },
   ru: {
@@ -332,6 +335,9 @@ const SITE = {
     handleCounts: (taken: string, free: string) => `${taken} номеров занято · ${free} свободно`,
     offerTitle: "Публичная оферта",
     offerAuthority: "Оригинал этого документа составлен на узбекском языке. Русская и английская версии приведены для удобства; при разногласиях применяется узбекский текст.",
+    tagline: "Ваши бесконечные возможности",
+    metaDescription: "Уникальный номер, личный профиль и NFC-карта. Делитесь собой одним касанием; выдавайте номера команде и собирайте контакты.",
+    product: "Продукт",
     langName: "Русский",
   },
   en: {
@@ -421,6 +427,9 @@ const SITE = {
     handleCounts: (taken: string, free: string) => `${taken} handles taken · ${free} free`,
     offerTitle: "Public offer",
     offerAuthority: "The original of this document is drawn up in Uzbek. The Russian and English versions are provided for convenience; in the event of a discrepancy the Uzbek text governs.",
+    tagline: "Your infinite possibilities",
+    metaDescription: "A unique handle, your own profile and an NFC card. Share yourself with one tap; issue handles to your team and collect contacts.",
+    product: "Product",
     langName: "English",
   },
 } as const;
