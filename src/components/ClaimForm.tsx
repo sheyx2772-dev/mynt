@@ -92,6 +92,7 @@ export default function ClaimForm({
       <div className="grid grid-cols-2 gap-3">
         <input name="telegram" placeholder="Telegram @username" className={inputClass} />
         <input name="instagram" placeholder="Instagram @username" className={inputClass} />
+        <input name="linkedin" placeholder="LinkedIn — aziz-karimov" className={inputClass} />
       </div>
       <input name="website" placeholder="Veb-sayt (ixtiyoriy)" className={inputClass} />
 

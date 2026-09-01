@@ -5,8 +5,10 @@
 export type Link = { label: string; href: string };
 
 // Usernames go straight into a URL path, so they're restricted to the
-// characters the platforms actually allow.
-const USERNAME = /^[A-Za-z0-9._]{1,64}$/;
+// characters the platforms actually allow. The hyphen is in the set because
+// LinkedIn's public profile slugs are built from it — without it every
+// LinkedIn address a person would actually paste is rejected.
+const USERNAME = /^[A-Za-z0-9._-]{1,64}$/;
 
 export function socialLink(label: string, raw: string, base: string): Link | null {
   const value = raw.trim().replace(/^@/, "");
@@ -44,11 +46,13 @@ export function websiteLink(raw: string): Link | null {
 export function buildProfileLinks(input: {
   telegram: string;
   instagram: string;
+  linkedin: string;
   website: string;
 }): Link[] {
   return [
     socialLink("Telegram", input.telegram, "https://t.me/"),
     socialLink("Instagram", input.instagram, "https://instagram.com/"),
+    socialLink("LinkedIn", input.linkedin, "https://linkedin.com/in/"),
     websiteLink(input.website),
   ].filter((l): l is Link => l !== null);
 }

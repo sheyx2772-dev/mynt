@@ -71,14 +71,20 @@ describe("websiteLink", () => {
 describe("buildProfileLinks", () => {
   it("keeps order and drops invalid entries", () => {
     expect(
-      buildProfileLinks({ telegram: "@aziz", instagram: "../evil", website: "flex.com.uz" })
+      buildProfileLinks({
+        telegram: "@aziz",
+        instagram: "../evil",
+        linkedin: "aziz-karimov",
+        website: "flex.com.uz",
+      })
     ).toEqual([
       { label: "Telegram", href: "https://t.me/aziz" },
+      { label: "LinkedIn", href: "https://linkedin.com/in/aziz-karimov" },
       { label: "Veb-sayt", href: "https://flex.com.uz/" },
     ]);
   });
 
   it("returns an empty list when nothing is supplied", () => {
-    expect(buildProfileLinks({ telegram: "", instagram: "", website: "" })).toEqual([]);
+    expect(buildProfileLinks({ telegram: "", instagram: "", linkedin: "", website: "" })).toEqual([]);
   });
 });

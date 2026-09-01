@@ -18,6 +18,7 @@ export default function EditProfileForm({
     bio: string;
     telegram: string;
     instagram: string;
+    linkedin: string;
     website: string;
     city: string;
     contactEmail: string;
@@ -102,6 +103,18 @@ export default function EditProfileForm({
             name="instagram"
             placeholder="@username"
             defaultValue={defaults.instagram}
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className={labelClass} htmlFor="linkedin">
+            LinkedIn
+          </label>
+          <input
+            id="linkedin"
+            name="linkedin"
+            placeholder="aziz-karimov"
+            defaultValue={defaults.linkedin}
             className={inputClass}
           />
         </div>

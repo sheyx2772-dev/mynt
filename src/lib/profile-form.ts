@@ -57,6 +57,7 @@ export async function readProfileForm(
   const links = buildProfileLinks({
     telegram: String(formData.get("telegram") ?? ""),
     instagram: String(formData.get("instagram") ?? ""),
+    linkedin: String(formData.get("linkedin") ?? ""),
     website: String(formData.get("website") ?? ""),
   });
 

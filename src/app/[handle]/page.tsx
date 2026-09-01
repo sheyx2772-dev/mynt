@@ -128,6 +128,10 @@ async function VanityHandlePage({
                 .join("")}
             </div>
           )}
+          <div className="absolute top-6 right-6 z-10">
+            <ShareButton handle={normalized} name={profile.name} />
+          </div>
+
           <h1 className="relative mt-5 font-display text-2xl font-semibold">{profile.name}</h1>
           <p className="relative mt-1 font-tabular text-sm text-white/50">flex.com.uz/{normalized}</p>
 
@@ -209,10 +213,6 @@ async function VanityHandlePage({
           <>
           <div className="mt-6">
             <SaveContactButton fullName={profile.name} handle={normalized} bio={profile.bio} />
-          </div>
-
-          <div className="mt-3">
-            <ShareButton handle={normalized} name={profile.name} />
           </div>
 
           {isOwner && (

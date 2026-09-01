@@ -41,18 +41,21 @@ export default function ShareButton({ handle, name }: { handle: string; name: st
     }
   }
 
+  // The clipboard can be refused outright, and a button that then does nothing
+  // looks broken. The link goes on screen instead, selected, to be copied by
+  // hand — over the card rather than in place of the button, so nothing below
+  // it moves.
   if (manual) {
     return (
-      <div className="rounded-2xl border border-black/12 px-4 py-3">
-        <p className="mb-2 text-xs text-flex-black/45">
-          Havolani nusxalab oling:
-        </p>
+      <div className="absolute top-0 right-0 z-10 w-[min(20rem,80vw)] rounded-2xl border border-white/15 bg-flex-black px-4 py-3 shadow-xl">
+        <p className="mb-1.5 text-xs text-white/45">Havolani nusxalab oling:</p>
         <input
           readOnly
           value={manual}
           onFocus={(e) => e.currentTarget.select()}
           autoFocus
-          className="w-full bg-transparent font-tabular text-sm outline-none"
+          onBlur={() => setManual(null)}
+          className="w-full bg-transparent font-tabular text-xs text-white outline-none"
         />
       </div>
     );
@@ -61,19 +64,11 @@ export default function ShareButton({ handle, name }: { handle: string; name: st
   return (
     <button
       onClick={share}
-      className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-black/12 px-6 py-3 text-center font-medium text-flex-black transition-colors hover:bg-black/[0.03]"
+      aria-label="Profilni ulashish"
+      title="Profilni ulashish"
+      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white/70 transition-colors hover:bg-white/[0.12] hover:text-white"
     >
-      {copied ? (
-        <>
-          <Check className="h-4 w-4 text-lime-ink" />
-          Havola nusxalandi
-        </>
-      ) : (
-        <>
-          <Share2 className="h-4 w-4" />
-          Ulashish
-        </>
-      )}
+      {copied ? <Check className="h-4 w-4 text-lime" /> : <Share2 className="h-4 w-4" />}
     </button>
   );
 }
