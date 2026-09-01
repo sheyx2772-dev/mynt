@@ -21,12 +21,12 @@ export default function LangSwitch({
 }) {
   const on =
     tone === "dark"
-      ? "rounded-md bg-white/15 px-2 py-1 font-medium text-white"
+      ? "rounded-md bg-white/15 px-2.5 py-2 font-medium text-white"
       : "rounded-md bg-flex-black px-2 py-1 font-medium text-white";
   const off =
     tone === "dark"
-      ? "rounded-md px-2 py-1 text-white/40 transition-colors hover:text-white/80"
-      : "rounded-md px-2 py-1 text-flex-black/40 transition-colors hover:text-flex-black/70";
+      ? "rounded-md px-2.5 py-2 text-white/40 transition-colors hover:text-white/80"
+      : "rounded-md px-2.5 py-2 text-flex-black/40 transition-colors hover:text-flex-black/70";
 
   return (
     <form

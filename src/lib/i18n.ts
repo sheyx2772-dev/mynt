@@ -246,6 +246,7 @@ const SITE = {
     tagline: "Sizning raqamli dunyoingiz",
     metaDescription: "Noyob raqam, shaxsiy profil va NFC karta. Bir tegish bilan shaxsingizni ulashing; jamoangiz uchun raqamlar chiqaring va kontakt yig'ing.",
     product: "Mahsulot",
+    whyFlex: "Nega Flex?",
     langName: "O'zbekcha",
   },
   ru: {
@@ -338,6 +339,7 @@ const SITE = {
     tagline: "Ваш цифровой мир",
     metaDescription: "Уникальный номер, личный профиль и NFC-карта. Делитесь собой одним касанием; выдавайте номера команде и собирайте контакты.",
     product: "Продукт",
+    whyFlex: "Почему Flex?",
     langName: "Русский",
   },
   en: {
@@ -430,6 +432,7 @@ const SITE = {
     tagline: "Your digital world",
     metaDescription: "A unique handle, your own profile and an NFC card. Share yourself with one tap; issue handles to your team and collect contacts.",
     product: "Product",
+    whyFlex: "Why Flex?",
     langName: "English",
   },
 } as const;

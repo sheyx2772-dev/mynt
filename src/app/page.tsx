@@ -133,21 +133,21 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]" />
           <div className="absolute -top-40 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-lime/[0.13] blur-[140px]" />
 
-          <div className="relative mx-auto max-w-6xl px-6 pt-20 pb-28 sm:pt-28">
-            <div className="grid items-center gap-16 lg:grid-cols-2">
+          <div className="relative mx-auto max-w-6xl px-6 pt-10 pb-16 sm:pt-28 sm:pb-28">
+            <div className="grid items-center gap-10 sm:gap-16 lg:grid-cols-2">
               <div>
-                <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-xs font-medium tracking-wide text-white/70 uppercase backdrop-blur-sm">
+                <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-[10px] font-medium tracking-wide text-white/70 uppercase backdrop-blur-sm sm:mb-6 sm:text-xs">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
                   {s.heroBadge}
                 </p>
-                <h1 className="font-display text-5xl font-semibold leading-[0.98] tracking-tight text-balance sm:text-6xl lg:text-[4.5rem]">
+                <h1 className="font-display text-[2.1rem] font-semibold leading-[1.05] tracking-tight text-balance sm:text-5xl sm:leading-[0.98] lg:text-[4.5rem]">
                   {s.heroTitleA && <>{s.heroTitleA} </>}
                   <span className="marker-reveal inline-block rounded-md bg-lime px-2 text-flex-black">
                     {s.heroTitleMark}
                   </span>{" "}
                   {s.heroTitleB}
                 </h1>
-                <p className="mt-7 max-w-md text-lg leading-relaxed text-white/60">
+                <p className="mt-5 max-w-md leading-relaxed text-white/60 sm:mt-7 sm:text-lg">
                   {s.heroLead}
                 </p>
                 <HandleChecker tone="dark"
@@ -157,13 +157,13 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 <div className="mt-6 flex flex-wrap gap-4">
                   <a
                     href="#narx"
-                    className="rounded-full bg-lime px-7 py-3.5 font-medium text-flex-black shadow-[0_12px_36px_-8px_rgba(171,255,9,0.5)] transition-transform hover:scale-[1.03]"
+                    className="rounded-full bg-lime px-6 py-3 text-sm font-medium text-flex-black shadow-[0_12px_36px_-8px_rgba(171,255,9,0.5)] transition-transform hover:scale-[1.03] sm:px-7 sm:py-3.5 sm:text-base"
                   >
                     {s.calcPrice}
                   </a>
                   <a
                     href="#biznes"
-                    className="rounded-full border border-white/20 px-7 py-3.5 font-medium text-white transition-colors hover:bg-white/10"
+                    className="rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10 sm:px-7 sm:py-3.5 sm:text-base"
                   >
                     {s.forBusiness}
                   </a>
@@ -196,11 +196,11 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </section>
 
         {/* How it works */}
-        <section className="mx-auto max-w-6xl px-6 py-24">
+        <section className="mx-auto max-w-6xl px-6 py-14 sm:py-24">
           <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
             {s.howItWorks}
           </p>
-          <h2 className="max-w-lg font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+          <h2 className="max-w-lg font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
             {s.threeSteps}
           </h2>
 
@@ -300,7 +300,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </section>
 
         {/* Scarcity */}
-        <section className="grain relative overflow-hidden bg-flex-black py-20 sm:py-28">
+        <section className="grain relative overflow-hidden bg-flex-black py-14 sm:py-28">
           <div className="bg-dot-grid-light absolute inset-0 opacity-30 [mask-image:radial-gradient(ellipse_50%_60%_at_50%_50%,black,transparent)]" />
           <div className="relative mx-auto max-w-6xl px-6">
             <p className="text-xs font-semibold tracking-widest text-lime/70 uppercase">
@@ -316,12 +316,12 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </section>
 
         {/* Pricing calculator */}
-        <section id="narx" className="mx-auto max-w-6xl px-6 py-24">
+        <section id="narx" className="mx-auto max-w-6xl px-6 py-14 sm:py-24">
           <div className="mb-12 max-w-lg">
             <p className="mb-3 text-xs font-semibold tracking-widest text-lime/80 uppercase [-webkit-text-stroke:0.3px_rgba(14,10,27,0.4)]">
               Narxlash
             </p>
-            <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-4xl">
               {s.priceOpen}
             </h2>
             <p className="mt-3 text-flex-black/65">
@@ -346,7 +346,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
               Obuna
             </p>
-            <h2 className="font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
               {s.priceThree}
             </h2>
             <p className="mt-4 leading-relaxed text-flex-black/60">
@@ -359,14 +359,14 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         {/* What a profile actually looks like */}
         <section
           id="individual"
-          className="border-t border-black/5 bg-black/[0.02] py-24"
+          className="border-t border-black/5 bg-black/[0.02] py-14 sm:py-24"
         >
           <div className="mx-auto grid max-w-6xl gap-14 px-6 lg:grid-cols-[1fr_320px] lg:gap-20">
             <div>
               <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
                 Shaxsiy
               </p>
-              <h2 className="max-w-md font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+              <h2 className="max-w-md font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
                 {s.oneTap}
               </h2>
               <p className="mt-4 max-w-md text-flex-black/65">
@@ -403,13 +403,13 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </section>
 
         {/* The cards themselves */}
-        <section className="mx-auto max-w-6xl px-6 py-24">
+        <section className="mx-auto max-w-6xl px-6 py-14 sm:py-24">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
                 {s.navDevices}
               </p>
-              <h2 className="max-w-md font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+              <h2 className="max-w-md font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
                 {s.oneNumberThree}
               </h2>
             </div>
@@ -442,7 +442,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         {/* Business */}
         <section
           id="biznes"
-          className="grain relative overflow-hidden bg-flex-black py-24"
+          className="grain relative overflow-hidden bg-flex-black py-14 sm:py-24"
         >
           <div className="bg-dot-grid-light absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
           <div className="relative mx-auto max-w-6xl px-6">
@@ -524,13 +524,13 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           </div>
         </section>
 
-        <section className="border-t border-black/5 bg-black/[0.02] py-24">
+        <section className="border-t border-black/5 bg-black/[0.02] py-14 sm:py-24">
           <div className="mx-auto max-w-4xl px-6">
             <p className="mb-3 text-center text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
               {s.compare}
             </p>
-            <h2 className="text-center font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-              Nega Flex?
+            <h2 className="text-center font-display text-2xl font-semibold tracking-tight sm:text-4xl">
+              {s.whyFlex}
             </h2>
             <div className="mt-10 overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_20px_50px_-24px_rgba(14,10,27,0.2)]">
               <div className="overflow-x-auto">
@@ -592,11 +592,11 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </section>
 
         {/* FAQ */}
-        <section id="savollar" className="mx-auto max-w-3xl px-6 py-24">
+        <section id="savollar" className="mx-auto max-w-3xl px-6 py-14 sm:py-24">
           <p className="mb-3 text-center text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
             Savollar
           </p>
-          <h2 className="text-center font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 className="text-center font-display text-2xl font-semibold tracking-tight sm:text-4xl">
             {s.faq}
           </h2>
           <div className="mt-10 space-y-3">
@@ -637,11 +637,11 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
                 {s.product}
               </p>
-              <ul className="mt-4 space-y-2.5 text-sm text-white/60">
+              <ul className="mt-3 space-y-0.5 text-sm text-white/60">
                 <li>
                   <a
                     href="#narx"
-                    className="transition-colors hover:text-white"
+                    className="block py-1.5 transition-colors hover:text-white"
                   >
                     {s.navPricing}
                   </a>
@@ -649,13 +649,13 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 <li>
                   <a
                     href="#individual"
-                    className="transition-colors hover:text-white"
+                    className="block py-1.5 transition-colors hover:text-white"
                   >
                     {s.personalProfile}
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="transition-colors hover:text-white">
+                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
                     FLEX CARD
                   </a>
                 </li>
@@ -665,22 +665,22 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
                 {s.navBusiness}
               </p>
-              <ul className="mt-4 space-y-2.5 text-sm text-white/60">
+              <ul className="mt-3 space-y-0.5 text-sm text-white/60">
                 <li>
                   <a
                     href="#biznes"
-                    className="transition-colors hover:text-white"
+                    className="block py-1.5 transition-colors hover:text-white"
                   >
                     {s.teamCards}
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="transition-colors hover:text-white">
+                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
                     {s.contactCollection}
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="transition-colors hover:text-white">
+                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
                     {s.eventMode}
                   </a>
                 </li>
@@ -690,24 +690,24 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
                 {s.company}
               </p>
-              <ul className="mt-4 space-y-2.5 text-sm text-white/60">
+              <ul className="mt-3 space-y-0.5 text-sm text-white/60">
                 <li>
                   <a
                     href="#savollar"
-                    className="transition-colors hover:text-white"
+                    className="block py-1.5 transition-colors hover:text-white"
                   >
                     {s.navFaq}
                   </a>
                 </li>
                 <li>
-                  <Link href="/shartlar" className="transition-colors hover:text-white">
+                  <Link href="/shartlar" className="block py-1.5 transition-colors hover:text-white">
                     {s.footerTerms}
                   </Link>
                 </li>
                 <li>
                   <a
                     href={`tel:${COMPANY.phoneHref}`}
-                    className="transition-colors hover:text-white"
+                    className="block py-1.5 transition-colors hover:text-white"
                   >
                     {COMPANY.phone}
                   </a>
@@ -720,7 +720,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               &copy; {new Date().getFullYear()} Flex &mdash; {COMPANY.legalName}. STIR{" "}
               {COMPANY.inn}.
             </p>
-            <Link href="/shartlar" className="transition-colors hover:text-white/70">
+            <Link href="/shartlar" className="block py-1.5 transition-colors hover:text-white/70">
               {s.delivery}
             </Link>
           </div>
