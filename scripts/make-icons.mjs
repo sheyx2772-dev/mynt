@@ -136,6 +136,13 @@ const ICONS = [
   { file: "icon-maskable-512.png", size: 512, padding: 0, dot: 0.24, cornerRadius: 0 },
   // iOS applies its own rounding, so this one is a plain square.
   { file: "apple-icon.png", size: 180, padding: 0, dot: 0.3, cornerRadius: 0, dir: "app" },
+  // Telegram crops an avatar to a circle and shows it at about forty pixels in
+  // a chat list. The corners of the rounded square are cut away there, so this
+  // one is a full-bleed square — nothing is lost that was drawn — and the dot
+  // is larger, because at that size the mark has to be legible rather than
+  // faithful. Square rather than pre-rounded: Telegram does its own masking,
+  // and a transparent corner underneath it renders as white.
+  { file: "telegram-avatar.png", size: 512, padding: 0, dot: 0.42, cornerRadius: 0 },
 ];
 
 mkdirSync(PUBLIC_DIR, { recursive: true });
