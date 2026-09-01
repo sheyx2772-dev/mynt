@@ -8,6 +8,7 @@ import { readProfileForm } from "@/lib/profile-form";
 import { isCardDesign, DEFAULT_CARD_DESIGN } from "@/lib/card-designs";
 import { isDeviceType, DEFAULT_DEVICE_TYPE } from "@/lib/devices";
 import { requestDesign } from "@/lib/design-requests";
+import { offerTransfer, cancelTransfer, acceptTransfer } from "@/lib/transfers";
 
 export type UpdateResult = { ok: boolean; error?: string; saved?: true };
 
@@ -171,4 +172,53 @@ export async function submitDesignRequest(
 
   revalidatePath(`/kabinet/${normalized}`);
   return { ok: true, queued: true };
+}
+
+export type TransferActionResult = { ok: boolean; error?: string; sent?: true };
+
+export async function offerHandleTransfer(
+  rawHandle: string,
+  _prevState: TransferActionResult,
+  formData: FormData
+): Promise<TransferActionResult> {
+  const parsed = parseHandle(rawHandle);
+  if (!parsed) return { ok: false, error: "Handle formati noto'g'ri." };
+  const normalized = `${parsed.letters}${parsed.digits}`;
+
+  const user = await getUser();
+  if (!user?.email) return { ok: false, error: "Avval hisobingizga kiring." };
+
+  const result = await offerTransfer(
+    user.id,
+    user.email,
+    normalized,
+    String(formData.get("email") ?? "")
+  );
+  if (!result.ok) return { ok: false, error: result.error };
+
+  revalidatePath(`/kabinet/${normalized}`);
+  return { ok: true, sent: true };
+}
+
+export async function cancelHandleTransfer(id: string): Promise<TransferActionResult> {
+  const user = await getUser();
+  if (!user) return { ok: false, error: "Avval hisobingizga kiring." };
+
+  const result = await cancelTransfer(user.id, id);
+  if (!result.ok) return { ok: false, error: result.error };
+
+  revalidatePath("/kabinet");
+  return { ok: true };
+}
+
+export async function acceptHandleTransfer(id: string): Promise<TransferActionResult> {
+  const user = await getUser();
+  if (!user?.email) return { ok: false, error: "Avval hisobingizga kiring." };
+
+  const result = await acceptTransfer(user.id, user.email, id);
+  if (!result.ok) return { ok: false, error: result.error };
+
+  revalidatePath("/kabinet");
+  revalidatePath(`/${result.handle}`);
+  return { ok: true };
 }

@@ -15,6 +15,8 @@ import { listPostsForHandle } from "@/lib/posts";
 import { getHandleStats } from "@/lib/analytics";
 import DesignRequestForm from "@/components/DesignRequestForm";
 import { listDesignRequests } from "@/lib/design-requests";
+import TransferPanel from "@/components/TransferPanel";
+import { listTransfersForHandle } from "@/lib/transfers";
 
 export async function generateMetadata(
   props: PageProps<"/kabinet/[handle]">
@@ -38,10 +40,11 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
   if (!owned) notFound();
 
   // Only reached once ownership is established above.
-  const [stats, posts, designRequests] = await Promise.all([
+  const [stats, posts, designRequests, transfers] = await Promise.all([
     getHandleStats(normalized),
     listPostsForHandle(normalized),
     listDesignRequests(normalized),
+    listTransfersForHandle(normalized),
   ]);
 
   return (
@@ -101,6 +104,10 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
 
       <div className="mt-6">
         <DesignRequestForm handle={normalized} requests={designRequests} />
+      </div>
+
+      <div className="mt-6">
+        <TransferPanel handle={normalized} transfers={transfers} />
       </div>
 
       <div className="mt-6">

@@ -7,6 +7,8 @@ import SignOutButton from "@/components/SignOutButton";
 import InstallHint from "@/components/InstallHint";
 import { requireUser } from "@/lib/auth";
 import { listHandlesForUser, touchLastSeen } from "@/lib/handles";
+import IncomingTransfers from "@/components/IncomingTransfers";
+import { listIncomingTransfers } from "@/lib/transfers";
 import { formatUZS } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -16,7 +18,10 @@ export const metadata: Metadata = {
 
 export default async function CabinetPage() {
   const user = await requireUser("/kabinet");
-  const handles = await listHandlesForUser(user.id);
+  const [handles, incoming] = await Promise.all([
+    listHandlesForUser(user.id),
+    listIncomingTransfers(user.email ?? ""),
+  ]);
 
   // The cabinet is the one page only an owner loads, which makes it the
   // natural place to stamp activity. Deferred so it never delays the render.
@@ -39,6 +44,8 @@ export default async function CabinetPage() {
           <SignOutButton />
         </div>
       </div>
+
+      <IncomingTransfers transfers={incoming} />
 
       <InstallHint />
 

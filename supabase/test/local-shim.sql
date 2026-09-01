@@ -31,3 +31,9 @@ create table if not exists auth.users (
 create or replace function auth.uid() returns uuid as $$
   select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid;
 $$ language sql stable;
+
+-- Same idea for the whole claim set: a policy that reads the signed-in address
+-- has to parse and run here, even though nothing sets a JWT in the test run.
+create or replace function auth.jwt() returns jsonb as $$
+  select coalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb, '{}'::jsonb);
+$$ language sql stable;

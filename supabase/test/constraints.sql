@@ -403,3 +403,68 @@ begin
   if not ok then raise exception 'custom_design_url saqlanmadi'; end if;
   raise notice '   ok   a handle can carry a design made for it alone';
 end $$;
+
+-- 0014 — handle transfers
+do $$
+declare
+  seller uuid;
+  buyer uuid;
+  tid uuid;
+  moved text;
+  owner_now uuid;
+  posts_left int;
+  name_left text;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into seller;
+  insert into auth.users (id) values (gen_random_uuid()) returning id into buyer;
+  insert into handles (letters, digits, status, user_id, claimed_at, owner_name, bio, follower_count, post_count)
+    values ('TRN', '001', 'claimed', seller, now(), 'Sotuvchi', 'eski bio', 3, 2);
+  insert into posts (handle, user_id, body) values ('TRN001', seller, 'eski post');
+
+  insert into handle_transfers (handle, from_user_id, to_email)
+    values ('TRN001', seller, 'xaridor@example.com') returning id into tid;
+  raise notice '   ok   a handle can be offered to an email';
+
+  begin
+    insert into handle_transfers (handle, from_user_id, to_email)
+      values ('TRN001', seller, 'boshqa@example.com');
+    raise exception 'ikkinchi taklif qabul qilindi';
+  exception when unique_violation then
+    raise notice '   ok   rejected: a second live offer for the same handle';
+  end;
+
+  begin
+    insert into handle_transfers (handle, from_user_id, to_email)
+      values ('TRN002', seller, 'Katta@Example.com');
+    raise exception 'katta harfli email qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: an address that was not lower-cased';
+  end;
+
+  select accept_handle_transfer(tid, buyer) into moved;
+  if moved is null then raise exception 'otkazish bajarilmadi'; end if;
+
+  select user_id, owner_name into owner_now, name_left from handles where normalized = 'TRN001';
+  select count(*) into posts_left from posts where handle = 'TRN001';
+
+  if owner_now <> buyer then raise exception 'egasi ozgarmadi'; end if;
+  raise notice '   ok   the handle changed hands';
+
+  if name_left is not null then raise exception 'eski profil qoldi'; end if;
+  raise notice '   ok   the previous profile is cleared';
+
+  if posts_left <> 0 then raise exception 'eski postlar qoldi'; end if;
+  raise notice '   ok   what the previous owner published goes with them';
+
+  -- A second acceptance must do nothing: the offer is no longer pending.
+  select accept_handle_transfer(tid, seller) into moved;
+  if moved is not null then raise exception 'ikkinchi marta qabul qilindi'; end if;
+  raise notice '   ok   an offer cannot be accepted twice';
+
+  -- An expired offer is not claimable either.
+  insert into handle_transfers (handle, from_user_id, to_email, expires_at)
+    values ('TRN001', buyer, 'kech@example.com', now() - interval '1 day') returning id into tid;
+  select accept_handle_transfer(tid, seller) into moved;
+  if moved is not null then raise exception 'muddati otgan taklif qabul qilindi'; end if;
+  raise notice '   ok   an offer past its date is not claimable';
+end $$;
