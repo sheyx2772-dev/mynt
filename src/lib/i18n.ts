@@ -251,6 +251,9 @@ const SITE = {
     randomise: "Tasodifiy tanlash",
     takeHandle: "{handle} ni band qilish",
     formulaLabel: "Hisob",
+    takenWord: "raqam band",
+    leftWord: "bo'sh qoldi",
+    latestWord: "so'nggi",
     langName: "O'zbekcha",
   },
   ru: {
@@ -348,6 +351,9 @@ const SITE = {
     randomise: "Случайный",
     takeHandle: "Занять {handle}",
     formulaLabel: "Расчёт",
+    takenWord: "номеров занято",
+    leftWord: "свободно",
+    latestWord: "последние",
     langName: "Русский",
   },
   en: {
@@ -445,6 +451,9 @@ const SITE = {
     randomise: "Random",
     takeHandle: "Take {handle}",
     formulaLabel: "Calculation",
+    takenWord: "handles taken",
+    leftWord: "still free",
+    latestWord: "latest",
     langName: "English",
   },
 } as const;

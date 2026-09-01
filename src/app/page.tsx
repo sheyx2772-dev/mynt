@@ -26,6 +26,8 @@ import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber, formatUZS } from "@/lib/format";
 import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
 import { site, landing, catalogue } from "@/lib/i18n";
+import { listNewestResidents, getDirectoryCounts } from "@/lib/handles";
+import LiveResidents from "@/components/LiveResidents";
 import { getLang } from "@/lib/lang";
 import LangSwitch from "@/components/LangSwitch";
 import { COMPANY } from "@/lib/company";
@@ -66,6 +68,8 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const s = site(lang);
   const copy = landing(lang);
   const c = catalogue(lang);
+
+  const [newest, counts] = await Promise.all([listNewestResidents(), getDirectoryCounts()]);
 
   const tapShot = productShot("tegizish");
   const familyShot = productShot("oila");
@@ -171,14 +175,6 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </div>
 
               <div className="relative flex justify-center lg:justify-end">
-                <div className="absolute -top-6 -left-10 z-20 hidden -rotate-6 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 backdrop-blur-md sm:block lg:-left-16">
-                  <p className="text-[10px] font-medium tracking-wide text-white/40 uppercase">
-                    {s.thisWeek}
-                  </p>
-                  <p className="font-display text-lg font-semibold">
-                    2 481 {s.visitsWord}
-                  </p>
-                </div>
                 <div className="absolute -right-6 -bottom-4 z-20 hidden rotate-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 backdrop-blur-md sm:block">
                   <p className="flex items-center gap-1.5 text-xs font-medium text-white/75">
                     <span className="h-1.5 w-1.5 rounded-full bg-lime" />
@@ -194,6 +190,18 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           {/* The dark section ends on the page ground rather than a hard edge. */}
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-white" />
         </section>
+
+        {/* Who has just joined, and how much of the namespace is gone. Directly
+            under the hero, because it is the first thing a scroll reveals and
+            it is the only proof on the page that other people are buying. */}
+        <div className="bg-flex-black">
+          <LiveResidents
+            residents={newest}
+            claimed={counts.claimed}
+            namespace={counts.namespace}
+            labels={{ taken: s.takenWord, left: s.leftWord, latest: s.latestWord }}
+          />
+        </div>
 
         {/* How it works */}
         <section className="mx-auto max-w-6xl px-6 py-14 sm:py-24">

@@ -309,6 +309,29 @@ function rowToResident(row: Record<string, unknown>): Resident {
 
 // The public directory. Only claimed handles appear — a reservation is an
 // unfinished purchase, not a resident.
+/**
+ * The most recently claimed handles.
+ *
+ * Social proof that is true and moves on its own. The competitor's landing page
+ * puts live counters where ours had an invented "2 481 visits this week" badge,
+ * and the difference is not decoration: a number somebody made up says nothing,
+ * and one that changes says people are buying.
+ */
+export async function listNewestResidents(limit = 8): Promise<Resident[]> {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [];
+
+  const { data } = await supabase
+    .from("handles")
+    .select(RESIDENT_COLUMNS)
+    .eq("status", "claimed")
+    .not("owner_name", "is", null)
+    .order("claimed_at", { ascending: false })
+    .limit(limit);
+
+  return (data ?? []).map(rowToResident);
+}
+
 export async function listResidents(query = "", limit = 60): Promise<Resident[]> {
   const supabase = await createServerSupabase();
   if (!supabase) return [];
