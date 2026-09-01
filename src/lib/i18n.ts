@@ -247,6 +247,10 @@ const SITE = {
     metaDescription: "Noyob raqam, shaxsiy profil va NFC karta. Bir tegish bilan shaxsingizni ulashing; jamoangiz uchun raqamlar chiqaring va kontakt yig'ing.",
     product: "Mahsulot",
     whyFlex: "Nega Flex?",
+    tiers: { common: "Oddiy", rare: "Noyob", epic: "Epik", legendary: "Afsonaviy", genesis: "Genesis" },
+    randomise: "Tasodifiy tanlash",
+    takeHandle: "{handle} ni band qilish",
+    formulaLabel: "Hisob",
     langName: "O'zbekcha",
   },
   ru: {
@@ -340,6 +344,10 @@ const SITE = {
     metaDescription: "Уникальный номер, личный профиль и NFC-карта. Делитесь собой одним касанием; выдавайте номера команде и собирайте контакты.",
     product: "Продукт",
     whyFlex: "Почему Flex?",
+    tiers: { common: "Обычный", rare: "Редкий", epic: "Эпический", legendary: "Легендарный", genesis: "Genesis" },
+    randomise: "Случайный",
+    takeHandle: "Занять {handle}",
+    formulaLabel: "Расчёт",
     langName: "Русский",
   },
   en: {
@@ -433,6 +441,10 @@ const SITE = {
     metaDescription: "A unique handle, your own profile and an NFC card. Share yourself with one tap; issue handles to your team and collect contacts.",
     product: "Product",
     whyFlex: "Why Flex?",
+    tiers: { common: "Common", rare: "Rare", epic: "Epic", legendary: "Legendary", genesis: "Genesis" },
+    randomise: "Random",
+    takeHandle: "Take {handle}",
+    formulaLabel: "Calculation",
     langName: "English",
   },
 } as const;

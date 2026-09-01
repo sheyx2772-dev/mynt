@@ -336,6 +336,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                   digitRarity: s.digitRarity,
                   total: s.totalPrice,
                   deviceNote: s.deviceNote(formatUZS(DEVICE_TYPES[0].price, lang)),
+                  tiers: s.tiers,
+                  randomise: s.randomise,
+                  take: s.takeHandle,
+                  formula: s.formulaLabel,
                 }}
               />
         </section>

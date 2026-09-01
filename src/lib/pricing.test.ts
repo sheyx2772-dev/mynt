@@ -1,12 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  BASE_PRICE,
-  parseHandle,
-  parseGenesisSerial,
-  letterRarity,
-  digitRarity,
-  priceForHandle,
-} from "./pricing";
+import { BASE_PRICE, parseHandle, parseGenesisSerial, letterRarity, digitRarity, priceForHandle, rarityTier } from "./pricing";
 
 describe("parseHandle", () => {
   it("accepts the AAA000 shape and normalizes case", () => {
@@ -109,5 +102,48 @@ describe("priceForHandle", () => {
 
   it("never returns a price below the base", () => {
     expect(priceForHandle("QXZ", "483")).toBeGreaterThanOrEqual(BASE_PRICE);
+  });
+});
+
+describe("rarityTier", () => {
+  it("calls a plain handle plain", () => {
+    expect(rarityTier("MYN", "042")).toBe("common");
+  });
+
+  it("names a single weak pattern rare", () => {
+    // A letter palindrome on its own: ×4.
+    expect(rarityTier("ABA", "042")).toBe("rare");
+  });
+
+  it("names one strong pattern epic", () => {
+    // Three identical digits: ×40.
+    expect(rarityTier("MYN", "777")).toBe("epic");
+  });
+
+  it("needs two strong patterns for legendary", () => {
+    // A short word and a leading double zero: ×20 × ×15 = ×300.
+    expect(rarityTier("VIP", "007")).toBe("legendary");
+  });
+
+  it("reserves genesis for both sides at their strongest", () => {
+    // ×30 × ×40 = ×1200, the highest a handle can reach.
+    expect(rarityTier("AAA", "000")).toBe("genesis");
+  });
+
+  // The bands are read off the multipliers, so they cannot disagree with the
+  // price: a dearer handle is never in a lower band.
+  it("never ranks a dearer handle below a cheaper one", () => {
+    const order: Record<string, number> = {
+      common: 0, rare: 1, epic: 2, legendary: 3, genesis: 4,
+    };
+    const samples = [
+      ["MYN", "042"], ["ABA", "042"], ["MYN", "777"], ["VIP", "007"], ["AAA", "000"],
+    ] as const;
+    const ranked = samples
+      .map(([l, d]) => ({ price: priceForHandle(l, d), band: order[rarityTier(l, d)]! }))
+      .sort((a, b) => a.price - b.price);
+    for (let i = 1; i < ranked.length; i++) {
+      expect(ranked[i]!.band).toBeGreaterThanOrEqual(ranked[i - 1]!.band);
+    }
   });
 });

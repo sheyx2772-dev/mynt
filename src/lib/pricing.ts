@@ -53,3 +53,28 @@ export function parseGenesisSerial(raw: string): string | null {
   const match = raw.match(/^\d{6}$/);
   return match ? match[0] : null;
 }
+
+
+/**
+ * The rarity band a handle falls in, from its combined multiplier.
+ *
+ * The multipliers were always there and always invisible: "×1 oddiy
+ * kombinatsiya" is arithmetic, and arithmetic does not make anybody want
+ * something. A named band does — it turns a number into a thing worth having,
+ * and it is the same information either way.
+ *
+ * The boundaries follow the multipliers rather than being chosen for effect. A
+ * plain handle is exactly ×1; anything with one weak pattern lands in rare;
+ * epic needs a strong pattern on one side; legendary needs two; and genesis is
+ * reserved for the handful where both sides are at their strongest.
+ */
+export type RarityTier = "common" | "rare" | "epic" | "legendary" | "genesis";
+
+export function rarityTier(letters: string, digits: string): RarityTier {
+  const multiplier = letterRarity(letters).multiplier * digitRarity(digits).multiplier;
+  if (multiplier >= 600) return "genesis";
+  if (multiplier >= 100) return "legendary";
+  if (multiplier >= 10) return "epic";
+  if (multiplier > 1) return "rare";
+  return "common";
+}

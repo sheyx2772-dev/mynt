@@ -1,9 +1,23 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { formatUZS } from "@/lib/format";
+import Link from "next/link";
+import { Shuffle, ArrowRight } from "lucide-react";
+import { formatUZS, formatNumber } from "@/lib/format";
 import type { Lang } from "@/lib/i18n";
-import { BASE_PRICE, letterRarity, digitRarity } from "@/lib/pricing";
+import { BASE_PRICE, letterRarity, digitRarity, rarityTier } from "@/lib/pricing";
+
+// What each band looks like. Kept here rather than in the dictionary because a
+// colour is not a translation, and the names come from the dictionary anyway.
+const TIER_STYLE: Record<string, string> = {
+  common: "bg-black/[0.06] text-black/50",
+  rare: "bg-sky-100 text-sky-700",
+  epic: "bg-violet-100 text-violet-700",
+  legendary: "bg-amber-100 text-amber-700",
+  genesis: "bg-flex-black text-lime",
+};
+
+const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export default function PricingCalculator({
   labels,
@@ -16,6 +30,11 @@ export default function PricingCalculator({
     digitRarity: string;
     total: string;
     deviceNote: string;
+    tiers: Record<string, string>;
+    randomise: string;
+    /** Carries a {handle} placeholder, filled in with what is being priced. */
+    take: string;
+    formula: string;
   };
 }) {
   const [letters, setLetters] = useState("MYN");
@@ -23,6 +42,16 @@ export default function PricingCalculator({
 
   const cleanLetters = letters.toUpperCase().replace(/[^A-Z]/g, "").padEnd(3, "X").slice(0, 3);
   const cleanDigits = digits.replace(/[^0-9]/g, "").padEnd(3, "0").slice(0, 3);
+
+  // Most people cannot think of a handle on the spot, and an empty box they
+  // have to fill is where a price calculator loses them. One button removes
+  // that step entirely.
+  function randomise() {
+    const pick = (n: number, from: string) =>
+      Array.from({ length: n }, () => from[Math.floor(Math.random() * from.length)]).join("");
+    setLetters(pick(3, LETTERS));
+    setDigits(pick(3, "0123456789"));
+  }
 
   const { letterMult, letterReason, digitMult, digitReason, total } = useMemo(() => {
     const lr = letterRarity(cleanLetters);
@@ -35,6 +64,8 @@ export default function PricingCalculator({
       total: BASE_PRICE * lr.multiplier * dr.multiplier,
     };
   }, [cleanLetters, cleanDigits]);
+
+  const tier = rarityTier(cleanLetters, cleanDigits);
 
   return (
     <div className="relative w-full max-w-xl">
@@ -61,6 +92,26 @@ export default function PricingCalculator({
           <span className="font-tabular text-sm text-black/40">
             flex.com.uz/{cleanLetters}
             {cleanDigits}
+          </span>
+
+          <button
+            type="button"
+            onClick={randomise}
+            aria-label={labels.randomise}
+            title={labels.randomise}
+            className="flex h-11 w-11 items-center justify-center rounded-2xl border-2 border-flex-black/90 transition-colors hover:bg-black/[0.04]"
+          >
+            <Shuffle className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* The band, named. "×1 oddiy kombinatsiya" is arithmetic; a name is a
+            thing worth having, and it is the same information. */}
+        <div className="mb-5">
+          <span
+            className={`inline-block rounded-full px-3 py-1 text-[11px] font-semibold tracking-[0.14em] uppercase ${TIER_STYLE[tier]}`}
+          >
+            {labels.tiers[tier]}
           </span>
         </div>
 
@@ -89,6 +140,24 @@ export default function PricingCalculator({
               {formatUZS(total, lang)}
             </div>
           </div>
+
+          {/* The arithmetic written out. The rows above say what each factor is;
+              this says the sum is not something we made up. */}
+          <p className="pt-2 text-xs text-black/35">
+            {labels.formula}: {formatNumber(BASE_PRICE)} × {letterMult} × {digitMult} ={" "}
+            {formatUZS(total, lang)}
+          </p>
+
+          {/* The calculator was a table. Somebody who has just been shown a
+              price and a name for what they are looking at is the likeliest
+              buyer on the page, and there was nothing here for them to press. */}
+          <Link
+            href={`/${cleanLetters}${cleanDigits}`}
+            className="mt-5 flex items-center justify-center gap-2 rounded-2xl bg-flex-black px-6 py-4 font-medium text-white transition-transform hover:scale-[1.01]"
+          >
+            {labels.take.replace("{handle}", `${cleanLetters}${cleanDigits}`)}
+            <ArrowRight className="h-4 w-4" />
+          </Link>
           <p className="pt-3 font-sans text-xs leading-relaxed text-black/40">
             {labels.deviceNote}
           </p>
