@@ -168,3 +168,29 @@ Create flat front-face artwork for an NFC business card. The card fills the whol
 ```text
 Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. Design: a fresh spring-green field with stylised flat tulip and blossom shapes in warm coral and gold scattered toward the right edge, leaving the left side calm. Keep the lower-left quarter calm and free of busy detail or bright colour — a handle code and a web address are printed over it later, so nothing may compete there. Put a small silver contactless payment symbol in the top-right corner. Put no text, letters, numbers or logos anywhere in the artwork. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing, and avoid neon colours that cannot be reproduced in CMYK.
 ```
+
+---
+
+## Milliy ruh — oltin va qora
+
+Davlat gerbining o'zi tijorat mahsulotiga bosilmaydi (qonun bilan cheklangan).
+Quyidagilar gerb qurilgan an'anaviy unsurlarni ishlatadi — ular erkin,
+va oltin-qora kombinatsiyasi ayni o'sha taassurotni beradi.
+
+## 28. Humo qushi
+
+```text
+Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. Design: a deep matte black field with a large stylised Humo bird — the mythical bird of Central Asian legend — rendered in fine gold linework with wings spread wide and symmetrical, filling the upper right two thirds, drawn as elegant heraldic engraving rather than a realistic bird. This is an original heraldic illustration and must not reproduce any national emblem, coat of arms or state insignia of any country. Keep the lower-left quarter calm and free of busy detail or bright colour — a handle code and a web address are printed over it later, so nothing may compete there. Put a small silver contactless payment symbol in the top-right corner. Put no text, letters, numbers or logos anywhere in the artwork. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing, and avoid neon colours that cannot be reproduced in CMYK.
+```
+
+## 29. Paxta va bug'doy
+
+```text
+Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. Design: a deep matte black field with a wreath of cotton bolls on the left and wheat ears on the right, curving up from the bottom corners toward each other, drawn in fine gold linework as classical botanical engraving, leaving the centre open. This is an original botanical illustration and must not reproduce any national emblem, coat of arms or state insignia of any country. Keep the lower-left quarter calm and free of busy detail or bright colour — a handle code and a web address are printed over it later, so nothing may compete there. Put a small silver contactless payment symbol in the top-right corner. Put no text, letters, numbers or logos anywhere in the artwork. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing, and avoid neon colours that cannot be reproduced in CMYK.
+```
+
+## 30. Sakkiz burchak va quyosh
+
+```text
+Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. Design: a deep matte black field with a single large eight-pointed star in fine gold linework at the upper right, and below it a low sun with radiating gold rays rising behind a simple mountain ridge silhouette, all drawn as flat engraved line art. This is an original decorative illustration and must not reproduce any national emblem, coat of arms or state insignia of any country. Keep the lower-left quarter calm and free of busy detail or bright colour — a handle code and a web address are printed over it later, so nothing may compete there. Put a small silver contactless payment symbol in the top-right corner. Put no text, letters, numbers or logos anywhere in the artwork. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing, and avoid neon colours that cannot be reproduced in CMYK.
+```
