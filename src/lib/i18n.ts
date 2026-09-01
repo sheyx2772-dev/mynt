@@ -283,6 +283,7 @@ const SITE = {
     latestWord: "so'nggi",
     navHome: "Bosh sahifa",
     navFeed: "Lenta",
+    moreLabel: "Batafsil",
     langName: "O'zbekcha",
   },
   ru: {
@@ -385,6 +386,7 @@ const SITE = {
     latestWord: "последние",
     navHome: "Главная",
     navFeed: "Лента",
+    moreLabel: "Подробнее",
     langName: "Русский",
   },
   en: {
@@ -487,6 +489,7 @@ const SITE = {
     latestWord: "latest",
     navHome: "Home",
     navFeed: "Feed",
+    moreLabel: "More",
     langName: "English",
   },
 } as const;

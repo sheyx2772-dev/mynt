@@ -203,8 +203,33 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           />
         </div>
 
+        {/* On a phone the sections above the breakpoint are replaced by this:
+            three places to go rather than five screens to scroll past. The
+            content is not dropped — it has pages of its own, which are better
+            than a landing section anyway. */}
+        <div className="mx-auto max-w-6xl px-6 pt-6 lg:hidden">
+          <p className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+            {s.moreLabel}
+          </p>
+        </div>
+        <nav className="mx-auto grid max-w-6xl grid-cols-3 gap-2 px-6 pt-3 pb-6 lg:hidden">
+          {[
+            { href: "/tarif", label: s.navPlans },
+            { href: "/qurilmalar", label: s.navDevices },
+            { href: "/rezidentlar", label: s.navResidents },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="rounded-2xl border border-black/10 px-3 py-4 text-center text-sm font-medium transition-colors hover:bg-black/[0.03]"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
         {/* How it works */}
-        <section className="mx-auto max-w-6xl px-6 py-14 sm:py-24">
+        <section className="hidden lg:block mx-auto max-w-6xl px-6 py-14 sm:py-24">
           <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
             {s.howItWorks}
           </p>
@@ -308,7 +333,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </section>
 
         {/* Scarcity */}
-        <section className="grain relative overflow-hidden bg-flex-black py-14 sm:py-28">
+        <section className="hidden lg:block grain relative overflow-hidden bg-flex-black py-14 sm:py-28">
           <div className="bg-dot-grid-light absolute inset-0 opacity-30 [mask-image:radial-gradient(ellipse_50%_60%_at_50%_50%,black,transparent)]" />
           <div className="relative mx-auto max-w-6xl px-6">
             <p className="text-xs font-semibold tracking-widest text-lime/70 uppercase">
@@ -353,7 +378,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </section>
 
         {/* The three parts of the price */}
-        <section className="mx-auto max-w-6xl px-6 pb-24">
+        <section className="hidden lg:block mx-auto max-w-6xl px-6 pb-24">
           <div className="mb-10 max-w-lg">
             <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
               Obuna
@@ -371,7 +396,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         {/* What a profile actually looks like */}
         <section
           id="individual"
-          className="border-t border-black/5 bg-black/[0.02] py-14 sm:py-24"
+          className="hidden border-t border-black/5 bg-black/[0.02] py-14 sm:py-24 lg:block"
         >
           <div className="mx-auto grid max-w-6xl gap-14 px-6 lg:grid-cols-[1fr_320px] lg:gap-20">
             <div>
@@ -470,7 +495,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </p>
             </div>
 
-            <div className="mt-14 grid gap-x-14 border-t border-white/10 sm:grid-cols-2">
+            <div className="mt-14 hidden gap-x-14 border-t border-white/10 sm:grid-cols-2 lg:grid">
               {copy.business.map((f, i) => {
                 const Icon = BUSINESS_ICONS[i]!;
                 return (
@@ -536,7 +561,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           </div>
         </section>
 
-        <section className="border-t border-black/5 bg-black/[0.02] py-14 sm:py-24">
+        <section className="hidden lg:block border-t border-black/5 bg-black/[0.02] py-14 sm:py-24">
           <div className="mx-auto max-w-4xl px-6">
             <p className="mb-3 text-center text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
               {s.compare}
