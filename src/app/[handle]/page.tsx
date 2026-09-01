@@ -6,12 +6,15 @@ import { Nfc } from "lucide-react";
 import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRarity } from "@/lib/pricing";
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
+import { headers } from "next/headers";
 import { linkValue } from "@/lib/links";
+import { pickLang, dict, type Lang } from "@/lib/i18n";
 import { PLAN_ACCENT, serviceLimit, FREE_LINK_LIMIT } from "@/lib/plans";
 import { cardDesign } from "@/lib/card-designs";
 import SaveContactButton from "@/components/SaveContactButton";
 import ShareButton from "@/components/ShareButton";
 import ProfileHandleSearch from "@/components/ProfileHandleSearch";
+import LangSwitch from "@/components/LangSwitch";
 import ActionRow from "@/components/ActionRow";
 import ExchangeContactForm from "@/components/ExchangeContactForm";
 import ClaimForm from "@/components/ClaimForm";
@@ -52,7 +55,7 @@ export async function generateMetadata(props: PageProps<"/[handle]">): Promise<M
 
 export default async function HandlePage(props: PageProps<"/[handle]">) {
   const { handle } = await props.params;
-  const { bolim, src } = await props.searchParams;
+  const { bolim, src, til } = await props.searchParams;
 
   const genesisSerial = parseGenesisSerial(handle);
   if (genesisSerial) {
@@ -79,6 +82,8 @@ export default async function HandlePage(props: PageProps<"/[handle]">) {
       digits={parsed.digits}
       tab={bolim === "postlar" ? "postlar" : "vizitka"}
       source={readSource(typeof src === "string" ? src : undefined)}
+      lang={pickLang(til, (await headers()).get("accept-language"))}
+      params={{ bolim: typeof bolim === "string" ? bolim : undefined, src: typeof src === "string" ? src : undefined }}
     />
   );
 }
@@ -88,16 +93,24 @@ async function VanityHandlePage({
   digits,
   tab,
   source,
+  lang,
+  params,
 }: {
   letters: string;
   digits: string;
   tab: "vizitka" | "postlar";
   source: VisitSource | null;
+  lang: Lang;
+  params: Record<string, string | undefined>;
 }) {
   const normalized = `${letters}${digits}`;
+  const t = dict(lang);
   const profile = await getClaimedProfile(normalized);
 
   if (profile) {
+    // The owner's first name, which two of the visitor-facing sentences use.
+    const firstName = profile.name.split(" ")[0] || normalized;
+
     const viewer = await getUser();
     const isOwner = Boolean(viewer && profile.userId && viewer.id === profile.userId);
 
@@ -108,7 +121,7 @@ async function VanityHandlePage({
       after(() => recordProfileView(normalized, visitor));
     }
 
-    const lastSeen = timeAgo(profile.lastSeenAt);
+    const lastSeen = timeAgo(profile.lastSeenAt, lang);
 
     const [following, followingCount, posts] = await Promise.all([
       viewer ? isFollowing(viewer.id, normalized) : Promise.resolve(false),
@@ -135,6 +148,10 @@ async function VanityHandlePage({
           <span className="rounded-lg bg-flex-black px-3 py-1.5 font-tabular text-xs tracking-wide text-white">
             {formatUZS(priceForHandle(letters, digits))}
           </span>
+
+          <div className="ml-auto">
+            <LangSwitch lang={lang} handle={normalized} params={params} />
+          </div>
         </div>
 
         {/* Gold marks a live subscription, lime a profile without one. It is
@@ -220,7 +237,7 @@ async function VanityHandlePage({
 
             {lastSeen && (
               <p className="mt-2 text-xs text-[color:var(--accent)]">
-                Oxirgi faollik — {lastSeen}
+                {t.lastSeen} — {lastSeen}
               </p>
             )}
 
@@ -255,9 +272,14 @@ async function VanityHandlePage({
                   email={profile.contactEmail}
                   position={profile.position}
                   company={profile.company}
+                  label={t.saveContact}
                 />
               </div>
-              {!isOwner && <FollowButton handle={normalized} initialFollowing={following} />}
+              {!isOwner && <FollowButton
+                  handle={normalized}
+                  initialFollowing={following}
+                  labels={{ follow: t.follow, following: t.following }}
+                />}
 
               {/* Premium, and only for a visitor: the owner has no reason to
                   send themselves a contact, and seeing the form on their own
@@ -265,8 +287,20 @@ async function VanityHandlePage({
               {!isOwner && profile.plan === "premium" && (
                 <ExchangeContactForm
                   handle={normalized}
-                  ownerName={profile.name}
                   source={source ?? undefined}
+                  t={{
+                    sent: t.sent,
+                    sendContact: t.sendContact,
+                    reachYou: t.reachYou(firstName),
+                    contactHint: t.contactHint(firstName),
+                    yourName: t.yourName,
+                    phone: t.phone,
+                    company: t.company,
+                    note: t.note,
+                    send: t.send,
+                    sending: t.sending,
+                    cancel: t.cancel,
+                  }}
                 />
               )}
             </div>
@@ -279,7 +313,7 @@ async function VanityHandlePage({
                       {profile.followerCount}
                     </p>
                     <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
-                      Obunachi
+                      {t.followers}
                     </p>
                   </div>
                   <div>
@@ -287,7 +321,7 @@ async function VanityHandlePage({
                       {followingCount}
                     </p>
                     <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
-                      Obuna
+                      {t.follows}
                     </p>
                   </div>
                 </>
@@ -297,7 +331,7 @@ async function VanityHandlePage({
                   {profile.viewCount}
                 </p>
                 <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
-                  Ko&apos;rish
+                  {t.views}
                 </p>
               </div>
             </div>
@@ -311,7 +345,7 @@ async function VanityHandlePage({
                     : "-mb-px border-b border-transparent pb-3 text-white/35 transition-colors hover:text-white/70"
                 }
               >
-                Vizitka
+                {t.card}
               </Link>
               <Link
                 href={`/${normalized}?bolim=postlar`}
@@ -321,7 +355,7 @@ async function VanityHandlePage({
                     : "-mb-px flex items-center gap-1.5 border-b border-transparent pb-3 text-white/35 transition-colors hover:text-white/70"
                 }
               >
-                Postlar
+                {t.posts}
                 {profile.postCount > 0 && (
                   <span className="font-tabular text-white/25">{profile.postCount}</span>
                 )}
@@ -332,20 +366,22 @@ async function VanityHandlePage({
               <div className="mt-5 divide-y divide-white/[0.07] overflow-hidden rounded-xl border border-white/[0.08]">
                 {profile.phone && (
                   <ActionRow
-                    label="Qo'ng'iroq"
+                    label={t.call}
+                    icon="call"
                     value={profile.phone}
                     href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
                   />
                 )}
                 {profile.contactEmail && (
                   <ActionRow
-                    label="Email"
+                    label={t.email}
+                    icon="email"
                     value={profile.contactEmail}
                     href={`mailto:${profile.contactEmail}`}
                   />
                 )}
                 {profile.city && (
-                  <ActionRow label="Manzil" value={profile.city} href={`/rezidentlar?q=${encodeURIComponent(profile.city)}`} />
+                  <ActionRow label={t.address} icon="Veb-sayt" value={profile.city} href={`/rezidentlar?q=${encodeURIComponent(profile.city)}`} />
                 )}
                 {/* Stored in full, shown by plan: an owner who fills in eight
                     and lets premium lapse keeps all eight in the form and gets
@@ -357,6 +393,7 @@ async function VanityHandlePage({
                 {profile.team?.website && (
                   <ActionRow
                     label={profile.team.name}
+                    icon="Veb-sayt"
                     value={linkValue({ label: "Veb-sayt", href: profile.team.website })}
                     href={profile.team.website}
                     external
@@ -369,7 +406,16 @@ async function VanityHandlePage({
                   .map(({ link, index }) => (
                     <ActionRow
                       key={link.href}
-                      label={link.label}
+                      // A platform names itself; only "Uchrashuv" and
+                      // "Veb-sayt" are ours to translate.
+                      label={
+                        link.label === "Uchrashuv"
+                          ? t.meeting
+                          : link.label === "Veb-sayt"
+                            ? t.website
+                            : link.label
+                      }
+                      icon={link.label}
                       value={linkValue(link)}
                       // Routed through /go so the click is counted; the
                       // destination is resolved from this index server-side,
@@ -384,7 +430,7 @@ async function VanityHandlePage({
             {tab === "vizitka" && profile.services.length > 0 && (
               <div className="mt-6">
                 <p className="text-[10px] font-medium tracking-[0.18em] text-white/35 uppercase">
-                  Xizmatlar
+                  {t.services}
                 </p>
                 <ul className="mt-3 divide-y divide-white/[0.07] overflow-hidden rounded-xl border border-white/[0.08]">
                   {profile.services.slice(0, serviceLimit(profile.plan)).map((service) => (
@@ -438,7 +484,7 @@ async function VanityHandlePage({
               emptyMessage={
                 isOwner
                   ? "Hali post yozmadingiz. Kabinetdan birinchi postni joylang."
-                  : "Bu profilda hali post yo'q."
+                  : t.noPosts
               }
             />
           </div>

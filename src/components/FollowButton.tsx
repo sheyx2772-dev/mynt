@@ -8,9 +8,11 @@ import { toggleFollow } from "@/app/[handle]/actions";
 export default function FollowButton({
   handle,
   initialFollowing,
+  labels,
 }: {
   handle: string;
   initialFollowing: boolean;
+  labels: { follow: string; following: string };
 }) {
   const [following, setFollowing] = useState(initialFollowing);
   const [error, setError] = useState<string | null>(null);
@@ -49,12 +51,12 @@ export default function FollowButton({
         {following ? (
           <>
             <UserCheck className="h-4 w-4" />
-            Obuna bo&apos;lingan
+            {labels.following}
           </>
         ) : (
           <>
             <UserPlus className="h-4 w-4" />
-            Obuna bo&apos;lish
+            {labels.follow}
           </>
         )}
       </button>

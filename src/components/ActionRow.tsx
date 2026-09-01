@@ -14,13 +14,16 @@ import { Phone, Mail, ChevronRight } from "lucide-react";
 // square, and the only colour on the card is the owner's own photograph.
 
 type Props = {
+  /** What the row is, in the visitor's language. */
   label: string;
+  /** Which glyph to draw. Not translated — it names a platform, or an action. */
+  icon: string;
   value: string;
   href: string;
   external?: boolean;
 };
 
-export default function ActionRow({ label, value, href, external = false }: Props) {
+export default function ActionRow({ label, icon, value, href, external = false }: Props) {
   return (
     <a
       href={href}
@@ -28,12 +31,12 @@ export default function ActionRow({ label, value, href, external = false }: Prop
       className="group flex items-center gap-3.5 px-4 py-3.5 transition-colors hover:bg-white/[0.03]"
     >
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-white/70 transition-colors group-hover:border-[color:var(--accent)]/40 group-hover:text-[color:var(--accent)]">
-        {label === "Qo'ng'iroq" ? (
+        {icon === "call" ? (
           <Phone className="h-4 w-4" />
-        ) : label === "Email" ? (
+        ) : icon === "email" ? (
           <Mail className="h-4 w-4" />
         ) : (
-          <LinkIcon label={label} className="h-4 w-4" />
+          <LinkIcon label={icon} className="h-4 w-4" />
         )}
       </span>
 

@@ -8,6 +8,7 @@ type Props = {
   email?: string | null;
   position?: string | null;
   company?: string | null;
+  label: string;
 };
 
 // vCard treats a comma, a semicolon and a backslash as structure, and a raw
@@ -30,6 +31,7 @@ export default function SaveContactButton({
   email,
   position,
   company,
+  label,
 }: Props) {
   function handleSave() {
     // Only the fields the owner filled in — an empty TEL line makes a phone
@@ -63,7 +65,7 @@ export default function SaveContactButton({
       onClick={handleSave}
       className="w-full rounded-xl bg-white px-6 py-3.5 text-center text-[11px] font-semibold tracking-[0.16em] text-flex-black uppercase transition-colors hover:bg-white/90"
     >
-      Kontaktni saqlash
+      {label}
     </button>
   );
 }
