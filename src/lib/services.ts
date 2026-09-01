@@ -6,7 +6,10 @@
 
 export type Service = { name: string; price: string | null };
 
-/** The most a card can carry before the list stops being scannable. */
+/**
+ * The hard ceiling, matching the database's own check. What a given profile may
+ * actually list is its plan's limit, which is at most this — see `serviceLimit`.
+ */
 export const MAX_SERVICES = 8;
 
 const NAME_LIMIT = 60;
@@ -14,6 +17,7 @@ const PRICE_LIMIT = 40;
 
 export function parseServices(
   rows: readonly { name: string; price: string }[],
+  limit: number = MAX_SERVICES,
 ): Service[] {
   return rows
     .map((row) => ({
@@ -24,7 +28,7 @@ export function parseServices(
     // too. Dropping it here means a half-filled row is simply ignored rather
     // than failing the whole save.
     .filter((s) => s.name.length > 0)
-    .slice(0, MAX_SERVICES);
+    .slice(0, Math.min(limit, MAX_SERVICES));
 }
 
 export function readServices(value: unknown): Service[] {

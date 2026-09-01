@@ -56,6 +56,24 @@ export const PLAN_ACCENT: Record<PlanId, string> = {
 /** Links a free profile may show. Unlimited on premium. */
 export const FREE_LINK_LIMIT = 5;
 
+/**
+ * Services a profile may list, by plan.
+ *
+ * Five on the free plan rather than three. A services list is the reason a
+ * tradesman or a lawyer keeps the card at all, and a rival offering more of
+ * them wins on the only line the buyer compares. The premium difference has to
+ * come from things the free plan can afford to lack — the statistics, the
+ * contacts collected — not from cutting the feature that sells the product.
+ */
+export const SERVICE_LIMIT: Record<PlanId, number> = {
+  free: 5,
+  premium: 8,
+};
+
+export function serviceLimit(id: PlanId): number {
+  return SERVICE_LIMIT[id];
+}
+
 export const PLANS: readonly Plan[] = [
   {
     id: "free",
@@ -66,6 +84,7 @@ export const PLANS: readonly Plan[] = [
     includes: [
       "Shaxsiy profil sahifasi",
       `${FREE_LINK_LIMIT} tagacha havola`,
+      `${SERVICE_LIMIT.free} tagacha xizmat va narx`,
       "QR-kod",
       "Kontaktni saqlash tugmasi",
       "Umumiy tashriflar soni",
@@ -80,6 +99,7 @@ export const PLANS: readonly Plan[] = [
     tagline: "Profilni to'liq ishlatish uchun",
     includes: [
       "Cheksiz havolalar",
+      `${SERVICE_LIMIT.premium} tagacha xizmat va narx`,
       "To'liq analitika — kunlik grafik va har bir havola bo'yicha",
       "Postlar va obunachilar",
       "AI dizayn so'rovi",

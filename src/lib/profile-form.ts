@@ -1,4 +1,5 @@
 import { parseServices, MAX_SERVICES, type Service } from "@/lib/services";
+import { serviceLimit, type PlanId } from "@/lib/plans";
 import "server-only";
 
 import { buildProfileLinks } from "@/lib/links";
@@ -65,7 +66,11 @@ export type ProfileRead =
 export async function readProfileForm(
   formData: FormData,
   normalized: string,
-  currentAvatarUrl: string | null = null
+  currentAvatarUrl: string | null = null,
+  // The plan decides how much of the form is kept. Defaulting to free means a
+  // caller that forgets to pass it under-saves rather than over-saves, which is
+  // the safe direction: nothing is silently granted.
+  plan: PlanId = "free",
 ): Promise<ProfileRead> {
   const name = String(formData.get("name") ?? "").trim().slice(0, 80);
   const bio = String(formData.get("bio") ?? "").trim().slice(0, 280);
@@ -116,6 +121,7 @@ export async function readProfileForm(
           name: String(formData.get(`service${i}Name`) ?? ""),
           price: String(formData.get(`service${i}Price`) ?? ""),
         })),
+        serviceLimit(plan),
       ),
       tags: parseTags(String(formData.get("tags") ?? "")),
     },

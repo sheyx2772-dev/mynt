@@ -1,6 +1,6 @@
 "use client";
 
-import { MAX_SERVICES } from "@/lib/services";
+import { serviceLimit, type PlanId } from "@/lib/plans";
 import { useActionState } from "react";
 import { updateProfile, type UpdateResult } from "@/app/kabinet/[handle]/actions";
 import DevicePicker from "@/components/DevicePicker";
@@ -27,6 +27,7 @@ export default function EditProfileForm({
     position: string;
     company: string;
     services: { name: string; price: string | null }[];
+    plan: PlanId;
     tags: string;
     cardDesign: CardDesignId;
     customDesignUrl?: string | null;
@@ -206,9 +207,16 @@ export default function EditProfileForm({
         <p className="mb-2 text-xs text-flex-black/35">
           Nima taklif qilasiz va qanchaga. Narxni bo&apos;sh qoldirsangiz ham bo&apos;ladi,
           yoki &laquo;kelishilgan holda&raquo; deb yozing.
+          {defaults.plan === "free" && (
+            <>
+              {" "}
+              Oddiy rejada {serviceLimit("free")} tagacha, premiumda{" "}
+              {serviceLimit("premium")} tagacha.
+            </>
+          )}
         </p>
         <div className="space-y-2">
-          {Array.from({ length: MAX_SERVICES }, (_, i) => (
+          {Array.from({ length: serviceLimit(defaults.plan) }, (_, i) => (
             <div key={i} className="grid grid-cols-[1fr_9rem] gap-2">
               <input
                 name={`service${i}Name`}

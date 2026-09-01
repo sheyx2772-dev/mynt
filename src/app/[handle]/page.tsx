@@ -7,7 +7,7 @@ import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRar
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import { linkValue } from "@/lib/links";
-import { PLAN_ACCENT } from "@/lib/plans";
+import { PLAN_ACCENT, serviceLimit } from "@/lib/plans";
 import { cardDesign } from "@/lib/card-designs";
 import SaveContactButton from "@/components/SaveContactButton";
 import ShareButton from "@/components/ShareButton";
@@ -315,7 +315,7 @@ async function VanityHandlePage({
                   Xizmatlar
                 </p>
                 <ul className="mt-3 divide-y divide-white/[0.07] overflow-hidden rounded-xl border border-white/[0.08]">
-                  {profile.services.map((service) => (
+                  {profile.services.slice(0, serviceLimit(profile.plan)).map((service) => (
                     <li
                       key={service.name}
                       className="flex items-baseline justify-between gap-4 px-4 py-3"

@@ -1,5 +1,6 @@
 "use server";
 
+import { activePlan } from "@/lib/plans";
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { parseHandle } from "@/lib/pricing";
@@ -32,7 +33,7 @@ export async function updateProfile(
   // and the update below carries the same filter so it cannot be widened.
   const { data: existing } = await supabaseAdmin
     .from("handles")
-    .select("avatar_url")
+    .select("avatar_url, plan, plan_expires_at")
     .eq("normalized", normalized)
     .eq("user_id", user.id)
     .maybeSingle();
@@ -41,7 +42,12 @@ export async function updateProfile(
 
   const design = String(formData.get("cardDesign") ?? "");
   const device = String(formData.get("deviceType") ?? "");
-  const read = await readProfileForm(formData, normalized, existing.avatar_url);
+  const read = await readProfileForm(
+    formData,
+    normalized,
+    existing.avatar_url,
+    activePlan(existing.plan, existing.plan_expires_at),
+  );
   if (!read.ok) return { ok: false, error: read.error };
 
   const { error } = await supabaseAdmin
