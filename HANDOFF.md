@@ -134,3 +134,22 @@ bu uning zaif joyi, bizning emas.
 
 **`output: "standalone"`** `next.config.ts` ga qaytarilmasin — Vercel deploy'i
 yiqiladi. Sababi o'sha faylda yozilgan.
+
+## O'rnatilgan ko'nikmalar
+
+`.claude/skills/` da Matt Pocock ning agent ko'nikmalari turadi — 25 ta,
+muallifning "engineering" va "productivity" to'plamlari. Bular kod emas, agentga
+beriladigan **yo'riqnomalar**: `/grill-me` deb yozilsa, agent o'sha fayldagi
+tartib bo'yicha ishlaydi.
+
+Manba: https://github.com/mattpocock/skills
+
+Rasmiy o'rnatuvchi (`npx skills add mattpocock/skills`) ishlatilmadi — u begona
+kodni yuklab bajaradi. O'rniga repozitoriy klonlanib, faqat `SKILL.md` va
+shablon fayllari ko'chirildi. Yangilash uchun ham shu yo'l.
+
+**`deprecated`, `in-progress` va `misc` to'plamlari ataylab olinmadi.** Birinchi
+ikkitasini muallifning o'zi tayyor emas deb belgilagan. `misc` ichida
+`git-guardrails-claude-code` bor — u hook sifatida ulansa `git push`,
+`git reset --hard` va shunga o'xshash buyruqlarni bloklaydi. Foydali bo'lishi
+mumkin, lekin uni ulash alohida qaror.
