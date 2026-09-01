@@ -33,7 +33,7 @@ export async function updateProfile(
   // and the update below carries the same filter so it cannot be widened.
   const { data: existing } = await supabaseAdmin
     .from("handles")
-    .select("avatar_url, plan, plan_expires_at")
+    .select("avatar_url, banner_url, plan, plan_expires_at")
     .eq("normalized", normalized)
     .eq("user_id", user.id)
     .maybeSingle();
@@ -46,6 +46,7 @@ export async function updateProfile(
     formData,
     normalized,
     existing.avatar_url,
+    existing.banner_url,
     activePlan(existing.plan, existing.plan_expires_at),
   );
   if (!read.ok) return { ok: false, error: read.error };
@@ -57,6 +58,7 @@ export async function updateProfile(
       bio: read.profile.bio,
       links: read.profile.links,
       avatar_url: read.profile.avatarUrl,
+      banner_url: read.profile.bannerUrl,
       city: read.profile.city,
       contact_email: read.profile.contactEmail,
       phone: read.profile.phone,

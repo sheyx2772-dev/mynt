@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { serviceLimit, type PlanId } from "@/lib/plans";
 import { useActionState } from "react";
 import { updateProfile, type UpdateResult } from "@/app/kabinet/[handle]/actions";
@@ -28,6 +30,7 @@ export default function EditProfileForm({
     company: string;
     services: { name: string; price: string | null }[];
     plan: PlanId;
+    bannerUrl: string | null;
     tags: string;
     cardDesign: CardDesignId;
     customDesignUrl?: string | null;
@@ -58,6 +61,41 @@ export default function EditProfileForm({
           Bo&apos;sh qoldirsangiz hozirgi rasm saqlanadi. JPG, PNG yoki WEBP, 2 MB gacha.
         </p>
       </div>
+
+      {defaults.plan === "premium" ? (
+        <div>
+          <span className={labelClass}>Fon rasmi</span>
+          <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/15 bg-black/[0.02] px-4 py-2.5 text-sm text-flex-black/50">
+            <span>Yangi fon tanlang</span>
+            <input
+              type="file"
+              name="banner"
+              accept="image/jpeg,image/png,image/webp"
+              className="max-w-[45%] text-xs"
+            />
+          </label>
+          <p className="mt-1 text-xs text-flex-black/35">
+            Kartaning tepasidagi keng rasm. JPG, PNG yoki WEBP, 4 MB gacha.
+          </p>
+          {defaults.bannerUrl && (
+            <label className="mt-2 flex items-center gap-2 text-xs text-flex-black/45">
+              <input type="checkbox" name="bannerClear" value="1" />
+              Fon rasmini olib tashlash — kartangiz dizayni qaytadi
+            </label>
+          )}
+        </div>
+      ) : (
+        <div className="rounded-xl border border-black/10 bg-black/[0.02] px-4 py-3">
+          <p className="text-xs text-flex-black/50">
+            <span className="font-medium text-flex-black/70">Fon rasmi</span> — premium
+            rejada o&apos;z rasmingizni qo&apos;yish mumkin. Hozir kartangiz dizayni
+            ko&apos;rinadi.{" "}
+            <Link href="/tarif" className="underline underline-offset-2">
+              Tariflar
+            </Link>
+          </p>
+        </div>
+      )}
 
       <div>
         <label className={labelClass} htmlFor="name">

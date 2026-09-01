@@ -3,7 +3,7 @@ import { serviceLimit, type PlanId } from "@/lib/plans";
 import "server-only";
 
 import { buildProfileLinks } from "@/lib/links";
-import { checkAvatar } from "@/lib/uploads";
+import { checkAvatar, checkBanner } from "@/lib/uploads";
 import { uploadImage, isStorageConfigured } from "@/lib/storage";
 
 export type ProfileInput = {
@@ -11,6 +11,7 @@ export type ProfileInput = {
   bio: string;
   links: { label: string; href: string }[];
   avatarUrl: string | null;
+  bannerUrl: string | null;
   city: string | null;
   contactEmail: string | null;
   phone: string | null;
@@ -67,6 +68,7 @@ export async function readProfileForm(
   formData: FormData,
   normalized: string,
   currentAvatarUrl: string | null = null,
+  currentBannerUrl: string | null = null,
   // The plan decides how much of the form is kept. Defaulting to free means a
   // caller that forgets to pass it under-saves rather than over-saves, which is
   // the safe direction: nothing is silently granted.
@@ -104,6 +106,30 @@ export async function readProfileForm(
     }
   }
 
+  // The cover is premium; the face is not. A free profile that somehow posts
+  // the field keeps whatever it had rather than being told off — there is no
+  // way to reach it from the form, so this is a guard, not a message.
+  let bannerUrl = currentBannerUrl;
+  const banner = formData.get("banner");
+  if (plan === "premium" && banner instanceof File && banner.size > 0) {
+    const check = checkBanner(banner);
+    if (!check.ok) return { ok: false, error: check.error };
+
+    if (isStorageConfigured) {
+      const buffer = Buffer.from(await banner.arrayBuffer());
+      const uploaded = await uploadImage(
+        `banners/${normalized}.${check.extension}`,
+        buffer,
+        check.contentType,
+      );
+      bannerUrl = uploaded ? `${uploaded}?v=${Date.now()}` : bannerUrl;
+    }
+  }
+
+  // Clearing it is a separate box, so a premium owner can go back to the card's
+  // own artwork without having to upload something else over it.
+  if (String(formData.get("bannerClear") ?? "") === "1") bannerUrl = null;
+
   return {
     ok: true,
     profile: {
@@ -111,6 +137,7 @@ export async function readProfileForm(
       bio,
       links,
       avatarUrl,
+      bannerUrl,
       city: String(formData.get("city") ?? "").trim().slice(0, 60) || null,
       contactEmail: parseContactEmail(String(formData.get("contactEmail") ?? "")),
       phone: parsePhone(String(formData.get("phone") ?? "")),

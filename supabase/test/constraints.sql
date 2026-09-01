@@ -654,3 +654,21 @@ begin
   end if;
   raise notice '   ok   leads go with the handle they were sent to';
 end $$;
+
+-- 0022 — banner
+do $$
+declare
+  uid uuid;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into uid;
+  insert into handles (letters, digits, status, user_id, claimed_at, banner_url)
+    values ('BNR', '001', 'claimed', uid, now(), 'https://cdn.flex.com.uz/banners/BNR001.jpg');
+  raise notice '   ok   a profile can carry its own cover';
+
+  begin
+    update handles set banner_url = 'javascript:alert(1)' where normalized = 'BNR001';
+    raise exception 'https bo''lmagan banner qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a cover that is not an https address';
+  end;
+end $$;

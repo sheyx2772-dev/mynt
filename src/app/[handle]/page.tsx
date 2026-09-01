@@ -116,7 +116,9 @@ async function VanityHandlePage({
       tab === "postlar" ? listPostsForHandle(normalized) : Promise.resolve([]),
     ]);
 
-    const banner = cardDesign(profile.cardDesign).image ?? null;
+    // The owner's own cover wins over the catalogue artwork, which wins over
+    // the plain gradient. Three states, one variable.
+    const banner = profile.bannerUrl ?? cardDesign(profile.cardDesign).image ?? null;
 
     return (
       <PageShell>
