@@ -14,7 +14,7 @@ export const DEVICE_TYPES = [
     tagline: "Cho'ntakda, hamyonda",
     description:
       "Bank kartasi o'lchamida. NFC chip va QR-kod bilan — tegizasiz yoki skanerlaysiz.",
-    price: 149_000,
+    price: 200_000,
   },
   {
     id: "ring",
@@ -22,7 +22,7 @@ export const DEVICE_TYPES = [
     tagline: "Qo'lda, doim o'zingiz bilan",
     description:
       "Hech narsa olib yurish shart emas. Qo'l siltashning o'zi profilingizni ochadi.",
-    price: 279_000,
+    price: 350_000,
   },
   {
     id: "bracelet",
@@ -30,7 +30,7 @@ export const DEVICE_TYPES = [
     tagline: "Bilakda, tadbirlar uchun",
     description:
       "Tadbir va konferensiyalarda qulay: qo'lingiz band bo'lsa ham bir tegish yetadi.",
-    price: 199_000,
+    price: 250_000,
   },
 ] as const;
 

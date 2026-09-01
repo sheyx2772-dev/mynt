@@ -15,6 +15,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 1,
     },
+    // The pages a buyer looks for before paying, and that a payment provider
+    // looks for before approving.
+    {
+      url: `${SITE_URL}/qurilmalar`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/shartlar`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
     ...handles.map((h) => ({
       url: `${SITE_URL}/${h.normalized}`,
       lastModified: h.updatedAt ? new Date(h.updatedAt) : undefined,

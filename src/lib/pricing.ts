@@ -1,4 +1,7 @@
-export const BASE_PRICE = 99_000;
+// A plain combination starts here; the rarity multipliers above take it up
+// from there. Round, because a price with a 9 on the end reads as a discount
+// and this is not a discounted thing.
+export const BASE_PRICE = 100_000;
 const RARE_WORDS = ["VIP", "CEO", "GOD", "SIR", "ACE", "WOW", "TOP", "BOS"];
 
 export function letterRarity(letters: string): { multiplier: number; reason: string } {

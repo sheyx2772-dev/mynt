@@ -22,6 +22,7 @@ import { productShot } from "@/lib/product-shots";
 import DeviceTile from "@/components/DeviceTile";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber, formatUZS } from "@/lib/format";
+import { COMPANY } from "@/lib/company";
 
 const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
 
@@ -679,8 +680,16 @@ export default function Home() {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="transition-colors hover:text-white">
-                    Aloqa
+                  <Link href="/shartlar" className="transition-colors hover:text-white">
+                    Ommaviy oferta
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href={`tel:${COMPANY.phoneHref}`}
+                    className="transition-colors hover:text-white"
+                  >
+                    {COMPANY.phone}
                   </a>
                 </li>
               </ul>
@@ -688,9 +697,12 @@ export default function Home() {
           </div>
           <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-white/40 sm:flex-row">
             <p>
-              &copy; {new Date().getFullYear()} Flex. Barcha huquqlar
-              himoyalangan.
+              &copy; {new Date().getFullYear()} Flex &mdash; {COMPANY.legalName}. STIR{" "}
+              {COMPANY.inn}.
             </p>
+            <Link href="/shartlar" className="transition-colors hover:text-white/70">
+              Yetkazib berish va qaytarish shartlari
+            </Link>
           </div>
         </div>
       </footer>
