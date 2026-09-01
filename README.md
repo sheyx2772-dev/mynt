@@ -65,6 +65,7 @@ credentials, so schema changes can be checked before they reach the project.
 | `0009_card_designs.sql` | per-handle card design, restricted to the known set |
 | `0010_device_types.sql` | which form factor an owner chose |
 | `0011_artwork_card_designs.sql` | widens the design set for the three artwork-backed fronts |
+| `0012_xarita_design.sql` | adds the Xarita design |
 
 ### Auth
 
