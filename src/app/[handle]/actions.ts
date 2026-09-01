@@ -1,6 +1,7 @@
 "use server";
 
 import { readLeadForm, saveLead } from "@/lib/leads";
+import { addComment, deleteComment } from "@/lib/comments";
 import { readSource } from "@/lib/analytics";
 
 import { revalidatePath } from "next/cache";
@@ -246,4 +247,41 @@ export async function submitLead(
   if (!read.ok) return { ok: false, error: read.error };
 
   return saveLead(`${parsed.letters}${parsed.digits}`, read.lead, readSource(rawSource));
+}
+
+export type CommentActionResult = { ok: boolean; error?: string; needsAuth?: true };
+
+/** Leaving a comment. Signed in, once per profile, and only where it is open. */
+export async function submitComment(
+  rawHandle: string,
+  body: string,
+): Promise<CommentActionResult> {
+  const user = await getUser();
+  if (!user) return { ok: false, needsAuth: true };
+
+  const parsed = parseHandle(rawHandle);
+  if (!parsed) return { ok: false, error: "Bu profil topilmadi." };
+
+  const normalized = `${parsed.letters}${parsed.digits}`;
+  const result = await addComment(normalized, user.id, body);
+  if (result.ok) revalidatePath(`/${normalized}`);
+  return result;
+}
+
+/** Removing one. The author may, and so may the profile's owner. */
+export async function removeComment(
+  rawHandle: string,
+  id: number,
+): Promise<CommentActionResult> {
+  const user = await getUser();
+  if (!user) return { ok: false, needsAuth: true };
+
+  const parsed = parseHandle(rawHandle);
+  if (!parsed) return { ok: false, error: "Bu profil topilmadi." };
+
+  const removed = await deleteComment(id, user.id);
+  if (!removed) return { ok: false, error: "O'chirilmadi." };
+
+  revalidatePath(`/${parsed.letters}${parsed.digits}`);
+  return { ok: true };
 }

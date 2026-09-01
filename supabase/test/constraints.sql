@@ -962,3 +962,46 @@ begin
   end if;
   raise notice '   ok   renewing earns a fresh reminder next period';
 end $$;
+
+-- 0030 — comments
+do $$
+declare
+  owner_id uuid;
+  visitor uuid;
+  hid uuid;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into owner_id;
+  insert into auth.users (id) values (gen_random_uuid()) returning id into visitor;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('CMT', '001', 'claimed', owner_id, now()) returning id into hid;
+
+  -- Off until the owner says otherwise.
+  if (select comments_open from handles where id = hid) then
+    raise exception 'izohlar sukut bo''yicha yoqilgan';
+  end if;
+  raise notice '   ok   comments are closed until the owner opens them';
+
+  insert into profile_comments (handle_id, author_id, body) values (hid, visitor, 'Zo''r ish');
+  raise notice '   ok   a signed-in visitor can leave one';
+
+  begin
+    insert into profile_comments (handle_id, author_id, body) values (hid, visitor, 'Yana bitta');
+    raise exception 'bitta odam ikki marta yozdi';
+  exception when unique_violation then
+    raise notice '   ok   rejected: a second comment from the same person';
+  end;
+
+  begin
+    insert into profile_comments (handle_id, author_id, body) values (hid, visitor, '');
+    raise exception 'bo''sh izoh qabul qilindi';
+  exception when check_violation or unique_violation then
+    raise notice '   ok   rejected: an empty comment';
+  end;
+
+  -- Deleting the handle takes its comments with it.
+  delete from handles where id = hid;
+  if exists (select 1 from profile_comments where handle_id = hid) then
+    raise exception 'handle o''chirilgach izohlar qoldi';
+  end if;
+  raise notice '   ok   comments go with the profile they were left on';
+end $$;

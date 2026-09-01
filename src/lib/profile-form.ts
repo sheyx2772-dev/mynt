@@ -18,6 +18,7 @@ export type ProfileInput = {
   position: string | null;
   company: string | null;
   services: Service[];
+  commentsOpen: boolean;
   tags: string[];
 };
 
@@ -147,6 +148,7 @@ export async function readProfileForm(
       phone: parsePhone(String(formData.get("phone") ?? "")),
       position: String(formData.get("position") ?? "").trim().slice(0, 80) || null,
       company: String(formData.get("company") ?? "").trim().slice(0, 80) || null,
+      commentsOpen: String(formData.get("commentsOpen") ?? "") === "1",
       services: parseServices(
         Array.from({ length: MAX_SERVICES }, (_, i) => ({
           name: String(formData.get(`service${i}Name`) ?? ""),

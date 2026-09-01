@@ -20,6 +20,7 @@ export type ClaimedProfile = {
   plan: PlanId;
   services: Service[];
   bannerUrl: string | null;
+  commentsOpen: boolean;
   /** Set when the handle belongs to a company, whose fields it then carries. */
   team: { name: string; logoUrl: string | null; website: string | null } | null;
   tags: string[];
@@ -42,6 +43,7 @@ const DEMO_PROFILES: Record<string, ClaimedProfile> = {
     plan: "free",
     services: [],
     bannerUrl: null,
+    commentsOpen: false,
     team: null,
     tags: ["Startup"],
     lastSeenAt: null,
@@ -68,7 +70,7 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
   const { data } = await supabase
     .from("handles")
     .select(
-      "user_id, owner_name, bio, avatar_url, links, city, contact_email, phone, position, company, tags, last_seen_at, view_count, follower_count, post_count, card_design, plan, plan_expires_at, services, banner_url, team_id, teams (name, logo_url, website, city, plan_expires_at)"
+      "user_id, owner_name, bio, avatar_url, links, city, contact_email, phone, position, company, tags, last_seen_at, view_count, follower_count, post_count, card_design, plan, plan_expires_at, services, banner_url, comments_open, team_id, teams (name, logo_url, website, city, plan_expires_at)"
     )
     .eq("normalized", normalized)
     .eq("status", "claimed")
@@ -95,6 +97,7 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
     plan: effectivePlan(data.plan, data.plan_expires_at, team?.plan_expires_at),
     services: readServices(data.services),
     bannerUrl: (data.banner_url as string) ?? null,
+    commentsOpen: Boolean(data.comments_open),
     team: team
       ? { name: team.name, logoUrl: team.logo_url, website: team.website }
       : null,
@@ -191,6 +194,7 @@ export type OwnedHandle = {
   bannerUrl: string | null;
   /** The company that owns this handle, if any. Its fields are not editable. */
   teamName: string | null;
+  commentsOpen: boolean;
   tags: string[];
   viewCount: number;
   cardDesign: CardDesignId;
@@ -234,6 +238,7 @@ function rowToOwned(row: Record<string, unknown>): OwnedHandle {
     plan: effectivePlan(row.plan as string, row.plan_expires_at as string, ownedTeam?.plan_expires_at),
     bannerUrl: (row.banner_url as string) ?? null,
     teamName: ownedTeam?.name ?? null,
+    commentsOpen: Boolean(row.comments_open),
     tags: Array.isArray(row.tags) ? (row.tags as string[]) : [],
     viewCount: Number(row.view_count ?? 0),
     cardDesign: isCardDesign(row.card_design) ? row.card_design : DEFAULT_CARD_DESIGN,
@@ -245,7 +250,7 @@ function rowToOwned(row: Record<string, unknown>): OwnedHandle {
 // One string literal, not a concatenation: Supabase infers the row type from
 // this text, and a joined expression makes it give up and return an error type.
 const OWNED_COLUMNS =
-  "normalized, status, owner_name, bio, avatar_url, links, price_paid, claimed_at, reserved_until, city, contact_email, phone, position, company, tags, view_count, card_design, device_type, custom_design_url, services, plan, plan_expires_at, banner_url, team_id, teams (name, logo_url, website, city, plan_expires_at)";
+  "normalized, status, owner_name, bio, avatar_url, links, price_paid, claimed_at, reserved_until, city, contact_email, phone, position, company, tags, view_count, card_design, device_type, custom_design_url, services, plan, plan_expires_at, banner_url, comments_open, team_id, teams (name, logo_url, website, city, plan_expires_at)";
 
 // Everything the signed-in user owns or is currently holding.
 export async function listHandlesForUser(userId: string): Promise<OwnedHandle[]> {

@@ -36,6 +36,7 @@ export default function EditProfileForm({
     plan: PlanId;
     bannerUrl: string | null;
     teamName: string | null;
+    commentsOpen: boolean;
     tags: string;
     cardDesign: CardDesignId;
     customDesignUrl?: string | null;
@@ -341,6 +342,26 @@ export default function EditProfileForm({
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="rounded-xl border border-black/10 bg-black/[0.02] px-4 py-3">
+        <label className="flex cursor-pointer items-start gap-2.5 text-sm">
+          <input
+            type="checkbox"
+            name="commentsOpen"
+            value="1"
+            defaultChecked={defaults.commentsOpen}
+            className="mt-0.5"
+          />
+          <span>
+            <span className="font-medium">Izohlarni ochish</span>
+            <span className="mt-0.5 block text-xs text-flex-black/45">
+              Profilingizga kirgan odamlar izoh yoza oladi. Har kim bittadan, va
+              istalganini o&apos;zingiz o&apos;chira olasiz. Yopiq bo&apos;lsa
+              izohlar umuman ko&apos;rinmaydi.
+            </span>
+          </span>
+        </label>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
