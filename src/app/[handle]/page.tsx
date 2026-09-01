@@ -118,7 +118,8 @@ async function VanityHandlePage({
 
     // The owner's own cover wins over the catalogue artwork, which wins over
     // the plain gradient. Three states, one variable.
-    const banner = profile.bannerUrl ?? cardDesign(profile.cardDesign).image ?? null;
+    const banner =
+      profile.bannerUrl ?? profile.team?.logoUrl ?? cardDesign(profile.cardDesign).image ?? null;
 
     return (
       <PageShell>
@@ -312,6 +313,19 @@ async function VanityHandlePage({
                 {/* Stored in full, shown by plan: an owner who fills in eight
                     and lets premium lapse keeps all eight in the form and gets
                     them back on renewal. */}
+                {/* Labelled with the company's name rather than "Veb-sayt",
+                    which the member may also have: two rows reading the same
+                    word and pointing at different places is worse than either
+                    one alone. */}
+                {profile.team?.website && (
+                  <ActionRow
+                    label={profile.team.name}
+                    value={linkValue({ label: "Veb-sayt", href: profile.team.website })}
+                    href={profile.team.website}
+                    external
+                  />
+                )}
+
                 {profile.links
                   .map((link, index) => ({ link, index }))
                   .slice(0, profile.plan === "premium" ? undefined : FREE_LINK_LIMIT)

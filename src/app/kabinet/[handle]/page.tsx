@@ -87,6 +87,7 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
             services: owned.services,
             plan: owned.plan,
             bannerUrl: owned.bannerUrl,
+            teamName: owned.teamName,
             tags: owned.tags.join(", "),
             cardDesign: owned.cardDesign,
             customDesignUrl: owned.customDesignUrl,

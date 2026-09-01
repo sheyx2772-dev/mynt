@@ -790,3 +790,22 @@ begin
   end if;
   raise notice '   ok   a leaver is not recorded as a deleted account';
 end $$;
+
+-- 0025 — team branding
+do $$
+declare
+  boss uuid;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into boss;
+  insert into teams (name, owner_user_id, seats, logo_url, website, city)
+    values ('MC LEGAL BRAND', boss, 5,
+            'https://cdn.flex.com.uz/logos/mc.png', 'https://mc-legal.uz', 'Toshkent');
+  raise notice '   ok   a company can carry its logo, site and city';
+
+  begin
+    update teams set website = 'javascript:alert(1)' where name = 'MC LEGAL BRAND';
+    raise exception 'https bo''lmagan sayt qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a company site that is not an https address';
+  end;
+end $$;

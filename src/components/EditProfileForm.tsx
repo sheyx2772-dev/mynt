@@ -35,6 +35,7 @@ export default function EditProfileForm({
     services: { name: string; price: string | null }[];
     plan: PlanId;
     bannerUrl: string | null;
+    teamName: string | null;
     tags: string;
     cardDesign: CardDesignId;
     customDesignUrl?: string | null;
@@ -275,9 +276,17 @@ export default function EditProfileForm({
             name="company"
             placeholder="MC LEGAL"
             maxLength={80}
-            defaultValue={defaults.company}
-            className={inputClass}
+            defaultValue={defaults.teamName ?? defaults.company}
+            disabled={defaults.teamName !== null}
+            className={
+              defaults.teamName !== null ? `${inputClass} opacity-60` : inputClass
+            }
           />
+          {defaults.teamName !== null && (
+            <p className="mt-1 text-xs text-flex-black/35">
+              Firma tomonidan belgilangan.
+            </p>
+          )}
         </div>
       </div>
 

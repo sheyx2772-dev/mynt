@@ -40,6 +40,29 @@ export function activePlan(
 }
 
 /**
+ * The plan a handle is on once its company is taken into account.
+ *
+ * A firm pays by the seat, so every number on that account is premium for as
+ * long as the company's own subscription holds. Without this the company would
+ * pay 29,000 a seat and its staff would carry free profiles — no statistics, no
+ * contacts collected, and the Flex mark still on a card the firm branded.
+ *
+ * Either side can carry it: a handle bought premium personally before joining a
+ * company keeps what it paid for, and whichever runs longer is the one that
+ * counts.
+ */
+export function effectivePlan(
+  handlePlan: string | null | undefined,
+  handleExpiresAt: string | null | undefined,
+  teamExpiresAt: string | null | undefined = null,
+  now: Date = new Date(),
+): PlanId {
+  if (activePlan(handlePlan, handleExpiresAt, now) === "premium") return "premium";
+  if (teamExpiresAt && new Date(teamExpiresAt) > now) return "premium";
+  return "free";
+}
+
+/**
  * What the profile opens in.
  *
  * Gold marks a paid subscription rather than a card design, and that is a
