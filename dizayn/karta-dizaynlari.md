@@ -194,3 +194,58 @@ Create flat front-face artwork for an NFC business card. The card fills the whol
 ```text
 Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. Design: a deep matte black field with a single large eight-pointed star in fine gold linework at the upper right, and below it a low sun with radiating gold rays rising behind a simple mountain ridge silhouette, all drawn as flat engraved line art. This is an original decorative illustration and must not reproduce any national emblem, coat of arms or state insignia of any country. Keep the lower-left quarter calm and free of busy detail or bright colour — a handle code and a web address are printed over it later, so nothing may compete there. Put a small silver contactless payment symbol in the top-right corner. Put no text, letters, numbers or logos anywhere in the artwork. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing, and avoid neon colours that cannot be reproduced in CMYK.
 ```
+
+---
+
+## Oltin lazer seriyasi
+
+Qora fonda oltin o'yma. Davlat gerbi va bayrog'i o'rniga —
+Humo, gulchambar, xarita va naqsh. Xarita va UZB toza: ular davlat ramzi emas.
+
+## 31. Humo medalyon
+
+```text
+Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. The finish is laser-etched polished gold on a deep matte black field, the gold catching light like engraved metal. Design: a large circular medallion centred in the upper right, containing a stylised Humo bird of Central Asian legend with wings spread, framed by a ring of fine engraved rays, all in gold linework. Keep the lower-left quarter calm and free of busy detail — a handle code and a web address are printed over it later. Put a small gold contactless payment symbol in the top-right corner. Put no text, letters, numbers or logos anywhere in the artwork, and do not reproduce any national emblem, coat of arms, flag or state insignia of any country. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing.
+```
+
+## 32. Humo va gulchambar
+
+```text
+Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. The finish is laser-etched polished gold on a deep matte black field, the gold catching light like engraved metal. Design: a tall symmetrical composition: a stylised Humo bird with spread wings above, and beneath it a wreath of cotton bolls on the left and wheat ears on the right curving up to meet, all in fine gold engraving, centred slightly right of the middle. Keep the lower-left quarter calm and free of busy detail — a handle code and a web address are printed over it later. Put a small gold contactless payment symbol in the top-right corner. Put no text, letters, numbers or logos anywhere in the artwork, and do not reproduce any national emblem, coat of arms, flag or state insignia of any country. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing.
+```
+
+## 33. Dollar naqsh
+
+```text
+Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. The finish is laser-etched polished gold on a deep matte black field, the gold catching light like engraved metal. Design: a repeating diagonal field of small gold dollar currency symbols covering the whole card at low contrast, with one large circular gold medallion in the upper right containing a stylised Humo bird framed by engraved rays. Keep the lower-left quarter calm and free of busy detail — a handle code and a web address are printed over it later. Put a small gold contactless payment symbol in the top-right corner. Put no text, letters, numbers or logos anywhere in the artwork, and do not reproduce any national emblem, coat of arms, flag or state insignia of any country. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing.
+```
+
+## 34. Xarita va medalyon
+
+```text
+Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. The finish is laser-etched polished gold on a deep matte black field, the gold catching light like engraved metal. Design: the outline of the map of Uzbekistan filled with a fine gold engraved texture, placed across the centre, with a small circular gold medallion containing a stylised Humo bird set at the upper right. Keep the lower-left quarter calm and free of busy detail — a handle code and a web address are printed over it later. Put a small gold contactless payment symbol in the top-right corner. Put no text, letters, numbers or logos anywhere in the artwork, and do not reproduce any national emblem, coat of arms, flag or state insignia of any country. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing.
+```
+
+## 35. Xarita
+
+```text
+Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. The finish is laser-etched polished gold on a deep matte black field, the gold catching light like engraved metal. Design: the outline of the map of Uzbekistan rendered in fine gold engraving with a subtly textured interior, placed across the centre right of the card, nothing else. Keep the lower-left quarter calm and free of busy detail — a handle code and a web address are printed over it later. Put a small gold contactless payment symbol in the top-right corner. Put no text, letters, numbers or logos anywhere in the artwork, and do not reproduce any national emblem, coat of arms, flag or state insignia of any country. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing.
+```
+
+## 36. UZB
+
+```text
+Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. The finish is laser-etched polished gold on a deep matte black field, the gold catching light like engraved metal. Design: a wide horizontal oval outline in polished gold, centred, containing the three capital letters U Z B in a clean bold sans-serif, in the manner of an international vehicle registration oval. Keep the lower-left quarter calm and free of busy detail — a handle code and a web address are printed over it later. Put a small gold contactless payment symbol in the top-right corner. The only text in the artwork is the three letters U Z B inside the oval. Do not reproduce any national emblem, coat of arms, flag or state insignia of any country. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing.
+```
+
+## 37. Uch chiziq
+
+```text
+Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. The finish is laser-etched polished gold on a deep matte black field, the gold catching light like engraved metal. Design: three broad horizontal bands filling the right two thirds of the card — the top band a soft sky blue, the middle white, the lower a fresh green — each separated by a thin gold rule, with a slim crescent and a small cluster of stars in gold at the upper left of the top band. An abstract decorative banner, not the flag of any country. Keep the lower-left quarter calm and free of busy detail — a handle code and a web address are printed over it later. Put a small gold contactless payment symbol in the top-right corner. Put no text, letters, numbers or logos anywhere in the artwork, and do not reproduce any national emblem, coat of arms, flag or state insignia of any country. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing.
+```
+
+## 38. Naqsh medalyon
+
+```text
+Create flat front-face artwork for an NFC business card. The card fills the whole image, seen straight on with no perspective, no mockup, no hand and no background scene. Aspect ratio exactly 1.586:1, the proportions of a bank card. The finish is laser-etched polished gold on a deep matte black field, the gold catching light like engraved metal. Design: a large circular medallion in the upper right built from an interlaced eight-point star lattice in fine gold engraving, with a low sun and mountain ridge silhouette inside it. Keep the lower-left quarter calm and free of busy detail — a handle code and a web address are printed over it later. Put a small gold contactless payment symbol in the top-right corner. Put no text, letters, numbers or logos anywhere in the artwork, and do not reproduce any national emblem, coat of arms, flag or state insignia of any country. Keep every line at least 0.3 mm thick at 85 mm wide so it survives printing.
+```
