@@ -8,6 +8,7 @@ import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import { linkValue } from "@/lib/links";
 import { PLAN_ACCENT } from "@/lib/plans";
+import { cardDesign } from "@/lib/card-designs";
 import SaveContactButton from "@/components/SaveContactButton";
 import ShareButton from "@/components/ShareButton";
 import ProfileHandleSearch from "@/components/ProfileHandleSearch";
@@ -114,6 +115,8 @@ async function VanityHandlePage({
       tab === "postlar" ? listPostsForHandle(normalized) : Promise.resolve([]),
     ]);
 
+    const banner = cardDesign(profile.cardDesign).image ?? null;
+
     return (
       <PageShell>
         {/* The handle and what a handle of this rarity costs, then a slim
@@ -138,19 +141,39 @@ async function VanityHandlePage({
           style={{ "--accent": PLAN_ACCENT[profile.plan] } as React.CSSProperties}
           className="relative mt-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0B0B0F] text-white shadow-[0_40px_80px_-30px_rgba(0,0,0,0.75)]"
         >
-          {/* The banner carries the handle as a watermark rather than a colour
-              wash. It is the one thing on the card that cannot be reproduced,
-              and it belongs at the top for the same reason a serial is engraved
-              on the object and not printed on the sleeve. */}
+          {/* Two channels, so neither has to give way. The banner shows the
+              artwork of the card the owner actually holds — a person who tapped
+              a gold-engraved card sees that engraving here — while the accent
+              above marks whether the subscription is live. The handle sits over
+              both as a watermark, the way a serial is put on the object rather
+              than printed on its sleeve. */}
           <div className="grain relative h-24 bg-[linear-gradient(160deg,#17171e_0%,#0B0B0F_75%)]">
-            <div
-              aria-hidden
-              className="absolute inset-0 opacity-[0.16]"
-              style={{
-                backgroundImage:
-                  "radial-gradient(85% 130% at 12% -20%, var(--accent) 0%, transparent 62%)",
-              }}
-            />
+            {banner ? (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element -- a static file in public/, sized by CSS */}
+                <img
+                  src={banner}
+                  alt=""
+                  aria-hidden
+                  className="absolute inset-0 h-full w-full object-cover opacity-60"
+                />
+                {/* The artwork is a card face, not a header: it has to sink far
+                    enough for white text and a lapping avatar to sit on it. */}
+                <div
+                  aria-hidden
+                  className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,11,15,0.35)_0%,rgba(11,11,15,0.8)_100%)]"
+                />
+              </>
+            ) : (
+              <div
+                aria-hidden
+                className="absolute inset-0 opacity-[0.16]"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(85% 130% at 12% -20%, var(--accent) 0%, transparent 62%)",
+                }}
+              />
+            )}
             <span
               aria-hidden
               className="pointer-events-none absolute top-5 left-6 font-display text-[2.6rem] leading-none font-semibold tracking-[0.08em] text-[color:var(--accent)] opacity-[0.09] select-none"
