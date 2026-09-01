@@ -109,6 +109,27 @@ export const PLANS: readonly Plan[] = [
   },
 ] as const;
 
+/**
+ * What a company pays, per seat, per month.
+ *
+ * Below the personal plan on purpose: a firm buying twenty is buying in volume,
+ * and the market prices team seats under the individual subscription for the
+ * same reason. Blinq charges $4.99–6.99 a seat and HiHello $5, which lands
+ * around 60–85 thousand so'm; ours sits under both because the salaries these
+ * come out of do too.
+ */
+export const TEAM_SEAT_MONTHLY = 29_000;
+
+/** A year up front, priced as ten months, the same as the personal plan. */
+export const TEAM_SEAT_YEARLY = TEAM_SEAT_MONTHLY * 10;
+
+/**
+ * Fewer than this and it is not a company, it is a few people who should each
+ * buy the personal plan — and supporting a two-seat "team" costs more than it
+ * earns.
+ */
+export const MIN_TEAM_SEATS = 5;
+
 export const DEFAULT_PLAN: PlanId = "free";
 
 export function plan(id: PlanId): Plan {

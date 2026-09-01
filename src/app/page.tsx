@@ -22,6 +22,7 @@ import { productShot } from "@/lib/product-shots";
 import DeviceTile from "@/components/DeviceTile";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber, formatUZS } from "@/lib/format";
+import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
 import { COMPANY } from "@/lib/company";
 import PlanTable from "@/components/PlanTable";
 import TeamOrderForm from "@/components/TeamOrderForm";
@@ -519,10 +520,39 @@ export default function Home() {
               <h3 className="font-display text-xl font-semibold text-white">
                 Jamoangiz uchun hisob-kitob
               </h3>
-              <p className="mt-2 mb-6 text-sm leading-relaxed text-white/55">
-                Nechta xodim borligini yozing &mdash; narx, muddat va brend
-                imkoniyatlarini bir ish kunida aytamiz.
-              </p>
+
+              {/* The three terms that actually decide a company purchase, said
+                  before the form rather than on a call. The third one in
+                  particular has to be read by the firm and by the employee
+                  carrying the card: a number that is not yours should never be
+                  a surprise. */}
+              <dl className="mt-5 mb-6 space-y-2.5 text-sm">
+                <div>
+                  <dt className="inline font-medium text-white">
+                    {formatUZS(TEAM_SEAT_MONTHLY)} — bir o&apos;ringa, oyiga.
+                  </dt>{" "}
+                  <dd className="inline text-white/55">
+                    Eng kami {MIN_TEAM_SEATS} o&apos;rin, to&apos;lov firmadan.
+                  </dd>
+                </div>
+                <div>
+                  <dt className="inline font-medium text-white">
+                    O&apos;rin sotib olinadi, odam emas.
+                  </dt>{" "}
+                  <dd className="inline text-white/55">
+                    Xodim ketsa o&apos;rin bo&apos;shaydi, keyingisiga beriladi.
+                  </dd>
+                </div>
+                <div>
+                  <dt className="inline font-medium text-white">
+                    Raqam firmaniki.
+                  </dt>{" "}
+                  <dd className="inline text-white/55">
+                    Xodim ketganda uning ma&apos;lumoti o&apos;chadi, raqam va
+                    karta firmada qoladi.
+                  </dd>
+                </div>
+              </dl>
               <TeamOrderForm />
             </div>
           </div>

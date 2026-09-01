@@ -726,3 +726,67 @@ begin
   end if;
   raise notice '   ok   a refund takes the months back off';
 end $$;
+
+-- 0024 — teams
+do $$
+declare
+  boss uuid;
+  worker uuid;
+  outsider uuid;
+  team uuid;
+  released boolean;
+  row_after handles%rowtype;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into boss;
+  insert into auth.users (id) values (gen_random_uuid()) returning id into worker;
+  insert into auth.users (id) values (gen_random_uuid()) returning id into outsider;
+
+  insert into teams (name, owner_user_id, seats) values ('MC LEGAL', boss, 20)
+    returning id into team;
+  raise notice '   ok   a company can be created with its seats';
+
+  begin
+    insert into teams (name, owner_user_id, seats) values ('X', boss, 0);
+    raise exception 'nol o''rin qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a company with no seats';
+  end;
+
+  insert into handles (letters, digits, status, user_id, claimed_at, team_id,
+                       owner_name, bio, phone, view_count, follower_count)
+    values ('MCL', '001', 'claimed', worker, now(), team,
+            'Xodim Xodimov', 'Yurist', '+998 90 000 00 00', 120, 7);
+
+  -- Somebody with no part in the company cannot empty its desk.
+  released := release_team_handle('MCL001', outsider);
+  if released then
+    raise exception 'begona odam raqamni bo''shatdi';
+  end if;
+  raise notice '   ok   rejected: an outsider releasing a company handle';
+
+  released := release_team_handle('MCL001', boss);
+  if not released then
+    raise exception 'egasi raqamni bo''shata olmadi';
+  end if;
+
+  select * into row_after from handles where normalized = 'MCL001';
+  if row_after.user_id is not null
+     or row_after.owner_name is not null
+     or row_after.phone is not null
+     or row_after.view_count <> 0
+     or row_after.follower_count <> 0 then
+    raise exception 'xodim ma''lumoti tozalanmadi';
+  end if;
+  raise notice '   ok   a leaver takes their data with them, not the number';
+
+  if row_after.team_id is null or row_after.status <> 'claimed' then
+    raise exception 'raqam firmadan chiqib ketdi';
+  end if;
+  raise notice '   ok   the handle stays with the company, still claimed';
+
+  -- And it must not be recorded as an abandoned account.
+  if row_after.owner_deleted_at is not null then
+    raise exception 'ketgan xodim hisob o''chirilgandek belgilandi';
+  end if;
+  raise notice '   ok   a leaver is not recorded as a deleted account';
+end $$;

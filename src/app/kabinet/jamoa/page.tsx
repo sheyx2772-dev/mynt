@@ -1,0 +1,141 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import PageShell from "@/components/PageShell";
+import ReleaseHandleButton from "@/components/ReleaseHandleButton";
+import { requireUser } from "@/lib/auth";
+import { getTeamForUser, listTeamHandles } from "@/lib/teams";
+import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
+import { formatUZS } from "@/lib/format";
+import { COMPANY } from "@/lib/company";
+
+export const metadata: Metadata = {
+  title: "Firma — flex.com.uz",
+  robots: { index: false },
+};
+
+export default async function JamoaPage() {
+  const user = await requireUser("/kabinet/jamoa");
+  const team = await getTeamForUser(user.id);
+
+  // Nothing is self-serve yet: a company account is opened by us, because the
+  // seats, the numbers and the physical cards are ordered together and one of
+  // those is a factory run. Saying so beats an empty dashboard.
+  if (!team) {
+    return (
+      <PageShell>
+        <h1 className="font-display text-3xl font-semibold tracking-tight">Firma hisobi</h1>
+        <p className="mt-3 max-w-prose text-flex-black/60">
+          Xodimlaringizga bir blokdan raqam va karta chiqaring, bitta hisobdan
+          boshqaring.
+        </p>
+
+        <div className="mt-8 space-y-3 text-sm text-flex-black/70">
+          <p>
+            <span className="font-medium">Bir o&apos;rin — {formatUZS(TEAM_SEAT_MONTHLY)} / oy.</span>{" "}
+            Eng kami {MIN_TEAM_SEATS} o&apos;rin. To&apos;lov firmadan, bitta
+            hisob-fakturada.
+          </p>
+          <p>
+            <span className="font-medium">O&apos;rin sotib olinadi, odam emas.</span>{" "}
+            Xodim ishdan chiqsa o&apos;rin bo&apos;shaydi va keyingisiga beriladi.
+          </p>
+          <p>
+            <span className="font-medium">Raqam firmaniki.</span> Xodim ketganda
+            uning ismi, surati, telefoni va havolalari o&apos;chadi; raqam va karta
+            firmada qoladi va keyingi xodimga beriladi.
+          </p>
+        </div>
+
+        <div className="mt-8 rounded-2xl border border-black/10 bg-black/[0.02] px-6 py-5">
+          <p className="text-sm text-flex-black/70">
+            Firma hisobini biz ochamiz — o&apos;rinlar soni, raqamlar bloki va
+            kartalar bitta buyurtmada tayyorlanadi.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <a
+              href={`tel:${COMPANY.phoneHref}`}
+              className="rounded-xl bg-flex-black px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-white uppercase"
+            >
+              {COMPANY.phone}
+            </a>
+            <Link
+              href="/#biznes"
+              className="rounded-xl border border-black/12 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] uppercase transition-colors hover:bg-black/[0.03]"
+            >
+              So&apos;rov qoldirish
+            </Link>
+          </div>
+        </div>
+      </PageShell>
+    );
+  }
+
+  const handles = await listTeamHandles(team.id);
+  const taken = handles.filter((h) => h.userId).length;
+
+  return (
+    <PageShell>
+      <p className="text-[11px] font-medium tracking-[0.18em] text-flex-black/40 uppercase">
+        Firma
+      </p>
+      <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight">{team.name}</h1>
+
+      <div className="mt-6 grid grid-cols-3 gap-3">
+        <div className="rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-3">
+          <p className="font-display text-2xl font-semibold tabular-nums">{taken}</p>
+          <p className="mt-0.5 text-xs text-flex-black/45">Band</p>
+        </div>
+        <div className="rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-3">
+          <p className="font-display text-2xl font-semibold tabular-nums">
+            {Math.max(0, team.seats - taken)}
+          </p>
+          <p className="mt-0.5 text-xs text-flex-black/45">Bo&apos;sh o&apos;rin</p>
+        </div>
+        <div className="rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-3">
+          <p className="font-display text-2xl font-semibold tabular-nums">{team.seats}</p>
+          <p className="mt-0.5 text-xs text-flex-black/45">Jami</p>
+        </div>
+      </div>
+
+      <section className="mt-8 rounded-[1.75rem] border border-black/10 bg-white p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+        <h2 className="font-display text-lg font-semibold tracking-tight">Raqamlar</h2>
+
+        {handles.length === 0 ? (
+          <p className="mt-6 rounded-2xl border border-dashed border-black/12 px-4 py-6 text-center text-sm text-flex-black/45">
+            Bu firmaga hali raqam biriktirilmagan.
+          </p>
+        ) : (
+          <ul className="mt-5 divide-y divide-black/5">
+            {handles.map((h) => (
+              <li key={h.normalized} className="flex flex-wrap items-center gap-3 py-3.5">
+                <div className="min-w-0 flex-1">
+                  <Link
+                    href={`/${h.normalized}`}
+                    className="font-tabular text-sm font-medium underline-offset-2 hover:underline"
+                  >
+                    {h.normalized}
+                  </Link>
+                  <p className="mt-0.5 text-sm text-flex-black/55">
+                    {h.holderName ?? "Bo'sh — hech kimda emas"}
+                    {h.position && ` · ${h.position}`}
+                  </p>
+                </div>
+
+                <p className="font-tabular text-xs text-flex-black/35">{h.viewCount}</p>
+
+                {h.userId && (
+                  <ReleaseHandleButton handle={h.normalized} holderName={h.holderName} />
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <p className="mt-6 text-sm text-flex-black/45">
+        O&apos;rin qo&apos;shish yoki raqam biriktirish uchun biz bilan
+        bog&apos;laning: {COMPANY.phone}
+      </p>
+    </PageShell>
+  );
+}
