@@ -207,6 +207,26 @@ for running in a container, and Vercel's build step instead reads the default
 build's file traces — with standalone set, the deploy fails looking for
 `.next/next-server.js.nft.json`.
 
+### Outstanding: migration 0014 is not applied
+
+`handle_transfers` does not exist in the project yet. The code for handing a
+handle to someone else is written, tested and deployed, but the cabinet's
+transfer panel will error until the migration runs — the table is not there.
+
+It was not applied because the dashboard could not be reached: the sign-in
+looped through auth.supabase.io with ERR_TOO_MANY_REDIRECTS, and retrying hit a
+rate limit.
+
+The better fix, which also removes the browser from every future migration:
+create a personal access token at supabase.com/dashboard/account/tokens, put it
+in `.env.local` as `SUPABASE_ACCESS_TOKEN=sbp_...`, then
+
+    npm run db:migrate
+
+`scripts/migrate.mjs` has been in the repository since the beginning and applies
+whatever has not run yet, recording each one. Everything up to 0013 was applied
+by hand through the SQL editor because that token was never created.
+
 ### The payment accounts
 
 Both providers belong to MC LEGAL, contract B/D 29279\TASH, and both were
