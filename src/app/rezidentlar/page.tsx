@@ -1,4 +1,7 @@
 import Mark from "@/components/Mark";
+import LangSwitch from "@/components/LangSwitch";
+import { site } from "@/lib/i18n";
+import { getLang } from "@/lib/lang";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Eye, MapPin, Search, Trophy } from "lucide-react";
@@ -30,8 +33,10 @@ function Avatar({ name, url }: { name: string; url: string | null }) {
 }
 
 export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
-  const { q } = await props.searchParams;
+  const { q, til } = await props.searchParams;
   const query = typeof q === "string" ? q : "";
+  const lang = await getLang(til);
+  const t = site(lang);
 
   const [residents, top, counts] = await Promise.all([
     listResidents(query),
@@ -50,12 +55,17 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
           flex
         </Link>
 
-        <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-          Rezidentlar
-        </h1>
+        <div className="flex flex-wrap items-baseline justify-between gap-3">
+          <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+            {t.navResidents}
+          </h1>
+          <LangSwitch lang={lang} next="/rezidentlar" />
+        </div>
         <p className="mt-2 font-tabular text-sm text-flex-black/50">
-          {formatNumber(counts.claimed)} ta handle band ·{" "}
-          {formatNumber(counts.namespace - counts.claimed)} ta bo&apos;sh
+          {t.handleCounts(
+            formatNumber(counts.claimed),
+            formatNumber(counts.namespace - counts.claimed),
+          )}
         </p>
 
         <form className="mt-7 flex gap-2">
@@ -64,7 +74,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
             <input
               name="q"
               defaultValue={query}
-              placeholder="Ism, handle yoki shahar"
+              placeholder={t.searchPlaceholder}
               className="w-full rounded-full border border-black/10 bg-white py-3 pr-4 pl-11 text-sm outline-none transition-colors focus:border-flex-black/30"
             />
           </div>
@@ -72,7 +82,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
             type="submit"
             className="rounded-full bg-flex-black px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-flex-black/85"
           >
-            Qidirish
+            {t.searchWord}
           </button>
         </form>
 
@@ -80,7 +90,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
           <section className="mt-10">
             <h2 className="mb-4 flex items-center gap-2 text-xs font-medium tracking-wide text-flex-black/45 uppercase">
               <Trophy className="h-3.5 w-3.5" />
-              So&apos;nggi 3 kun eng ko&apos;p ko&apos;rilganlar
+              {t.topThree}
             </h2>
             <div className="grid gap-3 sm:grid-cols-3">
               {top.map((entry, index) => (
@@ -109,14 +119,14 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
             <div className="rounded-[1.5rem] border border-dashed border-black/15 px-6 py-14 text-center">
               <p className="text-sm text-flex-black/55">
                 {query
-                  ? `"${query}" bo'yicha hech kim topilmadi.`
-                  : "Hali rezidentlar yo'q. Birinchi bo'lib handle oling."}
+                  ? t.nothingFound(query)
+                  : t.noResidents}
               </p>
               <Link
                 href={query ? "/rezidentlar" : "/#narx"}
                 className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
               >
-                {query ? "Hammasini ko'rish" : "Handle tanlash"}
+                {query ? t.seeAll : t.pickHandleCta}
               </Link>
             </div>
           ) : (

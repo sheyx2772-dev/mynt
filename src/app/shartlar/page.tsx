@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import { catalogue } from "@/lib/i18n";
-import { COMPANY, DELIVERY, REPLACEMENT_WINDOW_DAYS } from "@/lib/company";
+import { terms } from "@/lib/terms";
+import { getLang } from "@/lib/lang";
+import LangSwitch from "@/components/LangSwitch";
+import { COMPANY } from "@/lib/company";
 import { DEVICE_TYPES } from "@/lib/devices";
-import { BASE_PRICE } from "@/lib/pricing";
-import { plan, FREE_LINK_LIMIT } from "@/lib/plans";
 import { formatUZS } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -38,153 +39,76 @@ function Row({ label, value }: { label: string; value: string }) {
   );
 }
 
-const PREMIUM = plan("premium");
 
-export default function TermsPage() {
+export default async function TermsPage({ searchParams }: PageProps<"/shartlar">) {
+  const { til } = await searchParams;
+  const lang = await getLang(til);
+  const t = terms(lang);
+  const c = catalogue(lang);
+
+  const requisiteValues = [
+    COMPANY.legalName,
+    COMPANY.inn,
+    COMPANY.oked,
+    COMPANY.bank,
+    COMPANY.account,
+    COMPANY.mfo,
+    COMPANY.address,
+  ];
+  const contactValues = [COMPANY.contactPerson, COMPANY.phone, COMPANY.email];
+
   return (
     <PageShell>
-      <h1 className="font-display text-3xl font-semibold tracking-tight">
-        Ommaviy oferta va shartlar
-      </h1>
-      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-flex-black/55">
-        Bu sahifa {COMPANY.legalName} va xaridor o&apos;rtasidagi shartlarni belgilaydi.
-        Saytda buyurtma berish va to&apos;lovni amalga oshirish shu shartlarga rozilik
-        bildirish hisoblanadi.
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <h1 className="font-display text-3xl font-semibold tracking-tight">{t.title}</h1>
+        <LangSwitch lang={lang} next="/shartlar" />
+      </div>
+
+      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-flex-black/55">{t.intro}</p>
+
+      {/* Stated before anything it could contradict. A buyer and a seller
+          reading different words need to know which words they agreed to, and
+          this is the sentence that makes a translated contract safe to publish
+          at all. */}
+      <p className="mt-4 rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4 text-sm leading-relaxed text-flex-black/70">
+        {t.authority}
       </p>
 
-      <Section title="Xizmat nima">
-        <p>
-          Flex &mdash; noyob raqam (handle) va u ochadigan shaxsiy profil. Raqam 3 ta harf
-          va 3 ta raqamdan iborat, masalan <span className="font-tabular">FLX007</span>.
-          U <span className="font-tabular">flex.com.uz/FLX007</span> manzilida
-          xaridorning profilini ochadi.
-        </p>
-        <p>
-          Raqamni jismoniy qurilmada olib yurish mumkin: NFC karta, uzuk yoki braslet.
-          Qurilma alohida mahsulot sifatida sotiladi.
-        </p>
-      </Section>
-
-      <Section title="Narxlar">
-        <p>
-          Raqam narxi <strong>{formatUZS(BASE_PRICE)}</strong>dan boshlanadi va harflar
-          hamda raqamlarning kamyobligiga qarab avtomatik hisoblanadi. Formula ochiq:
-          bazaviy narx &times; harf koeffitsienti &times; raqam koeffitsienti. Yakuniy
-          summa to&apos;lovdan oldin ko&apos;rsatiladi.
-        </p>
-        <dl className="mt-4 rounded-2xl border border-black/8 bg-black/[0.02] px-5 py-3">
-          {DEVICE_TYPES.map((d) => (
-            <Row key={d.id} label={catalogue("uz").devices[d.id].name} value={formatUZS(d.price)} />
+      {t.sections.map((section) => (
+        <Section key={section.title} title={section.title}>
+          {section.body.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
           ))}
-        </dl>
-        <p>Narxlar O&apos;zbekiston so&apos;mida ko&apos;rsatilgan.</p>
-      </Section>
 
-      <Section title="Obuna">
-        <p>
-          Raqam va qurilma bir marta to&apos;lanadi. Profilning ishlab turishi uchun
-          platformaga obuna alohida to&apos;lanadi: oyiga{" "}
-          <strong>{formatUZS(PREMIUM.monthly)}</strong> yoki yiliga{" "}
-          <strong>{formatUZS(PREMIUM.yearly)}</strong>.
-        </p>
-        <p>
-          Obunasiz ham profil ishlaydi va raqam sizniki bo&apos;lib qoladi &mdash; u
-          hech qachon o&apos;chirilmaydi. Oddiy rejada {FREE_LINK_LIMIT} tagacha havola,
-          QR-kod va umumiy tashriflar soni mavjud. Obuna cheksiz havolalar, to&apos;liq
-          analitika, postlar va AI dizayn so&apos;rovini ochadi.
-        </p>
-        <p>
-          Obuna to&apos;xtatilsa, profil oddiy rejaga qaytadi. Ma&apos;lumotlar
-          o&apos;chirilmaydi.
-        </p>
-      </Section>
+          {section.title === t.sections[1]!.title && (
+            <dl className="mt-4 rounded-2xl border border-black/8 bg-black/[0.02] px-5 py-3">
+              {DEVICE_TYPES.map((d) => (
+                <Row
+                  key={d.id}
+                  label={c.devices[d.id].name}
+                  value={formatUZS(d.price, lang)}
+                />
+              ))}
+            </dl>
+          )}
 
-      <Section title="To'lov">
-        <p>
-          To&apos;lov Payme yoki Click orqali amalga oshiriladi. To&apos;lov tasdiqlangunga
-          qadar raqam 30 daqiqaga band qilinadi va shu vaqt ichida boshqa hech kimga
-          sotilmaydi. To&apos;lov amalga oshmasa, band bekor bo&apos;ladi va raqam
-          yana bo&apos;shaydi.
-        </p>
-      </Section>
+          {section.title === t.sections[7]!.title && (
+            <dl className="rounded-2xl border border-black/8 bg-black/[0.02] px-5 py-3">
+              {t.requisites.map((label, i) => (
+                <Row key={label} label={label} value={requisiteValues[i]!} />
+              ))}
+            </dl>
+          )}
 
-      <Section title="Yetkazib berish">
-        <p>
-          Qurilma buyurtma tasdiqlangandan so&apos;ng yetkaziladi:
-        </p>
-        <ul className="ml-5 list-disc space-y-1">
-          <li>
-            Toshkent shahri bo&apos;yicha &mdash; <strong>{DELIVERY.tashkentDays} kun</strong>
-          </li>
-          <li>
-            Viloyatlarga &mdash;{" "}
-            <strong>
-              {DELIVERY.regionsDaysFrom}&ndash;{DELIVERY.regionsDaysTo} kun
-            </strong>
-          </li>
-        </ul>
-        <p>
-          Raqam va profil to&apos;lov tasdiqlangan zahoti ishlay boshlaydi &mdash;
-          qurilmani kutish shart emas.
-        </p>
-      </Section>
-
-      <Section title="Qaytarish va almashtirish">
-        <p>
-          <strong>Raqam qaytarilmaydi.</strong> To&apos;lov amalga oshgan zahoti raqam
-          xaridorga biriktiriladi va boshqa hech kimga sotilmaydi. Aynan shu cheklanganlik
-          raqamning qiymatini tashkil qiladi, shuning uchun uni qaytarish boshqa
-          xaridorlarning huquqini buzadi.
-        </p>
-        <p>
-          <strong>Qurilmada zavod nuqsoni</strong> chiqsa &mdash; NFC chip ishlamasa,
-          korpus shikastlangan bo&apos;lsa yoki bosma nuqsonli bo&apos;lsa &mdash; uni
-          qabul qilgandan so&apos;ng <strong>{REPLACEMENT_WINDOW_DAYS} kun</strong> ichida
-          xabar bering, biz yangisiga almashtiramiz. Almashtirish bepul.
-        </p>
-        <p>
-          Foydalanish natijasida yuzaga kelgan shikast (chizilish, sinish, suvda qolish)
-          zavod nuqsoni hisoblanmaydi.
-        </p>
-      </Section>
-
-      <Section title="Raqamni boshqa odamga o'tkazish">
-        <p>
-          Raqam egasi uni istalgan vaqtda boshqa odamga o&apos;tkazishi mumkin &mdash;
-          kabinetdan, qabul qiluvchining elektron pochtasi orqali. O&apos;tkazishda profil
-          ma&apos;lumotlari (ism, bio, havolalar, postlar, obunachilar) tozalanadi va yangi
-          egaga o&apos;tmaydi.
-        </p>
-      </Section>
-
-      <Section title="Sotuvchi rekvizitlari">
-        <p>
-          Bu ma&apos;lumotlar sotuvchini tanishtirish uchun keltirilgan.{" "}
-          <strong>Bu yerga pul o&apos;tkazish shart emas</strong> &mdash; to&apos;lov
-          Payme yoki Click orqali, saytdagi tugma bilan amalga oshiriladi.
-        </p>
-        <dl className="rounded-2xl border border-black/8 bg-black/[0.02] px-5 py-3">
-          <Row label="Tashkilot" value={COMPANY.legalName} />
-          <Row label="STIR (INN)" value={COMPANY.inn} />
-          <Row label="OKED" value={COMPANY.oked} />
-          <Row label="Bank" value={COMPANY.bank} />
-          <Row label="Hisob raqami" value={COMPANY.account} />
-          <Row label="MFO" value={COMPANY.mfo} />
-          <Row label="Manzil" value={COMPANY.address} />
-        </dl>
-      </Section>
-
-      <Section title="Aloqa">
-        <dl className="rounded-2xl border border-black/8 bg-black/[0.02] px-5 py-3">
-          <Row label="Mas'ul shaxs" value={COMPANY.contactPerson} />
-          <Row label="Telefon" value={COMPANY.phone} />
-          <Row label="Elektron pochta" value={COMPANY.email} />
-        </dl>
-        <p>
-          Savol yoki shikoyat bo&apos;lsa shu manzillarga murojaat qiling. Har bir murojaat
-          ish kuni davomida ko&apos;rib chiqiladi.
-        </p>
-      </Section>
+          {section.title === t.sections[8]!.title && (
+            <dl className="rounded-2xl border border-black/8 bg-black/[0.02] px-5 py-3">
+              {t.contact.map((label, i) => (
+                <Row key={label} label={label} value={contactValues[i]!} />
+              ))}
+            </dl>
+          )}
+        </Section>
+      ))}
     </PageShell>
   );
 }
