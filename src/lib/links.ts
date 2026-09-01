@@ -56,3 +56,17 @@ export function buildProfileLinks(input: {
     websiteLink(input.website),
   ].filter((l): l is Link => l !== null);
 }
+
+// What a link row shows underneath its label: the part a person recognises.
+// A full "https://instagram.com/username" in a row is noise — the username is
+// the information, and for a website the host is.
+export function linkValue(link: Link): string {
+  try {
+    const url = new URL(link.href);
+    const path = url.pathname.replace(/^\/+|\/+$/g, "");
+    if (link.label === "Veb-sayt") return url.hostname.replace(/^www\./, "") + (path ? `/${path}` : "");
+    return path ? `@${path.split("/").pop()}` : url.hostname;
+  } catch {
+    return link.href;
+  }
+}

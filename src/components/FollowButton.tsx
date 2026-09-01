@@ -8,9 +8,13 @@ import { toggleFollow } from "@/app/[handle]/actions";
 export default function FollowButton({
   handle,
   initialFollowing,
+  // Beside the save-contact button the label does not fit, so the icon carries
+  // it. The accessible name stays on the button either way.
+  compact = false,
 }: {
   handle: string;
   initialFollowing: boolean;
+  compact?: boolean;
 }) {
   const [following, setFollowing] = useState(initialFollowing);
   const [error, setError] = useState<string | null>(null);
@@ -33,6 +37,26 @@ export default function FollowButton({
       // The server decides the resulting state, not this component.
       setFollowing(result.following);
     });
+  }
+
+  const label = following ? "Obuna bo'lingan" : "Obuna bo'lish";
+
+  if (compact) {
+    return (
+      <button
+        onClick={onClick}
+        disabled={pending}
+        aria-label={label}
+        title={label}
+        className={
+          following
+            ? "flex h-[46px] w-[46px] items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:bg-white/5 disabled:opacity-60"
+            : "flex h-[46px] w-[46px] items-center justify-center rounded-full border border-white/20 bg-white/[0.06] text-white transition-colors hover:bg-white/[0.12] disabled:opacity-60"
+        }
+      >
+        {following ? <UserCheck className="h-5 w-5" /> : <UserPlus className="h-5 w-5" />}
+      </button>
+    );
   }
 
   return (

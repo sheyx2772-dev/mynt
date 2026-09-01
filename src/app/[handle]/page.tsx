@@ -2,14 +2,15 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { after } from "next/server";
 import type { Metadata } from "next";
-import { Nfc, Eye, MapPin, Mail, Phone } from "lucide-react";
+import { Nfc, Eye } from "lucide-react";
 import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRarity } from "@/lib/pricing";
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
+import { linkValue } from "@/lib/links";
 import SaveContactButton from "@/components/SaveContactButton";
 import ShareButton from "@/components/ShareButton";
 import ProfileHandleSearch from "@/components/ProfileHandleSearch";
-import LinkIcon from "@/components/LinkIcon";
+import ActionRow from "@/components/ActionRow";
 import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
@@ -114,12 +115,12 @@ async function VanityHandlePage({
 
     return (
       <PageShell>
-        {/* The competitor puts the handle, its price and a search box above the
-            card, and is right to: a visitor arriving from a tapped card is at
-            the moment of wanting one, and ours were at the foot of the page
-            where nobody scrolled. The price is what a handle of this rarity
-            costs today — this one is taken. */}
-        <div className="mb-4 flex flex-wrap items-center gap-2">
+        {/* The handle and what a handle of this rarity costs, then a slim
+            search. Kept to one line each: a padded search panel above the card
+            was louder than the person it introduced. */}
+        <ProfileHandleSearch />
+
+        <div className="mb-3 flex flex-wrap items-center gap-2">
           <span className="rounded-full border border-black/12 bg-white px-3.5 py-1.5 font-tabular text-sm tracking-wider shadow-sm">
             {normalized}
           </span>
@@ -128,166 +129,77 @@ async function VanityHandlePage({
           </span>
         </div>
 
-        <ProfileHandleSearch />
-
-        <div className="grain card-sheen relative mt-4 overflow-hidden rounded-[1.75rem] bg-flex-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
-          {profile.avatarUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
-            <img
-              src={profile.avatarUrl}
-              alt={profile.name}
-              className="relative h-16 w-16 rounded-full object-cover shadow-[0_10px_24px_-8px_rgba(171,255,9,0.6)]"
-            />
-          ) : (
-            <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-lime font-display text-xl font-semibold text-flex-black shadow-[0_10px_24px_-8px_rgba(171,255,9,0.6)]">
-              {profile.name
-                .split(" ")
-                .map((p) => p[0])
-                .join("")}
-            </div>
-          )}
-          <div className="absolute top-6 right-6 z-10">
-            <ShareButton handle={normalized} name={profile.name} />
-          </div>
-
-          <h1 className="relative mt-5 font-display text-2xl font-semibold">{profile.name}</h1>
-
-          {(profile.position || profile.company) && (
-            <p className="relative mt-1 text-sm text-white/60">
-              {[profile.position, profile.company].filter(Boolean).join(" · ")}
-            </p>
-          )}
-
-          <p className="relative mt-1 font-tabular text-sm text-white/50">flex.com.uz/{normalized}</p>
-
-          {lastSeen && (
-            <p className="relative mt-2 text-xs text-white/40">Oxirgi faollik: {lastSeen}</p>
-          )}
-
-          {profile.bio && <p className="relative mt-4 text-sm text-white/70">{profile.bio}</p>}
-
-          {profile.tags.length > 0 && (
-            <div className="relative mt-4 flex flex-wrap gap-2">
-              {profile.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-white/15 px-2.5 py-1 text-xs text-white/60"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {(profile.phone || profile.contactEmail || profile.city) && (
-            <div className="relative mt-5 space-y-2 border-t border-white/10 pt-5">
-              {profile.phone && (
-                <a
-                  href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
-                  className="flex items-center gap-2.5 text-sm text-white/75 transition-colors hover:text-lime"
-                >
-                  <Phone className="h-4 w-4 shrink-0 text-white/35" />
-                  <span className="font-tabular">{profile.phone}</span>
-                </a>
-              )}
-              {profile.contactEmail && (
-                <a
-                  href={`mailto:${profile.contactEmail}`}
-                  className="flex items-center gap-2.5 text-sm text-white/75 transition-colors hover:text-lime"
-                >
-                  <Mail className="h-4 w-4 shrink-0 text-white/35" />
-                  <span className="break-all">{profile.contactEmail}</span>
-                </a>
-              )}
-              {profile.city && (
-                <p className="flex items-center gap-2.5 text-sm text-white/75">
-                  <MapPin className="h-4 w-4 shrink-0 text-white/35" />
-                  {profile.city}
-                </p>
-              )}
-            </div>
-          )}
-
-          <div className="relative mt-5 flex gap-6 border-t border-white/10 pt-5">
-            <div>
-              <p className="font-display text-lg font-semibold tabular-nums">
-                {profile.followerCount}
-              </p>
-              <p className="text-xs text-white/40">Obunachi</p>
-            </div>
-            <div>
-              <p className="font-display text-lg font-semibold tabular-nums">{followingCount}</p>
-              <p className="text-xs text-white/40">Obuna</p>
-            </div>
-            <div>
-              <p className="font-display text-lg font-semibold tabular-nums">
-                {profile.viewCount}
-              </p>
-              <p className="flex items-center gap-1 text-xs text-white/40">
-                <Eye className="h-3 w-3" />
-                Ko&apos;rish
-              </p>
+        <div className="relative mt-1 overflow-hidden rounded-[1.75rem] bg-flex-black text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
+          {/* Every card in this market opens with a banner and an avatar lapping
+              over it. It is what makes a profile read as a card rather than a
+              list, and ours had nothing above the initials. */}
+          {/* The gradient and the sheen are separate layers on purpose:
+              `.card-sheen` sets background-image, so a gradient utility on the
+              same element is silently overwritten by it. */}
+          <div className="grain relative h-28 bg-[radial-gradient(90%_150%_at_15%_-10%,#5c9600_0%,#2b4a06_35%,#171128_68%,#0e0a1b_100%)]">
+            <div className="card-sheen absolute inset-0" />
+            <div className="absolute top-4 right-4 z-10">
+              <ShareButton handle={normalized} name={profile.name} />
             </div>
           </div>
 
-          {!isOwner && (
-            <div className="relative mt-5">
-              <FollowButton handle={normalized} initialFollowing={following} />
-            </div>
-          )}
-
-          {/* The card is the visiting card, so the tabs and everything the
-              vizitka holds live on it. Posts are not the card and stay on the
-              page below. */}
-          <div className="relative mt-6 flex gap-6 border-b border-white/10 text-sm">
-            <Link
-              href={`/${normalized}`}
-              className={
-                tab === "vizitka"
-                  ? "-mb-px border-b-2 border-lime pb-2.5 font-medium text-white"
-                  : "-mb-px border-b-2 border-transparent pb-2.5 text-white/45 transition-colors hover:text-white"
-              }
-            >
-              Vizitka
-            </Link>
-            <Link
-              href={`/${normalized}?bolim=postlar`}
-              className={
-                tab === "postlar"
-                  ? "-mb-px flex items-center gap-1.5 border-b-2 border-lime pb-2.5 font-medium text-white"
-                  : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-white/45 transition-colors hover:text-white"
-              }
-            >
-              Postlar
-              {profile.postCount > 0 && (
-                <span className="font-tabular text-xs text-white/35">{profile.postCount}</span>
-              )}
-            </Link>
-          </div>
-
-          {tab === "vizitka" && (
-            <>
-              {profile.links.length > 0 && (
-                <div className="relative mt-5 space-y-2.5">
-                  {profile.links.map((link, index) => (
-                    <a
-                      key={link.href}
-                      // Routed through /go so the click is counted; the
-                      // destination is resolved from this index server-side,
-                      // not from the URL.
-                      href={`/${normalized}/go?to=${index}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2.5 rounded-xl border border-white/12 bg-white/[0.04] px-5 py-3 font-medium text-white/85 transition-colors hover:border-lime/40 hover:bg-white/[0.08] hover:text-white"
-                    >
-                      <LinkIcon label={link.label} />
-                      {link.label}
-                    </a>
-                  ))}
+          <div className="relative px-6 pb-6">
+            <div className="-mt-11 mb-4">
+              {profile.avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
+                <img
+                  src={profile.avatarUrl}
+                  alt={profile.name}
+                  className="h-22 w-22 rounded-2xl border-4 border-flex-black object-cover"
+                />
+              ) : (
+                <div className="flex h-22 w-22 items-center justify-center rounded-2xl border-4 border-flex-black bg-lime font-display text-2xl font-semibold text-flex-black">
+                  {profile.name
+                    .split(" ")
+                    .map((p) => p[0])
+                    .join("")}
                 </div>
               )}
+            </div>
 
-              <div className="relative mt-5">
+            <h1 className="font-display text-2xl font-semibold">{profile.name}</h1>
+
+            {profile.company && (
+              <p className="mt-0.5 text-base text-lime">{profile.company}</p>
+            )}
+
+            {(profile.position || profile.city) && (
+              <p className="mt-1.5 border-l-2 border-lime/50 pl-2.5 text-sm leading-snug text-white/55">
+                {profile.position}
+                {profile.position && profile.city && <br />}
+                {profile.city}
+              </p>
+            )}
+
+            <p className="mt-2 font-tabular text-sm text-white/40">flex.com.uz/{normalized}</p>
+
+            {lastSeen && <p className="mt-1 text-xs text-white/35">Oxirgi faollik: {lastSeen}</p>}
+
+            {profile.bio && <p className="mt-4 text-sm text-white/70">{profile.bio}</p>}
+
+            {profile.tags.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {profile.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-white/15 px-2.5 py-1 text-xs text-white/60"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* The save-contact action and sharing sit side by side, the way the
+                whole market lays them out: the wide one is the thing to do, the
+                square one is the thing to keep. */}
+            <div className="mt-5 flex gap-2">
+              <div className="min-w-0 flex-1">
                 <SaveContactButton
                   fullName={profile.name}
                   handle={normalized}
@@ -298,17 +210,100 @@ async function VanityHandlePage({
                   company={profile.company}
                 />
               </div>
-
-              {isOwner && (
-                <Link
-                  href={`/kabinet/${normalized}`}
-                  className="relative mt-3 block rounded-full border border-white/15 px-6 py-3 text-center text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.06] hover:text-white"
-                >
-                  Profilni tahrirlash
-                </Link>
+              {!isOwner && (
+                <div className="shrink-0">
+                  <FollowButton handle={normalized} initialFollowing={following} compact />
+                </div>
               )}
-            </>
-          )}
+            </div>
+
+            <div className="mt-6 flex gap-6 border-b border-white/10 text-sm">
+              <Link
+                href={`/${normalized}`}
+                className={
+                  tab === "vizitka"
+                    ? "-mb-px border-b-2 border-lime pb-2.5 font-medium text-white"
+                    : "-mb-px border-b-2 border-transparent pb-2.5 text-white/45 transition-colors hover:text-white"
+                }
+              >
+                Vizitka
+              </Link>
+              <Link
+                href={`/${normalized}?bolim=postlar`}
+                className={
+                  tab === "postlar"
+                    ? "-mb-px flex items-center gap-1.5 border-b-2 border-lime pb-2.5 font-medium text-white"
+                    : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-white/45 transition-colors hover:text-white"
+                }
+              >
+                Postlar
+                {profile.postCount > 0 && (
+                  <span className="font-tabular text-xs text-white/35">{profile.postCount}</span>
+                )}
+              </Link>
+            </div>
+
+            {tab === "vizitka" && (
+              <div className="mt-4 space-y-2">
+                {profile.phone && (
+                  <ActionRow
+                    label="Qo'ng'iroq"
+                    value={profile.phone}
+                    href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
+                  />
+                )}
+                {profile.contactEmail && (
+                  <ActionRow
+                    label="Email"
+                    value={profile.contactEmail}
+                    href={`mailto:${profile.contactEmail}`}
+                  />
+                )}
+                {profile.links.map((link, index) => (
+                  <ActionRow
+                    key={link.href}
+                    label={link.label}
+                    value={linkValue(link)}
+                    // Routed through /go so the click is counted; the destination
+                    // is resolved from this index server-side, not from the URL.
+                    href={`/${normalized}/go?to=${index}`}
+                    external
+                  />
+                ))}
+              </div>
+            )}
+
+            <div className="mt-6 flex gap-8 border-t border-white/10 pt-5">
+              <div>
+                <p className="font-display text-lg font-semibold tabular-nums">
+                  {profile.followerCount}
+                </p>
+                <p className="text-xs text-white/40">Obunachi</p>
+              </div>
+              <div>
+                <p className="font-display text-lg font-semibold tabular-nums">{followingCount}</p>
+                <p className="text-xs text-white/40">Obuna</p>
+              </div>
+              <div>
+                <p className="font-display text-lg font-semibold tabular-nums">
+                  {profile.viewCount}
+                </p>
+                <p className="flex items-center gap-1 text-xs text-white/40">
+                  <Eye className="h-3 w-3" />
+                  Ko&apos;rish
+                </p>
+              </div>
+            </div>
+
+            {isOwner && (
+              <Link
+                href={`/kabinet/${normalized}`}
+                className="mt-5 block rounded-full border border-white/15 px-6 py-3 text-center text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.06] hover:text-white"
+              >
+                Profilni tahrirlash
+              </Link>
+            )}
+          </div>
         </div>
 
         {tab === "postlar" && (
@@ -323,7 +318,6 @@ async function VanityHandlePage({
             />
           </div>
         )}
-
       </PageShell>
     );
   }
@@ -382,7 +376,7 @@ async function GenesisCardPage({ serial }: { serial: string }) {
         <div className="relative mt-10 font-display text-4xl font-semibold tracking-tight">
           #<span className="text-lime">{serial}</span>
         </div>
-        <p className="relative mt-1 font-tabular text-sm text-white/50">flex.com.uz/{serial}</p>
+        <p className="relative mt-1 text-center font-tabular text-sm text-white/50">flex.com.uz/{serial}</p>
 
         {card?.status === "claimed" ? (
           <div className="relative mt-8 border-t border-white/10 pt-6">

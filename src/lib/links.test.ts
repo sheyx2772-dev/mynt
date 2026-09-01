@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { socialLink, websiteLink, buildProfileLinks } from "./links";
+import { socialLink, websiteLink, buildProfileLinks, linkValue } from "./links";
 
 describe("socialLink", () => {
   it("builds a profile URL and strips a leading @", () => {
@@ -86,5 +86,21 @@ describe("buildProfileLinks", () => {
 
   it("returns an empty list when nothing is supplied", () => {
     expect(buildProfileLinks({ telegram: "", instagram: "", linkedin: "", website: "" })).toEqual([]);
+  });
+});
+
+describe("linkValue", () => {
+  it("shows the username, not the whole address", () => {
+    expect(linkValue({ label: "Telegram", href: "https://t.me/javohir" })).toBe("@javohir");
+    expect(linkValue({ label: "LinkedIn", href: "https://linkedin.com/in/aziz-karimov" })).toBe(
+      "@aziz-karimov",
+    );
+  });
+
+  it("shows a website by its host", () => {
+    expect(linkValue({ label: "Veb-sayt", href: "https://www.flex.com.uz/" })).toBe("flex.com.uz");
+    expect(linkValue({ label: "Veb-sayt", href: "https://mc-legal.uz/team" })).toBe(
+      "mc-legal.uz/team",
+    );
   });
 });
