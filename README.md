@@ -181,6 +181,25 @@ The seed rows `MYN042` and `SIR555` keep their old handles; only their text
 was updated. Renaming a handle would break `genesis_cards.owner_handle` and
 any link already shared.
 
+### Where it runs
+
+Deployed on Vercel as the project `flex`, building `main` on every push.
+
+| | |
+|---|---|
+| Live | `https://flex-five-kohl.vercel.app` |
+| Custom domain | `flex.com.uz` — added to the project, waiting on an `A` record at `@` pointing to `216.198.79.1` |
+| Not set in production | `CLICK_*` and `PAYME_*`, so payment endpoints answer "Payment provider is not configured" and refuse to touch the store |
+
+The apex is the canonical host on purpose: Vercel offers to redirect it to
+`www` and that offer was declined, because `NEXT_PUBLIC_SITE_URL`, the Supabase
+allow-list, the sitemap and every printed card say `flex.com.uz` without it.
+
+`output: "standalone"` must stay out of `next.config.ts`. It bundles a server
+for running in a container, and Vercel's build step instead reads the default
+build's file traces — with standalone set, the deploy fails looking for
+`.next/next-server.js.nft.json`.
+
 ### Before deploying
 
 **Supabase → Authentication → URL Configuration is done.** Site URL is
