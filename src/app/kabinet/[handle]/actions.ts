@@ -56,6 +56,7 @@ export async function updateProfile(
       phone: read.profile.phone,
       position: read.profile.position,
       company: read.profile.company,
+      services: read.profile.services,
       tags: read.profile.tags,
       // Anything the renderer does not know is refused here and by a check
       // constraint, so a card can never reference a design that cannot draw.

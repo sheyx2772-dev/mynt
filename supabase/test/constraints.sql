@@ -575,3 +575,38 @@ begin
     raise notice '   ok   rejected: a position too long to sit under a name';
   end;
 end $$;
+
+-- 0020 — services
+do $$
+declare
+  uid uuid;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into uid;
+  insert into handles (letters, digits, status, user_id, claimed_at, services)
+    values ('SRV', '001', 'claimed', uid, now(),
+      '[{"name":"Shartnoma tuzish","price":"500 000 so''m"},{"name":"Konsultatsiya","price":"kelishilgan holda"}]'::jsonb);
+  raise notice '   ok   a profile can list what it sells and what it costs';
+
+  begin
+    update handles set services = '[{"price":"100 000"}]'::jsonb where normalized = 'SRV001';
+    raise exception 'nomsiz xizmat qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a price with nothing priced';
+  end;
+
+  begin
+    update handles set services = '"xizmatlar"'::jsonb where normalized = 'SRV001';
+    raise exception 'massiv bo''lmagan qiymat qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: services that are not a list';
+  end;
+
+  begin
+    update handles
+      set services = (select jsonb_agg(jsonb_build_object('name', 'x' || i)) from generate_series(1, 9) i)
+      where normalized = 'SRV001';
+    raise exception 'to''qqizta xizmat qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: more services than a card can carry';
+  end;
+end $$;

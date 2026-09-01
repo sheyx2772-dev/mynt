@@ -1,5 +1,6 @@
 "use client";
 
+import { MAX_SERVICES } from "@/lib/services";
 import { useActionState } from "react";
 import { updateProfile, type UpdateResult } from "@/app/kabinet/[handle]/actions";
 import DevicePicker from "@/components/DevicePicker";
@@ -25,6 +26,7 @@ export default function EditProfileForm({
     phone: string;
     position: string;
     company: string;
+    services: { name: string; price: string | null }[];
     tags: string;
     cardDesign: CardDesignId;
     customDesignUrl?: string | null;
@@ -197,6 +199,34 @@ export default function EditProfileForm({
         <p className="mt-1 text-xs text-flex-black/35">
           Profilda &laquo;Qo&apos;ng&apos;iroq&raquo; tugmasi chiqadi &mdash; bosilsa telefon o&apos;zi teradi.
         </p>
+      </div>
+
+      <div>
+        <label className={labelClass}>Xizmatlar va narxlar</label>
+        <p className="mb-2 text-xs text-flex-black/35">
+          Nima taklif qilasiz va qanchaga. Narxni bo&apos;sh qoldirsangiz ham bo&apos;ladi,
+          yoki &laquo;kelishilgan holda&raquo; deb yozing.
+        </p>
+        <div className="space-y-2">
+          {Array.from({ length: MAX_SERVICES }, (_, i) => (
+            <div key={i} className="grid grid-cols-[1fr_9rem] gap-2">
+              <input
+                name={`service${i}Name`}
+                placeholder={i === 0 ? "Shartnoma tuzish" : "Xizmat nomi"}
+                maxLength={60}
+                defaultValue={defaults.services[i]?.name ?? ""}
+                className={inputClass}
+              />
+              <input
+                name={`service${i}Price`}
+                placeholder={i === 0 ? "500 000 so'm" : "Narx"}
+                maxLength={40}
+                defaultValue={defaults.services[i]?.price ?? ""}
+                className={inputClass}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3">

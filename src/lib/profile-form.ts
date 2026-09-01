@@ -1,3 +1,4 @@
+import { parseServices, MAX_SERVICES, type Service } from "@/lib/services";
 import "server-only";
 
 import { buildProfileLinks } from "@/lib/links";
@@ -14,6 +15,7 @@ export type ProfileInput = {
   phone: string | null;
   position: string | null;
   company: string | null;
+  services: Service[];
   tags: string[];
 };
 
@@ -109,6 +111,12 @@ export async function readProfileForm(
       phone: parsePhone(String(formData.get("phone") ?? "")),
       position: String(formData.get("position") ?? "").trim().slice(0, 80) || null,
       company: String(formData.get("company") ?? "").trim().slice(0, 80) || null,
+      services: parseServices(
+        Array.from({ length: MAX_SERVICES }, (_, i) => ({
+          name: String(formData.get(`service${i}Name`) ?? ""),
+          price: String(formData.get(`service${i}Price`) ?? ""),
+        })),
+      ),
       tags: parseTags(String(formData.get("tags") ?? "")),
     },
   };

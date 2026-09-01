@@ -235,8 +235,8 @@ async function VanityHandlePage({
                 saturated lime slab is the loudest thing on a screen and reads as
                 an app's call to action; the card wants the quietest possible
                 statement of the one thing to do. */}
-            <div className="mt-6 flex gap-2">
-              <div className="min-w-0 flex-1">
+            <div className="mt-6 flex flex-col gap-2">
+              <div className="min-w-0">
                 <SaveContactButton
                   fullName={profile.name}
                   handle={normalized}
@@ -247,11 +247,7 @@ async function VanityHandlePage({
                   company={profile.company}
                 />
               </div>
-              {!isOwner && (
-                <div className="shrink-0">
-                  <FollowButton handle={normalized} initialFollowing={following} compact />
-                </div>
-              )}
+              {!isOwner && <FollowButton handle={normalized} initialFollowing={following} />}
             </div>
 
             <div className="mt-7 flex gap-7 border-b border-white/[0.08] text-[11px] tracking-[0.16em] uppercase">
@@ -310,6 +306,29 @@ async function VanityHandlePage({
                     external
                   />
                 ))}
+              </div>
+            )}
+
+            {tab === "vizitka" && profile.services.length > 0 && (
+              <div className="mt-6">
+                <p className="text-[10px] font-medium tracking-[0.18em] text-white/35 uppercase">
+                  Xizmatlar
+                </p>
+                <ul className="mt-3 divide-y divide-white/[0.07] overflow-hidden rounded-xl border border-white/[0.08]">
+                  {profile.services.map((service) => (
+                    <li
+                      key={service.name}
+                      className="flex items-baseline justify-between gap-4 px-4 py-3"
+                    >
+                      <span className="min-w-0 text-sm text-white/85">{service.name}</span>
+                      {service.price && (
+                        <span className="shrink-0 font-tabular text-sm text-[color:var(--accent)]">
+                          {service.price}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
 
