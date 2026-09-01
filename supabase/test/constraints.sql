@@ -550,3 +550,28 @@ begin
     raise notice '   ok   rejected: a reason too short to mean anything';
   end;
 end $$;
+
+-- 0019 — contact fields
+do $$
+declare
+  uid uuid;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into uid;
+  insert into handles (letters, digits, status, user_id, claimed_at, phone, position, company)
+    values ('CNT', '001', 'claimed', uid, now(), '+998 90 123 45 67', 'Direktor', 'MC LEGAL');
+  raise notice '   ok   a profile can carry a phone, a position and a company';
+
+  begin
+    update handles set phone = 'aloqa uchun qongiroq qiling' where normalized = 'CNT001';
+    raise exception 'harfli telefon qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a phone number that is not a number';
+  end;
+
+  begin
+    update handles set position = repeat('x', 81) where normalized = 'CNT001';
+    raise exception 'juda uzun lavozim qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a position too long to sit under a name';
+  end;
+end $$;

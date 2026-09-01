@@ -22,6 +22,9 @@ export default function EditProfileForm({
     website: string;
     city: string;
     contactEmail: string;
+    phone: string;
+    position: string;
+    company: string;
     tags: string;
     cardDesign: CardDesignId;
     customDesignUrl?: string | null;
@@ -146,6 +149,53 @@ export default function EditProfileForm({
         />
         <p className="mt-1 text-xs text-flex-black/35">
           Vergul bilan ajrating, 5 tagacha. Profilda #teg ko&apos;rinishida chiqadi.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass} htmlFor="position">
+            Lavozim
+          </label>
+          <input
+            id="position"
+            name="position"
+            placeholder="Direktor"
+            maxLength={80}
+            defaultValue={defaults.position}
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className={labelClass} htmlFor="company">
+            Kompaniya
+          </label>
+          <input
+            id="company"
+            name="company"
+            placeholder="MC LEGAL"
+            maxLength={80}
+            defaultValue={defaults.company}
+            className={inputClass}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className={labelClass} htmlFor="phone">
+          Telefon
+        </label>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          inputMode="tel"
+          placeholder="+998 90 123 45 67"
+          defaultValue={defaults.phone}
+          className={inputClass}
+        />
+        <p className="mt-1 text-xs text-flex-black/35">
+          Profilda &laquo;Qo&apos;ng&apos;iroq&raquo; tugmasi chiqadi &mdash; bosilsa telefon o&apos;zi teradi.
         </p>
       </div>
 

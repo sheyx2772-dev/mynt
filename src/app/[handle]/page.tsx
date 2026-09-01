@@ -2,12 +2,13 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { after } from "next/server";
 import type { Metadata } from "next";
-import { Nfc, Eye, MapPin, Mail } from "lucide-react";
+import { Nfc, Eye, MapPin, Mail, Phone } from "lucide-react";
 import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRarity } from "@/lib/pricing";
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import SaveContactButton from "@/components/SaveContactButton";
 import ShareButton from "@/components/ShareButton";
+import ProfileHandleSearch from "@/components/ProfileHandleSearch";
 import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
@@ -133,6 +134,13 @@ async function VanityHandlePage({
           </div>
 
           <h1 className="relative mt-5 font-display text-2xl font-semibold">{profile.name}</h1>
+
+          {(profile.position || profile.company) && (
+            <p className="relative mt-1 text-sm text-white/60">
+              {[profile.position, profile.company].filter(Boolean).join(" · ")}
+            </p>
+          )}
+
           <p className="relative mt-1 font-tabular text-sm text-white/50">flex.com.uz/{normalized}</p>
 
           {lastSeen && (
@@ -211,8 +219,26 @@ async function VanityHandlePage({
 
         {tab === "vizitka" ? (
           <>
-          <div className="mt-6">
-            <SaveContactButton fullName={profile.name} handle={normalized} bio={profile.bio} />
+          {profile.phone && (
+            <a
+              href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
+              className="mt-6 flex items-center justify-center gap-2 rounded-full bg-flex-black px-6 py-3 text-center font-medium text-white transition-transform hover:scale-[1.01]"
+            >
+              <Phone className="h-4 w-4" />
+              Qo&apos;ng&apos;iroq qilish
+            </a>
+          )}
+
+          <div className={profile.phone ? "mt-3" : "mt-6"}>
+            <SaveContactButton
+              fullName={profile.name}
+              handle={normalized}
+              bio={profile.bio}
+              phone={profile.phone}
+              email={profile.contactEmail}
+              position={profile.position}
+              company={profile.company}
+            />
           </div>
 
           {isOwner && (
@@ -240,7 +266,7 @@ async function VanityHandlePage({
             ))}
           </div>
 
-          {(profile.city || profile.contactEmail) && (
+          {(profile.city || profile.contactEmail || profile.phone) && (
             <div className="mt-6 rounded-xl border border-black/10 bg-white px-5 py-4">
               <p className="mb-3 text-xs font-medium tracking-wide text-flex-black/40 uppercase">
                 Kontaktlar
@@ -249,6 +275,17 @@ async function VanityHandlePage({
                 <p className="flex items-center gap-2 text-sm text-flex-black/70">
                   <MapPin className="h-4 w-4 text-flex-black/35" />
                   {profile.city}
+                </p>
+              )}
+              {profile.phone && (
+                <p className="mt-2 flex items-center gap-2 text-sm">
+                  <Phone className="h-4 w-4 text-flex-black/35" />
+                  <a
+                    href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
+                    className="font-tabular text-flex-black/70 underline-offset-2 hover:underline"
+                  >
+                    {profile.phone}
+                  </a>
                 </p>
               )}
               {profile.contactEmail && (
@@ -277,6 +314,24 @@ async function VanityHandlePage({
             />
           </div>
         )}
+
+        {/* Every profile is a shop window. A visitor arriving from a tapped
+            card or a forwarded link is at the exact moment of wanting one, and
+            until now the page gave them nowhere to go.
+
+            The price shown is what a handle of this rarity costs today, not an
+            asking price — this one is taken. It is here because it is the
+            honest answer to the question the search bar provokes: what would
+            mine cost? */}
+        <div className="mt-10 border-t border-black/10 pt-6">
+          <p className="text-sm text-flex-black/55">
+            Shu darajadagi raqam narxi —{" "}
+            <span className="font-tabular font-medium text-flex-black">
+              {formatUZS(priceForHandle(letters, digits))}
+            </span>
+          </p>
+          <ProfileHandleSearch />
+        </div>
       </PageShell>
     );
   }

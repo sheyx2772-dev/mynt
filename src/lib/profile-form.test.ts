@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseTags, parseContactEmail, linkFieldValue } from "./profile-form";
+import { parseTags, parseContactEmail, linkFieldValue, parsePhone } from "./profile-form";
 
 describe("parseTags", () => {
   it("splits on commas and whitespace and strips a leading hash", () => {
@@ -65,5 +65,25 @@ describe("linkFieldValue", () => {
 
   it("returns an empty string when the link is absent", () => {
     expect(linkFieldValue(links, "Instagram")).toBe("");
+  });
+});
+
+describe("parsePhone", () => {
+  it("keeps the owner's own formatting", () => {
+    expect(parsePhone("+998 90 123 45 67")).toBe("+998 90 123 45 67");
+    expect(parsePhone("(71) 231-08-83")).toBe("(71) 231-08-83");
+  });
+
+  it("treats an empty field as no phone rather than an error", () => {
+    expect(parsePhone("")).toBeNull();
+    expect(parsePhone("   ")).toBeNull();
+  });
+
+  // A tel: link is built from this, so anything that is not a number has to be
+  // dropped rather than rendered as a dial button that dials nothing.
+  it("rejects anything that is not a number", () => {
+    expect(parsePhone("qo'ng'iroq qiling")).toBeNull();
+    expect(parsePhone("12345")).toBeNull();
+    expect(parsePhone("1".repeat(31))).toBeNull();
   });
 });

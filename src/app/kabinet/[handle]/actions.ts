@@ -53,6 +53,9 @@ export async function updateProfile(
       avatar_url: read.profile.avatarUrl,
       city: read.profile.city,
       contact_email: read.profile.contactEmail,
+      phone: read.profile.phone,
+      position: read.profile.position,
+      company: read.profile.company,
       tags: read.profile.tags,
       // Anything the renderer does not know is refused here and by a check
       // constraint, so a card can never reference a design that cannot draw.

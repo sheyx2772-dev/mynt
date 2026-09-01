@@ -11,6 +11,9 @@ export type ProfileInput = {
   avatarUrl: string | null;
   city: string | null;
   contactEmail: string | null;
+  phone: string | null;
+  position: string | null;
+  company: string | null;
   tags: string[];
 };
 
@@ -32,6 +35,19 @@ export function parseTags(raw: string): string[] {
 
 // Shown publicly and turned into a mailto: link, so an address that is not
 // one is dropped rather than rendered.
+/**
+ * A phone number as a person types it, or nothing.
+ *
+ * Digits, spaces and the usual punctuation are kept as entered rather than
+ * normalised: a number is dialled by a phone, and the owner's own formatting
+ * is what they recognise on their card.
+ */
+export function parsePhone(raw: string): string | null {
+  const value = raw.trim();
+  if (!value) return null;
+  return /^[0-9+()\- ]{7,30}$/.test(value) ? value : null;
+}
+
 export function parseContactEmail(raw: string): string | null {
   const value = raw.trim().slice(0, 120);
   if (!value) return null;
@@ -90,6 +106,9 @@ export async function readProfileForm(
       avatarUrl,
       city: String(formData.get("city") ?? "").trim().slice(0, 60) || null,
       contactEmail: parseContactEmail(String(formData.get("contactEmail") ?? "")),
+      phone: parsePhone(String(formData.get("phone") ?? "")),
+      position: String(formData.get("position") ?? "").trim().slice(0, 80) || null,
+      company: String(formData.get("company") ?? "").trim().slice(0, 80) || null,
       tags: parseTags(String(formData.get("tags") ?? "")),
     },
   };

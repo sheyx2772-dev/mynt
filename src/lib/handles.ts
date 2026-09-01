@@ -11,6 +11,9 @@ export type ClaimedProfile = {
   links: { label: string; href: string }[];
   city: string | null;
   contactEmail: string | null;
+  phone: string | null;
+  position: string | null;
+  company: string | null;
   tags: string[];
   lastSeenAt: string | null;
   viewCount: number;
@@ -24,6 +27,9 @@ const DEMO_PROFILES: Record<string, ClaimedProfile> = {
     userId: null,
     city: "Toshkent",
     contactEmail: null,
+    phone: null,
+    position: null,
+    company: null,
     tags: ["Startup"],
     lastSeenAt: null,
     viewCount: 0,
@@ -49,7 +55,7 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
   const { data } = await supabase
     .from("handles")
     .select(
-      "user_id, owner_name, bio, avatar_url, links, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count"
+      "user_id, owner_name, bio, avatar_url, links, city, contact_email, phone, position, company, tags, last_seen_at, view_count, follower_count, post_count"
     )
     .eq("normalized", normalized)
     .eq("status", "claimed")
@@ -65,6 +71,9 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
     links: Array.isArray(data.links) ? data.links : [],
     city: data.city ?? null,
     contactEmail: data.contact_email ?? null,
+    phone: data.phone ?? null,
+    position: data.position ?? null,
+    company: data.company ?? null,
     tags: Array.isArray(data.tags) ? data.tags : [],
     lastSeenAt: data.last_seen_at ?? null,
     viewCount: Number(data.view_count ?? 0),
@@ -150,6 +159,9 @@ export type OwnedHandle = {
   reservedUntil: string | null;
   city: string | null;
   contactEmail: string | null;
+  phone: string | null;
+  position: string | null;
+  company: string | null;
   tags: string[];
   viewCount: number;
   cardDesign: CardDesignId;
@@ -171,6 +183,9 @@ function rowToOwned(row: Record<string, unknown>): OwnedHandle {
     reservedUntil: (row.reserved_until as string) ?? null,
     city: (row.city as string) ?? null,
     contactEmail: (row.contact_email as string) ?? null,
+    phone: (row.phone as string) ?? null,
+    position: (row.position as string) ?? null,
+    company: (row.company as string) ?? null,
     tags: Array.isArray(row.tags) ? (row.tags as string[]) : [],
     viewCount: Number(row.view_count ?? 0),
     cardDesign: isCardDesign(row.card_design) ? row.card_design : DEFAULT_CARD_DESIGN,
@@ -182,7 +197,7 @@ function rowToOwned(row: Record<string, unknown>): OwnedHandle {
 // One string literal, not a concatenation: Supabase infers the row type from
 // this text, and a joined expression makes it give up and return an error type.
 const OWNED_COLUMNS =
-  "normalized, status, owner_name, bio, avatar_url, links, price_paid, claimed_at, reserved_until, city, contact_email, tags, view_count, card_design, device_type, custom_design_url";
+  "normalized, status, owner_name, bio, avatar_url, links, price_paid, claimed_at, reserved_until, city, contact_email, phone, position, company, tags, view_count, card_design, device_type, custom_design_url";
 
 // Everything the signed-in user owns or is currently holding.
 export async function listHandlesForUser(userId: string): Promise<OwnedHandle[]> {
