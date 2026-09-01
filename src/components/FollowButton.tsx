@@ -50,8 +50,8 @@ export default function FollowButton({
         title={label}
         className={
           following
-            ? "flex h-[46px] w-[46px] items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:bg-white/5 disabled:opacity-60"
-            : "flex h-[46px] w-[46px] items-center justify-center rounded-full border border-white/20 bg-white/[0.06] text-white transition-colors hover:bg-white/[0.12] disabled:opacity-60"
+            ? "flex h-[50px] w-[50px] items-center justify-center rounded-xl border border-white/25 text-white/70 transition-colors hover:bg-white/5 disabled:opacity-60"
+            : "flex h-[50px] w-[50px] items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] text-white/80 transition-colors hover:border-white/30 hover:text-white disabled:opacity-60"
         }
       >
         {following ? <UserCheck className="h-5 w-5" /> : <UserPlus className="h-5 w-5" />}

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { after } from "next/server";
 import type { Metadata } from "next";
-import { Nfc, Eye } from "lucide-react";
+import { Nfc } from "lucide-react";
 import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRarity } from "@/lib/pricing";
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
@@ -121,39 +121,42 @@ async function VanityHandlePage({
         <ProfileHandleSearch />
 
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-black/12 bg-white px-3.5 py-1.5 font-tabular text-sm tracking-wider shadow-sm">
+          <span className="rounded-lg border border-black/12 bg-white px-3 py-1.5 font-tabular text-xs tracking-[0.14em] shadow-sm">
             {normalized}
           </span>
-          <span className="rounded-full bg-flex-black px-3.5 py-1.5 font-tabular text-sm text-white">
+          <span className="rounded-lg bg-flex-black px-3 py-1.5 font-tabular text-xs tracking-wide text-white">
             {formatUZS(priceForHandle(letters, digits))}
           </span>
         </div>
 
-        <div className="relative mt-1 overflow-hidden rounded-[1.75rem] bg-flex-black text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
-          {/* Every card in this market opens with a banner and an avatar lapping
-              over it. It is what makes a profile read as a card rather than a
-              list, and ours had nothing above the initials. */}
-          {/* The gradient and the sheen are separate layers on purpose:
-              `.card-sheen` sets background-image, so a gradient utility on the
-              same element is silently overwritten by it. */}
-          <div className="grain relative h-28 bg-[radial-gradient(90%_150%_at_15%_-10%,#5c9600_0%,#2b4a06_35%,#171128_68%,#0e0a1b_100%)]">
-            <div className="card-sheen absolute inset-0" />
+        <div className="relative mt-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0B0B0F] text-white shadow-[0_40px_80px_-30px_rgba(0,0,0,0.75)]">
+          {/* The banner carries the handle as a watermark rather than a colour
+              wash. It is the one thing on the card that cannot be reproduced,
+              and it belongs at the top for the same reason a serial is engraved
+              on the object and not printed on the sleeve. */}
+          <div className="grain relative h-24 bg-[linear-gradient(160deg,#17171e_0%,#0B0B0F_75%)]">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute top-5 left-6 font-display text-[2.6rem] leading-none font-semibold tracking-[0.08em] text-white/[0.06] select-none"
+            >
+              {normalized}
+            </span>
             <div className="absolute top-4 right-4 z-10">
               <ShareButton handle={normalized} name={profile.name} />
             </div>
           </div>
 
           <div className="relative px-6 pb-6">
-            <div className="-mt-11 mb-4">
+            <div className="-mt-10 mb-5">
               {profile.avatarUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
                 <img
                   src={profile.avatarUrl}
                   alt={profile.name}
-                  className="h-22 w-22 rounded-2xl border-4 border-flex-black object-cover"
+                  className="h-20 w-20 rounded-xl border border-white/15 object-cover shadow-[0_12px_30px_-12px_rgba(0,0,0,0.9)]"
                 />
               ) : (
-                <div className="flex h-22 w-22 items-center justify-center rounded-2xl border-4 border-flex-black bg-lime font-display text-2xl font-semibold text-flex-black">
+                <div className="flex h-20 w-20 items-center justify-center rounded-xl border border-white/15 bg-[#15151b] font-display text-xl font-semibold tracking-wide text-white/80">
                   {profile.name
                     .split(" ")
                     .map((p) => p[0])
@@ -162,43 +165,38 @@ async function VanityHandlePage({
               )}
             </div>
 
-            <h1 className="font-display text-2xl font-semibold">{profile.name}</h1>
+            <h1 className="font-display text-[1.65rem] leading-tight font-semibold tracking-tight">
+              {profile.name}
+            </h1>
 
-            {profile.company && (
-              <p className="mt-0.5 text-base text-lime">{profile.company}</p>
-            )}
-
-            {(profile.position || profile.city) && (
-              <p className="mt-1.5 border-l-2 border-lime/50 pl-2.5 text-sm leading-snug text-white/55">
-                {profile.position}
-                {profile.position && profile.city && <br />}
-                {profile.city}
+            {(profile.position || profile.company) && (
+              <p className="mt-2 text-[11px] font-medium tracking-[0.18em] text-white/45 uppercase">
+                {[profile.position, profile.company].filter(Boolean).join(" · ")}
               </p>
             )}
 
-            <p className="mt-2 font-tabular text-sm text-white/40">flex.com.uz/{normalized}</p>
-
-            {lastSeen && <p className="mt-1 text-xs text-white/35">Oxirgi faollik: {lastSeen}</p>}
-
-            {profile.bio && <p className="mt-4 text-sm text-white/70">{profile.bio}</p>}
+            {profile.bio && (
+              <p className="mt-4 text-sm leading-relaxed text-white/60">{profile.bio}</p>
+            )}
 
             {profile.tags.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5">
                 {profile.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full border border-white/15 px-2.5 py-1 text-xs text-white/60"
+                    className="text-[10px] tracking-[0.14em] text-white/30 uppercase"
                   >
-                    #{tag}
+                    {tag}
                   </span>
                 ))}
               </div>
             )}
 
-            {/* The save-contact action and sharing sit side by side, the way the
-                whole market lays them out: the wide one is the thing to do, the
-                square one is the thing to keep. */}
-            <div className="mt-5 flex gap-2">
+            {/* A rectangle, not a pill, and white rather than brand-filled. A
+                saturated lime slab is the loudest thing on a screen and reads as
+                an app's call to action; the card wants the quietest possible
+                statement of the one thing to do. */}
+            <div className="mt-6 flex gap-2">
               <div className="min-w-0 flex-1">
                 <SaveContactButton
                   fullName={profile.name}
@@ -217,13 +215,13 @@ async function VanityHandlePage({
               )}
             </div>
 
-            <div className="mt-6 flex gap-6 border-b border-white/10 text-sm">
+            <div className="mt-7 flex gap-7 border-b border-white/[0.08] text-[11px] tracking-[0.16em] uppercase">
               <Link
                 href={`/${normalized}`}
                 className={
                   tab === "vizitka"
-                    ? "-mb-px border-b-2 border-lime pb-2.5 font-medium text-white"
-                    : "-mb-px border-b-2 border-transparent pb-2.5 text-white/45 transition-colors hover:text-white"
+                    ? "-mb-px border-b border-lime pb-3 font-medium text-white"
+                    : "-mb-px border-b border-transparent pb-3 text-white/35 transition-colors hover:text-white/70"
                 }
               >
                 Vizitka
@@ -232,19 +230,19 @@ async function VanityHandlePage({
                 href={`/${normalized}?bolim=postlar`}
                 className={
                   tab === "postlar"
-                    ? "-mb-px flex items-center gap-1.5 border-b-2 border-lime pb-2.5 font-medium text-white"
-                    : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-white/45 transition-colors hover:text-white"
+                    ? "-mb-px flex items-center gap-1.5 border-b border-lime pb-3 font-medium text-white"
+                    : "-mb-px flex items-center gap-1.5 border-b border-transparent pb-3 text-white/35 transition-colors hover:text-white/70"
                 }
               >
                 Postlar
                 {profile.postCount > 0 && (
-                  <span className="font-tabular text-xs text-white/35">{profile.postCount}</span>
+                  <span className="font-tabular text-white/25">{profile.postCount}</span>
                 )}
               </Link>
             </div>
 
             {tab === "vizitka" && (
-              <div className="mt-4 space-y-2">
+              <div className="mt-5 divide-y divide-white/[0.07] overflow-hidden rounded-xl border border-white/[0.08]">
                 {profile.phone && (
                   <ActionRow
                     label="Qo'ng'iroq"
@@ -258,6 +256,9 @@ async function VanityHandlePage({
                     value={profile.contactEmail}
                     href={`mailto:${profile.contactEmail}`}
                   />
+                )}
+                {profile.city && (
+                  <ActionRow label="Manzil" value={profile.city} href={`/rezidentlar?q=${encodeURIComponent(profile.city)}`} />
                 )}
                 {profile.links.map((link, index) => (
                   <ActionRow
@@ -273,35 +274,55 @@ async function VanityHandlePage({
               </div>
             )}
 
-            <div className="mt-6 flex gap-8 border-t border-white/10 pt-5">
-              <div>
-                <p className="font-display text-lg font-semibold tabular-nums">
-                  {profile.followerCount}
-                </p>
-                <p className="text-xs text-white/40">Obunachi</p>
-              </div>
-              <div>
-                <p className="font-display text-lg font-semibold tabular-nums">{followingCount}</p>
-                <p className="text-xs text-white/40">Obuna</p>
-              </div>
-              <div>
-                <p className="font-display text-lg font-semibold tabular-nums">
-                  {profile.viewCount}
-                </p>
-                <p className="flex items-center gap-1 text-xs text-white/40">
-                  <Eye className="h-3 w-3" />
-                  Ko&apos;rish
-                </p>
-              </div>
-            </div>
-
             {isOwner && (
               <Link
                 href={`/kabinet/${normalized}`}
-                className="mt-5 block rounded-full border border-white/15 px-6 py-3 text-center text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.06] hover:text-white"
+                className="mt-4 block rounded-xl border border-white/12 py-3 text-center text-[11px] font-medium tracking-[0.16em] text-white/55 uppercase transition-colors hover:border-white/25 hover:text-white"
               >
-                Profilni tahrirlash
+                Tahrirlash
               </Link>
+            )}
+
+            {/* The foot of the card, the way an object is marked: what it is,
+                which one it is, and nothing else. */}
+            <div className="mt-7 flex items-end justify-between border-t border-white/[0.08] pt-5">
+              <div className="flex gap-7">
+                <div>
+                  <p className="font-display text-base font-semibold tabular-nums">
+                    {profile.followerCount}
+                  </p>
+                  <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
+                    Obunachi
+                  </p>
+                </div>
+                <div>
+                  <p className="font-display text-base font-semibold tabular-nums">
+                    {followingCount}
+                  </p>
+                  <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
+                    Obuna
+                  </p>
+                </div>
+                <div>
+                  <p className="font-display text-base font-semibold tabular-nums">
+                    {profile.viewCount}
+                  </p>
+                  <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
+                    Ko&apos;rish
+                  </p>
+                </div>
+              </div>
+
+              <p className="flex items-center gap-1.5 text-[10px] tracking-[0.2em] text-white/25 uppercase">
+                <span className="h-1 w-1 rounded-full bg-lime" />
+                Flex
+              </p>
+            </div>
+
+            {lastSeen && (
+              <p className="mt-4 text-[10px] tracking-[0.14em] text-white/25 uppercase">
+                Oxirgi faollik — {lastSeen}
+              </p>
             )}
           </div>
         </div>

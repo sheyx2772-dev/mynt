@@ -61,7 +61,7 @@ export default function SaveContactButton({
   return (
     <button
       onClick={handleSave}
-      className="w-full rounded-full bg-lime px-6 py-3 text-center font-medium text-flex-black transition-transform hover:scale-[1.01]"
+      className="w-full rounded-xl bg-white px-6 py-3.5 text-center text-[11px] font-semibold tracking-[0.16em] text-flex-black uppercase transition-colors hover:bg-white/90"
     >
       Kontaktni saqlash
     </button>
