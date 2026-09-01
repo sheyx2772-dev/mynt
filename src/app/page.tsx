@@ -219,7 +219,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <HeroStage shot={productShot("karta-hero")} />
+                <HeroStage shot={productShot("hero")} />
               </div>
             </div>
           </div>

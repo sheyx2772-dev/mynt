@@ -50,9 +50,11 @@ def save(im, name, width):
 
 
 # Scene frames: crop by focal point, since the object floats in a wider room.
+# The hero carries all three form factors rather than the card alone — the
+# headline is about choosing what to carry the number in, so a lone card
+# argued against the sentence next to it.
 SCENES = [
-    ("card-office.jpeg", "karta-hero", 16 / 10, (0.49, 0.55), 1600),
-    ("trio-office.jpeg", "oila", 16 / 9, (0.50, 0.58), 1600),
+    ("trio-studio.jpeg", "hero", 16 / 9, (0.50, 0.50), 1600),
 ]
 
 # The three-up sheet: fixed boxes, each kept inside its own panel so no gutter
