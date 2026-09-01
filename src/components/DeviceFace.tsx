@@ -1,6 +1,7 @@
+import Image from "next/image";
 import { Nfc } from "lucide-react";
 import { SKINS } from "@/lib/device-skins";
-import type { CardDesignId } from "@/lib/card-designs";
+import { cardDesign, type CardDesignId } from "@/lib/card-designs";
 import type { DeviceTypeId } from "@/lib/devices";
 
 // The same handle rendered on whichever object its owner chose to carry it.
@@ -12,11 +13,22 @@ type FaceProps = { design: CardDesignId; handle: string; compact?: boolean };
 
 function Card({ design, handle, compact }: FaceProps) {
   const skin = SKINS[design];
+  const art = cardDesign(design);
   return (
     <div
       className={`relative isolate aspect-[1.586] w-full overflow-hidden ${compact ? "rounded-lg p-2" : "rounded-2xl p-5"} ${skin.shell} ${skin.ink} shadow-[0_20px_40px_-24px_rgba(14,10,27,0.5)]`}
     >
-      {skin.overlay && <div className="absolute inset-0 -z-10" style={skin.overlay} />}
+      {art.image ? (
+        <Image
+          src={art.image}
+          alt=""
+          fill
+          sizes="(min-width: 640px) 24rem, 100vw"
+          className="-z-10 object-cover"
+        />
+      ) : (
+        skin.overlay && <div className="absolute inset-0 -z-10" style={skin.overlay} />
+      )}
       <div className="flex h-full flex-col justify-between">
         <div className="flex items-start justify-between">
           <span
@@ -24,16 +36,20 @@ function Card({ design, handle, compact }: FaceProps) {
           >
             FLEX
           </span>
-          {/* The NFC mark sits in a recessed disc, as it does on a real card. */}
-          <span
-            className={`flex items-center justify-center rounded-full ${compact ? "h-3.5 w-3.5" : "h-7 w-7"}`}
-            style={{
-              background: "rgba(0,0,0,0.35)",
-              boxShadow: "inset 0 1px 2px rgba(0,0,0,0.6), 0 0.5px 0 rgba(255,255,255,0.08)",
-            }}
-          >
-            <Nfc className={`${compact ? "h-2 w-2" : "h-3.5 w-3.5"} ${skin.muted}`} />
-          </span>
+          {/* The NFC mark sits in a recessed disc, as it does on a real card —
+              unless the artwork already printed one, in which case drawing a
+              second would put two contactless symbols in the same corner. */}
+          {!art.artworkHasNfc && (
+            <span
+              className={`flex items-center justify-center rounded-full ${compact ? "h-3.5 w-3.5" : "h-7 w-7"}`}
+              style={{
+                background: "rgba(0,0,0,0.35)",
+                boxShadow: "inset 0 1px 2px rgba(0,0,0,0.6), 0 0.5px 0 rgba(255,255,255,0.08)",
+              }}
+            >
+              <Nfc className={`${compact ? "h-2 w-2" : "h-3.5 w-3.5"} ${skin.muted}`} />
+            </span>
+          )}
         </div>
         <div>
           <div className={`flex items-center ${compact ? "gap-1" : "gap-2"}`}>

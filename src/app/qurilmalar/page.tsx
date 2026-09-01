@@ -55,7 +55,7 @@ export default function DevicesPage() {
         {/* The design set, shared across every form */}
         <div className="mt-24 border-t border-black/8 pt-14">
           <h2 className="max-w-lg font-display text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
-            Oltita dizayn &mdash; uchala shaklda ham
+            {CARD_DESIGNS.length} ta dizayn &mdash; uchala shaklda ham
           </h2>
           <p className="mt-3 max-w-xl text-flex-black/60">
             Dizaynni bir marta tanlaysiz va u tanlagan buyumingizga tushadi. Kabinetdan

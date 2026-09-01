@@ -61,4 +61,25 @@ export const SKINS: Record<CardDesignId, Skin> = {
     muted: "text-flex-black/40",
     accent: "bg-flex-black",
   },
+  // Artwork-backed designs. The shell is the ink the printed image is darkest
+  // in, so the overlaid handle stays legible while the artwork loads and on the
+  // ring and bracelet, which have no room for a photograph.
+  rahbar: {
+    shell: "bg-[#0b0b0c]",
+    ink: "text-white",
+    muted: "text-white/55",
+    accent: "bg-white/70",
+  },
+  devops: {
+    shell: "bg-[#131417]",
+    ink: "text-white",
+    muted: "text-white/55",
+    accent: "bg-lime",
+  },
+  suzani: {
+    shell: "bg-[#2b2a5e]",
+    ink: "text-white",
+    muted: "text-white/60",
+    accent: "bg-[#d9b26a]",
+  },
 };
