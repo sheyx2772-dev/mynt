@@ -207,7 +207,22 @@ for running in a container, and Vercel's build step instead reads the default
 build's file traces — with standalone set, the deploy fails looking for
 `.next/next-server.js.nft.json`.
 
-### Outstanding: migration 0014 is not applied
+### Outstanding: migrations 0014-0017 are not applied
+
+Four migrations are written, tested against a real Postgres, and deployed as
+code — but none of them has reached the project, so each feature they carry
+errors rather than works:
+
+| | What breaks without it |
+|---|---|
+| `0014_handle_transfers.sql` | the cabinet's transfer panel |
+| `0015_plans.sql` | nothing yet — the plans are presentation only so far |
+| `0016_team_requests.sql` | the team order form falls back to the phone number |
+| `0017_gift_reason.sql` | `scripts/handles.py` |
+
+The team form was written to degrade rather than fail: with the table missing it
+shows the phone number instead of an error, which is the state production is in
+right now.
 
 `handle_transfers` does not exist in the project yet. The code for handing a
 handle to someone else is written, tested and deployed, but the cabinet's

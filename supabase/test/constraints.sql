@@ -526,3 +526,27 @@ begin
     raise notice '   ok   rejected: a team of nobody';
   end;
 end $$;
+
+-- 0017 — gifted handles
+do $$
+declare
+  uid uuid;
+  paid numeric;
+  reason text;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into uid;
+  insert into handles (letters, digits, status, user_id, claimed_at, gift_reason)
+    values ('GFT', '001', 'claimed', uid, now(), 'sartarosh, Chilonzor');
+
+  select price_paid, gift_reason into paid, reason from handles where normalized = 'GFT001';
+  if paid is not null then raise exception 'sovga narx bilan yozildi'; end if;
+  if reason is null then raise exception 'sabab saqlanmadi'; end if;
+  raise notice '   ok   a gifted handle carries a reason and no price';
+
+  begin
+    update handles set gift_reason = 'ha' where normalized = 'GFT001';
+    raise exception 'juda qisqa sabab qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a reason too short to mean anything';
+  end;
+end $$;
