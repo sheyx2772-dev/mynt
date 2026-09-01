@@ -70,6 +70,11 @@ credentials, so schema changes can be checked before they reach the project.
 | `0011_artwork_card_designs.sql` | widens the design set for the three artwork-backed fronts |
 | `0012_xarita_design.sql` | adds the Xarita design |
 | `0013_design_requests.sql` | made-to-order designs: the queue, and per-handle artwork |
+| `0014_handle_transfers.sql` | handing a handle to someone else |
+| `0015_plans.sql` | the subscription tier a handle is on |
+| `0016_team_requests.sql` | companies asking for a team order |
+| `0017_gift_reason.sql` | handles given rather than sold |
+| `0018_visit_source.sql` | whether a visit came from the device, the QR code or a link |
 
 ### Auth
 

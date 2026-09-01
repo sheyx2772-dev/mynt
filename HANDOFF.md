@@ -16,7 +16,7 @@ braslet ko'rinishida olib yuradi — tanlov foydalanuvchiniki, profil bitta.
 |---|---|
 | Sayt | https://flex-five-kohl.vercel.app — ishlayapti |
 | Deploy | Vercel, `main` ga har push avtomatik chiqadi |
-| Baza | Supabase, migratsiyalar 0001–0013 qo'llangan |
+| Baza | Supabase, migratsiyalar 0001–0018 qo'llangan |
 | Payme | ishlayapti, production'da tekshirilgan |
 | Click | yarim — `service_id` bor, `merchant_id` va kalit yo'q |
 | Domen | `flex.com.uz` olingan, DNS hali yo'naltirilmagan |
@@ -38,6 +38,7 @@ nomlarni sanaydi. Qiymatlar ikki joyda:
 | `CLICK_MERCHANT_ID` | kabinetda ko'rsatilmaydi — Click'dan so'rash kerak |
 | `CLICK_SECRET_KEY` | mc.click.uz → Сервисы → ko'z belgisi |
 | `GEMINI_API_KEY` | aistudio.google.com/apikey |
+| `SUPABASE_ACCESS_TOKEN` | supabase.com/dashboard/account/tokens — migratsiyalar uchun |
 | `ANALYTICS_SALT` | istalgan uzun tasodifiy satr; **bir marta qo'yiladi va o'zgartirilmaydi** |
 
 Production'dagi qiymatlar Vercel → Settings → Environment Variables da turadi.
@@ -68,10 +69,13 @@ keyingi odam ularni qaytadan boshdan kechiradi.
 **Egasi dasturchi emas.** Ko'rsatma berib qo'yish ishlamaydi — ish o'zi
 bajarilishi kerak. Buyruq berilsa, u odatda bajarilmay qoladi.
 
-**Migratsiyalar brauzer orqali qo'llanadi.** `SUPABASE_ACCESS_TOKEN` yo'q, ya'ni
-`npm run db:migrate` ishlamaydi. SQL Supabase SQL muharririga qo'yiladi. Monaco
-muharririga matnni `monaco.editor.getModels()[0].setValue(...)` bilan yozish
-mumkin — nusxalash-qo'yish u yerga o'tmaydi.
+**Migratsiyalar `npm run db:migrate` bilan qo'llanadi.** `.env.local` da
+`SUPABASE_ACCESS_TOKEN` bor. Bu loyihaning ko'p qismida yo'q edi va shuning
+uchun 0001–0013 qo'lda, SQL muharriri orqali qo'llangan — u yo'lga qaytish
+shart emas.
+
+Agar baribir SQL muharriri kerak bo'lsa: nusxalash-qo'yish panelga o'tmaydi,
+matnni `monaco.editor.getModels()[0].setValue(...)` bilan yozish kerak.
 
 **Brauzer panelida "qo'yish" jimgina ishlaydi.** ⌘V sahifaga yetadi, lekin
 panel darrov qayta chizmaydi. Foydalanuvchi hech nima bo'lmadi deb yana bosadi.
@@ -85,6 +89,19 @@ kesh buziladi.
 **Generator yashilni har xil chiqaradi.** Studiya kadrlari ~150°, tegizish
 kadri ~111° bo'lib keldi. `scripts/prep-shots.py` har bir rasmning o'z
 yashilini o'lchab, brend lime'iga (82°) suradi — qat'iy burilish emas.
+
+## NFC tegga yoziladigan manzil
+
+Har bir qurilmaga aynan shu format yoziladi:
+
+```
+https://flex.com.uz/AAA000?src=nfc
+```
+
+`?src=nfc` tushib qolsa, tegizish oddiy tashrifdan ajralmaydi va egasi kartasi
+ishlayotganini ko'rmaydi. QR-kodni sayt o'zi `?src=qr` bilan chiqaradi.
+Qabul qilinadigan qiymatlar faqat `nfc`, `qr`, `share` — boshqasi yozilmaydi,
+chunki parametr havolada turadi va uni istalgan odam o'zgartirishi mumkin.
 
 ## Nimalarni qilmaslik kerak
 

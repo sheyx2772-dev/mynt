@@ -11,7 +11,12 @@ import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
 import { isAnyProviderConfigured } from "@/lib/payments/config";
-import { readVisitorContext, recordProfileView } from "@/lib/analytics";
+import {
+  readVisitorContext,
+  readSource,
+  recordProfileView,
+  type VisitSource,
+} from "@/lib/analytics";
 import { timeAgo } from "@/lib/relative-time";
 import { listPostsForHandle } from "@/lib/posts";
 import { countFollowing, isFollowing } from "@/lib/follows";
@@ -40,7 +45,7 @@ export async function generateMetadata(props: PageProps<"/[handle]">): Promise<M
 
 export default async function HandlePage(props: PageProps<"/[handle]">) {
   const { handle } = await props.params;
-  const { bolim } = await props.searchParams;
+  const { bolim, src } = await props.searchParams;
 
   const genesisSerial = parseGenesisSerial(handle);
   if (genesisSerial) {
@@ -66,6 +71,7 @@ export default async function HandlePage(props: PageProps<"/[handle]">) {
       letters={parsed.letters}
       digits={parsed.digits}
       tab={bolim === "postlar" ? "postlar" : "vizitka"}
+      source={readSource(typeof src === "string" ? src : undefined)}
     />
   );
 }
@@ -74,10 +80,12 @@ async function VanityHandlePage({
   letters,
   digits,
   tab,
+  source,
 }: {
   letters: string;
   digits: string;
   tab: "vizitka" | "postlar";
+  source: VisitSource | null;
 }) {
   const normalized = `${letters}${digits}`;
   const profile = await getClaimedProfile(normalized);
@@ -89,7 +97,7 @@ async function VanityHandlePage({
     // Owners looking at their own page would otherwise inflate their numbers.
     // Recorded after the response so it never delays the profile.
     if (!isOwner) {
-      const visitor = await readVisitorContext();
+      const visitor = await readVisitorContext(source);
       after(() => recordProfileView(normalized, visitor));
     }
 

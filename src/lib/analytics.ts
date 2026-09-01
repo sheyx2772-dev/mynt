@@ -13,12 +13,30 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 // all four billion of them.
 const salt = process.env.ANALYTICS_SALT ?? process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 
+/** The ways a visit can arrive that we issue links for. */
+const SOURCES = ["nfc", "qr", "share"] as const;
+export type VisitSource = (typeof SOURCES)[number];
+
+/**
+ * The `src` parameter, kept only when it is one of ours.
+ *
+ * It lives in a link anyone can edit, so an unrecognised value is dropped
+ * rather than stored — otherwise the owner's breakdown is whatever a passer-by
+ * decided to type.
+ */
+export function readSource(raw: string | undefined): VisitSource | null {
+  return SOURCES.includes(raw as VisitSource) ? (raw as VisitSource) : null;
+}
+
 export type VisitorContext = {
   visitorHash: string | null;
   referrerHost: string | null;
+  source: VisitSource | null;
 };
 
-export async function readVisitorContext(): Promise<VisitorContext> {
+export async function readVisitorContext(
+  source: VisitSource | null = null
+): Promise<VisitorContext> {
   const h = await headers();
 
   const ip = (h.get("x-forwarded-for")?.split(",")[0] ?? h.get("x-real-ip") ?? "").trim();
@@ -44,7 +62,7 @@ export async function readVisitorContext(): Promise<VisitorContext> {
     }
   }
 
-  return { visitorHash, referrerHost };
+  return { visitorHash, referrerHost, source };
 }
 
 export async function recordProfileView(handle: string, context: VisitorContext): Promise<void> {
@@ -56,6 +74,7 @@ export async function recordProfileView(handle: string, context: VisitorContext)
       handle,
       visitor_hash: context.visitorHash,
       referrer_host: context.referrerHost,
+      source: context.source,
     });
     // The public counter is kept on the handle row so a profile page can show
     // it without opening profile_views, whose rows are the owner's business.
@@ -85,10 +104,13 @@ export async function recordLinkClick(
 
 export type DailyStat = { day: string; views: number; clicks: number; visitors: number };
 export type LinkStat = { label: string; clicks: number };
+/** Where visits arrived from. "togridan" is everything we did not issue a link for. */
+export type SourceStat = { source: string; views: number };
 
 export type HandleStats = {
   daily: DailyStat[];
   links: LinkStat[];
+  sources: SourceStat[];
   totalViews: number;
   totalClicks: number;
   totalVisitors: number;
@@ -99,15 +121,17 @@ export async function getHandleStats(handle: string, days = 30): Promise<HandleS
   const empty: HandleStats = {
     daily: [],
     links: [],
+    sources: [],
     totalViews: 0,
     totalClicks: 0,
     totalVisitors: 0,
   };
   if (!supabaseAdmin) return empty;
 
-  const [daily, links] = await Promise.all([
+  const [daily, links, sources] = await Promise.all([
     supabaseAdmin.rpc("handle_stats", { p_handle: handle, p_days: days }),
     supabaseAdmin.rpc("handle_link_stats", { p_handle: handle, p_days: days }),
+    supabaseAdmin.rpc("handle_source_stats", { p_handle: handle, p_days: days }),
   ]);
 
   if (daily.error || !daily.data) return empty;
@@ -124,6 +148,10 @@ export async function getHandleStats(handle: string, days = 30): Promise<HandleS
     links: (links.data ?? []).map((row: Record<string, unknown>) => ({
       label: String(row.label),
       clicks: Number(row.clicks),
+    })),
+    sources: (sources.data ?? []).map((row: Record<string, unknown>) => ({
+      source: String(row.source),
+      views: Number(row.views),
     })),
     totalViews: series.reduce((sum, d) => sum + d.views, 0),
     totalClicks: series.reduce((sum, d) => sum + d.clicks, 0),

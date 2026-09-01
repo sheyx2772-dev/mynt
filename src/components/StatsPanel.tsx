@@ -19,6 +19,14 @@ function dayLabel(iso: string): string {
   return `${day}.${month}`;
 }
 
+// The stored value is short and machine-ish; the owner sees what it means.
+const SOURCE_LABEL: Record<string, string> = {
+  nfc: "Qurilmani tegizib",
+  qr: "QR-kod orqali",
+  share: "Ulashilgan havoladan",
+  togridan: "To'g'ridan-to'g'ri",
+};
+
 export default function StatsPanel({ stats }: { stats: HandleStats }) {
   const peak = Math.max(...stats.daily.map((d) => d.views), 0);
   const busiest = stats.daily.find((d) => d.views === peak && peak > 0);
@@ -92,6 +100,28 @@ export default function StatsPanel({ stats }: { stats: HandleStats }) {
                 <tr key={link.label} className="border-t border-black/5">
                   <td className="py-2.5 text-flex-black/70">{link.label}</td>
                   <td className="py-2.5 text-right font-tabular font-medium">{link.clicks}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {stats.sources.length > 0 && (
+        <div className="mt-7">
+          <h3 className="mb-1 text-xs font-medium tracking-wide text-flex-black/45 uppercase">
+            Qayerdan kelgan
+          </h3>
+          <p className="mb-3 text-xs text-flex-black/40">
+            Kartani tegizib kelganmi, QR orqalimi yoki havoladan &mdash; qurilmangiz
+            ishlayotganini shu ko&apos;rsatadi.
+          </p>
+          <table className="w-full text-sm">
+            <tbody>
+              {stats.sources.map((s) => (
+                <tr key={s.source} className="border-t border-black/5">
+                  <td className="py-2.5 text-flex-black/70">{SOURCE_LABEL[s.source] ?? s.source}</td>
+                  <td className="py-2.5 text-right font-tabular font-medium">{s.views}</td>
                 </tr>
               ))}
             </tbody>

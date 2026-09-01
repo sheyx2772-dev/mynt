@@ -32,3 +32,14 @@ export async function getSiteOrigin(): Promise<string> {
   // canonical origin rather than trusting what the request claimed to be.
   return SITE_URL;
 }
+
+/**
+ * A profile's address, optionally carrying where the visit came from.
+ *
+ * The devices and the QR code are issued with a source so the owner can see
+ * whether the card they paid for is what brings people, rather than seeing a
+ * direct visit that could equally be somebody typing the address.
+ */
+export function profileUrl(handle: string, source?: "nfc" | "qr" | "share"): string {
+  return source ? `${SITE_URL}/${handle}?src=${source}` : `${SITE_URL}/${handle}`;
+}

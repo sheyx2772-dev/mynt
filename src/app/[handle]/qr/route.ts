@@ -1,6 +1,6 @@
 import QRCode from "qrcode";
 import { parseHandle, parseGenesisSerial } from "@/lib/pricing";
-import { SITE_URL } from "@/lib/site";
+import { profileUrl } from "@/lib/site";
 
 // Serves the QR code for a profile, so a printed card works on phones without
 // NFC. SVG rather than PNG: it stays sharp at card size and at poster size.
@@ -18,7 +18,7 @@ export async function GET(
 
   const normalized = serial ?? `${parsed!.letters}${parsed!.digits}`;
 
-  const svg = await QRCode.toString(`${SITE_URL}/${normalized}`, {
+  const svg = await QRCode.toString(profileUrl(normalized, "qr"), {
     type: "svg",
     errorCorrectionLevel: "M",
     margin: 1,

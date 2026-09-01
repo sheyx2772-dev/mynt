@@ -25,6 +25,21 @@ tegizilganda saytni ochadi.
 So'rovda birinchi savol shu bo'lsin. "Ha, NFC bor" degan javob yetarli emas —
 chip nomini aniq aytishi kerak.
 
+## Tegga yoziladigan manzil
+
+Har bir qurilmada boshqa manzil bo'ladi. Aniq format:
+
+```
+https://flex.com.uz/AAA000?src=nfc
+```
+
+Oxiridagi `?src=nfc` **shart**. U tashrif kartani tegizishdan kelganini bildiradi.
+Usiz tegizish oddiy tashrifdan farq qilmaydi va karta egasi sotib olgan
+qurilmasi ishlayotganini ko'ra olmaydi.
+
+Kodlashni zavod ro'yxat bo'yicha qilishi mumkin, yoki teglar bo'sh keladi va biz
+o'zimiz yozamiz. Ikkinchisi arzonroq, lekin NFC kodlagich kerak.
+
 ---
 
 ## Mahalliy firmalarga (rus tilida)
