@@ -6,9 +6,9 @@ import { Nfc } from "lucide-react";
 import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRarity } from "@/lib/pricing";
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
-import { headers } from "next/headers";
 import { linkValue } from "@/lib/links";
-import { pickLang, dict, type Lang } from "@/lib/i18n";
+import { dict, type Lang } from "@/lib/i18n";
+import { getLang } from "@/lib/lang";
 import { PLAN_ACCENT, serviceLimit, FREE_LINK_LIMIT } from "@/lib/plans";
 import { cardDesign } from "@/lib/card-designs";
 import SaveContactButton from "@/components/SaveContactButton";
@@ -82,7 +82,7 @@ export default async function HandlePage(props: PageProps<"/[handle]">) {
       digits={parsed.digits}
       tab={bolim === "postlar" ? "postlar" : "vizitka"}
       source={readSource(typeof src === "string" ? src : undefined)}
-      lang={pickLang(til, (await headers()).get("accept-language"))}
+      lang={await getLang(til)}
       params={{ bolim: typeof bolim === "string" ? bolim : undefined, src: typeof src === "string" ? src : undefined }}
     />
   );
@@ -110,6 +110,14 @@ async function VanityHandlePage({
   if (profile) {
     // The owner's first name, which two of the visitor-facing sentences use.
     const firstName = profile.name.split(" ")[0] || normalized;
+
+    // Where the language switch returns to: this page, with whatever else was
+    // in the address, so switching on the posts tab does not send you back to
+    // the card.
+    const kept = new URLSearchParams(
+      Object.entries(params).filter((entry): entry is [string, string] => Boolean(entry[1])),
+    );
+    const backTo = `/${normalized}${kept.size ? `?${kept}` : ""}`;
 
     const viewer = await getUser();
     const isOwner = Boolean(viewer && profile.userId && viewer.id === profile.userId);
@@ -150,7 +158,7 @@ async function VanityHandlePage({
           </span>
 
           <div className="ml-auto">
-            <LangSwitch lang={lang} handle={normalized} params={params} />
+            <LangSwitch lang={lang} next={backTo} />
           </div>
         </div>
 

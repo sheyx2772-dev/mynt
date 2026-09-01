@@ -24,6 +24,9 @@ import DeviceTile from "@/components/DeviceTile";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber, formatUZS } from "@/lib/format";
 import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
+import { site } from "@/lib/i18n";
+import { getLang } from "@/lib/lang";
+import LangSwitch from "@/components/LangSwitch";
 import { COMPANY } from "@/lib/company";
 import PlanTable from "@/components/PlanTable";
 import TeamOrderForm from "@/components/TeamOrderForm";
@@ -105,7 +108,11 @@ const faqs = [
   },
 ];
 
-export default function Home() {
+export default async function Home({ searchParams }: PageProps<"/">) {
+  const { til } = await searchParams;
+  const lang = await getLang(til);
+  const s = site(lang);
+
   const tapShot = productShot("tegizish");
   const familyShot = productShot("oila");
 
@@ -117,21 +124,21 @@ export default function Home() {
             <Mark className="h-7 w-7" tone="dark" />
             flex
           </div>
-          <nav className="hidden gap-8 text-sm font-medium text-white/55 sm:flex">
+          <nav className="hidden gap-8 text-sm font-medium text-white/55 lg:flex">
             <a href="#narx" className="transition-colors hover:text-white">
-              Narxlash
+              {s.navPricing}
             </a>
             <a
               href="#individual"
               className="transition-colors hover:text-white"
             >
-              Shaxsiy
+              {s.navPersonal}
             </a>
             <a href="#biznes" className="transition-colors hover:text-white">
-              Biznes
+              {s.navBusiness}
             </a>
             <a href="#savollar" className="transition-colors hover:text-white">
-              Savollar
+              {s.navFaq}
             </a>
             {/* Signed-out visitors are sent to sign-in from there, which keeps
                 this page static rather than making it depend on a session. */}
@@ -139,27 +146,30 @@ export default function Home() {
               href="/qurilmalar"
               className="transition-colors hover:text-white"
             >
-              Qurilmalar
+              {s.navDevices}
             </Link>
             <Link
               href="/rezidentlar"
               className="transition-colors hover:text-white"
             >
-              Rezidentlar
+              {s.navResidents}
             </Link>
             <Link
               href="/kabinet"
               className="transition-colors hover:text-white"
             >
-              Kabinet
+              {s.navCabinet}
             </Link>
           </nav>
-          <a
-            href="#narx"
-            className="rounded-full bg-lime px-4 py-2 text-sm font-medium text-flex-black transition-colors hover:bg-lime/85"
-          >
-            Handle oling
-          </a>
+          <div className="flex items-center gap-3">
+            <LangSwitch lang={lang} next="/" tone="dark" />
+            <a
+              href="#narx"
+              className="rounded-full bg-lime px-4 py-2 text-sm font-medium text-flex-black transition-colors hover:bg-lime/85"
+            >
+              {s.getHandle}
+            </a>
+          </div>
         </div>
       </header>
 

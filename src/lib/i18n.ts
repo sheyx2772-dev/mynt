@@ -146,3 +146,68 @@ export function pickLang(param: unknown, acceptLanguage: string | null): Lang {
 
   return DEFAULT_LANG;
 }
+
+
+// --- the site around the profile -----------------------------------------
+//
+// Separate from the profile's dictionary on purpose. That one is read by
+// whoever was handed a card; this one by somebody deciding whether to buy. They
+// change for different reasons and at different times, and merging them would
+// mean every copy change to the shop risks the card.
+
+const SITE = {
+  uz: {
+    navPricing: "Narxlash",
+    navPersonal: "Shaxsiy",
+    navBusiness: "Biznes",
+    navFaq: "Savollar",
+    navDevices: "Qurilmalar",
+    navResidents: "Rezidentlar",
+    navCabinet: "Kabinet",
+    navPlans: "Tariflar",
+    getHandle: "Handle oling",
+    signIn: "Kirish",
+    footerTerms: "Ommaviy oferta",
+    footerPlans: "Tariflar",
+    footerDevices: "Qurilmalar",
+    langName: "O'zbekcha",
+  },
+  ru: {
+    navPricing: "Цены",
+    navPersonal: "Личный",
+    navBusiness: "Бизнес",
+    navFaq: "Вопросы",
+    navDevices: "Устройства",
+    navResidents: "Резиденты",
+    navCabinet: "Кабинет",
+    navPlans: "Тарифы",
+    getHandle: "Получить номер",
+    signIn: "Войти",
+    footerTerms: "Публичная оферта",
+    footerPlans: "Тарифы",
+    footerDevices: "Устройства",
+    langName: "Русский",
+  },
+  en: {
+    navPricing: "Pricing",
+    navPersonal: "Personal",
+    navBusiness: "Business",
+    navFaq: "FAQ",
+    navDevices: "Devices",
+    navResidents: "Residents",
+    navCabinet: "Cabinet",
+    navPlans: "Plans",
+    getHandle: "Get a handle",
+    signIn: "Sign in",
+    footerTerms: "Public offer",
+    footerPlans: "Plans",
+    footerDevices: "Devices",
+    langName: "English",
+  },
+} as const;
+
+export type SiteDict = (typeof SITE)["uz"];
+
+export function site(lang: Lang): SiteDict {
+  return SITE[lang] as SiteDict;
+}
