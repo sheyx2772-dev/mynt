@@ -12,9 +12,9 @@ describe("card accents", () => {
     expect(accentHex("genesis")).toBe(ACCENT_HEX.lime);
   });
 
-  // Real gold sits near 3:1 on the card's ground and cannot be read. This
-  // guards the champagne that replaced it: if someone "corrects" the hex to a
-  // truer gold, the contrast goes with it.
+  // The card sets its labels at ten pixels in small caps, so the accents are
+  // held well above the 4.5:1 floor rather than at it. A truer gold would pass
+  // that floor at 6:1 and still be the wrong choice; this guards the margin.
   it("keeps every accent legible on the card", () => {
     const ground = [0x0b, 0x0b, 0x0f];
     const lum = (rgb: number[]) => {
@@ -29,7 +29,7 @@ describe("card accents", () => {
 
     for (const [name, hex] of Object.entries(ACCENT_HEX)) {
       const ratio = (lum(parse(hex)) + 0.05) / (lum(ground) + 0.05);
-      expect(ratio, `${name} (${hex}) on the card ground`).toBeGreaterThan(4.5);
+      expect(ratio, `${name} (${hex}) on the card ground`).toBeGreaterThan(9);
     }
   });
 

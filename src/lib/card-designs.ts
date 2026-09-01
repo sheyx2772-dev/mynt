@@ -17,8 +17,10 @@
  * the object it is a rank, and it is one the competitor cannot copy without
  * making the cards too.
  *
- * Real gold (#B8860B) sits at about 3:1 on this ground and cannot be read. The
- * champagne below measures about 9:1, which is why it is the one used.
+ * The champagne below measures 11.5:1 against the card's ground. A truer gold
+ * (#B8860B) measures 6.0:1 — legible, but half as legible, and the card sets its
+ * rubrics at ten pixels in small caps, where that difference is the difference
+ * between reading a label and guessing it.
  */
 export type Accent = "lime" | "gold" | "steel";
 
