@@ -18,6 +18,8 @@ import LangSwitch from "@/components/LangSwitch";
 import ActionRow from "@/components/ActionRow";
 import ExchangeContactForm from "@/components/ExchangeContactForm";
 import ProfileComments from "@/components/ProfileComments";
+import RecommendButton from "@/components/RecommendButton";
+import { listRecommenders, isRecommended } from "@/lib/recommendations";
 import { listComments } from "@/lib/comments";
 import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
@@ -133,11 +135,14 @@ async function VanityHandlePage({
 
     const lastSeen = timeAgo(profile.lastSeenAt, lang);
 
-    const [following, followingCount, posts, comments] = await Promise.all([
+    const [following, followingCount, posts, comments, recommenders, viewerRecommends] =
+      await Promise.all([
       viewer ? isFollowing(viewer.id, normalized) : Promise.resolve(false),
       profile.userId ? countFollowing(profile.userId) : Promise.resolve(0),
       tab === "postlar" ? listPostsForHandle(normalized) : Promise.resolve([]),
       listComments(normalized),
+      listRecommenders(normalized),
+      viewer ? isRecommended(normalized, viewer.id) : Promise.resolve(false),
     ]);
 
     // The owner's own cover wins over the catalogue artwork, which wins over
@@ -286,6 +291,20 @@ async function VanityHandlePage({
                   label={t.saveContact}
                 />
               </div>
+              {!isOwner && (
+                <RecommendButton
+                  handle={normalized}
+                  count={profile.recommendCount}
+                  recommended={viewerRecommends}
+                  recommenders={recommenders}
+                  labels={{
+                    recommend: t.recommend,
+                    recommended: t.recommended,
+                    whoDid: t.whoRecommended,
+                  }}
+                />
+              )}
+
               {!isOwner && <FollowButton
                   handle={normalized}
                   initialFollowing={following}

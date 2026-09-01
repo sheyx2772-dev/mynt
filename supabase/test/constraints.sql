@@ -1005,3 +1005,43 @@ begin
   end if;
   raise notice '   ok   comments go with the profile they were left on';
 end $$;
+
+-- 0031 — recommendations
+do $$
+declare
+  owner_id uuid;
+  a uuid;
+  b uuid;
+  hid uuid;
+  n integer;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into owner_id;
+  insert into auth.users (id) values (gen_random_uuid()) returning id into a;
+  insert into auth.users (id) values (gen_random_uuid()) returning id into b;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('REC', '001', 'claimed', owner_id, now()) returning id into hid;
+
+  insert into recommendations (handle_id, user_id) values (hid, a), (hid, b);
+  select recommend_count into n from handles where id = hid;
+  if n <> 2 then raise exception 'hisoblagich notoʻgʻri: %', n; end if;
+  raise notice '   ok   the counter follows the rows';
+
+  begin
+    insert into recommendations (handle_id, user_id) values (hid, a);
+    raise exception 'bir odam ikki marta tavsiya qildi';
+  exception when unique_violation then
+    raise notice '   ok   rejected: the same person recommending twice';
+  end;
+
+  -- Taking it back is a delete, and the counter has to come with it.
+  delete from recommendations where handle_id = hid and user_id = a;
+  select recommend_count into n from handles where id = hid;
+  if n <> 1 then raise exception 'olib tashlangach hisoblagich notoʻgʻri: %', n; end if;
+  raise notice '   ok   withdrawing one takes the counter down with it';
+
+  -- A deleted account takes its recommendation, and the count, with it.
+  delete from auth.users where id = b;
+  select recommend_count into n from handles where id = hid;
+  if n <> 0 then raise exception 'hisob oʻchirilgach hisoblagich notoʻgʻri: %', n; end if;
+  raise notice '   ok   a deleted account stops counting';
+end $$;

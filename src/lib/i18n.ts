@@ -50,6 +50,9 @@ const STRINGS = {
     commentSending: "Yuborilyapti",
     commentsEmpty: "Hali izoh yo'q.",
     commentSignIn: "Izoh yozish uchun kiring",
+    recommend: "Tavsiya qilaman",
+    recommended: "Tavsiya qildingiz",
+    whoRecommended: "Tavsiya qilganlar",
     noPosts: "Bu profilda hali post yo'q.",
   },
   ru: {
@@ -88,6 +91,9 @@ const STRINGS = {
     commentSending: "Отправляем",
     commentsEmpty: "Отзывов пока нет.",
     commentSignIn: "Войдите, чтобы оставить отзыв",
+    recommend: "Рекомендую",
+    recommended: "Вы рекомендуете",
+    whoRecommended: "Рекомендуют",
     noPosts: "В этом профиле пока нет постов.",
   },
   en: {
@@ -126,6 +132,9 @@ const STRINGS = {
     commentSending: "Sending",
     commentsEmpty: "No comments yet.",
     commentSignIn: "Sign in to comment",
+    recommend: "Recommend",
+    recommended: "You recommend",
+    whoRecommended: "Recommended by",
     noPosts: "No posts on this profile yet.",
   },
 } as const;

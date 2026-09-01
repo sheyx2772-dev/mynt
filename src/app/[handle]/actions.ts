@@ -2,6 +2,7 @@
 
 import { readLeadForm, saveLead } from "@/lib/leads";
 import { addComment, deleteComment } from "@/lib/comments";
+import { toggleRecommendation } from "@/lib/recommendations";
 import { readSource } from "@/lib/analytics";
 
 import { revalidatePath } from "next/cache";
@@ -284,4 +285,22 @@ export async function removeComment(
 
   revalidatePath(`/${parsed.letters}${parsed.digits}`);
   return { ok: true };
+}
+
+export type RecommendResult =
+  | { ok: true; recommended: boolean }
+  | { ok: false; error?: string; needsAuth?: true };
+
+/** One tap, both ways. */
+export async function toggleRecommend(rawHandle: string): Promise<RecommendResult> {
+  const user = await getUser();
+  if (!user) return { ok: false, needsAuth: true };
+
+  const parsed = parseHandle(rawHandle);
+  if (!parsed) return { ok: false, error: "Bu profil topilmadi." };
+
+  const normalized = `${parsed.letters}${parsed.digits}`;
+  const result = await toggleRecommendation(normalized, user.id);
+  if (result.ok) revalidatePath(`/${normalized}`);
+  return result;
 }

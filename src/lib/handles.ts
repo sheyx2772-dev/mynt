@@ -21,6 +21,7 @@ export type ClaimedProfile = {
   services: Service[];
   bannerUrl: string | null;
   commentsOpen: boolean;
+  recommendCount: number;
   /** Set when the handle belongs to a company, whose fields it then carries. */
   team: { name: string; logoUrl: string | null; website: string | null } | null;
   tags: string[];
@@ -44,6 +45,7 @@ const DEMO_PROFILES: Record<string, ClaimedProfile> = {
     services: [],
     bannerUrl: null,
     commentsOpen: false,
+    recommendCount: 0,
     team: null,
     tags: ["Startup"],
     lastSeenAt: null,
@@ -70,7 +72,7 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
   const { data } = await supabase
     .from("handles")
     .select(
-      "user_id, owner_name, bio, avatar_url, links, city, contact_email, phone, position, company, tags, last_seen_at, view_count, follower_count, post_count, card_design, plan, plan_expires_at, services, banner_url, comments_open, team_id, teams (name, logo_url, website, city, plan_expires_at)"
+      "user_id, owner_name, bio, avatar_url, links, city, contact_email, phone, position, company, tags, last_seen_at, view_count, follower_count, post_count, recommend_count, card_design, plan, plan_expires_at, services, banner_url, comments_open, team_id, teams (name, logo_url, website, city, plan_expires_at)"
     )
     .eq("normalized", normalized)
     .eq("status", "claimed")
@@ -98,6 +100,7 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
     services: readServices(data.services),
     bannerUrl: (data.banner_url as string) ?? null,
     commentsOpen: Boolean(data.comments_open),
+    recommendCount: (data.recommend_count as number) ?? 0,
     team: team
       ? { name: team.name, logoUrl: team.logo_url, website: team.website }
       : null,
