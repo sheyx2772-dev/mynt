@@ -809,3 +809,74 @@ begin
     raise notice '   ok   rejected: a company site that is not an https address';
   end;
 end $$;
+
+-- 0027 — invoices
+do $$
+declare
+  boss uuid;
+  team uuid;
+  inv uuid;
+  settled boolean;
+  after_row teams%rowtype;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into boss;
+  insert into teams (name, owner_user_id, seats, inn, bank_account, bank_mfo)
+    values ('INV TEST', boss, 5, '312559000', '20212000507346035001', '00423')
+    returning id into team;
+  raise notice '   ok   a company can carry the requisites an invoice needs';
+
+  begin
+    update teams set inn = '12345' where id = team;
+    raise exception 'noto''g''ri INN qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: an INN that is not nine digits';
+  end;
+
+  insert into team_invoices (team_id, seats, months, seat_monthly, total)
+    values (team, 20, 12, 29000, 20 * 12 * 29000)
+    returning id into inv;
+
+  begin
+    insert into team_invoices (team_id, seats, months, seat_monthly, total)
+      values (team, 20, 5, 29000, 100);
+    raise exception 'sotilmaydigan muddat qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: an invoice period that is not sold';
+  end;
+
+  settled := settle_team_invoice(inv);
+  if not settled then
+    raise exception 'hisob-faktura yopilmadi';
+  end if;
+
+  select * into after_row from teams where id = team;
+  if after_row.seats <> 20 then
+    raise exception 'o''rinlar soni yangilanmadi';
+  end if;
+  if after_row.plan_expires_at < now() + interval '300 days' then
+    raise exception 'firma obunasi uzaytirilmadi';
+  end if;
+  raise notice '   ok   paying an invoice raises the seats and extends the plan';
+
+  -- The provider, or a person, may do this twice.
+  settled := settle_team_invoice(inv);
+  if settled then
+    raise exception 'bir hisob-faktura ikki marta yopildi';
+  end if;
+  select * into after_row from teams where id = team;
+  if after_row.plan_expires_at > now() + interval '400 days' then
+    raise exception 'ikkinchi to''lov muddatni yana uzaytirdi';
+  end if;
+  raise notice '   ok   settling the same invoice twice extends it once';
+
+  -- Seats never fall on renewal: a company that shrank its order keeps the
+  -- staff it already provisioned until somebody decides otherwise.
+  insert into team_invoices (team_id, seats, months, seat_monthly, total)
+    values (team, 5, 1, 29000, 5 * 29000) returning id into inv;
+  perform settle_team_invoice(inv);
+  select * into after_row from teams where id = team;
+  if after_row.seats <> 20 then
+    raise exception 'kichikroq buyurtma o''rinlarni kamaytirdi';
+  end if;
+  raise notice '   ok   a smaller renewal does not take seats away';
+end $$;

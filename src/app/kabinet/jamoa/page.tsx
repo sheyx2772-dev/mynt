@@ -7,6 +7,8 @@ import { getTeamForUser, listTeamHandles } from "@/lib/teams";
 import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
 import { formatUZS } from "@/lib/format";
 import { COMPANY } from "@/lib/company";
+import InvoiceRequest from "@/components/InvoiceRequest";
+import { listInvoices } from "@/lib/invoices";
 
 export const metadata: Metadata = {
   title: "Firma — flex.com.uz",
@@ -70,7 +72,10 @@ export default async function JamoaPage() {
     );
   }
 
-  const handles = await listTeamHandles(team.id);
+  const [handles, invoices] = await Promise.all([
+    listTeamHandles(team.id),
+    listInvoices(team.id),
+  ]);
   const taken = handles.filter((h) => h.userId).length;
 
   return (
@@ -132,8 +137,49 @@ export default async function JamoaPage() {
         )}
       </section>
 
+      <section className="mt-6 rounded-[1.75rem] border border-black/10 bg-white p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+        <h2 className="font-display text-lg font-semibold tracking-tight">To&apos;lov</h2>
+        <p className="mt-1 mb-5 text-sm text-flex-black/50">
+          Firma to&apos;lovi bank o&apos;tkazmasi orqali. Hisob-fakturani
+          o&apos;zingiz olasiz, buxgalteriyangizga berasiz.
+        </p>
+
+        <InvoiceRequest currentSeats={team.seats} />
+
+        {invoices.length > 0 && (
+          <ul className="mt-6 divide-y divide-black/5">
+            {invoices.map((inv) => (
+              <li key={inv.id} className="flex flex-wrap items-center gap-3 py-3">
+                <Link
+                  href={`/kabinet/jamoa/hisob/${inv.id}`}
+                  className="font-tabular text-sm font-medium underline-offset-2 hover:underline"
+                >
+                  №{inv.number}
+                </Link>
+                <span className="text-sm text-flex-black/55">
+                  {inv.seats} o&apos;rin · {inv.months} oy
+                </span>
+                <span className="ml-auto font-tabular text-sm">{formatUZS(inv.total)}</span>
+                <span
+                  className={
+                    inv.status === "paid"
+                      ? "rounded-lg bg-lime/25 px-2.5 py-1 text-xs font-medium"
+                      : "rounded-lg border border-black/10 px-2.5 py-1 text-xs text-flex-black/50"
+                  }
+                >
+                  {inv.status === "paid" ? "To'langan" : "Kutilmoqda"}
+                </span>
+                <span className="w-full font-tabular text-xs text-flex-black/35">
+                  {inv.issuedAt.slice(0, 10).split("-").reverse().join(".")}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
       <p className="mt-6 text-sm text-flex-black/45">
-        O&apos;rin qo&apos;shish yoki raqam biriktirish uchun biz bilan
+        Raqam biriktirish yoki rekvizitlarni o&apos;zgartirish uchun biz bilan
         bog&apos;laning: {COMPANY.phone}
       </p>
     </PageShell>
