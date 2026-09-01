@@ -24,7 +24,7 @@ import DeviceTile from "@/components/DeviceTile";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber, formatUZS } from "@/lib/format";
 import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
-import { site } from "@/lib/i18n";
+import { site, landing } from "@/lib/i18n";
 import { getLang } from "@/lib/lang";
 import LangSwitch from "@/components/LangSwitch";
 import { COMPANY } from "@/lib/company";
@@ -33,85 +33,29 @@ import TeamOrderForm from "@/components/TeamOrderForm";
 
 const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
 
-const consumerFeatures = [
-  {
-    icon: Link2,
-    title: "Shaxsiy profil",
-    desc: "flex.com.uz/HANDLE — barcha havolalaringiz, ijtimoiy tarmoqlaringiz va vizit ma'lumotlaringiz bitta sahifada.",
-  },
-  {
-    icon: Nfc,
-    title: "Qurilmani o'zingiz tanlaysiz",
-    desc: "Karta, uzuk yoki braslet — uchalasi ham bir tegishda o'sha profilni ochadi. NFC yo'q telefonlar uchun QR-kod zaxira variant.",
-  },
-  {
-    icon: Sparkles,
-    title: "Kamyob handle",
-    desc: "3 harf + 3 raqam — cheklangan miqdor. Kamdan-kam kombinatsiyalar qimmatroq, shaffof narx bilan.",
-  },
-  {
-    icon: BarChart3,
-    title: "Analitika",
-    desc: "Profilingizga necha marta qaralgani, havolalar bosilishi va tashrif buyurgan hududlar statistikasi.",
-  },
+// Which icon goes with which entry, in the dictionary's order. Kept out of the
+// dictionary because an icon is not a translation.
+const CONSUMER_ICONS = [Link2, Nfc, Sparkles, BarChart3];
+const BUSINESS_ICONS = [Users, Target, RefreshCw, TrendingUp];
+
+// Who has what, in the same order as the dictionary's row labels. A claim about
+// a competitor is a fact rather than copy, so it does not move with the words —
+// and every row here is one this product actually does.
+const COMPARISON = [
+  { unqx: true, popl: false, flex: true },
+  { unqx: true, popl: false, flex: true },
+  { unqx: true, popl: true, flex: true },
+  { unqx: false, popl: true, flex: true },
+  { unqx: false, popl: true, flex: true },
+  { unqx: true, popl: false, flex: true },
 ];
 
-const businessFeatures = [
-  {
-    icon: Users,
-    title: "Jamoa uchun raqamlar",
-    desc: "Butun jamoangizga bir xil brend bilan raqam va qurilma chiqaring — har bir xodim o'ziga qulayini tanlaydi.",
-  },
-  {
-    icon: Target,
-    title: "Lead yig'ish",
-    desc: "Tadbirlarda va uchrashuvlarda bir tegish bilan mijoz kontaktini lead sifatida saqlang.",
-  },
-  {
-    icon: RefreshCw,
-    title: "CRM integratsiya",
-    desc: "HubSpot va Salesforce bilan ikki tomonlama sinxronizatsiya — maydonlarni o'zingiz moslashtiring.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Jamoa analitikasi",
-    desc: "Har bir xodim va butun jamoa bo'yicha lead'lar, tashriflar va konversiya statistikasi.",
-  },
-];
-
-const comparison = [
-  { label: "Kamyob/kolleksion handle", unqx: true, popl: false, flex: true },
-  { label: "Shaffof narx dvijoki", unqx: true, popl: false, flex: true },
-  { label: "Jismoniy NFC karta", unqx: true, popl: true, flex: true },
-  { label: "Jamoa/biznes tarif", unqx: false, popl: true, flex: true },
-  { label: "CRM sinxronizatsiya", unqx: false, popl: true, flex: true },
-  { label: "Tadbirda lead yig'ish", unqx: false, popl: true, flex: true },
-  { label: "Click / Payme to'lovlari", unqx: true, popl: false, flex: true },
-];
-
-const faqs = [
-  {
-    q: "Handle nima va u qanday narxlanadi?",
-    a: "Handle — 3 harf + 3 raqamdan iborat noyob kod (masalan MYN042), sizning shaxsiy profilingiz manzili bo'ladi. Narx bazaviy summadan, harflar va raqamlarning kamyobligiga qarab ko'payadigan koeffitsientlardan hisoblanadi. Yuqorida hisob-kitobni o'zingiz sinab ko'rishingiz mumkin.",
-  },
-  {
-    q: "NFC qurilma qanday ishlaydi?",
-    a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, sizning flex.com.uz profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC qo'llamaydigan telefonlar uchun QR-kod zaxira variant sifatida ishlaydi.",
-  },
-  {
-    q: "Biznes uchun qancha xodim qo'shsam bo'ladi?",
-    a: "Jamoa tarifida xodimlar soniga cheklov yo'q — narx xodimlar soniga qarab (per-seat) hisoblanadi.",
-  },
-  {
-    q: "To'lovni qanday amalga oshiraman?",
-    a: "O'zbekistondagi foydalanuvchilar uchun Click va Payme, xalqaro kartalar uchun Stripe orqali to'lov qo'llab-quvvatlanadi.",
-  },
-];
 
 export default async function Home({ searchParams }: PageProps<"/">) {
   const { til } = await searchParams;
   const lang = await getLang(til);
   const s = site(lang);
+  const copy = landing(lang);
 
   const tapShot = productShot("tegizish");
   const familyShot = productShot("oila");
@@ -184,19 +128,17 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               <div>
                 <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-xs font-medium tracking-wide text-white/70 uppercase backdrop-blur-sm">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
-                  Raqamli shaxsingiz. Bir tegish.
+                  {s.heroBadge}
                 </p>
                 <h1 className="font-display text-5xl font-semibold leading-[0.98] tracking-tight text-balance sm:text-6xl lg:text-[4.5rem]">
-                  Noyob raqam,{" "}
+                  {s.heroTitleA}{" "}
                   <span className="marker-reveal inline-block rounded-md bg-lime px-2 text-flex-black">
-                    umrbod
+                    {s.heroTitleMark}
                   </span>{" "}
-                  sizniki.
+                  {s.heroTitleB}
                 </h1>
                 <p className="mt-7 max-w-md text-lg leading-relaxed text-white/60">
-                  Siz noyob raqam sotib olasiz &mdash; u umrbod sizniki. Uni
-                  karta, uzuk yoki braslet ko&apos;rinishida olib yurasiz,
-                  tanlov sizniki. Har biri bitta profilni ochadi.
+                  {s.heroLead}
                 </p>
                 <HandleChecker tone="dark" />
 
@@ -205,13 +147,13 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                     href="#narx"
                     className="rounded-full bg-lime px-7 py-3.5 font-medium text-flex-black shadow-[0_12px_36px_-8px_rgba(171,255,9,0.5)] transition-transform hover:scale-[1.03]"
                   >
-                    Narxni hisoblang
+                    {s.calcPrice}
                   </a>
                   <a
                     href="#biznes"
                     className="rounded-full border border-white/20 px-7 py-3.5 font-medium text-white transition-colors hover:bg-white/10"
                   >
-                    Biznes uchun
+                    {s.forBusiness}
                   </a>
                 </div>
               </div>
@@ -228,7 +170,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 <div className="absolute -right-6 -bottom-4 z-20 hidden rotate-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 backdrop-blur-md sm:block">
                   <p className="flex items-center gap-1.5 text-xs font-medium text-white/75">
                     <span className="h-1.5 w-1.5 rounded-full bg-lime" />
-                    NFC ulandi
+                    {s.nfcOn}
                   </p>
                 </div>
 
@@ -244,10 +186,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         {/* How it works */}
         <section className="mx-auto max-w-6xl px-6 py-24">
           <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
-            Qanday ishlaydi
+            {s.howItWorks}
           </p>
           <h2 className="max-w-lg font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-            Uch qadam, o&apos;n daqiqa
+            {s.threeSteps}
           </h2>
 
           <ol className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-3">
@@ -265,11 +207,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 01
               </p>
               <h3 className="mt-1 font-display text-lg font-semibold">
-                Handle tanlang
+                {s.pickHandle}
               </h3>
               <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
-                3 harf + 3 raqam. Narx darhol ko&apos;rinadi &mdash; yashirin
-                to&apos;lov yo&apos;q.
+                {s.stepHandleDesc}
               </p>
             </li>
 
@@ -304,10 +245,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 02
               </p>
               <h3 className="mt-1 font-display text-lg font-semibold">
-                Qurilmani tanlang
+                {s.pickDevice}
               </h3>
               <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
-                Karta, uzuk yoki braslet. Dizaynni ham o&apos;zingiz tanlaysiz.
+                {s.pickDeviceDesc}
               </p>
             </li>
 
@@ -337,11 +278,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 03
               </p>
               <h3 className="mt-1 font-display text-lg font-semibold">
-                Tegizing
+                {s.stepTap}
               </h3>
               <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
-                Telefonga tegizasiz, profilingiz ochiladi. Hech kim ilova
-                o&apos;rnatmaydi.
+                {s.stepTapDesc}
               </p>
             </li>
           </ol>
@@ -352,15 +292,13 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <div className="bg-dot-grid-light absolute inset-0 opacity-30 [mask-image:radial-gradient(ellipse_50%_60%_at_50%_50%,black,transparent)]" />
           <div className="relative mx-auto max-w-6xl px-6">
             <p className="text-xs font-semibold tracking-widest text-lime/70 uppercase">
-              Cheklangan miqdor
+              {s.limited}
             </p>
             <p className="mt-5 font-display text-[clamp(2.75rem,11vw,7.5rem)] leading-[0.85] font-semibold tracking-tight text-white tabular-nums">
               {formatNumber(NAMESPACE_SIZE)}
             </p>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-white/55">
-              Mumkin bo&apos;lgan handle&rsquo;lar soni &mdash; boshqa yo&apos;q. Har biri
-              bittagina odamga tegishli bo&apos;ladi. Kombinatsiya qanchalik kamyob
-              bo&apos;lsa, u shunchalik qadrli.
+              {s.namespaceDesc}
             </p>
           </div>
         </section>
@@ -372,12 +310,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               Narxlash
             </p>
             <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-              Narx — to&apos;liq shaffof
+              {s.priceOpen}
             </h2>
             <p className="mt-3 text-flex-black/65">
-              Har bir handle narxi ochiq formula bilan hisoblanadi: bazaviy narx
-              &times; harf kamyobligi &times; raqam kamyobligi. Pastda
-              o&apos;zingiz sinab ko&apos;ring.
+              {s.pricingDesc}
             </p>
           </div>
           <PricingCalculator />
@@ -390,12 +326,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               Obuna
             </p>
             <h2 className="font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-              Narx uch qismdan iborat
+              {s.priceThree}
             </h2>
             <p className="mt-4 leading-relaxed text-flex-black/60">
-              Raqamni bir marta sotib olasiz va u sizniki. Qurilma &mdash; karta, uzuk yoki
-              braslet &mdash; alohida mahsulot. Profil esa har oy ishlab turadi, shuning
-              uchun platformaga obuna alohida.
+              {s.subscriptionDesc}
             </p>
           </div>
           <PlanTable />
@@ -412,17 +346,18 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 Shaxsiy
               </p>
               <h2 className="max-w-md font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-                Bir tegish &mdash; va sizni to&apos;liq ko&apos;radi
+                {s.oneTap}
               </h2>
               <p className="mt-4 max-w-md text-flex-black/65">
-                Kartani tegizasiz, brauzer o&apos;zi ochiladi. Hech kim hech
-                narsa o&apos;rnatmaydi.
+                {s.tapDesc}
               </p>
 
               <dl className="mt-10 divide-y divide-black/8 border-y border-black/8">
-                {consumerFeatures.map((f) => (
+                {copy.consumer.map((f, i) => {
+                  const Icon = CONSUMER_ICONS[i]!;
+                  return (
                   <div key={f.title} className="flex gap-5 py-5">
-                    <f.icon
+                    <Icon
                       className="mt-0.5 h-5 w-5 shrink-0 text-flex-black/35"
                       strokeWidth={1.75}
                     />
@@ -433,7 +368,8 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                       </dd>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </dl>
             </div>
 
@@ -450,17 +386,17 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
-                Qurilmalar
+                {s.navDevices}
               </p>
               <h2 className="max-w-md font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-                Bitta raqam, uchta shakl
+                {s.oneNumberThree}
               </h2>
             </div>
             <Link
               href="/qurilmalar"
               className="rounded-full border border-black/10 px-5 py-2.5 text-sm font-medium transition-colors hover:bg-black/[0.03]"
             >
-              Hammasini ko&apos;rish
+              {s.seeAll}
             </Link>
           </div>
 
@@ -494,22 +430,22 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 Biznes
               </p>
               <h2 className="font-display text-3xl font-semibold tracking-tight text-balance text-white sm:text-4xl">
-                Bitta karta emas &mdash; butun jamoa
+                {s.notOneCard}
               </h2>
               <p className="mt-4 text-white/55">
-                Xodimlaringizga bir xil brend bilan handle va NFC karta
-                chiqaring, tadbirlarda yig&apos;ilgan kontaktlar
-                to&apos;g&apos;ridan-to&apos;g&apos;ri CRM&apos;ingizga tushsin.
+                {s.businessDesc}
               </p>
             </div>
 
             <div className="mt-14 grid gap-x-14 border-t border-white/10 sm:grid-cols-2">
-              {businessFeatures.map((f) => (
+              {copy.business.map((f, i) => {
+                const Icon = BUSINESS_ICONS[i]!;
+                return (
                 <div
                   key={f.title}
                   className="flex gap-5 border-b border-white/10 py-7"
                 >
-                  <f.icon
+                  <Icon
                     className="mt-0.5 h-5 w-5 shrink-0 text-lime"
                     strokeWidth={1.75}
                   />
@@ -522,12 +458,13 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                     </p>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="mt-12 max-w-2xl">
               <h3 className="font-display text-xl font-semibold text-white">
-                Jamoangiz uchun hisob-kitob
+                {s.teamQuote}
               </h3>
 
               {/* The three terms that actually decide a company purchase, said
@@ -538,27 +475,26 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               <dl className="mt-5 mb-6 space-y-2.5 text-sm">
                 <div>
                   <dt className="inline font-medium text-white">
-                    {formatUZS(TEAM_SEAT_MONTHLY)} — bir o&apos;ringa, oyiga.
+                    {formatUZS(TEAM_SEAT_MONTHLY)} — {s.perSeat}
                   </dt>{" "}
                   <dd className="inline text-white/55">
-                    Eng kami {MIN_TEAM_SEATS} o&apos;rin, to&apos;lov firmadan.
+                    {s.minSeats} {MIN_TEAM_SEATS} {s.seatsWord}
                   </dd>
                 </div>
                 <div>
                   <dt className="inline font-medium text-white">
-                    O&apos;rin sotib olinadi, odam emas.
+                    {s.seatBought}
                   </dt>{" "}
                   <dd className="inline text-white/55">
-                    Xodim ketsa o&apos;rin bo&apos;shaydi, keyingisiga beriladi.
+                    {s.seatFrees}
                   </dd>
                 </div>
                 <div>
                   <dt className="inline font-medium text-white">
-                    Raqam firmaniki.
+                    {s.handleIsCompany}
                   </dt>{" "}
                   <dd className="inline text-white/55">
-                    Xodim ketganda uning ma&apos;lumoti o&apos;chadi, raqam va
-                    karta firmada qoladi.
+                    {s.handleStays}
                   </dd>
                 </div>
               </dl>
@@ -570,7 +506,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         <section className="border-t border-black/5 bg-black/[0.02] py-24">
           <div className="mx-auto max-w-4xl px-6">
             <p className="mb-3 text-center text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
-              Taqqoslash
+              {s.compare}
             </p>
             <h2 className="text-center font-display text-3xl font-semibold tracking-tight sm:text-4xl">
               Nega Flex?
@@ -580,7 +516,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-black/10 text-left text-flex-black/45">
-                      <th className="px-5 py-4 font-medium">Xususiyat</th>
+                      <th className="px-5 py-4 font-medium">{s.feature}</th>
                       <th className="px-5 py-4 text-center font-medium">
                         UNQX
                       </th>
@@ -593,12 +529,12 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                     </tr>
                   </thead>
                   <tbody>
-                    {comparison.map((row, i) => (
+                    {COMPARISON.map((row, i) => (
                       <tr
-                        key={row.label}
+                        key={copy.comparison[i]}
                         className={`border-b border-black/5 last:border-0 ${i % 2 === 1 ? "bg-black/[0.015]" : ""}`}
                       >
-                        <td className="px-5 py-4">{row.label}</td>
+                        <td className="px-5 py-4">{copy.comparison[i]}</td>
                         <td className="px-5 py-4 text-center">
                           {row.unqx ? (
                             <Check className="mx-auto h-4 w-4 text-flex-black/50" />
@@ -640,10 +576,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             Savollar
           </p>
           <h2 className="text-center font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-            Savol-javob
+            {s.faq}
           </h2>
           <div className="mt-10 space-y-3">
-            {faqs.map((item) => (
+            {copy.faqs.map((item) => (
               <details
                 key={item.q}
                 className="group rounded-2xl border border-black/10 bg-white p-5 open:shadow-[0_12px_30px_-16px_rgba(14,10,27,0.2)]"
@@ -673,7 +609,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 flex
               </div>
               <p className="mt-3 max-w-[220px] text-sm text-white/50">
-                Raqamli shaxsingiz. Bir tegish bilan ulashing.
+                {s.footerTagline}
               </p>
             </div>
             <div>
@@ -694,7 +630,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                     href="#individual"
                     className="transition-colors hover:text-white"
                   >
-                    Shaxsiy profil
+                    {s.personalProfile}
                   </a>
                 </li>
                 <li>
@@ -714,24 +650,24 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                     href="#biznes"
                     className="transition-colors hover:text-white"
                   >
-                    Jamoa kartalari
+                    {s.teamCards}
                   </a>
                 </li>
                 <li>
                   <a href="#" className="transition-colors hover:text-white">
-                    CRM integratsiya
+                    {s.contactCollection}
                   </a>
                 </li>
                 <li>
                   <a href="#" className="transition-colors hover:text-white">
-                    Tadbir rejimi
+                    {s.eventMode}
                   </a>
                 </li>
               </ul>
             </div>
             <div>
               <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
-                Kompaniya
+                {s.company}
               </p>
               <ul className="mt-4 space-y-2.5 text-sm text-white/60">
                 <li>
@@ -744,7 +680,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 </li>
                 <li>
                   <Link href="/shartlar" className="transition-colors hover:text-white">
-                    Ommaviy oferta
+                    {s.footerTerms}
                   </Link>
                 </li>
                 <li>
@@ -764,7 +700,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               {COMPANY.inn}.
             </p>
             <Link href="/shartlar" className="transition-colors hover:text-white/70">
-              Yetkazib berish va qaytarish shartlari
+              {s.delivery}
             </Link>
           </div>
         </div>
