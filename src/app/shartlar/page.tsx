@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
+import { catalogue } from "@/lib/i18n";
 import { COMPANY, DELIVERY, REPLACEMENT_WINDOW_DAYS } from "@/lib/company";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { BASE_PRICE } from "@/lib/pricing";
@@ -73,7 +74,7 @@ export default function TermsPage() {
         </p>
         <dl className="mt-4 rounded-2xl border border-black/8 bg-black/[0.02] px-5 py-3">
           {DEVICE_TYPES.map((d) => (
-            <Row key={d.id} label={d.name} value={formatUZS(d.price)} />
+            <Row key={d.id} label={catalogue("uz").devices[d.id].name} value={formatUZS(d.price)} />
           ))}
         </dl>
         <p>Narxlar O&apos;zbekiston so&apos;mida ko&apos;rsatilgan.</p>

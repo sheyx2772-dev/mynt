@@ -607,3 +607,149 @@ export type LandingDict = (typeof LANDING)["uz"];
 export function landing(lang: Lang): LandingDict {
   return LANDING[lang] as LandingDict;
 }
+
+
+// --- the catalogue -------------------------------------------------------
+//
+// Names and descriptions for the things being sold, keyed by the ids in
+// devices.ts and plans.ts. The prices, the limits and the ids stay in those
+// files: a price is not a translation, and a plan that costs a different amount
+// in a different language would be a bug rather than a feature.
+
+const CATALOGUE = {
+  uz: {
+    devices: {
+      card: {
+        name: "Karta",
+        tagline: "Cho'ntakda, hamyonda",
+        description: "Bank kartasi o'lchamida. NFC chip va QR-kod bilan — tegizasiz yoki skanerlaysiz.",
+      },
+      ring: {
+        name: "Uzuk",
+        tagline: "Qo'lda, doim o'zingiz bilan",
+        description: "Hech narsa olib yurish shart emas. Qo'l siltashning o'zi profilingizni ochadi.",
+      },
+      bracelet: {
+        name: "Braslet",
+        tagline: "Bilakda, tadbirlar uchun",
+        description: "Tadbir va konferensiyalarda qulay: qo'lingiz band bo'lsa ham bir tegish yetadi.",
+      },
+    },
+    plans: {
+      free: { name: "Oddiy", tagline: "Raqam narxiga kiritilgan" },
+      premium: { name: "Premium", tagline: "Profilni to'liq ishlatish uchun" },
+    },
+    perMonth: "oyiga",
+    perYear: (sum: string, months: number) => `Yiliga ${sum} — ${months} oy bepul`,
+    includesFree: (links: number, services: number) => [
+      "Shaxsiy profil sahifasi",
+      `${links} tagacha havola`,
+      `${services} tagacha xizmat va narx`,
+      "QR-kod",
+      "Kontaktni saqlash tugmasi",
+      "Umumiy tashriflar soni",
+      "Katalogdagi dizaynlar",
+    ],
+    includesPremium: (services: number) => [
+      "Cheksiz havolalar",
+      `${services} tagacha xizmat va narx`,
+      "To'liq analitika — kunlik grafik va har bir havola bo'yicha",
+      "Kelgan kontaktlar va ularni Excel'ga chiqarish",
+      "O'z fon rasmingiz",
+      "Oltin bezak",
+      "Sahifadagi Flex yozuvi olib tashlanadi",
+    ],
+  },
+  ru: {
+    devices: {
+      card: {
+        name: "Карта",
+        tagline: "В кармане, в кошельке",
+        description: "Размером с банковскую карту. С NFC-чипом и QR-кодом — подносите или сканируйте.",
+      },
+      ring: {
+        name: "Кольцо",
+        tagline: "На руке, всегда с вами",
+        description: "Носить с собой ничего не нужно. Достаточно движения руки — профиль открыт.",
+      },
+      bracelet: {
+        name: "Браслет",
+        tagline: "На запястье, для мероприятий",
+        description: "Удобно на конференциях: даже если руки заняты, хватает одного касания.",
+      },
+    },
+    plans: {
+      free: { name: "Обычный", tagline: "Входит в цену номера" },
+      premium: { name: "Premium", tagline: "Чтобы профиль работал полностью" },
+    },
+    perMonth: "в месяц",
+    perYear: (sum: string, months: number) => `${sum} в год — ${months} месяца бесплатно`,
+    includesFree: (links: number, services: number) => [
+      "Страница личного профиля",
+      `До ${links} ссылок`,
+      `До ${services} услуг с ценами`,
+      "QR-код",
+      "Кнопка сохранения контакта",
+      "Общее число визитов",
+      "Дизайны из каталога",
+    ],
+    includesPremium: (services: number) => [
+      "Ссылки без ограничений",
+      `До ${services} услуг с ценами`,
+      "Полная аналитика — по дням и по каждой ссылке",
+      "Собранные контакты и выгрузка в Excel",
+      "Своя фоновая картинка",
+      "Золотое оформление",
+      "Надпись Flex со страницы убирается",
+    ],
+  },
+  en: {
+    devices: {
+      card: {
+        name: "Card",
+        tagline: "In a pocket, in a wallet",
+        description: "The size of a bank card, with an NFC chip and a QR code — tap it or scan it.",
+      },
+      ring: {
+        name: "Ring",
+        tagline: "On your hand, always with you",
+        description: "Nothing to carry. A movement of your hand opens the profile.",
+      },
+      bracelet: {
+        name: "Bracelet",
+        tagline: "On the wrist, for events",
+        description: "Useful at conferences: one tap is enough even with your hands full.",
+      },
+    },
+    plans: {
+      free: { name: "Standard", tagline: "Included in the price of the handle" },
+      premium: { name: "Premium", tagline: "For the profile working in full" },
+    },
+    perMonth: "a month",
+    perYear: (sum: string, months: number) => `${sum} a year — ${months} months free`,
+    includesFree: (links: number, services: number) => [
+      "Your own profile page",
+      `Up to ${links} links`,
+      `Up to ${services} services with prices`,
+      "QR code",
+      "Save-contact button",
+      "Total visits",
+      "Designs from the catalogue",
+    ],
+    includesPremium: (services: number) => [
+      "Unlimited links",
+      `Up to ${services} services with prices`,
+      "Full analytics — by day and by link",
+      "Contacts collected, and an Excel export",
+      "Your own cover image",
+      "Gold finish",
+      "The Flex mark is removed from the page",
+    ],
+  },
+} as const;
+
+export type CatalogueDict = (typeof CATALOGUE)["uz"];
+
+export function catalogue(lang: Lang): CatalogueDict {
+  return CATALOGUE[lang] as CatalogueDict;
+}

@@ -12,13 +12,10 @@ export type PlanId = "free" | "premium";
 
 export type Plan = {
   id: PlanId;
-  name: string;
   /** Monthly price in so'm. Zero for the free plan. */
   monthly: number;
   /** A year up front, priced as ten months. */
   yearly: number;
-  tagline: string;
-  includes: string[];
 };
 
 /**
@@ -100,35 +97,13 @@ export function serviceLimit(id: PlanId): number {
 export const PLANS: readonly Plan[] = [
   {
     id: "free",
-    name: "Oddiy",
     monthly: 0,
     yearly: 0,
-    tagline: "Raqam narxiga kiritilgan",
-    includes: [
-      "Shaxsiy profil sahifasi",
-      `${FREE_LINK_LIMIT} tagacha havola`,
-      `${SERVICE_LIMIT.free} tagacha xizmat va narx`,
-      "QR-kod",
-      "Kontaktni saqlash tugmasi",
-      "Umumiy tashriflar soni",
-      "Katalogdagi dizaynlar",
-    ],
   },
   {
     id: "premium",
-    name: "Premium",
     monthly: 49_000,
     yearly: 490_000,
-    tagline: "Profilni to'liq ishlatish uchun",
-    includes: [
-      "Cheksiz havolalar",
-      `${SERVICE_LIMIT.premium} tagacha xizmat va narx`,
-      "To'liq analitika — kunlik grafik va har bir havola bo'yicha",
-      "Postlar va obunachilar",
-      "AI dizayn so'rovi",
-      "Rezidentlar reytingida ko'rinish",
-      "Sahifadagi Flex yozuvi olib tashlanadi",
-    ],
   },
 ] as const;
 

@@ -4,6 +4,10 @@ import PageShell from "@/components/PageShell";
 import { PLANS, yearlyMonthsFree } from "@/lib/plans";
 import { formatUZS } from "@/lib/format";
 import { COMPANY } from "@/lib/company";
+import { catalogue, site } from "@/lib/i18n";
+import { getLang } from "@/lib/lang";
+import LangSwitch from "@/components/LangSwitch";
+import { FREE_LINK_LIMIT, SERVICE_LIMIT } from "@/lib/plans";
 import { getUser } from "@/lib/auth";
 import { listHandlesForUser } from "@/lib/handles";
 import SubscribeButton from "@/components/SubscribeButton";
@@ -16,7 +20,12 @@ export const metadata: Metadata = {
 
 // The plans had been described in the terms page and nowhere a buyer would
 // look. A subscription with no page to read is a subscription nobody buys.
-export default async function TarifPage() {
+export default async function TarifPage({ searchParams }: PageProps<"/tarif">) {
+  const { til } = await searchParams;
+  const lang = await getLang(til);
+  const c = catalogue(lang);
+  const t = site(lang);
+
   const free = PLANS.find((p) => p.id === "free")!;
   const premium = PLANS.find((p) => p.id === "premium")!;
 
@@ -30,7 +39,10 @@ export default async function TarifPage() {
 
   return (
     <PageShell>
-      <h1 className="font-display text-3xl font-semibold tracking-tight">Tariflar</h1>
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <h1 className="font-display text-3xl font-semibold tracking-tight">{t.navPlans}</h1>
+        <LangSwitch lang={lang} next="/tarif" />
+      </div>
       <p className="mt-3 max-w-prose text-flex-black/60">
         Raqam bir marta sotib olinadi va sizniki bo&apos;lib qoladi. Profilni ochiq
         tutish esa har oy turadigan xarajat, shuning uchun u alohida to&apos;lanadi.
@@ -53,16 +65,18 @@ export default async function TarifPage() {
                   : "text-[11px] font-medium tracking-[0.18em] text-flex-black/40 uppercase"
               }
             >
-              {p.name}
+              {c.plans[p.id].name}
             </p>
 
             <p className="mt-3 font-display text-2xl font-semibold tracking-tight">
-              {p.monthly === 0 ? p.tagline : `${formatUZS(p.monthly)} / oy`}
+              {p.monthly === 0
+                ? c.plans[p.id].tagline
+                : `${formatUZS(p.monthly)} / ${c.perMonth}`}
             </p>
 
             {p.yearly > 0 && (
               <p className="mt-1 text-sm text-white/45">
-                Yiliga {formatUZS(p.yearly)} — {yearlyMonthsFree()} oy tekin
+                {c.perYear(formatUZS(p.yearly), yearlyMonthsFree())}
               </p>
             )}
 
@@ -77,7 +91,10 @@ export default async function TarifPage() {
                   : "mt-6 space-y-2 text-sm text-flex-black/65"
               }
             >
-              {p.includes.map((line) => (
+              {(p.id === "free"
+                ? c.includesFree(FREE_LINK_LIMIT, SERVICE_LIMIT.free)
+                : c.includesPremium(SERVICE_LIMIT.premium)
+              ).map((line) => (
                 <li key={line}>{line}</li>
               ))}
             </ul>

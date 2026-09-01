@@ -24,7 +24,7 @@ import DeviceTile from "@/components/DeviceTile";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber, formatUZS } from "@/lib/format";
 import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
-import { site, landing } from "@/lib/i18n";
+import { site, landing, catalogue } from "@/lib/i18n";
 import { getLang } from "@/lib/lang";
 import LangSwitch from "@/components/LangSwitch";
 import { COMPANY } from "@/lib/company";
@@ -56,6 +56,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const lang = await getLang(til);
   const s = site(lang);
   const copy = landing(lang);
+  const c = catalogue(lang);
 
   const tapShot = productShot("tegizish");
   const familyShot = productShot("oila");
@@ -341,7 +342,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               {s.subscriptionDesc}
             </p>
           </div>
-          <PlanTable />
+          <PlanTable c={c} />
         </section>
 
         {/* What a profile actually looks like */}
@@ -412,15 +413,15 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <div className="mt-10 grid gap-8 sm:grid-cols-3">
             {DEVICE_TYPES.map((device) => (
               <div key={device.id}>
-                <DeviceTile type={device.id} alt={`Flex ${device.name}`} />
+                <DeviceTile type={device.id} alt={`Flex ${c.devices[device.id].name}`} />
                 <div className="mt-4 flex items-baseline justify-between gap-3">
-                  <h3 className="font-display font-semibold">{device.name}</h3>
+                  <h3 className="font-display font-semibold">{c.devices[device.id].name}</h3>
                   <span className="font-tabular text-sm text-flex-black/60">
                     {formatUZS(device.price)}
                   </span>
                 </div>
                 <p className="mt-1 text-sm text-flex-black/55">
-                  {device.tagline}
+                  {c.devices[device.id].tagline}
                 </p>
               </div>
             ))}

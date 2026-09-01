@@ -1,4 +1,6 @@
 import Mark from "@/components/Mark";
+import { catalogue } from "@/lib/i18n";
+import { getLang } from "@/lib/lang";
 import Link from "next/link";
 import type { Metadata } from "next";
 import DeviceFace from "@/components/DeviceFace";
@@ -16,7 +18,11 @@ export const metadata: Metadata = {
 
 const SAMPLE = "MYN042";
 
-export default function DevicesPage() {
+export default async function DevicesPage({ searchParams }: PageProps<"/qurilmalar">) {
+  const { til } = await searchParams;
+  const lang = await getLang(til);
+  const c = catalogue(lang);
+
   return (
     <div className="relative min-h-full overflow-hidden">
       <div className="bg-dot-grid absolute inset-0 [mask-image:radial-gradient(ellipse_60%_40%_at_50%_0%,black,transparent)]" />
@@ -40,18 +46,18 @@ export default function DevicesPage() {
         <div className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-3">
           {DEVICE_TYPES.map((device) => (
             <div key={device.id}>
-              <DeviceTile type={device.id} alt={`Flex ${device.name}`} />
+              <DeviceTile type={device.id} alt={`Flex ${c.devices[device.id].name}`} />
               <div className="mt-5 flex items-baseline justify-between gap-3">
-                <h2 className="font-display text-lg font-semibold">{device.name}</h2>
+                <h2 className="font-display text-lg font-semibold">{c.devices[device.id].name}</h2>
                 <span className="font-tabular text-sm text-flex-black/60">
                   {formatUZS(device.price)}
                 </span>
               </div>
               <p className="mt-0.5 text-xs tracking-wide text-flex-black/40 uppercase">
-                {device.tagline}
+                {c.devices[device.id].tagline}
               </p>
               <p className="mt-2 text-sm leading-relaxed text-flex-black/60">
-                {device.description}
+                {c.devices[device.id].description}
               </p>
             </div>
           ))}

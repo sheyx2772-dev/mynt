@@ -3,12 +3,22 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
 import DeviceFace from "@/components/DeviceFace";
+import { catalogue } from "@/lib/i18n";
 import { DEVICE_TYPES, type DeviceTypeId } from "@/lib/devices";
 import { CARD_DESIGNS, type CardDesignId } from "@/lib/card-designs";
 
 // One control for both halves of the choice: which object, and how it looks.
 // They are shown together because the preview only makes sense as a pair —
 // Naqsh on a ring is not the same picture as Naqsh on a card.
+// The cabinet is Uzbek: its reader is the owner, who bought from an Uzbek site.
+// Naming the language here rather than threading one through says that on
+// purpose, so a later reader does not take it for an oversight.
+const DEVICE_NAMES = {
+  card: catalogue("uz").devices.card.name,
+  ring: catalogue("uz").devices.ring.name,
+  bracelet: catalogue("uz").devices.bracelet.name,
+} as const;
+
 export default function DevicePicker({
   handle,
   device,
@@ -57,7 +67,7 @@ export default function DevicePicker({
                   compact
                 />
                 <span className="mt-1.5 flex items-center justify-between px-1 text-xs font-medium">
-                  {type.name}
+                  {DEVICE_NAMES[type.id]}
                   {active && <Check className="h-3.5 w-3.5" />}
                 </span>
               </label>
