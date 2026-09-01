@@ -353,3 +353,53 @@ begin
 end $$;
 
 drop function assert_rejected(text, text);
+
+-- 0013 — design requests
+do $$
+declare
+  uid uuid;
+  ok boolean;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into uid;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('DSG', '001', 'claimed', uid, now());
+
+  insert into design_requests (handle, user_id, wish, prompt)
+    values ('DSG001', uid, 'qora fonda oltin naqsh', 'Create flat front-face artwork...');
+  raise notice '   ok   a design request can be queued';
+
+  begin
+    insert into design_requests (handle, user_id, wish, prompt)
+      values ('DSG001', uid, 'boshqa narsa', 'Create...');
+    raise exception 'ikkinchi navbat qabul qilindi';
+  exception when unique_violation then
+    raise notice '   ok   rejected: a second pending request for the same handle';
+  end;
+
+  begin
+    insert into design_requests (handle, user_id, wish, prompt)
+      values ('DSG001', uid, 'ha', 'Create...');
+    raise exception 'juda qisqa tavsif qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a wish too short to act on';
+  end;
+
+  begin
+    insert into design_requests (handle, user_id, wish, prompt, status)
+      values ('DSG001', uid, 'yaxshi tavsif', 'Create...', 'nomalum');
+    raise exception 'notogri status qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a status the app does not know';
+  end;
+
+  -- Filling the request frees the handle to ask again.
+  update design_requests set status = 'filled', filled_at = now() where handle = 'DSG001';
+  insert into design_requests (handle, user_id, wish, prompt)
+    values ('DSG001', uid, 'yangi tavsif', 'Create...');
+  raise notice '   ok   a filled request frees the handle to ask again';
+
+  update handles set custom_design_url = 'https://example.test/a.jpg' where normalized = 'DSG001';
+  select custom_design_url is not null into ok from handles where normalized = 'DSG001';
+  if not ok then raise exception 'custom_design_url saqlanmadi'; end if;
+  raise notice '   ok   a handle can carry a design made for it alone';
+end $$;

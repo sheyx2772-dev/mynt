@@ -13,6 +13,8 @@ import PostComposer from "@/components/PostComposer";
 import PostList from "@/components/PostList";
 import { listPostsForHandle } from "@/lib/posts";
 import { getHandleStats } from "@/lib/analytics";
+import DesignRequestForm from "@/components/DesignRequestForm";
+import { listDesignRequests } from "@/lib/design-requests";
 
 export async function generateMetadata(
   props: PageProps<"/kabinet/[handle]">
@@ -36,9 +38,10 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
   if (!owned) notFound();
 
   // Only reached once ownership is established above.
-  const [stats, posts] = await Promise.all([
+  const [stats, posts, designRequests] = await Promise.all([
     getHandleStats(normalized),
     listPostsForHandle(normalized),
+    listDesignRequests(normalized),
   ]);
 
   return (
@@ -69,6 +72,7 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
             contactEmail: owned.contactEmail ?? "",
             tags: owned.tags.join(", "),
             cardDesign: owned.cardDesign,
+            customDesignUrl: owned.customDesignUrl,
             deviceType: owned.deviceType,
           }}
         />
@@ -94,6 +98,10 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
           </div>
         )}
       </section>
+
+      <div className="mt-6">
+        <DesignRequestForm handle={normalized} requests={designRequests} />
+      </div>
 
       <div className="mt-6">
         <StatsPanel stats={stats} />

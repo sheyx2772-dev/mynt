@@ -7,6 +7,7 @@ import { getUser } from "@/lib/auth";
 import { readProfileForm } from "@/lib/profile-form";
 import { isCardDesign, DEFAULT_CARD_DESIGN } from "@/lib/card-designs";
 import { isDeviceType, DEFAULT_DEVICE_TYPE } from "@/lib/devices";
+import { requestDesign } from "@/lib/design-requests";
 
 export type UpdateResult = { ok: boolean; error?: string; saved?: true };
 
@@ -148,4 +149,26 @@ export async function deletePost(postId: string): Promise<PostResult> {
   revalidatePath("/lenta");
 
   return { ok: true };
+}
+
+export type DesignRequestResult = { ok: boolean; error?: string; queued?: true };
+
+export async function submitDesignRequest(
+  rawHandle: string,
+  _prevState: DesignRequestResult,
+  formData: FormData
+): Promise<DesignRequestResult> {
+  const parsed = parseHandle(rawHandle);
+  if (!parsed) return { ok: false, error: "Handle formati noto'g'ri." };
+  const normalized = `${parsed.letters}${parsed.digits}`;
+
+  const user = await getUser();
+  if (!user) return { ok: false, error: "Avval hisobingizga kiring." };
+
+  const wish = String(formData.get("wish") ?? "");
+  const result = await requestDesign(user.id, normalized, wish);
+  if (!result.ok) return { ok: false, error: result.error };
+
+  revalidatePath(`/kabinet/${normalized}`);
+  return { ok: true, queued: true };
 }

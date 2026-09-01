@@ -13,10 +13,12 @@ export default function DevicePicker({
   handle,
   device,
   design,
+  customImage = null,
 }: {
   handle: string;
   device: DeviceTypeId;
   design: CardDesignId;
+  customImage?: string | null;
 }) {
   const [selectedDevice, setSelectedDevice] = useState<DeviceTypeId>(device);
   const [selectedDesign, setSelectedDesign] = useState<CardDesignId>(design);
@@ -47,7 +49,13 @@ export default function DevicePicker({
                   onChange={() => setSelectedDevice(type.id)}
                   className="sr-only"
                 />
-                <DeviceFace type={type.id} design={selectedDesign} handle={handle} compact />
+                <DeviceFace
+                  type={type.id}
+                  design={selectedDesign}
+                  handle={handle}
+                  customImage={customImage}
+                  compact
+                />
                 <span className="mt-1.5 flex items-center justify-between px-1 text-xs font-medium">
                   {type.name}
                   {active && <Check className="h-3.5 w-3.5" />}

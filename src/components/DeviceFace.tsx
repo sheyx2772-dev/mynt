@@ -9,11 +9,18 @@ import type { DeviceTypeId } from "@/lib/devices";
 // drawing that is honestly a drawing beats a stock image of someone else's
 // card.
 
-type FaceProps = { design: CardDesignId; handle: string; compact?: boolean };
+type FaceProps = {
+  design: CardDesignId;
+  handle: string;
+  compact?: boolean;
+  /** Artwork made for this handle alone. Outranks the catalogue design. */
+  customImage?: string | null;
+};
 
-function Card({ design, handle, compact }: FaceProps) {
+function Card({ design, handle, compact, customImage }: FaceProps) {
   const skin = SKINS[design];
-  const art = cardDesign(design);
+  const catalogue = cardDesign(design);
+  const art = customImage ? { ...catalogue, image: customImage, artworkHasNfc: true } : catalogue;
   return (
     <div
       className={`relative isolate aspect-[1.586] w-full overflow-hidden ${compact ? "rounded-lg p-2" : "rounded-2xl p-5"} ${skin.shell} ${skin.ink} shadow-[0_20px_40px_-24px_rgba(14,10,27,0.5)]`}
@@ -157,13 +164,15 @@ export default function DeviceFace({
   design,
   handle,
   compact = false,
+  customImage = null,
 }: {
   type: DeviceTypeId;
   design: CardDesignId;
   handle: string;
   compact?: boolean;
+  customImage?: string | null;
 }) {
-  const props = { design, handle, compact };
+  const props = { design, handle, compact, customImage };
   if (type === "ring") return <Ring {...props} />;
   if (type === "bracelet") return <Bracelet {...props} />;
   return <Card {...props} />;

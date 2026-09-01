@@ -23,6 +23,7 @@ export default function EditProfileForm({
     contactEmail: string;
     tags: string;
     cardDesign: CardDesignId;
+    customDesignUrl?: string | null;
     deviceType: DeviceTypeId;
   };
 }) {
@@ -166,7 +167,12 @@ export default function EditProfileForm({
         Shahar va email profilda ochiq ko&apos;rinadi.
       </p>
 
-      <DevicePicker handle={handle} device={defaults.deviceType} design={defaults.cardDesign} />
+      <DevicePicker
+        handle={handle}
+        device={defaults.deviceType}
+        design={defaults.cardDesign}
+        customImage={defaults.customDesignUrl ?? null}
+      />
 
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
       {state.saved && <p className="text-sm text-flex-black/60">Saqlandi.</p>}
