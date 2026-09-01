@@ -192,7 +192,8 @@ Deployed on Vercel as the project `flex`, building `main` on every push.
 |---|---|
 | Live | `https://flex-five-kohl.vercel.app` |
 | Custom domain | `flex.com.uz` — added to the project, waiting on an `A` record at `@` pointing to `216.198.79.1` |
-| Not set in production | `CLICK_*` and `PAYME_*`, so payment endpoints answer "Payment provider is not configured" and refuse to touch the store |
+| Payme | live — the endpoint answers, and was checked both ways in production: correct auth reaches the store, a forged key gets -32504 |
+| Click | half-configured. `CLICK_SERVICE_ID` is 99108; `CLICK_MERCHANT_ID` is not shown anywhere in the merchant cabinet and `CLICK_SECRET_KEY` is still to be copied, so `isClickConfigured` stays false and the endpoints refuse |
 
 The apex is the canonical host on purpose: Vercel offers to redirect it to
 `www` and that offer was declined, because `NEXT_PUBLIC_SITE_URL`, the Supabase
@@ -202,6 +203,26 @@ allow-list, the sitemap and every printed card say `flex.com.uz` without it.
 for running in a container, and Vercel's build step instead reads the default
 build's file traces — with standalone set, the deploy fails looking for
 `.next/next-server.js.nft.json`.
+
+### The payment accounts
+
+Both providers belong to MC LEGAL, contract B/D 29279\TASH, and both were
+registered for tijoraat.uz rather than for Flex. Neither had ever taken a
+payment, so repointing them broke nothing.
+
+Payme's endpoint is self-service and now points at the deployment. Two things
+there are still wrong for a buyer: the kassa is named after the old callback
+URL, which is what a payer sees, and the endpoint is the vercel.app address
+rather than the domain — both change once the domain resolves.
+
+Click cannot be finished from the cabinet. The callback URLs are set by Click
+support, not by the merchant, and `merchant_id` is not displayed anywhere in
+it. That needs a call to +998 71 231 0883 quoting the contract number, asking
+for the merchant id, for service 99108 to be renamed to Flex against
+flex.com.uz, and for the two callbacks to be set:
+
+    https://flex.com.uz/api/click/prepare
+    https://flex.com.uz/api/click/complete
 
 ### Before deploying
 
