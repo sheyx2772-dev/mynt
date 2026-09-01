@@ -2,6 +2,7 @@ import "server-only";
 
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { TEAM_SEAT_MONTHLY } from "@/lib/plans";
+import { VAT } from "@/lib/company";
 
 // Invoices for company accounts.
 //
@@ -86,7 +87,9 @@ export async function issueInvoice(
   teamId: string,
   seats: number,
   months: number,
-  vatPercent = 0,
+  // Defaults to whatever the seller has settled on, so an invoice cannot be
+  // issued at a rate nobody chose.
+  vatPercent = VAT.percent,
 ): Promise<Invoice | null> {
   if (!supabaseAdmin) return null;
 

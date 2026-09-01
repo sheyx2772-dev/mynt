@@ -103,6 +103,25 @@ ishlayotganini ko'rmaydi. QR-kodni sayt o'zi `?src=qr` bilan chiqaradi.
 Qabul qilinadigan qiymatlar faqat `nfc`, `qr`, `share` — boshqasi yozilmaydi,
 chunki parametr havolada turadi va uni istalgan odam o'zgartirishi mumkin.
 
+## Hal qilinmagan: hisob-fakturadagi QQS
+
+Firma hisob-fakturalari `src/lib/company.ts` dagi `VAT.percent` ni o'qiydi va u
+**nolda turibdi, chunki hech kim hal qilmagan** — taxmin qilingani emas.
+
+Javob uch narsaga bog'liq:
+
+1. **IT Park rezidenti qaysi yuridik shaxs.** Hozir sotuvchi MC LEGAL, OKED
+   69101 — yuridik xizmatlar, IT emas. Rezidentlik boshqa firmaga tegishli
+   bo'lsa, hisob-faktura o'sha firmadan chiqishi kerak.
+2. **O'sha firma QQS to'lovchisimi.** Aylanma solig'ida bo'lsa QQS yo'q.
+3. **Sotuv eksportmi.** IT Park imtiyozlarida QQS alohida turadi ("QQS bundan
+   mustasno"), mavjud imtiyoz esa eksport qilingan xizmatga tegishli. O'zbekiston
+   firmasiga sotilgan obuna eksport emas.
+
+Buxgalter yoki IT Park tasdiqlagach `VAT.percent` ga raqam qo'yiladi va agar nol
+qonuniy ozodlik bo'lsa, `VAT.exemptionNote` ga asos yoziladi. Ikkalasi ham bitta
+joyda, har bir hisob-faktura shu yerdan o'qiydi.
+
 ## Nimalarni qilmaslik kerak
 
 **Davlat gerbi va bayrog'i** sotiladigan kartaga bosilmaydi — qonun bilan

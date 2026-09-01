@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { getTeamForUser } from "@/lib/teams";
 import { getInvoice, getBuyerRequisites, invoiceTotal } from "@/lib/invoices";
-import { COMPANY } from "@/lib/company";
+import { COMPANY, VAT } from "@/lib/company";
 import { formatUZS } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -131,6 +131,9 @@ export default async function InvoicePage(props: PageProps<"/kabinet/jamoa/hisob
           <span>Jami</span>
           <span className="tabular-nums">{formatUZS(invoice.total)}</span>
         </div>
+        {invoice.vatPercent === 0 && VAT.exemptionNote && (
+          <p className="pt-1 text-right text-black/50">{VAT.exemptionNote}</p>
+        )}
       </div>
 
       <p className="mt-8 text-black/55">
