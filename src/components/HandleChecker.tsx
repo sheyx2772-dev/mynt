@@ -8,7 +8,13 @@ import { parseHandle } from "@/lib/pricing";
 // The competitor puts this in the hero, and it is the right call: the first
 // thing anyone wants to know is whether the handle they have in mind is free.
 // Sending them to /{handle} answers that and prices it in one step.
-export default function HandleChecker({ tone = "light" }: { tone?: "light" | "dark" }) {
+export default function HandleChecker({
+  tone = "light",
+  labels,
+}: {
+  tone?: "light" | "dark";
+  labels: { check: string; letters: string; digits: string; error: string };
+}) {
   const dark = tone === "dark";
   const [letters, setLetters] = useState("");
   const [digits, setDigits] = useState("");
@@ -19,7 +25,7 @@ export default function HandleChecker({ tone = "light" }: { tone?: "light" | "da
     event.preventDefault();
     const parsed = parseHandle(`${letters}${digits}`);
     if (!parsed) {
-      setError("3 ta harf va 3 ta raqam kiriting.");
+      setError(labels.error);
       return;
     }
     router.push(`/${parsed.letters}${parsed.digits}`);
@@ -45,7 +51,7 @@ export default function HandleChecker({ tone = "light" }: { tone?: "light" | "da
             flex.com.uz/
           </span>
           <input
-            aria-label="Harflar"
+            aria-label={labels.letters}
             value={letters}
             onChange={(e) => {
               setLetters(e.target.value.replace(/[^A-Za-z]/g, "").toUpperCase().slice(0, 3));
@@ -59,7 +65,7 @@ export default function HandleChecker({ tone = "light" }: { tone?: "light" | "da
             }
           />
           <input
-            aria-label="Raqamlar"
+            aria-label={labels.digits}
             inputMode="numeric"
             value={digits}
             onChange={(e) => {
@@ -83,7 +89,7 @@ export default function HandleChecker({ tone = "light" }: { tone?: "light" | "da
               : "inline-flex items-center gap-2 rounded-full bg-flex-black px-6 py-3.5 font-medium text-white transition-colors hover:bg-flex-black/85"
           }
         >
-          Bo&apos;shligini tekshirish
+          {labels.check}
           <ArrowRight className="h-4 w-4" />
         </button>
       </div>

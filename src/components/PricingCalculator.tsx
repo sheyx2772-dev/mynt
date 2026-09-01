@@ -5,7 +5,16 @@ import { formatUZS } from "@/lib/format";
 import { BASE_PRICE, letterRarity, digitRarity } from "@/lib/pricing";
 import { DEVICE_TYPES } from "@/lib/devices";
 
-export default function PricingCalculator() {
+export default function PricingCalculator({
+  labels,
+}: {
+  labels: {
+    base: string;
+    letterRarity: string;
+    digitRarity: string;
+    total: string;
+  };
+}) {
   const [letters, setLetters] = useState("MYN");
   const [digits, setDigits] = useState("042");
 
@@ -54,25 +63,25 @@ export default function PricingCalculator() {
 
         <div className="space-y-1 font-tabular text-sm">
           <div className="flex items-center justify-between border-b border-black/5 py-3">
-            <div className="font-medium">Bazaviy narx</div>
+            <div className="font-medium">{labels.base}</div>
             <div>{formatUZS(BASE_PRICE)}</div>
           </div>
           <div className="flex items-center justify-between border-b border-black/5 py-3">
             <div>
-              <div className="font-medium">Harf kamyobligi</div>
+              <div className="font-medium">{labels.letterRarity}</div>
               <div className="font-sans text-xs text-black/40">{letterReason}</div>
             </div>
             <div className="font-semibold">&times;{letterMult}</div>
           </div>
           <div className="flex items-center justify-between border-b border-black/5 py-3">
             <div>
-              <div className="font-medium">Raqam kamyobligi</div>
+              <div className="font-medium">{labels.digitRarity}</div>
               <div className="font-sans text-xs text-black/40">{digitReason}</div>
             </div>
             <div className="font-semibold">&times;{digitMult}</div>
           </div>
           <div className="flex items-center justify-between pt-5">
-            <div className="font-display text-lg font-semibold">Jami narx</div>
+            <div className="font-display text-lg font-semibold">{labels.total}</div>
             <div className="rounded-xl bg-lime px-4 py-2 font-display text-xl font-semibold text-flex-black shadow-[0_10px_24px_-8px_rgba(171,255,9,0.7)]">
               {formatUZS(total)}
             </div>

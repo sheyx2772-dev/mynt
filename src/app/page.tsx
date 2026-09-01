@@ -140,7 +140,9 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 <p className="mt-7 max-w-md text-lg leading-relaxed text-white/60">
                   {s.heroLead}
                 </p>
-                <HandleChecker tone="dark" />
+                <HandleChecker tone="dark"
+                    labels={{ check: s.checkFree, letters: s.letters, digits: s.digits, error: s.handleError }}
+                  />
 
                 <div className="mt-6 flex flex-wrap gap-4">
                   <a
@@ -316,7 +318,14 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               {s.pricingDesc}
             </p>
           </div>
-          <PricingCalculator />
+          <PricingCalculator
+                labels={{
+                  base: s.basePrice,
+                  letterRarity: s.letterRarity,
+                  digitRarity: s.digitRarity,
+                  total: s.totalPrice,
+                }}
+              />
         </section>
 
         {/* The three parts of the price */}
