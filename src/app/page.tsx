@@ -23,6 +23,7 @@ import DeviceTile from "@/components/DeviceTile";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber, formatUZS } from "@/lib/format";
 import { COMPANY } from "@/lib/company";
+import PlanTable from "@/components/PlanTable";
 
 const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
 
@@ -369,6 +370,24 @@ export default function Home() {
             </p>
           </div>
           <PricingCalculator />
+        </section>
+
+        {/* The three parts of the price */}
+        <section className="mx-auto max-w-6xl px-6 pb-24">
+          <div className="mb-10 max-w-lg">
+            <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+              Obuna
+            </p>
+            <h2 className="font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+              Narx uch qismdan iborat
+            </h2>
+            <p className="mt-4 leading-relaxed text-flex-black/60">
+              Raqamni bir marta sotib olasiz va u sizniki. Qurilma &mdash; karta, uzuk yoki
+              braslet &mdash; alohida mahsulot. Profil esa har oy ishlab turadi, shuning
+              uchun platformaga obuna alohida.
+            </p>
+          </div>
+          <PlanTable />
         </section>
 
         {/* What a profile actually looks like */}

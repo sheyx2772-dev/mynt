@@ -3,6 +3,7 @@ import PageShell from "@/components/PageShell";
 import { COMPANY, DELIVERY, REPLACEMENT_WINDOW_DAYS } from "@/lib/company";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { BASE_PRICE } from "@/lib/pricing";
+import { plan, FREE_LINK_LIMIT } from "@/lib/plans";
 import { formatUZS } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -35,6 +36,8 @@ function Row({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
+
+const PREMIUM = plan("premium");
 
 export default function TermsPage() {
   return (
@@ -74,6 +77,25 @@ export default function TermsPage() {
           ))}
         </dl>
         <p>Narxlar O&apos;zbekiston so&apos;mida ko&apos;rsatilgan.</p>
+      </Section>
+
+      <Section title="Obuna">
+        <p>
+          Raqam va qurilma bir marta to&apos;lanadi. Profilning ishlab turishi uchun
+          platformaga obuna alohida to&apos;lanadi: oyiga{" "}
+          <strong>{formatUZS(PREMIUM.monthly)}</strong> yoki yiliga{" "}
+          <strong>{formatUZS(PREMIUM.yearly)}</strong>.
+        </p>
+        <p>
+          Obunasiz ham profil ishlaydi va raqam sizniki bo&apos;lib qoladi &mdash; u
+          hech qachon o&apos;chirilmaydi. Oddiy rejada {FREE_LINK_LIMIT} tagacha havola,
+          QR-kod va umumiy tashriflar soni mavjud. Obuna cheksiz havolalar, to&apos;liq
+          analitika, postlar va AI dizayn so&apos;rovini ochadi.
+        </p>
+        <p>
+          Obuna to&apos;xtatilsa, profil oddiy rejaga qaytadi. Ma&apos;lumotlar
+          o&apos;chirilmaydi.
+        </p>
       </Section>
 
       <Section title="To'lov">

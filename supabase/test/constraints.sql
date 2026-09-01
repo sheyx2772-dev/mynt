@@ -468,3 +468,29 @@ begin
   if moved is not null then raise exception 'muddati otgan taklif qabul qilindi'; end if;
   raise notice '   ok   an offer past its date is not claimable';
 end $$;
+
+-- 0015 — plans
+do $$
+declare
+  uid uuid;
+  p text;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into uid;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('PLN', '001', 'claimed', uid, now());
+
+  select plan into p from handles where normalized = 'PLN001';
+  if p <> 'free' then raise exception 'sukut boyicha free emas'; end if;
+  raise notice '   ok   a handle starts on the free plan';
+
+  update handles set plan = 'premium', plan_expires_at = now() + interval '30 days'
+    where normalized = 'PLN001';
+  raise notice '   ok   a handle can be moved to premium';
+
+  begin
+    update handles set plan = 'gold' where normalized = 'PLN001';
+    raise exception 'nomalum tarif qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a plan the app does not sell';
+  end;
+end $$;
