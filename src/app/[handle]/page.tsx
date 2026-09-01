@@ -152,31 +152,9 @@ async function VanityHandlePage({
 
     return (
       <PageShell>
-        {/* The handle and what a handle of this rarity costs, then a slim
-            search. Kept to one line each: a padded search panel above the card
-            was louder than the person it introduced. */}
-        <ProfileHandleSearch />
-
-        <div className="mb-3 flex flex-wrap items-center gap-2">
-          <span className="rounded-lg border border-black/12 bg-white px-3 py-1.5 font-tabular text-xs tracking-[0.14em] shadow-sm">
-            {normalized}
-          </span>
-          <span className="rounded-lg bg-flex-black px-3 py-1.5 font-tabular text-xs tracking-wide text-white">
-            {formatUZS(priceForHandle(letters, digits))}
-          </span>
-
-          <div className="ml-auto">
-            <LangSwitch lang={lang} next={backTo} />
-          </div>
-        </div>
-
-        {/* Gold marks a live subscription, lime a profile without one. It is
-            the one benefit of the monthly plan that the people a card is handed
-            to can actually see, and the one that stops the month the payments
-            do. Every child reads it from this one variable. */}
         <div
           style={{ "--accent": PLAN_ACCENT[profile.plan] } as React.CSSProperties}
-          className="relative mt-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0B0B0F] text-white shadow-[0_40px_80px_-30px_rgba(0,0,0,0.75)]"
+          className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0B0B0F] text-white shadow-[0_40px_80px_-30px_rgba(0,0,0,0.75)]"
         >
           {/* Two channels, so neither has to give way. The banner shows the
               artwork of the card the owner actually holds — a person who tapped
@@ -522,6 +500,30 @@ async function VanityHandlePage({
 
 
           </div>
+        </div>
+
+
+        {/* Under the card, not above it.
+            Somebody opening a profile tapped a physical card or followed a
+            forwarded link: they came to see a person, and half a phone screen
+            of our search box and our price tag before that person's name is
+            the shop talking over them. The moment of wanting one of these
+            arrives after the card has been read, not before — which is what
+            this block is for, and where it now waits. */}
+        <div className="mt-8 border-t border-black/10 pt-6">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <span className="rounded-lg border border-black/12 bg-white px-3 py-1.5 font-tabular text-xs tracking-[0.14em] shadow-sm">
+              {normalized}
+            </span>
+            <span className="rounded-lg bg-flex-black px-3 py-1.5 font-tabular text-xs tracking-wide text-white">
+              {formatUZS(priceForHandle(letters, digits), lang)}
+            </span>
+            <div className="ml-auto">
+              <LangSwitch lang={lang} next={backTo} />
+            </div>
+          </div>
+
+          <ProfileHandleSearch />
         </div>
 
         {tab === "postlar" && (
