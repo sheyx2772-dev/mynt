@@ -141,7 +141,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                   {s.heroBadge}
                 </p>
                 <h1 className="font-display text-5xl font-semibold leading-[0.98] tracking-tight text-balance sm:text-6xl lg:text-[4.5rem]">
-                  {s.heroTitleA}{" "}
+                  {s.heroTitleA && <>{s.heroTitleA} </>}
                   <span className="marker-reveal inline-block rounded-md bg-lime px-2 text-flex-black">
                     {s.heroTitleMark}
                   </span>{" "}
