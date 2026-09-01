@@ -27,7 +27,7 @@ export default function ActionRow({ label, value, href, external = false }: Prop
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className="group flex items-center gap-3.5 px-4 py-3.5 transition-colors hover:bg-white/[0.03]"
     >
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-white/70 transition-colors group-hover:border-lime/40 group-hover:text-lime">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-white/70 transition-colors group-hover:border-[color:var(--accent)]/40 group-hover:text-[color:var(--accent)]">
         {label === "Qo'ng'iroq" ? (
           <Phone className="h-4 w-4" />
         ) : label === "Email" ? (

@@ -7,6 +7,7 @@ import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRar
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import { linkValue } from "@/lib/links";
+import { accentHex } from "@/lib/card-designs";
 import SaveContactButton from "@/components/SaveContactButton";
 import ShareButton from "@/components/ShareButton";
 import ProfileHandleSearch from "@/components/ProfileHandleSearch";
@@ -129,15 +130,29 @@ async function VanityHandlePage({
           </span>
         </div>
 
-        <div className="relative mt-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0B0B0F] text-white shadow-[0_40px_80px_-30px_rgba(0,0,0,0.75)]">
+        {/* The accent is the card's own finish, not a site-wide colour: a
+            person who paid for the gold engraving sees gold when they tap it.
+            Every child reads it from this one variable. */}
+        <div
+          style={{ "--accent": accentHex(profile.cardDesign) } as React.CSSProperties}
+          className="relative mt-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0B0B0F] text-white shadow-[0_40px_80px_-30px_rgba(0,0,0,0.75)]"
+        >
           {/* The banner carries the handle as a watermark rather than a colour
               wash. It is the one thing on the card that cannot be reproduced,
               and it belongs at the top for the same reason a serial is engraved
               on the object and not printed on the sleeve. */}
           <div className="grain relative h-24 bg-[linear-gradient(160deg,#17171e_0%,#0B0B0F_75%)]">
+            <div
+              aria-hidden
+              className="absolute inset-0 opacity-[0.16]"
+              style={{
+                backgroundImage:
+                  "radial-gradient(85% 130% at 12% -20%, var(--accent) 0%, transparent 62%)",
+              }}
+            />
             <span
               aria-hidden
-              className="pointer-events-none absolute top-5 left-6 font-display text-[2.6rem] leading-none font-semibold tracking-[0.08em] text-white/[0.06] select-none"
+              className="pointer-events-none absolute top-5 left-6 font-display text-[2.6rem] leading-none font-semibold tracking-[0.08em] text-[color:var(--accent)] opacity-[0.09] select-none"
             >
               {normalized}
             </span>
@@ -220,7 +235,7 @@ async function VanityHandlePage({
                 href={`/${normalized}`}
                 className={
                   tab === "vizitka"
-                    ? "-mb-px border-b border-lime pb-3 font-medium text-white"
+                    ? "-mb-px border-b border-[color:var(--accent)] pb-3 font-medium text-white"
                     : "-mb-px border-b border-transparent pb-3 text-white/35 transition-colors hover:text-white/70"
                 }
               >
@@ -230,7 +245,7 @@ async function VanityHandlePage({
                 href={`/${normalized}?bolim=postlar`}
                 className={
                   tab === "postlar"
-                    ? "-mb-px flex items-center gap-1.5 border-b border-lime pb-3 font-medium text-white"
+                    ? "-mb-px flex items-center gap-1.5 border-b border-[color:var(--accent)] pb-3 font-medium text-white"
                     : "-mb-px flex items-center gap-1.5 border-b border-transparent pb-3 text-white/35 transition-colors hover:text-white/70"
                 }
               >
@@ -314,7 +329,7 @@ async function VanityHandlePage({
               </div>
 
               <p className="flex items-center gap-1.5 text-[10px] tracking-[0.2em] text-white/25 uppercase">
-                <span className="h-1 w-1 rounded-full bg-lime" />
+                <span className="h-1 w-1 rounded-full bg-[color:var(--accent)]" />
                 Flex
               </p>
             </div>
