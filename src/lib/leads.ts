@@ -1,6 +1,9 @@
 import "server-only";
 
+import { after } from "next/server";
+
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { notify } from "@/lib/notify";
 import { getClientIp } from "@/lib/rate-limit";
 import type { VisitSource } from "@/lib/analytics";
 
@@ -102,7 +105,7 @@ export async function saveLead(
 
   const { data: handle } = await supabaseAdmin
     .from("handles")
-    .select("id")
+    .select("id, user_id")
     .eq("normalized", normalized)
     .eq("status", "claimed")
     .maybeSingle();
@@ -124,6 +127,26 @@ export async function saveLead(
     .insert({ ip, handle: normalized, succeeded: !error });
 
   if (error) return { ok: false, error: "Hozir yuborib bo'lmadi. Keyinroq urinib ko'ring." };
+
+  // The owner hears about it now, not the next time they open the cabinet. A
+  // lead is worth money for about as long as the meeting is still fresh, and
+  // `after()` keeps the notice off the visitor's own wait — they have done
+  // their part and should see the confirmation immediately.
+  if (handle.user_id) {
+    after(
+      notify({
+        userId: handle.user_id as string,
+        kind: "lead",
+        handle: normalized,
+        title: `${lead.name} kontaktini qoldirdi`,
+        body: [lead.phone, lead.email, lead.company, lead.note]
+          .filter(Boolean)
+          .join(" · "),
+        href: `/kabinet/${normalized}`,
+      }),
+    );
+  }
+
   return { ok: true };
 }
 

@@ -880,3 +880,43 @@ begin
   end if;
   raise notice '   ok   a smaller renewal does not take seats away';
 end $$;
+
+-- 0028 — notifications
+do $$
+declare
+  uid uuid;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into uid;
+
+  insert into notifications (user_id, kind, handle, title, href)
+    values (uid, 'lead', 'NTF001', 'Yangi kontakt', '/kabinet/NTF001');
+  raise notice '   ok   a notification can be recorded for an account';
+
+  begin
+    insert into notifications (user_id, kind, title) values (uid, 'nimadir', 'X');
+    raise exception 'notanish tur qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a kind nothing renders';
+  end;
+
+  -- A link that leaves the site would make a notice a redirect anyone could aim.
+  begin
+    insert into notifications (user_id, kind, title, href)
+      values (uid, 'lead', 'X', 'https://evil.example');
+    raise exception 'tashqi havola qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a notification pointing off the site';
+  end;
+
+  insert into notification_settings (user_id, telegram_chat_id) values (uid, 12345);
+  raise notice '   ok   an account can carry where it wants to be reached';
+
+  begin
+    insert into auth.users (id) values (gen_random_uuid());
+    insert into notification_settings (user_id, telegram_chat_id)
+      values ((select id from auth.users order by id desc limit 1), 12345);
+    raise exception 'bitta telegram ikki hisobga bogʻlandi';
+  exception when unique_violation then
+    raise notice '   ok   rejected: one Telegram account linked twice';
+  end;
+end $$;

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { after } from "next/server";
+import { listNotifications } from "@/lib/notify";
 import type { Metadata } from "next";
 import { Pencil, QrCode, Clock } from "lucide-react";
 import PageShell from "@/components/PageShell";
@@ -18,10 +19,13 @@ export const metadata: Metadata = {
 
 export default async function CabinetPage() {
   const user = await requireUser("/kabinet");
-  const [handles, incoming] = await Promise.all([
+  const [handles, incoming, notifications] = await Promise.all([
     listHandlesForUser(user.id),
     listIncomingTransfers(user.email ?? ""),
+    listNotifications(user.id),
   ]);
+
+  const unreadCount = notifications.filter((n) => !n.readAt).length;
 
   // The cabinet is the one page only an owner loads, which makes it the
   // natural place to stamp activity. Deferred so it never delays the render.
@@ -35,6 +39,19 @@ export default async function CabinetPage() {
           <p className="mt-1 text-sm text-flex-black/50">{user.email}</p>
         </div>
         <div className="flex items-center gap-2">
+          <Link
+            href="/kabinet/xabarlar"
+            className="relative rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-flex-black/60 transition-colors hover:bg-black/[0.03]"
+          >
+            Xabarlar
+            {/* A count rather than a dot: "three leads waiting" is worth
+                opening the page for, "something happened" is not. */}
+            {unreadCount > 0 && (
+              <span className="ml-1.5 font-tabular text-xs font-semibold text-flex-black">
+                {unreadCount}
+              </span>
+            )}
+          </Link>
           <Link
             href="/lenta"
             className="rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-flex-black/60 transition-colors hover:bg-black/[0.03]"
