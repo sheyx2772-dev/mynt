@@ -1,4 +1,6 @@
+import Link from "next/link";
 import type { HandleStats } from "@/lib/analytics";
+import type { PlanId } from "@/lib/plans";
 
 // Headline numbers first, then a single-series column chart of daily visits.
 // Clicks are not plotted alongside visits: two series in a card this narrow
@@ -27,7 +29,37 @@ const SOURCE_LABEL: Record<string, string> = {
   togridan: "To'g'ridan-to'g'ri",
 };
 
-export default function StatsPanel({ stats }: { stats: HandleStats }) {
+// What the free plan shows, and why.
+//
+// The totals stay free: an owner has to be able to see that their card works at
+// all, and a card whose owner cannot tell whether anyone tapped it is a card
+// they stop carrying. What premium buys is the part that answers questions
+// rather than counts — which day, which link, and whether the traffic came from
+// the device they paid for. Both products this was measured against charge for
+// exactly this, and it is already built, so the plan gains a real benefit
+// without a line of new analytics code.
+function PremiumTeaser() {
+  return (
+    <div className="mt-7 rounded-2xl border border-black/10 bg-black/[0.02] px-5 py-5">
+      <p className="text-xs font-medium tracking-[0.14em] text-flex-black/45 uppercase">
+        Premium
+      </p>
+      <ul className="mt-3 space-y-1.5 text-sm text-flex-black/65">
+        <li>Kunlik grafik — qaysi kuni necha marta ochilgan</li>
+        <li>Har bir havola bo&apos;yicha bosishlar</li>
+        <li>Qayerdan kelgan — kartani tegizib, QR orqali yoki havoladan</li>
+      </ul>
+      <Link
+        href="/tarif"
+        className="mt-4 inline-block rounded-xl bg-flex-black px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-white uppercase transition-opacity hover:opacity-90"
+      >
+        Tariflar
+      </Link>
+    </div>
+  );
+}
+
+export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: PlanId }) {
   const peak = Math.max(...stats.daily.map((d) => d.views), 0);
   const busiest = stats.daily.find((d) => d.views === peak && peak > 0);
 
@@ -42,7 +74,9 @@ export default function StatsPanel({ stats }: { stats: HandleStats }) {
         <StatTile label="Bosish" value={stats.totalClicks} />
       </div>
 
-      {peak === 0 ? (
+      {plan === "free" ? (
+        <PremiumTeaser />
+      ) : peak === 0 ? (
         <p className="mt-7 rounded-2xl border border-dashed border-black/12 px-4 py-6 text-center text-sm text-flex-black/45">
           Hali tashrif yo&apos;q. Profilingizni ulashganingizdan keyin bu yerda kunlik
           statistika paydo bo&apos;ladi.

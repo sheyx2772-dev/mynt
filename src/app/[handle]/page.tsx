@@ -371,10 +371,18 @@ async function VanityHandlePage({
                 </div>
               </div>
 
-              <p className="flex items-center gap-1.5 text-[10px] tracking-[0.2em] text-white/25 uppercase">
-                <span className="h-1 w-1 rounded-full bg-[color:var(--accent)]" />
-                Flex
-              </p>
+              {/* The plan list has promised this since it was written. On a
+                  card a director hands to a client, the platform's name at the
+                  foot is the one thing on the page that is not theirs. */}
+              {profile.plan === "free" && (
+                <Link
+                  href="/tarif"
+                  className="flex items-center gap-1.5 text-[10px] tracking-[0.2em] text-white/25 uppercase transition-colors hover:text-white/45"
+                >
+                  <span className="h-1 w-1 rounded-full bg-[color:var(--accent)]" />
+                  Flex
+                </Link>
+              )}
             </div>
 
             {lastSeen && (

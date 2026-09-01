@@ -117,7 +117,7 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
       </div>
 
       <div className="mt-6">
-        <StatsPanel stats={stats} />
+        <StatsPanel stats={stats} plan={owned.plan} />
       </div>
 
       <div
