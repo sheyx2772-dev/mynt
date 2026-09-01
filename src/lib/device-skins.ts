@@ -82,4 +82,10 @@ export const SKINS: Record<CardDesignId, Skin> = {
     muted: "text-white/60",
     accent: "bg-[#d9b26a]",
   },
+  xarita: {
+    shell: "bg-[#0d0d0e]",
+    ink: "text-white",
+    muted: "text-white/55",
+    accent: "bg-[#d9b26a]",
+  },
 };

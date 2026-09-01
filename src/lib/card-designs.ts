@@ -74,6 +74,14 @@ export const CARD_DESIGNS = [
     image: "/kartalar/suzani.jpg",
     artworkHasNfc: true,
   },
+  {
+    id: "xarita",
+    name: "Xarita",
+    description:
+      "Qora fonda oltin o'ymakori: O'zbekiston xaritasi va yonida Humo medalyoni. Davlat ramzi emas — o'z chizmamiz.",
+    image: "/kartalar/xarita.jpg",
+    artworkHasNfc: true,
+  },
 ] as const satisfies readonly CardDesign[];
 
 export type CardDesignId = (typeof CARD_DESIGNS)[number]["id"];
