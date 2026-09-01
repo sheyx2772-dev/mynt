@@ -30,7 +30,7 @@ export const PLANS: readonly Plan[] = [
     name: "Oddiy",
     monthly: 0,
     yearly: 0,
-    tagline: "Raqamni sotib olganingizda beriladi",
+    tagline: "Raqam narxiga kiritilgan",
     includes: [
       "Shaxsiy profil sahifasi",
       `${FREE_LINK_LIMIT} tagacha havola`,

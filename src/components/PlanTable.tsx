@@ -23,8 +23,16 @@ export default function PlanTable() {
               {p.tagline}
             </p>
 
-            <p className="mt-6 font-display text-3xl font-semibold tracking-tight">
-              {paid ? formatUZS(p.monthly) : "Bepul"}
+            {/* Not "Bepul": the number was paid for, and a free tier written in
+                large type next to it reads as though the number were free too. */}
+            <p
+              className={
+                paid
+                  ? "mt-6 font-display text-3xl font-semibold tracking-tight"
+                  : "mt-6 font-display text-xl font-semibold tracking-tight text-flex-black/70"
+              }
+            >
+              {paid ? formatUZS(p.monthly) : "Qo'shimcha to'lovsiz"}
               {paid && (
                 <span className={`ml-1 text-sm font-normal ${paid ? "text-white/45" : ""}`}>
                   / oyiga
