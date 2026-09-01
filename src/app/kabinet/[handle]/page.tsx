@@ -71,9 +71,13 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
           defaults={{
             name: owned.name,
             bio: owned.bio,
+            booking: linkFieldValue(owned.links, "Uchrashuv"),
             telegram: linkFieldValue(owned.links, "Telegram"),
+            whatsapp: linkFieldValue(owned.links, "WhatsApp"),
             instagram: linkFieldValue(owned.links, "Instagram"),
             linkedin: linkFieldValue(owned.links, "LinkedIn"),
+            facebook: linkFieldValue(owned.links, "Facebook"),
+            youtube: linkFieldValue(owned.links, "YouTube"),
             website: linkFieldValue(owned.links, "Veb-sayt"),
             city: owned.city ?? "",
             contactEmail: owned.contactEmail ?? "",

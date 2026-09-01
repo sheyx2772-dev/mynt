@@ -7,7 +7,7 @@ import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRar
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import { linkValue } from "@/lib/links";
-import { PLAN_ACCENT, serviceLimit } from "@/lib/plans";
+import { PLAN_ACCENT, serviceLimit, FREE_LINK_LIMIT } from "@/lib/plans";
 import { cardDesign } from "@/lib/card-designs";
 import SaveContactButton from "@/components/SaveContactButton";
 import ShareButton from "@/components/ShareButton";
@@ -309,17 +309,24 @@ async function VanityHandlePage({
                 {profile.city && (
                   <ActionRow label="Manzil" value={profile.city} href={`/rezidentlar?q=${encodeURIComponent(profile.city)}`} />
                 )}
-                {profile.links.map((link, index) => (
-                  <ActionRow
-                    key={link.href}
-                    label={link.label}
-                    value={linkValue(link)}
-                    // Routed through /go so the click is counted; the destination
-                    // is resolved from this index server-side, not from the URL.
-                    href={`/${normalized}/go?to=${index}`}
-                    external
-                  />
-                ))}
+                {/* Stored in full, shown by plan: an owner who fills in eight
+                    and lets premium lapse keeps all eight in the form and gets
+                    them back on renewal. */}
+                {profile.links
+                  .map((link, index) => ({ link, index }))
+                  .slice(0, profile.plan === "premium" ? undefined : FREE_LINK_LIMIT)
+                  .map(({ link, index }) => (
+                    <ActionRow
+                      key={link.href}
+                      label={link.label}
+                      value={linkValue(link)}
+                      // Routed through /go so the click is counted; the
+                      // destination is resolved from this index server-side,
+                      // not from the URL.
+                      href={`/${normalized}/go?to=${index}`}
+                      external
+                    />
+                  ))}
               </div>
             )}
 

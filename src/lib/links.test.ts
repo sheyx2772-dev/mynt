@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { socialLink, websiteLink, buildProfileLinks, linkValue } from "./links";
+import { socialLink, websiteLink, buildProfileLinks, linkValue, whatsappLink, bookingLink } from "./links";
 
 describe("socialLink", () => {
   it("builds a profile URL and strips a leading @", () => {
@@ -97,10 +97,95 @@ describe("linkValue", () => {
     );
   });
 
+  it("shows a booking address in full, not as a username", () => {
+    expect(linkValue({ label: "Uchrashuv", href: "https://calendly.com/aziz" })).toBe(
+      "calendly.com/aziz",
+    );
+  });
+
+  it("shows a WhatsApp link as the number it dials", () => {
+    expect(linkValue({ label: "WhatsApp", href: "https://wa.me/998901234567" })).toBe(
+      "+998901234567",
+    );
+  });
+
   it("shows a website by its host", () => {
     expect(linkValue({ label: "Veb-sayt", href: "https://www.flex.com.uz/" })).toBe("flex.com.uz");
     expect(linkValue({ label: "Veb-sayt", href: "https://mc-legal.uz/team" })).toBe(
       "mc-legal.uz/team",
     );
+  });
+});
+
+describe("whatsappLink", () => {
+  // wa.me refuses a plus or a space and shows "number is invalid", so what the
+  // owner types is stripped down to digits rather than passed through.
+  it("keeps only the digits", () => {
+    expect(whatsappLink("+998 90 123 45 67")).toEqual({
+      label: "WhatsApp",
+      href: "https://wa.me/998901234567",
+    });
+    expect(whatsappLink("(90) 123-45-67")).toEqual({
+      label: "WhatsApp",
+      href: "https://wa.me/901234567",
+    });
+  });
+
+  it("rejects something that is not a number", () => {
+    expect(whatsappLink("")).toBeNull();
+    expect(whatsappLink("yozing")).toBeNull();
+    expect(whatsappLink("12345")).toBeNull();
+    expect(whatsappLink("1".repeat(16))).toBeNull();
+  });
+});
+
+describe("bookingLink", () => {
+  it("takes any address and names it for what it does", () => {
+    expect(bookingLink("calendly.com/aziz")).toEqual({
+      label: "Uchrashuv",
+      href: "https://calendly.com/aziz",
+    });
+  });
+
+  // The same guards as a website link: this is rendered as a clickable anchor.
+  it("refuses anything that is not an http address", () => {
+    expect(bookingLink("javascript:alert(1)")).toBeNull();
+    expect(bookingLink("https://flex.com.uz@evil.com")).toBeNull();
+    expect(bookingLink("")).toBeNull();
+  });
+});
+
+describe("buildProfileLinks", () => {
+  it("puts the appointment first and the site last", () => {
+    const links = buildProfileLinks({
+      booking: "calendly.com/aziz",
+      telegram: "@aziz",
+      whatsapp: "+998901234567",
+      instagram: "aziz",
+      linkedin: "aziz-karimov",
+      facebook: "aziz",
+      youtube: "aziz",
+      website: "flex.com.uz",
+    });
+    expect(links.map((l) => l.label)).toEqual([
+      "Uchrashuv",
+      "Telegram",
+      "WhatsApp",
+      "Instagram",
+      "LinkedIn",
+      "Facebook",
+      "YouTube",
+      "Veb-sayt",
+    ]);
+  });
+
+  it("drops what was left empty without leaving a gap", () => {
+    const links = buildProfileLinks({
+      telegram: "@aziz",
+      instagram: "",
+      linkedin: "",
+      website: "",
+    });
+    expect(links).toEqual([{ label: "Telegram", href: "https://t.me/aziz" }]);
   });
 });

@@ -43,6 +43,34 @@ export default function LinkIcon({ label, className = "h-4 w-4" }: Props) {
           <path d="M11 10.5V17" />
         </svg>
       );
+    case "WhatsApp":
+      return (
+        <svg {...COMMON} className={className}>
+          <path d="M3.2 20.8 4.5 16.6A8.4 8.4 0 1 1 7.6 19.6l-4.4 1.2Z" />
+          <path d="M9 8.4c.2 1 .7 2 1.5 2.9.8.8 1.7 1.4 2.7 1.7l.9-1.1 2 .9-.3 1.5c-1.6.4-3.4-.3-4.9-1.8-1.5-1.5-2.2-3.3-1.8-4.9l1.5-.3.9 2-.5.2Z" />
+        </svg>
+      );
+    case "Facebook":
+      return (
+        <svg {...COMMON} className={className}>
+          <path d="M14.5 21.5v-8h2.6l.5-3.2h-3.1V8.2c0-.9.3-1.6 1.7-1.6h1.6V3.7c-.8-.1-1.7-.2-2.6-.2-2.6 0-4.3 1.6-4.3 4.4v2.4H8v3.2h2.9v8" />
+        </svg>
+      );
+    case "YouTube":
+      return (
+        <svg {...COMMON} className={className}>
+          <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
+          <path d="m10.4 9.6 4.4 2.4-4.4 2.4V9.6Z" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    case "Uchrashuv":
+      return (
+        <svg {...COMMON} className={className}>
+          <rect x="3" y="4.8" width="18" height="16.2" rx="3" />
+          <path d="M3 9.6h18M8 3v3.6M16 3v3.6" />
+          <path d="m9.6 14.4 1.8 1.8 3.4-3.6" />
+        </svg>
+      );
     default:
       return (
         <svg {...COMMON} className={className}>

@@ -19,9 +19,13 @@ export default function EditProfileForm({
   defaults: {
     name: string;
     bio: string;
+    booking: string;
     telegram: string;
+    whatsapp: string;
     instagram: string;
     linkedin: string;
+    facebook: string;
+    youtube: string;
     website: string;
     city: string;
     contactEmail: string;
@@ -162,6 +166,61 @@ export default function EditProfileForm({
             className={inputClass}
           />
         </div>
+        <div>
+          <label className={labelClass} htmlFor="whatsapp">
+            WhatsApp
+          </label>
+          <input
+            id="whatsapp"
+            name="whatsapp"
+            type="tel"
+            inputMode="tel"
+            placeholder="+998 90 123 45 67"
+            defaultValue={defaults.whatsapp}
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className={labelClass} htmlFor="facebook">
+            Facebook
+          </label>
+          <input
+            id="facebook"
+            name="facebook"
+            placeholder="username"
+            defaultValue={defaults.facebook}
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className={labelClass} htmlFor="youtube">
+            YouTube
+          </label>
+          <input
+            id="youtube"
+            name="youtube"
+            placeholder="kanal"
+            defaultValue={defaults.youtube}
+            className={inputClass}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className={labelClass} htmlFor="booking">
+          Uchrashuv belgilash havolasi
+        </label>
+        <input
+          id="booking"
+          name="booking"
+          placeholder="calendly.com/ismingiz"
+          defaultValue={defaults.booking}
+          className={inputClass}
+        />
+        <p className="mt-1 text-xs text-flex-black/35">
+          Calendly, Google Calendar yoki bot &mdash; qaysi biridan foydalansangiz,
+          havolasini qo&apos;ying. Profilda birinchi bo&apos;lib chiqadi.
+        </p>
       </div>
 
       <div>
