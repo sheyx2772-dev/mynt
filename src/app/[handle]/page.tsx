@@ -9,6 +9,7 @@ import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import SaveContactButton from "@/components/SaveContactButton";
 import ShareButton from "@/components/ShareButton";
 import ProfileHandleSearch from "@/components/ProfileHandleSearch";
+import LinkIcon from "@/components/LinkIcon";
 import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
@@ -113,7 +114,23 @@ async function VanityHandlePage({
 
     return (
       <PageShell>
-        <div className="grain card-sheen relative overflow-hidden rounded-[1.75rem] bg-flex-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
+        {/* The competitor puts the handle, its price and a search box above the
+            card, and is right to: a visitor arriving from a tapped card is at
+            the moment of wanting one, and ours were at the foot of the page
+            where nobody scrolled. The price is what a handle of this rarity
+            costs today — this one is taken. */}
+        <div className="mb-4 flex flex-wrap items-center gap-2">
+          <span className="rounded-full border border-black/12 bg-white px-3.5 py-1.5 font-tabular text-sm tracking-wider shadow-sm">
+            {normalized}
+          </span>
+          <span className="rounded-full bg-flex-black px-3.5 py-1.5 font-tabular text-sm text-white">
+            {formatUZS(priceForHandle(letters, digits))}
+          </span>
+        </div>
+
+        <ProfileHandleSearch />
+
+        <div className="grain card-sheen relative mt-4 overflow-hidden rounded-[1.75rem] bg-flex-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
           {profile.avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
             <img
@@ -218,75 +235,83 @@ async function VanityHandlePage({
               <FollowButton handle={normalized} initialFollowing={following} />
             </div>
           )}
-        </div>
 
-        <div className="mt-6 flex gap-6 border-b border-black/10 text-sm">
-          <Link
-            href={`/${normalized}`}
-            className={
-              tab === "vizitka"
-                ? "-mb-px border-b-2 border-flex-black pb-2.5 font-medium"
-                : "-mb-px border-b-2 border-transparent pb-2.5 text-flex-black/45 transition-colors hover:text-flex-black"
-            }
-          >
-            Vizitka
-          </Link>
-          <Link
-            href={`/${normalized}?bolim=postlar`}
-            className={
-              tab === "postlar"
-                ? "-mb-px flex items-center gap-1.5 border-b-2 border-flex-black pb-2.5 font-medium"
-                : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-flex-black/45 transition-colors hover:text-flex-black"
-            }
-          >
-            Postlar
-            {profile.postCount > 0 && (
-              <span className="font-tabular text-xs text-flex-black/35">{profile.postCount}</span>
-            )}
-          </Link>
-        </div>
-
-        {tab === "vizitka" ? (
-          <>
-          <div className="mt-6">
-            <SaveContactButton
-              fullName={profile.name}
-              handle={normalized}
-              bio={profile.bio}
-              phone={profile.phone}
-              email={profile.contactEmail}
-              position={profile.position}
-              company={profile.company}
-            />
-          </div>
-
-          {isOwner && (
+          {/* The card is the visiting card, so the tabs and everything the
+              vizitka holds live on it. Posts are not the card and stay on the
+              page below. */}
+          <div className="relative mt-6 flex gap-6 border-b border-white/10 text-sm">
             <Link
-              href={`/kabinet/${normalized}`}
-              className="mt-3 block rounded-full border border-black/10 px-6 py-3 text-center text-sm font-medium transition-colors hover:bg-black/[0.03]"
+              href={`/${normalized}`}
+              className={
+                tab === "vizitka"
+                  ? "-mb-px border-b-2 border-lime pb-2.5 font-medium text-white"
+                  : "-mb-px border-b-2 border-transparent pb-2.5 text-white/45 transition-colors hover:text-white"
+              }
             >
-              Profilni tahrirlash
+              Vizitka
             </Link>
-          )}
-
-          <div className="mt-6 space-y-3">
-            {profile.links.map((link, index) => (
-              <a
-                key={link.href}
-                // Routed through /go so the click is counted; the destination is
-                // resolved from this index server-side, not from the URL.
-                href={`/${normalized}/go?to=${index}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block rounded-xl border border-black/10 bg-white px-5 py-3 text-center font-medium shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
-              >
-                {link.label}
-              </a>
-            ))}
+            <Link
+              href={`/${normalized}?bolim=postlar`}
+              className={
+                tab === "postlar"
+                  ? "-mb-px flex items-center gap-1.5 border-b-2 border-lime pb-2.5 font-medium text-white"
+                  : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-white/45 transition-colors hover:text-white"
+              }
+            >
+              Postlar
+              {profile.postCount > 0 && (
+                <span className="font-tabular text-xs text-white/35">{profile.postCount}</span>
+              )}
+            </Link>
           </div>
 
-          </>
-        ) : (
+          {tab === "vizitka" && (
+            <>
+              {profile.links.length > 0 && (
+                <div className="relative mt-5 space-y-2.5">
+                  {profile.links.map((link, index) => (
+                    <a
+                      key={link.href}
+                      // Routed through /go so the click is counted; the
+                      // destination is resolved from this index server-side,
+                      // not from the URL.
+                      href={`/${normalized}/go?to=${index}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2.5 rounded-xl border border-white/12 bg-white/[0.04] px-5 py-3 font-medium text-white/85 transition-colors hover:border-lime/40 hover:bg-white/[0.08] hover:text-white"
+                    >
+                      <LinkIcon label={link.label} />
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              <div className="relative mt-5">
+                <SaveContactButton
+                  fullName={profile.name}
+                  handle={normalized}
+                  bio={profile.bio}
+                  phone={profile.phone}
+                  email={profile.contactEmail}
+                  position={profile.position}
+                  company={profile.company}
+                />
+              </div>
+
+              {isOwner && (
+                <Link
+                  href={`/kabinet/${normalized}`}
+                  className="relative mt-3 block rounded-full border border-white/15 px-6 py-3 text-center text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.06] hover:text-white"
+                >
+                  Profilni tahrirlash
+                </Link>
+              )}
+            </>
+          )}
+        </div>
+
+        {tab === "postlar" && (
           <div className="mt-6">
             <PostList
               posts={posts}
@@ -299,23 +324,6 @@ async function VanityHandlePage({
           </div>
         )}
 
-        {/* Every profile is a shop window. A visitor arriving from a tapped
-            card or a forwarded link is at the exact moment of wanting one, and
-            until now the page gave them nowhere to go.
-
-            The price shown is what a handle of this rarity costs today, not an
-            asking price — this one is taken. It is here because it is the
-            honest answer to the question the search bar provokes: what would
-            mine cost? */}
-        <div className="mt-10 border-t border-black/10 pt-6">
-          <p className="text-sm text-flex-black/55">
-            Shu darajadagi raqam narxi —{" "}
-            <span className="font-tabular font-medium text-flex-black">
-              {formatUZS(priceForHandle(letters, digits))}
-            </span>
-          </p>
-          <ProfileHandleSearch />
-        </div>
       </PageShell>
     );
   }
