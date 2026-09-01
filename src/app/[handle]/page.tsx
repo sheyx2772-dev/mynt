@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { after } from "next/server";
 import type { Metadata } from "next";
 import { Nfc, Eye, MapPin, Mail } from "lucide-react";
@@ -51,6 +51,15 @@ export default async function HandlePage(props: PageProps<"/[handle]">) {
   // Neither a handle nor a serial — render the 404 page with a 404 status
   // rather than a 200 that invites crawlers to index every typo.
   if (!parsed) notFound();
+
+  // parseHandle accepts any casing, so /abc123 rendered the same profile as
+  // /ABC123 under a second address. A card, a QR code and the sitemap all
+  // carry the uppercase form, so that is the canonical one and the rest
+  // redirect to it rather than standing beside it as duplicates.
+  const canonical = `${parsed.letters}${parsed.digits}`;
+  if (handle !== canonical) {
+    permanentRedirect(bolim === "postlar" ? `/${canonical}?bolim=postlar` : `/${canonical}`);
+  }
 
   return (
     <VanityHandlePage
