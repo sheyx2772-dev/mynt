@@ -23,7 +23,7 @@ function Card({ design, handle, compact }: FaceProps) {
           src={art.image}
           alt=""
           fill
-          sizes="(min-width: 640px) 24rem, 100vw"
+          sizes={compact ? "96px" : "(min-width: 640px) 24rem, 100vw"}
           className="-z-10 object-cover"
         />
       ) : (
