@@ -21,7 +21,7 @@ import Image from "next/image";
 import { productShot } from "@/lib/product-shots";
 import DeviceTile from "@/components/DeviceTile";
 import { DEVICE_TYPES } from "@/lib/devices";
-import { formatNumber } from "@/lib/format";
+import { formatNumber, formatUZS } from "@/lib/format";
 
 const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
 
@@ -437,9 +437,12 @@ export default function Home() {
             {DEVICE_TYPES.map((device) => (
               <div key={device.id}>
                 <DeviceTile type={device.id} alt={`Flex ${device.name}`} />
-                <h3 className="mt-4 font-display font-semibold">
-                  {device.name}
-                </h3>
+                <div className="mt-4 flex items-baseline justify-between gap-3">
+                  <h3 className="font-display font-semibold">{device.name}</h3>
+                  <span className="font-tabular text-sm text-flex-black/60">
+                    {formatUZS(device.price)}
+                  </span>
+                </div>
                 <p className="mt-1 text-sm text-flex-black/55">
                   {device.tagline}
                 </p>

@@ -5,6 +5,7 @@ import DeviceTile from "@/components/DeviceTile";
 import CardFan from "@/components/CardFan";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { CARD_DESIGNS } from "@/lib/card-designs";
+import { formatUZS } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Qurilmalar — flex.com.uz",
@@ -41,7 +42,12 @@ export default function DevicesPage() {
           {DEVICE_TYPES.map((device) => (
             <div key={device.id}>
               <DeviceTile type={device.id} alt={`Flex ${device.name}`} />
-              <h2 className="mt-5 font-display text-lg font-semibold">{device.name}</h2>
+              <div className="mt-5 flex items-baseline justify-between gap-3">
+                <h2 className="font-display text-lg font-semibold">{device.name}</h2>
+                <span className="font-tabular text-sm text-flex-black/60">
+                  {formatUZS(device.price)}
+                </span>
+              </div>
               <p className="mt-0.5 text-xs tracking-wide text-flex-black/40 uppercase">
                 {device.tagline}
               </p>

@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { formatUZS } from "@/lib/format";
 import { BASE_PRICE, letterRarity, digitRarity } from "@/lib/pricing";
+import { DEVICE_TYPES } from "@/lib/devices";
 
 export default function PricingCalculator() {
   const [letters, setLetters] = useState("MYN");
@@ -76,6 +77,10 @@ export default function PricingCalculator() {
               {formatUZS(total)}
             </div>
           </div>
+          <p className="pt-3 font-sans text-xs leading-relaxed text-black/40">
+            Bu raqamning narxi. Qurilma &mdash; karta, uzuk yoki braslet &mdash; alohida
+            tanlanadi va alohida to&apos;lanadi, {formatUZS(DEVICE_TYPES[0].price)}dan boshlab.
+          </p>
         </div>
       </div>
     </div>
