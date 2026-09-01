@@ -610,3 +610,47 @@ begin
     raise notice '   ok   rejected: more services than a card can carry';
   end;
 end $$;
+
+-- 0021 — leads
+do $$
+declare
+  uid uuid;
+  hid uuid;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into uid;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('LED', '001', 'claimed', uid, now()) returning id into hid;
+
+  insert into leads (handle_id, name, phone, company, source)
+    values (hid, 'Javohir Abrorov', '+998 90 123 45 67', 'MC LEGAL', 'nfc');
+  raise notice '   ok   a visitor can send their contact back to a profile';
+
+  begin
+    insert into leads (handle_id, name) values (hid, 'Nomsiz odam');
+    raise exception 'aloqasiz lead qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a lead with no way to answer it';
+  end;
+
+  begin
+    insert into leads (handle_id, name, phone) values (hid, 'X', 'qongiroq qiling');
+    raise exception 'harfli telefon qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a lead phone that is not a number';
+  end;
+
+  begin
+    insert into leads (handle_id, name, email, source)
+      values (hid, 'X', 'a@b.uz', 'boshqa');
+    raise exception 'notanish manba qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a source outside nfc/qr/share';
+  end;
+
+  -- Deleting the handle takes its leads with it.
+  delete from handles where id = hid;
+  if exists (select 1 from leads where handle_id = hid) then
+    raise exception 'handle o''chirilgach leadlar qoldi';
+  end if;
+  raise notice '   ok   leads go with the handle they were sent to';
+end $$;

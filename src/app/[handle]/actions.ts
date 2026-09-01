@@ -1,5 +1,8 @@
 "use server";
 
+import { readLeadForm, saveLead } from "@/lib/leads";
+import { readSource } from "@/lib/analytics";
+
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -218,4 +221,29 @@ export async function toggleFollow(rawHandle: string): Promise<FollowResult> {
 
   revalidatePath(`/${normalized}`);
   return { following: true };
+}
+
+export type LeadResult = { ok: boolean; error?: string };
+
+/**
+ * A visitor sending their own contact back to the profile they are looking at.
+ *
+ * Open to anyone, including signed-out visitors — the point is that the person
+ * holding the card does not have to install anything or make an account. What
+ * protects it is validation, the rate limits inside `saveLead`, and the fact
+ * that nothing here reads or returns anything: it only writes one row that only
+ * the profile's owner can ever read back.
+ */
+export async function submitLead(
+  rawHandle: string,
+  rawSource: string | undefined,
+  formData: FormData,
+): Promise<LeadResult> {
+  const parsed = parseHandle(rawHandle);
+  if (!parsed) return { ok: false, error: "Bu profil topilmadi." };
+
+  const read = readLeadForm(formData);
+  if (!read.ok) return { ok: false, error: read.error };
+
+  return saveLead(`${parsed.letters}${parsed.digits}`, read.lead, readSource(rawSource));
 }

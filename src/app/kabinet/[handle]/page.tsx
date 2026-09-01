@@ -9,6 +9,8 @@ import { getOwnedHandle } from "@/lib/handles";
 import { parseHandle } from "@/lib/pricing";
 import { linkFieldValue } from "@/lib/profile-form";
 import StatsPanel from "@/components/StatsPanel";
+import LeadsPanel from "@/components/LeadsPanel";
+import { listLeads } from "@/lib/leads";
 import PostComposer from "@/components/PostComposer";
 import PostList from "@/components/PostList";
 import { listPostsForHandle } from "@/lib/posts";
@@ -40,11 +42,12 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
   if (!owned) notFound();
 
   // Only reached once ownership is established above.
-  const [stats, posts, designRequests, transfers] = await Promise.all([
+  const [stats, posts, designRequests, transfers, leads] = await Promise.all([
     getHandleStats(normalized),
     listPostsForHandle(normalized),
     listDesignRequests(normalized),
     listTransfersForHandle(normalized),
+    listLeads(normalized, user.id),
   ]);
 
   return (
@@ -117,6 +120,8 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
       </div>
 
       <div className="mt-6">
+        <LeadsPanel handle={owned.normalized} leads={leads} plan={owned.plan} />
+
         <StatsPanel stats={stats} plan={owned.plan} />
       </div>
 

@@ -13,6 +13,7 @@ import SaveContactButton from "@/components/SaveContactButton";
 import ShareButton from "@/components/ShareButton";
 import ProfileHandleSearch from "@/components/ProfileHandleSearch";
 import ActionRow from "@/components/ActionRow";
+import ExchangeContactForm from "@/components/ExchangeContactForm";
 import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
@@ -248,6 +249,17 @@ async function VanityHandlePage({
                 />
               </div>
               {!isOwner && <FollowButton handle={normalized} initialFollowing={following} />}
+
+              {/* Premium, and only for a visitor: the owner has no reason to
+                  send themselves a contact, and seeing the form on their own
+                  page would read as something they are meant to fill in. */}
+              {!isOwner && profile.plan === "premium" && (
+                <ExchangeContactForm
+                  handle={normalized}
+                  ownerName={profile.name}
+                  source={source ?? undefined}
+                />
+              )}
             </div>
 
             <div className="mt-7 flex gap-7 border-b border-white/[0.08] text-[11px] tracking-[0.16em] uppercase">
