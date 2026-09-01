@@ -7,7 +7,7 @@ import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRar
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import { linkValue } from "@/lib/links";
-import { accentHex } from "@/lib/card-designs";
+import { PLAN_ACCENT } from "@/lib/plans";
 import SaveContactButton from "@/components/SaveContactButton";
 import ShareButton from "@/components/ShareButton";
 import ProfileHandleSearch from "@/components/ProfileHandleSearch";
@@ -130,11 +130,12 @@ async function VanityHandlePage({
           </span>
         </div>
 
-        {/* The accent is the card's own finish, not a site-wide colour: a
-            person who paid for the gold engraving sees gold when they tap it.
-            Every child reads it from this one variable. */}
+        {/* Gold marks a live subscription, lime a profile without one. It is
+            the one benefit of the monthly plan that the people a card is handed
+            to can actually see, and the one that stops the month the payments
+            do. Every child reads it from this one variable. */}
         <div
-          style={{ "--accent": accentHex(profile.cardDesign) } as React.CSSProperties}
+          style={{ "--accent": PLAN_ACCENT[profile.plan] } as React.CSSProperties}
           className="relative mt-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0B0B0F] text-white shadow-[0_40px_80px_-30px_rgba(0,0,0,0.75)]"
         >
           {/* The banner carries the handle as a watermark rather than a colour

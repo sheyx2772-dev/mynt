@@ -1,3 +1,4 @@
+import { activePlan, type PlanId } from "@/lib/plans";
 import { cache } from "react";
 import { DEFAULT_CARD_DESIGN, isCardDesign, type CardDesignId } from "@/lib/card-designs";
 import { DEFAULT_DEVICE_TYPE, isDeviceType, type DeviceTypeId } from "@/lib/devices";
@@ -15,6 +16,7 @@ export type ClaimedProfile = {
   position: string | null;
   company: string | null;
   cardDesign: CardDesignId;
+  plan: PlanId;
   tags: string[];
   lastSeenAt: string | null;
   viewCount: number;
@@ -32,6 +34,7 @@ const DEMO_PROFILES: Record<string, ClaimedProfile> = {
     position: null,
     company: null,
     cardDesign: DEFAULT_CARD_DESIGN,
+    plan: "free",
     tags: ["Startup"],
     lastSeenAt: null,
     viewCount: 0,
@@ -57,7 +60,7 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
   const { data } = await supabase
     .from("handles")
     .select(
-      "user_id, owner_name, bio, avatar_url, links, city, contact_email, phone, position, company, tags, last_seen_at, view_count, follower_count, post_count, card_design"
+      "user_id, owner_name, bio, avatar_url, links, city, contact_email, phone, position, company, tags, last_seen_at, view_count, follower_count, post_count, card_design, plan, plan_expires_at"
     )
     .eq("normalized", normalized)
     .eq("status", "claimed")
@@ -77,6 +80,7 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
     position: data.position ?? null,
     company: data.company ?? null,
     cardDesign: isCardDesign(data.card_design) ? data.card_design : DEFAULT_CARD_DESIGN,
+    plan: activePlan(data.plan, data.plan_expires_at),
     tags: Array.isArray(data.tags) ? data.tags : [],
     lastSeenAt: data.last_seen_at ?? null,
     viewCount: Number(data.view_count ?? 0),

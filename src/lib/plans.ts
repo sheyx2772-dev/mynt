@@ -21,6 +21,38 @@ export type Plan = {
   includes: string[];
 };
 
+/**
+ * The plan a handle is actually on right now.
+ *
+ * The column says what was bought; the expiry says whether it still holds. A
+ * lapsed premium falls back to free rather than going dark — the number was
+ * paid for and stays reachable — so this is the only place the two are read
+ * together, and nothing downstream has to remember the rule.
+ */
+export function activePlan(
+  stored: string | null | undefined,
+  expiresAt: string | null | undefined,
+  now: Date = new Date(),
+): PlanId {
+  if (stored !== "premium") return "free";
+  if (!expiresAt) return "free";
+  return new Date(expiresAt) > now ? "premium" : "free";
+}
+
+/**
+ * What the profile opens in.
+ *
+ * Gold marks a paid subscription rather than a card design, and that is a
+ * commercial decision more than a visual one: the monthly plan had no visible
+ * benefit at all — a link limit nobody sees — and a mark that is plainly worth
+ * having, and plainly goes away when the payments stop, is the strongest thing
+ * a subscription can offer.
+ */
+export const PLAN_ACCENT: Record<PlanId, string> = {
+  free: "#abff09",
+  premium: "#d9c48f",
+};
+
 /** Links a free profile may show. Unlimited on premium. */
 export const FREE_LINK_LIMIT = 5;
 
