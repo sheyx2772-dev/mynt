@@ -31,7 +31,7 @@ export default function ProfileHandleSearch() {
         const parsed = parseHandle(value);
         if (parsed) router.push(`/${parsed.letters}${parsed.digits}`);
       }}
-      className="mt-8 rounded-2xl border border-black/10 bg-white p-4"
+      className="mt-4 rounded-2xl border border-black/10 bg-white p-4"
     >
       <p className="mb-2.5 text-xs text-flex-black/45">O&apos;z raqamingizni tekshiring</p>
       <div className="flex items-center gap-2 rounded-full border border-black/10 bg-black/[0.02] px-4 py-2.5">
