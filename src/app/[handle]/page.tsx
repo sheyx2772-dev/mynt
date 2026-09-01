@@ -218,6 +218,12 @@ async function VanityHandlePage({
               </p>
             )}
 
+            {lastSeen && (
+              <p className="mt-2 text-xs text-[color:var(--accent)]">
+                Oxirgi faollik — {lastSeen}
+              </p>
+            )}
+
             {profile.bio && (
               <p className="mt-4 text-sm leading-relaxed text-white/60">{profile.bio}</p>
             )}
@@ -265,7 +271,38 @@ async function VanityHandlePage({
               )}
             </div>
 
-            <div className="mt-7 flex gap-7 border-b border-white/[0.08] text-[11px] tracking-[0.16em] uppercase">
+            <div className="mt-6 flex gap-7 border-t border-white/[0.08] pt-5">
+              {(profile.followerCount > 0 || followingCount > 0) && (
+                <>
+                  <div>
+                    <p className="font-display text-base font-semibold tabular-nums">
+                      {profile.followerCount}
+                    </p>
+                    <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
+                      Obunachi
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-display text-base font-semibold tabular-nums">
+                      {followingCount}
+                    </p>
+                    <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
+                      Obuna
+                    </p>
+                  </div>
+                </>
+              )}
+              <div>
+                <p className="font-display text-base font-semibold tabular-nums">
+                  {profile.viewCount}
+                </p>
+                <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
+                  Ko&apos;rish
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex gap-7 border-b border-white/[0.08] text-[11px] tracking-[0.16em] uppercase">
               <Link
                 href={`/${normalized}`}
                 className={
@@ -376,39 +413,9 @@ async function VanityHandlePage({
               </Link>
             )}
 
-            {/* The foot of the card, the way an object is marked: what it is,
-                which one it is, and nothing else. */}
-            <div className="mt-7 flex items-end justify-between border-t border-white/[0.08] pt-5">
-              <div className="flex gap-7">
-                <div>
-                  <p className="font-display text-base font-semibold tabular-nums">
-                    {profile.followerCount}
-                  </p>
-                  <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
-                    Obunachi
-                  </p>
-                </div>
-                <div>
-                  <p className="font-display text-base font-semibold tabular-nums">
-                    {followingCount}
-                  </p>
-                  <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
-                    Obuna
-                  </p>
-                </div>
-                <div>
-                  <p className="font-display text-base font-semibold tabular-nums">
-                    {profile.viewCount}
-                  </p>
-                  <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
-                    Ko&apos;rish
-                  </p>
-                </div>
-              </div>
-
-              {/* The plan list has promised this since it was written. On a
-                  card a director hands to a client, the platform's name at the
-                  foot is the one thing on the page that is not theirs. */}
+            {/* The foot of the card, the way an object is marked: what it is
+                and nothing else. */}
+            <div className="mt-7 flex justify-end border-t border-white/[0.08] pt-5">
               {profile.plan === "free" && (
                 <Link
                   href="/tarif"
@@ -420,11 +427,7 @@ async function VanityHandlePage({
               )}
             </div>
 
-            {lastSeen && (
-              <p className="mt-4 text-[10px] tracking-[0.14em] text-white/25 uppercase">
-                Oxirgi faollik — {lastSeen}
-              </p>
-            )}
+
           </div>
         </div>
 
