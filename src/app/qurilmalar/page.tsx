@@ -50,7 +50,7 @@ export default async function DevicesPage({ searchParams }: PageProps<"/qurilmal
               <div className="mt-5 flex items-baseline justify-between gap-3">
                 <h2 className="font-display text-lg font-semibold">{c.devices[device.id].name}</h2>
                 <span className="font-tabular text-sm text-flex-black/60">
-                  {formatUZS(device.price)}
+                  {formatUZS(device.price, lang)}
                 </span>
               </div>
               <p className="mt-0.5 text-xs tracking-wide text-flex-black/40 uppercase">

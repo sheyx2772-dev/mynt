@@ -164,10 +164,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               <div className="relative flex justify-center lg:justify-end">
                 <div className="absolute -top-6 -left-10 z-20 hidden -rotate-6 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 backdrop-blur-md sm:block lg:-left-16">
                   <p className="text-[10px] font-medium tracking-wide text-white/40 uppercase">
-                    Bu hafta
+                    {s.thisWeek}
                   </p>
                   <p className="font-display text-lg font-semibold">
-                    2 481 tashrif
+                    2 481 {s.visitsWord}
                   </p>
                 </div>
                 <div className="absolute -right-6 -bottom-4 z-20 hidden rotate-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 backdrop-blur-md sm:block">
@@ -320,11 +320,13 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             </p>
           </div>
           <PricingCalculator
+                lang={lang}
                 labels={{
                   base: s.basePrice,
                   letterRarity: s.letterRarity,
                   digitRarity: s.digitRarity,
                   total: s.totalPrice,
+                  deviceNote: s.deviceNote(formatUZS(DEVICE_TYPES[0].price, lang)),
                 }}
               />
         </section>
@@ -342,7 +344,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               {s.subscriptionDesc}
             </p>
           </div>
-          <PlanTable c={c} />
+          <PlanTable c={c} lang={lang} />
         </section>
 
         {/* What a profile actually looks like */}
@@ -417,7 +419,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 <div className="mt-4 flex items-baseline justify-between gap-3">
                   <h3 className="font-display font-semibold">{c.devices[device.id].name}</h3>
                   <span className="font-tabular text-sm text-flex-black/60">
-                    {formatUZS(device.price)}
+                    {formatUZS(device.price, lang)}
                   </span>
                 </div>
                 <p className="mt-1 text-sm text-flex-black/55">
@@ -485,7 +487,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               <dl className="mt-5 mb-6 space-y-2.5 text-sm">
                 <div>
                   <dt className="inline font-medium text-white">
-                    {formatUZS(TEAM_SEAT_MONTHLY)} — {s.perSeat}
+                    {formatUZS(TEAM_SEAT_MONTHLY, lang)} — {s.perSeat}
                   </dt>{" "}
                   <dd className="inline text-white/55">
                     {s.minSeats} {MIN_TEAM_SEATS} {s.seatsWord}

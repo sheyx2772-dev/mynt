@@ -1,11 +1,11 @@
 import { Check } from "lucide-react";
 import { PLANS, yearlyMonthsFree, FREE_LINK_LIMIT, SERVICE_LIMIT } from "@/lib/plans";
 import { formatUZS } from "@/lib/format";
-import type { CatalogueDict } from "@/lib/i18n";
+import type { CatalogueDict, Lang } from "@/lib/i18n";
 
 // The two plans side by side. The free one is listed first and in full, because
 // it is what every buyer gets and hiding it makes the paid one look compulsory.
-export default function PlanTable({ c }: { c: CatalogueDict }) {
+export default function PlanTable({ c, lang }: { c: CatalogueDict; lang: Lang }) {
   return (
     <div className="grid gap-5 sm:grid-cols-2">
       {PLANS.map((p) => {
@@ -33,7 +33,7 @@ export default function PlanTable({ c }: { c: CatalogueDict }) {
                   : "mt-6 font-display text-xl font-semibold tracking-tight text-flex-black/70"
               }
             >
-              {paid ? formatUZS(p.monthly) : "Qo'shimcha to'lovsiz"}
+              {paid ? formatUZS(p.monthly, lang) : c.plans.free.tagline}
               {paid && (
                 <span className={`ml-1 text-sm font-normal ${paid ? "text-white/45" : ""}`}>
                   / {c.perMonth}
@@ -42,7 +42,7 @@ export default function PlanTable({ c }: { c: CatalogueDict }) {
             </p>
             {paid && (
               <p className="mt-1 text-xs text-white/45">
-                {c.perYear(formatUZS(p.yearly), yearlyMonthsFree())}
+                {c.perYear(formatUZS(p.yearly, lang), yearlyMonthsFree())}
               </p>
             )}
 

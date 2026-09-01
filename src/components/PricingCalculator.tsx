@@ -2,17 +2,20 @@
 
 import { useMemo, useState } from "react";
 import { formatUZS } from "@/lib/format";
+import type { Lang } from "@/lib/i18n";
 import { BASE_PRICE, letterRarity, digitRarity } from "@/lib/pricing";
-import { DEVICE_TYPES } from "@/lib/devices";
 
 export default function PricingCalculator({
   labels,
+  lang,
 }: {
+  lang: Lang;
   labels: {
     base: string;
     letterRarity: string;
     digitRarity: string;
     total: string;
+    deviceNote: string;
   };
 }) {
   const [letters, setLetters] = useState("MYN");
@@ -64,7 +67,7 @@ export default function PricingCalculator({
         <div className="space-y-1 font-tabular text-sm">
           <div className="flex items-center justify-between border-b border-black/5 py-3">
             <div className="font-medium">{labels.base}</div>
-            <div>{formatUZS(BASE_PRICE)}</div>
+            <div>{formatUZS(BASE_PRICE, lang)}</div>
           </div>
           <div className="flex items-center justify-between border-b border-black/5 py-3">
             <div>
@@ -83,12 +86,11 @@ export default function PricingCalculator({
           <div className="flex items-center justify-between pt-5">
             <div className="font-display text-lg font-semibold">{labels.total}</div>
             <div className="rounded-xl bg-lime px-4 py-2 font-display text-xl font-semibold text-flex-black shadow-[0_10px_24px_-8px_rgba(171,255,9,0.7)]">
-              {formatUZS(total)}
+              {formatUZS(total, lang)}
             </div>
           </div>
           <p className="pt-3 font-sans text-xs leading-relaxed text-black/40">
-            Bu raqamning narxi. Qurilma &mdash; karta, uzuk yoki braslet &mdash; alohida
-            tanlanadi va alohida to&apos;lanadi, {formatUZS(DEVICE_TYPES[0].price)}dan boshlab.
+            {labels.deviceNote}
           </p>
         </div>
       </div>

@@ -231,6 +231,9 @@ const SITE = {
     received: "Qabul qilindi",
     quoteHint: "Qanday qurilma, qanday brend, qachonga kerak",
     handleError: "3 ta harf va 3 ta raqam kiriting.",
+    visitsWord: "tashrif",
+    thisWeek: "BU HAFTA",
+    deviceNote: (from: string) => `Bu raqamning narxi. Qurilma — karta, uzuk yoki braslet — alohida tanlanadi va alohida to'lanadi, ${from}dan boshlab.`,
     langName: "O'zbekcha",
   },
   ru: {
@@ -308,6 +311,9 @@ const SITE = {
     received: "Принято",
     quoteHint: "Какое устройство, какой брендинг, к какому сроку",
     handleError: "Введите 3 буквы и 3 цифры.",
+    visitsWord: "визитов",
+    thisWeek: "НА ЭТОЙ НЕДЕЛЕ",
+    deviceNote: (from: string) => `Это цена номера. Устройство — карта, кольцо или браслет — выбирается и оплачивается отдельно, от ${from}.`,
     langName: "Русский",
   },
   en: {
@@ -385,6 +391,9 @@ const SITE = {
     received: "Received",
     quoteHint: "Which device, what branding, by when",
     handleError: "Enter three letters and three digits.",
+    visitsWord: "visits",
+    thisWeek: "THIS WEEK",
+    deviceNote: (from: string) => `That is the price of the handle. The device — card, ring or bracelet — is chosen and paid for separately, from ${from}.`,
     langName: "English",
   },
 } as const;

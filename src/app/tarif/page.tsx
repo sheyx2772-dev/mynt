@@ -71,12 +71,12 @@ export default async function TarifPage({ searchParams }: PageProps<"/tarif">) {
             <p className="mt-3 font-display text-2xl font-semibold tracking-tight">
               {p.monthly === 0
                 ? c.plans[p.id].tagline
-                : `${formatUZS(p.monthly)} / ${c.perMonth}`}
+                : `${formatUZS(p.monthly, lang)} / ${c.perMonth}`}
             </p>
 
             {p.yearly > 0 && (
               <p className="mt-1 text-sm text-white/45">
-                {c.perYear(formatUZS(p.yearly), yearlyMonthsFree())}
+                {c.perYear(formatUZS(p.yearly, lang), yearlyMonthsFree())}
               </p>
             )}
 
