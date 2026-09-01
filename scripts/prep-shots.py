@@ -55,6 +55,10 @@ def save(im, name, width):
 # argued against the sentence next to it.
 SCENES = [
     ("trio-studio.jpeg", "hero", 16 / 9, (0.50, 0.50), 1600),
+    # The choose-a-device step: the same three objects, but on a desk rather
+    # than a seamless floor, so the two frames do not read as one photo used
+    # twice. Square source, so the crop sits low where the products are.
+    ("trio-desk.jpeg", "oila", 16 / 9, (0.52, 0.62), 1600),
 ]
 
 # The three-up sheet: fixed boxes, each kept inside its own panel so no gutter
