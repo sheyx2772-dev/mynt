@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/auth";
-import { getTeamForUser, releaseTeamHandle } from "@/lib/teams";
+import { getTeamForUser, releaseTeamHandle, assignTeamHandle } from "@/lib/teams";
 import { parseHandle } from "@/lib/pricing";
 import { issueInvoice } from "@/lib/invoices";
 import { MIN_TEAM_SEATS } from "@/lib/plans";
@@ -63,4 +63,33 @@ export async function requestInvoice(
 
   revalidatePath("/kabinet/jamoa");
   return { ok: true, id: invoice.id };
+}
+
+export type AssignActionResult = { ok: boolean; error?: string; invited?: boolean };
+
+/** Handing one of the company's numbers to a member of staff, by email. */
+export async function assignHandle(
+  rawHandle: string,
+  rawEmail: string,
+): Promise<AssignActionResult> {
+  const user = await requireUser("/kabinet/jamoa");
+
+  const parsed = parseHandle(rawHandle);
+  if (!parsed) return { ok: false, error: "Raqam noto'g'ri." };
+
+  const email = rawEmail.trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    return { ok: false, error: "Emailni tekshiring." };
+  }
+
+  const result = await assignTeamHandle(
+    `${parsed.letters}${parsed.digits}`,
+    email,
+    user.id,
+  );
+
+  if (!result.ok) return { ok: false, error: result.error };
+
+  revalidatePath("/kabinet/jamoa");
+  return { ok: true, invited: result.invited };
 }

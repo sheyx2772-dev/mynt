@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
 import ReleaseHandleButton from "@/components/ReleaseHandleButton";
+import AssignHandleForm from "@/components/AssignHandleForm";
 import { requireUser } from "@/lib/auth";
-import { getTeamForUser, listTeamHandles } from "@/lib/teams";
+import { getTeamForUser, listTeamHandles, getTeamStats } from "@/lib/teams";
 import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
 import { formatUZS } from "@/lib/format";
 import { COMPANY } from "@/lib/company";
@@ -72,9 +73,10 @@ export default async function JamoaPage() {
     );
   }
 
-  const [handles, invoices] = await Promise.all([
+  const [handles, invoices, stats] = await Promise.all([
     listTeamHandles(team.id),
     listInvoices(team.id),
+    getTeamStats(team.id),
   ]);
   const taken = handles.filter((h) => h.userId).length;
 
@@ -103,6 +105,25 @@ export default async function JamoaPage() {
       </div>
 
       <section className="mt-8 rounded-[1.75rem] border border-black/10 bg-white p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+        <h2 className="font-display text-lg font-semibold tracking-tight">
+          Jamoa bo&apos;yicha
+        </h2>
+        <p className="mt-1 text-sm text-flex-black/50">
+          Barcha raqamlar bo&apos;yicha jami.
+        </p>
+        <div className="mt-5 grid grid-cols-2 gap-3">
+          <div className="rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-3">
+            <p className="font-display text-2xl font-semibold tabular-nums">{stats.views}</p>
+            <p className="mt-0.5 text-xs text-flex-black/45">Profil ochilgan</p>
+          </div>
+          <div className="rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-3">
+            <p className="font-display text-2xl font-semibold tabular-nums">{stats.leads}</p>
+            <p className="mt-0.5 text-xs text-flex-black/45">Kelgan kontakt</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-6 rounded-[1.75rem] border border-black/10 bg-white p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <h2 className="font-display text-lg font-semibold tracking-tight">Raqamlar</h2>
 
         {handles.length === 0 ? (
@@ -120,16 +141,23 @@ export default async function JamoaPage() {
                   >
                     {h.normalized}
                   </Link>
+                  {/* Three states, not two: nobody has it, somebody has it and
+                      has not filled it in yet, and somebody has it. The middle
+                      one read as "nobody has it" beside a Release button. */}
                   <p className="mt-0.5 text-sm text-flex-black/55">
-                    {h.holderName ?? "Bo'sh — hech kimda emas"}
-                    {h.position && ` · ${h.position}`}
+                    {h.userId
+                      ? (h.holderName ?? "Biriktirilgan — profil hali to'ldirilmagan")
+                      : "Bo'sh — hech kimda emas"}
+                    {h.userId && h.position && ` · ${h.position}`}
                   </p>
                 </div>
 
                 <p className="font-tabular text-xs text-flex-black/35">{h.viewCount}</p>
 
-                {h.userId && (
+                {h.userId ? (
                   <ReleaseHandleButton handle={h.normalized} holderName={h.holderName} />
+                ) : (
+                  <AssignHandleForm handle={h.normalized} />
                 )}
               </li>
             ))}
