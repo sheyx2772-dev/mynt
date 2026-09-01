@@ -345,9 +345,9 @@ export default function Home() {
               {formatNumber(NAMESPACE_SIZE)}
             </p>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-white/55">
-              Mumkin bo&apos;lgan handle&rsquo;lar soni. Boshqa yo&apos;q
-              &mdash; har biri faqat bitta odamga tegishli bo&apos;ladi va qayta
-              sotilmaydi.
+              Mumkin bo&apos;lgan handle&rsquo;lar soni &mdash; boshqa yo&apos;q. Har biri
+              bittagina odamga tegishli bo&apos;ladi. Kombinatsiya qanchalik kamyob
+              bo&apos;lsa, u shunchalik qadrli.
             </p>
           </div>
         </section>
