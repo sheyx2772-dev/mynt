@@ -138,6 +138,20 @@ qiluvchi izoh bor. **Belgi o'zgarsa, ikkalasini ham o'zgartiring**, keyin
 Sahifada belgi faqat `Mark` orqali chiqadi. Ilgari u besh joyda qo'lda
 takrorlangan edi va logotipni almashtirish beshtasini qidirishni talab qilardi.
 
+## Kunlik vazifa
+
+`vercel.json` da bitta cron bor: har kuni 06:00 da `/api/cron/eslatma` chaqiriladi
+va obunasi 7 kun ichida tugaydiganlarga eslatma yuboradi.
+
+Ishlashi uchun **Vercel'da `CRON_SECRET`** turishi shart va u `.env.local`
+dagidek qiymat bo'lishi kerak. Yo'q bo'lsa route hech kimni kiritmaydi (503) —
+ataylab shunday: yo'lni hech kim topmagani uchun xavfsiz bo'lgan endpoint
+xavfsiz emas.
+
+Eslatma **bir marta** yuboriladi. Yuborilgani `handles.plan_reminded_for` ga
+o'sha muddat bilan yoziladi; obuna yangilansa muddat siljiydi va keyingi davrda
+yangi eslatma ketadi.
+
 ## Nimalarni qilmaslik kerak
 
 **Davlat gerbi va bayrog'i** sotiladigan kartaga bosilmaydi — qonun bilan

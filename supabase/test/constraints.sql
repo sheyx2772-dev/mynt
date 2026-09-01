@@ -920,3 +920,45 @@ begin
     raise notice '   ok   rejected: one Telegram account linked twice';
   end;
 end $$;
+
+-- 0029 — plan reminders
+do $$
+declare
+  uid uuid;
+  due integer;
+  expiry timestamptz;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into uid;
+
+  expiry := now() + interval '5 days';
+  insert into handles (letters, digits, status, user_id, claimed_at, plan, plan_expires_at)
+    values ('REM', '001', 'claimed', uid, now(), 'premium', expiry);
+  -- Far enough out that it must not be picked up yet.
+  insert into handles (letters, digits, status, user_id, claimed_at, plan, plan_expires_at)
+    values ('REM', '002', 'claimed', uid, now(), 'premium', now() + interval '40 days');
+  -- Already lapsed: reminding somebody about an expiry that has passed is
+  -- telling them the news after the fact.
+  insert into handles (letters, digits, status, user_id, claimed_at, plan, plan_expires_at)
+    values ('REM', '003', 'claimed', uid, now(), 'premium', now() - interval '1 day');
+
+  select count(*) into due from handles_needing_plan_reminder(7);
+  if due <> 1 then
+    raise exception 'eslatma kerak boʻlganlar soni notoʻgʻri: %', due;
+  end if;
+  raise notice '   ok   only a plan running out inside the window is due';
+
+  perform mark_plan_reminded('REM001', expiry);
+  select count(*) into due from handles_needing_plan_reminder(7);
+  if due <> 0 then
+    raise exception 'eslatma ikkinchi marta yuboriladi';
+  end if;
+  raise notice '   ok   a reminder is sent once, not once a day';
+
+  -- Renewing moves the expiry, which is a new period and a new reminder.
+  update handles set plan_expires_at = now() + interval '3 days' where normalized = 'REM001';
+  select count(*) into due from handles_needing_plan_reminder(7);
+  if due <> 1 then
+    raise exception 'yangilangandan keyin eslatma qaytmadi';
+  end if;
+  raise notice '   ok   renewing earns a fresh reminder next period';
+end $$;
