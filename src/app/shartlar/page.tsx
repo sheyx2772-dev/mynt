@@ -135,6 +135,11 @@ export default function TermsPage() {
       </Section>
 
       <Section title="Sotuvchi rekvizitlari">
+        <p>
+          Bu ma&apos;lumotlar sotuvchini tanishtirish uchun keltirilgan.{" "}
+          <strong>Bu yerga pul o&apos;tkazish shart emas</strong> &mdash; to&apos;lov
+          Payme yoki Click orqali, saytdagi tugma bilan amalga oshiriladi.
+        </p>
         <dl className="rounded-2xl border border-black/8 bg-black/[0.02] px-5 py-3">
           <Row label="Tashkilot" value={COMPANY.legalName} />
           <Row label="STIR (INN)" value={COMPANY.inn} />
