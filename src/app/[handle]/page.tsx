@@ -7,6 +7,7 @@ import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRar
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import SaveContactButton from "@/components/SaveContactButton";
+import ShareButton from "@/components/ShareButton";
 import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
@@ -208,6 +209,10 @@ async function VanityHandlePage({
           <>
           <div className="mt-6">
             <SaveContactButton fullName={profile.name} handle={normalized} bio={profile.bio} />
+          </div>
+
+          <div className="mt-3">
+            <ShareButton handle={normalized} name={profile.name} />
           </div>
 
           {isOwner && (
