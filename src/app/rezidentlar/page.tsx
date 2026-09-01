@@ -1,3 +1,4 @@
+import Mark from "@/components/Mark";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Eye, MapPin, Search, Trophy } from "lucide-react";
@@ -45,9 +46,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
       <div className="relative mx-auto max-w-3xl px-6 py-16">
         <Link href="/" className="mb-10 flex items-center gap-2 font-display text-lg font-semibold">
-          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-flex-black">
-            <span className="h-1.5 w-1.5 rounded-full bg-lime" />
-          </span>
+          <Mark />
           flex
         </Link>
 

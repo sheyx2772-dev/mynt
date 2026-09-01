@@ -122,6 +122,22 @@ Buxgalter yoki IT Park tasdiqlagach `VAT.percent` ga raqam qo'yiladi va agar nol
 qonuniy ozodlik bo'lsa, `VAT.exemptionNote` ga asos yoziladi. Ikkalasi ham bitta
 joyda, har bir hisob-faktura shu yerdan o'qiydi.
 
+## Logotip ikki joyda chiziladi
+
+Belgi — nuqta va undan chiqayotgan ikki to'lqin (tegizish belgisi). U **ikkita
+faylda** chiziladi va ikkalasi bir xil raqamlarni ishlatadi:
+
+- `src/components/Mark.tsx` — sahifadagi SVG
+- `scripts/make-icons.mjs` — PNG ikonkalar (manifest, iOS, Telegram)
+
+Ikkinchisi birinchisidan import qila olmaydi (skript ilovaga bog'lanmasligi
+kerak), shuning uchun raqamlar takrorlangan va har birida ikkinchisiga ishora
+qiluvchi izoh bor. **Belgi o'zgarsa, ikkalasini ham o'zgartiring**, keyin
+`npm run icons`.
+
+Sahifada belgi faqat `Mark` orqali chiqadi. Ilgari u besh joyda qo'lda
+takrorlangan edi va logotipni almashtirish beshtasini qidirishni talab qilardi.
+
 ## Nimalarni qilmaslik kerak
 
 **Davlat gerbi va bayrog'i** sotiladigan kartaga bosilmaydi — qonun bilan

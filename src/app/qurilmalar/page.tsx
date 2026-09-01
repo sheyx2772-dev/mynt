@@ -1,3 +1,4 @@
+import Mark from "@/components/Mark";
 import Link from "next/link";
 import type { Metadata } from "next";
 import DeviceFace from "@/components/DeviceFace";
@@ -23,9 +24,7 @@ export default function DevicesPage() {
 
       <div className="relative mx-auto max-w-5xl px-6 py-16">
         <Link href="/" className="mb-10 flex items-center gap-2 font-display text-lg font-semibold">
-          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-flex-black">
-            <span className="h-1.5 w-1.5 rounded-full bg-lime" />
-          </span>
+          <Mark />
           flex
         </Link>
 

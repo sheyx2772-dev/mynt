@@ -1,9 +1,16 @@
 #!/usr/bin/env node
-// Renders the Flex mark to PNG for the web app manifest.
+// Renders the Flex mark to PNG for the web app manifest, the home screen and
+// the Telegram bot.
 //
-// The mark is a rounded square in the brand ink with a lime dot — simple
-// enough to rasterise directly, which keeps an image-processing dependency
-// out of the tree for four files that change approximately never.
+// The mark is a point with the signal leaving it — the contactless symbol, in
+// the brand's ink and lime. Simple enough to rasterise directly, which keeps an
+// image-processing dependency out of the tree for five files that change
+// approximately never.
+//
+// The geometry is the same numbers as src/components/Mark.tsx, which draws it
+// as SVG for the page. They are stated in both because this file must not
+// import from the app, and a comment in each points at the other: if one moves,
+// the other has to.
 //
 // Usage: npm run icons
 
@@ -41,14 +48,62 @@ function insideCircle(x, y, cx, cy, r) {
   return dx * dx + dy * dy <= r * r;
 }
 
-// `padding` and `dot` are fractions of the icon's edge.
-function render(size, { padding, dot, cornerRadius }) {
+// A segment of a ring with round caps: within the stroke of the radius and
+// inside the sweep, or within the stroke of either end point.
+function nearArc(px, py, cx, cy, radius, halfSweep, halfWidth) {
+  const dx = px - cx;
+  const dy = py - cy;
+
+  if (Math.abs(Math.hypot(dx, dy) - radius) <= halfWidth) {
+    const angle = Math.atan2(dy, dx);
+    if (angle >= -halfSweep && angle <= halfSweep) return true;
+  }
+
+  for (const a of [-halfSweep, halfSweep]) {
+    const ex = px - (cx + Math.cos(a) * radius);
+    const ey = py - (cy + Math.sin(a) * radius);
+    if (ex * ex + ey * ey <= halfWidth * halfWidth) return true;
+  }
+
+  return false;
+}
+
+// Mirrors MARK in src/components/Mark.tsx. Fractions of a 100-unit box.
+const MARK = {
+  originX: 27,
+  originY: 50,
+  dotRadius: 10,
+  arcRadii: [26, 45],
+  arcStroke: 11,
+  arcHalfSweep: 0.88,
+};
+
+/** True where the mark's lime falls, for a box of `S` units at `scale`. */
+function insideMark(px, py, S, scale) {
+  const u = (S / 100) * scale;
+  const offset = (S - S * scale) / 2;
+  const x = (px - offset) / scale;
+  const y = (py - offset) / scale;
+  const s = S / 100;
+
+  if (insideCircle(x, y, MARK.originX * s, MARK.originY * s, MARK.dotRadius * s)) return true;
+  for (const r of MARK.arcRadii) {
+    if (
+      nearArc(x, y, MARK.originX * s, MARK.originY * s, r * s, MARK.arcHalfSweep, (MARK.arcStroke * s) / 2)
+    ) {
+      return true;
+    }
+  }
+  void u;
+  return false;
+}
+
+// `padding` is a fraction of the icon's edge; `mark` scales the glyph inside it.
+function render(size, { padding, mark, cornerRadius }) {
   const S = size * SS;
   const pad = padding * S;
   const boxSize = S - pad * 2;
   const radius = cornerRadius * boxSize;
-  const dotRadius = (dot * S) / 2;
-  const centre = S / 2;
 
   const pixels = new Uint8Array(size * size * 4);
 
@@ -61,7 +116,7 @@ function render(size, { padding, dot, cornerRadius }) {
           const px = x * SS + sx + 0.5;
           const py = y * SS + sy + 0.5;
 
-          if (insideCircle(px, py, centre, centre, dotRadius)) {
+          if (insideMark(px, py, S, mark)) {
             r += LIME[0]; g += LIME[1]; b += LIME[2]; a += 255;
           } else if (insideRoundedRect(px - pad, py - pad, boxSize, radius)) {
             r += INK[0]; g += INK[1]; b += INK[2]; a += 255;
@@ -131,18 +186,20 @@ function encodePng(pixels, size) {
 // A maskable icon is cropped to a circle by some launchers, so it bleeds to
 // the edges and keeps the dot well inside the 80% safe zone.
 const ICONS = [
-  { file: "icon-192.png", size: 192, padding: 0, dot: 0.3, cornerRadius: 0.22 },
-  { file: "icon-512.png", size: 512, padding: 0, dot: 0.3, cornerRadius: 0.22 },
-  { file: "icon-maskable-512.png", size: 512, padding: 0, dot: 0.24, cornerRadius: 0 },
+  { file: "icon-192.png", size: 192, padding: 0, mark: 0.74, cornerRadius: 0.22 },
+  { file: "icon-512.png", size: 512, padding: 0, mark: 0.74, cornerRadius: 0.22 },
+  // Some launchers crop a maskable icon to a circle, so the glyph is pulled
+  // further in to stay inside the 80% safe zone.
+  { file: "icon-maskable-512.png", size: 512, padding: 0, mark: 0.6, cornerRadius: 0 },
   // iOS applies its own rounding, so this one is a plain square.
-  { file: "apple-icon.png", size: 180, padding: 0, dot: 0.3, cornerRadius: 0, dir: "app" },
+  { file: "apple-icon.png", size: 180, padding: 0, mark: 0.74, cornerRadius: 0, dir: "app" },
   // Telegram crops an avatar to a circle and shows it at about forty pixels in
   // a chat list. The corners of the rounded square are cut away there, so this
   // one is a full-bleed square — nothing is lost that was drawn — and the dot
   // is larger, because at that size the mark has to be legible rather than
   // faithful. Square rather than pre-rounded: Telegram does its own masking,
   // and a transparent corner underneath it renders as white.
-  { file: "telegram-avatar.png", size: 512, padding: 0, dot: 0.42, cornerRadius: 0 },
+  { file: "telegram-avatar.png", size: 512, padding: 0, mark: 0.72, cornerRadius: 0 },
 ];
 
 mkdirSync(PUBLIC_DIR, { recursive: true });

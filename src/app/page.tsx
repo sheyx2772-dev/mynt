@@ -12,6 +12,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
+import Mark from "@/components/Mark";
 import PricingCalculator from "@/components/PricingCalculator";
 import ProfilePreview from "@/components/ProfilePreview";
 import PhoneFrame from "@/components/PhoneFrame";
@@ -113,9 +114,7 @@ export default function Home() {
       <header className="sticky top-0 z-30 border-b border-white/10 bg-flex-black/85 text-white backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2 font-display text-xl font-semibold tracking-tight">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/15 bg-white/5">
-              <span className="h-2 w-2 rounded-full bg-lime" />
-            </span>
+            <Mark className="h-7 w-7" tone="dark" />
             flex
           </div>
           <nav className="hidden gap-8 text-sm font-medium text-white/55 sm:flex">
