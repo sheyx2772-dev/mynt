@@ -207,40 +207,16 @@ for running in a container, and Vercel's build step instead reads the default
 build's file traces — with standalone set, the deploy fails looking for
 `.next/next-server.js.nft.json`.
 
-### Outstanding: migrations 0014-0017 are not applied
+### Migrations
 
-Four migrations are written, tested against a real Postgres, and deployed as
-code — but none of them has reached the project, so each feature they carry
-errors rather than works:
-
-| | What breaks without it |
-|---|---|
-| `0014_handle_transfers.sql` | the cabinet's transfer panel |
-| `0015_plans.sql` | nothing yet — the plans are presentation only so far |
-| `0016_team_requests.sql` | the team order form falls back to the phone number |
-| `0017_gift_reason.sql` | `scripts/handles.py` |
-
-The team form was written to degrade rather than fail: with the table missing it
-shows the phone number instead of an error, which is the state production is in
-right now.
-
-`handle_transfers` does not exist in the project yet. The code for handing a
-handle to someone else is written, tested and deployed, but the cabinet's
-transfer panel will error until the migration runs — the table is not there.
-
-It was not applied because the dashboard could not be reached: the sign-in
-looped through auth.supabase.io with ERR_TOO_MANY_REDIRECTS, and retrying hit a
-rate limit.
-
-The better fix, which also removes the browser from every future migration:
-create a personal access token at supabase.com/dashboard/account/tokens, put it
-in `.env.local` as `SUPABASE_ACCESS_TOKEN=sbp_...`, then
+Everything through 0017 is applied to the project. There is a
+`SUPABASE_ACCESS_TOKEN` in `.env.local` now, so the runner does it:
 
     npm run db:migrate
 
-`scripts/migrate.mjs` has been in the repository since the beginning and applies
-whatever has not run yet, recording each one. Everything up to 0013 was applied
-by hand through the SQL editor because that token was never created.
+That was not the case for most of this project's life, which is why 0001-0013
+went in by hand through the SQL editor and why four of them piled up unapplied
+at one point. Write the migration, run the command.
 
 ### The payment accounts
 
