@@ -9,7 +9,7 @@
 // The owner's own words — their name, bio, services, the labels on their links
 // — are never touched. Only the furniture around them is.
 
-export type Lang = "uz" | "ru";
+export type Lang = "uz" | "ru" | "en";
 
 export const DEFAULT_LANG: Lang = "uz";
 
@@ -78,6 +78,38 @@ const STRINGS = {
     search: "Поиск",
     noPosts: "В этом профиле пока нет постов.",
   },
+  en: {
+    call: "Call",
+    email: "Email",
+    address: "Location",
+    meeting: "Book a meeting",
+    website: "Website",
+    saveContact: "Save contact",
+    follow: "Follow",
+    following: "Following",
+    card: "Card",
+    posts: "Posts",
+    services: "Services",
+    followers: "Followers",
+    follows: "Following",
+    views: "Views",
+    lastSeen: "Last seen",
+    sendContact: "Send your contact",
+    sent: "Sent",
+    yourName: "Your name",
+    phone: "Phone",
+    company: "Company",
+    note: "Note — what would you like to discuss",
+    send: "Send",
+    sending: "Sending",
+    cancel: "Cancel",
+    reachYou: (name: string) => `So ${name} can get back to you`,
+    contactHint: (name: string) =>
+      `Phone or email — at least one. Your details go only to ${name}.`,
+    checkYours: "Check your own number",
+    search: "Search",
+    noPosts: "No posts on this profile yet.",
+  },
 } as const;
 
 export type Dict = (typeof STRINGS)["uz"];
@@ -87,7 +119,7 @@ export function dict(lang: Lang): Dict {
 }
 
 export function isLang(value: unknown): value is Lang {
-  return value === "uz" || value === "ru";
+  return value === "uz" || value === "ru" || value === "en";
 }
 
 /**
@@ -98,8 +130,9 @@ export function isLang(value: unknown): value is Lang {
  * that, the browser's own preference — the visitor has already told their phone
  * what they read, and asking again is asking twice.
  *
- * Uzbek is the fallback rather than the browser's first choice, because a
- * browser set to English is not evidence that an English profile would help.
+ * Uzbek is the fallback for a browser asking for something none of the three
+ * covers — a card printed here is likelier to be read by somebody local than by
+ * a speaker of whatever the fourth language turned out to be.
  */
 export function pickLang(param: unknown, acceptLanguage: string | null): Lang {
   if (isLang(param)) return param;
@@ -108,6 +141,7 @@ export function pickLang(param: unknown, acceptLanguage: string | null): Lang {
     const tag = part.split(";")[0]!.trim().toLowerCase();
     if (tag.startsWith("uz")) return "uz";
     if (tag.startsWith("ru")) return "ru";
+    if (tag.startsWith("en")) return "en";
   }
 
   return DEFAULT_LANG;

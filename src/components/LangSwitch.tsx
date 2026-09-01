@@ -28,7 +28,7 @@ export default function LangSwitch({
 
   return (
     <div className="flex items-center gap-1 text-[11px] tracking-[0.14em] uppercase">
-      {(["uz", "ru"] as const).map((option) => (
+      {(["uz", "ru", "en"] as const).map((option) => (
         <Link
           key={option}
           href={href(option)}

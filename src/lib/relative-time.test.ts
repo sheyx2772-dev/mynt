@@ -50,3 +50,18 @@ describe("timeAgo in Russian", () => {
     expect(timeAgo(ago(3600 * 2), "uz", now)).toBe("2 soat oldin");
   });
 });
+
+describe("timeAgo in English", () => {
+  const now = Date.parse("2026-09-02T12:00:00Z");
+  const ago = (seconds: number) => new Date(now - seconds * 1000).toISOString();
+
+  it("pluralises on the count, not on everything", () => {
+    expect(timeAgo(ago(3600), "en", now)).toBe("1 hour ago");
+    expect(timeAgo(ago(3600 * 2), "en", now)).toBe("2 hours ago");
+    expect(timeAgo(ago(60), "en", now)).toBe("1 minute ago");
+  });
+
+  it("says just now under a minute", () => {
+    expect(timeAgo(ago(20), "en", now)).toBe("just now");
+  });
+});

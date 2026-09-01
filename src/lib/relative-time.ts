@@ -7,16 +7,21 @@ import type { Lang } from "@/lib/i18n";
 // than none of it: "Был в сети — 6 soat oldin" reads as a page that was
 // translated by somebody who gave up halfway.
 
-type Unit = { limit: number; uz: string; ru: [one: string, few: string, many: string] };
+type Unit = {
+  limit: number;
+  uz: string;
+  ru: [one: string, few: string, many: string];
+  en: string;
+};
 
 // Russian counts in three forms — 1 час, 2 часа, 5 часов — and picking the
 // wrong one is the tell of a machine translation.
 const UNITS: Unit[] = [
-  { limit: 60, uz: "soniya", ru: ["секунду", "секунды", "секунд"] },
-  { limit: 3600, uz: "daqiqa", ru: ["минуту", "минуты", "минут"] },
-  { limit: 86_400, uz: "soat", ru: ["час", "часа", "часов"] },
-  { limit: 604_800, uz: "kun", ru: ["день", "дня", "дней"] },
-  { limit: 2_592_000, uz: "hafta", ru: ["неделю", "недели", "недель"] },
+  { limit: 60, en: "second", uz: "soniya", ru: ["секунду", "секунды", "секунд"] },
+  { limit: 3600, en: "minute", uz: "daqiqa", ru: ["минуту", "минуты", "минут"] },
+  { limit: 86_400, en: "hour", uz: "soat", ru: ["час", "часа", "часов"] },
+  { limit: 604_800, en: "day", uz: "kun", ru: ["день", "дня", "дней"] },
+  { limit: 2_592_000, en: "week", uz: "hafta", ru: ["неделю", "недели", "недель"] },
 ];
 
 function plural(n: number, [one, few, many]: [string, string, string]): string {
@@ -34,15 +39,19 @@ export function timeAgo(iso: string | null, lang: Lang = "uz", now = Date.now())
   if (Number.isNaN(then)) return null;
 
   const seconds = Math.floor((now - then) / 1000);
-  if (seconds < 60) return lang === "ru" ? "только что" : "hozir";
+  if (seconds < 60) {
+    if (lang === "ru") return "только что";
+    if (lang === "en") return "just now";
+    return "hozir";
+  }
 
   let previous = 1;
   for (const unit of UNITS) {
     if (seconds < unit.limit) {
       const count = Math.floor(seconds / previous);
-      return lang === "ru"
-        ? `${count} ${plural(count, unit.ru)} назад`
-        : `${count} ${unit.uz} oldin`;
+      if (lang === "ru") return `${count} ${plural(count, unit.ru)} назад`;
+      if (lang === "en") return `${count} ${unit.en}${count === 1 ? "" : "s"} ago`;
+      return `${count} ${unit.uz} oldin`;
     }
     previous = unit.limit;
   }
