@@ -672,3 +672,57 @@ begin
     raise notice '   ok   rejected: a cover that is not an https address';
   end;
 end $$;
+
+-- 0023 — subscription orders
+do $$
+declare
+  uid uuid;
+  expiry timestamptz;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into uid;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('SUB', '001', 'claimed', uid, now());
+
+  insert into orders (user_id, handle, amount, kind, months)
+    values (uid, 'SUB001', 490000, 'subscription', 12);
+  raise notice '   ok   an order can be for a subscription';
+
+  begin
+    insert into orders (user_id, handle, amount, kind, months)
+      values (uid, 'SUB001', 49000, 'subscription', 7);
+    raise exception 'sotilmaydigan muddat qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a period that is not sold';
+  end;
+
+  begin
+    insert into orders (user_id, handle, amount, kind, months)
+      values (uid, 'SUB001', 100000, 'handle', 1);
+    raise exception 'handle buyurtmasiga muddat qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: months on an order that buys a handle';
+  end;
+
+  perform extend_premium('SUB001', 1);
+  select plan_expires_at into expiry from handles where normalized = 'SUB001';
+  if expiry < now() + interval '27 days' then
+    raise exception 'obuna uzaytirilmadi';
+  end if;
+  raise notice '   ok   a payment extends the plan by its months';
+
+  -- Renewing early adds to what is left rather than replacing it.
+  perform extend_premium('SUB001', 1);
+  select plan_expires_at into expiry from handles where normalized = 'SUB001';
+  if expiry < now() + interval '57 days' then
+    raise exception 'erta uzaytirish qoldiq muddatni yedi';
+  end if;
+  raise notice '   ok   renewing early adds to the time still left';
+
+  -- A refund runs the same function backwards.
+  perform extend_premium('SUB001', -2);
+  select plan_expires_at into expiry from handles where normalized = 'SUB001';
+  if expiry > now() + interval '1 day' then
+    raise exception 'qaytarilgan to''lov muddatni qisqartirmadi';
+  end if;
+  raise notice '   ok   a refund takes the months back off';
+end $$;

@@ -50,10 +50,21 @@ export class SupabasePaymentStore implements PaymentStore {
       })
       .eq("id", orderId)
       .eq("status", "pending")
-      .select("handle, user_id")
+      .select("handle, user_id, kind, months")
       .maybeSingle();
 
     if (!updated) return; // already settled
+
+    // What the money bought. Both settle through this one conditional update,
+    // so a provider retry is a no-op for a subscription exactly as it is for a
+    // handle — the second call finds nothing pending and extends nothing.
+    if (updated.kind === "subscription") {
+      await client.rpc("extend_premium", {
+        target_handle: updated.handle,
+        add_months: updated.months ?? 1,
+      });
+      return;
+    }
 
     await client
       .from("handles")
@@ -70,6 +81,16 @@ export class SupabasePaymentStore implements PaymentStore {
   async markOrderCancelled(orderId: string) {
     const client = requireClient();
 
+    // Read before writing, because the compensation depends on what the order
+    // was for and whether it had already been paid. The update below is still
+    // the thing that decides: it is conditional, so a repeated cancellation
+    // changes nothing and compensates nothing.
+    const { data: before } = await client
+      .from("orders")
+      .select("kind, months, status")
+      .eq("id", orderId)
+      .maybeSingle();
+
     const { data: updated } = await client
       .from("orders")
       .update({ status: "cancelled", cancelled_at: new Date().toISOString() })
@@ -79,6 +100,21 @@ export class SupabasePaymentStore implements PaymentStore {
       .maybeSingle();
 
     if (!updated) return;
+
+    // A cancelled subscription must never touch the handle. The number was
+    // bought separately and is the owner's; deleting it because a 49,000 so'm
+    // renewal was refunded would destroy a paid asset over a monthly fee.
+    if (before?.kind === "subscription") {
+      // Only a refund needs undoing. An order cancelled before payment never
+      // extended anything, so subtracting would take time the owner paid for.
+      if (before.status === "paid") {
+        await client.rpc("extend_premium", {
+          target_handle: updated.handle,
+          add_months: -(before.months ?? 1),
+        });
+      }
+      return;
+    }
 
     // Release the handle so it returns to the pool. This also covers a refund
     // after payment: the buyer got their money back, so they do not keep it.

@@ -4,6 +4,9 @@ import PageShell from "@/components/PageShell";
 import { PLANS, yearlyMonthsFree } from "@/lib/plans";
 import { formatUZS } from "@/lib/format";
 import { COMPANY } from "@/lib/company";
+import { getUser } from "@/lib/auth";
+import { listHandlesForUser } from "@/lib/handles";
+import SubscribeButton from "@/components/SubscribeButton";
 
 export const metadata: Metadata = {
   title: "Tariflar — flex.com.uz",
@@ -13,9 +16,17 @@ export const metadata: Metadata = {
 
 // The plans had been described in the terms page and nowhere a buyer would
 // look. A subscription with no page to read is a subscription nobody buys.
-export default function TarifPage() {
+export default async function TarifPage() {
   const free = PLANS.find((p) => p.id === "free")!;
   const premium = PLANS.find((p) => p.id === "premium")!;
+
+  // Signed out, the page is a price list; signed in, it is a checkout. Nothing
+  // about the plans is hidden either way.
+  const user = await getUser();
+  const owned = user ? await listHandlesForUser(user.id) : [];
+  const handles = owned
+    .filter((h) => h.status === "claimed")
+    .map((h) => ({ normalized: h.normalized, premium: h.plan === "premium" }));
 
   return (
     <PageShell>
@@ -53,6 +64,10 @@ export default function TarifPage() {
               <p className="mt-1 text-sm text-white/45">
                 Yiliga {formatUZS(p.yearly)} — {yearlyMonthsFree()} oy tekin
               </p>
+            )}
+
+            {p.id === "premium" && user && (
+              <SubscribeButton handles={handles} period="yearly" />
             )}
 
             <ul

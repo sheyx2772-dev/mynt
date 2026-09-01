@@ -23,6 +23,7 @@ describe.skipIf(!enabled)("SupabasePaymentStore against the live project", () =>
   let admin: NonNullable<typeof import("@/lib/supabase/admin")["supabaseAdmin"]>;
   let userId: string;
   let orderId: string;
+  let subOrderId: string;
 
   beforeAll(async () => {
     ({ supabaseAdmin: admin } = (await import("@/lib/supabase/admin")) as never);
@@ -57,6 +58,7 @@ describe.skipIf(!enabled)("SupabasePaymentStore against the live project", () =>
     if (!admin) return;
     await admin.from("handles").delete().eq("normalized", HANDLE);
     if (orderId) await admin.from("orders").delete().eq("id", orderId);
+    if (subOrderId) await admin.from("orders").delete().eq("id", subOrderId);
     if (userId) await admin.auth.admin.deleteUser(userId);
   });
 
@@ -118,6 +120,54 @@ describe.skipIf(!enabled)("SupabasePaymentStore against the live project", () =>
     expect(handle!.status).toBe("claimed");
     expect(handle!.claimed_at).not.toBeNull();
     expect(handle!.reserved_until).toBeNull();
+  });
+
+  // A subscription settles through the same conditional update, but must land
+  // on the plan instead of the handle's status.
+  it("settles a subscription by extending the plan", async () => {
+    const created = await admin
+      .from("orders")
+      .insert({
+        user_id: userId,
+        handle: HANDLE,
+        amount: 49_000,
+        kind: "subscription",
+        months: 1,
+      })
+      .select("id")
+      .single();
+    subOrderId = created.data!.id;
+
+    await store.markOrderPaid(subOrderId, "payme", "store-test-sub");
+
+    const { data: after } = await admin
+      .from("handles")
+      .select("status, plan, plan_expires_at")
+      .eq("normalized", HANDLE)
+      .single();
+
+    expect(after!.plan).toBe("premium");
+    expect(new Date(after!.plan_expires_at as string).getTime()).toBeGreaterThan(
+      Date.now() + 27 * 24 * 3600 * 1000,
+    );
+    // The handle it was bought for is untouched.
+    expect(after!.status).toBe("claimed");
+  });
+
+  // The fault this guards is the expensive one: a cancelled 49,000 so'm renewal
+  // must never delete a number the owner paid for separately.
+  it("cancelling a subscription refunds the months and keeps the handle", async () => {
+    await store.markOrderCancelled(subOrderId);
+
+    const { data: after } = await admin
+      .from("handles")
+      .select("status, plan_expires_at")
+      .eq("normalized", HANDLE)
+      .single();
+
+    expect(after).not.toBeNull();
+    expect(after!.status).toBe("claimed");
+    expect(new Date(after!.plan_expires_at as string).getTime()).toBeLessThan(Date.now() + 1000);
   });
 
   // Providers retry. A second settlement must change nothing.
