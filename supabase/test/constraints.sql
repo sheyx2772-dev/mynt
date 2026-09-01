@@ -494,3 +494,35 @@ begin
     raise notice '   ok   rejected: a plan the app does not sell';
   end;
 end $$;
+
+-- 0016 — team requests
+do $$
+begin
+  insert into team_requests (company, contact_name, phone, team_size)
+    values ('Test MCHJ', 'Javohir', '+998901234567', 20);
+  raise notice '   ok   a company can ask for a team order';
+
+  begin
+    insert into team_requests (company, contact_name, phone, team_size)
+      values ('X', 'Javohir', '+998901234567', 20);
+    raise exception 'juda qisqa nom qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a company name too short to call back';
+  end;
+
+  begin
+    insert into team_requests (company, contact_name, phone, team_size)
+      values ('Test MCHJ', 'Javohir', '123', 20);
+    raise exception 'juda qisqa telefon qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a phone number that cannot be dialled';
+  end;
+
+  begin
+    insert into team_requests (company, contact_name, phone, team_size)
+      values ('Test MCHJ', 'Javohir', '+998901234567', 0);
+    raise exception 'nol xodim qabul qilindi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a team of nobody';
+  end;
+end $$;

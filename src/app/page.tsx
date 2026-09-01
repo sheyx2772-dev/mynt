@@ -24,6 +24,7 @@ import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber, formatUZS } from "@/lib/format";
 import { COMPANY } from "@/lib/company";
 import PlanTable from "@/components/PlanTable";
+import TeamOrderForm from "@/components/TeamOrderForm";
 
 const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
 
@@ -514,12 +515,16 @@ export default function Home() {
               ))}
             </div>
 
-            <a
-              href="#savollar"
-              className="mt-12 inline-block rounded-full bg-lime px-7 py-3.5 font-medium text-flex-black shadow-[0_14px_34px_-12px_rgba(171,255,9,0.7)] transition-transform hover:scale-[1.02]"
-            >
-              Jamoangiz uchun hisob-kitob
-            </a>
+            <div className="mt-12 max-w-2xl">
+              <h3 className="font-display text-xl font-semibold text-white">
+                Jamoangiz uchun hisob-kitob
+              </h3>
+              <p className="mt-2 mb-6 text-sm leading-relaxed text-white/55">
+                Nechta xodim borligini yozing &mdash; narx, muddat va brend
+                imkoniyatlarini bir ish kunida aytamiz.
+              </p>
+              <TeamOrderForm />
+            </div>
           </div>
         </section>
 
