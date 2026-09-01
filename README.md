@@ -64,6 +64,7 @@ credentials, so schema changes can be checked before they reach the project.
 | `0008_account_deletion.sql` | privileges for cascades, orphaned-handle handling |
 | `0009_card_designs.sql` | per-handle card design, restricted to the known set |
 | `0010_device_types.sql` | which form factor an owner chose |
+| `0011_artwork_card_designs.sql` | widens the design set for the three artwork-backed fronts |
 
 ### Auth
 
