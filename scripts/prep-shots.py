@@ -21,15 +21,45 @@ SRC = sys.argv[1] if len(sys.argv) > 1 else os.path.expanduser("~/Downloads")
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "public", "mahsulot")
 
 LO, HI = 95, 180
-HUE_LUT = [
-    round((62 + (i * 360 / 255 - LO) * 0.31 if LO <= i * 360 / 255 <= HI else i * 360 / 255) * 255 / 360)
-    for i in range(256)
-]
+BRAND_LIME_HUE = 82  # #abff09 measured in HSV degrees
+
+
+def green_median(im):
+    """Median hue of the accent, or None when the frame has no green to move."""
+    small = im.convert("HSV").resize((352, 192))
+    hues = [
+        p[0] * 360 // 255
+        for p in small.getdata()
+        if p[1] > 60 and p[2] > 60 and LO <= p[0] * 360 // 255 <= HI
+    ]
+    if len(hues) < 40:
+        return None
+    hues.sort()
+    return hues[len(hues) // 2]
 
 
 def limeify(im):
+    """Rotate only the green band so the accent lands on the brand lime.
+
+    The generator does not pick one green: the studio frames came back around
+    150 degrees and the tap frame around 111. A fixed rotation tuned for one of
+    them drives the other past lime into olive, so the shift is measured per
+    image from its own accent. Hues outside the band — skin, marble, wood — are
+    never touched, which is the whole reason this is a band and not a global
+    rotation.
+    """
+    median = green_median(im)
+    if median is None:
+        return im.convert("RGB")
+    delta = BRAND_LIME_HUE - median
+    lut = []
+    for i in range(256):
+        d = i * 360 / 255
+        if LO <= d <= HI:
+            d = max(0, min(359, d + delta))
+        lut.append(round(d * 255 / 360))
     h, s, v = im.convert("HSV").split()
-    return Image.merge("HSV", (h.point(HUE_LUT), s, v)).convert("RGB")
+    return Image.merge("HSV", (h.point(lut), s, v)).convert("RGB")
 
 
 def centred_box(w, h, fx, fy, ratio):
@@ -59,6 +89,7 @@ SCENES = [
     # than a seamless floor, so the two frames do not read as one photo used
     # twice. Square source, so the crop sits low where the products are.
     ("trio-desk.jpeg", "oila", 16 / 9, (0.52, 0.62), 1600),
+    ("tap.jpeg", "tegizish", 16 / 9, (0.50, 0.50), 1600),
 ]
 
 # The three-up sheet: fixed boxes, each kept inside its own panel so no gutter
