@@ -1,5 +1,8 @@
 # Flex
 
+> Loyihani birinchi marta qo'lga olayotgan bo'lsangiz — [HANDOFF.md](HANDOFF.md).
+> Hozirgi holat, kalitlar qayerdaligi va ish yuritish bo'yicha eslatmalar o'sha yerda.
+
 Digital identity and networking for Uzbekistan: a rare handle, a public
 profile page, and an NFC card that opens it with one tap.
 
