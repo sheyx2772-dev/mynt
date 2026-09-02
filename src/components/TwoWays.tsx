@@ -1,4 +1,5 @@
 import Link from "next/link";
+import HandleChecker from "@/components/HandleChecker";
 import { ArrowRight, User, Store } from "lucide-react";
 import type { site } from "@/lib/i18n";
 
@@ -30,13 +31,31 @@ export default function TwoWays({ s }: { s: Site }) {
         {s.heroTitleB}
       </h1>
 
-      <p className="mt-8 mb-4 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+      {/* The search stays on the entry page even though the hero that carried
+          it has moved. It is the one thing somebody can do here without
+          choosing a side first: everybody wants to know whether the number
+          they have in mind is free. */}
+      <p className="mt-7 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+        {s.pickHandle}
+      </p>
+      <div className="-mt-4 max-w-xl">
+        <HandleChecker
+          labels={{
+            check: s.checkFree,
+            letters: s.letters,
+            digits: s.digits,
+            error: s.handleError,
+          }}
+        />
+      </div>
+
+      <p className="mt-10 mb-4 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
         {s.waysEyebrow}
       </p>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Link
-          href="/#narx"
+          href="/shaxsiy"
           className="group flex flex-col rounded-3xl bg-lime p-7 text-flex-black shadow-[0_24px_60px_-30px_rgba(171,255,9,0.85)] transition-transform hover:-translate-y-0.5 sm:p-8"
         >
           <User className="h-6 w-6 text-flex-black/70" strokeWidth={1.6} />

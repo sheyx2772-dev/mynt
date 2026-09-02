@@ -62,7 +62,7 @@ export default async function JamoaPage() {
               {COMPANY.phone}
             </a>
             <Link
-              href="/#biznes"
+              href="/biznes#jamoa"
               className="rounded-xl border border-black/12 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] uppercase transition-colors hover:bg-black/[0.03]"
             >
               So&apos;rov qoldirish

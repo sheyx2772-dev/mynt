@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, MapPin, Inbox, BarChart3 } from "lucide-react";
+import { ArrowRight, MapPin, Inbox, BarChart3, Users, Target, RefreshCw, TrendingUp } from "lucide-react";
 
 import Mark from "@/components/Mark";
 import LangSwitch from "@/components/LangSwitch";
 import VenuePicker from "@/components/VenuePicker";
 import VenueRequestForm from "@/components/VenueRequestForm";
-import { b2b, site } from "@/lib/i18n";
+import TeamOrderForm from "@/components/TeamOrderForm";
+import { b2b, site, landing } from "@/lib/i18n";
 import { getLang } from "@/lib/lang";
 import { productShot } from "@/lib/product-shots";
+import { formatUZS } from "@/lib/format";
+import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
 
 // The venue product, on its own page.
 //
@@ -19,6 +22,7 @@ import { productShot } from "@/lib/product-shots";
 // reach their own product is the thing this page exists to stop.
 
 const CORE_ICONS = [MapPin, Inbox, BarChart3];
+const BUSINESS_ICONS = [Users, Target, RefreshCw, TrendingUp];
 
 export async function generateMetadata({
   searchParams,
@@ -33,6 +37,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
   const lang = await getLang(til);
   const t = b2b(lang);
   const s = site(lang);
+  const copy = landing(lang);
   const heroShot = productShot("biznes");
 
   return (
@@ -245,7 +250,93 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
           </div>
         </section>
 
-        {/* The other B2B offer, which lives on the landing page */}
+        {/* Business */}
+        <section
+          id="jamoa"
+          className="grain relative scroll-mt-20 overflow-hidden bg-flex-black py-14 sm:py-24"
+        >
+          <div className="bg-dot-grid-light absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
+          <div className="relative mx-auto max-w-6xl px-6">
+            <div className="max-w-xl">
+              <p className="mb-3 text-xs font-semibold tracking-widest text-lime/70 uppercase">
+                {s.navBusiness}
+              </p>
+              <h2 className="font-display text-3xl font-semibold tracking-tight text-balance text-white sm:text-4xl">
+                {s.notOneCard}
+              </h2>
+              <p className="mt-4 text-white/55">
+                {s.businessDesc}
+              </p>
+            </div>
+
+            <div className="mt-14 hidden gap-x-14 border-t border-white/10 sm:grid-cols-2 lg:grid">
+              {copy.business.map((f, i) => {
+                const Icon = BUSINESS_ICONS[i]!;
+                return (
+                <div
+                  key={f.title}
+                  className="flex gap-5 border-b border-white/10 py-7"
+                >
+                  <Icon
+                    className="mt-0.5 h-5 w-5 shrink-0 text-lime"
+                    strokeWidth={1.75}
+                  />
+                  <div>
+                    <h3 className="font-display font-semibold text-white">
+                      {f.title}
+                    </h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-white/55">
+                      {f.desc}
+                    </p>
+                  </div>
+                </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-12 max-w-2xl">
+              <h3 className="font-display text-xl font-semibold text-white">
+                {s.teamQuote}
+              </h3>
+
+              {/* The three terms that actually decide a company purchase, said
+                  before the form rather than on a call. The third one in
+                  particular has to be read by the firm and by the employee
+                  carrying the card: a number that is not yours should never be
+                  a surprise. */}
+              <dl className="mt-5 mb-6 space-y-2.5 text-sm">
+                <div>
+                  <dt className="inline font-medium text-white">
+                    {formatUZS(TEAM_SEAT_MONTHLY, lang)} — {s.perSeat}
+                  </dt>{" "}
+                  <dd className="inline text-white/55">
+                    {s.minSeats} {MIN_TEAM_SEATS} {s.seatsWord}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="inline font-medium text-white">
+                    {s.seatBought}
+                  </dt>{" "}
+                  <dd className="inline text-white/55">
+                    {s.seatFrees}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="inline font-medium text-white">
+                    {s.handleIsCompany}
+                  </dt>{" "}
+                  <dd className="inline text-white/55">
+                    {s.handleStays}
+                  </dd>
+                </div>
+              </dl>
+              <TeamOrderForm />
+            </div>
+          </div>
+        </section>
+
+
+        {/* The other B2B offer */}
         <section className="mx-auto max-w-6xl px-6 py-14 sm:py-20">
           <div className="rounded-3xl border border-black/10 bg-white p-8 sm:p-10">
             <p className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
@@ -256,7 +347,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
             </h2>
             <p className="mt-3 max-w-xl leading-relaxed text-flex-black/60">{t.teamBody}</p>
             <Link
-              href="/#biznes"
+              href="#jamoa"
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-flex-black px-6 py-3 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
             >
               {t.teamCta}

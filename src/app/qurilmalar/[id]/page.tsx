@@ -151,7 +151,7 @@ export default async function DevicePage({
               </a>
             ) : (
               <Link
-                href="/#narx"
+                href="/shaxsiy#narx"
                 className="mt-9 flex items-center justify-center gap-2 rounded-2xl bg-lime px-6 py-4 font-medium text-flex-black shadow-[0_16px_40px_-16px_rgba(171,255,9,0.8)] transition-transform hover:scale-[1.01]"
               >
                 {p.orderCta}

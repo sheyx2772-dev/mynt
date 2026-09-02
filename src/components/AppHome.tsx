@@ -150,7 +150,7 @@ export default function AppHome({
         </p>
         <div className="grid gap-3">
           <Link
-            href="#narx"
+            href="/shaxsiy"
             className="flex items-center gap-4 rounded-3xl bg-lime px-5 py-5 text-flex-black shadow-[0_16px_40px_-22px_rgba(171,255,9,0.9)] transition-transform active:scale-[0.99]"
           >
             <User className="h-6 w-6 shrink-0 text-flex-black/70" strokeWidth={1.6} />
@@ -202,10 +202,10 @@ export default function AppHome({
       {/* Four destinations, thumb-sized. The sections these replace are hidden
           on a phone; each of these is where that content actually lives. */}
       <nav className="grid grid-cols-2 gap-3 px-6 pt-6">
-        <Tile href="#narx" label={s.calcPrice} Icon={Calculator} />
+        <Tile href="/shaxsiy#narx" label={s.calcPrice} Icon={Calculator} />
         <Tile href="/qurilmalar" label={s.navDevices} Icon={Nfc} />
         <Tile href="/rezidentlar" label={s.navResidents} Icon={Users} />
-        <Tile href="/tarif" label={s.navPlans} Icon={CreditCard} />
+        <Tile href="/shaxsiy#tarif" label={s.navPlans} Icon={CreditCard} />
       </nav>
 
       {newest.length > 0 && (
