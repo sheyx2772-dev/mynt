@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { Check, ArrowRight } from "lucide-react";
+import PhoneFrame from "@/components/PhoneFrame";
+import VenueScreen from "@/components/VenueScreen";
 import { formatUZS, formatNumber } from "@/lib/format";
-import type { Lang, B2BDict } from "@/lib/i18n";
+import { venueScreen, type Lang, type B2BDict } from "@/lib/i18n";
 import {
   VERTICALS,
   TYPICAL_POINTS,
@@ -25,10 +27,13 @@ import {
 export default function VenuePicker({
   t,
   lang,
+  shots,
   initial = "cafe",
 }: {
   t: B2BDict;
   lang: Lang;
+  /** Photography, when there is any. Resolved on the server; null is fine. */
+  shots: Record<VerticalId, string | null>;
   initial?: VerticalId;
 }) {
   const [vertical, setVertical] = useState<VerticalId>(initial);
@@ -71,18 +76,37 @@ export default function VenuePicker({
 
       <p className="mt-4 text-sm text-flex-black/55">{v.tagline}</p>
 
-      {/* What each side gets */}
-      <div className="mt-8 grid gap-4 lg:grid-cols-3">
-        <Panel title={t.guestSide} items={[...v.guest]} />
-        <Panel title={t.ownerSide} items={[...v.owner]} />
-        {v.staff.length > 0 ? (
-          <Panel title={t.staffSide} items={[...v.staff]} tone="gold" />
-        ) : (
-          <div className="rounded-3xl border border-black/10 bg-flex-black p-6 text-white">
-            <h3 className="font-display text-xs font-semibold tracking-widest text-lime uppercase">
+      {shots[vertical] && (
+        <div className="relative mt-7 aspect-[21/9] overflow-hidden rounded-3xl bg-flex-black">
+          {/* eslint-disable-next-line @next/next/no-img-element -- swapped on the client with the tab */}
+          <img
+            src={shots[vertical]!}
+            alt={v.name}
+            className="h-full w-full object-cover"
+          />
+        </div>
+      )}
+
+      {/* The screen itself, beside the lists that describe it. Reading
+          "menyu, narx, allergen" and seeing the menu are not the same amount
+          of explaining, and the personal side of the site already proved which
+          one lands. */}
+      <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px] lg:gap-12">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Panel title={t.guestSide} items={[...v.guest]} />
+          <Panel title={t.ownerSide} items={[...v.owner]} />
+          {v.staff.length > 0 && (
+            <div className="sm:col-span-2">
+              <Panel title={t.staffSide} items={[...v.staff]} tone="gold" />
+            </div>
+          )}
+
+          <div className="grain relative overflow-hidden rounded-3xl bg-flex-black p-6 text-white sm:col-span-2">
+            <div className="bg-dot-grid-light absolute inset-0 opacity-30" />
+            <h3 className="relative font-display text-xs font-semibold tracking-widest text-lime uppercase">
               {t.whyPay}
             </h3>
-            <div className="mt-4 space-y-4">
+            <div className="relative mt-4 grid gap-4 sm:grid-cols-2">
               {v.why.map((line) => (
                 <p key={line} className="text-sm leading-relaxed text-white/60">
                   {line}
@@ -90,23 +114,14 @@ export default function VenuePicker({
               ))}
             </div>
           </div>
-        )}
-      </div>
-
-      {v.staff.length > 0 && (
-        <div className="mt-4 rounded-3xl border border-black/10 bg-flex-black p-6 text-white">
-          <h3 className="font-display text-xs font-semibold tracking-widest text-lime uppercase">
-            {t.whyPay}
-          </h3>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            {v.why.map((line) => (
-              <p key={line} className="text-sm leading-relaxed text-white/60">
-                {line}
-              </p>
-            ))}
-          </div>
         </div>
-      )}
+
+        <div className="lg:sticky lg:top-24 lg:self-start">
+          <PhoneFrame>
+            <VenueScreen screen={venueScreen(lang, vertical)} vertical={vertical} />
+          </PhoneFrame>
+        </div>
+      </div>
 
       {/* How big, and what that costs */}
       <div className="mt-10 rounded-3xl border border-black/10 bg-white p-6 shadow-[0_30px_60px_-40px_rgba(14,10,27,0.3)] sm:p-8">

@@ -11,6 +11,9 @@ sayt uni o'zi topib ishlatadi, kod o'zgartirish shart emas.
 | `braslet.jpg`          | Qurilmalar              | 1:1    | bor   |
 | `oila.jpg`             | "Qurilmani tanlang"     | 16:9   | bor   |
 | `tegizish.jpg`         | "Tegizing"              | 16:9   | yo'q  |
+| `kafe.jpg`             | Biznes — kafe           | 21:9   | yo'q  |
+| `mehmonxona.jpg`       | Biznes — mehmonxona     | 21:9   | yo'q  |
+| `salon.jpg`            | Biznes — boshqa obyekt  | 21:9   | yo'q  |
 
 Ranglar butun sayt bo'ylab ikkitagina: chuqur qora `#0e0a1b` va kislotali
 yashil `#abff09`. Promptlarda shu ikkisidan boshqa rang so'ralmagan — shuning
@@ -71,3 +74,40 @@ va yog'och (~29°) tegilmay qoladi.
 Fayllarni `public/mahsulot/` ichiga yuqoridagi nomlar bilan qo'lda tashlasangiz
 ham bo'ladi. `.jpg`, `.png` yoki `.webp` — farqi yo'q. Rasm yo'q bo'lsa sayt
 chizilgan variantni ko'rsatib turaveradi, sinmaydi.
+
+
+---
+
+## Biznes yo'nalishi uchun
+
+Bu uchtasi bo'lmasa ham sayt ishlaydi — o'rnida chizilgan ekran maketi turadi.
+Rasm qo'shilsa, maketning tepasiga keng lenta bo'lib chiqadi.
+
+### kafe.jpg — 21:9
+
+> Wide cinematic photograph of a dark restaurant table from above at a slight
+> angle. On the table sits a small matte black acrylic table stand, about the
+> size of a playing card, with a thin acid-lime green contactless wave symbol
+> etched on its face. A hand holds a phone just above it, mid-tap, the screen
+> not readable. Warm low restaurant lighting, deep shadows, a lime green rim
+> light on the edge of the stand. Photorealistic, shallow depth of field.
+> Colour palette strictly black, warm neutral and acid lime green (#abff09).
+> No faces, no logos, no readable text.
+
+### mehmonxona.jpg — 21:9
+
+> Wide cinematic photograph of a hotel room bedside table. A slim matte black
+> stand rests beside a lamp, with a thin acid-lime green contactless wave
+> symbol on its face. Soft evening light through a window out of focus behind.
+> Photorealistic, shallow depth of field, calm and expensive. Colour palette
+> strictly black, warm neutral and acid lime green (#abff09). No people, no
+> logos, no readable text.
+
+### salon.jpg — 21:9
+
+> Wide cinematic photograph of a beauty salon station: a mirror edge, a chair
+> back and a small matte black NFC tag mounted at the side of the mirror with a
+> thin acid-lime green contactless wave symbol. Bright clean lighting, mostly
+> black and white surfaces. Photorealistic, shallow depth of field. Colour
+> palette strictly black, white and acid lime green (#abff09). No people, no
+> logos, no readable text.

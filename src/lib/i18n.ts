@@ -1447,3 +1447,159 @@ export type B2BDict = (typeof B2B)["uz"];
 export function b2b(lang: Lang): B2BDict {
   return B2B[lang] as B2BDict;
 }
+
+
+// --- what a venue's own page looks like ----------------------------------
+//
+// The landing page described the personal profile in prose for months before
+// anybody drew it, and the section that finally showed it is the one that
+// explains the product fastest. A cafe owner reading "menyu, narx, allergen"
+// is in exactly that position, so the venue page shows the screen instead.
+//
+// One shape for all three so a single component can draw them: a name, a point,
+// some chips, rows of [name, note, right-hand value], a small grid of actions
+// and two buttons. The content is a plausible venue, not a real customer.
+
+type Screen = {
+  venue: string;
+  point: string;
+  chips: readonly string[];
+  rows: readonly (readonly [string, string, string])[];
+  actions: readonly string[];
+  primary: string;
+  secondary: string;
+};
+
+const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "other", Screen>> = {
+  uz: {
+    cafe: {
+      venue: "Choyxona Navro'z",
+      point: "Stol 7",
+      chips: ["Salatlar", "Issiq taomlar", "Ichimlik"],
+      rows: [
+        ["Lag'mon", "Qo'l uzilgan, o'tkir", "38 000"],
+        ["Achichuk salat", "Pomidor, piyoz, rayhon", "18 000"],
+        ["Choy — ko'k", "Choynak, 1 litr", "9 000"],
+      ],
+      actions: [],
+      primary: "Ofitsiantni chaqirish",
+      secondary: "Hisobni so'rash",
+    },
+    hotel: {
+      venue: "Hotel Registon",
+      point: "Xona 214",
+      chips: ["Wi-Fi — bir tegishda"],
+      rows: [
+        ["Chiqish vaqti", "", "12:00"],
+        ["Nonushta", "Restoran, 2-qavat", "07:00 – 10:00"],
+        ["Room service", "Kechayu kunduz", "24/7"],
+      ],
+      actions: ["Xonani tozalash", "Kir yuvish", "Taksi", "Uyg'otish"],
+      primary: "So'rov yuborish",
+      secondary: "Shahar bo'yicha yo'riqnoma",
+    },
+    other: {
+      venue: "Salon Nilufar",
+      point: "Usta 3",
+      chips: ["Dilnoza R. · stilist, 6 yil"],
+      rows: [
+        ["Soch turmagi", "Yuvish bilan", "120 000"],
+        ["Bo'yash", "Uzunligiga qarab", "350 000"],
+        ["Manikyur", "Gel-lak", "150 000"],
+      ],
+      actions: [],
+      primary: "Yozilish",
+      secondary: "Izohlar · 4,9 ★",
+    },
+  },
+
+  ru: {
+    cafe: {
+      venue: "Чайхана Навруз",
+      point: "Стол 7",
+      chips: ["Салаты", "Горячее", "Напитки"],
+      rows: [
+        ["Лагман", "Тянутый, острый", "38 000"],
+        ["Салат ачичук", "Помидор, лук, базилик", "18 000"],
+        ["Чай зелёный", "Чайник, 1 литр", "9 000"],
+      ],
+      actions: [],
+      primary: "Позвать официанта",
+      secondary: "Попросить счёт",
+    },
+    hotel: {
+      venue: "Hotel Registon",
+      point: "Номер 214",
+      chips: ["Wi-Fi — одним касанием"],
+      rows: [
+        ["Время выезда", "", "12:00"],
+        ["Завтрак", "Ресторан, 2 этаж", "07:00 – 10:00"],
+        ["Room service", "Круглосуточно", "24/7"],
+      ],
+      actions: ["Уборка номера", "Прачечная", "Такси", "Разбудить"],
+      primary: "Отправить запрос",
+      secondary: "Путеводитель по городу",
+    },
+    other: {
+      venue: "Салон Нилуфар",
+      point: "Мастер 3",
+      chips: ["Дилноза Р. · стилист, 6 лет"],
+      rows: [
+        ["Стрижка", "С мытьём головы", "120 000"],
+        ["Окрашивание", "По длине волос", "350 000"],
+        ["Маникюр", "Гель-лак", "150 000"],
+      ],
+      actions: [],
+      primary: "Записаться",
+      secondary: "Отзывы · 4,9 ★",
+    },
+  },
+
+  en: {
+    cafe: {
+      venue: "Navro'z Teahouse",
+      point: "Table 7",
+      chips: ["Salads", "Hot dishes", "Drinks"],
+      rows: [
+        ["Lagman", "Hand-pulled, spicy", "38 000"],
+        ["Achichuk salad", "Tomato, onion, basil", "18 000"],
+        ["Green tea", "Pot, 1 litre", "9 000"],
+      ],
+      actions: [],
+      primary: "Call a waiter",
+      secondary: "Ask for the bill",
+    },
+    hotel: {
+      venue: "Hotel Registon",
+      point: "Room 214",
+      chips: ["Wi-Fi — one tap"],
+      rows: [
+        ["Checkout", "", "12:00"],
+        ["Breakfast", "Restaurant, 2nd floor", "07:00 – 10:00"],
+        ["Room service", "Round the clock", "24/7"],
+      ],
+      actions: ["Housekeeping", "Laundry", "Taxi", "Wake-up call"],
+      primary: "Send the request",
+      secondary: "City guide",
+    },
+    other: {
+      venue: "Nilufar Salon",
+      point: "Chair 3",
+      chips: ["Dilnoza R. · stylist, 6 years"],
+      rows: [
+        ["Cut", "Wash included", "120 000"],
+        ["Colour", "By hair length", "350 000"],
+        ["Manicure", "Gel polish", "150 000"],
+      ],
+      actions: [],
+      primary: "Book",
+      secondary: "Reviews · 4.9 ★",
+    },
+  },
+};
+
+export type VenueScreenDict = Screen;
+
+export function venueScreen(lang: Lang, vertical: "cafe" | "hotel" | "other"): Screen {
+  return SCREENS[lang][vertical];
+}

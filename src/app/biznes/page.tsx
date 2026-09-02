@@ -8,6 +8,7 @@ import VenuePicker from "@/components/VenuePicker";
 import VenueRequestForm from "@/components/VenueRequestForm";
 import { b2b, site } from "@/lib/i18n";
 import { getLang } from "@/lib/lang";
+import { productShot } from "@/lib/product-shots";
 
 // The venue product, on its own page.
 //
@@ -147,7 +148,15 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
             <p className="mt-4 max-w-xl leading-relaxed text-flex-black/60">{t.priceLede}</p>
 
             <div className="mt-10">
-              <VenuePicker t={t} lang={lang} />
+              <VenuePicker
+                t={t}
+                lang={lang}
+                shots={{
+                  cafe: productShot("kafe"),
+                  hotel: productShot("mehmonxona"),
+                  other: productShot("salon"),
+                }}
+              />
             </div>
           </div>
         </section>

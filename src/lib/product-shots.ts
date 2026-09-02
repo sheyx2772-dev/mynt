@@ -10,7 +10,19 @@ import path from "node:path";
 const DIR = path.join(process.cwd(), "public", "mahsulot");
 const EXTENSIONS = ["jpg", "jpeg", "png", "webp"] as const;
 
-export type ShotName = "hero" | "karta" | "uzuk" | "braslet" | "oila" | "tegizish";
+export type ShotName =
+  | "hero"
+  | "karta"
+  | "uzuk"
+  | "braslet"
+  | "oila"
+  | "tegizish"
+  // The venue product. Absent for now, and absent is a working state: the
+  // drawn screen mockup carries the section on its own, and a photograph
+  // dropped in later widens it rather than fixing it.
+  | "kafe"
+  | "mehmonxona"
+  | "salon";
 
 export function productShot(name: ShotName): string | null {
   for (const ext of EXTENSIONS) {
