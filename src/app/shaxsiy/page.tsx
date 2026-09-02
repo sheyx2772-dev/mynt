@@ -11,9 +11,11 @@ import PhoneFrame from "@/components/PhoneFrame";
 import ProfilePreview from "@/components/ProfilePreview";
 import PricingCalculator from "@/components/PricingCalculator";
 import PlanTable from "@/components/PlanTable";
-import { site, landing, catalogue } from "@/lib/i18n";
+import LoadoutStrip from "@/components/LoadoutStrip";
 import { getLang } from "@/lib/lang";
 import { productShot } from "@/lib/product-shots";
+import { deviceStrip } from "@/lib/strip-items";
+import { site, landing, catalogue, picker } from "@/lib/i18n";
 import { formatUZS } from "@/lib/format";
 import { DEVICE_TYPES } from "@/lib/devices";
 
@@ -41,6 +43,8 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
   const s = site(lang);
   const copy = landing(lang);
   const c = catalogue(lang);
+  const p = picker(lang);
+  const devices = deviceStrip(lang);
 
   const tapShot = productShot("tegizish");
   const familyShot = productShot("oila");
@@ -95,12 +99,6 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
                   >
                     {s.calcPrice}
                   </a>
-                  <Link
-                    href="/biznes"
-                    className="rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10 sm:px-7 sm:py-3.5 sm:text-base"
-                  >
-                    {s.forBusiness}
-                  </Link>
                 </div>
               </div>
 
@@ -286,6 +284,17 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
           </div>
         </section>
 
+
+        {/* The objects themselves, between what the profile does and what it
+            costs. The page says "a card, a ring or a bracelet" three times
+            before this and had nowhere to show them. */}
+        <div className="border-t border-black/5 bg-black/[0.02] py-6">
+          <LoadoutStrip
+            items={devices}
+            label={p.groupDevices}
+            note={p.groupDevicesNote}
+          />
+        </div>
 
         {/* Pricing calculator */}
         <section id="narx" className="scroll-mt-20 mx-auto max-w-6xl px-6 py-14 sm:py-24">

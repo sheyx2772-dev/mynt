@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, MapPin, Inbox, BarChart3, Users, Target, RefreshCw, TrendingUp } from "lucide-react";
+import { MapPin, Inbox, BarChart3, Users, Target, RefreshCw, TrendingUp } from "lucide-react";
 
 import Mark from "@/components/Mark";
 import LangSwitch from "@/components/LangSwitch";
@@ -336,25 +336,6 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
         </section>
 
 
-        {/* The other B2B offer */}
-        <section className="mx-auto max-w-6xl px-6 py-14 sm:py-20">
-          <div className="rounded-3xl border border-black/10 bg-white p-8 sm:p-10">
-            <p className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
-              {t.teamEyebrow}
-            </p>
-            <h2 className="mt-3 max-w-md font-display text-xl font-semibold tracking-tight text-balance sm:text-2xl">
-              {t.teamTitle}
-            </h2>
-            <p className="mt-3 max-w-xl leading-relaxed text-flex-black/60">{t.teamBody}</p>
-            <Link
-              href="#jamoa"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-flex-black px-6 py-3 text-sm font-medium text-white transition-transform hover:scale-[1.02]"
-            >
-              {t.teamCta}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </section>
       </main>
 
       <footer className="border-t border-black/8 py-10">
