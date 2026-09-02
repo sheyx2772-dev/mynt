@@ -90,7 +90,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               items={[
                 { href: "#narx", label: s.navPricing },
                 { href: "#individual", label: s.navPersonal },
-                { href: "#biznes", label: s.navBusiness },
+                { href: "/biznes", label: s.navBusiness },
                 { href: "#savollar", label: s.navFaq },
                 { href: "/qurilmalar", label: s.navDevices },
                 { href: "/tarif", label: s.navPlans },
@@ -113,9 +113,9 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             >
               {s.navPersonal}
             </a>
-            <a href="#biznes" className="transition-colors hover:text-white">
+            <Link href="/biznes" className="transition-colors hover:text-white">
               {s.navBusiness}
-            </a>
+            </Link>
             <a href="#savollar" className="transition-colors hover:text-white">
               {s.navFaq}
             </a>

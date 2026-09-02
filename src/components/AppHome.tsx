@@ -173,8 +173,8 @@ export default function AppHome({
       {/* The business enquiry is the one marketing section a phone keeps, so it
           gets a way in from here rather than only from a scroll. */}
       <section className="px-6 pt-9">
-        <a
-          href="#biznes"
+        <Link
+          href="/biznes"
           className="grain relative block overflow-hidden rounded-3xl bg-flex-black px-5 py-5 text-white"
         >
           <div className="relative flex items-center gap-3">
@@ -186,7 +186,7 @@ export default function AppHome({
             </div>
             <ChevronRight className="h-4 w-4 shrink-0 text-lime" />
           </div>
-        </a>
+        </Link>
       </section>
     </div>
   );

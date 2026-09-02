@@ -1045,3 +1045,45 @@ begin
   if n <> 0 then raise exception 'hisob oʻchirilgach hisoblagich notoʻgʻri: %', n; end if;
   raise notice '   ok   a deleted account stops counting';
 end $$;
+
+-- 0032 — venue enquiries share the team_requests queue
+do $$
+begin
+  -- A company still counts staff and nothing about it changed.
+  insert into team_requests (company, contact_name, phone, team_size)
+    values ('Test MCHJ', 'Aziz', '+998901234567', 20);
+  raise notice '   ok   a company request still counts staff';
+
+  -- A venue counts points instead, and leaves team_size empty.
+  insert into team_requests (company, contact_name, phone, points, vertical)
+    values ('Test Kafe', 'Sardor', '+998901234567', 12, 'cafe');
+  raise notice '   ok   a venue request counts points';
+
+  -- Dropping the NOT NULL must not let through a row that counts nothing:
+  -- nobody can quote against "a company would like something".
+  begin
+    insert into team_requests (company, contact_name, phone)
+      values ('Hech nima', 'Kimdir', '+998901234567');
+    raise exception 'hech narsani sanamaydigan soʻrov oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a request that counts neither staff nor points';
+  end;
+
+  begin
+    insert into team_requests (company, contact_name, phone, points, vertical)
+      values ('Test', 'Kimdir', '+998901234567', 5, 'kazino');
+    raise exception 'notanish yoʻnalish oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a vertical we do not sell';
+  end;
+
+  begin
+    insert into team_requests (company, contact_name, phone, points)
+      values ('Test', 'Kimdir', '+998901234567', 0);
+    raise exception 'nol nuqtali soʻrov oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a venue with no points';
+  end;
+
+  delete from team_requests where company in ('Test MCHJ', 'Test Kafe');
+end $$;

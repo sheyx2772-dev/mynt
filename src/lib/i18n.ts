@@ -867,3 +867,583 @@ export type CatalogueDict = (typeof CATALOGUE)["uz"];
 export function catalogue(lang: Lang): CatalogueDict {
   return CATALOGUE[lang] as CatalogueDict;
 }
+
+
+// --- the venue product ---------------------------------------------------
+//
+// Cafes, hotels and the rest of the service businesses. Kept whole rather than
+// split across the page, because a claim about what a restaurant gets has to be
+// the same claim in all three languages — the earlier split copy is exactly how
+// a page ends up true in Uzbek and wrong in Russian.
+//
+// Prices, bands and the point limit stay in venues.ts. A price is not a
+// translation.
+
+const B2B = {
+  uz: {
+    metaTitle: "Biznes uchun — flex.com.uz",
+    metaDescription:
+      "Kafe, restoran va mehmonxonalar uchun NFC: menyu, xona xizmatlari, so'rovlar va statistika. Bir panel, uch til.",
+    eyebrow: "Biznes uchun",
+    title: "NFC — endi biznes uchun ham",
+    lede: "Kafe, mehmonxona va boshqa xizmat obyektlari uchun. Mehmon telefonini tegizadi — kerakli sahifa ochiladi. Hech kim ilova o'rnatmaydi.",
+    chainNow: "bugun",
+    chainNext: "ertaga",
+    chain: [
+      "NFC → shaxsiy profil",
+      "NFC → menyu",
+      "NFC → mehmonxona xonasi",
+      "NFC → xizmat nuqtasi",
+    ],
+    pilotTitle: "Bu yo'nalishlar ishga tushirilmoqda",
+    pilotBody:
+      "Kafe va mehmonxona modullari birinchi mijozlar bilan birga sozlanmoqda. So'rov qoldiring — sizga mos qilib yig'amiz va narxni birga kelishamiz.",
+
+    coreEyebrow: "Qanday ishlaydi",
+    coreTitle: "Bitta obyekt, ko'p nuqta",
+    coreLede:
+      "Nuqta — stol, xona, eshik yoki kabinet. Har birining o'z NFC belgisi va o'z sahifasi bo'ladi, hammasi bitta paneldan boshqariladi.",
+    core: [
+      {
+        title: "Nuqta",
+        desc: "Stol 1–20, xona 101–250, eshik, basseyn. Har biri alohida manzil — qaysi biridan kelinganini o'zi biladi.",
+      },
+      {
+        title: "So'rovlar qutisi",
+        desc: "Ofitsiantni chaqirish, xona tozalash, izoh. So'rov qaysi nuqtadan kelgani biriktiriladi va Telegram'ga tushadi.",
+      },
+      {
+        title: "Statistika",
+        desc: "Qaysi stol ko'p ochilgan, qaysi taom ko'p qaralgan, qaysi xonadan ko'p so'rov kelgan.",
+      },
+    ],
+
+    pickVertical: "Yo'nalishni tanlang",
+    guestSide: "Mehmon ko'radi",
+    ownerSide: "Egasi ko'radi",
+    staffSide: "Xodim ishlatadi",
+    whyPay: "Nega to'laydi",
+
+    verticals: {
+      cafe: {
+        name: "Kafe va restoran",
+        pointWord: "stol",
+        pointsWord: "stol",
+        tagline: "Stol ustidagi taglik yoki stikerda NFC va QR",
+        guest: [
+          "Menyu: bo'limlar, rasm, narx, tarkib va allergenlar",
+          "«Tugadi» — taom bir tugma bilan yopiladi",
+          "O'zbekcha, ruscha, inglizcha",
+          "Ofitsiantni chaqirish",
+          "Hisobni so'rash",
+          "Baho va izoh qoldirish",
+          "Wi-Fi parolini NFC orqali olish",
+        ],
+        owner: [
+          "Menyu muharriri — narx bir daqiqada o'zgaradi",
+          "Stop-list: bugun yo'q taomlar",
+          "Har bir stol bo'yicha statistika",
+          "Izohlar qutisi",
+          "Chaqiruv va izoh Telegram'ga tushadi",
+        ],
+        staff: [],
+        why: [
+          "Menyu narxi o'zgarsa qayta chop etiladi — dizayn, bosma, kutish. Bu yerda narx o'zgarishi bepul va bir daqiqa.",
+          "Norozi mehmon izohni Google yoki Yandex xaritasiga yozadi va u o'sha yerda qoladi. Bu yerda izoh avval egasiga keladi — muammoni mehmon ketguncha hal qilish imkoni bo'ladi.",
+        ],
+      },
+      hotel: {
+        name: "Mehmonxona",
+        pointWord: "xona",
+        pointsWord: "xona",
+        tagline: "Xonadagi taglik yoki eshikdagi teg — charm papkani almashtiradi",
+        guest: [
+          "Wi-Fi paroli — NFC bilan o'zi ulanadi",
+          "Chiqish vaqti, nonushta vaqti",
+          "Room service menyusi",
+          "Xona tozalash so'rovi",
+          "Kir yuvish, taksi, uyg'otish",
+          "Shahar bo'yicha yo'riqnoma — uch tilda",
+        ],
+        owner: [
+          "So'rovlar qutisi — xona raqami o'zi biriktiriladi",
+          "Bajarildi / kutmoqda holati",
+          "Restoran va spa bronlari",
+          "Xona bo'yicha statistika",
+        ],
+        staff: [
+          "Farrosh eshikdagi tegga tegizadi — xona «tozalangan» bo'lib belgilanadi, vaqti bilan",
+          "Qog'oz varaq ham, alohida qurilma ham kerak emas",
+        ],
+        why: [
+          "Chet ellik mehmonga ruscha va inglizcha kerak — uchala til allaqachon ishlaydi. Bosma papka esa har mavsumda eskiradi.",
+          "Qurilma faqat mehmon uchun emas: ichki jarayon uchun ham ishlaydi, ya'ni bitta xarid ikki ish qiladi.",
+        ],
+      },
+      other: {
+        name: "Boshqa obyektlar",
+        pointWord: "nuqta",
+        pointsWord: "nuqta",
+        tagline: "Salon, klinika, muzey va boshqalar — shakl o'sha, sahifa boshqacha",
+        guest: [
+          "Xizmatlar va narxlar ro'yxati",
+          "Mutaxassis profili va ishlari",
+          "Yozilish so'rovi",
+          "Izoh va baho",
+          "Uch tilda",
+        ],
+        owner: [
+          "Narx va matnni o'zingiz tahrirlaysiz",
+          "So'rovlar qutisi",
+          "Nuqta bo'yicha statistika",
+        ],
+        staff: [],
+        why: [
+          "Sizning yo'nalishingiz ro'yxatda yo'qmi — so'rov qoldiring. Shakl bitta: buyumga tegiziladi, sahifa ochiladi, bitta ish bajariladi.",
+        ],
+      },
+    },
+
+    otherEyebrow: "Yana qayerda",
+    otherTitle: "Boshqa xizmat obyektlari",
+    otherLede:
+      "Mezon bitta: «buyumga tegiziladi → sahifa ochiladi va bitta ish bajariladi» degan shakl o'sha yerda haqiqiy muammoni yechadimi.",
+    tableHead: ["Yo'nalish", "Nuqta", "Nima qiladi"],
+    others: [
+      ["Go'zallik saloni, sartaroshxona", "Usta o'rindig'i", "Narxlar, ustaga yozilish, ishlari, izohlar"],
+      ["Klinika, stomatologiya", "Shifokor eshigi", "Shifokor profili, narx, navbat, tayyorgarlik"],
+      ["Muzey, turistik joy", "Eksponat lavhasi", "Uch tilda matn va audio yo'riqnoma"],
+      ["Ko'chmas mulk agentligi", "Obyektdagi lavha", "E'lon, rasmlar, agent kontakti"],
+      ["Avtoservis, avtosalon", "Avtomobilning o'zi", "Xizmat tarixi, kafolat, keyingi TX"],
+      ["Fitnes klub", "Trenajyor, murabbiy", "Mashq videosi, murabbiyga yozilish"],
+      ["Biznes markaz", "Yig'ilish xonasi eshigi", "Xona bandmi, hozir band qilish"],
+    ],
+
+    priceEyebrow: "Narx",
+    priceTitle: "O'rin emas, obyekt",
+    priceLede:
+      "To'lov obyekt bo'yicha, nuqta soniga qarab pog'onalanadi. Qurilmalar (taglik, stiker, teg) alohida va bir martalik.",
+    pointsLabel: "Nuqtalar soni",
+    monthlyWord: "oyiga",
+    perPointWord: "bitta nuqtaga",
+    negotiated: "Kelishuv bo'yicha",
+    negotiatedNote: "Tarmoq yoki katta obyekt — narxni suhbatda aniqlaymiz.",
+    bandNames: ["15 nuqtagacha", "40 nuqtagacha", "40 dan ortiq"],
+    askForThis: "Shu bo'yicha so'rov qoldirish",
+
+    formEyebrow: "So'rov",
+    formTitle: "Obyektingiz uchun hisob-kitob",
+    formLede: "Bir ish kuni ichida bog'lanamiz.",
+    fields: {
+      vertical: "Yo'nalish",
+      company: "Obyekt nomi",
+      companyHint: "Kafe, restoran yoki mehmonxona nomi",
+      points: "Nuqtalar soni",
+      contactName: "Ismingiz",
+      phone: "Telefon",
+      email: "Elektron pochta — ixtiyoriy",
+      note: "Izoh — ixtiyoriy",
+      noteHint: "Qanday qurilma, qachonga kerak, qo'shimcha savol",
+    },
+    submit: "So'rov yuborish",
+    sending: "Yuborilmoqda…",
+    sentTitle: "Qabul qilindi",
+    sentBody: "Bir ish kuni ichida bog'lanamiz. Shoshilinch bo'lsa qo'ng'iroq qiling:",
+    errors: {
+      company: "Obyekt nomini kiriting.",
+      name: "Ismingizni kiriting.",
+      phone: "Telefon raqamini to'liq kiriting.",
+      email: "Elektron pochta manzili noto'g'ri.",
+      points: "Nechta nuqta ekanini kiriting.",
+      pointsBig: "Bu son juda katta — tekshirib qayta kiriting.",
+      note: "Izoh juda uzun.",
+      save: "Hozir saqlab bo'lmadi. Qo'ng'iroq qiling:",
+    },
+
+    teamEyebrow: "Yana bir yo'nalish",
+    teamTitle: "Xodimlar uchun kartalar",
+    teamBody:
+      "Obyekt emas, jamoa kerakmi — xodimlaringizga bir xil brend bilan raqam va NFC karta chiqaramiz.",
+    teamCta: "Jamoa tarifini ko'rish",
+  },
+
+  ru: {
+    metaTitle: "Для бизнеса — flex.com.uz",
+    metaDescription:
+      "NFC для кафе, ресторанов и отелей: меню, обслуживание в номере, запросы и статистика. Одна панель, три языка.",
+    eyebrow: "Для бизнеса",
+    title: "NFC — теперь и для бизнеса",
+    lede: "Для кафе, отелей и других сервисных объектов. Гость подносит телефон — открывается нужная страница. Приложение никому ставить не нужно.",
+    chainNow: "сегодня",
+    chainNext: "завтра",
+    chain: [
+      "NFC → личный профиль",
+      "NFC → меню",
+      "NFC → номер отеля",
+      "NFC → сервисная точка",
+    ],
+    pilotTitle: "Эти направления запускаются",
+    pilotBody:
+      "Модули для кафе и отелей настраиваются вместе с первыми клиентами. Оставьте заявку — соберём под вас и согласуем цену.",
+
+    coreEyebrow: "Как работает",
+    coreTitle: "Один объект, много точек",
+    coreLede:
+      "Точка — это стол, номер, дверь или кабинет. У каждой свой NFC-знак и своя страница, всё управляется из одной панели.",
+    core: [
+      {
+        title: "Точка",
+        desc: "Стол 1–20, номер 101–250, дверь, бассейн. У каждой свой адрес — система сама знает, откуда пришли.",
+      },
+      {
+        title: "Ящик запросов",
+        desc: "Позвать официанта, убрать номер, оставить отзыв. К запросу сама подставляется точка, и он приходит в Telegram.",
+      },
+      {
+        title: "Статистика",
+        desc: "Какой стол открывают чаще, какое блюдо смотрят больше, из какого номера больше запросов.",
+      },
+    ],
+
+    pickVertical: "Выберите направление",
+    guestSide: "Видит гость",
+    ownerSide: "Видит владелец",
+    staffSide: "Использует персонал",
+    whyPay: "Почему платят",
+
+    verticals: {
+      cafe: {
+        name: "Кафе и ресторан",
+        pointWord: "стол",
+        pointsWord: "столов",
+        tagline: "NFC и QR на подставке или наклейке на столе",
+        guest: [
+          "Меню: разделы, фото, цена, состав и аллергены",
+          "«Закончилось» — блюдо скрывается одной кнопкой",
+          "Узбекский, русский, английский",
+          "Позвать официанта",
+          "Попросить счёт",
+          "Оставить оценку и отзыв",
+          "Пароль Wi-Fi через NFC",
+        ],
+        owner: [
+          "Редактор меню — цена меняется за минуту",
+          "Стоп-лист: чего сегодня нет",
+          "Статистика по каждому столу",
+          "Ящик отзывов",
+          "Вызовы и отзывы приходят в Telegram",
+        ],
+        staff: [],
+        why: [
+          "При смене цены меню печатают заново — дизайн, типография, ожидание. Здесь смена цены бесплатна и занимает минуту.",
+          "Недовольный гость пишет отзыв в Google или Яндекс.Картах, и он там остаётся. Здесь отзыв сначала приходит владельцу — проблему можно решить, пока гость ещё не ушёл.",
+        ],
+      },
+      hotel: {
+        name: "Отель",
+        pointWord: "номер",
+        pointsWord: "номеров",
+        tagline: "Подставка в номере или тег на двери — вместо кожаной папки",
+        guest: [
+          "Пароль Wi-Fi — подключает сам через NFC",
+          "Время выезда, время завтрака",
+          "Меню room service",
+          "Запрос на уборку номера",
+          "Прачечная, такси, будильник",
+          "Путеводитель по городу — на трёх языках",
+        ],
+        owner: [
+          "Ящик запросов — номер комнаты подставляется сам",
+          "Статус: выполнено / в ожидании",
+          "Брони ресторана и спа",
+          "Статистика по номерам",
+        ],
+        staff: [
+          "Горничная подносит телефон к тегу на двери — номер отмечается убранным, со временем",
+          "Ни бумажного листа, ни отдельного устройства",
+        ],
+        why: [
+          "Иностранному гостю нужны русский и английский — все три языка уже работают. Печатная папка устаревает каждый сезон.",
+          "Устройство работает не только для гостя, но и для внутреннего процесса: одна покупка делает две работы.",
+        ],
+      },
+      other: {
+        name: "Другие объекты",
+        pointWord: "точка",
+        pointsWord: "точек",
+        tagline: "Салон, клиника, музей и другие — форма та же, страница другая",
+        guest: [
+          "Список услуг и цен",
+          "Профиль специалиста и его работы",
+          "Запрос на запись",
+          "Отзыв и оценка",
+          "На трёх языках",
+        ],
+        owner: [
+          "Цены и тексты редактируете сами",
+          "Ящик запросов",
+          "Статистика по точкам",
+        ],
+        staff: [],
+        why: [
+          "Вашего направления нет в списке — оставьте заявку. Форма одна: поднесли к предмету, открылась страница, сделалось одно дело.",
+        ],
+      },
+    },
+
+    otherEyebrow: "Где ещё",
+    otherTitle: "Другие сервисные объекты",
+    otherLede:
+      "Критерий один: решает ли форма «поднёс к предмету → открылась страница и сделалось одно дело» настоящую проблему в этом месте.",
+    tableHead: ["Направление", "Точка", "Что делает"],
+    others: [
+      ["Салон красоты, барбершоп", "Кресло мастера", "Цены, запись к мастеру, работы, отзывы"],
+      ["Клиника, стоматология", "Дверь врача", "Профиль врача, цены, запись, подготовка"],
+      ["Музей, туристический объект", "Табличка у экспоната", "Текст и аудиогид на трёх языках"],
+      ["Агентство недвижимости", "Табличка на объекте", "Объявление, фото, контакт агента"],
+      ["Автосервис, автосалон", "Сам автомобиль", "История обслуживания, гарантия, следующее ТО"],
+      ["Фитнес-клуб", "Тренажёр, тренер", "Видео упражнения, запись к тренеру"],
+      ["Бизнес-центр", "Дверь переговорной", "Занята ли комната, забронировать сейчас"],
+    ],
+
+    priceEyebrow: "Цена",
+    priceTitle: "Не место, а объект",
+    priceLede:
+      "Оплата за объект, ступенями по числу точек. Устройства (подставки, наклейки, теги) отдельно и единоразово.",
+    pointsLabel: "Число точек",
+    monthlyWord: "в месяц",
+    perPointWord: "за одну точку",
+    negotiated: "По договорённости",
+    negotiatedNote: "Сеть или крупный объект — цену определим в разговоре.",
+    bandNames: ["до 15 точек", "до 40 точек", "больше 40"],
+    askForThis: "Оставить заявку по этому варианту",
+
+    formEyebrow: "Заявка",
+    formTitle: "Расчёт для вашего объекта",
+    formLede: "Свяжемся в течение рабочего дня.",
+    fields: {
+      vertical: "Направление",
+      company: "Название объекта",
+      companyHint: "Название кафе, ресторана или отеля",
+      points: "Число точек",
+      contactName: "Ваше имя",
+      phone: "Телефон",
+      email: "Электронная почта — необязательно",
+      note: "Комментарий — необязательно",
+      noteHint: "Какие устройства, к какому сроку, дополнительные вопросы",
+    },
+    submit: "Отправить заявку",
+    sending: "Отправляется…",
+    sentTitle: "Принято",
+    sentBody: "Свяжемся в течение рабочего дня. Если срочно — позвоните:",
+    errors: {
+      company: "Укажите название объекта.",
+      name: "Укажите ваше имя.",
+      phone: "Введите телефон полностью.",
+      email: "Неверный адрес электронной почты.",
+      points: "Укажите число точек.",
+      pointsBig: "Слишком большое число — проверьте и введите заново.",
+      note: "Комментарий слишком длинный.",
+      save: "Сейчас не удалось сохранить. Позвоните:",
+    },
+
+    teamEyebrow: "Ещё одно направление",
+    teamTitle: "Карты для сотрудников",
+    teamBody:
+      "Нужен не объект, а команда — выпустим сотрудникам номера и NFC-карты в едином фирменном стиле.",
+    teamCta: "Посмотреть тариф для команды",
+  },
+
+  en: {
+    metaTitle: "For business — flex.com.uz",
+    metaDescription:
+      "NFC for cafes, restaurants and hotels: menus, in-room service, requests and statistics. One panel, three languages.",
+    eyebrow: "For business",
+    title: "NFC — now for business too",
+    lede: "For cafes, hotels and other service venues. A guest taps their phone and the right page opens. Nobody installs an app.",
+    chainNow: "today",
+    chainNext: "next",
+    chain: [
+      "NFC → personal profile",
+      "NFC → menu",
+      "NFC → hotel room",
+      "NFC → service point",
+    ],
+    pilotTitle: "These are being launched",
+    pilotBody:
+      "The cafe and hotel modules are being shaped with the first customers. Send an enquiry — we will build it around you and agree the price together.",
+
+    coreEyebrow: "How it works",
+    coreTitle: "One venue, many points",
+    coreLede:
+      "A point is a table, a room, a door or a treatment room. Each gets its own NFC marker and its own page, all edited from one panel.",
+    core: [
+      {
+        title: "Points",
+        desc: "Table 1–20, room 101–250, a door, the pool. Each is its own address, so the system knows where a visit came from.",
+      },
+      {
+        title: "Request inbox",
+        desc: "Call a waiter, request housekeeping, leave a review. The point is attached automatically and it arrives in Telegram.",
+      },
+      {
+        title: "Statistics",
+        desc: "Which table is opened most, which dish is looked at most, which room sends the most requests.",
+      },
+    ],
+
+    pickVertical: "Pick a direction",
+    guestSide: "The guest sees",
+    ownerSide: "The owner sees",
+    staffSide: "Staff use",
+    whyPay: "Why they pay",
+
+    verticals: {
+      cafe: {
+        name: "Cafe and restaurant",
+        pointWord: "table",
+        pointsWord: "tables",
+        tagline: "NFC and QR on a table stand or a sticker",
+        guest: [
+          "Menu: sections, photos, prices, ingredients and allergens",
+          "“Sold out” — a dish is hidden with one button",
+          "Uzbek, Russian, English",
+          "Call a waiter",
+          "Ask for the bill",
+          "Leave a rating and a review",
+          "Wi-Fi password over NFC",
+        ],
+        owner: [
+          "Menu editor — a price changes in a minute",
+          "Stop list: what is off today",
+          "Statistics for every table",
+          "Review inbox",
+          "Calls and reviews arrive in Telegram",
+        ],
+        staff: [],
+        why: [
+          "A price change means reprinting the menu — design, print, waiting. Here a price change is free and takes a minute.",
+          "An unhappy guest writes the review on Google or Yandex Maps and it stays there. Here the review reaches the owner first, while the guest is still in the room.",
+        ],
+      },
+      hotel: {
+        name: "Hotel",
+        pointWord: "room",
+        pointsWord: "rooms",
+        tagline: "A stand in the room or a tag on the door — in place of the leather compendium",
+        guest: [
+          "Wi-Fi password — NFC connects the phone itself",
+          "Checkout time, breakfast time",
+          "Room service menu",
+          "Housekeeping request",
+          "Laundry, taxi, wake-up call",
+          "A city guide — in three languages",
+        ],
+        owner: [
+          "Request inbox — the room number attaches itself",
+          "Done / waiting status",
+          "Restaurant and spa bookings",
+          "Statistics by room",
+        ],
+        staff: [
+          "Housekeeping taps the tag on the door — the room is marked serviced, with the time",
+          "No paper sheet and no separate handheld",
+        ],
+        why: [
+          "A foreign guest needs Russian and English — all three languages already work. A printed compendium goes stale every season.",
+          "The hardware is not only for the guest: it serves an internal process too, so one purchase does two jobs.",
+        ],
+      },
+      other: {
+        name: "Other venues",
+        pointWord: "point",
+        pointsWord: "points",
+        tagline: "Salons, clinics, museums and the rest — same shape, different page",
+        guest: [
+          "Services and prices",
+          "The specialist's profile and their work",
+          "Booking request",
+          "Review and rating",
+          "In three languages",
+        ],
+        owner: [
+          "You edit the prices and the text yourself",
+          "Request inbox",
+          "Statistics by point",
+        ],
+        staff: [],
+        why: [
+          "If your line of work is not on the list, send an enquiry. The shape is one: tap an object, a page opens, one job gets done.",
+        ],
+      },
+    },
+
+    otherEyebrow: "Where else",
+    otherTitle: "Other service venues",
+    otherLede:
+      "One test: does the shape — tap an object, a page opens, one job gets done — solve a real problem in that place.",
+    tableHead: ["Direction", "Point", "What it does"],
+    others: [
+      ["Beauty salon, barbershop", "The stylist's chair", "Prices, booking a stylist, their work, reviews"],
+      ["Clinic, dental practice", "The doctor's door", "Doctor profile, prices, booking, preparation"],
+      ["Museum, heritage site", "The label by the exhibit", "Text and audio guide in three languages"],
+      ["Estate agency", "The plaque on the property", "The listing, photos, the agent's contact"],
+      ["Garage, car dealer", "The car itself", "Service history, warranty, next service due"],
+      ["Gym", "A machine, a trainer", "How to use it on video, booking a trainer"],
+      ["Business centre", "The meeting room door", "Whether it is booked, book it now"],
+    ],
+
+    priceEyebrow: "Price",
+    priceTitle: "Not a seat, a venue",
+    priceLede:
+      "Billed per venue, in bands by the number of points. Hardware (stands, stickers, tags) is separate and one-time.",
+    pointsLabel: "Number of points",
+    monthlyWord: "a month",
+    perPointWord: "per point",
+    negotiated: "By agreement",
+    negotiatedNote: "A chain or a large venue — we settle the price in conversation.",
+    bandNames: ["up to 15 points", "up to 40 points", "more than 40"],
+    askForThis: "Enquire about this",
+
+    formEyebrow: "Enquiry",
+    formTitle: "A quote for your venue",
+    formLede: "We reply within one working day.",
+    fields: {
+      vertical: "Direction",
+      company: "Venue name",
+      companyHint: "The name of the cafe, restaurant or hotel",
+      points: "Number of points",
+      contactName: "Your name",
+      phone: "Phone",
+      email: "Email — optional",
+      note: "Note — optional",
+      noteHint: "Which hardware, by when, anything else you want to ask",
+    },
+    submit: "Send the enquiry",
+    sending: "Sending…",
+    sentTitle: "Received",
+    sentBody: "We reply within one working day. If it is urgent, call:",
+    errors: {
+      company: "Enter the venue name.",
+      name: "Enter your name.",
+      phone: "Enter the phone number in full.",
+      email: "That email address is not valid.",
+      points: "Enter how many points there are.",
+      pointsBig: "That number is too large — check it and enter it again.",
+      note: "The note is too long.",
+      save: "That could not be saved just now. Please call:",
+    },
+
+    teamEyebrow: "One more direction",
+    teamTitle: "Cards for staff",
+    teamBody:
+      "If you need a team rather than a venue — we issue your staff numbers and NFC cards in one house style.",
+    teamCta: "See the team plan",
+  },
+} as const;
+
+export type B2BDict = (typeof B2B)["uz"];
+
+export function b2b(lang: Lang): B2BDict {
+  return B2B[lang] as B2BDict;
+}
