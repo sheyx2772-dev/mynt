@@ -32,5 +32,17 @@ export default function manifest(): MetadataRoute.Manifest {
       // Bleeds to the edges so a launcher can crop it to any shape.
       { src: "/icon-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
     ],
+    // Long-pressing the icon jumps straight to a screen.
+    //
+    // Every one of these has to work for somebody who owns no handle and for
+    // somebody who owns six, which rules out anything with a number in the
+    // path: /kabinet/qr would have to guess which card. So they are the three
+    // destinations that are the same address for everyone, and the cabinet
+    // sends each of them on to whichever number is open.
+    shortcuts: [
+      { name: "So'rovlar", short_name: "So'rovlar", url: "/kabinet?ish=sorovlar" },
+      { name: "QR-kod", short_name: "QR", url: "/kabinet?ish=qr" },
+      { name: "Xabarlar", short_name: "Xabarlar", url: "/kabinet/xabarlar" },
+    ],
   };
 }

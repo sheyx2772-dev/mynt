@@ -66,12 +66,12 @@ export default function OwnerHome({
 
       <div className="mt-3 grid grid-cols-3 gap-2">
         <Action
-          href={`/kabinet/${handle.normalized}#qr`}
+          href={`/kabinet/${handle.normalized}/qr`}
           label={s.actionQr}
           Icon={QrCode}
         />
         <Action
-          href={`/kabinet/${handle.normalized}`}
+          href={`/kabinet/${handle.normalized}/tahrirlash`}
           label={s.actionEdit}
           Icon={Pencil}
         />
@@ -80,7 +80,7 @@ export default function OwnerHome({
 
       {leads > 0 && (
         <Link
-          href={`/kabinet/${handle.normalized}#kontaktlar`}
+          href={`/kabinet/${handle.normalized}/statistika`}
           className="mt-3 flex items-center gap-3 rounded-2xl border border-lime-ink/25 bg-lime/[0.12] px-4 py-3.5 transition-transform active:scale-[0.99]"
         >
           <Inbox className="h-5 w-5 shrink-0 text-lime-ink" strokeWidth={1.8} />

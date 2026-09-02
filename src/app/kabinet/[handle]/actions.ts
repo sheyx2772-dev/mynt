@@ -78,6 +78,7 @@ export async function updateProfile(
   if (error) return { ok: false, error: "Saqlanmadi. Qaytadan urinib ko'ring." };
 
   revalidatePath(`/${normalized}`);
+  revalidatePath(`/kabinet/${normalized}/tahrirlash`);
   revalidatePath(`/kabinet/${normalized}`);
   revalidatePath("/kabinet");
 
@@ -135,7 +136,7 @@ export async function createPost(
   if (error) return { ok: false, error: "Post saqlanmadi. Qaytadan urinib ko'ring." };
 
   revalidatePath(`/${normalized}`);
-  revalidatePath(`/kabinet/${normalized}`);
+  revalidatePath(`/kabinet/${normalized}/postlar`);
   revalidatePath("/lenta");
 
   return { ok: true };
@@ -159,7 +160,7 @@ export async function deletePost(postId: string): Promise<PostResult> {
   if (!data) return { ok: false, error: "Post topilmadi." };
 
   revalidatePath(`/${data.handle}`);
-  revalidatePath(`/kabinet/${data.handle}`);
+  revalidatePath(`/kabinet/${data.handle}/postlar`);
   revalidatePath("/lenta");
 
   return { ok: true };
@@ -183,7 +184,7 @@ export async function submitDesignRequest(
   const result = await requestDesign(user.id, normalized, wish);
   if (!result.ok) return { ok: false, error: result.error };
 
-  revalidatePath(`/kabinet/${normalized}`);
+  revalidatePath(`/kabinet/${normalized}/dizayn`);
   return { ok: true, queued: true };
 }
 
@@ -209,7 +210,7 @@ export async function offerHandleTransfer(
   );
   if (!result.ok) return { ok: false, error: result.error };
 
-  revalidatePath(`/kabinet/${normalized}`);
+  revalidatePath(`/kabinet/${normalized}/otkazish`);
   return { ok: true, sent: true };
 }
 

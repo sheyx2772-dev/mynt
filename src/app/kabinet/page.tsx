@@ -1,25 +1,43 @@
 import Link from "next/link";
 import { after } from "next/server";
-import { listNotifications } from "@/lib/notify";
+import { redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { Pencil, QrCode, Clock, Building2, ChevronRight } from "lucide-react";
+import { Bell, Rss, Building2, ChevronRight, Clock } from "lucide-react";
+
 import PageShell from "@/components/PageShell";
+import HandleHub from "@/components/HandleHub";
 import SignOutButton from "@/components/SignOutButton";
 import InstallHint from "@/components/InstallHint";
+import IncomingTransfers from "@/components/IncomingTransfers";
 import { requireUser } from "@/lib/auth";
 import { listHandlesForUser, touchLastSeen } from "@/lib/handles";
-import IncomingTransfers from "@/components/IncomingTransfers";
+import { listNotifications } from "@/lib/notify";
 import { listIncomingTransfers } from "@/lib/transfers";
 import { getTeamForUser } from "@/lib/teams";
-import { formatUZS } from "@/lib/format";
+import { getHandleStats } from "@/lib/analytics";
+import { listLeads } from "@/lib/leads";
+import { getOwnedVenue } from "@/lib/menu";
+import { countWaiting } from "@/lib/venue-requests";
 
 export const metadata: Metadata = {
   title: "Kabinet — flex.com.uz",
   robots: { index: false },
 };
 
-export default async function CabinetPage() {
+// The screen behind the app icon.
+//
+// An installed copy opens here, which means this is the first thing an owner
+// sees every time — so it shows their number and what it did rather than a list
+// of cards they have to tap through to reach anything. Almost everybody owns
+// exactly one number; for them the list was a whole screen that existed to hold
+// a single row.
+//
+// With more than one, the extra numbers become a strip above the hub and the
+// address remembers which one is open.
+export default async function CabinetPage(props: PageProps<"/kabinet">) {
+  const { ish } = await props.searchParams;
   const user = await requireUser("/kabinet");
+
   const [handles, incoming, notifications, team] = await Promise.all([
     listHandlesForUser(user.id),
     listIncomingTransfers(user.email ?? ""),
@@ -27,7 +45,50 @@ export default async function CabinetPage() {
     getTeamForUser(user.id),
   ]);
 
-  const unreadCount = notifications.filter((n) => !n.readAt).length;
+  const unread = notifications.filter((n) => !n.readAt).length;
+
+  // Which number this screen is about. The oldest paid-for one, because that is
+  // the number somebody's cards are printed with; the newest is usually one
+  // they just bought and have not used yet. Every other number they own is a
+  // chip above it, and each chip is its own address — /kabinet/TST999 — rather
+  // than a query on this one. That was not a style choice: with ?raqam= the
+  // chip changed the address and the client router kept serving the payload it
+  // already had for /kabinet, so tapping a number did nothing at all.
+  const open =
+    handles
+      .filter((h) => h.status === "claimed")
+      .sort((a, b) => (a.claimedAt ?? "").localeCompare(b.claimedAt ?? ""))[0] ??
+    handles[0] ??
+    null;
+
+  // Only for the number actually on screen. Somebody with six handles should
+  // not pay for six sets of statistics to look at one.
+  const detail = open
+    ? await (async () => {
+        const [today, leads, venue] = await Promise.all([
+          getHandleStats(open.normalized, 1),
+          listLeads(open.normalized, user.id),
+          getOwnedVenue(open.normalized, user.id),
+        ]);
+        return {
+          todayViews: today.totalViews,
+          leads: leads.length,
+          venue,
+          waiting: venue ? await countWaiting(venue.id) : 0,
+        };
+      })()
+    : null;
+
+  // Arrived from a long-press on the app icon. The shortcut cannot name a
+  // number — the person may own none or six — so it names the job, and this is
+  // where it learns which card is open. A shortcut that has nowhere to go
+  // simply leaves them here, which is the screen they wanted anyway.
+  if (typeof ish === "string" && open && detail) {
+    if (ish === "qr") redirect(`/kabinet/${open.normalized}/qr`);
+    if (ish === "sorovlar" && detail.venue) {
+      redirect(`/kabinet/${open.normalized}/sorovlar`);
+    }
+  }
 
   const telegramName = user.user_metadata?.telegram_name as string | undefined;
   const accountLabel =
@@ -41,34 +102,37 @@ export default async function CabinetPage() {
 
   return (
     <PageShell>
-      <div className="mb-8 flex items-start justify-between gap-4">
-        <div>
+      <div className="mb-7 flex items-center justify-between gap-3">
+        <div className="min-w-0">
           <h1 className="font-display text-2xl font-semibold tracking-tight">Kabinet</h1>
           {/* A Telegram account has an address nobody can write to — it exists
               so Supabase has something to key the user on. Showing it would be
               showing the person a mailbox that is not theirs, so the name they
               signed in with wins whenever there is one. */}
-          <p className="mt-1 text-sm text-flex-black/50">{accountLabel}</p>
+          <p className="mt-0.5 truncate text-sm text-flex-black/50">{accountLabel}</p>
         </div>
-        <div className="flex items-center gap-2">
+
+        <div className="flex shrink-0 items-center gap-2">
           <Link
             href="/kabinet/xabarlar"
-            className="relative rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-flex-black/60 transition-colors hover:bg-black/[0.03]"
+            aria-label="Xabarlar"
+            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-black/10 text-flex-black/60 transition-colors hover:bg-black/[0.03]"
           >
-            Xabarlar
+            <Bell className="h-4 w-4" />
             {/* A count rather than a dot: "three leads waiting" is worth
                 opening the page for, "something happened" is not. */}
-            {unreadCount > 0 && (
-              <span className="ml-1.5 font-tabular text-xs font-semibold text-flex-black">
-                {unreadCount}
+            {unread > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-lime px-1 font-tabular text-[11px] font-semibold text-flex-black">
+                {unread}
               </span>
             )}
           </Link>
           <Link
             href="/lenta"
-            className="rounded-full border border-black/10 px-4 py-2 text-sm font-medium text-flex-black/60 transition-colors hover:bg-black/[0.03]"
+            aria-label="Lenta"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 text-flex-black/60 transition-colors hover:bg-black/[0.03] lg:flex"
           >
-            Lenta
+            <Rss className="h-4 w-4" />
           </Link>
           <SignOutButton />
         </div>
@@ -82,7 +146,7 @@ export default async function CabinetPage() {
       {team && (
         <Link
           href="/kabinet/jamoa"
-          className="mb-6 flex items-center gap-4 rounded-[1.5rem] border border-black/10 bg-flex-black px-6 py-5 text-white transition-transform hover:scale-[1.005]"
+          className="mb-4 flex items-center gap-4 rounded-[1.5rem] border border-black/10 bg-flex-black px-6 py-5 text-white transition-transform active:scale-[0.995]"
         >
           <Building2 className="h-5 w-5 shrink-0 text-lime" strokeWidth={1.75} />
           <div className="min-w-0 flex-1">
@@ -93,81 +157,58 @@ export default async function CabinetPage() {
         </Link>
       )}
 
-      <InstallHint />
-
-      {handles.length === 0 ? (
+      {!open || !detail ? (
         <div className="rounded-[1.75rem] border border-dashed border-black/15 p-8 text-center">
           <p className="text-sm text-flex-black/60">
-            Hali handle olmagansiz. Bosh sahifadagi hisoblagichda narxni ko&apos;rib, o&apos;zingizga
-            mos kombinatsiyani tanlang.
+            Hali raqam olmagansiz. Bosh sahifadagi hisoblagichda narxni ko&apos;rib,
+            o&apos;zingizga mos kombinatsiyani tanlang.
           </p>
           <Link
             href="/shaxsiy#narx"
             className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
           >
-            Handle tanlash
+            Raqam tanlash
           </Link>
         </div>
       ) : (
-        <div className="space-y-4">
-          {handles.map((h) => (
-            <div
-              key={h.normalized}
-              className="rounded-[1.5rem] border border-black/10 bg-white p-6 shadow-[0_20px_45px_-30px_rgba(14,10,27,0.3)]"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="font-display text-xl font-semibold tracking-tight">
+        <>
+          {handles.length > 1 && (
+            <div className="mb-3 -mx-6 flex gap-2 overflow-x-auto px-6 pb-1">
+              {handles.map((h) =>
+                h.normalized === open.normalized ? (
+                  <span
+                    key={h.normalized}
+                    className="flex shrink-0 items-center gap-1.5 rounded-full bg-flex-black px-4 py-2 font-tabular text-sm font-medium text-white"
+                  >
                     {h.normalized}
-                  </p>
-                  <p className="font-tabular text-xs text-flex-black/40">
-                    flex.com.uz/{h.normalized}
-                  </p>
-                </div>
-                {h.status === "reserved" ? (
-                  <span className="flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800">
-                    <Clock className="h-3 w-3" />
-                    To&apos;lov kutilmoqda
                   </span>
                 ) : (
-                  <span className="rounded-full bg-lime/25 px-3 py-1 text-xs font-medium text-flex-black/70">
-                    Sizniki
-                  </span>
-                )}
-              </div>
-
-              {h.pricePaid !== null && (
-                <p className="mt-3 font-tabular text-sm text-flex-black/50">
-                  {formatUZS(h.pricePaid)}
-                </p>
+                  <Link
+                    key={h.normalized}
+                    href={`/kabinet/${h.normalized}`}
+                    className="flex shrink-0 items-center gap-1.5 rounded-full border border-black/10 px-4 py-2 font-tabular text-sm text-flex-black/60 transition-colors hover:bg-black/[0.03]"
+                  >
+                    {h.normalized}
+                    {h.status === "reserved" && <Clock className="h-3 w-3" />}
+                  </Link>
+                ),
               )}
-
-              <div className="mt-5 flex flex-wrap gap-2">
-                <Link
-                  href={`/kabinet/${h.normalized}`}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-black/10 px-4 py-2 text-sm font-medium transition-colors hover:bg-black/[0.03]"
-                >
-                  <Pencil className="h-3.5 w-3.5" />
-                  Tahrirlash
-                </Link>
-                <Link
-                  href={`/kabinet/${h.normalized}#qr`}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-black/10 px-4 py-2 text-sm font-medium transition-colors hover:bg-black/[0.03]"
-                >
-                  <QrCode className="h-3.5 w-3.5" />
-                  QR-kod
-                </Link>
-                <Link
-                  href={`/${h.normalized}`}
-                  className="inline-flex items-center rounded-full border border-black/10 px-4 py-2 text-sm font-medium transition-colors hover:bg-black/[0.03]"
-                >
-                  Ko&apos;rish
-                </Link>
-              </div>
             </div>
-          ))}
-        </div>
+          )}
+
+          <HandleHub
+            handle={open}
+            todayViews={detail.todayViews}
+            leads={detail.leads}
+            venue={detail.venue}
+            waiting={detail.waiting}
+          />
+        </>
       )}
+
+      <div className="mt-6">
+        <InstallHint />
+      </div>
     </PageShell>
   );
 }
