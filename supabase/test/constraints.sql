@@ -1325,3 +1325,45 @@ begin
   delete from auth.users where id = owner_id;
   delete from handles where id = hid;
 end $$;
+
+-- 0039 — the tables themselves
+do $$
+declare
+  owner_id uuid;
+  hid uuid;
+  vid uuid;
+  labels text[];
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into owner_id;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('PNT', '001', 'claimed', owner_id, now()) returning id into hid;
+  insert into venues (handle_id, name) values (hid, 'Sinov kafe') returning id into vid;
+
+  select points into labels from venues where id = vid;
+  if labels is null or cardinality(labels) <> 0 then
+    raise exception 'yangi obyektda nuqtalar boʻsh emas';
+  end if;
+  raise notice '   ok   a new venue starts with no tags';
+
+  update venues set points = array['1', '2', 'Terrasa 3'] where id = vid;
+  raise notice '   ok   tables can be named, not only numbered';
+
+  begin
+    update venues set points = (select array_agg(n::text) from generate_series(1, 501) n)
+      where id = vid;
+    raise exception 'besh yuzdan ortiq nuqta oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: more tags than any one venue has';
+  end;
+
+  -- A request keeps the label it was made with, whatever the list says later.
+  insert into venue_requests (venue_id, point, kind) values (vid, 'Terrasa 3', 'waiter');
+  update venues set points = array['1', '2'] where id = vid;
+  if not exists (select 1 from venue_requests where venue_id = vid and point = 'Terrasa 3') then
+    raise exception 'nuqta oʻchirilganda soʻrov ham oʻzgardi';
+  end if;
+  raise notice '   ok   renaming the list does not rewrite old requests';
+
+  delete from auth.users where id = owner_id;
+  delete from handles where id = hid;
+end $$;

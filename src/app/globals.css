@@ -108,3 +108,27 @@ body:has([data-no-app-bar]) .app-bar {
 body:has([data-no-app-bar]) {
   padding-bottom: 0;
 }
+
+/* Paper.
+ *
+ * One page in the whole site is meant to come out of a printer — the sheet of
+ * table cards — and everything the browser adds around it costs somebody ink:
+ * the bottom bar, the page padding, the body's own background. The cards
+ * themselves are laid out by the page; this only takes away what the app wraps
+ * around it. */
+@media print {
+  .app-bar {
+    display: none !important;
+  }
+
+  body {
+    padding-bottom: 0 !important;
+    background: #fff !important;
+  }
+
+  /* A card cut in half by a page break is a card that gets thrown away. */
+  .break-inside-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

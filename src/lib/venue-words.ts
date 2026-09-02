@@ -30,6 +30,10 @@ export type VenueWords = {
   notePlaceholder: string;
   /** Table, room, counter — what the tag was stuck to. */
   pointLabel: string;
+  /** The screen where they are listed and printed. */
+  pointsTitle: string;
+  /** What one sticker says under the venue name. */
+  pointPrefix: string;
   pointPlaceholder: string;
   /** Off the list today. */
   soldOut: string;
@@ -51,6 +55,8 @@ const CAFE: Record<Lang, VenueWords> = {
     categoryPlaceholder: "Issiq taomlar",
     notePlaceholder: "Qo'l uzilgan, o'tkir",
     pointLabel: "Stol raqami",
+    pointsTitle: "Stollar",
+    pointPrefix: "Stol",
     pointPlaceholder: "7",
     soldOut: "Bugun yo'q",
     freeWord: "Bepul",
@@ -70,6 +76,8 @@ const CAFE: Record<Lang, VenueWords> = {
     categoryPlaceholder: "Горячее",
     notePlaceholder: "Ручная лапша, острое",
     pointLabel: "Номер стола",
+    pointsTitle: "Столы",
+    pointPrefix: "Стол",
     pointPlaceholder: "7",
     soldOut: "Сегодня нет",
     freeWord: "Бесплатно",
@@ -89,6 +97,8 @@ const CAFE: Record<Lang, VenueWords> = {
     categoryPlaceholder: "Hot dishes",
     notePlaceholder: "Hand-pulled, spicy",
     pointLabel: "Table number",
+    pointsTitle: "Tables",
+    pointPrefix: "Table",
     pointPlaceholder: "7",
     soldOut: "Off today",
     freeWord: "Free",
@@ -115,6 +125,8 @@ const HOTEL: Record<Lang, VenueWords> = {
     categoryPlaceholder: "Xona xizmatlari",
     notePlaceholder: "Ertalab olib ketiladi, kechqurun qaytariladi",
     pointLabel: "Xona raqami",
+    pointsTitle: "Xonalar",
+    pointPrefix: "Xona",
     pointPlaceholder: "214",
     soldOut: "Vaqtincha yo'q",
     freeWord: "Bepul",
@@ -134,6 +146,8 @@ const HOTEL: Record<Lang, VenueWords> = {
     categoryPlaceholder: "Обслуживание номеров",
     notePlaceholder: "Забираем утром, возвращаем вечером",
     pointLabel: "Номер комнаты",
+    pointsTitle: "Комнаты",
+    pointPrefix: "Комната",
     pointPlaceholder: "214",
     soldOut: "Временно нет",
     freeWord: "Бесплатно",
@@ -153,6 +167,8 @@ const HOTEL: Record<Lang, VenueWords> = {
     categoryPlaceholder: "Room service",
     notePlaceholder: "Collected in the morning, back by evening",
     pointLabel: "Room number",
+    pointsTitle: "Rooms",
+    pointPrefix: "Room",
     pointPlaceholder: "214",
     soldOut: "Unavailable",
     freeWord: "Free",
@@ -177,6 +193,8 @@ const SHOP: Record<Lang, VenueWords> = {
     categoryPlaceholder: "Novvoyxona",
     notePlaceholder: "Issiq, tandirda",
     pointLabel: "Nuqta",
+    pointsTitle: "Nuqtalar",
+    pointPrefix: "Nuqta",
     pointPlaceholder: "1",
     soldOut: "Tugagan",
     freeWord: "Bepul",
@@ -193,6 +211,8 @@ const SHOP: Record<Lang, VenueWords> = {
     categoryPlaceholder: "Пекарня",
     notePlaceholder: "Горячий, из тандыра",
     pointLabel: "Точка",
+    pointsTitle: "Точки",
+    pointPrefix: "Точка",
     pointPlaceholder: "1",
     soldOut: "Закончился",
     freeWord: "Бесплатно",
@@ -209,6 +229,8 @@ const SHOP: Record<Lang, VenueWords> = {
     categoryPlaceholder: "Bakery",
     notePlaceholder: "Hot, from the tandyr",
     pointLabel: "Point",
+    pointsTitle: "Points",
+    pointPrefix: "Point",
     pointPlaceholder: "1",
     soldOut: "Sold out",
     freeWord: "Free",

@@ -40,6 +40,8 @@ export type Venue = {
   wifiName: string | null;
   /** Only ever read for the owner, or for a guest standing at a point. */
   wifiPassword: string | null;
+  /** The tags: tables in a cafe, rooms in a hotel. Empty until printed. */
+  points: string[];
 };
 
 /**
@@ -80,7 +82,7 @@ export async function getVenueByHandle(normalized: string): Promise<Venue | null
 
   const { data } = await supabaseAdmin
     .from("venues")
-    .select("id, handle_id, name, kind, hours, address, wifi_name, wifi_password")
+    .select("id, handle_id, name, kind, hours, address, wifi_name, wifi_password, points")
     .eq("handle_id", handle.id as string)
     .maybeSingle();
 
@@ -95,6 +97,7 @@ export async function getVenueByHandle(normalized: string): Promise<Venue | null
     address: (data.address as string) ?? null,
     wifiName: (data.wifi_name as string) ?? null,
     wifiPassword: (data.wifi_password as string) ?? null,
+    points: (data.points as string[]) ?? [],
   };
 }
 

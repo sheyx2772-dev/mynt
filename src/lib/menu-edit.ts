@@ -195,3 +195,41 @@ export async function createVenue(
   if (error) return { ok: false, error: "Obyekt allaqachon ochilgan." };
   return { ok: true };
 }
+
+/**
+ * The list of tags this venue prints.
+ *
+ * Typed as one block of text — a line or a comma per tag — because that is how
+ * somebody holds the list in their head ("1 dan 12 gacha, terrasa 1, terrasa
+ * 2") and because saving is then one replacement rather than a screen of rows
+ * with their own add, rename and reorder controls.
+ *
+ * Renaming here never touches requests: those keep the label they were made
+ * with, since it is the label printed on a sticker that may still be on a
+ * table.
+ */
+export async function savePoints(venueId: string, form: FormData): Promise<EditResult> {
+  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+
+  const seen = new Set<string>();
+  const points: string[] = [];
+
+  for (const part of String(form.get("points") ?? "").split(/[\n,;]+/)) {
+    // The same characters the QR route allows, so what is printed and what is
+    // scanned cannot disagree.
+    const label = part.replace(/[^\p{L}\p{N} .\-]/gu, "").trim().slice(0, 12);
+    if (!label || seen.has(label)) continue;
+    seen.add(label);
+    points.push(label);
+  }
+
+  if (points.length > 500) return { ok: false, error: "500 tadan ko'p bo'lmasin." };
+
+  const { error } = await supabaseAdmin
+    .from("venues")
+    .update({ points })
+    .eq("id", venueId);
+
+  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
+  return { ok: true };
+}

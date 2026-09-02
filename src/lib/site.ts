@@ -2,9 +2,7 @@ import "server-only";
 
 import { headers } from "next/headers";
 
-// Canonical production origin. Everything that builds an absolute link starts
-// from here, and it never comes from a request.
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://flex.com.uz").replace(/\/$/, "");
+import { SITE_URL } from "./site-url";
 
 // A request's Host and X-Forwarded-Host headers are set by whoever sent the
 // request. Reading an origin from them lets an attacker post a sign-in form
@@ -33,13 +31,5 @@ export async function getSiteOrigin(): Promise<string> {
   return SITE_URL;
 }
 
-/**
- * A profile's address, optionally carrying where the visit came from.
- *
- * The devices and the QR code are issued with a source so the owner can see
- * whether the card they paid for is what brings people, rather than seeing a
- * direct visit that could equally be somebody typing the address.
- */
-export function profileUrl(handle: string, source?: "nfc" | "qr" | "share"): string {
-  return source ? `${SITE_URL}/${handle}?src=${source}` : `${SITE_URL}/${handle}`;
-}
+// Re-exported so the many callers that only wanted an address keep one import.
+export { SITE_URL, profileUrl, pointLabel, pointUrl } from "./site-url";

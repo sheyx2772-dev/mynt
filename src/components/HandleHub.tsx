@@ -92,8 +92,8 @@ export default function HandleHub({
 
       {/* A cafe opens this to answer a table, so that comes before its own
           profile does. */}
-      {venue && (
-        <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
+      {venue && w && (
+        <div className="mt-3 space-y-2.5">
           <Link
             href={at("sorovlar")}
             className="flex items-center justify-between gap-3 rounded-2xl bg-lime px-5 py-4 font-medium text-flex-black transition-transform active:scale-[0.99]"
@@ -109,16 +109,30 @@ export default function HandleHub({
             )}
           </Link>
 
-          <Link
-            href={at("menyu")}
-            className="flex items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white px-5 py-4 font-medium transition-transform active:scale-[0.99]"
-          >
-            <span className="flex items-center gap-2">
+          <div className="grid gap-2.5 sm:grid-cols-2">
+            <Link
+              href={at("menyu")}
+              className="flex items-center gap-2 rounded-2xl border border-black/10 bg-white px-5 py-4 font-medium transition-transform active:scale-[0.99]"
+            >
               <UtensilsCrossed className="h-4 w-4 text-flex-black/60" />
-              {w?.listTitle}
-            </span>
-            <span className="truncate text-xs text-flex-black/40">{venue.name}</span>
-          </Link>
+              {w.listTitle}
+            </Link>
+
+            {/* Where the tags come from. A venue with none has a menu nobody
+                can reach, so the count is on the button. */}
+            <Link
+              href={at("nuqtalar")}
+              className="flex items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white px-5 py-4 font-medium transition-transform active:scale-[0.99]"
+            >
+              <span className="flex items-center gap-2">
+                <QrCode className="h-4 w-4 text-flex-black/60" />
+                {w.pointsTitle}
+              </span>
+              <span className="font-tabular text-xs text-flex-black/40">
+                {venue.points.length || "—"}
+              </span>
+            </Link>
+          </div>
         </div>
       )}
 
