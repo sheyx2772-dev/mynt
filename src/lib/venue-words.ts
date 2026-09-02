@@ -251,13 +251,19 @@ export function venueWords(kind: VenueKind, lang: Lang): VenueWords {
 }
 
 /**
- * The words used in the counter's inbox, where every kind can appear whatever
- * the venue is — a hotel that was a cafe last month still has its old rows.
+ * The words in the inbox.
+ *
+ * Nouns rather than sentences, and the same ones whatever the venue is. Every
+ * kind can appear under any vertical — a hotel that was a cafe last month still
+ * has its old rows — so "Ofitsiant chaqirildi" cannot be used here, and a
+ * neutral verb like "Chaqirildi" says nothing at a glance. What the row is read
+ * for is the table number and what it wants; one word does that better than a
+ * sentence next to a number in a font twice its size.
  */
 export const REQUEST_LABEL: Record<RequestKind, string> = {
-  waiter: "Chaqirildi",
-  bill: "Hisob so'raldi",
-  clean: "Tozalash so'raldi",
-  review: "Izoh qoldirildi",
+  waiter: "Chaqiruv",
+  bill: "Hisob",
+  clean: "Tozalash",
+  review: "Izoh",
   other: "So'rov",
 };

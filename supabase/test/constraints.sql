@@ -1367,3 +1367,50 @@ begin
   delete from auth.users where id = owner_id;
   delete from handles where id = hid;
 end $$;
+
+-- 0040 — the phone on the counter
+do $$
+declare
+  owner_id uuid;
+  hid uuid;
+  vid uuid;
+  other_h uuid;
+  other_v uuid;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into owner_id;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('STF', '001', 'claimed', owner_id, now()) returning id into hid;
+  insert into venues (handle_id, name) values (hid, 'Sinov kafe') returning id into vid;
+
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('STF', '002', 'claimed', owner_id, now()) returning id into other_h;
+  insert into venues (handle_id, name) values (other_h, 'Ikkinchi') returning id into other_v;
+
+  update venues set staff_token = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' where id = vid;
+  raise notice '   ok   a venue can be given a counter link';
+
+  -- Two venues answering one link would show a waiter somebody else's tables.
+  begin
+    update venues set staff_token = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' where id = other_v;
+    raise exception 'bir xil token ikki obyektga oʻtdi';
+  exception when unique_violation then
+    raise notice '   ok   rejected: one link, one venue';
+  end;
+
+  begin
+    update venues set staff_token = 'qisqa' where id = other_v;
+    raise exception 'juda qisqa token oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a link short enough to guess';
+  end;
+
+  -- Most venues have none, and several of those must coexist.
+  update venues set staff_token = null where id = vid;
+  if exists (select 1 from venues where id in (vid, other_v) and staff_token is not null) then
+    raise exception 'token oʻchmadi';
+  end if;
+  raise notice '   ok   venues without a link do not collide';
+
+  delete from auth.users where id = owner_id;
+  delete from handles where id in (hid, other_h);
+end $$;

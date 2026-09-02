@@ -42,6 +42,8 @@ export type Venue = {
   wifiPassword: string | null;
   /** The tags: tables in a cafe, rooms in a hotel. Empty until printed. */
   points: string[];
+  /** The secret in the counter link, once the owner has made one. */
+  staffToken: string | null;
 };
 
 /**
@@ -82,7 +84,9 @@ export async function getVenueByHandle(normalized: string): Promise<Venue | null
 
   const { data } = await supabaseAdmin
     .from("venues")
-    .select("id, handle_id, name, kind, hours, address, wifi_name, wifi_password, points")
+    .select(
+      "id, handle_id, name, kind, hours, address, wifi_name, wifi_password, points, staff_token",
+    )
     .eq("handle_id", handle.id as string)
     .maybeSingle();
 
@@ -98,6 +102,7 @@ export async function getVenueByHandle(normalized: string): Promise<Venue | null
     wifiName: (data.wifi_name as string) ?? null,
     wifiPassword: (data.wifi_password as string) ?? null,
     points: (data.points as string[]) ?? [],
+    staffToken: (data.staff_token as string) ?? null,
   };
 }
 
@@ -175,4 +180,44 @@ export async function getOwnedVenue(
 
   if (!handle) return null;
   return getVenueByHandle(normalized);
+}
+
+/**
+ * The venue behind a counter link.
+ *
+ * The token is the whole credential, so the lookup is by it alone and a miss is
+ * a 404 — the same answer a made-up token gets, which tells whoever is guessing
+ * nothing about whether any venue exists. Nothing about the owner comes back:
+ * the counter screen shows a name and a list of requests, and that is all it is
+ * allowed to know.
+ */
+export async function getVenueByStaffToken(token: string): Promise<Venue | null> {
+  if (!supabaseAdmin) return null;
+
+  // Short or empty tokens cannot be real, and the constraint says so; checking
+  // here keeps a stray "/z/" from becoming a query at all.
+  if (token.length < 24 || token.length > 64) return null;
+
+  const { data } = await supabaseAdmin
+    .from("venues")
+    .select(
+      "id, handle_id, name, kind, hours, address, wifi_name, wifi_password, points, staff_token",
+    )
+    .eq("staff_token", token)
+    .maybeSingle();
+
+  if (!data) return null;
+
+  return {
+    id: data.id as string,
+    handleId: data.handle_id as string,
+    name: data.name as string,
+    kind: data.kind as Venue["kind"],
+    hours: (data.hours as string) ?? null,
+    address: (data.address as string) ?? null,
+    wifiName: (data.wifi_name as string) ?? null,
+    wifiPassword: (data.wifi_password as string) ?? null,
+    points: (data.points as string[]) ?? [],
+    staffToken: (data.staff_token as string) ?? null,
+  };
 }

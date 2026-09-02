@@ -48,3 +48,13 @@ export function pointUrl(
   const label = pointLabel(point);
   return label ? `${base}&stol=${encodeURIComponent(label)}` : base;
 }
+
+/**
+ * The counter link.
+ *
+ * Short on purpose: it is typed into a till phone by hand at least once, and
+ * every character is a chance to mistype a credential.
+ */
+export function staffUrl(token: string): string {
+  return `${SITE_URL}/z/${token}`;
+}

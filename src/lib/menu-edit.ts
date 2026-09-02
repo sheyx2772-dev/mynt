@@ -1,5 +1,7 @@
 import "server-only";
 
+import { randomBytes } from "node:crypto";
+
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
 // Writing a menu.
@@ -228,6 +230,32 @@ export async function savePoints(venueId: string, form: FormData): Promise<EditR
   const { error } = await supabaseAdmin
     .from("venues")
     .update({ points })
+    .eq("id", venueId);
+
+  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
+  return { ok: true };
+}
+
+/**
+ * Makes, or replaces, the counter link.
+ *
+ * Replacing is the revoke: there is one token, so writing a new one ends every
+ * phone that had the old one, which is what an owner wants the moment a waiter
+ * leaves or a link is forwarded somewhere it should not have gone. There is no
+ * separate "revoke" for the same reason there is no list of issued links — one
+ * venue, one address, and pressing the button is the whole story.
+ *
+ * 128 bits from the system generator. It is the entire credential, so it has to
+ * be worth as much as a password nobody will ever type.
+ */
+export async function rotateStaffToken(venueId: string): Promise<EditResult> {
+  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+
+  const token = randomBytes(16).toString("hex");
+
+  const { error } = await supabaseAdmin
+    .from("venues")
+    .update({ staff_token: token })
     .eq("id", venueId);
 
   if (error) return { ok: false, error: "Saqlab bo'lmadi." };
