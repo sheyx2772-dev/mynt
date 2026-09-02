@@ -171,10 +171,12 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                 t={t}
                 lang={lang}
                 shots={{
-                  cafe: productShot("kafe"),
-                  hotel: productShot("mehmonxona"),
-                  auto: productShot("avto"),
-                  other: productShot("salon"),
+                  cafe: [productShot("kafe")].filter(Boolean) as string[],
+                  hotel: [productShot("mehmonxona")].filter(Boolean) as string[],
+                  auto: [productShot("avto"), productShot("avtovizitka")].filter(
+                    Boolean,
+                  ) as string[],
+                  other: [productShot("salon")].filter(Boolean) as string[],
                 }}
               />
             </div>

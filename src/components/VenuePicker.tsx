@@ -33,8 +33,11 @@ export default function VenuePicker({
 }: {
   t: B2BDict;
   lang: Lang;
-  /** Photography, when there is any. Resolved on the server; null is fine. */
-  shots: Record<VerticalId, string | null>;
+  /**
+   * Photography per vertical, none to two. Two because a fleet is a coach and
+   * a car and neither one alone says "fleet"; an empty list is a working state.
+   */
+  shots: Record<VerticalId, readonly string[]>;
   initial?: VerticalId;
 }) {
   const [vertical, setVertical] = useState<VerticalId>(initial);
@@ -77,15 +80,32 @@ export default function VenuePicker({
 
       <p className="mt-4 text-sm text-flex-black/55">{v.tagline}</p>
 
-      {shots[vertical] && (
-        <div className="relative mt-7 aspect-[16/9] overflow-hidden rounded-3xl bg-flex-black shadow-[0_30px_70px_-40px_rgba(14,10,27,0.6)]">
-          <Image
-            src={shots[vertical]!}
-            alt={v.name}
-            fill
-            sizes="(min-width: 1024px) 1000px, 100vw"
-            className="object-cover"
-          />
+      {shots[vertical].length > 0 && (
+        <div
+          className={
+            shots[vertical].length > 1
+              ? "mt-7 grid gap-3 sm:grid-cols-2"
+              : "mt-7 grid gap-3"
+          }
+        >
+          {shots[vertical].map((src) => (
+            <div
+              key={src}
+              className="relative aspect-[16/9] overflow-hidden rounded-3xl bg-flex-black shadow-[0_30px_70px_-40px_rgba(14,10,27,0.6)]"
+            >
+              <Image
+                src={src}
+                alt={v.name}
+                fill
+                sizes={
+                  shots[vertical].length > 1
+                    ? "(min-width: 640px) 500px, 100vw"
+                    : "(min-width: 1024px) 1000px, 100vw"
+                }
+                className="object-cover"
+              />
+            </div>
+          ))}
         </div>
       )}
 

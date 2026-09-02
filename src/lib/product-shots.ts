@@ -24,6 +24,7 @@ export type ShotName =
   | "mehmonxona"
   | "salon"
   | "avto"
+  | "avtovizitka"
   | "biznes";
 
 export function productShot(name: ShotName): string | null {
