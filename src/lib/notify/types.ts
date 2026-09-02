@@ -4,7 +4,12 @@
 // other: a channel knows how to send, the store knows how to record, and adding
 // push when the phone app ships means writing one more Channel and nothing else.
 
-export type NotificationKind = "lead" | "plan_expiring" | "plan_expired" | "transfer";
+export type NotificationKind =
+  | "lead"
+  | "plan_expiring"
+  | "plan_expired"
+  | "transfer"
+  | "venue_request";
 
 export type Notice = {
   userId: string;

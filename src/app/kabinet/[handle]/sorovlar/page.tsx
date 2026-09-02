@@ -1,0 +1,172 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { ArrowLeft, BellRing, ReceiptText, Star, Check, Inbox } from "lucide-react";
+
+import PageShell from "@/components/PageShell";
+import AutoRefresh from "@/components/AutoRefresh";
+import { requireUser } from "@/lib/auth";
+import { getOwnedVenue } from "@/lib/menu";
+import { listVenueRequests, type RequestKind } from "@/lib/venue-requests";
+import { timeAgo } from "@/lib/relative-time";
+import { parseHandle } from "@/lib/pricing";
+import { markDoneAction } from "./actions";
+
+export const metadata: Metadata = {
+  title: "So'rovlar — flex.com.uz",
+  robots: { index: false },
+};
+
+// The counter's screen.
+//
+// Open all shift, glanced at rather than read: what is waiting is at the top,
+// large, with the table number as the biggest thing on the row, and one button
+// to close it. Everything already dealt with drops below a line and goes quiet.
+
+const LABEL: Record<RequestKind, string> = {
+  waiter: "Ofitsiant chaqirildi",
+  bill: "Hisob so'raldi",
+  review: "Izoh qoldirildi",
+  other: "So'rov",
+};
+
+function Icon({ kind }: { kind: RequestKind }) {
+  const className = "h-4 w-4";
+  if (kind === "bill") return <ReceiptText className={className} />;
+  if (kind === "review") return <Star className={className} />;
+  return <BellRing className={className} />;
+}
+
+export default async function RequestsPage({
+  params,
+}: PageProps<"/kabinet/[handle]/sorovlar">) {
+  const { handle } = await params;
+  const parsed = parseHandle(handle);
+  if (!parsed) notFound();
+
+  const normalized = `${parsed.letters}${parsed.digits}`;
+  const user = await requireUser(`/kabinet/${normalized}/sorovlar`);
+  const venue = await getOwnedVenue(normalized, user.id);
+  if (!venue) notFound();
+
+  const all = await listVenueRequests(venue.id);
+  const waiting = all.filter((r) => r.status === "new");
+  const closed = all.filter((r) => r.status === "done").slice(0, 30);
+
+  return (
+    <PageShell>
+      <AutoRefresh />
+
+      <div className="mb-8 flex items-center justify-between gap-4">
+        <Link
+          href={`/kabinet/${normalized}`}
+          className="flex items-center gap-2 text-sm font-medium text-flex-black/60 hover:text-flex-black"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          {normalized}
+        </Link>
+        <Link
+          href={`/kabinet/${normalized}/menyu`}
+          className="text-sm font-medium text-flex-black/60 hover:text-flex-black"
+        >
+          Menyu
+        </Link>
+      </div>
+
+      <h1 className="font-display text-2xl font-semibold tracking-tight">So&apos;rovlar</h1>
+      <p className="mt-1 text-sm text-flex-black/50">
+        {venue.name} — sahifa o&apos;zi yangilanadi.
+      </p>
+
+      {waiting.length === 0 ? (
+        <div className="mt-8 rounded-2xl border border-dashed border-black/15 px-6 py-12 text-center">
+          <Inbox className="mx-auto h-6 w-6 text-flex-black/25" />
+          <p className="mt-3 text-sm text-flex-black/50">Kutayotgan so&apos;rov yo&apos;q.</p>
+        </div>
+      ) : (
+        <div className="mt-8 space-y-2.5">
+          {waiting.map((request) => (
+            <div
+              key={request.id}
+              className="grain relative overflow-hidden rounded-2xl bg-flex-black px-5 py-4 text-white"
+            >
+              <div className="flex items-center gap-4">
+                {/* The table number is the answer to "where do I go", so it is
+                    the biggest thing on the row. */}
+                <span className="shrink-0 rounded-xl bg-lime px-3 py-2 font-tabular text-lg leading-none font-semibold text-flex-black">
+                  {request.point ?? "—"}
+                </span>
+
+                <div className="min-w-0 flex-1">
+                  <p className="flex items-center gap-2 text-sm font-medium">
+                    <Icon kind={request.kind} />
+                    {LABEL[request.kind]}
+                  </p>
+                  <p className="mt-0.5 text-xs text-white/45">
+                    {timeAgo(request.createdAt, "uz")}
+                  </p>
+                </div>
+
+                <form action={markDoneAction} className="shrink-0">
+                  <input type="hidden" name="handle" value={normalized} />
+                  <input type="hidden" name="id" value={request.id} />
+                  <button
+                    title="Bajarildi"
+                    className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/[0.07] text-white hover:bg-white/15"
+                  >
+                    <Check className="h-5 w-5" />
+                  </button>
+                </form>
+              </div>
+
+              {(request.rating || request.note) && (
+                <div className="mt-3 border-t border-white/10 pt-3">
+                  {request.rating && (
+                    <p className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <Star
+                          key={n}
+                          className={
+                            n <= request.rating!
+                              ? "h-3.5 w-3.5 fill-lime text-lime"
+                              : "h-3.5 w-3.5 text-white/20"
+                          }
+                        />
+                      ))}
+                    </p>
+                  )}
+                  {request.note && (
+                    <p className="mt-2 text-sm leading-relaxed text-white/70">{request.note}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {closed.length > 0 && (
+        <section className="mt-10">
+          <h2 className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+            Bajarilgan
+          </h2>
+          <div className="divide-y divide-black/6 rounded-2xl border border-black/10 bg-white">
+            {closed.map((request) => (
+              <div key={request.id} className="flex items-center gap-3 px-4 py-3 text-sm">
+                <span className="w-14 shrink-0 font-tabular text-flex-black/60">
+                  {request.point ?? "—"}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-flex-black/60">
+                  {request.note || LABEL[request.kind]}
+                </span>
+                <span className="shrink-0 text-xs text-flex-black/35">
+                  {timeAgo(request.createdAt, "uz")}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+    </PageShell>
+  );
+}

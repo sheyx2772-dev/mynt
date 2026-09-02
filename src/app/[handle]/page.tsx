@@ -7,7 +7,7 @@ import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRar
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import { linkValue } from "@/lib/links";
-import { dict, site, type Lang } from "@/lib/i18n";
+import { dict, site, menuBar, type Lang } from "@/lib/i18n";
 import { getLang } from "@/lib/lang";
 import { PLAN_ACCENT, serviceLimit, FREE_LINK_LIMIT } from "@/lib/plans";
 import { cardDesign } from "@/lib/card-designs";
@@ -17,6 +17,7 @@ import ProfileHandleSearch from "@/components/ProfileHandleSearch";
 import LangSwitch from "@/components/LangSwitch";
 import Mark from "@/components/Mark";
 import MenuView from "@/components/MenuView";
+import MenuRequests from "@/components/MenuRequests";
 import { getVenueByHandle, getMenu } from "@/lib/menu";
 import ActionRow from "@/components/ActionRow";
 import ExchangeContactForm from "@/components/ExchangeContactForm";
@@ -146,6 +147,10 @@ async function VanityHandlePage({
           <div className="mt-8 flex justify-end border-t border-black/10 pt-4">
             <LangSwitch lang={lang} next={`/${normalized}`} />
           </div>
+
+          {/* Room for the bar, which is pinned over the page rather than in it. */}
+          <div className="h-24" aria-hidden />
+          <MenuRequests handle={normalized} point={point} s={menuBar(lang)} />
         </PageShell>
       );
     }

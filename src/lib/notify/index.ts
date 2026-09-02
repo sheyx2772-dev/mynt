@@ -46,8 +46,11 @@ export async function notify(notice: Notice): Promise<void> {
   // anything. They still have the notice; there is simply nowhere to push it.
   if (!settings) return;
 
-  const wanted =
-    notice.kind === "lead" ? settings.lead_alerts !== false : settings.plan_alerts !== false;
+  // A table waiting for a waiter is the same kind of event as a lead — somebody
+  // is in front of the product right now — so it follows the same switch rather
+  // than the one about invoices.
+  const live = notice.kind === "lead" || notice.kind === "venue_request";
+  const wanted = live ? settings.lead_alerts !== false : settings.plan_alerts !== false;
   if (!wanted) return;
 
   const target = {

@@ -1236,3 +1236,65 @@ begin
 
   delete from auth.users where id = owner_id;
 end $$;
+
+-- 0037 — calling a waiter
+do $$
+declare
+  owner_id uuid;
+  hid uuid;
+  vid uuid;
+  rid uuid;
+  stamped timestamptz;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into owner_id;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('REQ', '001', 'claimed', owner_id, now()) returning id into hid;
+  insert into venues (handle_id, name) values (hid, 'Sinov kafe') returning id into vid;
+
+  insert into venue_requests (venue_id, point, kind)
+    values (vid, 'Stol 7', 'waiter') returning id into rid;
+  raise notice '   ok   a table can call a waiter';
+
+  insert into venue_requests (venue_id, point, kind, rating, note)
+    values (vid, 'Stol 7', 'review', 5, 'Rahmat');
+  raise notice '   ok   a review carries a rating';
+
+  begin
+    insert into venue_requests (venue_id, kind) values (vid, 'raqs');
+    raise exception 'notanish soʻrov turi oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a kind of request we do not handle';
+  end;
+
+  begin
+    insert into venue_requests (venue_id, kind, rating) values (vid, 'review', 9);
+    raise exception 'beshdan katta baho oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a rating outside one to five';
+  end;
+
+  -- "How long did table 7 wait" has to be answerable without a second table.
+  update venue_requests set status = 'done' where id = rid;
+  select done_at into stamped from venue_requests where id = rid;
+  if stamped is null then raise exception 'bajarilgan vaqti yozilmadi'; end if;
+  raise notice '   ok   finishing a request stamps when';
+
+  -- Reopening one clears it rather than leaving a time that means nothing.
+  update venue_requests set status = 'new' where id = rid;
+  select done_at into stamped from venue_requests where id = rid;
+  if stamped is not null then raise exception 'qayta ochilganda vaqt qoldi'; end if;
+  raise notice '   ok   reopening one clears the stamp';
+
+  -- The owner hears about it the way they hear about a lead.
+  insert into notifications (user_id, kind, title)
+    values (owner_id, 'venue_request', 'Stol 7 ofitsiant chaqirdi');
+  raise notice '   ok   a request can be notified';
+
+  delete from handles where id = hid;
+  if exists (select 1 from venue_requests where venue_id = vid) then
+    raise exception 'obyekt oʻchsa ham soʻrovlar qoldi';
+  end if;
+  raise notice '   ok   requests go with the venue';
+
+  delete from auth.users where id = owner_id;
+end $$;

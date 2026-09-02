@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowLeft, Download } from "lucide-react";
+import { ArrowLeft, Download, UtensilsCrossed, BellRing } from "lucide-react";
 import PageShell from "@/components/PageShell";
 import EditProfileForm from "@/components/EditProfileForm";
 import { requireUser } from "@/lib/auth";
@@ -19,6 +19,8 @@ import DesignRequestForm from "@/components/DesignRequestForm";
 import { listDesignRequests } from "@/lib/design-requests";
 import TransferPanel from "@/components/TransferPanel";
 import { listTransfersForHandle } from "@/lib/transfers";
+import { getOwnedVenue } from "@/lib/menu";
+import { countWaiting } from "@/lib/venue-requests";
 
 export async function generateMetadata(
   props: PageProps<"/kabinet/[handle]">
@@ -50,6 +52,11 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
     listLeads(normalized, user.id),
   ]);
 
+  // A venue is one row that most handles do not have; the count behind it is
+  // only worth a query when there is one.
+  const venue = await getOwnedVenue(normalized, user.id);
+  const waiting = venue ? await countWaiting(venue.id) : 0;
+
   return (
     <PageShell>
       <Link
@@ -59,6 +66,47 @@ export default async function EditHandlePage(props: PageProps<"/kabinet/[handle]
         <ArrowLeft className="h-4 w-4" />
         Kabinet
       </Link>
+
+      {/* Only for a number that is a place rather than a person. A cafe opens
+          the cabinet to do one of two things — change the menu, or answer a
+          table — so both are above everything else. */}
+      {venue && (
+        <section className="grain relative mb-6 overflow-hidden rounded-[1.75rem] bg-flex-black p-7 text-white">
+          <div className="bg-dot-grid-light absolute inset-0 opacity-25" />
+
+          <div className="relative">
+            <h2 className="font-display text-lg font-semibold tracking-tight">{venue.name}</h2>
+            <p className="mt-1 mb-5 text-sm text-white/50">
+              Stol ustidagi belgining orqasi.
+            </p>
+
+            <div className="grid gap-2.5 sm:grid-cols-2">
+              <Link
+                href={`/kabinet/${normalized}/sorovlar`}
+                className="flex items-center justify-between gap-3 rounded-2xl bg-lime px-5 py-4 font-medium text-flex-black"
+              >
+                <span className="flex items-center gap-2">
+                  <BellRing className="h-4 w-4" />
+                  So&apos;rovlar
+                </span>
+                {waiting > 0 && (
+                  <span className="rounded-lg bg-flex-black px-2.5 py-1 font-tabular text-sm text-lime">
+                    {waiting}
+                  </span>
+                )}
+              </Link>
+
+              <Link
+                href={`/kabinet/${normalized}/menyu`}
+                className="flex items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.07] px-5 py-4 font-medium text-white"
+              >
+                <UtensilsCrossed className="h-4 w-4" />
+                Menyu
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       <div className="rounded-[1.75rem] border border-black/10 bg-white p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <h1 className="font-display text-2xl font-semibold tracking-tight">{normalized}</h1>

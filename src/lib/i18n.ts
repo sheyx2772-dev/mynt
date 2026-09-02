@@ -297,6 +297,20 @@ const SITE = {
     menuEmpty: "Menyu hali to'ldirilmagan.",
     menuSoldOut: "Bugun yo'q",
     menuTitle: "Menyu",
+
+    // From the table. Short, because they are read standing up and pressed with
+    // one thumb.
+    menuCallWaiter: "Ofitsiant",
+    menuAskBill: "Hisob",
+    menuLeaveReview: "Izoh",
+    menuRequestSent: "Yuborildi — hozir kelishadi.",
+    menuBillSent: "Yuborildi — hisob tayyorlanmoqda.",
+    menuReviewSent: "Rahmat! Izohingiz yuborildi.",
+    menuRequestTooSoon: "So'rov allaqachon yuborilgan.",
+    menuRequestFailed: "Yuborib bo'lmadi. Qaytadan urinib ko'ring.",
+    menuReviewPlaceholder: "Nima yoqdi, nima yoqmadi?",
+    menuReviewSend: "Yuborish",
+    menuNoPoint: "Stol raqami",
     yourHandle: "Sizning raqamingiz",
     statViews: "Ko'rish",
     statToday: "Bugun",
@@ -421,6 +435,18 @@ const SITE = {
     menuEmpty: "Меню пока не заполнено.",
     menuSoldOut: "Сегодня нет",
     menuTitle: "Меню",
+
+    menuCallWaiter: "Официант",
+    menuAskBill: "Счёт",
+    menuLeaveReview: "Отзыв",
+    menuRequestSent: "Отправлено — сейчас подойдут.",
+    menuBillSent: "Отправлено — счёт готовят.",
+    menuReviewSent: "Спасибо! Отзыв отправлен.",
+    menuRequestTooSoon: "Запрос уже отправлен.",
+    menuRequestFailed: "Не удалось отправить. Попробуйте ещё раз.",
+    menuReviewPlaceholder: "Что понравилось, что нет?",
+    menuReviewSend: "Отправить",
+    menuNoPoint: "Номер стола",
     yourHandle: "Ваш номер",
     statViews: "Просмотры",
     statToday: "Сегодня",
@@ -545,6 +571,18 @@ const SITE = {
     menuEmpty: "The menu is not filled in yet.",
     menuSoldOut: "Off today",
     menuTitle: "Menu",
+
+    menuCallWaiter: "Waiter",
+    menuAskBill: "Bill",
+    menuLeaveReview: "Review",
+    menuRequestSent: "Sent — someone is on the way.",
+    menuBillSent: "Sent — your bill is being prepared.",
+    menuReviewSent: "Thank you! Your review was sent.",
+    menuRequestTooSoon: "That request has already been sent.",
+    menuRequestFailed: "Could not send. Please try again.",
+    menuReviewPlaceholder: "What worked, what didn't?",
+    menuReviewSend: "Send",
+    menuNoPoint: "Table number",
     yourHandle: "Your number",
     statViews: "Views",
     statToday: "Today",
@@ -1919,3 +1957,30 @@ export type PickerDict = (typeof PICKER)["uz"];
 export function picker(lang: Lang): PickerDict {
   return PICKER[lang] as PickerDict;
 }
+
+/**
+ * The strings on the guest's request bar, and nothing else.
+ *
+ * The full site dictionary carries a few functions — `deviceNote`,
+ * `handleCounts` — and a function cannot cross into a client component. The bar
+ * is the first client component that wanted site copy, so it takes the subset it
+ * uses, which is plain strings all the way down.
+ */
+export function menuBar(lang: Lang) {
+  const s = site(lang);
+  return {
+    menuCallWaiter: s.menuCallWaiter,
+    menuAskBill: s.menuAskBill,
+    menuLeaveReview: s.menuLeaveReview,
+    menuRequestSent: s.menuRequestSent,
+    menuBillSent: s.menuBillSent,
+    menuReviewSent: s.menuReviewSent,
+    menuRequestTooSoon: s.menuRequestTooSoon,
+    menuRequestFailed: s.menuRequestFailed,
+    menuReviewPlaceholder: s.menuReviewPlaceholder,
+    menuReviewSend: s.menuReviewSend,
+    menuNoPoint: s.menuNoPoint,
+  };
+}
+
+export type MenuBarDict = ReturnType<typeof menuBar>;
