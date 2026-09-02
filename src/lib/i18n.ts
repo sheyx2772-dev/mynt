@@ -1008,9 +1008,10 @@ const B2B = {
       "NFC → mehmonxona xonasi",
       "NFC → kassa va rekvizit",
     ],
-    pilotTitle: "Bu yo'nalishlar ishga tushirilmoqda",
+    pilotTitle: "Ishlab turibdi — hozir ochib ko'ring",
     pilotBody:
-      "Kafe va mehmonxona modullari birinchi mijozlar bilan birga sozlanmoqda. So'rov qoldiring — sizga mos qilib yig'amiz va narxni birga kelishamiz.",
+      "Kafe va mehmonxona modullari tayyor: menyu yoki xizmatlar ro'yxati, har stol va xonaga alohida QR va NFC, mehmondan keladigan chaqiruv, kassa telefonida ovozli ro'yxat va hisobot. Quyidagi demo — haqiqiy obyekt, telefoningizda oching.",
+    pilotCta: "Demo menyuni ochish",
 
     coreEyebrow: "Qanday ishlaydi",
     coreTitle: "Bitta obyekt, ko'p nuqta",
@@ -1026,8 +1027,8 @@ const B2B = {
         desc: "Ofitsiantni chaqirish, xona tozalash, izoh. So'rov qaysi nuqtadan kelgani biriktiriladi va Telegram'ga tushadi.",
       },
       {
-        title: "Statistika",
-        desc: "Qaysi stol ko'p ochilgan, qaysi taom ko'p qaralgan, qaysi xonadan ko'p so'rov kelgan.",
+        title: "Hisobot",
+        desc: "O'rtacha necha daqiqada javob berilgan, eng uzoq kim kutgan, qaysi stol ko'p chaqirgan va qaysi soatlarda gavjum.",
       },
     ],
 
@@ -1218,9 +1219,10 @@ const B2B = {
       "NFC → номер отеля",
       "NFC → касса и реквизиты",
     ],
-    pilotTitle: "Эти направления запускаются",
+    pilotTitle: "Уже работает — откройте прямо сейчас",
     pilotBody:
-      "Модули для кафе и отелей настраиваются вместе с первыми клиентами. Оставьте заявку — соберём под вас и согласуем цену.",
+      "Модули для кафе и отелей готовы: меню или список услуг, отдельный QR и NFC на каждый стол и номер, вызов от гостя, список со звуком на телефоне у кассы и отчёт. Демо ниже — настоящий объект, откройте на телефоне.",
+    pilotCta: "Открыть демо-меню",
 
     coreEyebrow: "Как работает",
     coreTitle: "Один объект, много точек",
@@ -1236,8 +1238,8 @@ const B2B = {
         desc: "Позвать официанта, убрать номер, оставить отзыв. К запросу сама подставляется точка, и он приходит в Telegram.",
       },
       {
-        title: "Статистика",
-        desc: "Какой стол открывают чаще, какое блюдо смотрят больше, из какого номера больше запросов.",
+        title: "Отчёт",
+        desc: "За сколько минут в среднем отвечают, кто ждал дольше всех, какой стол зовёт чаще и в какие часы наплыв.",
       },
     ],
 
@@ -1428,9 +1430,10 @@ const B2B = {
       "NFC → hotel room",
       "NFC → till and company details",
     ],
-    pilotTitle: "These are being launched",
+    pilotTitle: "It is running — open it now",
     pilotBody:
-      "The cafe and hotel modules are being shaped with the first customers. Send an enquiry — we will build it around you and agree the price together.",
+      "The cafe and hotel modules are ready: a menu or a service list, a separate QR and NFC tag for every table and room, a call from the guest, a list that makes a noise on the phone by the till, and a report. The demo below is a real venue — open it on your phone.",
+    pilotCta: "Open the demo menu",
 
     coreEyebrow: "How it works",
     coreTitle: "One venue, many points",
@@ -1446,8 +1449,8 @@ const B2B = {
         desc: "Call a waiter, request housekeeping, leave a review. The point is attached automatically and it arrives in Telegram.",
       },
       {
-        title: "Statistics",
-        desc: "Which table is opened most, which dish is looked at most, which room sends the most requests.",
+        title: "Report",
+        desc: "How many minutes a call waits on average, who waited longest, which table calls most, and which hours are busy.",
       },
     ],
 

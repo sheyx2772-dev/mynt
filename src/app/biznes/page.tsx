@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Inbox, BarChart3, Users, Target, RefreshCw, TrendingUp } from "lucide-react";
+import {
+  MapPin,
+  Inbox,
+  BarChart3,
+  Users,
+  Target,
+  RefreshCw,
+  TrendingUp,
+  ArrowUpRight,
+} from "lucide-react";
 
 import Mark from "@/components/Mark";
 import LangSwitch from "@/components/LangSwitch";
@@ -20,6 +29,11 @@ import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
 // restaurant owner arriving from a sales call is not the same reader as
 // somebody pricing a personal handle, and making them scroll past the hero to
 // reach their own product is the thing this page exists to stop.
+
+// The venue the page invites people to open. A real one, with a real menu and
+// real table tags, because a mock-up of a menu is exactly as convincing as a
+// screenshot — and this is a product somebody has to believe works on a phone.
+const DEMO_VENUE = "NAV001";
 
 const CORE_ICONS = [MapPin, Inbox, BarChart3];
 const BUSINESS_ICONS = [Users, Target, RefreshCw, TrendingUp];
@@ -120,14 +134,24 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
           <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent to-white" />
         </section>
 
-        {/* Said plainly and near the top, because everything below describes
-            something being built rather than something already switched on. */}
+        {/* Near the top, because this used to say the modules were still being
+            built and a visiting owner read that as "come back later". They are
+            built, so the box that said so now hands them the working thing —
+            the demo venue, opened on their own phone, which argues better than
+            the rest of the page put together. */}
         <section className="mx-auto max-w-6xl px-6 pt-12">
           <div className="rounded-3xl border-l-[3px] border-lime-ink bg-black/[0.03] px-6 py-5">
             <h2 className="font-display font-semibold">{t.pilotTitle}</h2>
             <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-flex-black/65">
               {t.pilotBody}
             </p>
+            <a
+              href={`/${DEMO_VENUE}?stol=7`}
+              className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-flex-black px-5 py-2.5 text-sm font-medium text-white transition-transform hover:scale-[1.01]"
+            >
+              {t.pilotCta}
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
           </div>
         </section>
 

@@ -5,6 +5,7 @@ import { after } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { getClientIp } from "@/lib/rate-limit";
 import { notify } from "@/lib/notify";
+import type { ReportRow } from "@/lib/venue-report";
 
 // A guest asking for something from the table.
 //
@@ -242,4 +243,42 @@ export async function countWaiting(venueId: string): Promise<number> {
     .eq("status", "new");
 
   return count ?? 0;
+}
+
+/**
+ * The rows behind the report.
+ *
+ * A window rather than everything: a venue that has been open two years should
+ * not pay for two years of rows to answer a question about this month. The cap
+ * is generous — a busy cafe on twelve tables writes a few hundred a week — and
+ * the page says when it has been hit rather than quietly reporting a slice as
+ * if it were the whole month.
+ */
+export async function listRequestsSince(
+  venueId: string,
+  days: number,
+  limit = 4000,
+): Promise<{ rows: ReportRow[]; capped: boolean }> {
+  if (!supabaseAdmin) return { rows: [], capped: false };
+
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+
+  const { data } = await supabaseAdmin
+    .from("venue_requests")
+    .select("point, kind, rating, status, created_at, done_at")
+    .eq("venue_id", venueId)
+    .gte("created_at", since)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  const rows: ReportRow[] = (data ?? []).map((row) => ({
+    point: (row.point as string) ?? null,
+    kind: row.kind as RequestKind,
+    rating: (row.rating as number) ?? null,
+    status: row.status as "new" | "done",
+    createdAt: row.created_at as string,
+    doneAt: (row.done_at as string) ?? null,
+  }));
+
+  return { rows, capped: rows.length >= limit };
 }

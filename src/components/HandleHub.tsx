@@ -133,6 +133,15 @@ export default function HandleHub({
               </span>
             </Link>
           </div>
+
+          {/* Not a tile: this is the weekly question, not a daily one. */}
+          <Link
+            href={at("hisobot")}
+            className="flex items-center gap-2 rounded-2xl border border-black/10 bg-white px-5 py-4 font-medium transition-transform active:scale-[0.99]"
+          >
+            <BarChart3 className="h-4 w-4 text-flex-black/60" />
+            Hisobot
+          </Link>
         </div>
       )}
 
