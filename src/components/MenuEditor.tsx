@@ -9,6 +9,7 @@ import {
   saveVenueAction,
 } from "@/app/kabinet/[handle]/menyu/actions";
 import type { MenuCategory, Venue } from "@/lib/menu";
+import type { VenueWords } from "@/lib/venue-words";
 import type { EditResult } from "@/lib/menu-edit";
 
 // The three things an owner adds: a dish, a section, and the details about the
@@ -28,10 +29,13 @@ export default function MenuEditor({
   handle,
   venue,
   categories,
+  w,
 }: {
   handle: string;
   venue: Venue;
   categories: MenuCategory[];
+  /** A cafe adds dishes, a hotel adds services. Same form, same table. */
+  w: VenueWords;
 }) {
   const [open, setOpen] = useState<"item" | "category" | "venue" | null>("item");
 
@@ -56,7 +60,7 @@ export default function MenuEditor({
   return (
     <div>
       <div className="flex flex-wrap gap-2">
-        {tab("item", "Taom qo'shish")}
+        {tab("item", w.addItem)}
         {tab("category", "Bo'lim qo'shish")}
         {tab("venue", "Obyekt ma'lumotlari")}
       </div>
@@ -70,7 +74,7 @@ export default function MenuEditor({
               <label htmlFor="mi-name" className={label}>
                 Nomi
               </label>
-              <input id="mi-name" name="name" required className={field} placeholder="Lag'mon" />
+              <input id="mi-name" name="name" required className={field} placeholder={w.itemPlaceholder} />
             </div>
             <div>
               <label htmlFor="mi-price" className={label}>
@@ -93,7 +97,7 @@ export default function MenuEditor({
                 id="mi-note"
                 name="note"
                 className={field}
-                placeholder="Qo'l uzilgan, o'tkir"
+                placeholder={w.notePlaceholder}
               />
             </div>
             <div className="sm:col-span-2">
@@ -119,13 +123,13 @@ export default function MenuEditor({
               <label htmlFor="mi-ru" className={label}>
                 Ruscha — ixtiyoriy
               </label>
-              <input id="mi-ru" name="name_ru" className={field} placeholder="Лагман" />
+              <input id="mi-ru" name="name_ru" className={field} placeholder={w.itemPlaceholderRu} />
             </div>
             <div>
               <label htmlFor="mi-en" className={label}>
                 Inglizcha — ixtiyoriy
               </label>
-              <input id="mi-en" name="name_en" className={field} placeholder="Lagman" />
+              <input id="mi-en" name="name_en" className={field} placeholder={w.itemPlaceholderEn} />
             </div>
           </div>
 
@@ -151,19 +155,19 @@ export default function MenuEditor({
               <label htmlFor="mc-name" className={label}>
                 Nomi
               </label>
-              <input id="mc-name" name="name" required className={field} placeholder="Issiq taomlar" />
+              <input id="mc-name" name="name" required className={field} placeholder={w.categoryPlaceholder} />
             </div>
             <div>
               <label htmlFor="mc-ru" className={label}>
                 Ruscha
               </label>
-              <input id="mc-ru" name="name_ru" className={field} placeholder="Горячее" />
+              <input id="mc-ru" name="name_ru" className={field} placeholder="" />
             </div>
             <div>
               <label htmlFor="mc-en" className={label}>
                 Inglizcha
               </label>
-              <input id="mc-en" name="name_en" className={field} placeholder="Hot dishes" />
+              <input id="mc-en" name="name_en" className={field} placeholder="" />
             </div>
           </div>
 

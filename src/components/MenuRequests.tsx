@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import { createPortal } from "react-dom";
-import { BellRing, ReceiptText, Star, X, Check } from "lucide-react";
+import { BellRing, ReceiptText, Sparkles, Star, X, Check } from "lucide-react";
 
 import { requestFromTable } from "@/app/[handle]/menu-actions";
 import type { MenuBarDict } from "@/lib/i18n";
+import type { VenueWords } from "@/lib/venue-words";
+import type { RequestKind } from "@/lib/venue-requests";
 
 // The half of a menu that paper cannot do.
 //
@@ -20,7 +22,7 @@ import type { MenuBarDict } from "@/lib/i18n";
 // viewport, and a page like this grows those by decoration; the portal takes
 // the question off the table for good.
 
-type Kind = "waiter" | "bill" | "review";
+type Kind = RequestKind;
 
 /** Remembered so the bill does not ask for a table number the waiter already got. */
 const POINT_KEY = "flex.point";
@@ -45,11 +47,14 @@ export default function MenuRequests({
   handle,
   point,
   s,
+  w,
 }: {
   handle: string;
-  /** From the address on the stand, when the stand carries a table number. */
+  /** From the address on the tag: a table in a cafe, a room in a hotel. */
   point: string | null;
   s: MenuBarDict;
+  /** What this vertical calls things, and which buttons it gets. */
+  w: VenueWords;
 }) {
   const [sheet, setSheet] = useState<Kind | null>(null);
   const [typed, setTyped] = useState<string | null>(null);
@@ -125,13 +130,11 @@ export default function MenuRequests({
   if (!mounted) return null;
 
   const confirmation =
-    done === "waiter"
-      ? s.menuRequestSent
-      : done === "bill"
-        ? s.menuBillSent
-        : done === "review"
-          ? s.menuReviewSent
-          : null;
+    done === "review"
+      ? s.menuReviewSent
+      : done
+        ? (w.actions.find((a) => a.kind === done)?.sent ?? s.menuRequestSent)
+        : null;
 
   const bar = (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
@@ -149,26 +152,28 @@ export default function MenuRequests({
           </p>
         )}
 
-        <div className="grid grid-cols-[1fr_1fr_auto] gap-1.5 rounded-2xl bg-flex-black p-1.5 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.55)]">
-          <button
-            type="button"
-            onClick={() => press("waiter")}
-            disabled={pending}
-            className="flex items-center justify-center gap-2 rounded-xl bg-lime px-4 py-3 text-sm font-semibold text-flex-black disabled:opacity-60"
-          >
-            <BellRing className="h-4 w-4" />
-            {s.menuCallWaiter}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => press("bill")}
-            disabled={pending}
-            className="flex items-center justify-center gap-2 rounded-xl bg-white/10 px-4 py-3 text-sm font-medium text-white disabled:opacity-60"
-          >
-            <ReceiptText className="h-4 w-4" />
-            {s.menuAskBill}
-          </button>
+        {/* A cafe gets two buttons, a shop one, and the review is always the
+            third slot — so the columns are counted rather than written. */}
+        <div
+          className="grid gap-1.5 rounded-2xl bg-flex-black p-1.5 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.55)]"
+          style={{ gridTemplateColumns: `repeat(${w.actions.length}, minmax(0, 1fr)) auto` }}
+        >
+          {w.actions.map((action, index) => (
+            <button
+              key={action.kind}
+              type="button"
+              onClick={() => press(action.kind)}
+              disabled={pending}
+              className={
+                index === 0
+                  ? "flex items-center justify-center gap-2 rounded-xl bg-lime px-4 py-3 text-sm font-semibold text-flex-black disabled:opacity-60"
+                  : "flex items-center justify-center gap-2 rounded-xl bg-white/10 px-4 py-3 text-sm font-medium text-white disabled:opacity-60"
+              }
+            >
+              <ActionIcon kind={action.kind} />
+              {action.label}
+            </button>
+          ))}
 
           <button
             type="button"
@@ -200,9 +205,7 @@ export default function MenuRequests({
           <h2 className="font-display text-lg font-semibold">
             {sheet === "review"
               ? s.menuLeaveReview
-              : sheet === "bill"
-                ? s.menuAskBill
-                : s.menuCallWaiter}
+              : (w.actions.find((a) => a.kind === sheet)?.label ?? s.menuCallWaiter)}
           </h2>
           <button type="button" onClick={() => setSheet(null)} aria-label="Yopish">
             <X className="h-5 w-5 text-flex-black/40" />
@@ -213,7 +216,7 @@ export default function MenuRequests({
             answerable — "table 7 wants the bill" reaches somebody, "somebody
             wants the bill" reaches nobody. */}
         <label htmlFor="req-point" className="mb-1 block text-[11px] font-medium tracking-wide text-flex-black/45 uppercase">
-          {s.menuNoPoint}
+          {w.pointLabel}
         </label>
         <input
           id="req-point"
@@ -221,7 +224,7 @@ export default function MenuRequests({
           onChange={(e) => setTable(e.target.value.slice(0, 12))}
           inputMode="numeric"
           autoFocus={!table}
-          placeholder="7"
+          placeholder={w.pointPlaceholder}
           className="w-full rounded-xl border border-black/10 bg-white px-3 py-2.5 text-sm outline-none focus:border-flex-black/30"
         />
 
@@ -276,4 +279,11 @@ export default function MenuRequests({
     </>,
     document.body,
   );
+}
+
+function ActionIcon({ kind }: { kind: Kind }) {
+  const className = "h-4 w-4";
+  if (kind === "bill") return <ReceiptText className={className} />;
+  if (kind === "clean") return <Sparkles className={className} />;
+  return <BellRing className={className} />;
 }

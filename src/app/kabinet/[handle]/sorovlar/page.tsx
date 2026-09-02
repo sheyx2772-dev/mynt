@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowLeft, BellRing, ReceiptText, Star, Check, Inbox } from "lucide-react";
+import { ArrowLeft, BellRing, ReceiptText, Star, Sparkles, Check, Inbox } from "lucide-react";
 
 import PageShell from "@/components/PageShell";
 import AutoRefresh from "@/components/AutoRefresh";
 import { requireUser } from "@/lib/auth";
 import { getOwnedVenue } from "@/lib/menu";
 import { listVenueRequests, type RequestKind } from "@/lib/venue-requests";
+import { REQUEST_LABEL, venueWords } from "@/lib/venue-words";
 import { timeAgo } from "@/lib/relative-time";
 import { parseHandle } from "@/lib/pricing";
 import { markDoneAction } from "./actions";
@@ -23,17 +24,11 @@ export const metadata: Metadata = {
 // large, with the table number as the biggest thing on the row, and one button
 // to close it. Everything already dealt with drops below a line and goes quiet.
 
-const LABEL: Record<RequestKind, string> = {
-  waiter: "Ofitsiant chaqirildi",
-  bill: "Hisob so'raldi",
-  review: "Izoh qoldirildi",
-  other: "So'rov",
-};
-
 function Icon({ kind }: { kind: RequestKind }) {
   const className = "h-4 w-4";
   if (kind === "bill") return <ReceiptText className={className} />;
   if (kind === "review") return <Star className={className} />;
+  if (kind === "clean") return <Sparkles className={className} />;
   return <BellRing className={className} />;
 }
 
@@ -49,6 +44,7 @@ export default async function RequestsPage({
   const venue = await getOwnedVenue(normalized, user.id);
   if (!venue) notFound();
 
+  const words = venueWords(venue.kind, "uz");
   const all = await listVenueRequests(venue.id);
   const waiting = all.filter((r) => r.status === "new");
   const closed = all.filter((r) => r.status === "done").slice(0, 30);
@@ -69,7 +65,7 @@ export default async function RequestsPage({
           href={`/kabinet/${normalized}/menyu`}
           className="text-sm font-medium text-flex-black/60 hover:text-flex-black"
         >
-          Menyu
+          {words.listTitle}
         </Link>
       </div>
 
@@ -100,7 +96,7 @@ export default async function RequestsPage({
                 <div className="min-w-0 flex-1">
                   <p className="flex items-center gap-2 text-sm font-medium">
                     <Icon kind={request.kind} />
-                    {LABEL[request.kind]}
+                    {REQUEST_LABEL[request.kind]}
                   </p>
                   <p className="mt-0.5 text-xs text-white/45">
                     {timeAgo(request.createdAt, "uz")}
@@ -157,7 +153,7 @@ export default async function RequestsPage({
                   {request.point ?? "—"}
                 </span>
                 <span className="min-w-0 flex-1 truncate text-flex-black/60">
-                  {request.note || LABEL[request.kind]}
+                  {request.note || REQUEST_LABEL[request.kind]}
                 </span>
                 <span className="shrink-0 text-xs text-flex-black/35">
                   {timeAgo(request.createdAt, "uz")}

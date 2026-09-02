@@ -13,9 +13,15 @@ import { notify } from "@/lib/notify";
 // from the address, so it is a string a stranger controls — trimmed hard and
 // never used for anything but display.
 
-export type RequestKind = "waiter" | "bill" | "review" | "other";
+export type RequestKind = "waiter" | "bill" | "review" | "clean" | "other";
 
-export const REQUEST_KINDS: readonly RequestKind[] = ["waiter", "bill", "review", "other"];
+export const REQUEST_KINDS: readonly RequestKind[] = [
+  "waiter",
+  "bill",
+  "review",
+  "clean",
+  "other",
+];
 
 export function isRequestKind(value: unknown): value is RequestKind {
   return typeof value === "string" && (REQUEST_KINDS as readonly string[]).includes(value);
@@ -147,14 +153,17 @@ export async function sendVenueRequest(opts: {
   // the cabinet — through after(), so the guest gets their confirmation without
   // waiting on Telegram.
   if (found.ownerUserId) {
-    const what =
-      opts.kind === "waiter"
-        ? "ofitsiant chaqirdi"
-        : opts.kind === "bill"
-          ? "hisob so'radi"
-          : opts.kind === "review"
-            ? "izoh qoldirdi"
-            : "so'rov yubordi";
+    // Written out here rather than imported from the vocabulary, which imports
+    // this file for its types — one message in one language is a smaller cost
+    // than a cycle between the two modules.
+    const WHAT: Record<RequestKind, string> = {
+      waiter: "chaqirdi",
+      bill: "hisob so'radi",
+      clean: "tozalash so'radi",
+      review: "izoh qoldirdi",
+      other: "so'rov yubordi",
+    };
+    const what = WHAT[opts.kind];
 
     const who = point ?? found.venueName;
     const ownerUserId = found.ownerUserId;

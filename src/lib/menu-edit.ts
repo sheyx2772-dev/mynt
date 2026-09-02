@@ -146,3 +146,52 @@ export async function saveVenue(venueId: string, form: FormData): Promise<EditRe
   if (error) return { ok: false, error: "Saqlab bo'lmadi." };
   return { ok: true };
 }
+
+/**
+ * Turning a number into a place.
+ *
+ * Until now a venue row could only be written by hand, which meant the whole
+ * business product — the menu, the service list, the requests — was reachable
+ * only for a cafe somebody set up from a terminal. A hotel that buys a number
+ * on Monday has to be able to open it on Monday.
+ *
+ * The handle is resolved with the ownership filter in the same statement, so a
+ * forged handle creates nothing rather than attaching a venue to somebody
+ * else's number.
+ */
+export async function createVenue(
+  normalized: string,
+  userId: string,
+  form: FormData,
+): Promise<EditResult> {
+  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+
+  const name = text(form.get("name"), 120);
+  if (name.length < 2) return { ok: false, error: "Obyekt nomini kiriting." };
+
+  const kind = text(form.get("kind"), 10);
+  if (!["cafe", "hotel", "shop", "other"].includes(kind)) {
+    return { ok: false, error: "Obyekt turini tanlang." };
+  }
+
+  const { data: handle } = await supabaseAdmin
+    .from("handles")
+    .select("id")
+    .eq("normalized", normalized)
+    .eq("user_id", userId)
+    .eq("status", "claimed")
+    .maybeSingle();
+
+  if (!handle) return { ok: false, error: "Bu raqam sizniki emas." };
+
+  // One venue per number, enforced by a unique constraint on handle_id. A
+  // second attempt is somebody double-tapping, not a new building.
+  const { error } = await supabaseAdmin.from("venues").insert({
+    handle_id: handle.id as string,
+    name,
+    kind,
+  });
+
+  if (error) return { ok: false, error: "Obyekt allaqachon ochilgan." };
+  return { ok: true };
+}

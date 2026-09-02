@@ -7,7 +7,8 @@ import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRar
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import { linkValue } from "@/lib/links";
-import { dict, site, menuBar, type Lang } from "@/lib/i18n";
+import { dict, menuBar, type Lang } from "@/lib/i18n";
+import { venueWords } from "@/lib/venue-words";
 import { getLang } from "@/lib/lang";
 import { PLAN_ACCENT, serviceLimit, FREE_LINK_LIMIT } from "@/lib/plans";
 import { cardDesign } from "@/lib/card-designs";
@@ -63,7 +64,7 @@ export async function generateMetadata(props: PageProps<"/[handle]">): Promise<M
 
 export default async function HandlePage(props: PageProps<"/[handle]">) {
   const { handle } = await props.params;
-  const { bolim, src, til, stol } = await props.searchParams;
+  const { bolim, src, til, stol, xona } = await props.searchParams;
 
   const genesisSerial = parseGenesisSerial(handle);
   if (genesisSerial) {
@@ -94,9 +95,11 @@ export default async function HandlePage(props: PageProps<"/[handle]">) {
       params={{
         bolim: typeof bolim === "string" ? bolim : undefined,
         src: typeof src === "string" ? src : undefined,
-        // Which table the tag was on. Carried through so the language switch
-        // does not drop it and send the guest back to a menu with no table.
+        // Which point the tag was on. Carried through so the language switch
+        // does not drop it and send the guest back to a list with no table or
+        // room attached — a request from nowhere reaches nobody.
         stol: typeof stol === "string" ? stol : undefined,
+        xona: typeof xona === "string" ? xona : undefined,
       }}
     />
   );
@@ -129,7 +132,12 @@ async function VanityHandlePage({
 
     if (venue) {
       const categories = await getMenu(venue.id, lang);
-      const point = typeof params.stol === "string" ? params.stol.slice(0, 12) : null;
+      const w = venueWords(venue.kind, lang);
+
+      // The tag on a hotel door says xona, the one on a table says stol, and
+      // whoever printed the stickers used the word for their own building.
+      const rawPoint = params.stol ?? params.xona;
+      const point = typeof rawPoint === "string" ? rawPoint.slice(0, 12) : null;
 
       // Counted the same as a profile: a table that gets tapped is the number
       // a venue is paying us to learn.
@@ -142,7 +150,7 @@ async function VanityHandlePage({
 
       return (
         <PageShell>
-          <MenuView venue={venue} categories={categories} point={point} s={site(lang)} />
+          <MenuView venue={venue} categories={categories} point={point} w={w} />
 
           <div className="mt-8 flex justify-end border-t border-black/10 pt-4">
             <LangSwitch lang={lang} next={`/${normalized}`} />
@@ -150,7 +158,7 @@ async function VanityHandlePage({
 
           {/* Room for the bar, which is pinned over the page rather than in it. */}
           <div className="h-24" aria-hidden />
-          <MenuRequests handle={normalized} point={point} s={menuBar(lang)} />
+          <MenuRequests handle={normalized} point={point} s={menuBar(lang)} w={w} />
         </PageShell>
       );
     }

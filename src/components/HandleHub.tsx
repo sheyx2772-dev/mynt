@@ -9,12 +9,14 @@ import {
   ArrowLeft,
   BellRing,
   UtensilsCrossed,
+  Store,
   Clock,
 } from "lucide-react";
 
 import { formatNumber } from "@/lib/format";
 import type { OwnedHandle } from "@/lib/handles";
 import type { Venue } from "@/lib/menu";
+import { venueWords } from "@/lib/venue-words";
 
 // One number's home screen.
 //
@@ -44,6 +46,9 @@ export default function HandleHub({
   waiting: number;
 }) {
   const at = (screen: string) => `/kabinet/${handle.normalized}/${screen}`;
+
+  // A hotel's tile says Xizmatlar, not Menyu.
+  const w = venue ? venueWords(venue.kind, "uz") : null;
 
   return (
     <div>
@@ -110,7 +115,7 @@ export default function HandleHub({
           >
             <span className="flex items-center gap-2">
               <UtensilsCrossed className="h-4 w-4 text-flex-black/60" />
-              Menyu
+              {w?.listTitle}
             </span>
             <span className="truncate text-xs text-flex-black/40">{venue.name}</span>
           </Link>
@@ -127,6 +132,18 @@ export default function HandleHub({
         <Tile href={at("dizayn")} label="Dizayn" Icon={Palette} />
         <Tile href={at("otkazish")} label="O'tkazish" Icon={ArrowLeftRight} />
       </div>
+
+      {/* The way in for a number that is going to be a place. Quiet, because
+          most numbers are a person and never will be. */}
+      {!venue && handle.status === "claimed" && (
+        <Link
+          href={at("obyekt")}
+          className="mt-3 flex items-center gap-3 rounded-2xl border border-dashed border-black/15 px-5 py-4 text-sm text-flex-black/55 transition-colors hover:bg-black/[0.02]"
+        >
+          <Store className="h-4 w-4 shrink-0 text-flex-black/35" strokeWidth={1.7} />
+          Kafe, mehmonxona yoki do&apos;konmi? Obyekt oching — menyu va so&apos;rovlar.
+        </Link>
+      )}
 
       {handle.status === "reserved" && (
         <p className="mt-4 rounded-2xl border border-dashed border-black/15 px-5 py-4 text-sm text-flex-black/55">

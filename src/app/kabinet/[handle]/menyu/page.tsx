@@ -14,13 +14,15 @@ import {
   removeItemAction,
 } from "./actions";
 import MenuEditor from "@/components/MenuEditor";
+import { venueWords } from "@/lib/venue-words";
 
 export const metadata: Metadata = {
-  title: "Menyu — flex.com.uz",
+  title: "Ro'yxat — flex.com.uz",
   robots: { index: false },
 };
 
-// The owner's side of the table stand.
+// The owner's side of the tag — a table stand in a cafe, a card by the door in
+// a hotel. One editor: the rows are the same shape and only the nouns differ.
 //
 // Server actions and plain forms rather than a client-side editor: this is
 // used standing behind a counter on a phone with one bar of signal, and a form
@@ -39,6 +41,7 @@ export default async function MenuAdminPage({ params }: PageProps<"/kabinet/[han
   if (!venue) notFound();
 
   const categories = await getMenu(venue.id, "uz");
+  const w = venueWords(venue.kind, "uz");
 
   return (
     <PageShell>
@@ -54,7 +57,7 @@ export default async function MenuAdminPage({ params }: PageProps<"/kabinet/[han
           href={`/${normalized}`}
           className="flex items-center gap-1.5 text-sm font-medium text-flex-black/60 hover:text-flex-black"
         >
-          Menyuni ko&apos;rish
+          {w.listTitle}
           <ExternalLink className="h-3.5 w-3.5" />
         </Link>
       </div>
@@ -64,7 +67,7 @@ export default async function MenuAdminPage({ params }: PageProps<"/kabinet/[han
         O&apos;zgartirish darhol ko&apos;rinadi — qayta chop etish kerak emas.
       </p>
 
-      <MenuEditor handle={normalized} venue={venue} categories={categories} />
+      <MenuEditor handle={normalized} venue={venue} categories={categories} w={w} />
 
       {/* The list, with the two controls that get used every day: take a dish
           off, and put it back. */}
@@ -98,7 +101,11 @@ export default async function MenuAdminPage({ params }: PageProps<"/kabinet/[han
                 </div>
 
                 <p className="shrink-0 font-tabular text-sm font-semibold">
-                  {formatNumber(item.price)}
+                  {item.price === 0 ? (
+                    <span className="text-xs font-medium text-flex-black/45">{w.freeWord}</span>
+                  ) : (
+                    formatNumber(item.price)
+                  )}
                 </p>
 
                 <form action={toggleItemAction} className="shrink-0">
@@ -106,7 +113,9 @@ export default async function MenuAdminPage({ params }: PageProps<"/kabinet/[han
                   <input type="hidden" name="id" value={item.id} />
                   <input type="hidden" name="available" value={item.available ? "0" : "1"} />
                   <button
-                    title={item.available ? "Bugun yo'q deb belgilash" : "Menyuga qaytarish"}
+                    title={
+                      item.available ? `${w.soldOut} deb belgilash` : "Ro'yxatga qaytarish"
+                    }
                     className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 text-flex-black/50 hover:bg-black/[0.03]"
                   >
                     {item.available ? (

@@ -3,7 +3,7 @@ import { Wifi, Clock, MapPin } from "lucide-react";
 
 import { formatNumber } from "@/lib/format";
 import type { MenuCategory, Venue } from "@/lib/menu";
-import type { site } from "@/lib/i18n";
+import type { VenueWords } from "@/lib/venue-words";
 
 // What a guest sees after tapping the stand on the table.
 //
@@ -16,19 +16,17 @@ import type { site } from "@/lib/i18n";
 // would read as a menu that never had it, and the guest would ask for it
 // anyway.
 
-type Site = ReturnType<typeof site>;
-
 export default function MenuView({
   venue,
   categories,
   point,
-  s,
+  w,
 }: {
   venue: Venue;
   categories: MenuCategory[];
   /** Which table or room this was opened from, if the URL said. */
   point: string | null;
-  s: Site;
+  w: VenueWords;
 }) {
   return (
     <div>
@@ -78,7 +76,7 @@ export default function MenuView({
 
       {categories.length === 0 ? (
         <p className="mt-8 rounded-2xl border border-dashed border-black/15 px-6 py-10 text-center text-sm text-flex-black/50">
-          {s.menuEmpty}
+          {w.listEmpty}
         </p>
       ) : (
         categories.map((category) => (
@@ -120,13 +118,19 @@ export default function MenuView({
                     )}
                     {!item.available && (
                       <p className="mt-1 text-xs font-medium text-flex-black/50">
-                        {s.menuSoldOut}
+                        {w.soldOut}
                       </p>
                     )}
                   </div>
 
                   <p className="shrink-0 font-tabular font-semibold">
-                    {formatNumber(item.price)}
+                    {item.price === 0 ? (
+                      <span className="text-sm font-medium text-flex-black/45">
+                        {w.freeWord}
+                      </span>
+                    ) : (
+                      formatNumber(item.price)
+                    )}
                   </p>
                 </div>
               ))}

@@ -1298,3 +1298,30 @@ begin
 
   delete from auth.users where id = owner_id;
 end $$;
+
+-- 0038 — a room is not a table
+do $$
+declare
+  owner_id uuid;
+  hid uuid;
+  vid uuid;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into owner_id;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('HTL', '001', 'claimed', owner_id, now()) returning id into hid;
+  insert into venues (handle_id, name, kind) values (hid, 'Sinov mehmonxona', 'hotel')
+    returning id into vid;
+
+  insert into venue_requests (venue_id, point, kind) values (vid, '214', 'clean');
+  raise notice '   ok   a room can ask for housekeeping';
+
+  begin
+    insert into venue_requests (venue_id, kind) values (vid, 'turnadown');
+    raise exception 'notanish soʻrov turi oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   still rejects a kind we do not handle';
+  end;
+
+  delete from auth.users where id = owner_id;
+  delete from handles where id = hid;
+end $$;
