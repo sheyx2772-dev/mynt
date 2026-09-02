@@ -1157,3 +1157,82 @@ begin
 
   delete from telegram_logins where code = 'AB2C3D';
 end $$;
+
+-- 0036 — the cafe menu
+do $$
+declare
+  owner_id uuid;
+  hid uuid;
+  vid uuid;
+  cid uuid;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into owner_id;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('CAF', '001', 'claimed', owner_id, now()) returning id into hid;
+
+  insert into venues (handle_id, name, kind, hours, wifi_name, wifi_password)
+    values (hid, 'Choyxona Navro''z', 'cafe', '08:00 – 23:00', 'Navroz_Guest', 'mehmon2026')
+    returning id into vid;
+  raise notice '   ok   a venue hangs off a claimed handle';
+
+  -- One number, one venue: a second would make the table stand ambiguous.
+  begin
+    insert into venues (handle_id, name) values (hid, 'Ikkinchi');
+    raise exception 'bitta raqamga ikkita obyekt oʻtdi';
+  exception when unique_violation then
+    raise notice '   ok   rejected: two venues on one number';
+  end;
+
+  begin
+    insert into venues (handle_id, name, kind) values (gen_random_uuid(), 'Yoq Kafe', 'cafe');
+    raise exception 'mavjud boʻlmagan raqamga obyekt oʻtdi';
+  exception when foreign_key_violation then
+    raise notice '   ok   rejected: a venue with no number behind it';
+  end;
+
+  insert into menu_categories (venue_id, name, position) values (vid, 'Issiq taomlar', 0)
+    returning id into cid;
+  insert into menu_items (venue_id, category_id, name, price, position)
+    values (vid, cid, 'Lag''mon', 38000, 0);
+  raise notice '   ok   a category and a dish';
+
+  -- A price with tiyin on it does not exist on a menu here.
+  begin
+    insert into menu_items (venue_id, name, price) values (vid, 'Xato taom', -1);
+    raise exception 'manfiy narx oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a negative price';
+  end;
+
+  begin
+    insert into menu_items (venue_id, name, price, photo_url)
+      values (vid, 'Xato taom', 1000, 'http://misol.uz/a.jpg');
+    raise exception 'himoyalanmagan rasm manzili oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a photo served over plain http';
+  end;
+
+  -- Today's absence is not a deletion.
+  update menu_items set available = false where venue_id = vid;
+  raise notice '   ok   a dish can be taken off today and come back tomorrow';
+
+  -- A category can go without taking its dishes with it.
+  delete from menu_categories where id = cid;
+  if not exists (select 1 from menu_items where venue_id = vid) then
+    raise exception 'kategoriya oʻchirilganda taomlar ham ketdi';
+  end if;
+  raise notice '   ok   deleting a category leaves its dishes alone';
+
+  -- Losing the number takes the whole menu with it, which is correct: the
+  -- number is the address the menu lives at.
+  delete from handles where id = hid;
+  if exists (select 1 from venues where id = vid) then
+    raise exception 'raqam oʻchsa ham obyekt qoldi';
+  end if;
+  if exists (select 1 from menu_items where venue_id = vid) then
+    raise exception 'obyekt oʻchsa ham taomlar qoldi';
+  end if;
+  raise notice '   ok   the menu goes with the number it lived at';
+
+  delete from auth.users where id = owner_id;
+end $$;

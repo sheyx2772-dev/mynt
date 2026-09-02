@@ -7,7 +7,7 @@ import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRar
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import { linkValue } from "@/lib/links";
-import { dict, type Lang } from "@/lib/i18n";
+import { dict, site, type Lang } from "@/lib/i18n";
 import { getLang } from "@/lib/lang";
 import { PLAN_ACCENT, serviceLimit, FREE_LINK_LIMIT } from "@/lib/plans";
 import { cardDesign } from "@/lib/card-designs";
@@ -16,6 +16,8 @@ import ShareButton from "@/components/ShareButton";
 import ProfileHandleSearch from "@/components/ProfileHandleSearch";
 import LangSwitch from "@/components/LangSwitch";
 import Mark from "@/components/Mark";
+import MenuView from "@/components/MenuView";
+import { getVenueByHandle, getMenu } from "@/lib/menu";
 import ActionRow from "@/components/ActionRow";
 import ExchangeContactForm from "@/components/ExchangeContactForm";
 import ProfileComments from "@/components/ProfileComments";
@@ -60,7 +62,7 @@ export async function generateMetadata(props: PageProps<"/[handle]">): Promise<M
 
 export default async function HandlePage(props: PageProps<"/[handle]">) {
   const { handle } = await props.params;
-  const { bolim, src, til } = await props.searchParams;
+  const { bolim, src, til, stol } = await props.searchParams;
 
   const genesisSerial = parseGenesisSerial(handle);
   if (genesisSerial) {
@@ -88,7 +90,13 @@ export default async function HandlePage(props: PageProps<"/[handle]">) {
       tab={bolim === "postlar" ? "postlar" : "vizitka"}
       source={readSource(typeof src === "string" ? src : undefined)}
       lang={await getLang(til)}
-      params={{ bolim: typeof bolim === "string" ? bolim : undefined, src: typeof src === "string" ? src : undefined }}
+      params={{
+        bolim: typeof bolim === "string" ? bolim : undefined,
+        src: typeof src === "string" ? src : undefined,
+        // Which table the tag was on. Carried through so the language switch
+        // does not drop it and send the guest back to a menu with no table.
+        stol: typeof stol === "string" ? stol : undefined,
+      }}
     />
   );
 }
@@ -113,6 +121,35 @@ async function VanityHandlePage({
   const profile = await getClaimedProfile(normalized);
 
   if (profile) {
+    // A number that belongs to a venue opens the venue, not a person. The tag
+    // on a table is the same tag as a card in a pocket, and what is behind it
+    // is what the owner made of it.
+    const venue = await getVenueByHandle(normalized);
+
+    if (venue) {
+      const categories = await getMenu(venue.id, lang);
+      const point = typeof params.stol === "string" ? params.stol.slice(0, 12) : null;
+
+      // Counted the same as a profile: a table that gets tapped is the number
+      // a venue is paying us to learn.
+      const viewer = await getUser();
+      const isOwner = Boolean(viewer && profile.userId && viewer.id === profile.userId);
+      if (!isOwner) {
+        const visitor = await readVisitorContext(source);
+        after(() => recordProfileView(normalized, visitor));
+      }
+
+      return (
+        <PageShell>
+          <MenuView venue={venue} categories={categories} point={point} s={site(lang)} />
+
+          <div className="mt-8 flex justify-end border-t border-black/10 pt-4">
+            <LangSwitch lang={lang} next={`/${normalized}`} />
+          </div>
+        </PageShell>
+      );
+    }
+
     // The owner's first name, which two of the visitor-facing sentences use.
     const firstName = profile.name.split(" ")[0] || normalized;
 
