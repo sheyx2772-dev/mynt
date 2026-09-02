@@ -1,0 +1,177 @@
+import Link from "next/link";
+import { Calculator, Nfc, Users, CreditCard, ChevronRight } from "lucide-react";
+import HandleChecker from "@/components/HandleChecker";
+import { formatNumber } from "@/lib/format";
+import type { Resident } from "@/lib/handles";
+import type { site } from "@/lib/i18n";
+
+// The phone's home screen.
+//
+// Everything else on the landing page is a pitch: a hero, a walkthrough, a
+// comparison table, an argument. That is what a desktop visitor came for and
+// what a phone visitor has to scroll past. An app opens to the thing you do
+// with it, so this opens to the search box and four places to go.
+//
+// It replaces the hero on a phone rather than sitting above it, so nobody
+// scrolls through both. The marketing page is still the whole page at lg and up.
+
+type Site = ReturnType<typeof site>;
+
+function Tile({
+  href,
+  label,
+  Icon,
+}: {
+  href: string;
+  label: string;
+  Icon: typeof Nfc;
+}) {
+  return (
+    <Link
+      href={href}
+      className="flex flex-col justify-between rounded-3xl border border-black/8 bg-white px-4 py-4 shadow-[0_2px_10px_-6px_rgba(14,10,27,0.25)] transition-transform active:scale-[0.98]"
+    >
+      <Icon className="h-6 w-6 text-flex-black/70" strokeWidth={1.6} />
+      <span className="mt-6 text-sm leading-tight font-medium">{label}</span>
+    </Link>
+  );
+}
+
+export default function AppHome({
+  s,
+  residents,
+  claimed,
+  namespace,
+}: {
+  s: Site;
+  residents: Resident[];
+  claimed: number;
+  namespace: number;
+}) {
+  const newest = residents.slice(0, 3);
+
+  return (
+    <div className="lg:hidden">
+      {/* The one thing worth doing first, on the brand ground so the app still
+          opens as Flex rather than as a form. */}
+      <section className="grain relative overflow-hidden bg-flex-black px-6 pt-7 pb-9 text-white">
+        <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_0%,black,transparent)]" />
+        <div className="absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-lime/[0.15] blur-[110px]" />
+
+        <div className="relative">
+          <h1 className="font-display text-[1.75rem] leading-tight font-semibold tracking-tight text-balance">
+            {s.pickHandle}
+          </h1>
+          <p className="mt-2 text-sm leading-relaxed text-white/55">
+            {s.stepHandleDesc}
+          </p>
+
+          {/* The checker carries its own top margin for the hero; here it sits
+              directly under two lines, so the wrapper pulls it back. */}
+          <div className="-mt-4">
+            <HandleChecker
+              tone="dark"
+              labels={{
+                check: s.checkFree,
+                letters: s.letters,
+                digits: s.digits,
+                error: s.handleError,
+              }}
+            />
+          </div>
+
+          {claimed > 0 && (
+            <p className="mt-5 font-tabular text-xs text-white/40">
+              <span className="text-white/70">{formatNumber(claimed)}</span>{" "}
+              {s.takenWord}
+              <span className="mx-2 text-white/20">·</span>
+              <span className="text-white/70">
+                {formatNumber(namespace - claimed)}
+              </span>{" "}
+              {s.leftWord}
+            </p>
+          )}
+        </div>
+      </section>
+
+      {/* Four destinations, thumb-sized. The sections these replace are hidden
+          on a phone; each of these is where that content actually lives. */}
+      <nav className="grid grid-cols-2 gap-3 px-6 pt-6">
+        <Tile href="#narx" label={s.calcPrice} Icon={Calculator} />
+        <Tile href="/qurilmalar" label={s.navDevices} Icon={Nfc} />
+        <Tile href="/rezidentlar" label={s.navResidents} Icon={Users} />
+        <Tile href="/tarif" label={s.navPlans} Icon={CreditCard} />
+      </nav>
+
+      {newest.length > 0 && (
+        <section className="px-6 pt-9">
+          <div className="mb-3 flex items-baseline justify-between">
+            <h2 className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+              {s.appNewResidents}
+            </h2>
+            <Link
+              href="/rezidentlar"
+              className="text-xs font-medium text-flex-black/50"
+            >
+              {s.seeAll}
+            </Link>
+          </div>
+
+          <ul className="space-y-2">
+            {newest.map((r) => (
+              <li key={r.normalized}>
+                <Link
+                  href={`/${r.normalized}`}
+                  className="flex items-center gap-3 rounded-2xl border border-black/8 bg-white px-4 py-3 transition-transform active:scale-[0.99]"
+                >
+                  {r.avatarUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- external R2 URL
+                    <img
+                      src={r.avatarUrl}
+                      alt={r.name}
+                      className="h-10 w-10 shrink-0 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lime font-display text-xs font-semibold text-flex-black">
+                      {r.name
+                        .split(" ")
+                        .map((p) => p[0])
+                        .slice(0, 2)
+                        .join("")}
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium">{r.name}</p>
+                    <p className="font-tabular text-xs text-flex-black/40">
+                      flex.com.uz/{r.normalized}
+                    </p>
+                  </div>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-flex-black/25" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* The business enquiry is the one marketing section a phone keeps, so it
+          gets a way in from here rather than only from a scroll. */}
+      <section className="px-6 pt-9">
+        <a
+          href="#biznes"
+          className="grain relative block overflow-hidden rounded-3xl bg-flex-black px-5 py-5 text-white"
+        >
+          <div className="relative flex items-center gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="font-display font-semibold">{s.notOneCard}</p>
+              <p className="mt-1 text-xs leading-relaxed text-white/50">
+                {s.businessDesc}
+              </p>
+            </div>
+            <ChevronRight className="h-4 w-4 shrink-0 text-lime" />
+          </div>
+        </a>
+      </section>
+    </div>
+  );
+}

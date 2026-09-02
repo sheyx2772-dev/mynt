@@ -284,6 +284,7 @@ const SITE = {
     navHome: "Bosh sahifa",
     navFeed: "Lenta",
     moreLabel: "Batafsil",
+    appNewResidents: "Yangi rezidentlar",
     langName: "O'zbekcha",
   },
   ru: {
@@ -387,6 +388,7 @@ const SITE = {
     navHome: "Главная",
     navFeed: "Лента",
     moreLabel: "Подробнее",
+    appNewResidents: "Новые резиденты",
     langName: "Русский",
   },
   en: {
@@ -490,6 +492,7 @@ const SITE = {
     navHome: "Home",
     navFeed: "Feed",
     moreLabel: "More",
+    appNewResidents: "New residents",
     langName: "English",
   },
 } as const;

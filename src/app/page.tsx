@@ -28,6 +28,7 @@ import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
 import { site, landing, catalogue } from "@/lib/i18n";
 import { listNewestResidents, getDirectoryCounts } from "@/lib/handles";
 import LiveResidents from "@/components/LiveResidents";
+import AppHome from "@/components/AppHome";
 import { getLang } from "@/lib/lang";
 import LangSwitch from "@/components/LangSwitch";
 import { COMPANY } from "@/lib/company";
@@ -133,7 +134,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="grain relative overflow-hidden bg-flex-black text-white">
+        <section className="hidden grain relative overflow-hidden bg-flex-black text-white lg:block">
           <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]" />
           <div className="absolute -top-40 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-lime/[0.13] blur-[140px]" />
 
@@ -194,7 +195,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         {/* Who has just joined, and how much of the namespace is gone. Directly
             under the hero, because it is the first thing a scroll reveals and
             it is the only proof on the page that other people are buying. */}
-        <div className="bg-flex-black">
+        <div className="hidden bg-flex-black lg:block">
           <LiveResidents
             residents={newest}
             claimed={counts.claimed}
@@ -203,30 +204,13 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           />
         </div>
 
-        {/* On a phone the sections above the breakpoint are replaced by this:
-            three places to go rather than five screens to scroll past. The
-            content is not dropped — it has pages of its own, which are better
-            than a landing section anyway. */}
-        <div className="mx-auto max-w-6xl px-6 pt-6 lg:hidden">
-          <p className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
-            {s.moreLabel}
-          </p>
-        </div>
-        <nav className="mx-auto grid max-w-6xl grid-cols-3 gap-2 px-6 pt-3 pb-6 lg:hidden">
-          {[
-            { href: "/tarif", label: s.navPlans },
-            { href: "/qurilmalar", label: s.navDevices },
-            { href: "/rezidentlar", label: s.navResidents },
-          ].map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="rounded-2xl border border-black/10 px-3 py-4 text-center text-sm font-medium transition-colors hover:bg-black/[0.03]"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        {/* On a phone this is the whole entry screen. See AppHome. */}
+        <AppHome
+          s={s}
+          residents={newest}
+          claimed={counts.claimed}
+          namespace={counts.namespace}
+        />
 
         {/* How it works */}
         <section className="hidden lg:block mx-auto max-w-6xl px-6 py-14 sm:py-24">
@@ -439,8 +423,9 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           </div>
         </section>
 
-        {/* The cards themselves */}
-        <section className="mx-auto max-w-6xl px-6 py-14 sm:py-24">
+        {/* The cards themselves. On a phone /qurilmalar is one tap from the
+            app home and shows the same thing with room to breathe. */}
+        <section className="hidden mx-auto max-w-6xl px-6 py-14 sm:py-24 lg:block">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
