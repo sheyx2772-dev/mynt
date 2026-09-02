@@ -1107,3 +1107,53 @@ begin
 
   delete from team_requests where company = 'Test Market';
 end $$;
+
+-- 0035 — sign-in codes
+do $$
+declare
+  ok boolean;
+begin
+  insert into telegram_logins (code, expires_at) values ('AB2C3D', now() + interval '5 minutes');
+  raise notice '   ok   a sign-in code can be issued with nobody attached yet';
+
+  begin
+    insert into telegram_logins (code, expires_at) values ('abc123', now() + interval '5 minutes');
+    raise exception 'kichik harfli kod oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a code outside the alphabet we issue';
+  end;
+
+  -- O and 0, I and 1 are not in the alphabet precisely because they are read
+  -- off one screen and typed into another.
+  begin
+    insert into telegram_logins (code, expires_at) values ('ABO0ID', now() + interval '5 minutes');
+    raise exception 'chalkash harfli kod oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: the characters people mistype';
+  end;
+
+  begin
+    insert into telegram_logins (code, expires_at) values ('AB2C3D', now() + interval '5 minutes');
+    raise exception 'bitta kod ikki marta oʻtdi';
+  exception when unique_violation then
+    raise notice '   ok   rejected: the same code twice';
+  end;
+
+  -- Claiming is a filtered update: a second attempt matches nothing.
+  update telegram_logins set chat_id = 42, display_name = 'Sinov' where code = 'AB2C3D';
+
+  update telegram_logins set consumed_at = now()
+    where code = 'AB2C3D' and chat_id is not null and consumed_at is null
+      and expires_at > now();
+  get diagnostics ok = row_count;
+  if not ok then raise exception 'birinchi olish ishlamadi'; end if;
+
+  update telegram_logins set consumed_at = now()
+    where code = 'AB2C3D' and chat_id is not null and consumed_at is null
+      and expires_at > now();
+  get diagnostics ok = row_count;
+  if ok then raise exception 'ishlatilgan kod ikkinchi marta oʻtdi'; end if;
+  raise notice '   ok   a code is spent by the first exchange, not the second';
+
+  delete from telegram_logins where code = 'AB2C3D';
+end $$;

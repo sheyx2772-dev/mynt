@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import SignInForm from "@/components/SignInForm";
+import TelegramSignIn from "@/components/TelegramSignIn";
+import { isTelegramLoginConfigured } from "@/lib/auth/telegram-login";
 import { getUser } from "@/lib/auth";
 import { safePath } from "@/lib/safe-path";
 
@@ -38,6 +40,24 @@ export default async function SignInPage(props: PageProps<"/kirish">) {
           <p className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
             {ERRORS[errorKey]}
           </p>
+        )}
+
+        {/* Telegram first: it is one tap, it costs nothing, and it is what
+            this market actually has on its phone. Email stays underneath for
+            the people Telegram does not reach — foreign buyers, and companies
+            whose accounting wants a mailbox. */}
+        {isTelegramLoginConfigured && (
+          <>
+            <TelegramSignIn next={next} />
+
+            <div className="my-6 flex items-center gap-3">
+              <span className="h-px flex-1 bg-black/10" />
+              <span className="text-xs tracking-wide text-flex-black/35 uppercase">
+                yoki
+              </span>
+              <span className="h-px flex-1 bg-black/10" />
+            </div>
+          </>
         )}
 
         <SignInForm next={next} />

@@ -29,6 +29,12 @@ export default async function CabinetPage() {
 
   const unreadCount = notifications.filter((n) => !n.readAt).length;
 
+  const telegramName = user.user_metadata?.telegram_name as string | undefined;
+  const accountLabel =
+    telegramName?.trim() ||
+    (user.email?.endsWith("@telegram.flex.local") ? "Telegram" : user.email) ||
+    "";
+
   // The cabinet is the one page only an owner loads, which makes it the
   // natural place to stamp activity. Deferred so it never delays the render.
   after(() => touchLastSeen(user.id));
@@ -38,7 +44,11 @@ export default async function CabinetPage() {
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-semibold tracking-tight">Kabinet</h1>
-          <p className="mt-1 text-sm text-flex-black/50">{user.email}</p>
+          {/* A Telegram account has an address nobody can write to — it exists
+              so Supabase has something to key the user on. Showing it would be
+              showing the person a mailbox that is not theirs, so the name they
+              signed in with wins whenever there is one. */}
+          <p className="mt-1 text-sm text-flex-black/50">{accountLabel}</p>
         </div>
         <div className="flex items-center gap-2">
           <Link
