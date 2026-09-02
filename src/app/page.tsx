@@ -29,6 +29,7 @@ import { site, landing, catalogue } from "@/lib/i18n";
 import { listNewestResidents, getDirectoryCounts } from "@/lib/handles";
 import LiveResidents from "@/components/LiveResidents";
 import AppHome from "@/components/AppHome";
+import TwoWays from "@/components/TwoWays";
 import MobileMenu from "@/components/MobileMenu";
 import { getLang } from "@/lib/lang";
 import LangSwitch from "@/components/LangSwitch";
@@ -224,6 +225,12 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             namespace={counts.namespace}
             labels={{ taken: s.takenWord, left: s.leftWord, latest: s.latestWord }}
           />
+        </div>
+
+        {/* The fork, before anything is explained. Desktop only here — the
+            phone gets the same thing inside AppHome, higher up. */}
+        <div className="hidden lg:block">
+          <TwoWays s={s} />
         </div>
 
         {/* On a phone this is the whole entry screen. See AppHome. */}

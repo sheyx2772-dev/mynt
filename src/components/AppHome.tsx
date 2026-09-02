@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Calculator, Nfc, Users, CreditCard, ChevronRight } from "lucide-react";
+import { Calculator, Nfc, Users, CreditCard, ChevronRight, User, Store } from "lucide-react";
 import HandleChecker from "@/components/HandleChecker";
 import { formatNumber } from "@/lib/format";
 import type { Resident } from "@/lib/handles";
@@ -110,6 +110,48 @@ export default function AppHome({
         </div>
       </section>
 
+      {/* The fork first: which of the two products is this person here for.
+          Everything under it is the personal side, which is what the four
+          tiles below are. */}
+      <section className="px-6 pt-7">
+        <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+          {s.waysEyebrow}
+        </p>
+        <div className="grid gap-3">
+          <Link
+            href="#narx"
+            className="flex items-center gap-4 rounded-3xl border border-black/10 bg-white px-5 py-5 transition-transform active:scale-[0.99]"
+          >
+            <User className="h-6 w-6 shrink-0 text-flex-black/50" strokeWidth={1.6} />
+            <div className="min-w-0 flex-1">
+              <p className="font-display text-lg font-semibold tracking-tight">
+                {s.wayPersonal}
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-flex-black/55">
+                {s.wayPersonalDesc}
+              </p>
+            </div>
+            <ChevronRight className="h-4 w-4 shrink-0 text-flex-black/25" />
+          </Link>
+
+          <Link
+            href="/biznes"
+            className="grain relative flex items-center gap-4 overflow-hidden rounded-3xl bg-flex-black px-5 py-5 text-white transition-transform active:scale-[0.99]"
+          >
+            <Store className="relative h-6 w-6 shrink-0 text-lime" strokeWidth={1.6} />
+            <div className="relative min-w-0 flex-1">
+              <p className="font-display text-lg font-semibold tracking-tight">
+                {s.wayBusiness}
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-white/55">
+                {s.wayBusinessDesc}
+              </p>
+            </div>
+            <ChevronRight className="relative h-4 w-4 shrink-0 text-lime" />
+          </Link>
+        </div>
+      </section>
+
       {/* Four destinations, thumb-sized. The sections these replace are hidden
           on a phone; each of these is where that content actually lives. */}
       <nav className="grid grid-cols-2 gap-3 px-6 pt-6">
@@ -170,24 +212,6 @@ export default function AppHome({
         </section>
       )}
 
-      {/* The business enquiry is the one marketing section a phone keeps, so it
-          gets a way in from here rather than only from a scroll. */}
-      <section className="px-6 pt-9">
-        <Link
-          href="/biznes"
-          className="grain relative block overflow-hidden rounded-3xl bg-flex-black px-5 py-5 text-white"
-        >
-          <div className="relative flex items-center gap-3">
-            <div className="min-w-0 flex-1">
-              <p className="font-display font-semibold">{s.notOneCard}</p>
-              <p className="mt-1 text-xs leading-relaxed text-white/50">
-                {s.businessDesc}
-              </p>
-            </div>
-            <ChevronRight className="h-4 w-4 shrink-0 text-lime" />
-          </div>
-        </Link>
-      </section>
     </div>
   );
 }
