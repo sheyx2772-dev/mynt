@@ -1,32 +1,8 @@
-import {
-  Link2,
-  Nfc,
-  Sparkles,
-  BarChart3,
-  Users,
-  Target,
-  RefreshCw,
-  TrendingUp,
-  Check,
-  Minus,
-  ChevronDown,
-  Car,
-} from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Mark from "@/components/Mark";
-import PricingCalculator from "@/components/PricingCalculator";
-import ProfilePreview from "@/components/ProfilePreview";
-import PhoneFrame from "@/components/PhoneFrame";
-import HandleChecker from "@/components/HandleChecker";
-import HeroStage from "@/components/HeroStage";
-import Image from "next/image";
-import { productShot } from "@/lib/product-shots";
-import DeviceTile from "@/components/DeviceTile";
-import { DEVICE_TYPES } from "@/lib/devices";
-import { formatNumber, formatUZS } from "@/lib/format";
-import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
-import { site, landing, catalogue, picker } from "@/lib/i18n";
+import { site, landing, picker } from "@/lib/i18n";
 import { listNewestResidents, getDirectoryCounts, listHandlesForUser } from "@/lib/handles";
 import { getUser } from "@/lib/auth";
 import { getHandleStats } from "@/lib/analytics";
@@ -40,16 +16,9 @@ import MobileMenu from "@/components/MobileMenu";
 import { getLang } from "@/lib/lang";
 import LangSwitch from "@/components/LangSwitch";
 import { COMPANY } from "@/lib/company";
-import PlanTable from "@/components/PlanTable";
-import TeamOrderForm from "@/components/TeamOrderForm";
-
-const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
 
 // Which icon goes with which entry, in the dictionary's order. Kept out of the
 // dictionary because an icon is not a translation.
-const CONSUMER_ICONS = [Link2, Nfc, Sparkles, BarChart3, Car];
-const BUSINESS_ICONS = [Users, Target, RefreshCw, TrendingUp];
-
 
 export async function generateMetadata({
   searchParams,
@@ -64,7 +33,6 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const lang = await getLang(til);
   const s = site(lang);
   const copy = landing(lang);
-  const c = catalogue(lang);
   const p = picker(lang);
 
   const [newest, counts, user] = await Promise.all([
@@ -92,12 +60,8 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         };
       })()
     : null;
-
-  const tapShot = productShot("tegizish");
-  const carShot = productShot("avtovizitka");
   const devices = deviceStrip(lang);
   const verticals = verticalStrip(lang);
-  const familyShot = productShot("oila");
 
   return (
     <div className="flex min-h-full flex-col overflow-x-clip">
