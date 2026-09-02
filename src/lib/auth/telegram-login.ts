@@ -5,7 +5,7 @@ import { randomBytes } from "node:crypto";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getClientIp } from "@/lib/rate-limit";
-import { telegramUpdates, isTelegramConfigured } from "@/lib/notify/telegram";
+import { telegramUpdates, sendTelegramText, isTelegramConfigured } from "@/lib/notify/telegram";
 
 // Signing in with Telegram.
 //
@@ -65,7 +65,9 @@ export async function startTelegramLogin(): Promise<StartResult> {
     .is("chat_id", null)
     .is("consumed_at", null)
     .gt("expires_at", now.toISOString())
-    .order("created_at", { ascending: false })
+    // Oldest first, so two tabs that raced into existence converge on one
+    // code instead of showing a different one each.
+    .order("created_at", { ascending: true })
     .limit(1)
     .maybeSingle();
 
@@ -119,7 +121,19 @@ export async function drainTelegramLogins(): Promise<number> {
 
   for (const update of updates) {
     const code = update.text.trim().replace(/^\/start\s*/i, "").toUpperCase();
-    if (!/^[A-Z2-9]{6}$/.test(code)) continue;
+
+    // A bare /start. This is the common case and it used to be swallowed in
+    // silence: somebody who already has the bot in their chat list opens it
+    // there rather than through our link, so Telegram attaches no payload, and
+    // the person is left looking at a bot that did not react.
+    if (!/^[A-Z2-9]{6}$/.test(code)) {
+      await sendTelegramText(
+        update.chatId,
+        "Kirish uchun saytdagi <b>Telegram orqali kirish</b> tugmasini bosing — " +
+          "yoki ekrandagi 6 xonali kodni shu yerga xabar qilib yuboring.",
+      );
+      continue;
+    }
 
     const { data } = await supabaseAdmin
       .from("telegram_logins")
@@ -131,7 +145,17 @@ export async function drainTelegramLogins(): Promise<number> {
       .select("code")
       .maybeSingle();
 
-    if (data) answered += 1;
+    if (data) {
+      answered += 1;
+      await sendTelegramText(update.chatId, "Tasdiqlandi. Saytga qayting — kirdingiz.");
+    } else {
+      // A code we have never issued, or one that has already been spent or has
+      // run out. Saying so is better than saying nothing.
+      await sendTelegramText(
+        update.chatId,
+        "Bu kod eskirgan yoki ishlatilgan. Saytda <b>Qaytadan urinish</b> tugmasini bosing.",
+      );
+    }
   }
 
   const highest = Math.max(...updates.map((u) => u.updateId));

@@ -51,6 +51,34 @@ export const telegramChannel: Channel = {
   },
 };
 
+/**
+ * A plain message from the bot, outside the notification pipeline.
+ *
+ * The sign-in flow needs to answer a person who is standing in the chat
+ * waiting: a bot that receives Start and says nothing reads as broken, and
+ * they press it again.
+ */
+export async function sendTelegramText(chatId: number, text: string): Promise<boolean> {
+  if (!TOKEN) return false;
+
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+      }),
+      signal: AbortSignal.timeout(5000),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
 /** Updates the bot has received, used by the linking flow. */
 export async function telegramUpdates(
   offset?: number,
