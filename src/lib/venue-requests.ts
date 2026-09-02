@@ -50,7 +50,7 @@ const PER_POINT_PER_HOUR = 12;
 
 export type SendResult =
   | { ok: true }
-  | { ok: false; error: "tooSoon" | "failed" };
+  | { ok: false; error: "tooSoon" | "expired" | "failed" };
 
 /**
  * The venue behind a handle, plus who to wake.
@@ -64,6 +64,7 @@ async function target(normalized: string): Promise<{
   venueId: string;
   venueName: string;
   ownerUserId: string | null;
+  planExpiresAt: string;
 } | null> {
   if (!supabaseAdmin) return null;
 
@@ -77,7 +78,7 @@ async function target(normalized: string): Promise<{
 
   const { data: venue } = await supabaseAdmin
     .from("venues")
-    .select("id, name")
+    .select("id, name, plan_expires_at")
     .eq("handle_id", handle.id as string)
     .maybeSingle();
 
@@ -87,6 +88,7 @@ async function target(normalized: string): Promise<{
     venueId: venue.id as string,
     venueName: venue.name as string,
     ownerUserId: (handle.user_id as string) ?? null,
+    planExpiresAt: venue.plan_expires_at as string,
   };
 }
 
@@ -101,6 +103,13 @@ export async function sendVenueRequest(opts: {
 
   const found = await target(opts.handle);
   if (!found) return { ok: false, error: "failed" };
+
+  // Checked here and not only by hiding the button: a page left open when the
+  // month ran out would otherwise keep writing rows nobody is allowed to read,
+  // and a form can be posted by anyone in any case.
+  if (new Date(found.planExpiresAt).getTime() <= Date.now()) {
+    return { ok: false, error: "expired" };
+  }
 
   const point = opts.point?.trim().slice(0, 12) || null;
   const ip = await getClientIp();

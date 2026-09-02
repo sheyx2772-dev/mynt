@@ -9,6 +9,7 @@ import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import { linkValue } from "@/lib/links";
 import { dict, menuBar, type Lang } from "@/lib/i18n";
 import { venueWords } from "@/lib/venue-words";
+import { planState } from "@/lib/venue-billing";
 import { getLang } from "@/lib/lang";
 import { PLAN_ACCENT, serviceLimit, FREE_LINK_LIMIT } from "@/lib/plans";
 import { cardDesign } from "@/lib/card-designs";
@@ -156,9 +157,17 @@ async function VanityHandlePage({
             <LangSwitch lang={lang} next={`/${normalized}`} />
           </div>
 
-          {/* Room for the bar, which is pinned over the page rather than in it. */}
-          <div className="h-24" aria-hidden />
-          <MenuRequests handle={normalized} point={point} s={menuBar(lang)} w={w} />
+          {/* The call button is what the venue pays for, so it is what stops
+              when the venue stops paying. The menu above it does not: a sticker
+              on a table cannot die because an invoice is late, and embarrassing
+              a cafe in front of its own guests over our billing is not a thing
+              we get to do to them. */}
+          {planState(venue.planExpiresAt).active && (
+            <>
+              <div className="h-24" aria-hidden />
+              <MenuRequests handle={normalized} point={point} s={menuBar(lang)} w={w} />
+            </>
+          )}
         </PageShell>
       );
     }

@@ -21,3 +21,18 @@ const CURRENCY: Record<string, string> = {
 export function formatUZS(n: number, lang = "uz"): string {
   return `${formatNumber(n)} ${CURRENCY[lang] ?? CURRENCY.uz}`;
 }
+
+/**
+ * A date somebody reads, not one somebody parses.
+ *
+ * "3-sentabr, 2026" rather than an ISO stamp: these appear next to invoices and
+ * expiry dates, where the question is always "which day" and never "which
+ * millisecond".
+ */
+export function formatDate(iso: string, lang = "uz"): string {
+  return new Date(iso).toLocaleDateString(lang === "uz" ? "uz-UZ" : lang, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}

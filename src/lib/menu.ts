@@ -44,6 +44,8 @@ export type Venue = {
   points: string[];
   /** The secret in the counter link, once the owner has made one. */
   staffToken: string | null;
+  /** When this venue stops being paid for. A new one gets thirty days. */
+  planExpiresAt: string;
 };
 
 /**
@@ -85,7 +87,7 @@ export async function getVenueByHandle(normalized: string): Promise<Venue | null
   const { data } = await supabaseAdmin
     .from("venues")
     .select(
-      "id, handle_id, name, kind, hours, address, wifi_name, wifi_password, points, staff_token",
+      "id, handle_id, name, kind, hours, address, wifi_name, wifi_password, points, staff_token, plan_expires_at",
     )
     .eq("handle_id", handle.id as string)
     .maybeSingle();
@@ -103,6 +105,7 @@ export async function getVenueByHandle(normalized: string): Promise<Venue | null
     wifiPassword: (data.wifi_password as string) ?? null,
     points: (data.points as string[]) ?? [],
     staffToken: (data.staff_token as string) ?? null,
+    planExpiresAt: data.plan_expires_at as string,
   };
 }
 
@@ -201,7 +204,7 @@ export async function getVenueByStaffToken(token: string): Promise<Venue | null>
   const { data } = await supabaseAdmin
     .from("venues")
     .select(
-      "id, handle_id, name, kind, hours, address, wifi_name, wifi_password, points, staff_token",
+      "id, handle_id, name, kind, hours, address, wifi_name, wifi_password, points, staff_token, plan_expires_at",
     )
     .eq("staff_token", token)
     .maybeSingle();
@@ -219,5 +222,6 @@ export async function getVenueByStaffToken(token: string): Promise<Venue | null>
     wifiPassword: (data.wifi_password as string) ?? null,
     points: (data.points as string[]) ?? [],
     staffToken: (data.staff_token as string) ?? null,
+    planExpiresAt: data.plan_expires_at as string,
   };
 }

@@ -100,6 +100,9 @@ export default function MenuRequests({
       });
 
       if (!result.ok) {
+        // "expired" reaches a guest only if the page was open when the month
+        // ran out, and telling them about somebody else's invoice would be
+        // rude — so it reads as the failure it is from where they stand.
         setError(result.error === "tooSoon" ? s.menuRequestTooSoon : s.menuRequestFailed);
         return;
       }

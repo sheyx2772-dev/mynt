@@ -7,6 +7,7 @@ import {
   cancelHandleTransfer,
   type TransferActionResult,
 } from "@/app/kabinet/[handle]/actions";
+import { formatDate } from "@/lib/format";
 import type { Transfer } from "@/lib/transfers";
 
 const STATUS_LABEL: Record<Transfer["status"], string> = {
@@ -15,14 +16,6 @@ const STATUS_LABEL: Record<Transfer["status"], string> = {
   cancelled: "Bekor qilindi",
   expired: "Muddati o'tdi",
 };
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("uz-UZ", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 export default function TransferPanel({
   handle,

@@ -10,6 +10,7 @@ import { getOwnedVenue } from "@/lib/menu";
 import { listRequestsSince } from "@/lib/venue-requests";
 import { summariseRequests, formatWait } from "@/lib/venue-report";
 import { venueWords } from "@/lib/venue-words";
+import { planState } from "@/lib/venue-billing";
 import { formatNumber } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Hisobot — flex.com.uz", robots: { index: false } };
@@ -30,6 +31,33 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
   if (!venue) notFound();
 
   const w = venueWords(venue.kind, "uz");
+  const plan = planState(venue.planExpiresAt);
+
+  // Locked rather than emptied. Showing a report of zeroes to somebody whose
+  // month ran out reads as "your tables stopped calling", which is a different
+  // and much worse message than "this is behind the subscription".
+  if (!plan.active) {
+    return (
+      <PageShell>
+        <SubScreen handle={normalized} title="Hisobot" hint={venue.name}>
+          <div className="rounded-2xl border-l-[3px] border-red-500 bg-red-50 px-6 py-6">
+            <p className="font-display font-semibold">Obuna muddati tugagan</p>
+            <p className="mt-1.5 text-sm leading-relaxed text-flex-black/65">
+              Hisobot to&apos;lovdan keyin ochiladi. {w.listTitle} mehmonlarga
+              ko&apos;rinib turibdi va so&apos;rovlar tarixi saqlanib qoladi.
+            </p>
+            <Link
+              href={`/kabinet/${normalized}/obuna`}
+              className="mt-5 inline-block rounded-full bg-flex-black px-5 py-2.5 text-sm font-medium text-white"
+            >
+              Obuna
+            </Link>
+          </div>
+        </SubScreen>
+      </PageShell>
+    );
+  }
+
   const { rows, capped } = await listRequestsSince(venue.id, DAYS);
   const report = summariseRequests(rows);
 

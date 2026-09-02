@@ -1414,3 +1414,69 @@ begin
   delete from auth.users where id = owner_id;
   delete from handles where id in (hid, other_h);
 end $$;
+
+-- 0041 — the venue product starts costing money
+do $$
+declare
+  owner_id uuid;
+  hid uuid;
+  vid uuid;
+  inv uuid;
+  expiry timestamptz;
+  before_expiry timestamptz;
+  settled boolean;
+  team_no bigint;
+  venue_no bigint;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into owner_id;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('BIL', '001', 'claimed', owner_id, now()) returning id into hid;
+  insert into venues (handle_id, name) values (hid, 'Sinov kafe') returning id into vid;
+
+  -- A venue nobody has paid for yet still has to be usable, or nobody can try
+  -- the product at all.
+  select plan_expires_at into expiry from venues where id = vid;
+  if expiry <= now() then raise exception 'yangi obyekt darhol tugagan'; end if;
+  if expiry > now() + interval '31 days' then raise exception 'sinov muddati juda uzun'; end if;
+  raise notice '   ok   a new venue is paid for while it is being tried';
+
+  insert into venue_invoices (venue_id, points, months, monthly, total)
+    values (vid, 12, 3, 149000, 447000) returning id into inv;
+  raise notice '   ok   an invoice can be issued for a venue';
+
+  begin
+    insert into venue_invoices (venue_id, points, months, monthly, total)
+      values (vid, 12, 5, 149000, 745000);
+    raise exception 'besh oylik hisob-faktura oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a term nobody sells';
+  end;
+
+  -- Two documents both called number one is a conversation with an accountant
+  -- that nobody wants to have.
+  insert into teams (name, owner_user_id) values ('Sinov firma', owner_id);
+  insert into team_invoices (team_id, seats, months, seat_monthly, total)
+    select id, 5, 1, 29000, 145000 from teams where owner_user_id = owner_id
+    returning number into team_no;
+  select number into venue_no from venue_invoices where id = inv;
+  if team_no = venue_no then raise exception 'hisob-faktura raqamlari takrorlandi'; end if;
+  raise notice '   ok   invoices share one series across both products';
+
+  select plan_expires_at into before_expiry from venues where id = vid;
+  select settle_venue_invoice(inv) into settled;
+  if not settled then raise exception 'hisob-faktura yopilmadi'; end if;
+
+  select plan_expires_at into expiry from venues where id = vid;
+  if expiry < before_expiry + interval '89 days' then
+    raise exception 'muddat uch oyga uzaymadi';
+  end if;
+  raise notice '   ok   paying extends the venue by what was bought';
+
+  -- Paying twice must extend once.
+  select settle_venue_invoice(inv) into settled;
+  if settled then raise exception 'bir hisob-faktura ikki marta yopildi'; end if;
+  raise notice '   ok   settling twice extends once';
+
+  delete from auth.users where id = owner_id;
+  delete from handles where id = hid;
+end $$;

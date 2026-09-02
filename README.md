@@ -367,6 +367,31 @@ cancel-after-perform (-2).
 `RUN_DB_TESTS=1 npm test` additionally runs the store against the live
 project, creating and then removing its own rows.
 
+## Taking money for a venue
+
+Nothing in the app charges anybody. A cafe presses "Hisob-faktura olish" in
+`/kabinet/{handle}/obuna`, gets a document, and its accountant transfers against
+it — which is how suppliers are paid here, and the reason an uncertified card
+gateway does not stop the venue product being sold.
+
+When the transfer lands, mark the invoice paid. Extending the venue and settling
+the document are one statement on purpose: an invoice marked paid against a
+venue that was never extended is the worst of the three possible states.
+
+```sql
+select settle_venue_invoice('<invoice-id>');
+```
+
+It returns `true` once and `false` for every repeat, so paying twice extends
+once. `settle_team_invoice('<invoice-id>')` is the same thing for company
+accounts. Both run through `npm run db:status`-style access, i.e. the
+management API or the SQL editor; neither is exposed to the app.
+
+A venue is given thirty days when it is created, so a new customer can be shown
+the whole product before any money moves. When the date passes, the guest's menu
+keeps working — a sticker on a table cannot die because an invoice is late — and
+the call button and the report are what stop.
+
 ## Commands
 
 | Command | Purpose |

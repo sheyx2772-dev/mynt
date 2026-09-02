@@ -3,6 +3,7 @@ import {
   QrCode,
   Pencil,
   BarChart3,
+  CalendarClock,
   MessageSquare,
   Palette,
   ArrowLeftRight,
@@ -17,6 +18,7 @@ import { formatNumber } from "@/lib/format";
 import type { OwnedHandle } from "@/lib/handles";
 import type { Venue } from "@/lib/menu";
 import { venueWords } from "@/lib/venue-words";
+import { planState } from "@/lib/venue-billing";
 
 // One number's home screen.
 //
@@ -49,6 +51,7 @@ export default function HandleHub({
 
   // A hotel's tile says Xizmatlar, not Menyu.
   const w = venue ? venueWords(venue.kind, "uz") : null;
+  const plan = venue ? planState(venue.planExpiresAt) : null;
 
   return (
     <div>
@@ -134,14 +137,53 @@ export default function HandleHub({
             </Link>
           </div>
 
-          {/* Not a tile: this is the weekly question, not a daily one. */}
-          <Link
-            href={at("hisobot")}
-            className="flex items-center gap-2 rounded-2xl border border-black/10 bg-white px-5 py-4 font-medium transition-transform active:scale-[0.99]"
-          >
-            <BarChart3 className="h-4 w-4 text-flex-black/60" />
-            Hisobot
-          </Link>
+          <div className="grid gap-2.5 sm:grid-cols-2">
+            {/* Not a tile: this is the weekly question, not a daily one. */}
+            <Link
+              href={at("hisobot")}
+              className="flex items-center gap-2 rounded-2xl border border-black/10 bg-white px-5 py-4 font-medium transition-transform active:scale-[0.99]"
+            >
+              <BarChart3 className="h-4 w-4 text-flex-black/60" />
+              Hisobot
+            </Link>
+
+            <Link
+              href={at("obuna")}
+              className="flex items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white px-5 py-4 font-medium transition-transform active:scale-[0.99]"
+            >
+              <span className="flex items-center gap-2">
+                <CalendarClock className="h-4 w-4 text-flex-black/60" />
+                Obuna
+              </span>
+              <span className="font-tabular text-xs text-flex-black/40">
+                {plan?.active ? `${plan.daysLeft} kun` : "tugagan"}
+              </span>
+            </Link>
+          </div>
+
+          {/* Said where the owner is already looking, and only when it matters:
+              a month that has run out has taken the call button off their
+              tables, which they would otherwise discover from a guest. */}
+          {plan && !plan.active && (
+            <Link
+              href={at("obuna")}
+              className="flex items-center gap-3 rounded-2xl border-l-[3px] border-red-500 bg-red-50 px-5 py-4 text-sm"
+            >
+              <span className="flex-1">
+                <strong className="font-medium">Obuna muddati tugagan.</strong>{" "}
+                {w?.listTitle} ochiq, lekin chaqiruv tugmasi stollarda ko&apos;rinmaydi.
+              </span>
+            </Link>
+          )}
+
+          {plan?.endingSoon && (
+            <Link
+              href={at("obuna")}
+              className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white px-5 py-3.5 text-sm text-flex-black/65"
+            >
+              Obunaga {plan.daysLeft} kun qoldi.
+            </Link>
+          )}
         </div>
       )}
 
