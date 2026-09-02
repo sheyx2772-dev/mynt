@@ -10,9 +10,9 @@
 // at 29,000 would be 580,000 a month, against an international market where a
 // whole venue pays roughly $8–20. So a venue is priced as a venue, in bands.
 
-export type VerticalId = "cafe" | "hotel" | "other";
+export type VerticalId = "cafe" | "hotel" | "auto" | "other";
 
-export const VERTICALS: readonly VerticalId[] = ["cafe", "hotel", "other"] as const;
+export const VERTICALS: readonly VerticalId[] = ["cafe", "hotel", "auto", "other"] as const;
 
 export function isVertical(value: unknown): value is VerticalId {
   return typeof value === "string" && (VERTICALS as readonly string[]).includes(value);
@@ -66,5 +66,8 @@ export function perPointMonthly(points: number): number | null {
 export const TYPICAL_POINTS: Record<VerticalId, number> = {
   cafe: 12,
   hotel: 30,
+  // A taxi park or a delivery fleet, which is the size at which a plate per car
+  // is worth managing centrally rather than one driver at a time.
+  auto: 25,
   other: 8,
 };

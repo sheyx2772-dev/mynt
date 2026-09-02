@@ -980,6 +980,33 @@ const B2B = {
           "Qurilma faqat mehmon uchun emas: ichki jarayon uchun ham ishlaydi, ya'ni bitta xarid ikki ish qiladi.",
         ],
       },
+      auto: {
+        name: "Avtopark va avtosalon",
+        pointWord: "avtomobil",
+        pointsWord: "avtomobil",
+        tagline: "Old oynadagi avtovizitka — NFC va QR bilan",
+        guest: [
+          "Haydovchiga qo'ng'iroq — ikkala raqam ham yopiq qoladi",
+          "«Mashinangizni suring» xabari",
+          "«Faralaringiz yoqiq qolgan»",
+          "Avtomobil va park nomi ko'rinadi",
+          "Taksi yoki yetkazib berish bo'lsa — baho qoldirish",
+        ],
+        owner: [
+          "Har bir avtomobil — alohida nuqta",
+          "Kelgan xabarlar bitta panelda",
+          "Haydovchi almashsa nuqta firmada qoladi, ma'lumot yangilanadi",
+          "Avtomobil bo'yicha statistika",
+        ],
+        staff: [
+          "Xabar haydovchining Telegram'iga darhol tushadi",
+          "Shaxsiy raqami hech kimga ko'rinmaydi — qo'ng'iroq platforma orqali ulanadi",
+        ],
+        why: [
+          "Old oynaga qo'yilgan qog'ozdagi raqam hammaga ochiq: spam ham, tanish bo'lmagan qo'ng'iroq ham o'shandan keladi. Bu yerda raqam yopiq, aloqa esa ishlaydi.",
+          "Haydovchi ishdan ketsa raqam va plastina firmada qoladi — jamoa tarifidagi o'rin bilan bir xil mantiq.",
+        ],
+      },
       other: {
         name: "Boshqa obyektlar",
         pointWord: "nuqta",
@@ -1014,7 +1041,6 @@ const B2B = {
       ["Klinika, stomatologiya", "Shifokor eshigi", "Shifokor profili, narx, navbat, tayyorgarlik"],
       ["Muzey, turistik joy", "Eksponat lavhasi", "Uch tilda matn va audio yo'riqnoma"],
       ["Ko'chmas mulk agentligi", "Obyektdagi lavha", "E'lon, rasmlar, agent kontakti"],
-      ["Avtoservis, avtosalon", "Avtomobilning o'zi", "Xizmat tarixi, kafolat, keyingi TX"],
       ["Fitnes klub", "Trenajyor, murabbiy", "Mashq videosi, murabbiyga yozilish"],
       ["Biznes markaz", "Yig'ilish xonasi eshigi", "Xona bandmi, hozir band qilish"],
     ],
@@ -1167,6 +1193,33 @@ const B2B = {
           "Устройство работает не только для гостя, но и для внутреннего процесса: одна покупка делает две работы.",
         ],
       },
+      auto: {
+        name: "Автопарк и автосалон",
+        pointWord: "автомобиль",
+        pointsWord: "автомобилей",
+        tagline: "Автовизитка на лобовом стекле — NFC и QR",
+        guest: [
+          "Звонок водителю — оба номера остаются скрытыми",
+          "Сообщение «Отгоните машину»",
+          "«У вас горят фары»",
+          "Видно автомобиль и название парка",
+          "Для такси и доставки — оценка поездки",
+        ],
+        owner: [
+          "Каждый автомобиль — отдельная точка",
+          "Все сообщения в одной панели",
+          "Водитель сменился — точка остаётся у компании, данные обновляются",
+          "Статистика по каждому автомобилю",
+        ],
+        staff: [
+          "Сообщение сразу приходит водителю в Telegram",
+          "Личный номер никому не виден — звонок соединяется через платформу",
+        ],
+        why: [
+          "Номер на бумажке под стеклом открыт всем: оттуда и спам, и незнакомые звонки. Здесь номер закрыт, а связь работает.",
+          "Водитель ушёл — номер и пластина остаются у компании, та же логика, что и с местом в тарифе для команды.",
+        ],
+      },
       other: {
         name: "Другие объекты",
         pointWord: "точка",
@@ -1201,7 +1254,6 @@ const B2B = {
       ["Клиника, стоматология", "Дверь врача", "Профиль врача, цены, запись, подготовка"],
       ["Музей, туристический объект", "Табличка у экспоната", "Текст и аудиогид на трёх языках"],
       ["Агентство недвижимости", "Табличка на объекте", "Объявление, фото, контакт агента"],
-      ["Автосервис, автосалон", "Сам автомобиль", "История обслуживания, гарантия, следующее ТО"],
       ["Фитнес-клуб", "Тренажёр, тренер", "Видео упражнения, запись к тренеру"],
       ["Бизнес-центр", "Дверь переговорной", "Занята ли комната, забронировать сейчас"],
     ],
@@ -1354,6 +1406,33 @@ const B2B = {
           "The hardware is not only for the guest: it serves an internal process too, so one purchase does two jobs.",
         ],
       },
+      auto: {
+        name: "Fleets and dealerships",
+        pointWord: "car",
+        pointsWord: "cars",
+        tagline: "A card on the windscreen — NFC and QR",
+        guest: [
+          "Call the driver — neither number is revealed",
+          "A “please move your car” message",
+          "“Your lights are on”",
+          "The car and the fleet are shown",
+          "For taxi and delivery — rate the trip",
+        ],
+        owner: [
+          "Every car is its own point",
+          "Every message in one panel",
+          "A driver leaves and the point stays with the company; the details change",
+          "Statistics per car",
+        ],
+        staff: [
+          "The message reaches the driver's Telegram immediately",
+          "Their own number is never shown — the call is connected through the platform",
+        ],
+        why: [
+          "A phone number on a slip of paper under the windscreen is open to everyone, which is where the spam and the strange calls come from. Here the number is closed and the contact still works.",
+          "A driver leaves and the number and the plate stay with the company — the same logic as a seat on the team plan.",
+        ],
+      },
       other: {
         name: "Other venues",
         pointWord: "point",
@@ -1388,7 +1467,6 @@ const B2B = {
       ["Clinic, dental practice", "The doctor's door", "Doctor profile, prices, booking, preparation"],
       ["Museum, heritage site", "The label by the exhibit", "Text and audio guide in three languages"],
       ["Estate agency", "The plaque on the property", "The listing, photos, the agent's contact"],
-      ["Garage, car dealer", "The car itself", "Service history, warranty, next service due"],
       ["Gym", "A machine, a trainer", "How to use it on video, booking a trainer"],
       ["Business centre", "The meeting room door", "Whether it is booked, book it now"],
     ],
@@ -1470,7 +1548,7 @@ type Screen = {
   secondary: string;
 };
 
-const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "other", Screen>> = {
+const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "auto" | "other", Screen>> = {
   uz: {
     cafe: {
       venue: "Choyxona Navro'z",
@@ -1497,6 +1575,19 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "other", Screen>> = {
       actions: ["Xonani tozalash", "Kir yuvish", "Taksi", "Uyg'otish"],
       primary: "So'rov yuborish",
       secondary: "Shahar bo'yicha yo'riqnoma",
+    },
+    auto: {
+      venue: "Toshkent Taxi",
+      point: "01 A 777 AA",
+      chips: ["Chevrolet Cobalt · oq"],
+      rows: [
+        ["Haydovchiga qo'ng'iroq", "Raqamlar ikkala tomonga ham ko'rinmaydi", ""],
+        ["Mashinani suring", "Xabar darhol yetadi", ""],
+        ["Faralaringiz yoqiq qolgan", "", ""],
+      ],
+      actions: ["Signalizatsiya ishlayapti", "Boshqa sabab"],
+      primary: "Qo'ng'iroq qilish",
+      secondary: "Xabar yuborish",
     },
     other: {
       venue: "Salon Nilufar",
@@ -1540,6 +1631,19 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "other", Screen>> = {
       primary: "Отправить запрос",
       secondary: "Путеводитель по городу",
     },
+    auto: {
+      venue: "Toshkent Taxi",
+      point: "01 A 777 AA",
+      chips: ["Chevrolet Cobalt · белый"],
+      rows: [
+        ["Позвонить водителю", "Номера скрыты с обеих сторон", ""],
+        ["Отгоните машину", "Сообщение дойдёт сразу", ""],
+        ["У вас горят фары", "", ""],
+      ],
+      actions: ["Сработала сигнализация", "Другая причина"],
+      primary: "Позвонить",
+      secondary: "Отправить сообщение",
+    },
     other: {
       venue: "Салон Нилуфар",
       point: "Мастер 3",
@@ -1582,6 +1686,19 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "other", Screen>> = {
       primary: "Send the request",
       secondary: "City guide",
     },
+    auto: {
+      venue: "Toshkent Taxi",
+      point: "01 A 777 AA",
+      chips: ["Chevrolet Cobalt · white"],
+      rows: [
+        ["Call the driver", "Neither number is shown", ""],
+        ["Please move the car", "The message arrives at once", ""],
+        ["Your lights are on", "", ""],
+      ],
+      actions: ["The alarm is going off", "Something else"],
+      primary: "Call",
+      secondary: "Send a message",
+    },
     other: {
       venue: "Nilufar Salon",
       point: "Chair 3",
@@ -1600,6 +1717,6 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "other", Screen>> = {
 
 export type VenueScreenDict = Screen;
 
-export function venueScreen(lang: Lang, vertical: "cafe" | "hotel" | "other"): Screen {
+export function venueScreen(lang: Lang, vertical: "cafe" | "hotel" | "auto" | "other"): Screen {
   return SCREENS[lang][vertical];
 }

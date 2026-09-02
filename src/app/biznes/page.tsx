@@ -173,6 +173,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                 shots={{
                   cafe: productShot("kafe"),
                   hotel: productShot("mehmonxona"),
+                  auto: productShot("avto"),
                   other: productShot("salon"),
                 }}
               />

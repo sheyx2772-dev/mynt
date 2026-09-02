@@ -44,9 +44,10 @@ describe("perPointMonthly", () => {
 });
 
 describe("isVertical", () => {
-  it("accepts the three we sell and nothing else", () => {
+  it("accepts the four we sell and nothing else", () => {
     expect(isVertical("cafe")).toBe(true);
     expect(isVertical("hotel")).toBe(true);
+    expect(isVertical("auto")).toBe(true);
     expect(isVertical("other")).toBe(true);
     expect(isVertical("casino")).toBe(false);
     expect(isVertical(null)).toBe(false);

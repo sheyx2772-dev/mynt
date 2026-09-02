@@ -23,6 +23,7 @@ export type ShotName =
   | "kafe"
   | "mehmonxona"
   | "salon"
+  | "avto"
   | "biznes";
 
 export function productShot(name: ShotName): string | null {

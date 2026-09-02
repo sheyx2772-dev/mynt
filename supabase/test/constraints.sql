@@ -1087,3 +1087,21 @@ begin
 
   delete from team_requests where company in ('Test MCHJ', 'Test Kafe');
 end $$;
+
+-- 0033 — cars join the verticals
+do $$
+begin
+  insert into team_requests (company, contact_name, phone, points, vertical)
+    values ('Test Taxi', 'Bekzod', '+998901234567', 25, 'auto');
+  raise notice '   ok   a fleet request counts cars';
+
+  begin
+    insert into team_requests (company, contact_name, phone, points, vertical)
+      values ('Test', 'Kimdir', '+998901234567', 5, 'avtobus');
+    raise exception 'notanish yoʻnalish oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: still only the verticals we sell';
+  end;
+
+  delete from team_requests where company = 'Test Taxi';
+end $$;
