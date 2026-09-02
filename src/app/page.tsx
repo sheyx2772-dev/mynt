@@ -29,6 +29,7 @@ import { site, landing, catalogue } from "@/lib/i18n";
 import { listNewestResidents, getDirectoryCounts } from "@/lib/handles";
 import LiveResidents from "@/components/LiveResidents";
 import AppHome from "@/components/AppHome";
+import MobileMenu from "@/components/MobileMenu";
 import { getLang } from "@/lib/lang";
 import LangSwitch from "@/components/LangSwitch";
 import { COMPANY } from "@/lib/company";
@@ -80,6 +81,25 @@ export default async function Home({ searchParams }: PageProps<"/">) {
       <header className="sticky top-0 z-30 border-b border-white/10 bg-flex-black/85 text-white backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2 font-display text-xl font-semibold tracking-tight">
+            {/* Telefonda sarlavha qatoridagi yagona yo'l — desktopdagi
+                bo'limlar ro'yxati shu yerga yig'ilgan. */}
+            <MobileMenu
+              openLabel={s.menuOpen}
+              closeLabel={s.menuClose}
+              cta={{ href: "#narx", label: s.getHandle }}
+              items={[
+                { href: "#narx", label: s.navPricing },
+                { href: "#individual", label: s.navPersonal },
+                { href: "#biznes", label: s.navBusiness },
+                { href: "#savollar", label: s.navFaq },
+                { href: "/qurilmalar", label: s.navDevices },
+                { href: "/tarif", label: s.navPlans },
+                { href: "/rezidentlar", label: s.navResidents },
+                { href: "/kabinet", label: s.navCabinet },
+              ]}
+            >
+              <LangSwitch lang={lang} next="/" tone="dark" />
+            </MobileMenu>
             <Mark className="h-7 w-7" tone="dark" />
             flex
           </div>
@@ -121,7 +141,9 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             </Link>
           </nav>
           <div className="flex items-center gap-3">
-            <LangSwitch lang={lang} next="/" tone="dark" />
+            <div className="hidden lg:block">
+              <LangSwitch lang={lang} next="/" tone="dark" />
+            </div>
             <a
               href="#narx"
               className="rounded-full bg-lime px-4 py-2 text-sm font-medium text-flex-black transition-colors hover:bg-lime/85"
@@ -333,7 +355,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </section>
 
         {/* Pricing calculator */}
-        <section id="narx" className="mx-auto max-w-6xl px-6 py-14 sm:py-24">
+        <section id="narx" className="scroll-mt-20 mx-auto max-w-6xl px-6 py-14 sm:py-24">
           <div className="mb-12 max-w-lg">
             <p className="mb-3 text-xs font-semibold tracking-widest text-lime/80 uppercase [-webkit-text-stroke:0.3px_rgba(14,10,27,0.4)]">
               Narxlash
@@ -380,7 +402,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         {/* What a profile actually looks like */}
         <section
           id="individual"
-          className="hidden border-t border-black/5 bg-black/[0.02] py-14 sm:py-24 lg:block"
+          className="scroll-mt-20 border-t border-black/5 bg-black/[0.02] py-14 sm:py-24"
         >
           <div className="mx-auto grid max-w-6xl gap-14 px-6 lg:grid-cols-[1fr_320px] lg:gap-20">
             <div>
@@ -415,7 +437,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </dl>
             </div>
 
-            <div className="lg:pt-4">
+            <div className="hidden lg:block lg:pt-4">
               <PhoneFrame>
                 <ProfilePreview />
               </PhoneFrame>
@@ -464,7 +486,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         {/* Business */}
         <section
           id="biznes"
-          className="grain relative overflow-hidden bg-flex-black py-14 sm:py-24"
+          className="grain relative scroll-mt-20 overflow-hidden bg-flex-black py-14 sm:py-24"
         >
           <div className="bg-dot-grid-light absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
           <div className="relative mx-auto max-w-6xl px-6">
@@ -614,7 +636,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </section>
 
         {/* FAQ */}
-        <section id="savollar" className="mx-auto max-w-3xl px-6 py-14 sm:py-24">
+        <section id="savollar" className="scroll-mt-20 mx-auto max-w-3xl px-6 py-14 sm:py-24">
           <p className="mb-3 text-center text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
             Savollar
           </p>

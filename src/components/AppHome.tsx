@@ -59,16 +59,32 @@ export default function AppHome({
         <div className="absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-lime/[0.15] blur-[110px]" />
 
         <div className="relative">
-          <h1 className="font-display text-[1.75rem] leading-tight font-semibold tracking-tight text-balance">
-            {s.pickHandle}
+          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-[10px] font-medium tracking-wide text-white/70 uppercase">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
+            {s.heroBadge}
+          </p>
+
+          {/* The brand line, not the task. An app that opens straight onto a
+              form has told the person nothing about what they opened; the
+              desktop hero says this and the phone was left without it. */}
+          <h1 className="font-display text-[1.75rem] leading-[1.12] font-semibold tracking-tight text-balance">
+            {s.heroTitleA && <>{s.heroTitleA} </>}
+            <span className="rounded-md bg-lime px-1.5 text-flex-black">
+              {s.heroTitleMark}
+            </span>{" "}
+            {s.heroTitleB}
           </h1>
-          <p className="mt-2 text-sm leading-relaxed text-white/55">
+
+          <p className="mt-5 text-xs font-semibold tracking-widest text-white/40 uppercase">
+            {s.pickHandle}
+          </p>
+          <p className="mt-1.5 text-sm leading-relaxed text-white/55">
             {s.stepHandleDesc}
           </p>
 
           {/* The checker carries its own top margin for the hero; here it sits
               directly under two lines, so the wrapper pulls it back. */}
-          <div className="-mt-4">
+          <div className="-mt-5">
             <HandleChecker
               tone="dark"
               labels={{

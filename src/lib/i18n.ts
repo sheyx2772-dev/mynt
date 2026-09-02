@@ -285,6 +285,8 @@ const SITE = {
     navFeed: "Lenta",
     moreLabel: "Batafsil",
     appNewResidents: "Yangi rezidentlar",
+    menuOpen: "Menyu",
+    menuClose: "Yopish",
     langName: "O'zbekcha",
   },
   ru: {
@@ -389,6 +391,8 @@ const SITE = {
     navFeed: "Лента",
     moreLabel: "Подробнее",
     appNewResidents: "Новые резиденты",
+    menuOpen: "Меню",
+    menuClose: "Закрыть",
     langName: "Русский",
   },
   en: {
@@ -493,6 +497,8 @@ const SITE = {
     navFeed: "Feed",
     moreLabel: "More",
     appNewResidents: "New residents",
+    menuOpen: "Menu",
+    menuClose: "Close",
     langName: "English",
   },
 } as const;
