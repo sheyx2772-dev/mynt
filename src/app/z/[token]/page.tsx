@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import AutoRefresh from "@/components/AutoRefresh";
 import RequestList from "@/components/RequestList";
+import CounterAlert from "@/components/CounterAlert";
 import { getVenueByStaffToken } from "@/lib/menu";
 import { listVenueRequests } from "@/lib/venue-requests";
 import { markDoneFromCounter } from "./actions";
@@ -28,7 +29,7 @@ export default async function CounterPage({ params }: PageProps<"/z/[token]">) {
   if (!venue) notFound();
 
   const requests = await listVenueRequests(venue.id);
-  const waiting = requests.filter((r) => r.status === "new").length;
+  const waiting = requests.filter((r) => r.status === "new");
 
   return (
     <div className="mx-auto min-h-full max-w-md px-5 py-6">
@@ -40,9 +41,13 @@ export default async function CounterPage({ params }: PageProps<"/z/[token]">) {
       <header className="mb-6 flex items-baseline justify-between gap-3">
         <h1 className="font-display text-xl font-semibold tracking-tight">{venue.name}</h1>
         <span className="font-tabular text-sm text-flex-black/45">
-          {waiting > 0 ? `${waiting} ta kutmoqda` : "bo'sh"}
+          {waiting.length > 0 ? `${waiting.length} ta kutmoqda` : "bo'sh"}
         </span>
       </header>
+
+      {/* The ids rather than the count: two closed and two arrived is not a
+          quiet minute, and a count would call it one. */}
+      <CounterAlert waiting={waiting.map((r) => r.id)} />
 
       <RequestList
         requests={requests}
