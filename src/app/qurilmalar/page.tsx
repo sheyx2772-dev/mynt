@@ -1,109 +1,112 @@
-import Mark from "@/components/Mark";
-import { catalogue } from "@/lib/i18n";
-import { getLang } from "@/lib/lang";
 import Link from "next/link";
 import type { Metadata } from "next";
-import DeviceFace from "@/components/DeviceFace";
-import DeviceTile from "@/components/DeviceTile";
-import CardFan from "@/components/CardFan";
-import { DEVICE_TYPES } from "@/lib/devices";
-import { CARD_DESIGNS } from "@/lib/card-designs";
+
+import Mark from "@/components/Mark";
+import LangSwitch from "@/components/LangSwitch";
+import LoadoutTile from "@/components/LoadoutTile";
+import { catalogue, picker, b2b } from "@/lib/i18n";
+import { getLang } from "@/lib/lang";
 import { formatUZS } from "@/lib/format";
+import {
+  LOADOUT_DEVICES,
+  VERTICALS,
+  deviceShot,
+  verticalShot,
+  devicePriceOrNull,
+  UNPRICED_DEVICE,
+} from "@/lib/loadout";
 
-export const metadata: Metadata = {
-  title: "Qurilmalar — flex.com.uz",
-  description:
-    "Flex raqamingizni karta, uzuk yoki braslet ko'rinishida olib yuring. Shaklni o'zingiz tanlaysiz.",
-};
+// The shelf.
+//
+// This page used to be three products described in prose, one under the other.
+// It is now everything Flex sells, laid out as pictures you choose between —
+// the shape a game uses for a loadout, and the right one here for the same
+// reason: picking a ring over a card is a taste decision, and taste decisions
+// are made by looking, not by reading.
+//
+// Tapping a tile opens the thing itself, where the detail belongs.
 
-const SAMPLE = "MYN042";
+export async function generateMetadata({
+  searchParams,
+}: PageProps<"/qurilmalar">): Promise<Metadata> {
+  const { til } = await searchParams;
+  const p = picker(await getLang(til));
+  return { title: p.metaTitle, description: p.metaDescription };
+}
 
 export default async function DevicesPage({ searchParams }: PageProps<"/qurilmalar">) {
   const { til } = await searchParams;
   const lang = await getLang(til);
+  const p = picker(lang);
   const c = catalogue(lang);
+  const t = b2b(lang);
 
   return (
-    <div className="relative min-h-full overflow-hidden">
-      <div className="bg-dot-grid absolute inset-0 [mask-image:radial-gradient(ellipse_60%_40%_at_50%_0%,black,transparent)]" />
-      <div className="absolute -top-24 right-[-6rem] h-80 w-80 rounded-full bg-lime/20 blur-[100px]" />
+    <div className="relative min-h-full overflow-hidden bg-[#0a0715] text-white">
+      <div className="bg-dot-grid-light absolute inset-0 opacity-20 [mask-image:radial-gradient(ellipse_60%_40%_at_50%_0%,black,transparent)]" />
+      <div className="absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-lime/[0.12] blur-[130px]" />
 
-      <div className="relative mx-auto max-w-5xl px-6 py-16">
-        <Link href="/" className="mb-10 flex items-center gap-2 font-display text-lg font-semibold">
-          <Mark />
-          flex
-        </Link>
-
-        <h1 className="max-w-2xl font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-          Raqamingizni qanday olib yurasiz &mdash; o&apos;zingiz tanlaysiz
-        </h1>
-        <p className="mt-4 max-w-xl text-flex-black/60">
-          Siz noyob raqamni sotib olasiz. U sizniki bo&apos;lib qoladi, qaysi buyumda olib
-          yurishingizdan qat&apos;i nazar &mdash; hammasi bir xil profilni ochadi.
-        </p>
-
-        {/* The three form factors */}
-        <div className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-3">
-          {DEVICE_TYPES.map((device) => (
-            <div key={device.id}>
-              <DeviceTile type={device.id} alt={`Flex ${c.devices[device.id].name}`} />
-              <div className="mt-5 flex items-baseline justify-between gap-3">
-                <h2 className="font-display text-lg font-semibold">{c.devices[device.id].name}</h2>
-                <span className="font-tabular text-sm text-flex-black/60">
-                  {formatUZS(device.price, lang)}
-                </span>
-              </div>
-              <p className="mt-0.5 text-xs tracking-wide text-flex-black/40 uppercase">
-                {c.devices[device.id].tagline}
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-flex-black/60">
-                {c.devices[device.id].description}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* The design set, shared across every form */}
-        <div className="mt-24 border-t border-black/8 pt-14">
-          <h2 className="max-w-lg font-display text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
-            {CARD_DESIGNS.length} ta dizayn &mdash; uchala shaklda ham
-          </h2>
-          <p className="mt-3 max-w-xl text-flex-black/60">
-            Dizaynni bir marta tanlaysiz va u tanlagan buyumingizga tushadi. Kabinetdan
-            istalgan vaqtda almashtirasiz.
-          </p>
-
-          <CardFan handle={SAMPLE} />
-
-          <div className="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {CARD_DESIGNS.map((design) => (
-              <div key={design.id}>
-                <div className="rounded-2xl border border-black/8 bg-white p-4">
-                  <DeviceFace type="card" design={design.id} handle={SAMPLE} />
-                </div>
-                <h3 className="mt-4 font-display font-semibold">{design.name}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-flex-black/55">
-                  {design.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-20 rounded-[1.5rem] border border-black/10 bg-white p-7">
-          <h2 className="font-display text-lg font-semibold">Nega birov brendini bosmaymiz</h2>
-          <p className="mt-2 text-sm text-flex-black/60">
-            Bozorda mashhur logotiplar bosilgan buyumlar uchraydi. Biz bunday qilmaymiz: bu
-            tovar belgisi huquqini buzadi va buyumni hech qanday noyob qilmaydi &mdash;
-            logotipni har kim nusxalashi mumkin. Sizning raqamingizni esa nusxalab
-            bo&apos;lmaydi.
-          </p>
-          <Link
-            href="/#narx"
-            className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
-          >
-            Raqam tanlash
+      <div className="relative mx-auto max-w-5xl px-6 py-14 sm:py-16">
+        <div className="mb-10 flex items-center justify-between gap-4">
+          <Link href="/" className="flex items-center gap-2 font-display text-lg font-semibold">
+            <Mark tone="dark" />
+            flex
           </Link>
+          <LangSwitch lang={lang} next="/qurilmalar" tone="dark" />
+        </div>
+
+        <h1 className="max-w-2xl font-display text-3xl font-semibold tracking-tight text-balance sm:text-5xl">
+          {p.title}
+        </h1>
+        <p className="mt-4 max-w-xl leading-relaxed text-white/55">{p.lead}</p>
+
+        {/* Devices */}
+        <div className="mt-12 flex items-baseline justify-between gap-4">
+          <h2 className="font-display text-xs font-semibold tracking-widest text-lime uppercase">
+            {p.groupDevices}
+          </h2>
+          <p className="text-xs text-white/35">{p.groupDevicesNote}</p>
+        </div>
+
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+          {LOADOUT_DEVICES.map((id) => {
+            const price = devicePriceOrNull(id);
+            const name =
+              id === UNPRICED_DEVICE ? p.avtovizitka.name : c.devices[id].name;
+            const note =
+              id === UNPRICED_DEVICE ? p.avtovizitka.tagline : c.devices[id].tagline;
+            return (
+              <LoadoutTile
+                key={id}
+                href={`/qurilmalar/${id}`}
+                shot={deviceShot(id)}
+                name={name}
+                note={note}
+                price={price === null ? p.priceUnknown : formatUZS(price, lang)}
+              />
+            );
+          })}
+        </div>
+
+        {/* Directions */}
+        <div className="mt-14 flex items-baseline justify-between gap-4">
+          <h2 className="font-display text-xs font-semibold tracking-widest text-lime uppercase">
+            {p.groupDirections}
+          </h2>
+          <p className="text-xs text-white/35">{p.groupDirectionsNote}</p>
+        </div>
+
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+          {VERTICALS.map((id) => (
+            <LoadoutTile
+              key={id}
+              href="/biznes"
+              shot={verticalShot(id)}
+              name={t.verticals[id].name}
+              note={t.verticals[id].pointsWord}
+              price={p.openCta}
+            />
+          ))}
         </div>
       </div>
     </div>

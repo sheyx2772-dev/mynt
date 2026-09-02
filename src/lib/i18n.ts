@@ -1744,3 +1744,136 @@ export type VenueScreenDict = Screen;
 export function venueScreen(lang: Lang, vertical: "cafe" | "hotel" | "shop" | "other"): Screen {
   return SCREENS[lang][vertical];
 }
+
+
+// --- the picker ----------------------------------------------------------
+//
+// Everything Flex sells, as things you look at and choose between rather than
+// paragraphs you read. The owner asked for it in the shape of a game's loadout
+// screen, and the comparison is exact: a person picking a card over a ring is
+// making a taste decision, and taste decisions are made from pictures.
+//
+// Prices stay in devices.ts. Names and descriptions for the three devices stay
+// in the catalogue above — repeating them here would be two places to change a
+// product name and one of them would be missed.
+
+const PICKER = {
+  uz: {
+    metaTitle: "Tanlang — flex.com.uz",
+    metaDescription:
+      "Flex qurilmalari va yo'nalishlari: karta, uzuk, braslet, avtovizitka; kafe, mehmonxona va do'kon uchun NFC.",
+    title: "Nimani tanlaysiz?",
+    lead: "Raqamingizni qaysi buyumda olib yurasiz, yoki qaysi yo'nalishda ishlatasiz. Rasmni bosing — ichida hammasi bor.",
+    groupDevices: "Qurilmalar",
+    groupDevicesNote: "Bittasini tanlaysiz, keyin ham almashtira olasiz",
+    groupDirections: "Yo'nalishlar",
+    groupDirectionsNote: "Obyektingiz uchun",
+    askPrice: "Narxni so'rash",
+    orderCta: "Buyurtma qilish",
+    openCta: "Ochish",
+    includesLabel: "Nimalar kiradi",
+    back: "Hammasi",
+    priceNote: "Bu qurilmaning narxi. Raqam alohida sotib olinadi.",
+    priceUnknown: "Narx kelishuv bo'yicha",
+    includes: [
+      "NFC chip va QR-kod",
+      "Katalogdagi dizaynlardan biri",
+      "Raqamingiz o'yib yoziladi",
+      "Toshkent bo'ylab yetkazib berish",
+    ],
+    // A plate on glass has no design catalogue and nothing engraved on it, so
+    // it does not borrow the device list above.
+    carIncludes: [
+      "NFC chip va QR-kod",
+      "Old oynaga yopishtiriladigan plastina",
+      "Xabar Telegram'ingizga tushadi",
+      "Telefon raqamingiz hech kimga ochilmaydi",
+    ],
+    avtovizitka: {
+      name: "Avtovizitka",
+      tagline: "Mashina old oynasida",
+      description:
+        "QR va NFC plastina. Yo'lda to'sib qo'ysangiz yoki faralar yoqiq qolsa — sizga xabar keladi, telefon raqamingiz esa ochilmaydi.",
+    },
+  },
+
+  ru: {
+    metaTitle: "Выбор — flex.com.uz",
+    metaDescription:
+      "Устройства и направления Flex: карта, кольцо, браслет, автовизитка; NFC для кафе, отелей и магазинов.",
+    title: "Что выбираете?",
+    lead: "В каком предмете носить номер или в каком направлении его использовать. Нажмите на картинку — внутри всё есть.",
+    groupDevices: "Устройства",
+    groupDevicesNote: "Выбираете одно, позже можно поменять",
+    groupDirections: "Направления",
+    groupDirectionsNote: "Для вашего объекта",
+    askPrice: "Узнать цену",
+    orderCta: "Заказать",
+    openCta: "Открыть",
+    includesLabel: "Что входит",
+    back: "Все",
+    priceNote: "Это цена устройства. Номер покупается отдельно.",
+    priceUnknown: "Цена по договорённости",
+    includes: [
+      "NFC-чип и QR-код",
+      "Один из дизайнов каталога",
+      "Ваш номер наносится гравировкой",
+      "Доставка по Ташкенту",
+    ],
+    carIncludes: [
+      "NFC-чип и QR-код",
+      "Пластина на лобовое стекло",
+      "Сообщение приходит в ваш Telegram",
+      "Ваш номер телефона никому не открывается",
+    ],
+    avtovizitka: {
+      name: "Автовизитка",
+      tagline: "На лобовом стекле",
+      description:
+        "QR и NFC-пластина. Перегородили проезд или у вас горят фары — вам напишут, а телефон останется закрытым.",
+    },
+  },
+
+  en: {
+    metaTitle: "Choose — flex.com.uz",
+    metaDescription:
+      "Flex devices and directions: card, ring, bracelet, car card; NFC for cafes, hotels and shops.",
+    title: "What are you choosing?",
+    lead: "Which object carries your number, or which direction you use it in. Tap a picture — everything is inside.",
+    groupDevices: "Devices",
+    groupDevicesNote: "Pick one; you can change it later",
+    groupDirections: "Directions",
+    groupDirectionsNote: "For your venue",
+    askPrice: "Ask the price",
+    orderCta: "Order",
+    openCta: "Open",
+    includesLabel: "What's included",
+    back: "All of them",
+    priceNote: "This is the price of the device. The number is bought separately.",
+    priceUnknown: "Price by agreement",
+    includes: [
+      "An NFC chip and a QR code",
+      "One of the designs from the catalogue",
+      "Your number engraved on it",
+      "Delivery across Tashkent",
+    ],
+    carIncludes: [
+      "An NFC chip and a QR code",
+      "A plate for the windscreen",
+      "The message arrives in your Telegram",
+      "Your phone number is never revealed",
+    ],
+    avtovizitka: {
+      name: "Car card",
+      tagline: "On the windscreen",
+      description:
+        "A QR and NFC plate. Blocked someone in, or left your lights on, and they can reach you — while your phone number stays closed.",
+    },
+  },
+} as const;
+
+export type PickerDict = (typeof PICKER)["uz"];
+
+export function picker(lang: Lang): PickerDict {
+  return PICKER[lang] as PickerDict;
+}
