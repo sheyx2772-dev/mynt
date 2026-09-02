@@ -158,6 +158,15 @@ export default async function Home({ searchParams }: PageProps<"/">) {
       </header>
 
       <main className="flex-1">
+        {/* The fork is the first screen: two products, said as two, before
+            anything is explained. The hero that used to be here follows it —
+            it sells the personal side, and a visitor who came for the business
+            side should not have to scroll past a pitch to find out we have one.
+            The phone gets the same pair inside AppHome. */}
+        <div className="hidden lg:block">
+          <TwoWays s={s} />
+        </div>
+
         {/* Hero */}
         <section className="hidden grain relative overflow-hidden bg-flex-black text-white lg:block">
           <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]" />
@@ -166,18 +175,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <div className="relative mx-auto max-w-6xl px-6 pt-10 pb-16 sm:pt-28 sm:pb-28">
             <div className="grid items-center gap-10 sm:gap-16 lg:grid-cols-2">
               <div>
-                <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-[10px] font-medium tracking-wide text-white/70 uppercase backdrop-blur-sm sm:mb-6 sm:text-xs">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
-                  {s.heroBadge}
-                </p>
-                <h1 className="font-display text-[2.1rem] font-semibold leading-[1.05] tracking-tight text-balance sm:text-5xl sm:leading-[0.98] lg:text-[4.5rem]">
-                  {s.heroTitleA && <>{s.heroTitleA} </>}
-                  <span className="marker-reveal inline-block rounded-md bg-lime px-2 text-flex-black">
-                    {s.heroTitleMark}
-                  </span>{" "}
-                  {s.heroTitleB}
-                </h1>
-                <p className="mt-5 max-w-md leading-relaxed text-white/60 sm:mt-7 sm:text-lg">
+                {/* The brand line moved above, to the fork. What is left here
+                    is the personal offer, which is what this band was always
+                    arguing for — so the lead becomes the statement. */}
+                <p className="max-w-lg font-display text-2xl leading-snug font-medium tracking-tight text-balance text-white/85 sm:text-3xl">
                   {s.heroLead}
                 </p>
                 <HandleChecker tone="dark"
@@ -227,12 +228,6 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             namespace={counts.namespace}
             labels={{ taken: s.takenWord, left: s.leftWord, latest: s.latestWord }}
           />
-        </div>
-
-        {/* The fork, before anything is explained. Desktop only here — the
-            phone gets the same thing inside AppHome, higher up. */}
-        <div className="hidden lg:block">
-          <TwoWays s={s} />
         </div>
 
         {/* On a phone this is the whole entry screen. See AppHome. */}

@@ -18,21 +18,32 @@ type Site = ReturnType<typeof site>;
 
 export default function TwoWays({ s }: { s: Site }) {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-12 sm:py-16">
-      <p className="mb-6 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+    <section className="mx-auto max-w-6xl px-6 pt-12 pb-14 sm:pt-16 sm:pb-20">
+      <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-black/10 bg-black/[0.03] px-3 py-1.5 text-[11px] font-medium tracking-wide text-flex-black/60 uppercase">
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime-ink" />
+        {s.heroBadge}
+      </p>
+
+      <h1 className="max-w-2xl font-display text-[2.2rem] leading-[1.06] font-semibold tracking-tight text-balance sm:text-5xl">
+        {s.heroTitleA && <>{s.heroTitleA} </>}
+        <span className="rounded-md bg-lime px-2 text-flex-black">{s.heroTitleMark}</span>{" "}
+        {s.heroTitleB}
+      </h1>
+
+      <p className="mt-8 mb-4 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
         {s.waysEyebrow}
       </p>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Link
           href="/#narx"
-          className="group flex flex-col rounded-3xl border border-black/10 bg-white p-7 shadow-[0_20px_50px_-40px_rgba(14,10,27,0.5)] transition-transform hover:-translate-y-0.5 sm:p-8"
+          className="group flex flex-col rounded-3xl bg-lime p-7 text-flex-black shadow-[0_24px_60px_-30px_rgba(171,255,9,0.85)] transition-transform hover:-translate-y-0.5 sm:p-8"
         >
-          <User className="h-6 w-6 text-flex-black/50" strokeWidth={1.6} />
+          <User className="h-6 w-6 text-flex-black/70" strokeWidth={1.6} />
           <h2 className="mt-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
             {s.wayPersonal}
           </h2>
-          <p className="mt-3 flex-1 leading-relaxed text-flex-black/60">
+          <p className="mt-3 flex-1 leading-relaxed text-flex-black/70">
             {s.wayPersonalDesc}
           </p>
           <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium">

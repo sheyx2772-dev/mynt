@@ -120,18 +120,18 @@ export default function AppHome({
         <div className="grid gap-3">
           <Link
             href="#narx"
-            className="flex items-center gap-4 rounded-3xl border border-black/10 bg-white px-5 py-5 transition-transform active:scale-[0.99]"
+            className="flex items-center gap-4 rounded-3xl bg-lime px-5 py-5 text-flex-black shadow-[0_16px_40px_-22px_rgba(171,255,9,0.9)] transition-transform active:scale-[0.99]"
           >
-            <User className="h-6 w-6 shrink-0 text-flex-black/50" strokeWidth={1.6} />
+            <User className="h-6 w-6 shrink-0 text-flex-black/70" strokeWidth={1.6} />
             <div className="min-w-0 flex-1">
               <p className="font-display text-lg font-semibold tracking-tight">
                 {s.wayPersonal}
               </p>
-              <p className="mt-1 text-xs leading-relaxed text-flex-black/55">
+              <p className="mt-1 text-xs leading-relaxed text-flex-black/70">
                 {s.wayPersonalDesc}
               </p>
             </div>
-            <ChevronRight className="h-4 w-4 shrink-0 text-flex-black/25" />
+            <ChevronRight className="h-4 w-4 shrink-0 text-flex-black/45" />
           </Link>
 
           <Link
