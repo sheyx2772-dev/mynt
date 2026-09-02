@@ -47,8 +47,9 @@ describe("isVertical", () => {
   it("accepts the four we sell and nothing else", () => {
     expect(isVertical("cafe")).toBe(true);
     expect(isVertical("hotel")).toBe(true);
-    expect(isVertical("auto")).toBe(true);
+    expect(isVertical("shop")).toBe(true);
     expect(isVertical("other")).toBe(true);
+    expect(isVertical("auto")).toBe(false);
     expect(isVertical("casino")).toBe(false);
     expect(isVertical(null)).toBe(false);
     expect(isVertical(7)).toBe(false);

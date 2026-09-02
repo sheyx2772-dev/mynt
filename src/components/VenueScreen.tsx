@@ -1,4 +1,4 @@
-import { Wifi, Check, Phone } from "lucide-react";
+import { Wifi, Check, CreditCard } from "lucide-react";
 import type { VenueScreenDict } from "@/lib/i18n";
 
 // What the guest's phone actually shows, drawn rather than described.
@@ -17,7 +17,7 @@ export default function VenueScreen({
   vertical,
 }: {
   screen: VenueScreenDict;
-  vertical: "cafe" | "hotel" | "auto" | "other";
+  vertical: "cafe" | "hotel" | "shop" | "other";
 }) {
   return (
     <div className="w-full text-flex-black">
@@ -99,9 +99,9 @@ export default function VenueScreen({
 
       <div className="mt-3 space-y-1.5">
         <div className="flex items-center justify-center gap-1.5 rounded-xl bg-lime px-4 py-2.5 text-[13px] font-medium text-flex-black shadow-[0_10px_22px_-10px_rgba(171,255,9,0.9)]">
-          {/* The car's primary action is a call, not a confirmation. */}
-          {vertical === "auto" ? (
-            <Phone className="h-3.5 w-3.5" strokeWidth={2.4} />
+          {/* A shop's primary action is a payment, not a confirmation. */}
+          {vertical === "shop" ? (
+            <CreditCard className="h-3.5 w-3.5" strokeWidth={2.2} />
           ) : (
             <Check className="h-3.5 w-3.5" strokeWidth={2.6} />
           )}

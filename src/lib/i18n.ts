@@ -290,7 +290,7 @@ const SITE = {
     wayPersonalDesc: "O'zingiz uchun: noyob raqam, shaxsiy profil va karta, uzuk yoki braslet. Bir tegish — kontaktingiz o'tadi.",
     wayPersonalCta: "Raqam tanlash",
     wayBusiness: "Biznes uchun NFC",
-    wayBusinessDesc: "Kafe, mehmonxona, avtopark va jamoa uchun: menyu, xona xizmatlari, avtovizitka va xodim kartalari.",
+    wayBusinessDesc: "Kafe, mehmonxona, do'kon va jamoa uchun: menyu, xona xizmatlari, kassadagi to'lov va xodim kartalari.",
     wayBusinessCta: "Biznes bo'limi",
     menuOpen: "Menyu",
     menuClose: "Yopish",
@@ -403,7 +403,7 @@ const SITE = {
     wayPersonalDesc: "Для себя: уникальный номер, личный профиль и карта, кольцо или браслет. Одно касание — и контакт передан.",
     wayPersonalCta: "Выбрать номер",
     wayBusiness: "NFC для бизнеса",
-    wayBusinessDesc: "Для кафе, отелей, автопарков и команд: меню, обслуживание в номере, автовизитка и карты сотрудников.",
+    wayBusinessDesc: "Для кафе, отелей, магазинов и команд: меню, обслуживание в номере, оплата на кассе и карты сотрудников.",
     wayBusinessCta: "Раздел для бизнеса",
     menuOpen: "Меню",
     menuClose: "Закрыть",
@@ -516,7 +516,7 @@ const SITE = {
     wayPersonalDesc: "For yourself: a unique number, your own profile and a card, ring or bracelet. One tap and they have your contact.",
     wayPersonalCta: "Pick a number",
     wayBusiness: "NFC for business",
-    wayBusinessDesc: "For cafes, hotels, fleets and teams: menus, in-room service, car cards and staff cards.",
+    wayBusinessDesc: "For cafes, hotels, shops and teams: menus, in-room service, payment at the till and staff cards.",
     wayBusinessCta: "The business section",
     menuOpen: "Menu",
     menuClose: "Close",
@@ -560,6 +560,10 @@ const LANDING = {
       {
         title: "Analitika",
         desc: "Profilingiz necha marta ochilgani, qaysi havola bosilgani va tashrif kartani tegizishdanmi yoki QR'danmi — hammasi ko'rinadi.",
+      },
+      {
+        title: "Avtovizitka",
+        desc: "Mashinangiz old oynasiga QR va NFC plastina. Yo'lda to'sib qo'ysangiz yoki faralar yoqiq qolsa — sizga xabar keladi, telefon raqamingiz esa ochilmaydi.",
       },
     ],
     business: [
@@ -625,6 +629,10 @@ const LANDING = {
         title: "Аналитика",
         desc: "Сколько раз открыли профиль, по какой ссылке перешли и откуда пришли — с карты, по QR или по ссылке.",
       },
+      {
+        title: "Автовизитка",
+        desc: "QR и NFC-пластина на лобовое стекло. Перегородили проезд или у вас горят фары — вам напишут, а телефон останется закрытым.",
+      },
     ],
     business: [
       {
@@ -688,6 +696,10 @@ const LANDING = {
       {
         title: "Analytics",
         desc: "How often the profile was opened, which link was tapped, and whether the visit came from the card, a QR code or a shared link.",
+      },
+      {
+        title: "Car card",
+        desc: "A QR and NFC plate for the windscreen. Blocked someone in, or left your lights on, and they can reach you — while your phone number stays closed.",
       },
     ],
     business: [
@@ -914,7 +926,7 @@ const B2B = {
       "NFC → shaxsiy profil",
       "NFC → menyu",
       "NFC → mehmonxona xonasi",
-      "NFC → xizmat nuqtasi",
+      "NFC → kassa va rekvizit",
     ],
     pilotTitle: "Bu yo'nalishlar ishga tushirilmoqda",
     pilotBody:
@@ -1001,31 +1013,28 @@ const B2B = {
           "Qurilma faqat mehmon uchun emas: ichki jarayon uchun ham ishlaydi, ya'ni bitta xarid ikki ish qiladi.",
         ],
       },
-      auto: {
-        name: "Avtopark va avtosalon",
-        pointWord: "avtomobil",
-        pointsWord: "avtomobil",
-        tagline: "Old oynadagi avtovizitka — NFC va QR bilan",
+      shop: {
+        name: "Savdo do'koni",
+        pointWord: "nuqta",
+        pointsWord: "nuqta",
+        tagline: "Eshik oldida yoki kassada — o'zingiz tanlaysiz",
         guest: [
-          "Haydovchiga qo'ng'iroq — ikkala raqam ham yopiq qoladi",
-          "«Mashinangizni suring» xabari",
-          "«Faralaringiz yoqiq qolgan»",
-          "Avtomobil va park nomi ko'rinadi",
-          "Taksi yoki yetkazib berish bo'lsa — baho qoldirish",
+          "To'lov: Click, Payme yoki karta raqami — bir tegishda",
+          "Firma rekvizitlari: STIR, hisob raqami, bank — nusxa olinadi",
+          "Tovarlar katalogi: rasm, narx, mavjudligi",
+          "Ish vaqti, manzil va xaritada yo'l",
+          "Izoh va baho qoldirish",
         ],
         owner: [
-          "Har bir avtomobil — alohida nuqta",
-          "Kelgan xabarlar bitta panelda",
-          "Haydovchi almashsa nuqta firmada qoladi, ma'lumot yangilanadi",
-          "Avtomobil bo'yicha statistika",
+          "Narx va mavjudlikni o'zingiz tahrirlaysiz",
+          "«Tugadi» — tovar bir tugma bilan yopiladi",
+          "Nuqta bo'yicha statistika: eshikdanmi yoki kassadanmi",
+          "Izohlar qutisi",
         ],
-        staff: [
-          "Xabar haydovchining Telegram'iga darhol tushadi",
-          "Shaxsiy raqami hech kimga ko'rinmaydi — qo'ng'iroq platforma orqali ulanadi",
-        ],
+        staff: [],
         why: [
-          "Old oynaga qo'yilgan qog'ozdagi raqam hammaga ochiq: spam ham, tanish bo'lmagan qo'ng'iroq ham o'shandan keladi. Bu yerda raqam yopiq, aloqa esa ishlaydi.",
-          "Haydovchi ishdan ketsa raqam va plastina firmada qoladi — jamoa tarifidagi o'rin bilan bir xil mantiq.",
+          "Kassada karta raqamini qo'lda aytish yoki qog'ozga yozib qo'yish — xato va vaqt. Bu yerda xaridor tegizadi va to'lov ochiladi.",
+          "Rekvizitni so'ragan firmaga har safar qayta yozib bermaysiz: nusxa olish tugmasi bor, xato ketmaydi.",
         ],
       },
       other: {
@@ -1127,7 +1136,7 @@ const B2B = {
       "NFC → личный профиль",
       "NFC → меню",
       "NFC → номер отеля",
-      "NFC → сервисная точка",
+      "NFC → касса и реквизиты",
     ],
     pilotTitle: "Эти направления запускаются",
     pilotBody:
@@ -1214,31 +1223,28 @@ const B2B = {
           "Устройство работает не только для гостя, но и для внутреннего процесса: одна покупка делает две работы.",
         ],
       },
-      auto: {
-        name: "Автопарк и автосалон",
-        pointWord: "автомобиль",
-        pointsWord: "автомобилей",
-        tagline: "Автовизитка на лобовом стекле — NFC и QR",
+      shop: {
+        name: "Магазин",
+        pointWord: "точка",
+        pointsWord: "точек",
+        tagline: "У двери или на кассе — как вам удобнее",
         guest: [
-          "Звонок водителю — оба номера остаются скрытыми",
-          "Сообщение «Отгоните машину»",
-          "«У вас горят фары»",
-          "Видно автомобиль и название парка",
-          "Для такси и доставки — оценка поездки",
+          "Оплата: Click, Payme или номер карты — одним касанием",
+          "Реквизиты компании: ИНН, расчётный счёт, банк — копируются",
+          "Каталог товаров: фото, цена, наличие",
+          "Часы работы, адрес и маршрут на карте",
+          "Отзыв и оценка",
         ],
         owner: [
-          "Каждый автомобиль — отдельная точка",
-          "Все сообщения в одной панели",
-          "Водитель сменился — точка остаётся у компании, данные обновляются",
-          "Статистика по каждому автомобилю",
+          "Цены и наличие редактируете сами",
+          "«Закончилось» — товар скрывается одной кнопкой",
+          "Статистика по точкам: от двери или от кассы",
+          "Ящик отзывов",
         ],
-        staff: [
-          "Сообщение сразу приходит водителю в Telegram",
-          "Личный номер никому не виден — звонок соединяется через платформу",
-        ],
+        staff: [],
         why: [
-          "Номер на бумажке под стеклом открыт всем: оттуда и спам, и незнакомые звонки. Здесь номер закрыт, а связь работает.",
-          "Водитель ушёл — номер и пластина остаются у компании, та же логика, что и с местом в тарифе для команды.",
+          "Диктовать номер карты на кассе или держать его на бумажке — это ошибки и время. Здесь покупатель подносит телефон и открывается оплата.",
+          "Реквизиты не приходится каждый раз переписывать: есть кнопка копирования, и в них не будет опечатки.",
         ],
       },
       other: {
@@ -1340,7 +1346,7 @@ const B2B = {
       "NFC → personal profile",
       "NFC → menu",
       "NFC → hotel room",
-      "NFC → service point",
+      "NFC → till and company details",
     ],
     pilotTitle: "These are being launched",
     pilotBody:
@@ -1427,31 +1433,28 @@ const B2B = {
           "The hardware is not only for the guest: it serves an internal process too, so one purchase does two jobs.",
         ],
       },
-      auto: {
-        name: "Fleets and dealerships",
-        pointWord: "car",
-        pointsWord: "cars",
-        tagline: "A card on the windscreen — NFC and QR",
+      shop: {
+        name: "Shop",
+        pointWord: "point",
+        pointsWord: "points",
+        tagline: "By the door or at the till — whichever suits you",
         guest: [
-          "Call the driver — neither number is revealed",
-          "A “please move your car” message",
-          "“Your lights are on”",
-          "The car and the fleet are shown",
-          "For taxi and delivery — rate the trip",
+          "Payment: Click, Payme or a card number — in one tap",
+          "Company details: tax number, account, bank — copied, not retyped",
+          "The catalogue: photo, price, whether it is in stock",
+          "Opening hours, the address and directions",
+          "Leave a review and a rating",
         ],
         owner: [
-          "Every car is its own point",
-          "Every message in one panel",
-          "A driver leaves and the point stays with the company; the details change",
-          "Statistics per car",
+          "You edit prices and stock yourself",
+          "“Sold out” — an item is hidden with one button",
+          "Statistics per point: from the door or from the till",
+          "Review inbox",
         ],
-        staff: [
-          "The message reaches the driver's Telegram immediately",
-          "Their own number is never shown — the call is connected through the platform",
-        ],
+        staff: [],
         why: [
-          "A phone number on a slip of paper under the windscreen is open to everyone, which is where the spam and the strange calls come from. Here the number is closed and the contact still works.",
-          "A driver leaves and the number and the plate stay with the company — the same logic as a seat on the team plan.",
+          "Reading a card number aloud at the till, or keeping it on a slip of paper, costs time and produces mistakes. Here the customer taps and the payment opens.",
+          "Company details stop being retyped for every buyer who asks: there is a copy button, and nothing gets a digit wrong.",
         ],
       },
       other: {
@@ -1569,7 +1572,7 @@ type Screen = {
   secondary: string;
 };
 
-const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "auto" | "other", Screen>> = {
+const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "shop" | "other", Screen>> = {
   uz: {
     cafe: {
       venue: "Choyxona Navro'z",
@@ -1597,18 +1600,18 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "auto" | "other", Screen>>
       primary: "So'rov yuborish",
       secondary: "Shahar bo'yicha yo'riqnoma",
     },
-    auto: {
-      venue: "Toshkent Taxi",
-      point: "01 A 777 AA",
-      chips: ["Chevrolet Cobalt · oq"],
+    shop: {
+      venue: "Anor Market",
+      point: "Kassa",
+      chips: ["Har kuni 08:00 – 22:00"],
       rows: [
-        ["Haydovchiga qo'ng'iroq", "Raqamlar ikkala tomonga ham ko'rinmaydi", ""],
-        ["Mashinani suring", "Xabar darhol yetadi", ""],
-        ["Faralaringiz yoqiq qolgan", "", ""],
+        ["Click orqali to'lash", "Summani o'zingiz kiritasiz", ""],
+        ["Payme orqali to'lash", "", ""],
+        ["Karta raqami", "8600 •••• •••• 1234", "Nusxa"],
       ],
-      actions: ["Signalizatsiya ishlayapti", "Boshqa sabab"],
-      primary: "Qo'ng'iroq qilish",
-      secondary: "Xabar yuborish",
+      actions: ["Firma rekvizitlari", "Tovarlar katalogi"],
+      primary: "To'lash",
+      secondary: "Izoh qoldirish",
     },
     other: {
       venue: "Salon Nilufar",
@@ -1652,18 +1655,18 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "auto" | "other", Screen>>
       primary: "Отправить запрос",
       secondary: "Путеводитель по городу",
     },
-    auto: {
-      venue: "Toshkent Taxi",
-      point: "01 A 777 AA",
-      chips: ["Chevrolet Cobalt · белый"],
+    shop: {
+      venue: "Anor Market",
+      point: "Касса",
+      chips: ["Ежедневно 08:00 – 22:00"],
       rows: [
-        ["Позвонить водителю", "Номера скрыты с обеих сторон", ""],
-        ["Отгоните машину", "Сообщение дойдёт сразу", ""],
-        ["У вас горят фары", "", ""],
+        ["Оплатить через Click", "Сумму вводите сами", ""],
+        ["Оплатить через Payme", "", ""],
+        ["Номер карты", "8600 •••• •••• 1234", "Копия"],
       ],
-      actions: ["Сработала сигнализация", "Другая причина"],
-      primary: "Позвонить",
-      secondary: "Отправить сообщение",
+      actions: ["Реквизиты компании", "Каталог товаров"],
+      primary: "Оплатить",
+      secondary: "Оставить отзыв",
     },
     other: {
       venue: "Салон Нилуфар",
@@ -1707,18 +1710,18 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "auto" | "other", Screen>>
       primary: "Send the request",
       secondary: "City guide",
     },
-    auto: {
-      venue: "Toshkent Taxi",
-      point: "01 A 777 AA",
-      chips: ["Chevrolet Cobalt · white"],
+    shop: {
+      venue: "Anor Market",
+      point: "Till",
+      chips: ["Every day 08:00 – 22:00"],
       rows: [
-        ["Call the driver", "Neither number is shown", ""],
-        ["Please move the car", "The message arrives at once", ""],
-        ["Your lights are on", "", ""],
+        ["Pay with Click", "You enter the amount", ""],
+        ["Pay with Payme", "", ""],
+        ["Card number", "8600 •••• •••• 1234", "Copy"],
       ],
-      actions: ["The alarm is going off", "Something else"],
-      primary: "Call",
-      secondary: "Send a message",
+      actions: ["Company details", "Catalogue"],
+      primary: "Pay",
+      secondary: "Leave a review",
     },
     other: {
       venue: "Nilufar Salon",
@@ -1738,6 +1741,6 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "auto" | "other", Screen>>
 
 export type VenueScreenDict = Screen;
 
-export function venueScreen(lang: Lang, vertical: "cafe" | "hotel" | "auto" | "other"): Screen {
+export function venueScreen(lang: Lang, vertical: "cafe" | "hotel" | "shop" | "other"): Screen {
   return SCREENS[lang][vertical];
 }

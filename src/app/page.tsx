@@ -10,6 +10,7 @@ import {
   Check,
   Minus,
   ChevronDown,
+  Car,
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -41,7 +42,7 @@ const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
 
 // Which icon goes with which entry, in the dictionary's order. Kept out of the
 // dictionary because an icon is not a translation.
-const CONSUMER_ICONS = [Link2, Nfc, Sparkles, BarChart3];
+const CONSUMER_ICONS = [Link2, Nfc, Sparkles, BarChart3, Car];
 const BUSINESS_ICONS = [Users, Target, RefreshCw, TrendingUp];
 
 // Who has what, in the same order as the dictionary's row labels. A claim about
@@ -75,6 +76,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const [newest, counts] = await Promise.all([listNewestResidents(), getDirectoryCounts()]);
 
   const tapShot = productShot("tegizish");
+  const carShot = productShot("avtovizitka");
   const familyShot = productShot("oila");
 
   return (
@@ -448,6 +450,20 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               <PhoneFrame>
                 <ProfilePreview />
               </PhoneFrame>
+
+              {/* The car card, on the side of the site it belongs to: one
+                  person, one car, bought the way a card or a ring is. */}
+              {carShot && (
+                <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-2xl bg-flex-black">
+                  <Image
+                    src={carShot}
+                    alt={copy.consumer[4]?.title ?? ""}
+                    fill
+                    sizes="320px"
+                    className="object-cover"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </section>

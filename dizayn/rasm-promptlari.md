@@ -15,8 +15,9 @@ sayt uni o'zi topib ishlatadi, kod o'zgartirish shart emas.
 | `mehmonxona.jpg`       | Biznes — mehmonxona     | 16:9   | bor   |
 | `salon.jpg`            | Biznes — boshqa obyekt  | 4:3    | bor   |
 | `biznes.jpg`           | Biznes sahifasi hero    | 3:4    | bor   |
-| `avto.jpg`             | Biznes — avtopark       | 16:9   | bor   |
-| `avtovizitka.jpg`      | Biznes — yengil avto    | 16:9   | bor   |
+| `avto.jpg`             | ishlatilmayapti         | 16:9   | bor   |
+| `avtovizitka.jpg`      | Shaxsiy — avtovizitka   | 16:9   | bor   |
+| `dokon.jpg`            | Biznes — savdo do'koni  | 16:9   | yo'q  |
 
 Ranglar butun sayt bo'ylab ikkitagina: chuqur qora `#0e0a1b` va kislotali
 yashil `#abff09`. Promptlarda shu ikkisidan boshqa rang so'ralmagan — shuning
@@ -120,7 +121,10 @@ uslubni qaytaradi.
 > logos, no readable text.
 
 
-### avto.jpg / avtovizitka.jpg — 16:9
+### avtovizitka.jpg — 16:9
+
+`avto.jpg` (avtobus) hozir hech qayerda ishlatilmayapti — avtopark alohida
+yo'nalish bo'lishdan to'xtadi. O'chirmadim: kerak bo'lsa joyida turibdi.
 
 Ikkalasi ham tik rasmdan qirqilgan: old oyna, telefon va QR plastina kadrda
 qolgan. Qayta qirqish kerak bo'lsa `public/mahsulot/` ga tik rasmni tashlab,
@@ -130,3 +134,13 @@ yengil avtoda `top=585`.
 > Wide photograph through a windscreen from outside: a phone in a dashboard
 > mount and a matte QR plate on the dash beside it. Daylight, the street
 > reflected in the glass. Photorealistic. No readable text, no logos.
+
+
+### dokon.jpg — 16:9
+
+> Wide photograph of a small shop counter beside the till. A slim matte black
+> NFC plate with a thin acid-lime contactless wave symbol stands next to the
+> card terminal; a customer's hand holds a phone above it. Warm shop lighting,
+> shelves out of focus behind. Photorealistic, shallow depth of field. Colour
+> palette black, warm neutral and acid lime green (#abff09). No faces, no
+> logos, no readable text.

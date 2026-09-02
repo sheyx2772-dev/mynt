@@ -173,9 +173,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                 shots={{
                   cafe: [productShot("kafe")].filter(Boolean) as string[],
                   hotel: [productShot("mehmonxona")].filter(Boolean) as string[],
-                  auto: [productShot("avto"), productShot("avtovizitka")].filter(
-                    Boolean,
-                  ) as string[],
+                  shop: [productShot("dokon")].filter(Boolean) as string[],
                   other: [productShot("salon")].filter(Boolean) as string[],
                 }}
               />

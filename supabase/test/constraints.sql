@@ -1088,20 +1088,22 @@ begin
   delete from team_requests where company in ('Test MCHJ', 'Test Kafe');
 end $$;
 
--- 0033 — cars join the verticals
+-- 0034 — shops are a vertical, cars are not
 do $$
 begin
   insert into team_requests (company, contact_name, phone, points, vertical)
-    values ('Test Taxi', 'Bekzod', '+998901234567', 25, 'auto');
-  raise notice '   ok   a fleet request counts cars';
+    values ('Test Market', 'Bekzod', '+998901234567', 2, 'shop');
+  raise notice '   ok   a shop request counts points';
 
+  -- Cars moved to the personal side, so the word is gone rather than kept
+  -- for compatibility with rows that never existed.
   begin
     insert into team_requests (company, contact_name, phone, points, vertical)
-      values ('Test', 'Kimdir', '+998901234567', 5, 'avtobus');
-    raise exception 'notanish yoʻnalish oʻtdi';
+      values ('Test', 'Kimdir', '+998901234567', 5, 'auto');
+    raise exception 'olib tashlangan yoʻnalish oʻtdi';
   exception when check_violation then
-    raise notice '   ok   rejected: still only the verticals we sell';
+    raise notice '   ok   rejected: a vertical we no longer sell';
   end;
 
-  delete from team_requests where company = 'Test Taxi';
+  delete from team_requests where company = 'Test Market';
 end $$;
