@@ -2,7 +2,7 @@ import Link from "next/link";
 import { after } from "next/server";
 import { listNotifications } from "@/lib/notify";
 import type { Metadata } from "next";
-import { Pencil, QrCode, Clock } from "lucide-react";
+import { Pencil, QrCode, Clock, Building2, ChevronRight } from "lucide-react";
 import PageShell from "@/components/PageShell";
 import SignOutButton from "@/components/SignOutButton";
 import InstallHint from "@/components/InstallHint";
@@ -10,6 +10,7 @@ import { requireUser } from "@/lib/auth";
 import { listHandlesForUser, touchLastSeen } from "@/lib/handles";
 import IncomingTransfers from "@/components/IncomingTransfers";
 import { listIncomingTransfers } from "@/lib/transfers";
+import { getTeamForUser } from "@/lib/teams";
 import { formatUZS } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -19,10 +20,11 @@ export const metadata: Metadata = {
 
 export default async function CabinetPage() {
   const user = await requireUser("/kabinet");
-  const [handles, incoming, notifications] = await Promise.all([
+  const [handles, incoming, notifications, team] = await Promise.all([
     listHandlesForUser(user.id),
     listIncomingTransfers(user.email ?? ""),
     listNotifications(user.id),
+    getTeamForUser(user.id),
   ]);
 
   const unreadCount = notifications.filter((n) => !n.readAt).length;
@@ -63,6 +65,23 @@ export default async function CabinetPage() {
       </div>
 
       <IncomingTransfers transfers={incoming} />
+
+      {/* The company panel existed and nothing pointed at it: an owner had to
+          know to type /kabinet/jamoa. One cabinet, one sign-in, and the
+          company is a place you switch to rather than a second account. */}
+      {team && (
+        <Link
+          href="/kabinet/jamoa"
+          className="mb-6 flex items-center gap-4 rounded-[1.5rem] border border-black/10 bg-flex-black px-6 py-5 text-white transition-transform hover:scale-[1.005]"
+        >
+          <Building2 className="h-5 w-5 shrink-0 text-lime" strokeWidth={1.75} />
+          <div className="min-w-0 flex-1">
+            <p className="font-display font-semibold tracking-tight">{team.name}</p>
+            <p className="mt-0.5 text-xs text-white/50">Firma hisobi</p>
+          </div>
+          <ChevronRight className="h-4 w-4 shrink-0 text-white/40" />
+        </Link>
+      )}
 
       <InstallHint />
 
