@@ -223,6 +223,19 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-white" />
         </section>
 
+        {/* Third block, straight after the offer. Somebody who has read the
+            fork and then the offer is now deciding what the thing looks like,
+            and that is decided by looking rather than by reading — so nothing
+            goes between. Desktop only; AppHome carries the same two rows. */}
+        <div className="hidden pb-6 lg:block">
+          <LoadoutStrip items={devices} label={p.groupDevices} note={p.groupDevicesNote} />
+          <LoadoutStrip
+            items={verticals}
+            label={p.groupDirections}
+            note={p.groupDirectionsNote}
+          />
+        </div>
+
         {/* Who has just joined, and how much of the namespace is gone. Directly
             under the hero, because it is the first thing a scroll reveals and
             it is the only proof on the page that other people are buying. */}
@@ -232,19 +245,6 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             claimed={counts.claimed}
             namespace={counts.namespace}
             labels={{ taken: s.takenWord, left: s.leftWord, latest: s.latestWord }}
-          />
-        </div>
-
-        {/* Third screen: the shelf, moving. Somebody who has read the fork and
-            the offer is now deciding what the thing looks like, and that is a
-            decision made by looking rather than by reading. Desktop only —
-            AppHome carries the same two rows on a phone. */}
-        <div className="hidden pb-6 lg:block">
-          <LoadoutStrip items={devices} label={p.groupDevices} note={p.groupDevicesNote} />
-          <LoadoutStrip
-            items={verticals}
-            label={p.groupDirections}
-            note={p.groupDirectionsNote}
           />
         </div>
 

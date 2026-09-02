@@ -164,15 +164,6 @@ export default function AppHome({
         </div>
       </section>
 
-      {/* Four destinations, thumb-sized. The sections these replace are hidden
-          on a phone; each of these is where that content actually lives. */}
-      <nav className="grid grid-cols-2 gap-3 px-6 pt-6">
-        <Tile href="#narx" label={s.calcPrice} Icon={Calculator} />
-        <Tile href="/qurilmalar" label={s.navDevices} Icon={Nfc} />
-        <Tile href="/rezidentlar" label={s.navResidents} Icon={Users} />
-        <Tile href="/tarif" label={s.navPlans} Icon={CreditCard} />
-      </nav>
-
       {/* The shelf, moving, right under the fork: whichever of the two you
           are, the next question is which object. */}
       <div className="pt-4">
@@ -187,6 +178,15 @@ export default function AppHome({
           note={stripLabels.directionsNote}
         />
       </div>
+
+      {/* Four destinations, thumb-sized. The sections these replace are hidden
+          on a phone; each of these is where that content actually lives. */}
+      <nav className="grid grid-cols-2 gap-3 px-6 pt-6">
+        <Tile href="#narx" label={s.calcPrice} Icon={Calculator} />
+        <Tile href="/qurilmalar" label={s.navDevices} Icon={Nfc} />
+        <Tile href="/rezidentlar" label={s.navResidents} Icon={Users} />
+        <Tile href="/tarif" label={s.navPlans} Icon={CreditCard} />
+      </nav>
 
       {newest.length > 0 && (
         <section className="px-6 pt-9">
