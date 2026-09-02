@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import SignInForm from "@/components/SignInForm";
 import TelegramSignIn from "@/components/TelegramSignIn";
-import { isTelegramLoginConfigured } from "@/lib/auth/telegram-login";
+import { isTelegramLoginConfigured, startTelegramLogin } from "@/lib/auth/telegram-login";
 import { getUser } from "@/lib/auth";
 import { safePath } from "@/lib/safe-path";
 
@@ -28,6 +28,10 @@ export default async function SignInPage(props: PageProps<"/kirish">) {
 
   const errorKey = typeof xato === "string" ? xato : null;
 
+  // Minted here rather than on the click, so the button can be a plain link
+  // and never meets a popup blocker. A reload reuses the outstanding one.
+  const telegram = isTelegramLoginConfigured ? await startTelegramLogin() : null;
+
   return (
     <PageShell>
       <div className="rounded-[1.75rem] border border-black/10 bg-white p-8 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
@@ -46,9 +50,13 @@ export default async function SignInPage(props: PageProps<"/kirish">) {
             this market actually has on its phone. Email stays underneath for
             the people Telegram does not reach — foreign buyers, and companies
             whose accounting wants a mailbox. */}
-        {isTelegramLoginConfigured && (
+        {telegram?.ok && (
           <>
-            <TelegramSignIn next={next} />
+            <TelegramSignIn
+              next={next}
+              code={telegram.code}
+              deepLink={telegram.deepLink}
+            />
 
             <div className="my-6 flex items-center gap-3">
               <span className="h-px flex-1 bg-black/10" />

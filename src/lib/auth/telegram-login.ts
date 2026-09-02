@@ -21,7 +21,10 @@ import { telegramUpdates, isTelegramConfigured } from "@/lib/notify/telegram";
 // the domain is not pointed yet. It is cheap: Telegram only holds updates the
 // bot has not acknowledged, and we only ask while somebody is waiting.
 
-const CODE_TTL_MS = 5 * 60 * 1000;
+// Fifteen rather than five. Switching apps, signing into Telegram on a phone
+// that had logged out, finding the Start button — five minutes ran out while
+// somebody was still doing exactly what we asked.
+const CODE_TTL_MS = 15 * 60 * 1000;
 const PER_IP_PER_HOUR = 12;
 
 /** The alphabet has no O/0 and no I/1: this is read on one screen, typed on another. */
@@ -49,7 +52,31 @@ export async function startTelegramLogin(): Promise<StartResult> {
   if (!isTelegramLoginConfigured || !supabaseAdmin) return { ok: false, error: "unavailable" };
 
   const ip = await getClientIp();
-  const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const now = new Date();
+  const since = new Date(now.getTime() - 60 * 60 * 1000).toISOString();
+
+  // A code is minted when the page is rendered, so a reload must not mint
+  // another: it would spend the rate limit on nothing and leave a trail of
+  // codes nobody will ever answer. An outstanding one is still good.
+  const { data: live } = await supabaseAdmin
+    .from("telegram_logins")
+    .select("code, expires_at")
+    .eq("ip", ip ?? "")
+    .is("chat_id", null)
+    .is("consumed_at", null)
+    .gt("expires_at", now.toISOString())
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (live) {
+    return {
+      ok: true,
+      code: live.code as string,
+      deepLink: botDeepLink(live.code as string),
+      expiresAt: live.expires_at as string,
+    };
+  }
 
   // A code is a credential, and minting them is the cheap half of an attack:
   // without this, one address could fill the table and fish for collisions.
@@ -62,7 +89,7 @@ export async function startTelegramLogin(): Promise<StartResult> {
   if ((count ?? 0) >= PER_IP_PER_HOUR) return { ok: false, error: "rateLimited" };
 
   const code = newCode();
-  const expiresAt = new Date(Date.now() + CODE_TTL_MS).toISOString();
+  const expiresAt = new Date(now.getTime() + CODE_TTL_MS).toISOString();
 
   const { error } = await supabaseAdmin
     .from("telegram_logins")
