@@ -50,18 +50,6 @@ const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
 const CONSUMER_ICONS = [Link2, Nfc, Sparkles, BarChart3, Car];
 const BUSINESS_ICONS = [Users, Target, RefreshCw, TrendingUp];
 
-// Who has what, in the same order as the dictionary's row labels. A claim about
-// a competitor is a fact rather than copy, so it does not move with the words —
-// and every row here is one this product actually does.
-const COMPARISON = [
-  { unqx: true, popl: false, flex: true },
-  { unqx: true, popl: false, flex: true },
-  { unqx: true, popl: true, flex: true },
-  { unqx: false, popl: true, flex: true },
-  { unqx: false, popl: true, flex: true },
-  { unqx: true, popl: false, flex: true },
-];
-
 
 export async function generateMetadata({
   searchParams,
