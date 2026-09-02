@@ -27,7 +27,10 @@ import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber, formatUZS } from "@/lib/format";
 import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
 import { site, landing, catalogue, picker } from "@/lib/i18n";
-import { listNewestResidents, getDirectoryCounts } from "@/lib/handles";
+import { listNewestResidents, getDirectoryCounts, listHandlesForUser } from "@/lib/handles";
+import { getUser } from "@/lib/auth";
+import { getHandleStats } from "@/lib/analytics";
+import { listLeads } from "@/lib/leads";
 import LiveResidents from "@/components/LiveResidents";
 import AppHome from "@/components/AppHome";
 import TwoWays from "@/components/TwoWays";
@@ -76,7 +79,31 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const c = catalogue(lang);
   const p = picker(lang);
 
-  const [newest, counts] = await Promise.all([listNewestResidents(), getDirectoryCounts()]);
+  const [newest, counts, user] = await Promise.all([
+    listNewestResidents(),
+    getDirectoryCounts(),
+    getUser(),
+  ]);
+
+  // What an owner opens the app for. Only the newest claimed handle: somebody
+  // with several has a cabinet, and a home screen that lists everything is a
+  // cabinet with extra steps.
+  const owned = user ? await listHandlesForUser(user.id) : [];
+  const primary = owned.find((h) => h.status === "claimed") ?? null;
+
+  const owner = primary
+    ? await (async () => {
+        const [stats, leads] = await Promise.all([
+          getHandleStats(primary.normalized, 1),
+          listLeads(primary.normalized, user!.id),
+        ]);
+        return {
+          handle: primary,
+          todayViews: stats.totalViews,
+          leads: leads.length,
+        };
+      })()
+    : null;
 
   const tapShot = productShot("tegizish");
   const carShot = productShot("avtovizitka");
@@ -262,6 +289,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             directions: p.groupDirections,
             directionsNote: p.groupDirectionsNote,
           }}
+          owner={owner}
         />
 
         {/* How it works */}

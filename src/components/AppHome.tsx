@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Calculator, Nfc, Users, CreditCard, ChevronRight, User, Store } from "lucide-react";
 import HandleChecker from "@/components/HandleChecker";
 import LoadoutStrip, { type StripItem } from "@/components/LoadoutStrip";
+import OwnerHome from "@/components/OwnerHome";
+import type { OwnedHandle } from "@/lib/handles";
 import { formatNumber } from "@/lib/format";
 import type { Resident } from "@/lib/handles";
 import type { site } from "@/lib/i18n";
@@ -46,6 +48,7 @@ export default function AppHome({
   devices,
   verticals,
   stripLabels,
+  owner,
 }: {
   s: Site;
   residents: Resident[];
@@ -59,13 +62,27 @@ export default function AppHome({
     directions: string;
     directionsNote: string;
   };
+  /** Present only for a signed-in owner who has a handle. */
+  owner?: { handle: OwnedHandle; todayViews: number; leads: number } | null;
 }) {
   const newest = residents.slice(0, 3);
 
   return (
     <div className="lg:hidden">
-      {/* The one thing worth doing first, on the brand ground so the app still
-          opens as Flex rather than as a form. */}
+      {owner && (
+        <OwnerHome
+          s={s}
+          handle={owner.handle}
+          todayViews={owner.todayViews}
+          leads={owner.leads}
+        />
+      )}
+
+      {/* The shop, for somebody who has not bought yet. An owner opens the app
+          to see what their card did today, not to be sold the thing they are
+          holding — so for them this whole block is skipped and the shelf below
+          is where buying still lives. */}
+      {!owner && (
       <section className="grain relative overflow-hidden bg-flex-black px-6 pt-7 pb-9 text-white">
         <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_0%,black,transparent)]" />
         <div className="absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-lime/[0.15] blur-[110px]" />
@@ -121,10 +138,12 @@ export default function AppHome({
           )}
         </div>
       </section>
+      )}
 
       {/* The fork first: which of the two products is this person here for.
           Everything under it is the personal side, which is what the four
           tiles below are. */}
+      {!owner && (
       <section className="px-6 pt-7">
         <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
           {s.waysEyebrow}
@@ -163,6 +182,7 @@ export default function AppHome({
           </Link>
         </div>
       </section>
+      )}
 
       {/* The shelf, moving, right under the fork: whichever of the two you
           are, the next question is which object. */}
