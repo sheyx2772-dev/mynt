@@ -54,6 +54,9 @@ const STRINGS = {
     recommended: "Tavsiya qildingiz",
     whoRecommended: "Tavsiya qilganlar",
     noPosts: "Bu profilda hali post yo'q.",
+    ownItTitle: "Bu — Flex",
+    ownItLead: "Bir tegish bilan ochiladigan raqamli shaxs. Noyob raqam, shaxsiy profil va NFC karta.",
+    ownItCta: "O'zingiznikini oling",
   },
   ru: {
     call: "Позвонить",
@@ -95,6 +98,9 @@ const STRINGS = {
     recommended: "Вы рекомендуете",
     whoRecommended: "Рекомендуют",
     noPosts: "В этом профиле пока нет постов.",
+    ownItTitle: "Это — Flex",
+    ownItLead: "Цифровая личность, которая открывается одним касанием. Уникальный номер, личный профиль и NFC-карта.",
+    ownItCta: "Получить свой",
   },
   en: {
     call: "Call",
@@ -136,6 +142,9 @@ const STRINGS = {
     recommended: "You recommend",
     whoRecommended: "Recommended by",
     noPosts: "No posts on this profile yet.",
+    ownItTitle: "This is Flex",
+    ownItLead: "A digital identity that opens with one tap. A unique number, a profile of your own and an NFC card.",
+    ownItCta: "Get your own",
   },
 } as const;
 

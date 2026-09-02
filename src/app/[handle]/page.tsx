@@ -15,6 +15,7 @@ import SaveContactButton from "@/components/SaveContactButton";
 import ShareButton from "@/components/ShareButton";
 import ProfileHandleSearch from "@/components/ProfileHandleSearch";
 import LangSwitch from "@/components/LangSwitch";
+import Mark from "@/components/Mark";
 import ActionRow from "@/components/ActionRow";
 import ExchangeContactForm from "@/components/ExchangeContactForm";
 import ProfileComments from "@/components/ProfileComments";
@@ -513,21 +514,36 @@ async function VanityHandlePage({
             the shop talking over them. The moment of wanting one of these
             arrives after the card has been read, not before — which is what
             this block is for, and where it now waits. */}
-        <div className="mt-8 border-t border-black/10 pt-6">
-          <div className="mb-3 flex flex-wrap items-center gap-2">
-            <span className="rounded-lg border border-black/12 bg-white px-3 py-1.5 font-tabular text-xs tracking-[0.14em] shadow-sm">
-              {normalized}
-            </span>
-            <span className="rounded-lg bg-flex-black px-3 py-1.5 font-tabular text-xs tracking-wide text-white">
-              {formatUZS(priceForHandle(letters, digits), lang)}
-            </span>
-            <div className="ml-auto">
-              <LangSwitch lang={lang} next={backTo} />
-            </div>
-          </div>
-
-          <ProfileHandleSearch />
+        <div className="mt-8 flex justify-end border-t border-black/10 pt-4">
+          <LangSwitch lang={lang} next={backTo} />
         </div>
+
+        {/* The cheapest customer we will ever get.
+            Most people meet Flex by tapping a stranger's card, and this page
+            used to answer the question they arrive with — "is my own number
+            free?" — by showing them this person's handle and its price, beside
+            a handle that is plainly taken. It read as a price tag on somebody
+            else's name.
+
+            So it says what the thing is first, and only then offers the search.
+
+            Not on premium: "the Flex mark is removed from the page" is a paid
+            promise, and removing a small label while adding a larger block
+            would be keeping the letter of it and breaking the rest. */}
+        {profile.plan === "free" && (
+          <div className="mt-6 rounded-3xl border border-black/10 bg-black/[0.02] px-5 py-5">
+            <div className="flex items-center gap-2">
+              <Mark className="h-5 w-5" />
+              <p className="font-display font-semibold tracking-tight">{t.ownItTitle}</p>
+            </div>
+            <p className="mt-2 text-sm leading-relaxed text-flex-black/60">{t.ownItLead}</p>
+
+            <p className="mt-4 mb-2 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+              {t.ownItCta}
+            </p>
+            <ProfileHandleSearch />
+          </div>
+        )}
 
         {tab === "postlar" && (
           <div className="mt-6">
