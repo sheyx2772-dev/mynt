@@ -138,12 +138,36 @@ here: the recessed disc the NFC mark sits in, the specular sweep across a ring
 band, and the fanned arrangement a supplier catalogue uses to show a range all
 came from looking at how these objects are actually made and photographed.
 
+### Where the pages are
+
+The entry page is a door, not a brochure. It carries four blocks — the brand
+line and the handle search, the fork between the two products, the shelf of
+things you can hold, and the questions — and explains neither product, because
+its job is to find out which one somebody came for.
+
+Each side then has one page that answers everything:
+
+- `/shaxsiy` — the offer, the three steps, what a profile looks like, the
+  devices, the price calculator and the plans.
+- `/biznes` — the venue product (cafe, hotel, shop, other), its pricing bands,
+  the enquiry form, and the staff-card offer with its own form.
+
+`/tarif` still answers and redirects to `/shaxsiy#tarif`: it is printed in
+footers and sent in renewal reminders. It is deliberately absent from the
+sitemap, which should not spend a crawler's visit on a redirect.
+
+On a phone the entry page is an app rather than a shorter site — see
+`AppHome`. Signed in with a claimed handle it opens on that handle and what it
+did today instead of on the shop.
+
 ### Devices
 
 What Flex sells is the number. Which object carries it — a card, a ring or a
 bracelet — is the buyer's choice, and all three open the same profile.
-`/qurilmalar` presents the three forms and the six designs, which apply
-across all of them; owners pick both in the cabinet.
+`/qurilmalar` is the shelf: every device and every direction as a picture you
+choose between, each opening `/qurilmalar/[id]` with the detail and the price.
+The six card designs apply across all the forms; owners pick both in the
+cabinet.
 
 Each form is drawn in CSS at its own proportions rather than shipped as an
 image, so a preview shows the viewer's own handle and stays sharp at any size.
