@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, MapPin, Inbox, BarChart3 } from "lucide-react";
 
 import Mark from "@/components/Mark";
@@ -32,6 +33,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
   const lang = await getLang(til);
   const t = b2b(lang);
   const s = site(lang);
+  const heroShot = productShot("biznes");
 
   return (
     <div className="flex min-h-full flex-col overflow-x-clip">
@@ -62,7 +64,8 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
           <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_60%_at_30%_0%,black,transparent)]" />
           <div className="absolute -top-40 left-1/4 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-lime/[0.13] blur-[130px]" />
 
-          <div className="relative mx-auto max-w-6xl px-6 pt-12 pb-14 sm:pt-20 sm:pb-20">
+          <div className="relative mx-auto grid max-w-6xl gap-10 px-6 pt-12 pb-14 sm:pt-20 sm:pb-20 lg:grid-cols-[1fr_320px] lg:items-center lg:gap-16">
+            <div>
             <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
               {t.eyebrow}
             </p>
@@ -91,6 +94,22 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
               ))}
               <span className="text-xs text-white/30">{t.chainNext}</span>
             </div>
+            </div>
+
+            {/* The product in a real room. Absent is a working state — the
+                column simply does not render. */}
+            {heroShot && (
+              <div className="relative aspect-[3/4] overflow-hidden rounded-[1.8rem] ring-1 ring-white/10">
+                <Image
+                  src={heroShot}
+                  alt={t.title}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 320px, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            )}
           </div>
 
           <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent to-white" />

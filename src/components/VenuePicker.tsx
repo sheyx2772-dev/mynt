@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Check, ArrowRight } from "lucide-react";
 import PhoneFrame from "@/components/PhoneFrame";
 import VenueScreen from "@/components/VenueScreen";
@@ -77,12 +78,13 @@ export default function VenuePicker({
       <p className="mt-4 text-sm text-flex-black/55">{v.tagline}</p>
 
       {shots[vertical] && (
-        <div className="relative mt-7 aspect-[21/9] overflow-hidden rounded-3xl bg-flex-black">
-          {/* eslint-disable-next-line @next/next/no-img-element -- swapped on the client with the tab */}
-          <img
+        <div className="relative mt-7 aspect-[16/9] overflow-hidden rounded-3xl bg-flex-black shadow-[0_30px_70px_-40px_rgba(14,10,27,0.6)]">
+          <Image
             src={shots[vertical]!}
             alt={v.name}
-            className="h-full w-full object-cover"
+            fill
+            sizes="(min-width: 1024px) 1000px, 100vw"
+            className="object-cover"
           />
         </div>
       )}

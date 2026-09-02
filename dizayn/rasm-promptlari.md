@@ -11,9 +11,10 @@ sayt uni o'zi topib ishlatadi, kod o'zgartirish shart emas.
 | `braslet.jpg`          | Qurilmalar              | 1:1    | bor   |
 | `oila.jpg`             | "Qurilmani tanlang"     | 16:9   | bor   |
 | `tegizish.jpg`         | "Tegizing"              | 16:9   | yo'q  |
-| `kafe.jpg`             | Biznes — kafe           | 21:9   | yo'q  |
-| `mehmonxona.jpg`       | Biznes — mehmonxona     | 21:9   | yo'q  |
-| `salon.jpg`            | Biznes — boshqa obyekt  | 21:9   | yo'q  |
+| `kafe.jpg`             | Biznes — kafe           | 16:9   | bor   |
+| `mehmonxona.jpg`       | Biznes — mehmonxona     | 16:9   | bor   |
+| `salon.jpg`            | Biznes — boshqa obyekt  | 4:3    | bor   |
+| `biznes.jpg`           | Biznes sahifasi hero    | 3:4    | bor   |
 
 Ranglar butun sayt bo'ylab ikkitagina: chuqur qora `#0e0a1b` va kislotali
 yashil `#abff09`. Promptlarda shu ikkisidan boshqa rang so'ralmagan — shuning
@@ -80,8 +81,12 @@ chizilgan variantni ko'rsatib turaveradi, sinmaydi.
 
 ## Biznes yo'nalishi uchun
 
-Bu uchtasi bo'lmasa ham sayt ishlaydi — o'rnida chizilgan ekran maketi turadi.
-Rasm qo'shilsa, maketning tepasiga keng lenta bo'lib chiqadi.
+Bu to'rttasi 2-sentyabrda qo'shildi (Gemini). Bo'lmasa ham sayt ishlaydi —
+o'rnida chizilgan ekran maketi turadi; rasm bo'lsa maketning tepasiga keng
+lenta bo'lib chiqadi. Almashtirmoqchi bo'lsangiz, quyidagi promptlar o'sha
+uslubni qaytaradi.
+
+`biznes.jpg` — biznes sahifasining sarlavhasi yonidagi tik rasm (3:4).
 
 ### kafe.jpg — 21:9
 

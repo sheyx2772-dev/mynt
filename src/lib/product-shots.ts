@@ -22,7 +22,8 @@ export type ShotName =
   // dropped in later widens it rather than fixing it.
   | "kafe"
   | "mehmonxona"
-  | "salon";
+  | "salon"
+  | "biznes";
 
 export function productShot(name: ShotName): string | null {
   for (const ext of EXTENSIONS) {
