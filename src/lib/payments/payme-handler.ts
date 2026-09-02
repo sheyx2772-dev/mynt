@@ -1,5 +1,6 @@
 import {
   PAYME_ERROR,
+  PAYME_MESSAGE,
   PAYME_STATE,
   rpcResult,
   rpcError,
@@ -72,17 +73,17 @@ async function checkPerform(
   params: Record<string, unknown>
 ) {
   const orderId = orderIdOf(params);
-  if (!orderId) return rpcError(id, PAYME_ERROR.INVALID_ACCOUNT, "Buyurtma topilmadi");
+  if (!orderId) return rpcError(id, PAYME_ERROR.INVALID_ACCOUNT, PAYME_MESSAGE.orderNotFound);
 
   const order = await store.findOrder(orderId);
-  if (!order) return rpcError(id, PAYME_ERROR.INVALID_ACCOUNT, "Buyurtma topilmadi");
+  if (!order) return rpcError(id, PAYME_ERROR.INVALID_ACCOUNT, PAYME_MESSAGE.orderNotFound);
 
   if (!paymeAmountMatches(params.amount, order.amount)) {
-    return rpcError(id, PAYME_ERROR.INVALID_AMOUNT, "Noto'g'ri summa");
+    return rpcError(id, PAYME_ERROR.INVALID_AMOUNT, PAYME_MESSAGE.wrongAmount);
   }
 
   if (order.status !== "pending") {
-    return rpcError(id, PAYME_ERROR.CANT_PERFORM, "Buyurtma allaqachon yopilgan");
+    return rpcError(id, PAYME_ERROR.CANT_PERFORM, PAYME_MESSAGE.orderClosed);
   }
 
   return rpcResult(id, { allow: true });
@@ -101,7 +102,7 @@ async function createTransaction(
   const existing = await store.findPaymeTransaction(txId);
   if (existing) {
     if (existing.state !== PAYME_STATE.CREATED) {
-      return rpcError(id, PAYME_ERROR.CANT_PERFORM, "Tranzaksiya holati mos emas");
+      return rpcError(id, PAYME_ERROR.CANT_PERFORM, PAYME_MESSAGE.wrongState);
     }
     if (isTransactionExpired(existing.createTime, now())) {
       await store.updatePaymeTransaction(txId, {
@@ -110,29 +111,29 @@ async function createTransaction(
         reason: 4,
       });
       await store.markOrderCancelled(existing.orderId);
-      return rpcError(id, PAYME_ERROR.CANT_PERFORM, "Tranzaksiya muddati tugagan");
+      return rpcError(id, PAYME_ERROR.CANT_PERFORM, PAYME_MESSAGE.expired);
     }
     return txResult(id, existing);
   }
 
   const orderId = orderIdOf(params);
-  if (!orderId) return rpcError(id, PAYME_ERROR.INVALID_ACCOUNT, "Buyurtma topilmadi");
+  if (!orderId) return rpcError(id, PAYME_ERROR.INVALID_ACCOUNT, PAYME_MESSAGE.orderNotFound);
 
   const order = await store.findOrder(orderId);
-  if (!order) return rpcError(id, PAYME_ERROR.INVALID_ACCOUNT, "Buyurtma topilmadi");
+  if (!order) return rpcError(id, PAYME_ERROR.INVALID_ACCOUNT, PAYME_MESSAGE.orderNotFound);
 
   if (!paymeAmountMatches(params.amount, order.amount)) {
-    return rpcError(id, PAYME_ERROR.INVALID_AMOUNT, "Noto'g'ri summa");
+    return rpcError(id, PAYME_ERROR.INVALID_AMOUNT, PAYME_MESSAGE.wrongAmount);
   }
 
   if (order.status !== "pending") {
-    return rpcError(id, PAYME_ERROR.CANT_PERFORM, "Buyurtma allaqachon yopilgan");
+    return rpcError(id, PAYME_ERROR.CANT_PERFORM, PAYME_MESSAGE.orderClosed);
   }
 
   // One live transaction per order, or two payers could both succeed.
   const active = await store.findPaymeTransactionByOrder(orderId);
   if (active && (active.state === PAYME_STATE.CREATED || active.state === PAYME_STATE.PERFORMED)) {
-    return rpcError(id, PAYME_ERROR.CANT_PERFORM, "Buyurtma uchun boshqa tranzaksiya ochiq");
+    return rpcError(id, PAYME_ERROR.CANT_PERFORM, PAYME_MESSAGE.otherTransactionOpen);
   }
 
   const createTime = typeof params.time === "number" ? params.time : now();
@@ -159,13 +160,13 @@ async function performTransaction(
 ) {
   const txId = String(params.id ?? "");
   const tx = await store.findPaymeTransaction(txId);
-  if (!tx) return rpcError(id, PAYME_ERROR.TRANSACTION_NOT_FOUND, "Tranzaksiya topilmadi");
+  if (!tx) return rpcError(id, PAYME_ERROR.TRANSACTION_NOT_FOUND, PAYME_MESSAGE.transactionNotFound);
 
   // Already performed — repeat the original answer rather than paying twice.
   if (tx.state === PAYME_STATE.PERFORMED) return txResult(id, tx);
 
   if (tx.state !== PAYME_STATE.CREATED) {
-    return rpcError(id, PAYME_ERROR.CANT_PERFORM, "Tranzaksiya bekor qilingan");
+    return rpcError(id, PAYME_ERROR.CANT_PERFORM, PAYME_MESSAGE.cancelled);
   }
 
   if (isTransactionExpired(tx.createTime, now())) {
@@ -175,7 +176,7 @@ async function performTransaction(
       reason: 4,
     });
     await store.markOrderCancelled(tx.orderId);
-    return rpcError(id, PAYME_ERROR.CANT_PERFORM, "Tranzaksiya muddati tugagan");
+    return rpcError(id, PAYME_ERROR.CANT_PERFORM, PAYME_MESSAGE.expired);
   }
 
   const performTime = now();
@@ -193,7 +194,7 @@ async function cancelTransaction(
 ) {
   const txId = String(params.id ?? "");
   const tx = await store.findPaymeTransaction(txId);
-  if (!tx) return rpcError(id, PAYME_ERROR.TRANSACTION_NOT_FOUND, "Tranzaksiya topilmadi");
+  if (!tx) return rpcError(id, PAYME_ERROR.TRANSACTION_NOT_FOUND, PAYME_MESSAGE.transactionNotFound);
 
   // Already cancelled — return the recorded result unchanged.
   if (tx.state === PAYME_STATE.CANCELLED || tx.state === PAYME_STATE.CANCELLED_AFTER_PERFORM) {
@@ -217,7 +218,7 @@ async function checkTransaction(
 ) {
   const txId = String(params.id ?? "");
   const tx = await store.findPaymeTransaction(txId);
-  if (!tx) return rpcError(id, PAYME_ERROR.TRANSACTION_NOT_FOUND, "Tranzaksiya topilmadi");
+  if (!tx) return rpcError(id, PAYME_ERROR.TRANSACTION_NOT_FOUND, PAYME_MESSAGE.transactionNotFound);
 
   return rpcResult(id, {
     transaction: billingRef(tx),

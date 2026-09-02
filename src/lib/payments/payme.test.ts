@@ -1,18 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  verifyPaymeAuth,
-  rpcResult,
-  rpcError,
-  paymeAmountMatches,
-  sumToTiyin,
-  tiyinToSum,
-  isTransactionExpired,
-  cancelledState,
-  paymeCheckoutUrl,
-  PAYME_ERROR,
-  PAYME_STATE,
-  PAYME_TIMEOUT_MS,
-} from "./payme";
+import { PAYME_ERROR, PAYME_MESSAGE, PAYME_STATE, PAYME_TIMEOUT_MS, cancelledState, isTransactionExpired, paymeAmountMatches, paymeCheckoutUrl, rpcError, rpcResult, sumToTiyin, tiyinToSum, verifyPaymeAuth } from "./payme";
 
 const KEY = "test-merchant-key";
 
@@ -112,5 +99,35 @@ describe("paymeCheckoutUrl", () => {
 
     const payload = Buffer.from(url.split("/").pop()!, "base64").toString();
     expect(payload).toBe("m=merch-1;ac.order_id=order-abc;a=9900000");
+  });
+});
+
+describe("rpcError messages", () => {
+  it("passes a payer-facing message through in three languages", () => {
+    const out = rpcError(1, PAYME_ERROR.INVALID_AMOUNT, PAYME_MESSAGE.wrongAmount);
+    expect(out.error.message).toEqual({
+      ru: "Неверная сумма",
+      uz: "Noto'g'ri summa",
+      en: "Wrong amount",
+    });
+  });
+
+  // The bug this replaced: every message was the Uzbek string copied into all
+  // three fields, so Payme showed a Russian-speaking payer Uzbek.
+  it("never leaves Russian holding the Uzbek text", () => {
+    for (const message of Object.values(PAYME_MESSAGE)) {
+      expect(message.ru).not.toBe(message.uz);
+      expect(message.en).not.toBe(message.uz);
+    }
+  });
+
+  // Anything only an integrator reads is still allowed to be one language.
+  it("still accepts a plain string for messages nobody but us reads", () => {
+    const out = rpcError(1, PAYME_ERROR.METHOD_NOT_FOUND, "Method not found");
+    expect(out.error.message).toEqual({
+      ru: "Method not found",
+      uz: "Method not found",
+      en: "Method not found",
+    });
   });
 });

@@ -45,14 +45,75 @@ export function rpcResult(id: RpcRequest["id"], result: unknown) {
   return { jsonrpc: "2.0", id, result };
 }
 
-export function rpcError(id: RpcRequest["id"], code: number, message: string, data?: string) {
-  // Payme expects the message in three languages; the same text is fine when
-  // a translation isn't available, but the shape must be an object.
-  return {
-    jsonrpc: "2.0",
-    id,
-    error: { code, message: { ru: message, uz: message, en: message }, data },
-  };
+/** What Payme shows the payer, in the three languages it asks for. */
+export type PaymeMessage = { ru: string; uz: string; en: string };
+
+/**
+ * Messages a payer sees, in their own language.
+ *
+ * Payme renders these inside its own app, so the Russian field showing Uzbek
+ * text is not a formatting detail — it is a Russian-speaking customer being
+ * told, in a language they may not read, why their payment failed.
+ *
+ * Messages nobody but an integrator will ever see stay in one language, and
+ * are passed as plain strings.
+ */
+export const PAYME_MESSAGE = {
+  orderNotFound: {
+    ru: "Заказ не найден",
+    uz: "Buyurtma topilmadi",
+    en: "Order not found",
+  },
+  wrongAmount: {
+    ru: "Неверная сумма",
+    uz: "Noto'g'ri summa",
+    en: "Wrong amount",
+  },
+  orderClosed: {
+    ru: "Заказ уже закрыт",
+    uz: "Buyurtma allaqachon yopilgan",
+    en: "This order is already closed",
+  },
+  otherTransactionOpen: {
+    ru: "По этому заказу уже открыта другая транзакция",
+    uz: "Buyurtma uchun boshqa tranzaksiya ochiq",
+    en: "Another transaction is already open for this order",
+  },
+  transactionNotFound: {
+    ru: "Транзакция не найдена",
+    uz: "Tranzaksiya topilmadi",
+    en: "Transaction not found",
+  },
+  wrongState: {
+    ru: "Неверное состояние транзакции",
+    uz: "Tranzaksiya holati mos emas",
+    en: "The transaction is in the wrong state",
+  },
+  expired: {
+    ru: "Срок транзакции истёк",
+    uz: "Tranzaksiya muddati tugagan",
+    en: "The transaction has expired",
+  },
+  cancelled: {
+    ru: "Транзакция отменена",
+    uz: "Tranzaksiya bekor qilingan",
+    en: "The transaction was cancelled",
+  },
+} as const satisfies Record<string, PaymeMessage>;
+
+export function rpcError(
+  id: RpcRequest["id"],
+  code: number,
+  message: string | PaymeMessage,
+  data?: string,
+) {
+  // The shape Payme requires is always three languages. A plain string means
+  // the same text in all three, which is right for messages only an integrator
+  // reads and wrong for anything a payer does.
+  const body: PaymeMessage =
+    typeof message === "string" ? { ru: message, uz: message, en: message } : message;
+
+  return { jsonrpc: "2.0", id, error: { code, message: body, data } };
 }
 
 // Payme authenticates with HTTP Basic where the username is literally
