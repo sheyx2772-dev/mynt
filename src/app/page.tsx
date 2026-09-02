@@ -26,11 +26,13 @@ import DeviceTile from "@/components/DeviceTile";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber, formatUZS } from "@/lib/format";
 import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
-import { site, landing, catalogue } from "@/lib/i18n";
+import { site, landing, catalogue, picker } from "@/lib/i18n";
 import { listNewestResidents, getDirectoryCounts } from "@/lib/handles";
 import LiveResidents from "@/components/LiveResidents";
 import AppHome from "@/components/AppHome";
 import TwoWays from "@/components/TwoWays";
+import LoadoutStrip from "@/components/LoadoutStrip";
+import { deviceStrip, verticalStrip } from "@/lib/strip-items";
 import MobileMenu from "@/components/MobileMenu";
 import { getLang } from "@/lib/lang";
 import LangSwitch from "@/components/LangSwitch";
@@ -72,11 +74,14 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const s = site(lang);
   const copy = landing(lang);
   const c = catalogue(lang);
+  const p = picker(lang);
 
   const [newest, counts] = await Promise.all([listNewestResidents(), getDirectoryCounts()]);
 
   const tapShot = productShot("tegizish");
   const carShot = productShot("avtovizitka");
+  const devices = deviceStrip(lang);
+  const verticals = verticalStrip(lang);
   const familyShot = productShot("oila");
 
   return (
@@ -230,12 +235,33 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           />
         </div>
 
+        {/* Third screen: the shelf, moving. Somebody who has read the fork and
+            the offer is now deciding what the thing looks like, and that is a
+            decision made by looking rather than by reading. Desktop only —
+            AppHome carries the same two rows on a phone. */}
+        <div className="hidden pb-6 lg:block">
+          <LoadoutStrip items={devices} label={p.groupDevices} note={p.groupDevicesNote} />
+          <LoadoutStrip
+            items={verticals}
+            label={p.groupDirections}
+            note={p.groupDirectionsNote}
+          />
+        </div>
+
         {/* On a phone this is the whole entry screen. See AppHome. */}
         <AppHome
           s={s}
           residents={newest}
           claimed={counts.claimed}
           namespace={counts.namespace}
+          devices={devices}
+          verticals={verticals}
+          stripLabels={{
+            devices: p.groupDevices,
+            devicesNote: p.groupDevicesNote,
+            directions: p.groupDirections,
+            directionsNote: p.groupDirectionsNote,
+          }}
         />
 
         {/* How it works */}

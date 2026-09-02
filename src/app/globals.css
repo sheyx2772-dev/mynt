@@ -26,6 +26,16 @@ body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* A carousel with a visible scrollbar reads as a bug on a phone and as a
+   second control on a desktop. The rail still scrolls, and still by keyboard. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .font-tabular {
   font-variant-numeric: tabular-nums;
 }

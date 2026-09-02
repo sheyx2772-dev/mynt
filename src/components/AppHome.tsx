@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Calculator, Nfc, Users, CreditCard, ChevronRight, User, Store } from "lucide-react";
 import HandleChecker from "@/components/HandleChecker";
+import LoadoutStrip, { type StripItem } from "@/components/LoadoutStrip";
 import { formatNumber } from "@/lib/format";
 import type { Resident } from "@/lib/handles";
 import type { site } from "@/lib/i18n";
@@ -42,11 +43,22 @@ export default function AppHome({
   residents,
   claimed,
   namespace,
+  devices,
+  verticals,
+  stripLabels,
 }: {
   s: Site;
   residents: Resident[];
   claimed: number;
   namespace: number;
+  devices: StripItem[];
+  verticals: StripItem[];
+  stripLabels: {
+    devices: string;
+    devicesNote: string;
+    directions: string;
+    directionsNote: string;
+  };
 }) {
   const newest = residents.slice(0, 3);
 
@@ -160,6 +172,21 @@ export default function AppHome({
         <Tile href="/rezidentlar" label={s.navResidents} Icon={Users} />
         <Tile href="/tarif" label={s.navPlans} Icon={CreditCard} />
       </nav>
+
+      {/* The shelf, moving, right under the fork: whichever of the two you
+          are, the next question is which object. */}
+      <div className="pt-4">
+        <LoadoutStrip
+          items={devices}
+          label={stripLabels.devices}
+          note={stripLabels.devicesNote}
+        />
+        <LoadoutStrip
+          items={verticals}
+          label={stripLabels.directions}
+          note={stripLabels.directionsNote}
+        />
+      </div>
 
       {newest.length > 0 && (
         <section className="px-6 pt-9">
