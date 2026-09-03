@@ -16,8 +16,8 @@ import { listIncomingTransfers } from "@/lib/transfers";
 import { getTeamForUser } from "@/lib/teams";
 import { getHandleStats } from "@/lib/analytics";
 import { listLeads } from "@/lib/leads";
-import { getOwnedVenue } from "@/lib/menu";
-import { countWaiting } from "@/lib/venue-requests";
+import { getOwnedVenue, countMenuItems } from "@/lib/menu";
+import { countWaiting, countAllRequests } from "@/lib/venue-requests";
 
 export const metadata: Metadata = {
   title: "Kabinet — flex.com.uz",
@@ -75,6 +75,14 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
           leads: leads.length,
           venue,
           waiting: venue ? await countWaiting(venue.id) : 0,
+          setup: venue
+            ? {
+                menuItems: await countMenuItems(venue.id),
+                points: venue.points.length,
+                hasStaffLink: Boolean(venue.staffToken),
+                requests: await countAllRequests(venue.id),
+              }
+            : null,
         };
       })()
     : null;
@@ -202,6 +210,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
             leads={detail.leads}
             venue={detail.venue}
             waiting={detail.waiting}
+            setup={detail.setup}
           />
         </>
       )}

@@ -291,3 +291,21 @@ export async function listRequestsSince(
 
   return { rows, capped: rows.length >= limit };
 }
+
+/**
+ * Every request this venue has ever had, answered or not.
+ *
+ * Distinct from countWaiting: what the setup panel asks is whether the loop has
+ * ever closed, and a venue whose first call was answered within the minute has
+ * proved exactly as much as one still waiting.
+ */
+export async function countAllRequests(venueId: string): Promise<number> {
+  if (!supabaseAdmin) return 0;
+
+  const { count } = await supabaseAdmin
+    .from("venue_requests")
+    .select("id", { count: "exact", head: true })
+    .eq("venue_id", venueId);
+
+  return count ?? 0;
+}

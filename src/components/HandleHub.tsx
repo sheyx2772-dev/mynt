@@ -19,6 +19,8 @@ import type { OwnedHandle } from "@/lib/handles";
 import type { Venue } from "@/lib/menu";
 import { venueWords } from "@/lib/venue-words";
 import { planState } from "@/lib/venue-billing";
+import { isSetUp, type SetupState } from "@/lib/venue-setup";
+import VenueSetup from "@/components/VenueSetup";
 
 // One number's home screen.
 //
@@ -38,6 +40,7 @@ export default function HandleHub({
   leads,
   venue,
   waiting,
+  setup,
 }: {
   handle: OwnedHandle;
   /** Views in the last day. Zero is an answer, not a missing value. */
@@ -46,6 +49,8 @@ export default function HandleHub({
   /** Set when this number is a place rather than a person. */
   venue: Venue | null;
   waiting: number;
+  /** How far a new venue has got. Absent for a number that is a person. */
+  setup?: SetupState | null;
 }) {
   const at = (screen: string) => `/kabinet/${handle.normalized}/${screen}`;
 
@@ -92,6 +97,15 @@ export default function HandleHub({
           <Stat value={leads} label="Kontakt" />
         </div>
       </Link>
+
+      {/* Before the buttons, while it still matters: a venue that has not been
+          set up cannot tell which of them comes first, and the answer is not a
+          matter of taste. Gone the moment the loop has closed once. */}
+      {venue && w && setup && !isSetUp(setup) && (
+        <div className="mt-3">
+          <VenueSetup handle={handle.normalized} state={setup} w={w} />
+        </div>
+      )}
 
       {/* A cafe opens this to answer a table, so that comes before its own
           profile does. */}

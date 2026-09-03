@@ -225,3 +225,15 @@ export async function getVenueByStaffToken(token: string): Promise<Venue | null>
     planExpiresAt: data.plan_expires_at as string,
   };
 }
+
+/** How much of a menu exists. Cheap, and the setup panel is the only caller. */
+export async function countMenuItems(venueId: string): Promise<number> {
+  if (!supabaseAdmin) return 0;
+
+  const { count } = await supabaseAdmin
+    .from("menu_items")
+    .select("id", { count: "exact", head: true })
+    .eq("venue_id", venueId);
+
+  return count ?? 0;
+}

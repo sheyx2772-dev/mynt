@@ -7,8 +7,8 @@ import HandleHub from "@/components/HandleHub";
 import { requireOwnHandle } from "@/lib/kabinet";
 import { getHandleStats } from "@/lib/analytics";
 import { listLeads } from "@/lib/leads";
-import { getOwnedVenue } from "@/lib/menu";
-import { countWaiting } from "@/lib/venue-requests";
+import { getOwnedVenue, countMenuItems } from "@/lib/menu";
+import { countWaiting, countAllRequests } from "@/lib/venue-requests";
 
 export async function generateMetadata(
   props: PageProps<"/kabinet/[handle]">
@@ -32,6 +32,16 @@ export default async function HandlePage(props: PageProps<"/kabinet/[handle]">) 
   ]);
 
   const waiting = venue ? await countWaiting(venue.id) : 0;
+
+  // Only for a venue, and only the four counts the checklist reads.
+  const setup = venue
+    ? {
+        menuItems: await countMenuItems(venue.id),
+        points: venue.points.length,
+        hasStaffLink: Boolean(venue.staffToken),
+        requests: await countAllRequests(venue.id),
+      }
+    : null;
 
   return (
     <PageShell>
@@ -58,6 +68,7 @@ export default async function HandlePage(props: PageProps<"/kabinet/[handle]">) 
         leads={leads.length}
         venue={venue}
         waiting={waiting}
+        setup={setup}
       />
     </PageShell>
   );
