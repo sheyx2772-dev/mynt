@@ -92,9 +92,22 @@ export default function NetworkBrief({
   const enough = contactCount >= 4;
 
   return (
-    <section className="overflow-hidden rounded-[1.75rem] bg-flex-black text-white">
-      <div className="flex items-center gap-3 px-6 pt-6 sm:px-7">
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-lime">
+    <section className="grain relative overflow-hidden rounded-[1.75rem] bg-flex-black text-white">
+      <div className="bg-dot-grid-light pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_60%_50%_at_0%_0%,black,transparent)]" />
+
+      {/* While it is thinking, a band travels across the panel. Honest about
+          what it knows: there is no percentage to show, because nobody is
+          counting anything. */}
+      {working && <span className="sweep pointer-events-none absolute inset-0" aria-hidden />}
+
+      <div className="relative flex items-center gap-3 px-6 pt-6 sm:px-7">
+        <span
+          className={
+            working
+              ? "halo flex h-7 w-7 items-center justify-center rounded-lg bg-lime"
+              : "flex h-7 w-7 items-center justify-center rounded-lg bg-lime"
+          }
+        >
           <Sparkles className="h-3.5 w-3.5 text-flex-black" />
         </span>
         <h2 className="font-display text-[15px] font-semibold tracking-tight">
@@ -110,14 +123,18 @@ export default function NetworkBrief({
 
       {brief ? (
         <>
-          <p className="px-6 pt-4 text-[15px] leading-relaxed text-white/85 sm:px-7">
+          <p className="relative px-6 pt-4 text-[15px] leading-relaxed text-white/85 sm:px-7">
             {brief.summary}
           </p>
 
           {brief.suggestions.length > 0 && (
-            <ul className="mt-5 space-y-px bg-white/8">
+            <ul className="relative mt-5 space-y-px bg-white/8">
               {brief.suggestions.map((s, i) => (
-                <li key={s.contactId} className="bg-flex-black px-6 py-5 sm:px-7">
+                <li
+                  key={s.contactId}
+                  className="rise bg-flex-black px-6 py-5 sm:px-7"
+                  style={{ animationDelay: `${i * 70}ms` }}
+                >
                   <div className="flex items-baseline gap-2.5">
                     <span className="font-tabular text-[11px] text-lime">
                       {String(i + 1).padStart(2, "0")}
@@ -138,7 +155,7 @@ export default function NetworkBrief({
             </ul>
           )}
 
-          <div className="flex items-center gap-2 px-6 py-5 sm:px-7">
+          <div className="relative flex items-center gap-2 px-6 py-5 sm:px-7">
             <form action={action}>
               <input type="hidden" name="handle" value={handle} />
               <button
@@ -162,7 +179,7 @@ export default function NetworkBrief({
           </div>
         </>
       ) : (
-        <div className="px-6 pb-6 pt-3 sm:px-7">
+        <div className="relative px-6 pb-6 pt-3 sm:px-7">
           <p className="text-[15px] leading-relaxed text-white/60">
             {enough
               ? "Ro'yxatni o'qib, bugun kimga javob berish kerakligini va nima yozishni aytadi."
@@ -199,7 +216,7 @@ export default function NetworkBrief({
             <button
               type="submit"
               disabled={working || !enough}
-              className="w-full rounded-2xl bg-lime px-6 py-3.5 text-[14px] font-semibold text-flex-black transition-transform hover:scale-[1.01] disabled:opacity-25 sm:w-auto sm:px-8"
+              className="w-full rounded-2xl bg-lime px-6 py-3.5 text-[14px] font-semibold text-flex-black shadow-[0_10px_30px_-12px_rgba(171,255,9,0.8)] transition-transform hover:scale-[1.02] active:scale-[0.99] disabled:opacity-25 disabled:shadow-none sm:w-auto sm:px-8"
             >
               {working ? "O'qiyapti…" : "Tahlil qilish"}
             </button>

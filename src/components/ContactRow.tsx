@@ -5,6 +5,7 @@ import { CalendarDays, Mail, Phone, Send } from "lucide-react";
 
 import { moveStage, saveContactNote } from "@/app/kabinet/[handle]/tarmoq/actions";
 import { STAGES, reasonLabel, stageLabel, type Contact, type Reason } from "@/lib/crm";
+import { ReasonIcon, StageIcon } from "@/components/CrmIcon";
 
 // One person in the list.
 //
@@ -44,10 +45,13 @@ export default function ContactRow({
   handle,
   contact,
   reason,
+  delayMs = 0,
 }: {
   handle: string;
   contact: Contact;
   reason: Reason;
+  /** Where this row sits in the deal, so the list arrives rather than appears. */
+  delayMs?: number;
 }) {
   const [open, setOpen] = useState(false);
   const label = reasonLabel(reason, "uz");
@@ -56,7 +60,10 @@ export default function ContactRow({
     : null;
 
   return (
-    <li className="relative overflow-hidden rounded-2xl border border-black/6 bg-white transition-shadow hover:shadow-[0_2px_12px_-4px_rgba(14,10,27,0.12)]">
+    <li
+      className="rise relative overflow-hidden rounded-2xl border border-black/6 bg-white transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
+      style={{ animationDelay: `${delayMs}ms` }}
+    >
       {reason && (
         <span className={`absolute inset-y-0 left-0 w-[3px] ${STRIPE[reason]}`} />
       )}
@@ -66,8 +73,13 @@ export default function ContactRow({
         onClick={() => setOpen((was) => !was)}
         className="flex w-full items-center gap-3.5 py-3.5 pl-5 pr-4 text-left"
       >
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-black/[0.05] font-display text-[12px] font-semibold tracking-tight text-flex-black/70">
+        <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-flex-black font-display text-[12px] font-semibold tracking-tight text-white">
           {initials(contact.name)}
+          {/* The stage, on the corner of the face, so the list can be read
+              without opening anything. */}
+          <span className="absolute -right-1 -bottom-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-white ring-2 ring-white">
+            <StageIcon stage={contact.stage} className="h-3 w-3 text-flex-black/55" />
+          </span>
         </span>
 
         <div className="min-w-0 flex-1">
@@ -83,8 +95,9 @@ export default function ContactRow({
 
         {label ? (
           <span
-            className={`shrink-0 rounded-lg px-2 py-1 text-[11px] font-medium ${CHIP[reason as Exclude<Reason, null>]}`}
+            className={`flex shrink-0 items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-medium ${CHIP[reason as Exclude<Reason, null>]}`}
           >
+            <ReasonIcon reason={reason as Exclude<Reason, null>} className="h-3 w-3" />
             {label}
           </span>
         ) : (
@@ -95,7 +108,7 @@ export default function ContactRow({
       </button>
 
       {open && (
-        <div className="border-t border-black/6 px-5 pb-5 pt-4">
+        <div className="rise border-t border-black/6 px-5 pb-5 pt-4">
           <div className="flex flex-wrap gap-2">
             {contact.phone && (
               <a
@@ -147,10 +160,11 @@ export default function ContactRow({
                   type="submit"
                   className={
                     stage === contact.stage
-                      ? "rounded-lg bg-white px-3 py-1.5 text-[12px] font-semibold shadow-[0_1px_3px_rgba(14,10,27,0.1)]"
-                      : "rounded-lg px-3 py-1.5 text-[12px] text-flex-black/45 transition-colors hover:text-flex-black/70"
+                      ? "flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-[12px] font-semibold shadow-[0_1px_3px_rgba(14,10,27,0.12)]"
+                      : "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] text-flex-black/45 transition-colors hover:text-flex-black/70"
                   }
                 >
+                  <StageIcon stage={stage} className="h-3 w-3" />
                   {stageLabel(stage, "uz")}
                 </button>
               </form>

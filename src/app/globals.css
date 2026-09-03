@@ -92,8 +92,75 @@ body {
   animation: marker-reveal 0.5s cubic-bezier(0.65, 0, 0.35, 1) 0.2s both;
 }
 
+/* A list arriving rather than appearing.
+   Rows are dealt in with a short stagger, which is what makes a screen read as
+   an application instead of a document that finished loading. The delay is set
+   per row inline, and capped there — past about the eighth row nobody is
+   watching the animation, they are waiting for it. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Something is happening and we cannot say how far along it is. Honest about
+   that: a band travelling across the surface rather than a bar filling up to a
+   percentage nobody measured. */
+@keyframes sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(171, 255, 9, 0.14) 50%,
+    transparent 100%
+  );
+  animation: sweep 1.4s linear infinite;
+}
+
+/* The lime ring a live figure gets, so a number that matters does not sit on
+   the screen looking like every other number. */
+@keyframes halo {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(171, 255, 9, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(171, 255, 9, 0);
+  }
+}
+
+.halo {
+  animation: halo 2.4s ease-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .marker-reveal {
+  .marker-reveal,
+  .rise,
+  .halo {
+    animation: none;
+  }
+
+  .sweep::after {
     animation: none;
   }
 }

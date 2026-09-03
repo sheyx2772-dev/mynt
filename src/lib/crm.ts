@@ -218,6 +218,27 @@ const WORDS: Record<Lang, { stages: Record<Stage, string>; reasons: Record<Exclu
   },
 };
 
+/**
+ * The icon each stage and each reason wears.
+ *
+ * Named here rather than chosen in a component because two screens draw them
+ * and a stage that is a handshake in one place and a tick in another is two
+ * stages as far as anybody reading is concerned. Names are lucide's.
+ */
+export const STAGE_ICON: Record<Stage, string> = {
+  new: "sparkles",
+  talking: "messages-square",
+  client: "circle-check-big",
+  cold: "snowflake",
+};
+
+export const REASON_ICON: Record<Exclude<Reason, null>, string> = {
+  overdue: "alarm-clock",
+  today: "clock",
+  unanswered: "mail-question-mark",
+  quiet: "moon",
+};
+
 export function stageLabel(stage: Stage, lang: Lang): string {
   return WORDS[lang].stages[stage];
 }
