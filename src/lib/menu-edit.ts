@@ -3,6 +3,8 @@ import "server-only";
 import { randomBytes } from "node:crypto";
 
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { uploadImage, isStorageConfigured } from "@/lib/storage";
+import { checkDishPhoto } from "@/lib/uploads";
 
 // Writing a menu.
 //
@@ -64,6 +66,36 @@ export async function removeCategory(venueId: string, categoryId: string): Promi
   return { ok: true };
 }
 
+/**
+ * The photograph on one row of the menu.
+ *
+ * Optional everywhere, because a cafe types its menu on the day it gets the
+ * tags and photographs it over the following week — a form that will not save
+ * without a picture is a menu that never gets published.
+ *
+ * Returns undefined when there is nothing to do, which is different from null:
+ * null is "take the picture off", undefined is "leave whatever is there".
+ */
+async function readPhoto(
+  venueId: string,
+  file: FormDataEntryValue | null,
+): Promise<{ url: string | null } | { error: string } | undefined> {
+  if (!(file instanceof File) || file.size === 0) return undefined;
+  if (!isStorageConfigured) return { error: "Rasm saqlash hozircha ulanmagan." };
+
+  const check = checkDishPhoto(file);
+  if (!check.ok) return { error: check.error };
+
+  const key = `menyu/${venueId}/${crypto.randomUUID()}.${check.extension}`;
+  const url = await uploadImage(
+    key,
+    Buffer.from(await file.arrayBuffer()),
+    check.contentType,
+  );
+
+  return url ? { url } : { error: "Rasmni yuklab bo'lmadi." };
+}
+
 export async function addItem(venueId: string, form: FormData): Promise<EditResult> {
   if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
 
@@ -76,6 +108,9 @@ export async function addItem(venueId: string, form: FormData): Promise<EditResu
   if (price > PRICE_MAX) return { ok: false, error: "Narx juda katta." };
 
   const categoryId = text(form.get("category_id"), 40) || null;
+
+  const photo = await readPhoto(venueId, form.get("photo"));
+  if (photo && "error" in photo) return { ok: false, error: photo.error };
 
   const { count } = await supabaseAdmin
     .from("menu_items")
@@ -91,6 +126,7 @@ export async function addItem(venueId: string, form: FormData): Promise<EditResu
     name_en: optional(form.get("name_en"), NAME_MAX),
     note: optional(form.get("note"), NOTE_MAX),
     price,
+    photo_url: photo?.url ?? null,
     position: count ?? 0,
   });
 
@@ -257,6 +293,39 @@ export async function rotateStaffToken(venueId: string): Promise<EditResult> {
     .from("venues")
     .update({ staff_token: token })
     .eq("id", venueId);
+
+  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
+  return { ok: true };
+}
+
+/**
+ * Putting a photograph on a dish that is already on the menu, or taking it off.
+ *
+ * Separate from addItem because that is the shape of the work: the menu is
+ * typed in one sitting and photographed over the following week, one dish at a
+ * time, by somebody walking around with a phone.
+ */
+export async function setItemPhoto(
+  venueId: string,
+  itemId: string,
+  form: FormData,
+): Promise<EditResult> {
+  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+
+  const remove = form.get("remove") === "1";
+  const photo = remove ? { url: null } : await readPhoto(venueId, form.get("photo"));
+
+  if (photo && "error" in photo) return { ok: false, error: photo.error };
+  if (!photo) return { ok: false, error: "Rasm tanlanmadi." };
+
+  // The old file is left in the bucket rather than deleted. A dish photo is
+  // small, deleting is the one operation that cannot be undone by re-uploading,
+  // and a menu page cached on a guest's phone would otherwise show a hole.
+  const { error } = await supabaseAdmin
+    .from("menu_items")
+    .update({ photo_url: photo.url })
+    .eq("id", itemId)
+    .eq("venue_id", venueId);
 
   if (error) return { ok: false, error: "Saqlab bo'lmadi." };
   return { ok: true };

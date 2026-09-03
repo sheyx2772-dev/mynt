@@ -14,6 +14,7 @@ import {
   removeItemAction,
 } from "./actions";
 import MenuEditor from "@/components/MenuEditor";
+import DishPhotoButton from "@/components/DishPhotoButton";
 import { venueWords } from "@/lib/venue-words";
 
 export const metadata: Metadata = {
@@ -91,6 +92,15 @@ export default async function MenuAdminPage({ params }: PageProps<"/kabinet/[han
           <div className="divide-y divide-black/6 rounded-2xl border border-black/10 bg-white">
             {category.items.map((item) => (
               <div key={item.id} className="flex items-center gap-3 px-4 py-3">
+                {item.photoUrl && (
+                  // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
+                  <img
+                    src={item.photoUrl}
+                    alt=""
+                    className="h-10 w-10 shrink-0 rounded-lg object-cover"
+                  />
+                )}
+
                 <div className="min-w-0 flex-1">
                   <p className={item.available ? "font-medium" : "font-medium opacity-45"}>
                     {item.name}
@@ -107,6 +117,12 @@ export default async function MenuAdminPage({ params }: PageProps<"/kabinet/[han
                     formatNumber(item.price)
                   )}
                 </p>
+
+                <DishPhotoButton
+                  handle={normalized}
+                  itemId={item.id}
+                  hasPhoto={Boolean(item.photoUrl)}
+                />
 
                 <form action={toggleItemAction} className="shrink-0">
                   <input type="hidden" name="handle" value={normalized} />

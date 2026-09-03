@@ -16,8 +16,12 @@ const client = isStorageConfigured
     })
   : null;
 
-// Uploads a file to Cloudflare R2 and returns its public URL, or null if
-// R2 isn't configured yet (callers should treat images as optional until it is).
+// Uploads a file to Cloudflare R2 and returns its public URL, or null if the
+// upload did not happen — because R2 is not configured yet, or because it
+// refused. Callers treat images as optional and were already written against
+// null; the send used to be unguarded, so a rejected key threw straight through
+// a server action and replaced the page with the error screen. Losing a
+// photograph is a message. Losing the form somebody was filling in is not.
 export async function uploadImage(
   key: string,
   body: Buffer,
@@ -25,14 +29,22 @@ export async function uploadImage(
 ): Promise<string | null> {
   if (!isStorageConfigured || !client) return null;
 
-  await client.send(
-    new PutObjectCommand({
-      Bucket: bucket,
-      Key: key,
-      Body: body,
-      ContentType: contentType,
-    })
-  );
+  try {
+    await client.send(
+      new PutObjectCommand({
+        Bucket: bucket,
+        Key: key,
+        Body: body,
+        ContentType: contentType,
+      })
+    );
+  } catch (error) {
+    // Logged rather than swallowed: an upload that stops working is almost
+    // always a rotated key or a bucket permission, and neither is visible from
+    // the "could not upload" the owner sees.
+    console.error("R2 upload failed:", key, error);
+    return null;
+  }
 
   return `${publicUrl}/${key}`;
 }

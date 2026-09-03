@@ -66,7 +66,11 @@ export default function MenuEditor({
       </div>
 
       {open === "item" && (
-        <form action={itemAction} className="mt-4 rounded-2xl border border-black/10 bg-white p-5">
+        <form
+          action={itemAction}
+          encType="multipart/form-data"
+          className="mt-4 rounded-2xl border border-black/10 bg-white p-5"
+        >
           <input type="hidden" name="handle" value={handle} />
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -100,6 +104,22 @@ export default function MenuEditor({
                 placeholder={w.notePlaceholder}
               />
             </div>
+            <div className="sm:col-span-2">
+              <label htmlFor="mi-photo" className={label}>
+                Rasm — ixtiyoriy
+              </label>
+              <input
+                id="mi-photo"
+                name="photo"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className={field}
+              />
+              <p className="mt-1 text-xs text-flex-black/40">
+                JPG, PNG yoki WEBP, 2 MB gacha. Keyinroq ham qo&apos;shsa bo&apos;ladi.
+              </p>
+            </div>
+
             <div className="sm:col-span-2">
               <label htmlFor="mi-cat" className={label}>
                 Bo&apos;lim

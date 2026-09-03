@@ -9,6 +9,7 @@ import {
   removeCategory,
   addItem,
   setItemAvailable,
+  setItemPhoto,
   removeItem,
   saveVenue,
   type EditResult,
@@ -79,6 +80,21 @@ export async function saveVenueAction(_prev: EditResult, form: FormData) {
   if (!venue) return DENIED;
 
   const result = await saveVenue(venue.id, form);
+  if (result.ok) {
+    revalidatePath(`/kabinet/${handle}/menyu`);
+    revalidatePath(`/${handle}`);
+  }
+  return result;
+}
+
+// Returns its result rather than swallowing it. A photograph that quietly does
+// not appear is an afternoon wasted trying again with a different file, when
+// what happened was that storage refused the key.
+export async function setItemPhotoAction(_prev: EditResult, form: FormData) {
+  const { venue, handle } = await venueFor(form);
+  if (!venue) return DENIED;
+
+  const result = await setItemPhoto(venue.id, String(form.get("id") ?? ""), form);
   if (result.ok) {
     revalidatePath(`/kabinet/${handle}/menyu`);
     revalidatePath(`/${handle}`);

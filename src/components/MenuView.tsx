@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Wifi, Clock, MapPin } from "lucide-react";
 
 import { formatNumber } from "@/lib/format";
@@ -98,15 +97,13 @@ export default function MenuView({
                   }
                 >
                   {item.photoUrl && (
-                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-black/[0.04]">
-                      <Image
-                        src={item.photoUrl}
-                        alt={item.name}
-                        fill
-                        sizes="56px"
-                        className="object-cover"
-                      />
-                    </div>
+                    // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
+                    <img
+                      src={item.photoUrl}
+                      alt={item.name}
+                      loading="lazy"
+                      className="h-14 w-14 shrink-0 rounded-xl bg-black/[0.04] object-cover"
+                    />
                   )}
 
                   <div className="min-w-0 flex-1">

@@ -38,3 +38,13 @@ export function checkAvatar(file: File): AvatarCheck {
 export function checkBanner(file: File): AvatarCheck {
   return checkImage(file, MAX_BANNER_BYTES, "Fon rasmi 4 MB dan oshmasligi kerak.");
 }
+
+// A dish is photographed on a phone in a kitchen doorway and shown at about
+// the size of a thumbnail, so the cap is the avatar's rather than the banner's:
+// a menu is thirty of these on one page over a restaurant's Wi-Fi, and every
+// megabyte is paid for by a guest standing at a table.
+export const MAX_DISH_BYTES = MAX_AVATAR_BYTES;
+
+export function checkDishPhoto(file: File): AvatarCheck {
+  return checkImage(file, MAX_DISH_BYTES, "Rasm hajmi 2 MB dan oshmasligi kerak.");
+}
