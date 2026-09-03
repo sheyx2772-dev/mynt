@@ -232,6 +232,14 @@ const SITE = {
     teamCards: "Jamoa kartalari",
     contactCollection: "Kontakt yig'ish",
     venueLine: "Kafe va mehmonxonalar",
+    priceEyebrow: "Narx",
+    priceTitle: "Ikki mahsulot, ikki to'lov",
+    pricePersonal: "Shaxsiy raqam",
+    pricePersonalNote: "Bir marta. Raqam sizniki bo'lib qoladi.",
+    priceVenue: "Obyekt — kafe, mehmonxona, do'kon",
+    priceVenueNote: "Oyiga. Menyu, stol belgilari, chaqiruv va hisobot.",
+    priceFrom: "dan",
+    priceMonthly: "oyiga",
     company: "Kompaniya",
     delivery: "Yetkazib berish va qaytarish shartlari",
     heroTitleA: "Flex — Sizning",
@@ -370,6 +378,14 @@ const SITE = {
     teamCards: "Карты для команды",
     contactCollection: "Сбор контактов",
     venueLine: "Кафе и отели",
+    priceEyebrow: "Цена",
+    priceTitle: "Два продукта, две оплаты",
+    pricePersonal: "Личный номер",
+    pricePersonalNote: "Разово. Номер остаётся вашим.",
+    priceVenue: "Объект — кафе, отель, магазин",
+    priceVenueNote: "В месяц. Меню, метки на столы, вызов и отчёт.",
+    priceFrom: "от",
+    priceMonthly: "в месяц",
     company: "Компания",
     delivery: "Доставка и условия возврата",
     heroTitleA: "Flex — Ваша",
@@ -506,6 +522,14 @@ const SITE = {
     teamCards: "Team cards",
     contactCollection: "Contact collection",
     venueLine: "Cafes and hotels",
+    priceEyebrow: "Price",
+    priceTitle: "Two products, two payments",
+    pricePersonal: "A personal number",
+    pricePersonalNote: "Once. The number stays yours.",
+    priceVenue: "A venue — cafe, hotel, shop",
+    priceVenueNote: "Monthly. Menu, table tags, calls and a report.",
+    priceFrom: "from",
+    priceMonthly: "a month",
     company: "Company",
     delivery: "Delivery and returns",
     heroTitleA: "Flex — Your",
@@ -674,20 +698,24 @@ const LANDING = {
     ],
     faqs: [
       {
-        q: "Handle nima va u qanday narxlanadi?",
-        a: "Handle — 3 harf + 3 raqamdan iborat noyob kod (masalan MYN042), sizning shaxsiy profilingiz manzili bo'ladi. Narx bazaviy summadan, harflar va raqamlarning kamyobligiga qarab ko'payadigan koeffitsientlardan hisoblanadi. Yuqorida hisob-kitobni o'zingiz sinab ko'rishingiz mumkin.",
+        q: "Raqam nima va u qanday narxlanadi?",
+        a: "Raqam — 3 harf + 3 raqamdan iborat noyob kod (masalan MYN042), sizning profilingiz manzili bo'ladi. Narx bazaviy summadan, harflar va raqamlarning kamyobligiga qarab ko'payadigan koeffitsientlardan hisoblanadi. Narxlash sahifasida istalgan kombinatsiyani yozib, narxini darhol ko'rasiz.",
       },
       {
         q: "NFC qurilma qanday ishlaydi?",
         a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, sizning flex.com.uz profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC qo'llamaydigan telefonlar uchun QR-kod zaxira variant sifatida ishlaydi.",
       },
       {
-        q: "Biznes uchun qancha xodim qo'shsam bo'ladi?",
+        q: "Kafe yoki mehmonxonaga nima beradi?",
+        a: "Har stol yoki xonaga alohida QR va NFC belgisi tegadi. Mehmon tegizadi — menyu yoki xizmatlar ro'yxati ochiladi, u yerdan ofitsiantni chaqiradi, hisob so'raydi yoki izoh qoldiradi. So'rov qaysi stoldan kelgani bilan kassadagi telefonda ovoz bilan chiqadi. Oyiga o'rtacha javob vaqti va qaysi stol ko'p chaqirgani hisobotda ko'rinadi.",
+      },
+      {
+        q: "Jamoa uchun qancha xodim qo'shsam bo'ladi?",
         a: "Jamoa tarifi o'rinlar bo'yicha sotiladi, eng kami 5 ta. O'rin odamga emas, firmaga tegishli: xodim ketsa o'rin bo'shaydi va keyingisiga beriladi.",
       },
       {
         q: "To'lovni qanday amalga oshiraman?",
-        a: "Raqam va obuna uchun Click yoki Payme. Firmalar uchun hisob-faktura va bank o'tkazmasi — hujjatni kabinetdan o'zingiz olasiz.",
+        a: "Raqam va shaxsiy obuna uchun — Payme. Kafe, mehmonxona va firmalar uchun — hisob-faktura va bank o'tkazmasi: hujjatni kabinetdan o'zingiz olasiz, pul kelgach obuna uzayadi.",
       },
     ],
   },
@@ -743,11 +771,15 @@ const LANDING = {
     faqs: [
       {
         q: "Что такое номер и как считается цена?",
-        a: "Номер — это уникальный код из 3 букв и 3 цифр (например MYN042), он становится адресом вашего профиля. Цена считается от базовой суммы с коэффициентами за редкость букв и цифр. Расчёт можно проверить выше.",
+        a: "Номер — это уникальный код из 3 букв и 3 цифр (например MYN042), он становится адресом вашего профиля. Цена считается от базовой суммы с коэффициентами за редкость букв и цифр. На странице цен наберите любую комбинацию и сразу увидите её стоимость.",
       },
       {
         q: "Как работает NFC-устройство?",
         a: "Подносите устройство (карту, кольцо или браслет) к чужому телефону — ваш профиль flex.com.uz открывается сам. Приложение никому ставить не нужно. Для телефонов без NFC есть QR-код.",
+      },
+      {
+        q: "Что это даёт кафе или отелю?",
+        a: "У каждого стола или номера свой QR и своя NFC-метка. Гость подносит телефон — открывается меню или список услуг, оттуда же зовёт официанта, просит счёт или оставляет отзыв. Запрос приходит на телефон у кассы со звуком и с номером стола. В отчёте за месяц видно среднее время ответа и какой стол зовёт чаще.",
       },
       {
         q: "Сколько сотрудников можно добавить?",
@@ -755,7 +787,7 @@ const LANDING = {
       },
       {
         q: "Как оплатить?",
-        a: "Номер и подписку — через Click или Payme. Для компаний — счёт-фактура и банковский перевод, документ выдаётся прямо в кабинете.",
+        a: "Номер и личную подписку — через Payme. Кафе, отели и компании — по счёт-фактуре и банковским переводом: документ выдаётся прямо в кабинете, подписка продлевается после поступления денег.",
       },
     ],
   },
@@ -810,12 +842,16 @@ const LANDING = {
     ],
     faqs: [
       {
-        q: "What is a handle and how is it priced?",
-        a: "A handle is a unique code of three letters and three digits — MYN042, say — and it becomes the address of your profile. The price starts from a base and rises with how rare the letters and digits are. You can try the calculation above.",
+        q: "What is a number and how is it priced?",
+        a: "A number is a unique code of three letters and three digits — MYN042, say — and it becomes the address of your profile. The price starts from a base and rises with how rare the letters and digits are. Type any combination on the pricing page and its price appears straight away.",
       },
       {
         q: "How does the NFC device work?",
         a: "Hold the device — card, ring or bracelet — to somebody's phone and your flex.com.uz profile opens by itself. Nobody installs an app. Phones without NFC use the QR code instead.",
+      },
+      {
+        q: "What does it do for a cafe or a hotel?",
+        a: "Every table or room gets its own QR code and its own NFC tag. A guest taps it, the menu or service list opens, and from there they call a waiter, ask for the bill or leave a review. The request arrives on the phone by the till with a sound and with the table number on it. The monthly report shows the average time to answer and which table calls most.",
       },
       {
         q: "How many staff can I add?",
@@ -823,7 +859,7 @@ const LANDING = {
       },
       {
         q: "How do I pay?",
-        a: "Click or Payme for a handle and a subscription. Companies pay by invoice and bank transfer, and the document is issued in the cabinet.",
+        a: "Payme for a number and a personal subscription. Cafes, hotels and companies pay by invoice and bank transfer: the document is issued in the cabinet and the subscription is extended when the money arrives.",
       },
     ],
   },

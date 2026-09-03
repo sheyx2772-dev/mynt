@@ -11,6 +11,7 @@ import LiveResidents from "@/components/LiveResidents";
 import AppHome from "@/components/AppHome";
 import TwoWays from "@/components/TwoWays";
 import LoadoutStrip from "@/components/LoadoutStrip";
+import PriceTeaser from "@/components/PriceTeaser";
 import { deviceStrip, verticalStrip } from "@/lib/strip-items";
 import MobileMenu from "@/components/MobileMenu";
 import { getLang } from "@/lib/lang";
@@ -167,9 +168,8 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           />
         </div>
 
-        {/* Who has just joined, and how much of the namespace is gone. Directly
-            under the hero, because it is the first thing a scroll reveals and
-            it is the only proof on the page that other people are buying. */}
+        {/* Who has just joined, and how much of the namespace is gone: the only
+            proof on the page that other people are buying. */}
         <div className="hidden bg-flex-black lg:block">
           <LiveResidents
             residents={newest}
@@ -195,6 +195,11 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           }}
           owner={owner}
         />
+
+        {/* What it costs, which this page stopped saying when the calculator
+            and the bands moved to their own pages. Two numbers, after the phone
+            has had its home screen and before the questions. */}
+        <PriceTeaser s={s} lang={lang} />
 
         {/* FAQ */}
         <section id="savollar" className="scroll-mt-20 mx-auto max-w-3xl px-6 py-14 sm:py-24">
