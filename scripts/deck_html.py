@@ -156,18 +156,30 @@ def foot(page, light=False):
     return f'<div class="pad foot" style="padding-top:0"><span>flex.com.uz</span><span>{page}</span></div>'
 
 
+TRIMMED = {"karta", "uzuk", "braslet"}
+
+
 def build(t):
     s = []
 
-    # 1 — the product, full bleed. The photograph is the argument.
+    # 1 — the product, split rather than behind the words.
+    #
+    # It was a full-bleed photograph with the type laid over it and a scrim
+    # darkening the whole frame, and the objects the company sells could not be
+    # made out at all. Splitting the slide gives the words a ground they are
+    # legible on and gives the card, the ring and the bracelet an undarkened half
+    # to be seen in. The first slide of a hardware pitch has one job: show the
+    # hardware.
     s.append(slide(f'''
-      <div class="bleed"><img src="{PHOTO['hero']}"></div>
-      <div class="scrim"></div>
-      <div class="pad grow" style="position:relative;display:flex;flex-direction:column;justify-content:center">
+      <div class="bleed"><img src="{PHOTO['qurilmalar']}"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,
+           rgba(14,10,27,.97) 0%, rgba(14,10,27,.86) 34%, rgba(14,10,27,.3) 52%,
+           rgba(14,10,27,0) 66%)"></div>
+      <div class="pad grow" style="position:relative;display:flex;flex-direction:column">
         <div class="eyebrow">{t['event']}</div>
-        <h1 style="margin-top:26px">flex</h1>
-        <h2 class="lime" style="max-width:640px">{t['tagline']}</h2>
-        <p class="lead" style="max-width:520px;margin-top:22px">{t['sub']}</p>
+        <h1 style="margin-top:22px">flex</h1>
+        <h2 class="lime" style="max-width:700px">{t['tagline']}</h2>
+        <p class="lead" style="max-width:520px;margin-top:18px">{t['sub']}</p>
       </div>'''))
 
     # 2 — problem
@@ -204,18 +216,21 @@ def build(t):
 
     # 4 — the devices, which is the thing people can hold
     devices = "".join(f'''<div class="card" style="padding:0;overflow:hidden">
-        <div class="shot" style="height:262px;border-radius:22px 22px 0 0"><img src="{PHOTO[k]}"></div>
-        <div style="padding:20px 24px 26px">
-          <h3 style="font-size:21px">{n}</h3>
-          <p style="margin-top:5px;font-size:15px">{d}</p>
-          <div class="lime" style="margin-top:12px;font-weight:700;font-size:17px">{p}</div>
+        <div class="shot" style="height:172px;border-radius:22px 22px 0 0;background:#fff">
+          <img src="{PHOTO[k]}" style="object-fit:{'contain' if k in TRIMMED else 'cover'}"></div>
+        <div style="padding:16px 20px 20px">
+          <h3 style="font-size:19px">{n}</h3>
+          <p style="margin-top:4px;font-size:14px;min-height:2.9em">{d}</p>
+          <div class="lime" style="margin-top:8px;font-weight:700;font-size:16px">{p}</div>
         </div></div>''' for k, n, d, p in t["devices"])
     # Light, deliberately. These four are studio cutouts shot on white; on a dark
     # slide each one read as a hole punched through the deck. On paper they are
     # objects sitting on a table.
     s.append(slide(head(t["nav_devices"], t["devices_title"], True) +
-                   f'<div class="pad grow" style="padding-top:30px"><div class="cols c4">{devices}</div></div>' +
-                   foot(3, True), light=True))
+                   f'''<div class="pad grow" style="padding-top:24px;padding-bottom:22px">
+                     <div style="display:grid;grid-template-columns:repeat(3, 1fr);
+                          grid-template-rows:1fr 1fr;gap:18px;height:100%">{devices}</div>
+                   </div>''' + foot(3, True), light=True))
 
     # 5 — one number, many designs.
     #
@@ -244,14 +259,14 @@ def build(t):
         <img src="{PHOTO[k]}" style="width:100%;height:100%;object-fit:cover">
         <div class="scrim up" style="background:linear-gradient(0deg,
              rgba(14,10,27,.94) 0%, rgba(14,10,27,.72) 26%, rgba(14,10,27,0) 62%)"></div>
-        <div style="position:absolute;left:34px;right:26px;bottom:34px">
-          {icon(ic, "#ABFF09", 32)}
-          <h3 style="margin-top:12px;font-size:26px">{n}</h3>
-          <p style="margin-top:6px;font-size:16px;max-width:300px;line-height:1.5;min-height:3em">{d}</p>
+        <div style="position:absolute;left:26px;right:20px;bottom:30px">
+          {icon(ic, "#ABFF09", 30)}
+          <h3 style="margin-top:11px;font-size:21px">{n}</h3>
+          <p style="margin-top:6px;font-size:15px;line-height:1.5;min-height:4.5em">{d}</p>
         </div></div>''' for k, ic, n, d in t["verticals"])
     s.append(slide(head(t["nav_market"], t["market_title"]) +
-                   f'''<div class="grow" style="margin-top:30px;display:grid;
-                        grid-template-columns:1fr 1fr 1fr;gap:3px">{verts}</div>'''))
+                   f'''<div class="grow" style="margin-top:26px;display:grid;
+                        grid-template-columns:repeat(4, 1fr);gap:3px">{verts}</div>'''))
 
     # 7 — the loop, with the real screens
     loop = "".join(f'<div class="step"><div class="num">{i+1}</div><p style="color:#fff;font-size:17px;padding-top:5px">{x}</p></div>'
@@ -261,7 +276,7 @@ def build(t):
         <div class="eyebrow">{t['nav_loop']}</div><h2>{t['loop_title']}</h2>
       </div>
       <div class="pad grow" style="padding-top:26px;display:grid;grid-template-columns:250px 250px 1fr;gap:34px;align-items:start">
-        <div class="shot" style="height:434px"><img src="{PHOTO['kafe']}" style="object-position:center"></div>
+        <div class="shot" style="height:434px"><img src="{PHOTO['restoran']}" style="object-position:center"></div>
         <img src="{data_uri(ROOT / 'deck' / 'frames' / 'counter.png')}" style="width:100%;filter:drop-shadow(0 30px 60px rgba(0,0,0,.5))">
         <div style="display:flex;flex-direction:column;gap:19px">{loop}</div>
       </div>''' + foot(6)))
@@ -314,12 +329,19 @@ def build(t):
     live = "".join(f'<div style="display:flex;gap:13px;align-items:flex-start;padding:9px 0"><span style="color:#4D7C0F;font-weight:700;font-size:17px">·</span><span style="font-size:16px">{x}</span></div>'
                    for x in t["status_live"])
     s.append(slide(head(t["nav_status"], t["status_title"], True) +
-                   f'''<div class="pad grow" style="padding-top:22px;display:grid;grid-template-columns:1.15fr .85fr;gap:40px">
+                   f'''<div class="pad grow" style="padding-top:20px;display:grid;
+                        grid-template-columns:1.05fr .62fr .58fr;gap:30px;
+                        min-height:0;padding-bottom:26px">
                      <div>{live}</div>
                      <div class="card lime" style="justify-content:center">
                        {icon('smartphone', '#0E0A1B', 34)}
-                       <h3 style="font-size:21px">{t['status_next_head']}</h3>
-                       <p style="font-size:16px">{t['status_next']}</p>
+                       <h3 style="font-size:20px">{t['status_next_head']}</h3>
+                       <p style="font-size:15px">{t['status_next']}</p>
+                     </div>
+                     <div style="display:flex;flex-direction:column;min-height:0">
+                       <div class="shot" style="flex:1;min-height:0;box-shadow:0 24px 40px -20px rgba(14,10,27,.45)">
+                         <img src="{PHOTO['haqiqiy-kafe']}" style="object-position:center 62%"></div>
+                       <div class="tiny" style="margin-top:11px">{t['status_photo_caption']}</div>
                      </div>
                    </div>''' + foot(11, True), light=True))
 
@@ -359,7 +381,7 @@ def build(t):
     use = "".join(f'<div style="display:flex;gap:18px;align-items:baseline"><span class="lime" style="font-weight:700;font-size:19px;width:56px">{a}</span><span style="font-size:16px">{b}</span></div>'
                   for a, b in t["use"])
     s.append(slide(f'''
-      <div class="bleed"><img src="{PHOTO['oila']}"></div>
+      <div class="bleed"><img src="{PHOTO['oila']}" style="object-position:60% center"></div>
       <div class="scrim"></div>
       <div class="pad grow" style="position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:40px">
         <div>

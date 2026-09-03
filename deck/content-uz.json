@@ -63,6 +63,18 @@
    "Avtovizitka",
    "Mashina old oynasida",
    "Kelishuv bo'yicha"
+  ],
+  [
+   "stend2",
+   "Stol qurilmasi",
+   "Kafe, salon, klinika stoliga",
+   "Obyekt tarifida"
+  ],
+  [
+   "konsyerj",
+   "Konsyerj plitasi",
+   "Mehmonxona xonasiga",
+   "Obyekt tarifida"
   ]
  ],
  "nav_design": "Dizayn",
@@ -106,6 +118,12 @@
    "store",
    "Do'kon va salon",
    "Narxlar, rekvizitlar, yordam chaqiruvi"
+  ],
+  [
+   "klinika",
+   "stethoscope",
+   "Klinika va xizmat",
+   "Xizmatlar, narxlar, navbatga yozilish"
   ]
  ],
  "nav_loop": "Qanday ishlaydi",
@@ -287,5 +305,6 @@
  "contact": "Javohir Abrorov<br>sheyx2772@gmail.com<br>+998 97 724 79 99<br>flex.com.uz",
  "statement": "Bir tegish —<br>va sahifa ochiladi.",
  "statement_sub": "Ilova o'rnatilmaydi. Ro'yxatdan o'tilmaydi. Mehmon o'z telefonini tegizadi, tamom.",
- "team_body": "Uch kishi. Mahsulot, veb va sotuv — hammasi ichkarida. Birinchi versiya tashqi jamoasiz qurildi va bugun ishlab turibdi."
+ "team_body": "Uch kishi. Mahsulot, veb va sotuv — hammasi ichkarida. Birinchi versiya tashqi jamoasiz qurildi va bugun ishlab turibdi.",
+ "status_photo_caption": "Haqiqiy obyektda, bugun"
 }

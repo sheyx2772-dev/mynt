@@ -63,6 +63,18 @@
    "Car card",
    "On the windscreen",
    "On request"
+  ],
+  [
+   "stend2",
+   "Table unit",
+   "On a cafe, salon or clinic table",
+   "In the venue plan"
+  ],
+  [
+   "konsyerj",
+   "Concierge plate",
+   "In a hotel room",
+   "In the venue plan"
   ]
  ],
  "nav_design": "Design",
@@ -106,6 +118,12 @@
    "store",
    "Shops and salons",
    "Prices, payment details, calling for help"
+  ],
+  [
+   "klinika",
+   "stethoscope",
+   "Clinics and services",
+   "Services, prices, booking a slot"
   ]
  ],
  "nav_loop": "How it works",
@@ -287,5 +305,6 @@
  "contact": "Javohir Abrorov<br>sheyx2772@gmail.com<br>+998 97 724 79 99<br>flex.com.uz",
  "statement": "One tap —<br>and the page opens.",
  "statement_sub": "Nothing to install. Nothing to sign up for. The guest taps their own phone, and that is the whole of it.",
- "team_body": "Three people. Product, web and sales, all in-house. The first version was built without an outside team, and it is running today."
+ "team_body": "Three people. Product, web and sales, all in-house. The first version was built without an outside team, and it is running today.",
+ "status_photo_caption": "In a real venue, today"
 }
