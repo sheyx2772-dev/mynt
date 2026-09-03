@@ -2,9 +2,10 @@ import { ChevronDown } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Mark from "@/components/Mark";
-import { site, landing, picker } from "@/lib/i18n";
+import { site, landing, picker, dict } from "@/lib/i18n";
 import { listNewestResidents, getDirectoryCounts, listHandlesForUser } from "@/lib/handles";
 import { getUser } from "@/lib/auth";
+import { getVenueByHandle, getMenu } from "@/lib/menu";
 import { getHandleStats } from "@/lib/analytics";
 import { listLeads } from "@/lib/leads";
 import LiveResidents from "@/components/LiveResidents";
@@ -12,6 +13,7 @@ import AppHome from "@/components/AppHome";
 import TwoWays from "@/components/TwoWays";
 import LoadoutStrip from "@/components/LoadoutStrip";
 import PriceTeaser from "@/components/PriceTeaser";
+import SeeItWorking from "@/components/SeeItWorking";
 import { deviceStrip, verticalStrip } from "@/lib/strip-items";
 import MobileMenu from "@/components/MobileMenu";
 import { getLang } from "@/lib/lang";
@@ -29,11 +31,16 @@ export async function generateMetadata({
   return { title: `Flex — ${t.tagline}`, description: t.metaDescription };
 }
 
+// The object the front page opens to show what a tap does. The same one
+// /biznes invites people into, on purpose: one demo to keep correct.
+const DEMO_VENUE = "NAV001";
+
 export default async function Home({ searchParams }: PageProps<"/">) {
   const { til } = await searchParams;
   const lang = await getLang(til);
   const s = site(lang);
   const copy = landing(lang);
+  const t = dict(lang);
   const p = picker(lang);
 
   const [newest, counts, user] = await Promise.all([
@@ -61,6 +68,12 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         };
       })()
     : null;
+  // The venue the page shows working. Real rows from a real object, so the
+  // front page cannot demonstrate a menu that does not exist; if it is ever
+  // deleted the phone simply goes away rather than breaking the page.
+  const demoVenue = await getVenueByHandle(DEMO_VENUE);
+  const demoMenu = demoVenue ? await getMenu(demoVenue.id, lang) : [];
+
   const devices = deviceStrip(lang);
   const verticals = verticalStrip(lang);
 
@@ -151,6 +164,24 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             it sells the personal side, and a visitor who came for the business
             side should not have to scroll past a pitch to find out we have one.
             The phone gets the same pair inside AppHome. */}
+        {/* Before the fork, because the fork asks a question a first-time
+            visitor cannot answer yet: they do not know what this is. A phone
+            with the thing running on it answers faster than any sentence. */}
+        <SeeItWorking
+          s={s}
+          labels={{
+            role: s.demoRole,
+            tagOne: s.demoTagOne,
+            tagTwo: s.demoTagTwo,
+            followers: t.followers,
+            views: s.statViews,
+            saveContact: t.saveContact,
+          }}
+          venue={demoVenue}
+          categories={demoMenu}
+          demoHandle={DEMO_VENUE}
+        />
+
         <div className="hidden lg:block">
           <TwoWays s={s} />
         </div>

@@ -15,7 +15,7 @@ import LoadoutStrip from "@/components/LoadoutStrip";
 import { getLang } from "@/lib/lang";
 import { productShot } from "@/lib/product-shots";
 import { deviceStrip } from "@/lib/strip-items";
-import { site, landing, catalogue, picker } from "@/lib/i18n";
+import { dict, site, landing, catalogue, picker } from "@/lib/i18n";
 import { formatUZS } from "@/lib/format";
 import { DEVICE_TYPES } from "@/lib/devices";
 
@@ -41,6 +41,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
   const { til } = await searchParams;
   const lang = await getLang(til);
   const s = site(lang);
+  const t = dict(lang);
   const copy = landing(lang);
   const c = catalogue(lang);
   const p = picker(lang);
@@ -264,7 +265,16 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
 
             <div className="hidden lg:block lg:pt-4">
               <PhoneFrame>
-                <ProfilePreview />
+                <ProfilePreview
+                  labels={{
+                    role: s.demoRole,
+                    tagOne: s.demoTagOne,
+                    tagTwo: s.demoTagTwo,
+                    followers: t.followers,
+                    views: s.statViews,
+                    saveContact: t.saveContact,
+                  }}
+                />
               </PhoneFrame>
 
               {/* The car card, on the side of the site it belongs to: one
