@@ -131,12 +131,15 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             <div className="hidden lg:block">
               <LangSwitch lang={lang} next="/" tone="dark" />
             </div>
-            <a
-              href="#narx"
+            {/* The calculator lives on /shaxsiy. This button kept pointing at
+                the anchor it left behind, so the largest control on the site
+                did nothing at all. */}
+            <Link
+              href="/shaxsiy#narx"
               className="rounded-full bg-lime px-4 py-2 text-sm font-medium text-flex-black transition-colors hover:bg-lime/85"
             >
               {s.getHandle}
-            </a>
+            </Link>
           </div>
         </div>
       </header>
@@ -241,25 +244,28 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </p>
               <ul className="mt-3 space-y-0.5 text-sm text-white/60">
                 <li>
-                  <a
-                    href="#narx"
+                  <Link
+                    href="/shaxsiy#narx"
                     className="block py-1.5 transition-colors hover:text-white"
                   >
                     {s.navPricing}
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#individual"
+                  <Link
+                    href="/shaxsiy#individual"
                     className="block py-1.5 transition-colors hover:text-white"
                   >
                     {s.personalProfile}
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
+                  <Link
+                    href="/qurilmalar/card"
+                    className="block py-1.5 transition-colors hover:text-white"
+                  >
                     FLEX CARD
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -269,22 +275,28 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </p>
               <ul className="mt-3 space-y-0.5 text-sm text-white/60">
                 <li>
-                  <a
-                    href="#biznes"
+                  <Link
+                    href="/biznes"
+                    className="block py-1.5 transition-colors hover:text-white"
+                  >
+                    {s.venueLine}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/biznes#jamoa"
                     className="block py-1.5 transition-colors hover:text-white"
                   >
                     {s.teamCards}
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
+                  <Link
+                    href="/shaxsiy#tarif"
+                    className="block py-1.5 transition-colors hover:text-white"
+                  >
                     {s.contactCollection}
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
-                    {s.eventMode}
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
