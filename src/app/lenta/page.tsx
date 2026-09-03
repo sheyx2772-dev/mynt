@@ -8,7 +8,7 @@ import { listFeed } from "@/lib/posts";
 import { touchLastSeen } from "@/lib/handles";
 
 export const metadata: Metadata = {
-  title: "Lenta — flex.com.uz",
+  title: "Postlar — flex.com.uz",
   robots: { index: false },
 };
 
@@ -21,7 +21,7 @@ export default async function FeedPage() {
   return (
     <PageShell>
       <div className="mb-7 flex items-baseline justify-between gap-4">
-        <h1 className="font-display text-2xl font-semibold tracking-tight">Lenta</h1>
+        <h1 className="font-display text-2xl font-semibold tracking-tight">Postlar</h1>
         <Link href="/rezidentlar" className="text-sm text-flex-black/45 hover:text-flex-black">
           Rezidentlar
         </Link>
@@ -30,7 +30,7 @@ export default async function FeedPage() {
       <PostList
         posts={posts}
         showAuthor
-        emptyMessage="Lentangiz bo'sh. Rezidentlarga obuna bo'ling — ularning postlari shu yerda chiqadi."
+        emptyMessage="Hozircha bo'sh. Rezidentlarga obuna bo'ling — ularning postlari shu yerda chiqadi."
       />
     </PageShell>
   );

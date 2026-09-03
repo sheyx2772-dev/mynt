@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { site } from "@/lib/i18n";
+import { venueTab } from "@/lib/venue-nav";
 import { getLang } from "@/lib/lang";
 import BottomNav from "@/components/BottomNav";
 import { Space_Grotesk, Inter } from "next/font/google";
@@ -39,6 +40,10 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const lang = await getLang();
   const t = site(lang);
 
+  // Costs a signed-out visitor nothing: it returns null as soon as there is no
+  // session, without asking the database anything.
+  const venue = await venueTab();
+
   return (
     <html
       lang={lang}
@@ -54,7 +59,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             residents: t.navResidents,
             feed: t.navFeed,
             cabinet: t.navCabinet,
+            requests: t.navRequests,
           }}
+          venue={venue}
         />
         <ServiceWorkerRegistrar />
       </body>
