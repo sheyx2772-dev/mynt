@@ -1,6 +1,7 @@
 import "server-only";
 
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { announcePaidDeviceOrder } from "@/lib/device-orders";
 import type { PaymentStore, Order, PaymeTransaction, ClickTransaction } from "./store";
 
 // PaymentStore backed by Supabase. Every write runs under the service_role
@@ -50,7 +51,7 @@ export class SupabasePaymentStore implements PaymentStore {
       })
       .eq("id", orderId)
       .eq("status", "pending")
-      .select("handle, user_id, kind, months")
+      .select("handle, user_id, kind, months, device_type")
       .maybeSingle();
 
     if (!updated) return; // already settled
@@ -62,6 +63,19 @@ export class SupabasePaymentStore implements PaymentStore {
       await client.rpc("extend_premium", {
         target_handle: updated.handle,
         add_months: updated.months ?? 1,
+      });
+      return;
+    }
+
+    // A device is a physical thing: nothing about the number changes, and the
+    // work starts elsewhere. This is the only place that knows a sale actually
+    // completed, so it is the only place that can raise the notice — an order
+    // that was placed is not an order that was paid for.
+    if (updated.kind === "device") {
+      announcePaidDeviceOrder({
+        id: orderId,
+        handle: updated.handle,
+        deviceType: String(updated.device_type ?? ""),
       });
       return;
     }

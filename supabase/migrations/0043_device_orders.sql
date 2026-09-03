@@ -139,3 +139,16 @@ create trigger orders_stamp_fulfilment
   for each row
   when (new.kind = 'device')
   execute function flex_stamp_fulfilment();
+
+-- A paid device order has to reach a person, not just a table.
+--
+-- Nothing in the system told anyone a sale had happened: leads, table requests
+-- and expiring plans all raised a notice, and the one event that means somebody
+-- has to make something and post it raised none. An order that arrives silently
+-- is an order that gets found a fortnight later.
+alter table notifications drop constraint if exists notifications_kind_check;
+alter table notifications add constraint notifications_kind_check
+  check (kind in (
+    'lead', 'plan_expiring', 'plan_expired', 'transfer', 'venue_request',
+    'device_order'
+  ));
