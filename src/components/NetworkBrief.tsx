@@ -1,7 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
-import { Sparkles, Trash2 } from "lucide-react";
+import { useActionState, useState } from "react";
+import { Check, ChevronDown, Copy, Send, Shield, Sparkles, Trash2 } from "lucide-react";
 
 import {
   buildBrief,
@@ -10,20 +10,68 @@ import {
 } from "@/app/kabinet/[handle]/tarmoq/actions";
 import { timeAgo } from "@/lib/relative-time";
 
-// The assistant's note above the list.
+// The assistant, on its own ground.
 //
-// It sits above a list that is already correct without it, and is allowed to be
-// absent — no key, a busy vendor, fewer than four contacts. What it must never
-// be is a surprise: the panel says what leaves before anything does, because
-// the substance being sent is other people's notes and the owner is the only
-// person who can weigh that.
+// Drawn on ink rather than as one more white card, because it is a different
+// kind of thing from the list underneath it: the list is fact, this is an
+// opinion, and a reader should be able to tell them apart without reading
+// either. The lime is spent here and almost nowhere else on the screen.
+//
+// The drafts are the working part. A message the assistant writes and nobody
+// can use is a demonstration; each one carries a copy button and, where there
+// is a number, a way to open it in Telegram — the two ends of the only journey
+// this panel exists to shorten.
 
 export type BriefView = {
   summary: string;
-  suggestions: { why: string; draft: string; name: string; contactId: number }[];
+  suggestions: {
+    why: string;
+    draft: string;
+    name: string;
+    contactId: number;
+    phone: string | null;
+  }[];
   contactsSeen: number;
   builtAt: string;
 };
+
+function DraftActions({ draft, phone }: { draft: string; phone: string | null }) {
+  const [copied, setCopied] = useState(false);
+
+  return (
+    <div className="mt-3 flex items-center gap-2">
+      <button
+        type="button"
+        onClick={async () => {
+          try {
+            await navigator.clipboard.writeText(draft);
+            setCopied(true);
+            window.setTimeout(() => setCopied(false), 2000);
+          } catch {
+            // A denied clipboard is not worth a dialogue: the text is on
+            // screen and can be selected.
+          }
+        }}
+        className="flex items-center gap-1.5 rounded-lg bg-white/10 px-2.5 py-1.5 text-[12px] font-medium text-white/80 transition-colors hover:bg-white/15"
+      >
+        {copied ? <Check className="h-3 w-3 text-lime" /> : <Copy className="h-3 w-3" />}
+        {copied ? "Nusxa olindi" : "Nusxa olish"}
+      </button>
+
+      {phone && (
+        <a
+          href={`https://t.me/+${phone.replace(/[^0-9]/g, "")}`}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-1.5 rounded-lg bg-white/10 px-2.5 py-1.5 text-[12px] font-medium text-white/80 transition-colors hover:bg-white/15"
+        >
+          <Send className="h-3 w-3" />
+          Telegram
+        </a>
+      )}
+    </div>
+  );
+}
 
 export default function NetworkBrief({
   handle,
@@ -38,58 +86,65 @@ export default function NetworkBrief({
     buildBrief,
     {},
   );
+  const [showTerms, setShowTerms] = useState(false);
 
   const stale = brief ? brief.contactsSeen !== contactCount : false;
+  const enough = contactCount >= 4;
 
   return (
-    <section className="rounded-3xl border border-black/8 bg-white p-6 sm:p-8">
-      <div className="flex items-start gap-3">
-        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime">
-          <Sparkles className="h-4 w-4 text-flex-black" />
+    <section className="overflow-hidden rounded-[1.75rem] bg-flex-black text-white">
+      <div className="flex items-center gap-3 px-6 pt-6 sm:px-7">
+        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-lime">
+          <Sparkles className="h-3.5 w-3.5 text-flex-black" />
         </span>
-        <div className="min-w-0 flex-1">
-          <h2 className="font-display text-lg font-semibold">Yordamchi</h2>
-          <p className="mt-1 text-sm leading-relaxed text-flex-black/55">
-            Ro&apos;yxatni o&apos;qib, bugun kimga javob berish kerakligini
-            aytadi.
-          </p>
-        </div>
+        <h2 className="font-display text-[15px] font-semibold tracking-tight">
+          Yordamchi
+        </h2>
+        {brief && (
+          <span className="ml-auto font-tabular text-[11px] text-white/35">
+            {timeAgo(brief.builtAt, "uz")}
+            {stale && " · ro'yxat o'zgargan"}
+          </span>
+        )}
       </div>
 
       {brief ? (
         <>
-          <p className="mt-6 text-sm leading-relaxed">{brief.summary}</p>
+          <p className="px-6 pt-4 text-[15px] leading-relaxed text-white/85 sm:px-7">
+            {brief.summary}
+          </p>
 
           {brief.suggestions.length > 0 && (
-            <ul className="mt-5 space-y-3">
-              {brief.suggestions.map((s) => (
-                <li
-                  key={s.contactId}
-                  className="rounded-2xl border border-black/8 bg-black/[0.02] p-4"
-                >
-                  <p className="text-sm font-medium">{s.name}</p>
-                  <p className="mt-1 text-sm text-flex-black/60">{s.why}</p>
-                  {/* Shown as something to copy rather than something to send:
-                      nothing here has the right to message anybody. */}
-                  <p className="mt-3 rounded-xl bg-white p-3 text-sm leading-relaxed text-flex-black/80">
-                    {s.draft}
+            <ul className="mt-5 space-y-px bg-white/8">
+              {brief.suggestions.map((s, i) => (
+                <li key={s.contactId} className="bg-flex-black px-6 py-5 sm:px-7">
+                  <div className="flex items-baseline gap-2.5">
+                    <span className="font-tabular text-[11px] text-lime">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <p className="text-[15px] font-semibold tracking-tight">{s.name}</p>
+                  </div>
+                  <p className="mt-1.5 pl-[26px] text-[13px] leading-relaxed text-white/50">
+                    {s.why}
                   </p>
+                  <div className="mt-3 pl-[26px]">
+                    <p className="rounded-xl bg-white/[0.06] p-3.5 text-[13px] leading-relaxed text-white/90">
+                      {s.draft}
+                    </p>
+                    <DraftActions draft={s.draft} phone={s.phone} />
+                  </div>
                 </li>
               ))}
             </ul>
           )}
 
-          <div className="mt-5 flex flex-wrap items-center gap-3">
-            <span className="text-xs text-flex-black/45">
-              {timeAgo(brief.builtAt, "uz")}
-              {stale && " · ro'yxat o'zgargan"}
-            </span>
-            <form action={action} className="contents">
+          <div className="flex items-center gap-2 px-6 py-5 sm:px-7">
+            <form action={action}>
               <input type="hidden" name="handle" value={handle} />
               <button
                 type="submit"
                 disabled={working}
-                className="rounded-xl border border-black/12 px-4 py-2 text-sm text-flex-black/70 transition-colors hover:border-black/30 disabled:opacity-50"
+                className="rounded-xl bg-white/10 px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-white/15 disabled:opacity-40"
               >
                 {working ? "O'qiyapti…" : "Yangilash"}
               </button>
@@ -98,7 +153,7 @@ export default function NetworkBrief({
               <input type="hidden" name="handle" value={handle} />
               <button
                 type="submit"
-                className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm text-flex-black/45 transition-colors hover:text-red-700"
+                className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] text-white/35 transition-colors hover:text-red-400"
               >
                 <Trash2 className="h-3.5 w-3.5" />
                 O&apos;chirish
@@ -107,32 +162,56 @@ export default function NetworkBrief({
           </div>
         </>
       ) : (
-        <form action={action} className="mt-6">
-          <input type="hidden" name="handle" value={handle} />
-          {/* Said before the button, not after it. */}
-          <p className="rounded-2xl bg-black/[0.03] p-4 text-sm leading-relaxed text-flex-black/60">
-            Tahlil uchun ism, telefon va email <strong>yuborilmaydi</strong> —
-            faqat kompaniya, bosqich, kunlar soni va izohlaringiz ketadi. Har
-            bir odam K1, K2 kabi belgi bilan boradi va ismni faqat siz
-            ko&apos;rasiz. Izohlar o&apos;zgartirilmay yuboriladi, shuning uchun
-            unda boshqa odamning ismi bo&apos;lsa, u ham ketadi.
+        <div className="px-6 pb-6 pt-3 sm:px-7">
+          <p className="text-[15px] leading-relaxed text-white/60">
+            {enough
+              ? "Ro'yxatni o'qib, bugun kimga javob berish kerakligini va nima yozishni aytadi."
+              : `Kamida to'rtta kontakt kerak. Hozir ${contactCount} ta.`}
           </p>
+
+          {/* Folded, but never further than one tap away, and never after the
+              button. What is sent is the owner's decision to make and they
+              cannot make it from a wall of grey text they scrolled past. */}
           <button
-            type="submit"
-            disabled={working || contactCount < 4}
-            className="mt-4 w-full rounded-2xl bg-flex-black px-6 py-3.5 text-sm font-medium text-white transition-transform hover:scale-[1.01] disabled:opacity-40 sm:w-auto"
+            type="button"
+            onClick={() => setShowTerms((was) => !was)}
+            className="mt-4 flex items-center gap-1.5 text-[12px] text-white/45 transition-colors hover:text-white/70"
           >
-            {working ? "O'qiyapti…" : "Tahlil qilish"}
+            <Shield className="h-3.5 w-3.5" />
+            Nima yuboriladi
+            <ChevronDown
+              className={showTerms ? "h-3.5 w-3.5 rotate-180" : "h-3.5 w-3.5"}
+            />
           </button>
-          {contactCount < 4 && (
-            <p className="mt-3 text-sm text-flex-black/45">
-              Kamida to&apos;rtta kontakt kerak — hozir {contactCount} ta.
+
+          {showTerms && (
+            <p className="mt-3 rounded-xl bg-white/[0.06] p-4 text-[13px] leading-relaxed text-white/60">
+              Ism, telefon va email <strong className="text-white/90">yuborilmaydi</strong>.
+              Faqat kompaniya, bosqich, kunlar soni va izohlar ketadi; har bir odam
+              K1, K2 kabi belgi bilan boradi va ismni faqat siz ko&apos;rasiz.
+              Izohlar o&apos;zgartirilmay yuboriladi — ularda boshqa odamning ismi
+              bo&apos;lsa, u ham ketadi.
             </p>
           )}
-        </form>
+
+          <form action={action} className="mt-5">
+            <input type="hidden" name="handle" value={handle} />
+            <button
+              type="submit"
+              disabled={working || !enough}
+              className="w-full rounded-2xl bg-lime px-6 py-3.5 text-[14px] font-semibold text-flex-black transition-transform hover:scale-[1.01] disabled:opacity-25 sm:w-auto sm:px-8"
+            >
+              {working ? "O'qiyapti…" : "Tahlil qilish"}
+            </button>
+          </form>
+        </div>
       )}
 
-      {state.error && <p className="mt-4 text-sm text-red-700">{state.error}</p>}
+      {state.error && (
+        <p className="mx-6 mb-6 rounded-xl bg-red-500/15 p-3.5 text-[13px] text-red-200 sm:mx-7">
+          {state.error}
+        </p>
+      )}
     </section>
   );
 }

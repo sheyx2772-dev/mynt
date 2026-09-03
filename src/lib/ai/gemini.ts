@@ -77,7 +77,11 @@ export async function ask(
       // exercise, and the same list on two mornings should not produce two
       // different opinions.
       temperature: 0.2,
-      maxOutputTokens: 2048,
+      // Generous because the newer models spend part of this budget thinking
+      // before they answer. At 2048 a briefing came back cut in half, which
+      // fails as "not json" rather than as anything that names the cause — an
+      // hour of the wrong diagnosis is what a low ceiling here actually buys.
+      maxOutputTokens: 8192,
       ...(options.schema
         ? {
             responseMimeType: "application/json",
