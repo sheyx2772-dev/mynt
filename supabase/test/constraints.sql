@@ -1642,3 +1642,105 @@ begin
   delete from handles where normalized = 'dev001';
   delete from auth.users where id = owner_id;
 end $$;
+
+-- ── the contact list an owner works ───────────────────────────────────────
+--
+-- A lead used to be a record of a meeting. These columns make it a
+-- relationship, and what the database has to hold is that the owner's side of
+-- the row cannot quietly overwrite the visitor's, and that the clock moves
+-- when somebody is actually dealt with.
+do $$
+declare
+  owner_id uuid := gen_random_uuid();
+  hid uuid;
+  lid bigint;
+  other bigint;
+  touched timestamptz;
+  again timestamptz;
+  visitor_note text;
+begin
+  insert into auth.users (id, email) values (owner_id, 'crm@flex.test');
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('CRM', '001', 'claimed', owner_id, now())
+    returning id into hid;
+
+  insert into leads (handle_id, name, phone, note, source)
+    values (hid, 'Dilnoza Karimova', '+998901234567', 'Qandolat buyurtma qilaman', 'nfc')
+    returning id into lid;
+  raise notice '   ok   a tap leaves a contact';
+
+  -- What a tap produces, and the only status the application sets itself.
+  perform 1 from leads where id = lid and status = 'new' and last_touch_at is null;
+  if not found then raise exception 'yangi kontakt holati xato'; end if;
+  raise notice '   ok   a new contact starts unanswered';
+
+  begin
+    update leads set status = 'mijozroq' where id = lid;
+    raise exception 'noma''lum holat oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a stage nobody works in';
+  end;
+
+  -- Answering somebody moves the clock, without the application saying so.
+  update leads set status = 'talking' where id = lid;
+  select last_touch_at into touched from leads where id = lid;
+  if touched is null then raise exception 'javob berilgan vaqt qoʻyilmadi'; end if;
+  raise notice '   ok   answering them moves the clock';
+
+  -- And the owner's note is kept apart from the visitor's own sentence.
+  update leads set owner_note = 'Dushanba narx yuborish kerak' where id = lid;
+  select note into visitor_note from leads where id = lid;
+  if visitor_note <> 'Qandolat buyurtma qilaman' then
+    raise exception 'mehmon yozgani ustiga yozildi';
+  end if;
+  raise notice '   ok   the owner''s note does not overwrite the visitor''s';
+
+  -- Proved on a contact nobody has answered yet, because now() is the
+  -- transaction's start time: two updates in one transaction share it, so
+  -- "moved forward" is not a question this test can ask. What matters is that
+  -- a note on its own is enough to count.
+  insert into leads (handle_id, name, email, source)
+    values (hid, 'Sardor Rahimov', 'sardor@example.uz', 'qr')
+    returning id into other;
+
+  update leads set owner_note = 'Ukasi bilan tanishtiradi' where id = other;
+  select last_touch_at into again from leads where id = other;
+  if again is null then raise exception 'izoh yozilgani hisobga olinmadi'; end if;
+  perform 1 from leads where id = other and status = 'new';
+  if not found then raise exception 'izoh holatni oʻzgartirdi'; end if;
+  raise notice '   ok   writing about them counts, without moving their stage';
+
+  -- Going back to 'new' is the owner saying they have not dealt with this after
+  -- all, so it must not be recorded as having dealt with it.
+  update leads set status = 'new' where id = lid;
+  select last_touch_at into touched from leads where id = lid;
+  if touched <> again then raise exception 'yangiga qaytish vaqtni surdi'; end if;
+  raise notice '   ok   putting one back does not count as answering it';
+
+  update leads set follow_up_on = current_date + 3 where id = lid;
+  raise notice '   ok   a contact can be put in the diary';
+
+  begin
+    update leads set tags = array['a','b','c','d','e','f'] where id = lid;
+    raise exception 'olti yorliq oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: more labels than anybody labels with';
+  end;
+
+  -- A number taken on paper belongs in the same list as one taken by tap.
+  insert into leads (handle_id, name, phone, source)
+    values (hid, 'Bekzod Yo''ldoshev', '+998907654321', 'manual');
+  raise notice '   ok   a contact can be entered by hand';
+
+  begin
+    insert into leads (handle_id, name, phone, source)
+      values (hid, 'Nomaʼlum', '+998900000000', 'faks');
+    raise exception 'nomaʼlum manba oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a source we do not have';
+  end;
+
+  delete from leads where handle_id = hid;
+  delete from handles where id = hid;
+  delete from auth.users where id = owner_id;
+end $$;
