@@ -6,6 +6,7 @@ import DeviceFace from "@/components/DeviceFace";
 import { catalogue } from "@/lib/i18n";
 import { DEVICE_TYPES, type DeviceTypeId } from "@/lib/devices";
 import { CARD_DESIGNS, type CardDesignId } from "@/lib/card-designs";
+import { formatUZS } from "@/lib/format";
 
 // One control for both halves of the choice: which object, and how it looks.
 // They are shown together because the preview only makes sense as a pair —
@@ -24,11 +25,22 @@ export default function DevicePicker({
   device,
   design,
   customImage = null,
+  prices = false,
 }: {
   handle: string;
   device: DeviceTypeId;
   design: CardDesignId;
   customImage?: string | null;
+  /**
+   * Show what each object costs.
+   *
+   * Off in the profile editor, where the choice is only which picture the card
+   * carries and a price beside it would read as a charge for changing it. On
+   * when the same control is being used to buy one, and then it belongs on the
+   * tile: a row of three prices under the picker does not say which of them is
+   * the one you just selected.
+   */
+  prices?: boolean;
 }) {
   const [selectedDevice, setSelectedDevice] = useState<DeviceTypeId>(device);
   const [selectedDesign, setSelectedDesign] = useState<CardDesignId>(design);
@@ -70,6 +82,11 @@ export default function DevicePicker({
                   {DEVICE_NAMES[type.id]}
                   {active && <Check className="h-3.5 w-3.5" />}
                 </span>
+                {prices && (
+                  <span className="mt-0.5 block px-1 text-xs text-flex-black/50">
+                    {formatUZS(type.price, "uz")}
+                  </span>
+                )}
               </label>
             );
           })}

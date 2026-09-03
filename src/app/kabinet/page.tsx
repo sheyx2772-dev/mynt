@@ -2,7 +2,7 @@ import Link from "next/link";
 import { after } from "next/server";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { Bell, Rss, Building2, ChevronRight, Clock } from "lucide-react";
+import { Bell, Rss, Building2, ChevronRight, Clock, Package } from "lucide-react";
 
 import PageShell from "@/components/PageShell";
 import HandleHub from "@/components/HandleHub";
@@ -10,6 +10,8 @@ import SignOutButton from "@/components/SignOutButton";
 import InstallHint from "@/components/InstallHint";
 import IncomingTransfers from "@/components/IncomingTransfers";
 import { requireUser } from "@/lib/auth";
+import { isOperator } from "@/lib/operator";
+import { countQueue } from "@/lib/device-orders";
 import { listHandlesForUser, touchLastSeen } from "@/lib/handles";
 import { listNotifications } from "@/lib/notify";
 import { listIncomingTransfers } from "@/lib/transfers";
@@ -38,11 +40,15 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
   const { ish } = await props.searchParams;
   const user = await requireUser("/kabinet");
 
-  const [handles, incoming, notifications, team] = await Promise.all([
+  // The queue count is only asked for on behalf of the one account allowed to
+  // see it: a customer's cabinet must not run a query whose answer it is never
+  // shown.
+  const [handles, incoming, notifications, team, queue] = await Promise.all([
     listHandlesForUser(user.id),
     listIncomingTransfers(user.email ?? ""),
     listNotifications(user.id),
     getTeamForUser(user.id),
+    isOperator(user.id) ? countQueue() : Promise.resolve(0),
   ]);
 
   const unread = notifications.filter((n) => !n.readAt).length;
@@ -162,6 +168,26 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
             <p className="mt-0.5 text-xs text-white/50">Firma hisobi</p>
           </div>
           <ChevronRight className="h-4 w-4 shrink-0 text-white/40" />
+        </Link>
+      )}
+
+      {/* The fulfilment queue is ours, not a customer's, so it is only drawn
+          for the one account that is allowed in — and it carries the count,
+          because the reason it exists is that a paid order used to go
+          unnoticed. */}
+      {queue > 0 && (
+        <Link
+          href="/kabinet/buyurtmalar"
+          className="mb-4 flex items-center gap-4 rounded-[1.5rem] border border-lime/50 bg-lime px-6 py-5 text-flex-black transition-transform active:scale-[0.995]"
+        >
+          <Package className="h-5 w-5 shrink-0" strokeWidth={1.75} />
+          <div className="min-w-0 flex-1">
+            <p className="font-display font-semibold tracking-tight">
+              {queue} ta buyurtma
+            </p>
+            <p className="mt-0.5 text-xs text-flex-black/60">Yasash va yuborish</p>
+          </div>
+          <ChevronRight className="h-4 w-4 shrink-0 text-flex-black/40" />
         </Link>
       )}
 

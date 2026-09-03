@@ -312,3 +312,59 @@ export async function countQueue(): Promise<number> {
 
   return count ?? 0;
 }
+
+/**
+ * Settle a device order with no provider behind it.
+ *
+ * The same concession the claim flow makes: without merchant keys the site has
+ * to stay usable, in development and in the window before certification
+ * finishes. It goes through the ordinary paid path — the state it lands in and
+ * the notice it raises are the ones a real payment produces — so nothing
+ * downstream has to know which of the two happened.
+ */
+export async function settleWithoutProvider(
+  userId: string,
+  orderId: string,
+): Promise<boolean> {
+  if (!supabaseAdmin) return false;
+
+  const { data } = await supabaseAdmin
+    .from("orders")
+    .update({ status: "paid", paid_at: new Date().toISOString() })
+    .eq("id", orderId)
+    .eq("user_id", userId)
+    .eq("kind", "device")
+    // Conditional on pending, so this is a no-op the second time exactly as a
+    // provider retry is.
+    .eq("status", "pending")
+    .select("id, handle, device_type")
+    .maybeSingle();
+
+  if (!data) return false;
+
+  announcePaidDeviceOrder({
+    id: data.id,
+    handle: data.handle,
+    deviceType: String(data.device_type ?? ""),
+  });
+
+  return true;
+}
+
+/** One order, as its buyer. Ownership is a filter, so a guessed id is nothing. */
+export async function getOwnOrder(
+  userId: string,
+  orderId: string,
+): Promise<DeviceOrder | null> {
+  if (!supabaseAdmin) return null;
+
+  const { data } = await supabaseAdmin
+    .from("orders")
+    .select(COLUMNS)
+    .eq("id", orderId)
+    .eq("user_id", userId)
+    .eq("kind", "device")
+    .maybeSingle();
+
+  return data ? toOrder(data) : null;
+}

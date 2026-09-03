@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   QrCode,
+  Package,
   Pencil,
   BarChart3,
   CalendarClock,
@@ -209,6 +210,7 @@ export default function HandleHub({
         <Tile href={at("statistika")} label="Statistika" Icon={BarChart3} count={leads} />
         <Tile href={at("postlar")} label="Postlar" Icon={MessageSquare} />
         <Tile href={at("dizayn")} label="Dizayn" Icon={Palette} />
+        <Tile href={at("qurilma")} label="Qurilma" Icon={Package} />
         <Tile href={at("otkazish")} label="O'tkazish" Icon={ArrowLeftRight} />
       </div>
 
