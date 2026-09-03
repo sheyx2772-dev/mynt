@@ -1,0 +1,276 @@
+{
+ "event": "ICT WEEK UZBEKISTAN · 2026 · PRE-SEED",
+ "tagline": "Your number is your identity.",
+ "sub": "A unique number and an NFC object that opens it. One tap — nothing to install.",
+ "nav_problem": "The problem",
+ "problem_title": "Paper is printed once.\nEverything else changes.",
+ "problems": [
+  [
+   "contact",
+   "A card is out of date the day it is printed",
+   "A new job, a new number, a new company — and the box in the drawer is wrong. People hand them over anyway."
+  ],
+  [
+   "book-open",
+   "A menu is a photograph of last month's prices",
+   "A cafe reprints, or crosses lines out with a pen. The dish that ran out at lunch is still on every table."
+  ],
+  [
+   "hand",
+   "A table cannot ask for anything",
+   "A guest raises a hand and waits for someone to look. The cafe never learns which tables waited, or for how long."
+  ]
+ ],
+ "nav_solution": "The solution",
+ "solution_title": "One tap, and the page opens.",
+ "solution": [
+  [
+   "The number",
+   "Three letters and three digits — MYN042 — become an address, and it is yours for life."
+  ],
+  [
+   "The object",
+   "A card, a ring, a bracelet, or a tag on a table. An NFC chip and a QR code inside."
+  ],
+  [
+   "The page",
+   "The guest taps their own phone and it opens in their own language. Nobody installs anything."
+  ]
+ ],
+ "nav_devices": "Our devices",
+ "devices_title": "Something you can hold.",
+ "devices": [
+  [
+   "karta",
+   "Card",
+   "In a pocket, in a wallet",
+   "200,000 UZS"
+  ],
+  [
+   "uzuk",
+   "Ring",
+   "On a hand, always with you",
+   "350,000 UZS"
+  ],
+  [
+   "braslet",
+   "Bracelet",
+   "On a wrist, for events",
+   "250,000 UZS"
+  ],
+  [
+   "avtovizitka",
+   "Car card",
+   "On the windscreen",
+   "On request"
+  ]
+ ],
+ "nav_design": "Design",
+ "design_title": "One number, many faces.",
+ "design_body": "The owner picks the card design, and every one of them is drawn by us rather than borrowed. A low serial number cannot be reproduced at all — which is the one thing on the card that is genuinely scarce.",
+ "card_designs": [
+  "xarita",
+  "suzani",
+  "rahbar",
+  "devops"
+ ],
+ "nav_market": "Our market",
+ "market_title": "Everywhere somebody is served.",
+ "verticals": [
+  [
+   "kafe",
+   "utensils-crossed",
+   "Cafes and restaurants",
+   "Menu, table tags, calling a waiter, the bill"
+  ],
+  [
+   "mehmonxona",
+   "bed-double",
+   "Hotels",
+   "Service list, room tags, housekeeping requests"
+  ],
+  [
+   "salon",
+   "store",
+   "Shops and salons",
+   "Prices, payment details, calling for help"
+  ]
+ ],
+ "nav_loop": "How it works",
+ "loop_title": "The half a printed menu cannot do.",
+ "loop": [
+  "Every table has its own QR code and its own NFC tag",
+  "The guest taps it — the menu opens in their language",
+  "One tap: a waiter, the bill, or a review",
+  "It lands on the phone by the till with the table number, and it rings",
+  "Nobody signs in — the phone stays on one link"
+ ],
+ "nav_gets": "What a venue receives",
+ "gets_title": "Printed on Monday, answering by Tuesday.",
+ "gets_body": "The owner types the tables, prints the sheet and puts a card on each one. Every code carries its own table number.",
+ "gets_items": [
+  [
+   "qr-code",
+   "A QR and NFC tag per table"
+  ],
+  [
+   "printer",
+   "A sheet ready to print and cut"
+  ],
+  [
+   "bell-ring",
+   "A counter screen with sound"
+  ],
+  [
+   "chart-column",
+   "A monthly report"
+  ],
+  [
+   "languages",
+   "Uzbek, Russian, English"
+  ]
+ ],
+ "nav_model": "Business model",
+ "model_title": "A number once.\nA venue every month.",
+ "bands": [
+  [
+   "Personal number",
+   "from 100,000 UZS",
+   "Priced by rarity · paid once"
+  ],
+  [
+   "Device",
+   "200,000 – 350,000",
+   "Card, ring or bracelet · paid once"
+  ],
+  [
+   "Venue, up to 15 points",
+   "149,000 / mo",
+   "A cafe with twelve tables"
+  ],
+  [
+   "Venue, up to 40 points",
+   "299,000 / mo",
+   "A hotel with thirty rooms"
+  ]
+ ],
+ "model_side_head": "How they pay",
+ "model_side": "Individuals pay by card through Payme. Venues and companies pay by invoice and bank transfer, which is how a business here actually pays.",
+ "nav_math": "The arithmetic",
+ "math_title": "Recurring revenue, at the smallest band.",
+ "scenarios": [
+  [
+   "100 venues",
+   "14.9M",
+   "a month · ≈ 179M UZS a year"
+  ],
+  [
+   "500 venues",
+   "74.5M",
+   "a month · ≈ 894M UZS a year"
+  ],
+  [
+   "1,000 venues",
+   "149M",
+   "a month · ≈ 1.79B UZS a year"
+  ]
+ ],
+ "math_note": "At the entry band of 149,000 UZS and nothing above it — a hotel or a larger restaurant pays twice that. Devices and personal numbers are not counted here at all. These are venue counts, not a market size.",
+ "nav_why": "Why now",
+ "why_title": "Three things are true at once.",
+ "why": [
+  [
+   "smartphone",
+   "The phones are ready",
+   "Every phone sold in recent years reads NFC, and after 2020 a QR code on a table needs no explaining to anyone."
+  ],
+  [
+   "trending-up",
+   "Service is the battleground",
+   "Cafes and hotels no longer compete on price alone. How fast somebody answers a table is a thing guests notice."
+  ],
+  [
+   "credit-card",
+   "The rails exist",
+   "Payme and bank transfer make a monthly subscription collectable from a business — what turns this from a gadget into revenue."
+  ]
+ ],
+ "nav_status": "Where it stands",
+ "status_title": "Built, deployed, and running.",
+ "status_live": [
+  "Personal profiles, devices, QR codes and analytics",
+  "Venue menu and service list — in three languages",
+  "A separate QR and NFC tag per table, with a printable sheet",
+  "Guest requests: waiter, bill, housekeeping, reviews",
+  "Counter screen with sound, and a screen that stays awake",
+  "Monthly report: response time, busiest tables and hours",
+  "Subscriptions, invoices and expiry reminders",
+  "Telegram sign-in · Payme integrated"
+ ],
+ "status_next_head": "Open to anyone, today",
+ "status_next": "flex.com.uz/NAV001 is a real venue. Open it on your phone, read the menu, call a waiter, and watch it arrive at the till.",
+ "nav_comp": "Competition",
+ "comp_title": "Nobody local sells the venue half.",
+ "competitors": [
+  [
+   "UNQX",
+   "The same three-letter, three-digit format. Personal profiles only. Live in the Fergana Valley.",
+   "No menu, no tables, no requests — the recurring half is missing."
+  ],
+  [
+   "International NFC cards",
+   "Popl and the rest. Personal profiles, sold worldwide.",
+   "No local payment, no invoice for an accountant, no Uzbek."
+  ],
+  [
+   "Paper and pen",
+   "What every cafe uses today. Free.",
+   "Cannot tell you which table is waiting, or for how long."
+  ]
+ ],
+ "nav_team": "Team",
+ "team_title": "Who is building it.",
+ "team": [
+  [
+   "JA",
+   "Javohir Abrorov",
+   "Founder · AI engineer",
+   "MC LEGAL"
+  ],
+  [
+   "ZA",
+   "Zoirjon Abduvohidov",
+   "Web developer",
+   "Tompson School"
+  ],
+  [
+   "AA",
+   "Abdujabbor Ahmadjonov",
+   "Product manager",
+   "Canada"
+  ]
+ ],
+ "nav_ask": "The ask",
+ "ask_amount": "$50,000 – $100,000",
+ "ask_stage": "Pre-seed · the product is built and running",
+ "use": [
+  [
+   "40%",
+   "Device stock: cards, rings, bracelets and table tags"
+  ],
+  [
+   "35%",
+   "Sales and installation for the first 100 venues"
+  ],
+  [
+   "15%",
+   "Team"
+  ],
+  [
+   "10%",
+   "Marketing and events"
+  ]
+ ],
+ "contact_head": "Contact",
+ "contact": "Javohir Abrorov<br>sheyx2772@gmail.com<br>+998 97 724 79 99<br>flex.com.uz"
+}

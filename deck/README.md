@@ -1,35 +1,40 @@
 # Pitch deck
 
-Two files, one layout: `flex-pitch-en.pptx` and `flex-pitch-uz.pptx`.
-Thirteen slides, 16:9, editable in PowerPoint, Keynote or Google Slides.
+`flex-pitch-uz.pptx` and `flex-pitch-en.pptx`, with a `.pdf` of each for
+sending. Fifteen slides, 16:9.
 
-## Rebuilding it
+## How it is made
+
+The first version was built shape by shape in python-pptx and it looked like
+what it was: text in boxes, screenshots of the website, no product in sight.
+The photography in `public/mahsulot/` — the card, the ring, the bracelet, the
+cafe, the hotel — was sitting there unused.
+
+So the slides are designed in CSS instead, where the brand already lives:
 
 ```
-node scripts/deck-shots.mjs https://flex-five-kohl.vercel.app
-python3 scripts/deck_frames.py
-python3 scripts/deck_build.py
+python3 scripts/deck_html.py uz     # content-uz.json -> slides-uz.html
+node scripts/deck-render.mjs uz     # -> deck/render-uz/*.png at 3840 wide
+python3 scripts/deck_pack.py uz     # -> the pptx and the pdf
 ```
 
-The first takes the screenshots from the running site, the second puts them in
-phone frames, the third writes both decks. Editing the text means editing the
-`EN` and `UZ` dictionaries at the bottom of `deck_build.py` — one layout, two
-dictionaries, so the Uzbek one cannot quietly drift away from the English.
+Changing the words means changing `deck/content-uz.json` or `content-en.json`
+and running those three. Nothing in the deck is typed twice.
 
-`python3 scripts/deck_preview.py deck/flex-pitch-en.pptx` renders a proof sheet
-to `/tmp/preview`. It wraps text the way PowerPoint does and draws a red rule
-under any paragraph that outgrew its box, which is the mistake this deck made
-four times before it was looked at.
+## What that trades away
 
-## Two things to check before presenting
+Each slide in the finished file is one image, so the text is not editable in
+PowerPoint. That is deliberate. The deck is presented, not edited, and in
+exchange it looks identical on every machine: no missing font, no version of
+PowerPoint disagreeing about a rounded corner, nothing reflowing on a projector
+in a hall.
 
-**Arial, on purpose.** The brand faces are Space Grotesk and Inter, and neither
-is on a stranger's laptop. A font that is missing is silently replaced by one
-that ruins the layout, so the deck uses a font that is everywhere and lets size,
-space and the lime carry it instead.
+Icons are copied into `deck/icons/` rather than read from `node_modules` — an
+unrelated `npm install --no-save` pruned the package once and the build stopped.
 
-**Everything here is true today.** The prices are the constants the checkout
-uses. The screenshots are of the live site, not mock-ups. The status slide lists
-what runs and says the domain and Payme certification are still ahead. If any of
-that changes, change the slide — a deck that overstates is found out in the
-meeting after it.
+## Before presenting
+
+Everything in it is true today. The prices are the constants the checkout uses,
+the screenshots are of the live site, and the status slide says the domain and
+Payme certification are still ahead rather than implying they are done. If that
+changes, change the slide.

@@ -1,0 +1,276 @@
+{
+ "event": "ICT WEEK UZBEKISTAN · 2026 · PRE-SEED",
+ "tagline": "Sizning raqamingiz — sizning shaxsingiz.",
+ "sub": "Noyob raqam va uni ochadigan NFC buyum. Bir tegish — ilova o'rnatilmaydi.",
+ "nav_problem": "Muammo",
+ "problem_title": "Qog'oz bir marta bosiladi.\nQolgan hammasi o'zgaradi.",
+ "problems": [
+  [
+   "contact",
+   "Vizitka bosilgan kuniyoq eskiradi",
+   "Yangi ish, yangi raqam, yangi kompaniya — quttidagi vizitkalar noto'g'ri bo'lib qoladi. Odamlar baribir uzatadi."
+  ],
+  [
+   "book-open",
+   "Menyu — o'tgan oygi narxlarning surati",
+   "Kafe qayta bosadi yoki ruchka bilan chizib tashlaydi. Tushda tugagan taom kechgacha hamma stolda turaveradi."
+  ],
+  [
+   "hand",
+   "Stol hech narsa so'ray olmaydi",
+   "Mehmon qo'l ko'taradi va kimdir qaraguncha kutadi. Kafe qaysi stol qancha kutganini hech qachon bilmaydi."
+  ]
+ ],
+ "nav_solution": "Yechim",
+ "solution_title": "Bir tegish — va sahifa ochiladi.",
+ "solution": [
+  [
+   "Raqam",
+   "Uch harf va uch raqam — MYN042 — manzilga aylanadi va umrbod sizniki."
+  ],
+  [
+   "Buyum",
+   "Karta, uzuk, braslet yoki stol ustidagi belgi. Ichida NFC chip va QR kod."
+  ],
+  [
+   "Sahifa",
+   "Mehmon o'z telefonini tegizadi, sahifa uning tilida ochiladi. Hech kim hech narsa o'rnatmaydi."
+  ]
+ ],
+ "nav_devices": "Qurilmalarimiz",
+ "devices_title": "Qo'lga olinadigan mahsulot.",
+ "devices": [
+  [
+   "karta",
+   "Karta",
+   "Cho'ntakda, hamyonda",
+   "200 000 so'm"
+  ],
+  [
+   "uzuk",
+   "Uzuk",
+   "Qo'lda, doim o'zingiz bilan",
+   "350 000 so'm"
+  ],
+  [
+   "braslet",
+   "Braslet",
+   "Bilakda, tadbirlar uchun",
+   "250 000 so'm"
+  ],
+  [
+   "avtovizitka",
+   "Avtovizitka",
+   "Mashina old oynasida",
+   "Kelishuv bo'yicha"
+  ]
+ ],
+ "nav_design": "Dizayn",
+ "design_title": "Bitta raqam, ko'p ko'rinish.",
+ "design_body": "Karta dizaynini egasi tanlaydi — o'zimiz chizganmiz, birovnikidan olinmagan. Past raqamli seriya esa takrorlanmaydi: uni boshqa hech kim bosib chiqara olmaydi.",
+ "card_designs": [
+  "xarita",
+  "suzani",
+  "rahbar",
+  "devops"
+ ],
+ "nav_market": "Bozorimiz",
+ "market_title": "Xizmat ko'rsatadigan har bir joy.",
+ "verticals": [
+  [
+   "kafe",
+   "utensils-crossed",
+   "Kafe va restoran",
+   "Menyu, stol belgilari, ofitsiant chaqiruvi, hisob"
+  ],
+  [
+   "mehmonxona",
+   "bed-double",
+   "Mehmonxona",
+   "Xizmatlar ro'yxati, xona belgilari, tozalash so'rovi"
+  ],
+  [
+   "salon",
+   "store",
+   "Do'kon va salon",
+   "Narxlar, rekvizitlar, yordam chaqiruvi"
+  ]
+ ],
+ "nav_loop": "Qanday ishlaydi",
+ "loop_title": "Bosilgan menyu qila olmaydigan yarmi.",
+ "loop": [
+  "Har stolning o'z QR kodi va o'z NFC belgisi bor",
+  "Mehmon tegizadi — menyu uning tilida ochiladi",
+  "Bir tegish: ofitsiant, hisob yoki izoh",
+  "So'rov kassadagi telefonga stol raqami bilan tushadi va ovoz chiqaradi",
+  "Hech kim kirmaydi — telefon bitta havolada turaveradi"
+ ],
+ "nav_gets": "Obyekt nima oladi",
+ "gets_title": "Dushanba bosiladi, seshanba javob beradi.",
+ "gets_body": "Egasi stollarni yozadi, varaqni chop etadi va har stolga bittadan qo'yadi. Har bir kod o'z stol raqamini olib yuradi.",
+ "gets_items": [
+  [
+   "qr-code",
+   "Har stolga alohida QR va NFC"
+  ],
+  [
+   "printer",
+   "Chop etiladigan kartochkalar"
+  ],
+  [
+   "bell-ring",
+   "Ovozli kassa ekrani"
+  ],
+  [
+   "chart-column",
+   "Oylik hisobot"
+  ],
+  [
+   "languages",
+   "O'zbek, rus, ingliz"
+  ]
+ ],
+ "nav_model": "Biznes modeli",
+ "model_title": "Raqam bir marta.\nObyekt har oy.",
+ "bands": [
+  [
+   "Shaxsiy raqam",
+   "100 000 so'mdan",
+   "Kamyoblikka qarab · bir marta"
+  ],
+  [
+   "Qurilma",
+   "200 000 – 350 000",
+   "Karta, uzuk yoki braslet · bir marta"
+  ],
+  [
+   "Obyekt, 15 nuqtagacha",
+   "oyiga 149 000",
+   "O'n ikki stolli kafe"
+  ],
+  [
+   "Obyekt, 40 nuqtagacha",
+   "oyiga 299 000",
+   "O'ttiz xonali mehmonxona"
+  ]
+ ],
+ "model_side_head": "Qanday to'laydi",
+ "model_side": "Jismoniy shaxs — Payme orqali. Obyekt va firma — hisob-faktura va bank o'tkazmasi bilan, bizda biznes aynan shunday to'laydi.",
+ "nav_math": "Hisob-kitob",
+ "math_title": "Eng past tarifda takrorlanuvchi daromad.",
+ "scenarios": [
+  [
+   "100 obyekt",
+   "14,9 mln",
+   "oyiga · yiliga ≈ 179 mln so'm"
+  ],
+  [
+   "500 obyekt",
+   "74,5 mln",
+   "oyiga · yiliga ≈ 894 mln so'm"
+  ],
+  [
+   "1 000 obyekt",
+   "149 mln",
+   "oyiga · yiliga ≈ 1,79 mlrd so'm"
+  ]
+ ],
+ "math_note": "Eng past 149 000 so'mlik tarif bo'yicha, undan yuqorisi hisobga olinmagan — mehmonxona yoki kattaroq restoran ikki barobar to'laydi. Qurilmalar va shaxsiy raqamlar bu yerda umuman sanalmagan. Bu bozor hajmi emas, obyektlar soni bo'yicha hisob.",
+ "nav_why": "Nega hozir",
+ "why_title": "Uchta narsa bir vaqtda ro'y berdi.",
+ "why": [
+  [
+   "smartphone",
+   "Telefonlar tayyor",
+   "So'nggi yillarda sotilgan har bir telefon NFC o'qiydi, QR kodni esa 2020 dan keyin hech kimga tushuntirish kerak emas."
+  ],
+  [
+   "trending-up",
+   "Raqobat — xizmatda",
+   "Kafe va mehmonxonalar endi faqat narxda raqobatlashmaydi. Stolga qancha tez javob berilishi — mehmon sezadigan narsa."
+  ],
+  [
+   "credit-card",
+   "To'lov yo'llari bor",
+   "Payme va bank o'tkazmasi oylik obunani bizneslardan yig'ish imkonini beradi — buyumni daromadga aylantiradigan narsa."
+  ]
+ ],
+ "nav_status": "Hozirgi holat",
+ "status_title": "Qurilgan, joylashtirilgan, ishlayapti.",
+ "status_live": [
+  "Shaxsiy profil, qurilmalar, QR va statistika",
+  "Obyekt menyusi va xizmatlar ro'yxati — uch tilda",
+  "Har stolga alohida QR va NFC, chop etiladigan varaq bilan",
+  "Mehmon so'rovlari: ofitsiant, hisob, tozalash, izoh",
+  "Ovozli kassa ekrani va o'chmaydigan displey",
+  "Oylik hisobot: javob vaqti, gavjum stollar va soatlar",
+  "Obuna, hisob-faktura va muddat eslatmalari",
+  "Telegram orqali kirish · Payme ulangan"
+ ],
+ "status_next_head": "Bugun har kim ochishi mumkin",
+ "status_next": "flex.com.uz/NAV001 — haqiqiy obyekt. Telefoningizda oching, menyuni ko'ring, ofitsiant chaqiring va kassaga tushishini kuzating.",
+ "nav_comp": "Raqobat",
+ "comp_title": "Obyekt yarmini mahalliy hech kim sotmaydi.",
+ "competitors": [
+  [
+   "UNQX",
+   "Xuddi shu uch harf, uch raqam formati. Faqat shaxsiy profil. Farg'ona vodiysida.",
+   "Menyu yo'q, stol yo'q, so'rov yo'q — takrorlanuvchi yarmi yetishmaydi."
+  ],
+  [
+   "Xalqaro NFC kartalar",
+   "Popl va boshqalar. Shaxsiy profil, butun dunyoda.",
+   "Mahalliy to'lov yo'q, buxgalterga hisob-faktura yo'q, o'zbek tili yo'q."
+  ],
+  [
+   "Qog'oz va ruchka",
+   "Bugun har bir kafe shundan foydalanadi. Bepul.",
+   "Qaysi stol kutayotganini va qancha kutganini ayta olmaydi."
+  ]
+ ],
+ "nav_team": "Jamoa",
+ "team_title": "Kim qurayapti.",
+ "team": [
+  [
+   "JA",
+   "Javohir Abrorov",
+   "Asoschi · AI muhandis",
+   "MC LEGAL"
+  ],
+  [
+   "ZA",
+   "Zoirjon Abduvohidov",
+   "Veb dasturchi",
+   "Tompson School"
+  ],
+  [
+   "AA",
+   "Abdujabbor Ahmadjonov",
+   "Mahsulot menejeri",
+   "Kanada"
+  ]
+ ],
+ "nav_ask": "So'rov",
+ "ask_amount": "$50 000 – $100 000",
+ "ask_stage": "Pre-seed · mahsulot qurilgan va ishlayapti",
+ "use": [
+  [
+   "40%",
+   "Qurilmalar zaxirasi: karta, uzuk, braslet, stol belgilari"
+  ],
+  [
+   "35%",
+   "Birinchi 100 obyekt: savdo va o'rnatish"
+  ],
+  [
+   "15%",
+   "Jamoa"
+  ],
+  [
+   "10%",
+   "Marketing va tadbirlar"
+  ]
+ ],
+ "contact_head": "Aloqa",
+ "contact": "Javohir Abrorov<br>sheyx2772@gmail.com<br>+998 97 724 79 99<br>flex.com.uz"
+}
