@@ -434,6 +434,18 @@ the page renders in tens of milliseconds once the database is close. Move the
 compute to the data first, and measure again before paying for a caching
 migration.
 
+## The daily run
+
+`vercel.json` schedules `/api/cron/eslatma` once a day at 09:00 UTC — two in the
+afternoon in Tashkent, which is a working hour for the person who has to act on
+what it says. It warns a venue seven days before its subscription ends and tells
+it again the day it lapses, and it reminds a personal plan the same way.
+
+The route refuses anybody without `Bearer $CRON_SECRET`, and Vercel sends
+exactly that header when the variable is set on the project. Without one set the
+route answers 503 rather than defaulting open — which is how it was found to be
+unconfigured in production, having quietly answered 503 since it was written.
+
 ## Commands
 
 | Command | Purpose |
