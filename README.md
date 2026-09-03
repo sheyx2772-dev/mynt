@@ -397,6 +397,41 @@ again on the day it lapses, since the second notice is the one that gets a venue
 back. Both are recorded against the expiry they were sent for, so paying earns a
 fresh pair next period rather than silencing the venue forever.
 
+## Where this runs, and why it matters more than caching
+
+The Supabase project is in `ap-northeast-1` — Tokyo. Measured from Tashkent, the
+round trip to it is about 130 ms, and a single REST query takes 700–850 ms
+including TLS.
+
+Every page here talks to that database several times in sequence: the guest menu
+resolves a handle, then a venue, then its categories and items. So the number
+that decides how fast the product feels is not how quickly we render — it is how
+far the function is from the database, multiplied by how many queries it makes.
+
+`vercel.json` therefore pins the functions to `hnd1`, the same region as the
+database. Left unset, Vercel's default is `iad1` — Washington — which puts every
+one of those queries across the Pacific and back, roughly 150 ms each, before
+the answer starts its own journey to Uzbekistan. Same-region is under 5 ms.
+Confirm the setting took in the project's Functions settings after deploying:
+the region is also configurable there, and the dashboard wins if the two
+disagree.
+
+The better arrangement is Frankfurt for both: `eu-central-1` for the database and
+`fra1` for the functions. Tashkent reaches European networks over shorter and
+better-peered paths than Japanese ones, so it would cut the remaining user-facing
+leg as well. It means recreating the Supabase project and restoring into it,
+which is a migration to plan rather than a setting to change — worth doing before
+there is much data, not after.
+
+Caching the menu was considered first and is deliberately not done. In Next 16
+`use cache` requires `cacheComponents: true`, which turns on Partial Prerendering
+for every route in the app and would need auth, language and payment routes
+migrated with it; `unstable_cache` still works but the release notes call it
+replaced. Against that: a busy cafe generates a request every few seconds, and
+the page already renders in tens of milliseconds once the database is close.
+Move the compute to the data first, and measure again before paying for a
+caching migration.
+
 ## Commands
 
 | Command | Purpose |
