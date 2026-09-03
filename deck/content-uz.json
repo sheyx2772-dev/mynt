@@ -3,22 +3,47 @@
  "tagline": "Sizning raqamingiz — sizning shaxsingiz.",
  "sub": "Noyob raqam va uni ochadigan NFC buyum. Bir tegish — ilova o'rnatilmaydi.",
  "nav_problem": "Muammo",
- "problem_title": "Qog'oz bir marta bosiladi.\nQolgan hammasi o'zgaradi.",
+ "problem_title": "Ma'lumot hali ham qog'ozda\nva og'zaki uzatiladi.",
  "problems": [
   [
-   "contact",
-   "Vizitka bosilgan kuniyoq eskiradi",
-   "Yangi ish, yangi raqam, yangi kompaniya — quttidagi vizitkalar noto'g'ri bo'lib qoladi. Odamlar baribir uzatadi."
+   "receipt",
+   "Qog'oz rekvizit",
+   "Kompaniya rekvizitlari qo'lda yozib beriladi. Bitta xato raqam — to'lov noto'g'ri hisobga tushadi."
   ],
   [
-   "book-open",
-   "Menyu — o'tgan oygi narxlarning surati",
-   "Kafe qayta bosadi yoki ruchka bilan chizib tashlaydi. Tushda tugagan taom kechgacha hamma stolda turaveradi."
+   "car",
+   "Parkovkada raqam yo'q",
+   "Mashina yo'lni to'sib qo'ydi. Oyna ortida telefon raqami yo'q, bo'lsa ham qo'lda yozilgan qog'oz."
   ],
   [
-   "hand",
-   "Stol hech narsa so'ray olmaydi",
-   "Mehmon qo'l ko'taradi va kimdir qaraguncha kutadi. Kafe qaysi stol qancha kutganini hech qachon bilmaydi."
+   "paw-print",
+   "Hayvon yo'qoladi",
+   "Bo'yinbog'da hech narsa yo'q. Topgan odam egasi bilan bog'lana olmaydi."
+  ],
+  [
+   "key-round",
+   "Kalit va buyum yo'qoladi",
+   "Sumka, kalit, chamadon — topilsa ham egasiga qaytmaydi."
+  ],
+  [
+   "credit-card",
+   "Savdoda karta raqami",
+   "To'lov uchun karta raqami og'zaki aytiladi yoki qog'ozga yoziladi. Xato ham, xavf ham shu yerda."
+  ],
+  [
+   "users",
+   "Uchrashuvda almashish yo'q",
+   "Vizitka tugaydi, telefon raqamini terish uzoq. Uchrashuvdan keyin hech kim hech kimni topolmaydi."
+  ],
+  [
+   "badge-check",
+   "Brendni tanitish qiyin",
+   "Kichik biznesning nomi mijoz telefonida qolmaydi. Har safar noldan tanishtirish kerak."
+  ],
+  [
+   "file-user",
+   "Rezyume uzatish qiyin",
+   "PDF yuboriladi, havola yo'qoladi, versiyalar chalkashadi. Ish beruvchi eng eskisini ochadi."
   ]
  ],
  "nav_solution": "Yechim",
@@ -306,5 +331,274 @@
  "statement": "Bir tegish —<br>va sahifa ochiladi.",
  "statement_sub": "Ilova o'rnatilmaydi. Ro'yxatdan o'tilmaydi. Mehmon o'z telefonini tegizadi, tamom.",
  "team_body": "Uch kishi. Mahsulot, veb va sotuv — hammasi ichkarida. Birinchi versiya tashqi jamoasiz qurildi va bugun ishlab turibdi.",
- "status_photo_caption": "Haqiqiy obyektda, bugun"
+ "status_photo_caption": "Haqiqiy obyektda, bugun",
+ "nav_answer": "Yechim",
+ "answer_title": "Bitta raqam, bitta buyum,\nsakkizta holat.",
+ "answer_body": "Har bir muammo bir xil tarzda hal bo'ladi: NFC buyumga tegiziladi yoki QR skanerlanadi — va o'sha vaziyat uchun kerakli sahifa ochiladi. Ilova o'rnatilmaydi.",
+ "answers": [
+  [
+   "Qog'oz rekvizit",
+   "Rekvizitlar sahifada — nusxalash tugmasi bilan, xatosiz"
+  ],
+  [
+   "Parkovkada raqam yo'q",
+   "Avtovizitka: tegizadi — sizga qo'ng'iroq yoki xabar ketadi"
+  ],
+  [
+   "Hayvon yo'qoladi",
+   "Bo'yinbog' tegi: topgan odam egasining sahifasini ochadi"
+  ],
+  [
+   "Kalit va buyum",
+   "Buyum tegi: topilma egasiga qaytadi"
+  ],
+  [
+   "Savdoda karta raqami",
+   "To'lov sahifasi: Payme orqali, raqam aytilmaydi"
+  ],
+  [
+   "Uchrashuvda almashish",
+   "Bir tegish — kontakt telefonga saqlanadi"
+  ],
+  [
+   "Brendni tanitish",
+   "Sahifa sizning brendingizda, mijoz telefonida qoladi"
+  ],
+  [
+   "Rezyume uzatish",
+   "Bitta havola, doim eng oxirgi versiya"
+  ]
+ ],
+ "nav_notplain": "Farqimiz",
+ "notplain_title": "Bu oddiy NFC vizitka emas.",
+ "notplain_body": "Bozorda NFC karta ko'p. Farq kartada emas — kartaning orqasida nima turganida.",
+ "notplain": [
+  [
+   "sparkles",
+   "Raqam sizniki",
+   "AAA000 formatidagi noyob raqam. Past raqamli seriya takrorlanmaydi — uni boshqa hech kim bosib chiqara olmaydi."
+  ],
+  [
+   "route",
+   "Sahifa o'zgaradi, qurilma yo'q",
+   "Ish, raqam, kompaniya o'zgardi — sahifani tahrirlaysiz. Karta o'sha kartaligicha qoladi."
+  ],
+  [
+   "chart-column",
+   "Statistika",
+   "Necha marta ochildi, qaysi havola bosildi, qaysi kundan. Qog'oz vizitka buni hech qachon aytmaydi."
+  ],
+  [
+   "languages",
+   "Uch til",
+   "O'zbek, rus, ingliz. Mehmon o'z tilida ko'radi."
+  ],
+  [
+   "qr-code",
+   "NFC va QR birga",
+   "NFC yo'q telefon ham ochadi. Chop etilgan QR bilan ishlaydi."
+  ],
+  [
+   "credit-card",
+   "Mahalliy to'lov",
+   "Payme ulangan: obuna, hisob-faktura, muddat eslatmasi."
+  ],
+  [
+   "store",
+   "Obyekt yarmi ham bor",
+   "Menyu, stol belgilari, ofitsiant chaqiruvi, kassa ekrani — bir tizimda."
+  ],
+  [
+   "shield-check",
+   "Ma'lumot sizniki",
+   "Sahifani istalgan vaqtda o'chirasiz yoki boshqa qurilmaga ko'chirasiz."
+  ]
+ ],
+ "nav_size": "Bozor hajmi",
+ "size_title": "Bozor hajmi — so'mda.",
+ "size_rows": [
+  [
+   "TAM",
+   "116 900 obyekt",
+   "209 mlrd so'm / yil",
+   "O'zbekistondagi barcha umumiy ovqatlanish, chakana savdo va joylashtirish obyektlari, eng past tarif bo'yicha"
+  ],
+  [
+   "SAM",
+   "29 000 obyekt",
+   "51,9 mlrd so'm / yil",
+   "Toshkent va viloyat markazlari — bugun yetib boradigan qismimiz"
+  ],
+  [
+   "SOM",
+   "1 000 obyekt",
+   "1,79 mlrd so'm / yil",
+   "Uch yillik maqsad. Bu jami bozorning 0,9 foizi"
+  ]
+ ],
+ "size_units": [
+  [
+   "utensils-crossed",
+   "29 582",
+   "umumiy ovqatlanish korxonasi · 01.08.2026"
+  ],
+  [
+   "store",
+   "86 180",
+   "chakana savdo korxonasi · 01.01.2026"
+  ],
+  [
+   "bed-double",
+   "1 156",
+   "mehmonxona va joylashtirish vositasi · 2021"
+  ],
+  [
+   "car",
+   "4,98 mln",
+   "jismoniy shaxslarga tegishli avtotransport · 01.07.2026"
+  ]
+ ],
+ "size_source": "Manba: O'zbekiston Respublikasi Statistika qo'mitasi (stat.uz). Obuna hisobi eng past tarif — oyiga 149 000 so'm — bo'yicha olingan.",
+ "nav_rivals": "Raqobat",
+ "rivals_title": "Raqobatchilar tahlili.",
+ "rivals_cols": [
+  "Shaxsiy raqam",
+  "Obyekt yarmi",
+  "Mahalliy to'lov",
+  "Statistika",
+  "Uch til"
+ ],
+ "rivals": [
+  [
+   "flex",
+   [
+    "Ha · AAA000",
+    "Ha",
+    "Ha · Payme",
+    "Ha",
+    "Ha"
+   ],
+   true
+  ],
+  [
+   "UNQX",
+   [
+    "Ha · uch harf, uch raqam",
+    "Yo'q",
+    "Ma'lum emas",
+    "Ma'lum emas",
+    "Ma'lum emas"
+   ],
+   false
+  ],
+  [
+   "Popl, V1CE, Linq",
+   [
+    "Ha · havola",
+    "Yo'q",
+    "Yo'q",
+    "Ha",
+    "Qisman"
+   ],
+   false
+  ],
+  [
+   "QR-menyu servislari",
+   [
+    "Yo'q",
+    "Faqat menyu",
+    "Qisman",
+    "Qisman",
+    "Ha"
+   ],
+   false
+  ],
+  [
+   "Qog'oz vizitka",
+   [
+    "Yo'q",
+    "Yo'q",
+    "Yo'q",
+    "Yo'q",
+    "Yo'q"
+   ],
+   false
+  ]
+ ],
+ "rivals_note": "UNQX — Farg'ona vodiysida, shaxsiy profil bilan. Obyekt yarmini mahalliy hech kim sotmaydi: menyu, stol so'rovlari, kassa ekrani va oylik hisobot bitta tizimda.",
+ "nav_traction": "Biz kimmiz",
+ "traction_title": "Bu birinchi urinish emas.",
+ "traction": [
+  [
+   "award",
+   "IT Park rezidenti",
+   "Rasmiy status, soliq va eksport rejimi bilan."
+  ],
+  [
+   "rocket",
+   "Akseleratsiyalar",
+   "Bir necha akseleratsiya dasturidan o'tganmiz."
+  ],
+  [
+   "users",
+   "Mashhur shaxslar",
+   "NFC rekvizitlarimiz taniqli shaxslarda ishlatilgan."
+  ],
+  [
+   "car",
+   "Avtomobillarga",
+   "Avtovizitka seriyasi ishlab chiqarilgan va sotilgan."
+  ],
+  [
+   "building-2",
+   "B2B sotuvlar",
+   "Kafe, do'kon, kiyim do'koni va shifoxonalarga NFC qurilma, sayt va ilova sotganmiz."
+  ],
+  [
+   "truck",
+   "Yetkazib beruvchilar",
+   "Qurilma ishlab chiqaruvchi firmalar bilan to'g'ridan-to'g'ri ishlaymiz."
+  ]
+ ],
+ "nav_road": "Reja",
+ "road_title": "Keyingi o'n sakkiz oy.",
+ "road": [
+  [
+   "2026 · IV chorak",
+   "Ishga tushirish",
+   [
+    "flex.com.uz domeni va Payme sertifikatsiyasi",
+    "Birinchi 100 obyekt: kafe, salon, klinika",
+    "Avtovizitka va buyum tegi seriyasi savdoda"
+   ]
+  ],
+  [
+   "2027 · I chorak",
+   "Mahsulotni kengaytirish",
+   [
+    "Mobil ilova — sherik jamoa bilan",
+    "Hayvon tegi va rezyume sahifasi",
+    "Hisob-faktura va oylik hisobot avtomatik"
+   ]
+  ],
+  [
+   "2027 · II chorak",
+   "Sotuvni ko'paytirish",
+   [
+    "500 obyekt",
+    "Viloyat markazlarida diler tarmog'i",
+    "Yetkazib beruvchilar bilan hajmli shartnoma"
+   ]
+  ],
+  [
+   "2027 · III–IV chorak",
+   "Chegaradan tashqari",
+   [
+    "1 000 obyekt — SOM maqsadi",
+    "Qozog'iston va Qirg'iziston bo'yicha sinov",
+    "Seed bosqichiga chiqish"
+   ]
+  ]
+ ],
+ "road_note": "Sanalar investitsiya olingandan keyingi jadval bo'yicha."
 }
