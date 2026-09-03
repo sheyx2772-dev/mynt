@@ -50,9 +50,7 @@ export default async function TagsPage({
   return (
     <PageShell wide>
       <SubScreen handle={normalized} title="Buyumlar">
-        <section className="grain relative overflow-hidden rounded-[1.75rem] bg-flex-black p-6 text-white sm:p-7">
-          <div className="bg-dot-grid-light absolute inset-0 [mask-image:radial-gradient(ellipse_70%_60%_at_100%_0%,black,transparent)]" />
-          <div className="card-sheen absolute inset-0" />
+        <section className="relative overflow-hidden rounded-[1.75rem] bg-flex-black p-6 text-white sm:p-7">
 
           <div className="relative">
             <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-white/40 uppercase">
@@ -64,7 +62,7 @@ export default async function TagsPage({
                 {unread}
               </p>
               {unread > 0 && (
-                <span className="halo mb-2 h-2 w-2 rounded-full bg-lime" aria-hidden />
+                <span className="mb-2 h-2 w-2 rounded-full bg-lime" aria-hidden />
               )}
             </div>
             <p className="mt-5 max-w-md text-[13px] leading-relaxed text-white/45">

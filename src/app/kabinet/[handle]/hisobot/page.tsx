@@ -88,7 +88,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
           <>
             {/* The two numbers worth a glance: how many, and how fast. */}
             <div className="grid grid-cols-2 gap-2.5">
-              <div className="grain relative overflow-hidden rounded-2xl bg-flex-black px-5 py-5 text-white">
+              <div className="relative overflow-hidden rounded-2xl bg-flex-black px-5 py-5 text-white">
                 <p className="font-display font-tabular text-3xl font-semibold">
                   {formatNumber(report.total)}
                 </p>

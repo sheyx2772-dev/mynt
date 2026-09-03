@@ -116,7 +116,7 @@ export default function LoadoutStrip({
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 />
               ) : (
-                <div className="grain absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,#211a3c_0%,#0b0817_70%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,#211a3c_0%,#0b0817_70%)]" />
               )}
 
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-flex-black via-flex-black/70 to-transparent px-4 pt-10 pb-3">

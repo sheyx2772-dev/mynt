@@ -92,8 +92,7 @@ export default function NetworkBrief({
   const enough = contactCount >= 4;
 
   return (
-    <section className="grain relative overflow-hidden rounded-[1.75rem] bg-flex-black text-white">
-      <div className="bg-dot-grid-light pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_60%_50%_at_0%_0%,black,transparent)]" />
+    <section className="relative overflow-hidden rounded-[1.75rem] bg-flex-black text-white">
 
       {/* While it is thinking, a band travels across the panel. Honest about
           what it knows: there is no percentage to show, because nobody is
@@ -104,7 +103,7 @@ export default function NetworkBrief({
         <span
           className={
             working
-              ? "halo flex h-7 w-7 items-center justify-center rounded-lg bg-lime"
+              ? "flex h-7 w-7 items-center justify-center rounded-lg bg-lime"
               : "flex h-7 w-7 items-center justify-center rounded-lg bg-lime"
           }
         >

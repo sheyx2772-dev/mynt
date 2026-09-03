@@ -76,9 +76,7 @@ export default async function QueuePage() {
         {/* The count, on the brand's own ground. A queue rendered as a white
             page is a spreadsheet; this is the screen somebody opens to find out
             what their morning is. */}
-        <section className="grain relative mt-4 overflow-hidden rounded-[1.75rem] bg-flex-black p-6 text-white sm:p-7">
-          <div className="bg-dot-grid-light absolute inset-0 [mask-image:radial-gradient(ellipse_70%_60%_at_100%_0%,black,transparent)]" />
-          <div className="card-sheen absolute inset-0" />
+        <section className="relative mt-4 overflow-hidden rounded-[1.75rem] bg-flex-black p-6 text-white sm:p-7">
 
           <div className="relative">
             <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-white/40 uppercase">
@@ -91,7 +89,7 @@ export default async function QueuePage() {
                 {orders.length}
               </p>
               {orders.length > 0 && (
-                <span className="halo mb-2 h-2 w-2 rounded-full bg-lime" aria-hidden />
+                <span className="mb-2 h-2 w-2 rounded-full bg-lime" aria-hidden />
               )}
             </div>
 

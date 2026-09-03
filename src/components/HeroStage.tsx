@@ -52,7 +52,7 @@ export default function HeroStage({ shot }: { shot: string | null }) {
 
 function Face() {
   return (
-    <div className="grain relative aspect-[1.586/1] w-full overflow-hidden rounded-[1.75rem] border border-white/[0.09] bg-[linear-gradient(145deg,#1e1736_0%,#0b0817_48%,#161127_100%)] p-7 text-white shadow-[0_50px_100px_-30px_rgba(0,0,0,0.95)]">
+    <div className="relative aspect-[1.586/1] w-full overflow-hidden rounded-[1.75rem] border border-white/[0.09] bg-[linear-gradient(145deg,#1e1736_0%,#0b0817_48%,#161127_100%)] p-7 text-white shadow-[0_50px_100px_-30px_rgba(0,0,0,0.95)]">
       {/* Specular sweep — a highlight travelling across the surface. */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(112deg,transparent_28%,rgba(255,255,255,0.10)_44%,rgba(255,255,255,0.02)_52%,transparent_62%)]" />
       {/* Lime rim on the edge away from the key light. */}

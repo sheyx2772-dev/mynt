@@ -17,7 +17,6 @@ export default function Error({
 
   return (
     <div className="relative flex min-h-full flex-col items-center justify-center px-6 text-center">
-      <div className="bg-dot-grid absolute inset-0 [mask-image:radial-gradient(ellipse_60%_45%_at_50%_0%,black,transparent)]" />
       <div className="relative">
         <h1 className="font-display text-2xl font-semibold tracking-tight">Nimadir noto&apos;g&apos;ri ketdi</h1>
         <p className="mt-2 text-sm text-flex-black/60">

@@ -29,8 +29,7 @@ export default function MenuView({
 }) {
   return (
     <div>
-      <header className="grain relative overflow-hidden rounded-[1.75rem] bg-flex-black px-6 py-7 text-white">
-        <div className="bg-dot-grid-light absolute inset-0 opacity-25" />
+      <header className="relative overflow-hidden rounded-[1.75rem] bg-flex-black px-6 py-7 text-white">
 
         <div className="relative flex items-start justify-between gap-4">
           <div className="min-w-0">

@@ -35,7 +35,7 @@ export default async function SubscriptionPage({
         <div
           className={
             plan.active
-              ? "grain relative overflow-hidden rounded-2xl bg-flex-black px-5 py-5 text-white"
+              ? "relative overflow-hidden rounded-2xl bg-flex-black px-5 py-5 text-white"
               : "rounded-2xl border-l-[3px] border-red-500 bg-red-50 px-5 py-5"
           }
         >

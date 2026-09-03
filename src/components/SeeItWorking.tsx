@@ -74,7 +74,7 @@ export default function SeeItWorking({
             >
               <PhoneFrame>
                 <div>
-                  <div className="grain relative overflow-hidden rounded-[1.4rem] bg-flex-black px-5 py-4 text-white">
+                  <div className="relative overflow-hidden rounded-[1.4rem] bg-flex-black px-5 py-4 text-white">
                     <p className="font-display text-lg font-semibold tracking-tight">
                       {venue.name}
                     </p>

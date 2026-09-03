@@ -38,9 +38,8 @@ export default function OwnerHome({
 
       <Link
         href={`/${handle.normalized}`}
-        className="grain relative mt-3 block overflow-hidden rounded-3xl bg-flex-black px-5 py-5 text-white transition-transform active:scale-[0.99]"
+        className="relative mt-3 block overflow-hidden rounded-3xl bg-flex-black px-5 py-5 text-white transition-transform active:scale-[0.99]"
       >
-        <div className="bg-dot-grid-light absolute inset-0 opacity-25" />
         <div className="relative flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="font-display text-2xl font-semibold tracking-tight">

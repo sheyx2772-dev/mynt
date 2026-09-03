@@ -43,7 +43,6 @@ export default async function DevicesPage({ searchParams }: PageProps<"/qurilmal
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#0a0715] text-white">
-      <div className="bg-dot-grid-light absolute inset-0 opacity-20 [mask-image:radial-gradient(ellipse_60%_40%_at_50%_0%,black,transparent)]" />
       <div className="absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-lime/[0.12] blur-[130px]" />
 
       <div className="relative mx-auto max-w-5xl px-6 py-14 sm:py-16">

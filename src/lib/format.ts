@@ -1,7 +1,14 @@
+/**
+ * Thousands, grouped the way they are grouped here.
+ *
+ * A space, not a dot and not a comma: 45 000, never 45.000 or 45,000. And a
+ * non-breaking one, because a price that wraps between the 45 and the 000 has
+ * been read as forty-five by somebody in a hurry.
+ */
 export function formatNumber(n: number): string {
   return Math.round(n)
     .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    .replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
 }
 
 /**
@@ -18,8 +25,12 @@ const CURRENCY: Record<string, string> = {
   en: "so'm",
 };
 
+export function currencyWord(lang = "uz"): string {
+  return CURRENCY[lang] ?? CURRENCY.uz;
+}
+
 export function formatUZS(n: number, lang = "uz"): string {
-  return `${formatNumber(n)} ${CURRENCY[lang] ?? CURRENCY.uz}`;
+  return `${formatNumber(n)}\u00a0${currencyWord(lang)}`;
 }
 
 /**

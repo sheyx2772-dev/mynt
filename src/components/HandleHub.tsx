@@ -66,9 +66,8 @@ export default function HandleHub({
       {/* The card, which is also the way to look at the public page. */}
       <Link
         href={`/${handle.normalized}`}
-        className="grain relative block overflow-hidden rounded-[1.75rem] bg-flex-black px-6 py-6 text-white transition-transform active:scale-[0.995]"
+        className="relative block overflow-hidden rounded-[1.75rem] bg-flex-black px-6 py-6 text-white transition-transform active:scale-[0.995]"
       >
-        <div className="bg-dot-grid-light absolute inset-0 opacity-25" />
 
         <div className="relative flex items-start justify-between gap-3">
           <div className="min-w-0">

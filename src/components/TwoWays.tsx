@@ -73,9 +73,8 @@ export default function TwoWays({ s }: { s: Site }) {
 
         <Link
           href="/biznes"
-          className="grain group relative flex flex-col overflow-hidden rounded-3xl bg-flex-black p-7 text-white transition-transform hover:-translate-y-0.5 sm:p-8"
+          className="group relative flex flex-col overflow-hidden rounded-3xl bg-flex-black p-7 text-white transition-transform hover:-translate-y-0.5 sm:p-8"
         >
-          <div className="bg-dot-grid-light absolute inset-0 opacity-30" />
           <div className="absolute -top-20 -right-16 h-56 w-56 rounded-full bg-lime/[0.13] blur-[90px]" />
 
           <Store className="relative h-6 w-6 text-lime" strokeWidth={1.6} />

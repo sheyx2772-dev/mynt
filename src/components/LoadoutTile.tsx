@@ -49,7 +49,7 @@ export default function LoadoutTile({
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
-          <div className="grain absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,#211a3c_0%,#0b0817_70%)]">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,#211a3c_0%,#0b0817_70%)]">
             <div className="absolute inset-x-0 -top-8 h-32 bg-lime/10 blur-3xl" />
           </div>
         )}

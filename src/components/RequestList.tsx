@@ -49,7 +49,7 @@ export default function RequestList({
           {waiting.map((request) => (
             <div
               key={request.id}
-              className="grain relative overflow-hidden rounded-2xl bg-flex-black px-5 py-4 text-white"
+              className="relative overflow-hidden rounded-2xl bg-flex-black px-5 py-4 text-white"
             >
               <div className="flex items-center gap-4">
                 {/* The table number is the answer to "where do I go", so it is

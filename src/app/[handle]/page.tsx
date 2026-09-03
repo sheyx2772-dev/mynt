@@ -225,7 +225,7 @@ async function VanityHandlePage({
               above marks whether the subscription is live. The handle sits over
               both as a watermark, the way a serial is put on the object rather
               than printed on its sleeve. */}
-          <div className="grain relative h-24 bg-[linear-gradient(160deg,#17171e_0%,#0B0B0F_75%)]">
+          <div className="relative h-24 bg-[linear-gradient(160deg,#17171e_0%,#0B0B0F_75%)]">
             {banner ? (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element -- a static file in public/, sized by CSS */}
@@ -666,7 +666,7 @@ async function GenesisCardPage({ serial }: { serial: string }) {
 
   return (
     <PageShell>
-      <div className="grain card-sheen relative overflow-hidden rounded-[1.75rem] bg-flex-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
+      <div className="relative overflow-hidden rounded-[1.75rem] bg-flex-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
         <div className="relative flex items-center justify-between text-xs text-white/50">
           <span className="font-medium tracking-wide uppercase">FLEX CARD</span>
           <Nfc className="h-5 w-5 text-white/40" />

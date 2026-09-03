@@ -3,20 +3,9 @@ import { site } from "@/lib/i18n";
 import { venueTab } from "@/lib/venue-nav";
 import { getLang } from "@/lib/lang";
 import BottomNav from "@/components/BottomNav";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { inter, unbounded } from "./fonts";
 import "./globals.css";
 import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   // The default for pages that set none. The landing page overrides both in
@@ -47,7 +36,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang={lang}
-      className={`${spaceGrotesk.variable} ${inter.variable} h-full antialiased`}
+      className={`${unbounded.variable} ${inter.variable} h-full antialiased`}
     >
       {/* The bar is fixed, so the page needs room under it. Phones only —
           `pb-16` is undone at the breakpoint where the bar disappears. */}

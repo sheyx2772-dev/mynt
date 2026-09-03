@@ -119,9 +119,7 @@ export default async function NetworkPage({
             that decision deserves — and on the brand's own ground rather than
             on white, because a card that is white on white is a page and this
             is meant to be an application. */}
-        <section className="grain relative overflow-hidden rounded-[1.75rem] bg-flex-black p-6 text-white sm:p-7">
-          <div className="bg-dot-grid-light absolute inset-0 [mask-image:radial-gradient(ellipse_70%_60%_at_100%_0%,black,transparent)]" />
-          <div className="card-sheen absolute inset-0" />
+        <section className="relative overflow-hidden rounded-[1.75rem] bg-flex-black p-6 text-white sm:p-7">
 
           <div className="relative">
             <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-white/40 uppercase">
@@ -134,7 +132,7 @@ export default async function NetworkPage({
                 {waiting}
               </p>
               {waiting > 0 && (
-                <span className="halo mb-2 h-2 w-2 rounded-full bg-lime" aria-hidden />
+                <span className="mb-2 h-2 w-2 rounded-full bg-lime" aria-hidden />
               )}
             </div>
 

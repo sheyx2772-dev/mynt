@@ -83,8 +83,7 @@ export default function AppHome({
           holding — so for them this whole block is skipped and the shelf below
           is where buying still lives. */}
       {!owner && (
-      <section className="grain relative overflow-hidden bg-flex-black px-6 pt-7 pb-9 text-white">
-        <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_0%,black,transparent)]" />
+      <section className="relative overflow-hidden bg-flex-black px-6 pt-7 pb-9 text-white">
         <div className="absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-lime/[0.15] blur-[110px]" />
 
         <div className="relative">
@@ -167,7 +166,7 @@ export default function AppHome({
 
           <Link
             href="/biznes"
-            className="grain relative flex items-center gap-4 overflow-hidden rounded-3xl bg-flex-black px-5 py-5 text-white transition-transform active:scale-[0.99]"
+            className="relative flex items-center gap-4 overflow-hidden rounded-3xl bg-flex-black px-5 py-5 text-white transition-transform active:scale-[0.99]"
           >
             <Store className="relative h-6 w-6 shrink-0 text-lime" strokeWidth={1.6} />
             <div className="relative min-w-0 flex-1">

@@ -123,8 +123,7 @@ export default function VenuePicker({
             </div>
           )}
 
-          <div className="grain relative overflow-hidden rounded-3xl bg-flex-black p-6 text-white sm:col-span-2">
-            <div className="bg-dot-grid-light absolute inset-0 opacity-30" />
+          <div className="relative overflow-hidden rounded-3xl bg-flex-black p-6 text-white sm:col-span-2">
             <h3 className="relative font-display text-xs font-semibold tracking-widest text-lime uppercase">
               {t.whyPay}
             </h3>

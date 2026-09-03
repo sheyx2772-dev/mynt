@@ -76,8 +76,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="grain relative overflow-hidden bg-flex-black text-white">
-          <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]" />
+        <section className="relative overflow-hidden bg-flex-black text-white">
           <div className="absolute -top-40 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-lime/[0.13] blur-[140px]" />
 
           <div className="relative mx-auto max-w-6xl px-6 pt-10 pb-16 sm:pt-28 sm:pb-28">
@@ -131,7 +130,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
 
           <ol className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-3">
             <li>
-              <div className="grain relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
+              <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
                 <div className="relative flex overflow-hidden rounded-xl border border-white/15 font-display text-xl font-semibold text-white">
                   <span className="px-3 py-2">MYN</span>
                   <span className="w-px bg-white/15" />
@@ -152,7 +151,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
             </li>
 
             <li>
-              <div className="grain relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
+              <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
                 {familyShot ? (
                   <Image
                     src={familyShot}
@@ -190,7 +189,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
             </li>
 
             <li>
-              <div className="grain relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
+              <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
                 {tapShot ? (
                   <Image
                     src={tapShot}

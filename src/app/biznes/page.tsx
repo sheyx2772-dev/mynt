@@ -79,8 +79,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="grain relative overflow-hidden bg-flex-black text-white">
-          <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_60%_at_30%_0%,black,transparent)]" />
+        <section className="relative overflow-hidden bg-flex-black text-white">
           <div className="absolute -top-40 left-1/4 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-lime/[0.13] blur-[130px]" />
 
           <div className="relative mx-auto grid max-w-6xl gap-10 px-6 pt-12 pb-14 sm:pt-20 sm:pb-20 lg:grid-cols-[1fr_320px] lg:items-center lg:gap-16">
@@ -256,9 +255,8 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
         {/* Enquiry */}
         <section
           id="sorov"
-          className="grain relative scroll-mt-20 overflow-hidden bg-flex-black py-14 text-white sm:py-20"
+          className="relative scroll-mt-20 overflow-hidden bg-flex-black py-14 text-white sm:py-20"
         >
-          <div className="bg-dot-grid-light absolute inset-0 opacity-30 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
           <div className="relative mx-auto max-w-3xl px-6">
             <p className="text-xs font-semibold tracking-widest text-lime/70 uppercase">
               {t.formEyebrow}
@@ -277,9 +275,8 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
         {/* Business */}
         <section
           id="jamoa"
-          className="grain relative scroll-mt-20 overflow-hidden bg-flex-black py-14 sm:py-24"
+          className="relative scroll-mt-20 overflow-hidden bg-flex-black py-14 sm:py-24"
         >
-          <div className="bg-dot-grid-light absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
           <div className="relative mx-auto max-w-6xl px-6">
             <div className="max-w-xl">
               <p className="mb-3 text-xs font-semibold tracking-widest text-lime/70 uppercase">
