@@ -1540,3 +1540,105 @@ begin
   delete from auth.users where id = owner_id;
   delete from handles where id = hid;
 end $$;
+
+-- ── device orders ─────────────────────────────────────────────────────────
+--
+-- A device is the first thing sold here that has to be manufactured and
+-- posted, so the rules the database has to hold are about physical reality:
+-- something has to be made, and it has to go somewhere.
+do $$
+declare
+  owner_id uuid := gen_random_uuid();
+  oid uuid;
+  shipped timestamptz;
+  again timestamptz;
+begin
+  insert into auth.users (id, email) values (owner_id, 'device@flex.test');
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('DEV', '001', 'claimed', owner_id, now());
+
+  insert into orders (user_id, handle, amount, kind, device_type, design, fulfilment)
+    values (owner_id, 'dev001', 200000, 'device', 'card', 'xarita', 'address_needed')
+    returning id into oid;
+  raise notice '   ok   a device can be ordered';
+
+  begin
+    insert into orders (user_id, handle, amount, kind, device_type, fulfilment, months)
+      values (owner_id, 'dev001', 200000, 'device', 'ring', 'address_needed', 12);
+    raise exception 'oylik muddat qurilmaga oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a device bought by the month';
+  end;
+
+  -- An order that does not say what to make cannot be filled.
+  begin
+    insert into orders (user_id, handle, amount, kind, fulfilment)
+      values (owner_id, 'dev001', 200000, 'device', 'address_needed');
+    raise exception 'qurilmasiz qurilma buyurtmasi oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a device order that names no device';
+  end;
+
+  -- And a number on its own has nothing to manufacture.
+  begin
+    insert into orders (user_id, handle, amount, kind, device_type)
+      values (owner_id, 'dev001', 100000, 'handle', 'card');
+    raise exception 'raqam buyurtmasiga qurilma yozildi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a form factor on a number order';
+  end;
+
+  begin
+    insert into orders (user_id, handle, amount, kind, device_type, design, fulfilment)
+      values (owner_id, 'dev001', 200000, 'device', 'card', 'ferrari', 'address_needed');
+    raise exception 'chizib boʻlmaydigan dizayn oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a design no renderer can draw';
+  end;
+
+  begin
+    insert into orders (user_id, handle, amount, kind, fulfilment)
+      values (owner_id, 'dev001', 100000, 'handle', 'queued');
+    raise exception 'raqam buyurtmasi yetkazishga qoʻyildi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a number order queued for delivery';
+  end;
+
+  -- Nothing gets made until we know where it goes.
+  begin
+    update orders set fulfilment = 'making' where id = oid;
+    raise exception 'manzilsiz yasashga oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: making one before we know the address';
+  end;
+
+  update orders set
+      recipient = 'Javohir Abrorov',
+      phone = '+998 97 724 79 99',
+      region = 'Toshkent',
+      address = 'Chilonzor tumani, 12-kvartal, 4-uy',
+      fulfilment = 'queued'
+    where id = oid;
+  raise notice '   ok   an address moves it into the queue';
+
+  update orders set fulfilment = 'shipped' where id = oid;
+  select shipped_at into shipped from orders where id = oid;
+  if shipped is null then raise exception 'yuborilgan vaqt qoʻyilmadi'; end if;
+  raise notice '   ok   shipping stamps when';
+
+  -- A second write of the same status must not move the clock: the parcel left
+  -- once, whatever the dashboard is clicked afterwards.
+  update orders set fulfilment = 'shipped' where id = oid;
+  select shipped_at into again from orders where id = oid;
+  if again <> shipped then raise exception 'yuborilgan vaqt qayta yozildi'; end if;
+  raise notice '   ok   re-marking it shipped does not move the clock';
+
+  update orders set fulfilment = 'delivered' where id = oid;
+  select delivered_at into again from orders where id = oid;
+  if again is null then raise exception 'yetkazilgan vaqt qoʻyilmadi'; end if;
+  raise notice '   ok   delivery stamps when';
+
+  delete from orders where user_id = owner_id;
+  delete from handles where normalized = 'dev001';
+  delete from auth.users where id = owner_id;
+end $$;
