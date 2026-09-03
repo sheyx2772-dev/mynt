@@ -122,30 +122,35 @@ def answer(prs, t):
 # ── 5 · the hardware ───────────────────────────────────────────────────────
 TRIMMED = {"karta", "uzuk", "braslet"}
 
+# Where in the frame the product actually is. The tag on the dog's collar sits
+# low in its picture, and a centred crop showed a portrait of a dog.
+FOCUS = {"hayvon-teg": 0.86, "buyum-teg": 0.55, "avtovizitka": 0.5}
+
 
 def devices(prs, t):
     s = blank(prs, dark=False)
     eyebrow(s, t["nav_devices"], M, TOP, dark=False)
     heading(s, t["devices_title"], M, TOP + 22, 620, dark=False)
 
-    cw, ch, gap = 266.0, 158.0, 14.0
+    cw, ch, gap = 199.0, 157.0, 12.0
     x0, y0 = M, 172.0
     for i, (key, name, where, price) in enumerate(t["devices"]):
-        x = x0 + (i % 3) * (cw + gap)
-        y = y0 + (i // 3) * (ch + gap)
+        x = x0 + (i % 4) * (cw + gap)
+        y = y0 + (i // 4) * (ch + gap)
         card(s, x, y, cw, ch, dark=False)
 
         band = 86.0
         if key in TRIMMED:
             contain(s, photo(key), x + 8, y + 6, cw - 16, band - 6)
         else:
-            picture(s, photo(key), x + 8, y + 8, cw - 16, band - 14, focus=0.5)
+            picture(s, photo(key), x + 8, y + 8, cw - 16, band - 14,
+                    focus=FOCUS.get(key, 0.5))
 
-        text(s, name, x + 16, y + band + 10, cw - 30, None, size=12,
+        text(s, name, x + 14, y + band + 9, cw - 26, None, size=11,
              font=HEAD, bold=True, color=INK)
-        text(s, where, x + 16, y + band + 28, cw - 30, None, size=8.8,
+        text(s, where, x + 14, y + band + 26, cw - 26, None, size=8.0,
              color=INK_DIM, spacing=1.35)
-        text(s, price, x + 16, y + ch - 26, cw - 30, None, size=10.5,
+        text(s, price, x + 14, y + ch - 24, cw - 26, None, size=9.6,
              font=HEAD, bold=True, color=OLIVE)
     footer(s, page(prs), dark=False)
 

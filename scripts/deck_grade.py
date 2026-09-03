@@ -59,6 +59,7 @@ EXPOSURE = {
     "menyu-stend": 96.0, "mehmonxona2": 92.0, "salon2": 96.0, "klinika2": 96.0,
     "restoran": 88.0, "konsyerj": 92.0, "menyu-telefon": 92.0, "stend2": 96.0,
     "haqiqiy-kafe": 104.0, "stiker": 86.0,
+    "hayvon-teg": 104.0, "buyum-teg": 108.0,
 }
 MATCH = 0.75
 
