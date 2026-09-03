@@ -107,8 +107,14 @@ export default async function NetworkPage({
       : "flex shrink-0 items-center gap-1.5 rounded-xl bg-black/[0.04] px-3.5 py-2 text-[12px] font-medium text-flex-black/55 transition-all hover:bg-black/[0.07] hover:text-flex-black";
 
   return (
-    <PageShell>
+    <PageShell wide>
       <SubScreen handle={normalized} title="Tarmoq">
+        {/* Side by side once there is room. The list is what somebody works
+            through and the assistant is what they consult while working, so on
+            a laptop the assistant stops pushing the list down the page and
+            stays beside it instead. */}
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:items-start">
+          <div className="lg:order-2 lg:sticky lg:top-8 lg:space-y-5">
         {/* The number that decides what the morning looks like, at the size
             that decision deserves — and on the brand's own ground rather than
             on white, because a card that is white on white is a page and this
@@ -149,7 +155,17 @@ export default async function NetworkPage({
           </div>
         </section>
 
-        <div className="mt-5">
+            <div className="hidden lg:block">
+              <NetworkBrief
+                handle={normalized}
+                brief={brief}
+                contactCount={contacts.length}
+              />
+            </div>
+          </div>
+
+          <div className="lg:order-1">
+        <div className="lg:hidden">
           <NetworkBrief
             handle={normalized}
             brief={brief}
@@ -223,6 +239,8 @@ export default async function NetworkPage({
             </div>
           </>
         )}
+          </div>
+        </div>
       </SubScreen>
     </PageShell>
   );

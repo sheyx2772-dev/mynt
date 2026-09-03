@@ -63,8 +63,8 @@ export default async function QueuePage() {
   ).length;
 
   return (
-    <PageShell>
-      <div className="mx-auto w-full max-w-4xl px-5 py-8 sm:px-6">
+    <PageShell wide>
+      <div className="w-full">
         <Link
           href="/kabinet"
           className="inline-flex items-center gap-1.5 text-[13px] text-flex-black/45 transition-colors hover:text-flex-black"
@@ -180,7 +180,7 @@ export default async function QueuePage() {
                     </span>
                   </div>
 
-                  <div className="border-t border-black/6 px-5 py-4">
+                  <div className="border-t border-black/6 px-5 py-4 sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start sm:gap-6">
                     {hasAddress ? (
                       <div className="text-[13px] leading-relaxed">
                         <p className="font-semibold">{order.recipient}</p>
@@ -213,7 +213,7 @@ export default async function QueuePage() {
                       </p>
                     )}
 
-                    <div className="mt-4 flex flex-wrap gap-2">
+                    <div className="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:flex-col sm:items-stretch">
                       {next && (
                         <form action={moveOrder}>
                           <input type="hidden" name="orderId" value={order.id} />

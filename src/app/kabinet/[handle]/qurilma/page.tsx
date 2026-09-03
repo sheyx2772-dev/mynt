@@ -35,7 +35,7 @@ export default async function DeviceOrderPage({
   const names = catalogue("uz").devices;
 
   return (
-    <PageShell>
+    <PageShell wide>
       <SubScreen handle={normalized} title="Qurilma buyurtma qilish">
         <DeviceOrderForm
           handle={normalized}

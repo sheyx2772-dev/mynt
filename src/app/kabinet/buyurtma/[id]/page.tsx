@@ -47,7 +47,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
   const returned = order.fulfilment === "returned";
 
   return (
-    <PageShell>
+    <PageShell wide>
       <SubScreen handle={order.handle} title={device.name}>
         <section className="grain relative overflow-hidden rounded-[1.75rem] bg-flex-black p-6 text-white sm:p-7">
           <div className="bg-dot-grid-light absolute inset-0 [mask-image:radial-gradient(ellipse_70%_60%_at_100%_0%,black,transparent)]" />
