@@ -12,6 +12,8 @@ import { getLang } from "@/lib/lang";
 import { formatUZS } from "@/lib/format";
 import { productShot } from "@/lib/product-shots";
 import { COMPANY } from "@/lib/company";
+import { getUser } from "@/lib/auth";
+import { listHandlesForUser } from "@/lib/handles";
 import {
   LOADOUT_DEVICES,
   isLoadoutDevice,
@@ -67,6 +69,7 @@ export default async function DevicePage({
   const description = isCar ? p.avtovizitka.description : c.devices[id].description;
   const price = devicePriceOrNull(id);
   const shot = productShot(deviceShot(id));
+  const order = await orderDestination(p);
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#0a0715] text-white">
@@ -138,9 +141,14 @@ export default async function DevicePage({
               ))}
             </ul>
 
-            {/* A device is useless without a number, so the priced ones send
-                you to pick one. The car card has no price yet and sends you to
-                a person instead of pretending it can be bought here. */}
+            {/* A device is useless without a number, so where this button goes
+                depends on whether the reader already has one.
+                
+                It used to send everybody to the price calculator, which for an
+                owner meant being asked to buy a second number in order to buy
+                a card for the one they already own. The car card still has no
+                price and still sends you to a person, rather than pretending
+                it can be bought here. */}
             {price === null ? (
               <a
                 href={`tel:${COMPANY.phoneHref}`}
@@ -151,10 +159,10 @@ export default async function DevicePage({
               </a>
             ) : (
               <Link
-                href="/shaxsiy#narx"
+                href={order.href}
                 className="mt-9 flex items-center justify-center gap-2 rounded-2xl bg-lime px-6 py-4 font-medium text-flex-black shadow-[0_16px_40px_-16px_rgba(171,255,9,0.8)] transition-transform hover:scale-[1.01]"
               >
-                {p.orderCta}
+                {order.label}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             )}
@@ -170,4 +178,37 @@ export default async function DevicePage({
       </div>
     </div>
   );
+}
+
+/**
+ * Where the order button should go, for whoever is reading.
+ *
+ * An owner is sent to the screen that orders a device against a number they
+ * already hold. Somebody without one is sent to the price calculator, because
+ * the object needs a number behind it and there is nothing to order yet.
+ *
+ * With more than one number it goes to the cabinet rather than guessing: a ring
+ * engraved with the wrong handle is not a mistake a default should be allowed
+ * to make.
+ */
+async function orderDestination(
+  p: ReturnType<typeof picker>,
+): Promise<{ href: string; label: string }> {
+  const user = await getUser();
+  if (!user) return { href: "/shaxsiy#narx", label: p.orderCta };
+
+  const owned = (await listHandlesForUser(user.id)).filter(
+    (handle) => handle.status === "claimed",
+  );
+
+  if (owned.length === 1) {
+    return {
+      href: `/kabinet/${owned[0].normalized}/qurilma`,
+      label: p.orderForHandle,
+    };
+  }
+  if (owned.length > 1) {
+    return { href: "/kabinet", label: p.orderPickHandle };
+  }
+  return { href: "/shaxsiy#narx", label: p.orderCta };
 }
