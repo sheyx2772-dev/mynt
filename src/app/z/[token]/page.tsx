@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
-import AutoRefresh from "@/components/AutoRefresh";
+import CounterHeader from "@/components/CounterHeader";
 import RequestList from "@/components/RequestList";
 import CounterAlert from "@/components/CounterAlert";
 import { getVenueByStaffToken } from "@/lib/menu";
@@ -36,14 +36,10 @@ export default async function CounterPage({ params }: PageProps<"/z/[token]">) {
       {/* Not one of our screens: a phone propped up by a till has nowhere to
           navigate to, and the bar would be four things to tap by accident. */}
       <span data-no-app-bar hidden />
-      <AutoRefresh seconds={10} />
-
-      <header className="mb-6 flex items-baseline justify-between gap-3">
-        <h1 className="font-display text-xl font-semibold tracking-tight">{venue.name}</h1>
-        <span className="font-tabular text-sm text-flex-black/45">
-          {waiting.length > 0 ? `${waiting.length} ta kutmoqda` : "bo'sh"}
-        </span>
-      </header>
+      {/* The name, the count and the connection together: the count is only
+          true while the phone is connected, and the header is where that has
+          to be said. */}
+      <CounterHeader venueName={venue.name} waiting={waiting.length} seconds={10} />
 
       {/* The ids rather than the count: two closed and two arrived is not a
           quiet minute, and a count would call it one. */}
