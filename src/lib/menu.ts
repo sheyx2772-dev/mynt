@@ -237,3 +237,35 @@ export async function countMenuItems(venueId: string): Promise<number> {
 
   return count ?? 0;
 }
+
+/** One row of a menu, for the screen that corrects it. */
+export async function getMenuItem(
+  venueId: string,
+  itemId: string,
+): Promise<(MenuItem & { nameRu: string | null; nameEn: string | null }) | null> {
+  if (!supabaseAdmin) return null;
+
+  // Scoped to the venue, so a guessed id belonging to another cafe is a 404
+  // rather than an edit form over their menu.
+  const { data } = await supabaseAdmin
+    .from("menu_items")
+    .select("id, category_id, name, name_ru, name_en, note, price, available, photo_url, position")
+    .eq("venue_id", venueId)
+    .eq("id", itemId)
+    .maybeSingle();
+
+  if (!data) return null;
+
+  return {
+    id: data.id as string,
+    categoryId: (data.category_id as string) ?? null,
+    name: data.name as string,
+    nameRu: (data.name_ru as string) ?? null,
+    nameEn: (data.name_en as string) ?? null,
+    note: (data.note as string) ?? null,
+    price: Number(data.price),
+    available: Boolean(data.available),
+    photoUrl: (data.photo_url as string) ?? null,
+    position: Number(data.position),
+  };
+}

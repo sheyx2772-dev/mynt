@@ -96,18 +96,47 @@ async function readPhoto(
   return url ? { url } : { error: "Rasmni yuklab bo'lmadi." };
 }
 
-export async function addItem(venueId: string, form: FormData): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+type ItemFields = {
+  name: string;
+  name_ru: string | null;
+  name_en: string | null;
+  note: string | null;
+  price: number;
+  category_id: string | null;
+};
 
+/**
+ * The fields of one row, read the same way whether it is being added or
+ * corrected.
+ *
+ * Shared because a price typed on the edit screen has to be accepted exactly as
+ * it is on the add screen — the alternative is two validators that agree until
+ * one of them is changed.
+ */
+function readItemFields(form: FormData): ItemFields | { error: string } {
   const name = text(form.get("name"), NAME_MAX);
-  if (!name) return { ok: false, error: "Taom nomini kiriting." };
+  if (!name) return { error: "Taom nomini kiriting." };
 
   // Typed by somebody who thinks in "38 000", not in digits.
   const price = Number.parseInt(text(form.get("price"), 20).replace(/\D/g, ""), 10);
-  if (!Number.isFinite(price) || price < 0) return { ok: false, error: "Narxni kiriting." };
-  if (price > PRICE_MAX) return { ok: false, error: "Narx juda katta." };
+  if (!Number.isFinite(price) || price < 0) return { error: "Narxni kiriting." };
+  if (price > PRICE_MAX) return { error: "Narx juda katta." };
 
-  const categoryId = text(form.get("category_id"), 40) || null;
+  return {
+    name,
+    name_ru: optional(form.get("name_ru"), NAME_MAX),
+    name_en: optional(form.get("name_en"), NAME_MAX),
+    note: optional(form.get("note"), NOTE_MAX),
+    price,
+    category_id: text(form.get("category_id"), 40) || null,
+  };
+}
+
+export async function addItem(venueId: string, form: FormData): Promise<EditResult> {
+  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+
+  const fields = readItemFields(form);
+  if ("error" in fields) return { ok: false, error: fields.error };
 
   const photo = await readPhoto(venueId, form.get("photo"));
   if (photo && "error" in photo) return { ok: false, error: photo.error };
@@ -116,19 +145,48 @@ export async function addItem(venueId: string, form: FormData): Promise<EditResu
     .from("menu_items")
     .select("id", { count: "exact", head: true })
     .eq("venue_id", venueId)
-    .eq("category_id", categoryId ?? "");
+    .eq("category_id", fields.category_id ?? "");
 
   const { error } = await supabaseAdmin.from("menu_items").insert({
     venue_id: venueId,
-    category_id: categoryId,
-    name,
-    name_ru: optional(form.get("name_ru"), NAME_MAX),
-    name_en: optional(form.get("name_en"), NAME_MAX),
-    note: optional(form.get("note"), NOTE_MAX),
-    price,
+    ...fields,
     photo_url: photo?.url ?? null,
     position: count ?? 0,
   });
+
+  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
+  return { ok: true };
+}
+
+/**
+ * Correcting a row that is already on the menu.
+ *
+ * Until this existed, changing a price meant deleting the dish and typing it
+ * again — which threw away its photograph, its translations and its place in
+ * the list, for the single most ordinary edit a menu ever gets.
+ *
+ * The photograph is left alone unless a new file came with the form: the edit
+ * screen is where a price is corrected, and losing the picture because the file
+ * field was empty would be its own small disaster.
+ */
+export async function editItem(
+  venueId: string,
+  itemId: string,
+  form: FormData,
+): Promise<EditResult> {
+  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+
+  const fields = readItemFields(form);
+  if ("error" in fields) return { ok: false, error: fields.error };
+
+  const photo = await readPhoto(venueId, form.get("photo"));
+  if (photo && "error" in photo) return { ok: false, error: photo.error };
+
+  const { error } = await supabaseAdmin
+    .from("menu_items")
+    .update(photo ? { ...fields, photo_url: photo.url } : fields)
+    .eq("id", itemId)
+    .eq("venue_id", venueId);
 
   if (error) return { ok: false, error: "Saqlab bo'lmadi." };
   return { ok: true };
@@ -329,4 +387,94 @@ export async function setItemPhoto(
 
   if (error) return { ok: false, error: "Saqlab bo'lmadi." };
   return { ok: true };
+}
+
+/**
+ * Moving one row up or down its list.
+ *
+ * The whole list is renumbered rather than two positions being swapped.
+ * Positions were handed out as "how many were here when I was added", so a menu
+ * that has had anything deleted carries gaps and duplicates — swapping two of
+ * those does nothing visible about half the time, which is the kind of bug an
+ * owner retries five times before giving up on the product.
+ *
+ * A category holds a few dozen rows at most, so rewriting it is a handful of
+ * statements and always leaves the list in a state that behaves.
+ */
+async function reorder(
+  table: "menu_items" | "menu_categories",
+  scope: { column: string; value: string | null; venueId: string },
+  id: string,
+  direction: "up" | "down",
+): Promise<EditResult> {
+  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+
+  const query = supabaseAdmin
+    .from(table)
+    .select("id")
+    .eq("venue_id", scope.venueId)
+    .order("position")
+    .order("created_at");
+
+  const { data } = await (scope.value === null && scope.column !== ""
+    ? query.is(scope.column, null)
+    : scope.column === ""
+      ? query
+      : query.eq(scope.column, scope.value));
+
+  const ids = (data ?? []).map((row) => row.id as string);
+  const from = ids.indexOf(id);
+  if (from === -1) return { ok: false, error: "Topilmadi." };
+
+  const to = direction === "up" ? from - 1 : from + 1;
+  // Already at the end. Not an error — the button simply had nothing to do.
+  if (to < 0 || to >= ids.length) return { ok: true };
+
+  [ids[from], ids[to]] = [ids[to]!, ids[from]!];
+
+  await Promise.all(
+    ids.map((rowId, position) =>
+      supabaseAdmin!
+        .from(table)
+        .update({ position })
+        .eq("id", rowId)
+        .eq("venue_id", scope.venueId),
+    ),
+  );
+
+  return { ok: true };
+}
+
+export async function moveItem(
+  venueId: string,
+  itemId: string,
+  direction: "up" | "down",
+): Promise<EditResult> {
+  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+
+  // Moved within its own section, since that is the list the owner is looking
+  // at. Changing sections is what the edit screen's category field is for.
+  const { data } = await supabaseAdmin
+    .from("menu_items")
+    .select("category_id")
+    .eq("id", itemId)
+    .eq("venue_id", venueId)
+    .maybeSingle();
+
+  if (!data) return { ok: false, error: "Topilmadi." };
+
+  return reorder(
+    "menu_items",
+    { column: "category_id", value: (data.category_id as string) ?? null, venueId },
+    itemId,
+    direction,
+  );
+}
+
+export async function moveCategory(
+  venueId: string,
+  categoryId: string,
+  direction: "up" | "down",
+): Promise<EditResult> {
+  return reorder("menu_categories", { column: "", value: null, venueId }, categoryId, direction);
 }

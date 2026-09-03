@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import { requireUser } from "@/lib/auth";
 import { getOwnedVenue } from "@/lib/menu";
@@ -8,6 +9,9 @@ import {
   addCategory,
   removeCategory,
   addItem,
+  editItem,
+  moveItem,
+  moveCategory,
   setItemAvailable,
   setItemPhoto,
   removeItem,
@@ -100,4 +104,39 @@ export async function setItemPhotoAction(_prev: EditResult, form: FormData) {
     revalidatePath(`/${handle}`);
   }
   return result;
+}
+
+export async function editItemAction(_prev: EditResult, form: FormData) {
+  const { venue, handle } = await venueFor(form);
+  if (!venue) return DENIED;
+
+  const result = await editItem(venue.id, String(form.get("id") ?? ""), form);
+  if (!result.ok) return result;
+
+  revalidatePath(`/kabinet/${handle}/menyu`);
+  revalidatePath(`/${handle}`);
+
+  // Back to the list rather than a message on the form: the row showing the new
+  // price is the confirmation, and it is the thing they came to check.
+  redirect(`/kabinet/${handle}/menyu`);
+}
+
+export async function moveItemAction(form: FormData) {
+  const { venue, handle } = await venueFor(form);
+  if (!venue) return;
+
+  const direction = form.get("direction") === "up" ? "up" : "down";
+  await moveItem(venue.id, String(form.get("id") ?? ""), direction);
+  revalidatePath(`/kabinet/${handle}/menyu`);
+  revalidatePath(`/${handle}`);
+}
+
+export async function moveCategoryAction(form: FormData) {
+  const { venue, handle } = await venueFor(form);
+  if (!venue) return;
+
+  const direction = form.get("direction") === "up" ? "up" : "down";
+  await moveCategory(venue.id, String(form.get("id") ?? ""), direction);
+  revalidatePath(`/kabinet/${handle}/menyu`);
+  revalidatePath(`/${handle}`);
 }

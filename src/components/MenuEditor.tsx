@@ -66,11 +66,7 @@ export default function MenuEditor({
       </div>
 
       {open === "item" && (
-        <form
-          action={itemAction}
-          encType="multipart/form-data"
-          className="mt-4 rounded-2xl border border-black/10 bg-white p-5"
-        >
+        <form action={itemAction} className="mt-4 rounded-2xl border border-black/10 bg-white p-5">
           <input type="hidden" name="handle" value={handle} />
 
           <div className="grid gap-3 sm:grid-cols-2">

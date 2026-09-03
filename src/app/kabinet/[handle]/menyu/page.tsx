@@ -1,7 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowLeft, Trash2, Eye, EyeOff, ExternalLink } from "lucide-react";
+import {
+  ArrowLeft,
+  Trash2,
+  Eye,
+  EyeOff,
+  ExternalLink,
+  Pencil,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 
 import PageShell from "@/components/PageShell";
 import { requireUser } from "@/lib/auth";
@@ -12,6 +21,8 @@ import {
   removeCategoryAction,
   toggleItemAction,
   removeItemAction,
+  moveItemAction,
+  moveCategoryAction,
 } from "./actions";
 import MenuEditor from "@/components/MenuEditor";
 import DishPhotoButton from "@/components/DishPhotoButton";
@@ -29,7 +40,41 @@ export const metadata: Metadata = {
 // used standing behind a counter on a phone with one bar of signal, and a form
 // that posts is the only kind that still works there.
 
-export default async function MenuAdminPage({ params }: PageProps<"/kabinet/[handle]/menyu">) {
+/** One nudge up or down. Plain forms, so it works on a counter phone with one
+    bar of signal exactly as the rest of this screen does. */
+function Move({
+  action,
+  handle,
+  id,
+  direction,
+}: {
+  action: (form: FormData) => Promise<void>;
+  handle: string;
+  id: string;
+  direction: "up" | "down";
+}) {
+  return (
+    <form action={action} className="shrink-0">
+      <input type="hidden" name="handle" value={handle} />
+      <input type="hidden" name="id" value={id} />
+      <input type="hidden" name="direction" value={direction} />
+      <button
+        title={direction === "up" ? "Yuqoriga" : "Pastga"}
+        className="flex h-8 w-6 items-center justify-center rounded-lg text-flex-black/35 hover:bg-black/[0.03] hover:text-flex-black"
+      >
+        {direction === "up" ? (
+          <ChevronUp className="h-4 w-4" />
+        ) : (
+          <ChevronDown className="h-4 w-4" />
+        )}
+      </button>
+    </form>
+  );
+}
+
+export default async function MenuAdminPage({
+  params,
+}: PageProps<"/kabinet/[handle]/menyu">) {
   const { handle } = await params;
   const parsed = parseHandle(handle);
   if (!parsed) notFound();
@@ -63,12 +108,19 @@ export default async function MenuAdminPage({ params }: PageProps<"/kabinet/[han
         </Link>
       </div>
 
-      <h1 className="font-display text-2xl font-semibold tracking-tight">{venue.name}</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight">
+        {venue.name}
+      </h1>
       <p className="mt-1 mb-8 text-sm text-flex-black/50">
         O&apos;zgartirish darhol ko&apos;rinadi — qayta chop etish kerak emas.
       </p>
 
-      <MenuEditor handle={normalized} venue={venue} categories={categories} w={w} />
+      <MenuEditor
+        handle={normalized}
+        venue={venue}
+        categories={categories}
+        w={w}
+      />
 
       {/* The list, with the two controls that get used every day: take a dish
           off, and put it back. */}
@@ -79,79 +131,137 @@ export default async function MenuAdminPage({ params }: PageProps<"/kabinet/[han
               {category.name || "Bo'limsiz"}
             </h2>
             {category.id !== "boshqa" && (
-              <form action={removeCategoryAction}>
-                <input type="hidden" name="handle" value={normalized} />
-                <input type="hidden" name="id" value={category.id} />
-                <button className="text-xs text-flex-black/35 hover:text-red-600">
-                  Bo&apos;limni o&apos;chirish
-                </button>
-              </form>
+              <div className="flex items-center gap-1.5">
+                <Move
+                  action={moveCategoryAction}
+                  handle={normalized}
+                  id={category.id}
+                  direction="up"
+                />
+                <Move
+                  action={moveCategoryAction}
+                  handle={normalized}
+                  id={category.id}
+                  direction="down"
+                />
+                <form action={removeCategoryAction}>
+                  <input type="hidden" name="handle" value={normalized} />
+                  <input type="hidden" name="id" value={category.id} />
+                  <button className="ml-1.5 text-xs text-flex-black/35 hover:text-red-600">
+                    O&apos;chirish
+                  </button>
+                </form>
+              </div>
             )}
           </div>
 
           <div className="divide-y divide-black/6 rounded-2xl border border-black/10 bg-white">
             {category.items.map((item) => (
-              <div key={item.id} className="flex items-center gap-3 px-4 py-3">
-                {item.photoUrl && (
-                  // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
-                  <img
-                    src={item.photoUrl}
-                    alt=""
-                    className="h-10 w-10 shrink-0 rounded-lg object-cover"
-                  />
-                )}
-
-                <div className="min-w-0 flex-1">
-                  <p className={item.available ? "font-medium" : "font-medium opacity-45"}>
-                    {item.name}
-                  </p>
-                  {item.note && (
-                    <p className="mt-0.5 text-xs text-flex-black/45">{item.note}</p>
+              // Two lines, not one. The controls outgrew the row the moment
+              // reordering and editing joined them, and a dish called "Bahor
+              // salati" was wrapping to three lines to make space for buttons.
+              <div key={item.id} className="px-4 py-3">
+                <div className="flex items-center gap-3">
+                  {item.photoUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
+                    <img
+                      src={item.photoUrl}
+                      alt=""
+                      className="h-10 w-10 shrink-0 rounded-lg object-cover"
+                    />
                   )}
+
+                  <div className="min-w-0 flex-1">
+                    <p
+                      className={
+                        item.available
+                          ? "font-medium"
+                          : "font-medium opacity-45"
+                      }
+                    >
+                      {item.name}
+                    </p>
+                    {item.note && (
+                      <p className="mt-0.5 text-xs text-flex-black/45">
+                        {item.note}
+                      </p>
+                    )}
+                  </div>
+
+                  <p className="shrink-0 font-tabular text-sm font-semibold">
+                    {item.price === 0 ? (
+                      <span className="text-xs font-medium text-flex-black/45">
+                        {w.freeWord}
+                      </span>
+                    ) : (
+                      formatNumber(item.price)
+                    )}
+                  </p>
                 </div>
 
-                <p className="shrink-0 font-tabular text-sm font-semibold">
-                  {item.price === 0 ? (
-                    <span className="text-xs font-medium text-flex-black/45">{w.freeWord}</span>
-                  ) : (
-                    formatNumber(item.price)
-                  )}
-                </p>
+                <div className="mt-2 flex items-center justify-end gap-1.5">
+                  <Move
+                    action={moveItemAction}
+                    handle={normalized}
+                    id={item.id}
+                    direction="up"
+                  />
+                  <Move
+                    action={moveItemAction}
+                    handle={normalized}
+                    id={item.id}
+                    direction="down"
+                  />
 
-                <DishPhotoButton
-                  handle={normalized}
-                  itemId={item.id}
-                  hasPhoto={Boolean(item.photoUrl)}
-                />
-
-                <form action={toggleItemAction} className="shrink-0">
-                  <input type="hidden" name="handle" value={normalized} />
-                  <input type="hidden" name="id" value={item.id} />
-                  <input type="hidden" name="available" value={item.available ? "0" : "1"} />
-                  <button
-                    title={
-                      item.available ? `${w.soldOut} deb belgilash` : "Ro'yxatga qaytarish"
-                    }
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 text-flex-black/50 hover:bg-black/[0.03]"
+                  <Link
+                    href={`/kabinet/${normalized}/menyu/${item.id}`}
+                    title="Tahrirlash"
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-black/10 text-flex-black/50 hover:bg-black/[0.03]"
                   >
-                    {item.available ? (
-                      <Eye className="h-4 w-4" />
-                    ) : (
-                      <EyeOff className="h-4 w-4" />
-                    )}
-                  </button>
-                </form>
+                    <Pencil className="h-4 w-4" />
+                  </Link>
 
-                <form action={removeItemAction} className="shrink-0">
-                  <input type="hidden" name="handle" value={normalized} />
-                  <input type="hidden" name="id" value={item.id} />
-                  <button
-                    title="O'chirish"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 text-flex-black/40 hover:bg-red-50 hover:text-red-600"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </form>
+                  <DishPhotoButton
+                    handle={normalized}
+                    itemId={item.id}
+                    hasPhoto={Boolean(item.photoUrl)}
+                  />
+
+                  <form action={toggleItemAction} className="shrink-0">
+                    <input type="hidden" name="handle" value={normalized} />
+                    <input type="hidden" name="id" value={item.id} />
+                    <input
+                      type="hidden"
+                      name="available"
+                      value={item.available ? "0" : "1"}
+                    />
+                    <button
+                      title={
+                        item.available
+                          ? `${w.soldOut} deb belgilash`
+                          : "Ro'yxatga qaytarish"
+                      }
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 text-flex-black/50 hover:bg-black/[0.03]"
+                    >
+                      {item.available ? (
+                        <Eye className="h-4 w-4" />
+                      ) : (
+                        <EyeOff className="h-4 w-4" />
+                      )}
+                    </button>
+                  </form>
+
+                  <form action={removeItemAction} className="shrink-0">
+                    <input type="hidden" name="handle" value={normalized} />
+                    <input type="hidden" name="id" value={item.id} />
+                    <button
+                      title="O'chirish"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 text-flex-black/40 hover:bg-red-50 hover:text-red-600"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </form>
+                </div>
               </div>
             ))}
           </div>
