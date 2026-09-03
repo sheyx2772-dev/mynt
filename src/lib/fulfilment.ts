@@ -89,6 +89,20 @@ export function step(state: Fulfilment): { index: number; of: number } | null {
   return index === -1 ? null : { index: index + 1, of: line.length };
 }
 
+/**
+ * The mark each state wears, named once because three screens draw them: the
+ * maker's queue, the buyer's order page and the cabinet. A parcel that is a van
+ * in one place and a box in another is two parcels to whoever is reading.
+ */
+export const FULFILMENT_ICON: Record<Fulfilment, string> = {
+  address_needed: "map-pin",
+  queued: "list-checks",
+  making: "hammer",
+  shipped: "truck",
+  delivered: "package-check",
+  returned: "undo-2",
+};
+
 type Words = { label: string; buyer: string; action: string };
 
 const WORDS: Record<Lang, Record<Fulfilment, Words>> = {

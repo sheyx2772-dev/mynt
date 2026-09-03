@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, CreditCard, Package } from "lucide-react";
 
 import PageShell from "@/components/PageShell";
 import { SubScreen } from "@/components/HandleHub";
 import DeviceOrderForm from "@/components/DeviceOrderForm";
 import { requireOwnHandle } from "@/lib/kabinet";
 import { listOwnOrders } from "@/lib/device-orders";
-import { fulfilmentForBuyer, fulfilmentLabel } from "@/lib/fulfilment";
+import { fulfilmentForBuyer } from "@/lib/fulfilment";
+import { FulfilmentIcon } from "@/components/CrmIcon";
 import { catalogue } from "@/lib/i18n";
 import { formatUZS } from "@/lib/format";
 import { DEFAULT_DEVICE_TYPE } from "@/lib/devices";
@@ -43,36 +44,45 @@ export default async function DeviceOrderPage({
         />
 
         {mine.length > 0 && (
-          <section className="mt-8 rounded-3xl border border-black/8 bg-white p-6 sm:p-8">
-            <h2 className="font-display text-lg font-semibold">
+          <section className="mt-8">
+            <h2 className="flex items-center gap-2 text-[12px] font-medium tracking-wide text-flex-black/40 uppercase">
+              <Package className="h-3.5 w-3.5" />
               Buyurtmalaringiz
             </h2>
-            <ul className="mt-4 divide-y divide-black/8">
-              {mine.map((order) => (
-                <li key={order.id}>
+            <ul className="mt-3 space-y-2">
+              {mine.map((order, i) => (
+                <li
+                  key={order.id}
+                  className="rise"
+                  style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
+                >
                   <Link
                     href={`/kabinet/buyurtma/${order.id}`}
-                    className="flex items-center gap-4 py-4 transition-colors hover:bg-black/[0.02]"
+                    className="flex items-center gap-3.5 rounded-2xl border border-black/6 bg-white py-3.5 pr-4 pl-4 transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
                   >
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-flex-black text-white">
+                      {order.status === "pending" ? (
+                        <CreditCard className="h-4 w-4" />
+                      ) : (
+                        <FulfilmentIcon state={order.fulfilment} className="h-4 w-4" />
+                      )}
+                    </span>
+
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium">
+                      <p className="truncate text-[14px] font-semibold tracking-tight">
                         {names[order.deviceType].name}
-                        <span className="ml-2 font-normal text-flex-black/45">
+                        <span className="ml-2 font-tabular font-normal text-flex-black/45">
                           {formatUZS(order.amount, "uz")}
                         </span>
                       </p>
-                      <p className="mt-0.5 text-sm text-flex-black/55">
+                      <p className="mt-0.5 truncate text-[12px] text-flex-black/45">
                         {order.status === "pending"
                           ? "To'lov kutilmoqda"
                           : fulfilmentForBuyer(order.fulfilment, "uz")}
                       </p>
                     </div>
-                    <span className="shrink-0 rounded-full bg-black/[0.06] px-3 py-1 text-xs text-flex-black/60">
-                      {order.status === "pending"
-                        ? "To'lanmagan"
-                        : fulfilmentLabel(order.fulfilment, "uz")}
-                    </span>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-flex-black/30" />
+
+                    <ChevronRight className="h-4 w-4 shrink-0 text-flex-black/25" />
                   </Link>
                 </li>
               ))}
