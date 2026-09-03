@@ -23,8 +23,12 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PHOTOS = ROOT / "public" / "mahsulot"
-CARDS = ROOT / "public" / "kartalar"
+# Graded copies rather than the originals — see scripts/deck_grade.py. The
+# photographs were taken separately and arrived in three colour temperatures:
+# the cafe and hotel warm gold, the salon warm pink, the product shots on white.
+# Side by side under an acid lime they looked like three different companies.
+PHOTOS = ROOT / "deck" / "graded"
+CARDS = ROOT / "deck" / "graded"
 # Copied into the repo rather than read from node_modules: an unrelated
 # `npm install --no-save` pruned the icon package once and the deck stopped
 # building, which is a silly thing to depend on for fifteen small files.
@@ -174,7 +178,19 @@ def build(t):
                    f'<div class="pad grow" style="padding-top:34px"><div class="cols c3">{cards}</div></div>' +
                    foot(1)))
 
-    # 3 — solution, against the tap photograph
+    # 3 — the thesis, in lime, on its own.
+    #
+    # Eleven dark slides in a row read as one long tunnel, and the criticism
+    # that the deck was boring was mostly this. A slide carrying one sentence
+    # and no photograph is the breath in the middle of the argument.
+    s.append(f'''<section class="slide" style="background:var(--lime);color:var(--ink)">
+      <div class="pad grow" style="justify-content:center">
+        <h1 style="font-size:96px;max-width:1000px;letter-spacing:-.042em">{t['statement']}</h1>
+        <p style="color:rgba(14,10,27,.62);font-size:23px;margin-top:28px;max-width:660px">{t['statement_sub']}</p>
+      </div>
+    </section>''')
+
+    # 4 — solution, against the tap photograph
     steps = "".join(f'<div class="step"><div class="num">{i+1}</div><div><h3 style="font-size:20px">{h}</h3><p style="margin-top:6px">{b}</p></div></div>'
                     for i, (h, b) in enumerate(t["solution"]))
     s.append(slide(f'''
@@ -194,30 +210,48 @@ def build(t):
           <p style="margin-top:5px;font-size:15px">{d}</p>
           <div class="lime" style="margin-top:12px;font-weight:700;font-size:17px">{p}</div>
         </div></div>''' for k, n, d, p in t["devices"])
-    s.append(slide(head(t["nav_devices"], t["devices_title"]) +
+    # Light, deliberately. These four are studio cutouts shot on white; on a dark
+    # slide each one read as a hole punched through the deck. On paper they are
+    # objects sitting on a table.
+    s.append(slide(head(t["nav_devices"], t["devices_title"], True) +
                    f'<div class="pad grow" style="padding-top:30px"><div class="cols c4">{devices}</div></div>' +
-                   foot(3), light=False))
+                   foot(3, True), light=True))
 
-    # 5 — one number, many designs
-    designs = "".join(f'<div class="shot" style="height:186px"><img src="{CARD[k]}"></div>' for k in t["card_designs"])
+    # 5 — one number, many designs.
+    #
+    # The cards are the object a buyer actually holds, and they were being shown
+    # at the size of a postage stamp with a third of the slide empty beneath
+    # them. Bigger, named, and lifted off the paper by a shadow, because they are
+    # physical things and should read as physical things.
+    designs = "".join(f'''<div>
+        <div class="shot" style="height:230px;box-shadow:0 26px 44px -18px rgba(14,10,27,.42)">
+          <img src="{CARD[k]}"></div>
+        <div style="margin-top:16px;font-size:17px;font-weight:600;letter-spacing:-.01em">{n}</div>
+      </div>''' for k, n in t["card_designs"])
     s.append(slide(head(t["nav_design"], t["design_title"], True) +
-                   f'''<div class="pad grow" style="padding-top:26px">
-                     <p class="lead" style="max-width:760px">{t['design_body']}</p>
-                     <div class="cols c4" style="margin-top:28px">{designs}</div>
+                   f'''<div class="pad grow" style="padding-top:22px;justify-content:space-between">
+                     <p class="lead" style="max-width:720px">{t['design_body']}</p>
+                     <div class="cols c4" style="margin-bottom:8px">{designs}</div>
                    </div>''' + foot(4, True), light=True))
 
-    # 6 — the market, in photographs
-    verts = "".join(f'''<div style="position:relative;border-radius:22px;overflow:hidden;height:340px">
+    # 6 — the market, in photographs.
+    #
+    # Edge to edge and down to the bottom of the slide. As three small rounded
+    # cards floating in the middle, the rooms we are selling into were postage
+    # stamps with half the slide empty underneath them; this is the one place in
+    # the deck where the photography should be the loudest thing in the hall.
+    verts = "".join(f'''<div style="position:relative;overflow:hidden">
         <img src="{PHOTO[k]}" style="width:100%;height:100%;object-fit:cover">
-        <div class="scrim up"></div>
-        <div style="position:absolute;left:26px;right:26px;bottom:24px">
-          {icon(ic, "#ABFF09", 30)}
-          <h3 style="margin-top:10px;font-size:22px">{n}</h3>
-          <p style="margin-top:4px;font-size:15px">{d}</p>
+        <div class="scrim up" style="background:linear-gradient(0deg,
+             rgba(14,10,27,.94) 0%, rgba(14,10,27,.72) 26%, rgba(14,10,27,0) 62%)"></div>
+        <div style="position:absolute;left:34px;right:26px;bottom:34px">
+          {icon(ic, "#ABFF09", 32)}
+          <h3 style="margin-top:12px;font-size:26px">{n}</h3>
+          <p style="margin-top:6px;font-size:16px;max-width:300px;line-height:1.5;min-height:3em">{d}</p>
         </div></div>''' for k, ic, n, d in t["verticals"])
     s.append(slide(head(t["nav_market"], t["market_title"]) +
-                   f'<div class="pad grow" style="padding-top:28px"><div class="cols c3">{verts}</div></div>' +
-                   foot(5)))
+                   f'''<div class="grow" style="margin-top:30px;display:grid;
+                        grid-template-columns:1fr 1fr 1fr;gap:3px">{verts}</div>'''))
 
     # 7 — the loop, with the real screens
     loop = "".join(f'<div class="step"><div class="num">{i+1}</div><p style="color:#fff;font-size:17px;padding-top:5px">{x}</p></div>'
@@ -296,15 +330,30 @@ def build(t):
     s.append(slide(head(t["nav_comp"], t["comp_title"]) +
                    f'<div class="pad grow" style="padding-top:20px">{comp}</div>' + foot(12)))
 
-    # 14 — team
-    team = "".join(f'''<div class="card" style="align-items:flex-start">
-        <div style="width:54px;height:54px;border-radius:16px;background:var(--lime);color:var(--ink);display:grid;place-items:center;font-weight:700;font-size:20px">{i}</div>
-        <h3 style="font-size:20px">{n}</h3>
-        <p class="limeink" style="font-weight:700;font-size:15px;margin-top:-6px">{r}</p>
-        <p style="font-size:15px">{w}</p></div>''' for i, n, r, w in t["team"])
-    s.append(slide(head(t["nav_team"], t["team_title"], True) +
-                   f'<div class="pad grow" style="padding-top:34px"><div class="cols c3">{team}</div></div>' +
-                   foot(13, True), light=True))
+    # 14 — team.
+    #
+    # Three cards in a row left two thirds of the slide empty, which on a team
+    # slide reads as a team with something missing. Rows down one side against
+    # the heading fills the page and lets each person have a full line.
+    team = "".join(f'''<div class="card" style="flex-direction:row;align-items:center;gap:20px;padding:22px 26px">
+        <div style="flex:none;width:56px;height:56px;border-radius:17px;background:var(--lime);color:var(--ink);
+             display:grid;place-items:center;font-weight:700;font-size:20px">{i}</div>
+        <div>
+          <h3 style="font-size:20px">{n}</h3>
+          <p class="limeink" style="font-weight:700;font-size:15px;margin-top:2px">{r}</p>
+        </div>
+        <div style="margin-left:auto;text-align:right">
+          <p style="font-size:15px">{w}</p>
+        </div></div>''' for i, n, r, w in t["team"])
+    s.append(slide(f'''
+      <div class="pad grow" style="display:grid;grid-template-columns:.82fr 1.18fr;gap:52px;align-items:center">
+        <div>
+          <div class="eyebrow">{t['nav_team']}</div>
+          <h2 style="margin-top:16px">{t['team_title']}</h2>
+          <p class="lead" style="margin-top:22px">{t['team_body']}</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:18px">{team}</div>
+      </div>''' + foot(13, True), light=True))
 
     # 15 — ask, over the family photograph
     use = "".join(f'<div style="display:flex;gap:18px;align-items:baseline"><span class="lime" style="font-weight:700;font-size:19px;width:56px">{a}</span><span style="font-size:16px">{b}</span></div>'

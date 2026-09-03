@@ -69,10 +69,22 @@
  "design_title": "One number, many faces.",
  "design_body": "The owner picks the card design, and every one of them is drawn by us rather than borrowed. A low serial number cannot be reproduced at all — which is the one thing on the card that is genuinely scarce.",
  "card_designs": [
-  "xarita",
-  "suzani",
-  "rahbar",
-  "devops"
+  [
+   "xarita",
+   "Xarita"
+  ],
+  [
+   "suzani",
+   "Suzani"
+  ],
+  [
+   "rahbar",
+   "Rahbar"
+  ],
+  [
+   "devops",
+   "DevOps"
+  ]
  ],
  "nav_market": "Our market",
  "market_title": "Everywhere somebody is served.",
@@ -272,5 +284,8 @@
   ]
  ],
  "contact_head": "Contact",
- "contact": "Javohir Abrorov<br>sheyx2772@gmail.com<br>+998 97 724 79 99<br>flex.com.uz"
+ "contact": "Javohir Abrorov<br>sheyx2772@gmail.com<br>+998 97 724 79 99<br>flex.com.uz",
+ "statement": "One tap —<br>and the page opens.",
+ "statement_sub": "Nothing to install. Nothing to sign up for. The guest taps their own phone, and that is the whole of it.",
+ "team_body": "Three people. Product, web and sales, all in-house. The first version was built without an outside team, and it is running today."
 }

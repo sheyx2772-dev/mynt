@@ -69,10 +69,22 @@
  "design_title": "Bitta raqam, ko'p ko'rinish.",
  "design_body": "Karta dizaynini egasi tanlaydi — o'zimiz chizganmiz, birovnikidan olinmagan. Past raqamli seriya esa takrorlanmaydi: uni boshqa hech kim bosib chiqara olmaydi.",
  "card_designs": [
-  "xarita",
-  "suzani",
-  "rahbar",
-  "devops"
+  [
+   "xarita",
+   "Xarita"
+  ],
+  [
+   "suzani",
+   "Suzani"
+  ],
+  [
+   "rahbar",
+   "Rahbar"
+  ],
+  [
+   "devops",
+   "DevOps"
+  ]
  ],
  "nav_market": "Bozorimiz",
  "market_title": "Xizmat ko'rsatadigan har bir joy.",
@@ -272,5 +284,8 @@
   ]
  ],
  "contact_head": "Aloqa",
- "contact": "Javohir Abrorov<br>sheyx2772@gmail.com<br>+998 97 724 79 99<br>flex.com.uz"
+ "contact": "Javohir Abrorov<br>sheyx2772@gmail.com<br>+998 97 724 79 99<br>flex.com.uz",
+ "statement": "Bir tegish —<br>va sahifa ochiladi.",
+ "statement_sub": "Ilova o'rnatilmaydi. Ro'yxatdan o'tilmaydi. Mehmon o'z telefonini tegizadi, tamom.",
+ "team_body": "Uch kishi. Mahsulot, veb va sotuv — hammasi ichkarida. Birinchi versiya tashqi jamoasiz qurildi va bugun ishlab turibdi."
 }
