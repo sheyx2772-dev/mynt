@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   QrCode,
+  Car,
   Package,
   Users,
   Pencil,
@@ -213,6 +214,7 @@ export default function HandleHub({
         <Tile href={at("dizayn")} label="Dizayn" Icon={Palette} />
         <Tile href={at("qurilma")} label="Qurilma" Icon={Package} />
         <Tile href={at("tarmoq")} label="Tarmoq" Icon={Users} />
+        <Tile href={at("buyumlar")} label="Buyumlar" Icon={Car} />
         <Tile href={at("otkazish")} label="O'tkazish" Icon={ArrowLeftRight} />
       </div>
 

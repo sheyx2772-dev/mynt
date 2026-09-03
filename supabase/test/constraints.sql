@@ -1744,3 +1744,91 @@ begin
   delete from handles where id = hid;
   delete from auth.users where id = owner_id;
 end $$;
+
+-- ── the tag on a thing, and what a stranger leaves on it ──────────────────
+--
+-- What the database has to hold here is mostly about the two people never
+-- being introduced to each other unless they choose to be.
+do $$
+declare
+  owner_id uuid := gen_random_uuid();
+  hid uuid;
+  tid uuid;
+  mid bigint;
+begin
+  insert into auth.users (id, email) values (owner_id, 'tag@flex.test');
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('TAG', '001', 'claimed', owner_id, now())
+    returning id into hid;
+
+  insert into object_tags (handle_id, token, kind, label)
+    values (hid, 'k7f3a91b2c8d4e6079a5b3c1d', 'car', 'Malibu')
+    returning id into tid;
+  raise notice '   ok   a thing can carry a tag';
+
+  begin
+    insert into object_tags (handle_id, token, kind)
+      values (hid, 'qisqa', 'car');
+    raise exception 'taxmin qilsa boʻladigan qisqa manzil oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: an address short enough to guess';
+  end;
+
+  begin
+    insert into object_tags (handle_id, token, kind)
+      values (hid, 'b2c8d4e6079a5b3c1dk7f3a91', 'velosiped');
+    raise exception 'nomaʼlum buyum turi oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a kind of thing we do not sell a tag for';
+  end;
+
+  begin
+    insert into object_tags (handle_id, token, kind)
+      values (hid, 'k7f3a91b2c8d4e6079a5b3c1d', 'pet');
+    raise exception 'bitta manzil ikki buyumga berildi';
+  exception when unique_violation then
+    raise notice '   ok   rejected: one address, one thing';
+  end;
+
+  -- The message that needs no answer, and gives nothing away.
+  insert into tag_messages (tag_id, kind, place)
+    values (tid, 'blocking', 'Chilonzor, 12-kvartal')
+    returning id into mid;
+  perform 1 from tag_messages where id = mid and reply_to is null;
+  if not found then raise exception 'javob manzili oʻz-oʻzidan paydo boʻldi'; end if;
+  raise notice '   ok   a stranger can write without leaving anything of theirs';
+
+  -- And the one where being reachable is the whole point.
+  insert into tag_messages (tag_id, kind, body, reply_to)
+    values (tid, 'found', 'Itingizni bogʻda topdim', '+998901234567');
+  raise notice '   ok   a finder can choose to be reachable';
+
+  begin
+    insert into tag_messages (tag_id, kind, reply_to)
+      values (tid, 'found', '12');
+    raise exception 'aloqaga yaramaydigan javob manzili oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a way back that nobody could use';
+  end;
+
+  begin
+    insert into tag_messages (tag_id, kind) values (tid, 'salom');
+    raise exception 'nomaʼlum xabar turi oʻtdi';
+  exception when check_violation then
+    raise notice '   ok   rejected: a kind of message we do not handle';
+  end;
+
+  -- A tag glued to a windscreen outlives the car it was glued to.
+  update object_tags set active = false where id = tid;
+  perform 1 from object_tags where id = tid and active = false;
+  if not found then raise exception 'tegni toʻxtatib boʻlmadi'; end if;
+  raise notice '   ok   a tag can be retired without being destroyed';
+
+  -- Losing the number takes the tags and the messages with it.
+  delete from handles where id = hid;
+  perform 1 from object_tags where id = tid;
+  if found then raise exception 'raqam oʻchdi, teg qoldi'; end if;
+  raise notice '   ok   losing the number takes its tags and their messages';
+
+  delete from auth.users where id = owner_id;
+end $$;

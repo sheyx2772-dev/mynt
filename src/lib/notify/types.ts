@@ -10,7 +10,8 @@ export type NotificationKind =
   | "plan_expired"
   | "transfer"
   | "venue_request"
-  | "device_order";
+  | "device_order"
+  | "tag_message";
 
 export type Notice = {
   userId: string;
