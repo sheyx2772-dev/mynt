@@ -31,10 +31,16 @@ function isTransient(status: number): boolean {
   return status === 429 || status >= 500;
 }
 
-// Per attempt, not for the whole call. Measured: a real briefing prompt takes
-// well over a minute on the slow model, and the brief is written in the
-// background and stored, so nothing is waiting on this.
-const TIMEOUT_MS = 45_000;
+// Per attempt, and generous because the measurements demanded it: the fast
+// models answer a real briefing prompt in seconds but return 503 under load
+// often enough to matter, and the one that is always reachable took over two
+// minutes for the same prompt. A short timeout here does not make the feature
+// faster, it makes it fail.
+//
+// This is why the result is stored rather than recomputed on render, and why a
+// deployment has to allow the page a long enough function duration — see
+// maxDuration on the network page.
+const TIMEOUT_MS = 120_000;
 
 export function isAiConfigured(): boolean {
   return Boolean(process.env.GEMINI_API_KEY?.trim());
