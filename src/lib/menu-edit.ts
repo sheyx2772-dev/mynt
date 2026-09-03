@@ -50,6 +50,38 @@ export async function addCategory(venueId: string, form: FormData): Promise<Edit
   return { ok: true };
 }
 
+/**
+ * Renaming a section.
+ *
+ * The last corner of the menu that could only be deleted and retyped — and the
+ * worst one, because deleting a section does not take one row with it: every
+ * dish under it drops out into "uncategorised" and has to be reassigned one by
+ * one. A typo in a heading was costing an afternoon.
+ */
+export async function editCategory(
+  venueId: string,
+  categoryId: string,
+  form: FormData,
+): Promise<EditResult> {
+  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+
+  const name = text(form.get("name"), 60);
+  if (!name) return { ok: false, error: "Bo'lim nomini kiriting." };
+
+  const { error } = await supabaseAdmin
+    .from("menu_categories")
+    .update({
+      name,
+      name_ru: optional(form.get("name_ru"), 60),
+      name_en: optional(form.get("name_en"), 60),
+    })
+    .eq("id", categoryId)
+    .eq("venue_id", venueId);
+
+  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
+  return { ok: true };
+}
+
 export async function removeCategory(venueId: string, categoryId: string): Promise<EditResult> {
   if (!supabaseAdmin) return { ok: false, error: "O'chirib bo'lmadi." };
 

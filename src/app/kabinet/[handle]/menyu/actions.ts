@@ -7,6 +7,7 @@ import { requireUser } from "@/lib/auth";
 import { getOwnedVenue } from "@/lib/menu";
 import {
   addCategory,
+  editCategory,
   removeCategory,
   addItem,
   editItem,
@@ -139,4 +140,16 @@ export async function moveCategoryAction(form: FormData) {
   await moveCategory(venue.id, String(form.get("id") ?? ""), direction);
   revalidatePath(`/kabinet/${handle}/menyu`);
   revalidatePath(`/${handle}`);
+}
+
+export async function editCategoryAction(_prev: EditResult, form: FormData) {
+  const { venue, handle } = await venueFor(form);
+  if (!venue) return DENIED;
+
+  const result = await editCategory(venue.id, String(form.get("id") ?? ""), form);
+  if (!result.ok) return result;
+
+  revalidatePath(`/kabinet/${handle}/menyu`);
+  revalidatePath(`/${handle}`);
+  redirect(`/kabinet/${handle}/menyu`);
 }

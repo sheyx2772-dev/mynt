@@ -269,3 +269,27 @@ export async function getMenuItem(
     position: Number(data.position),
   };
 }
+
+/** One section, for the screen that renames it. */
+export async function getMenuCategory(
+  venueId: string,
+  categoryId: string,
+): Promise<{ id: string; name: string; nameRu: string | null; nameEn: string | null } | null> {
+  if (!supabaseAdmin) return null;
+
+  const { data } = await supabaseAdmin
+    .from("menu_categories")
+    .select("id, name, name_ru, name_en")
+    .eq("venue_id", venueId)
+    .eq("id", categoryId)
+    .maybeSingle();
+
+  if (!data) return null;
+
+  return {
+    id: data.id as string,
+    name: data.name as string,
+    nameRu: (data.name_ru as string) ?? null,
+    nameEn: (data.name_en as string) ?? null,
+  };
+}

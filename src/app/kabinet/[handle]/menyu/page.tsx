@@ -132,6 +132,13 @@ export default async function MenuAdminPage({
             </h2>
             {category.id !== "boshqa" && (
               <div className="flex items-center gap-1.5">
+                <Link
+                  href={`/kabinet/${normalized}/menyu/bolim/${category.id}`}
+                  title="Nomini o'zgartirish"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg text-flex-black/35 hover:bg-black/[0.03] hover:text-flex-black"
+                >
+                  <Pencil className="h-3.5 w-3.5" />
+                </Link>
                 <Move
                   action={moveCategoryAction}
                   handle={normalized}
