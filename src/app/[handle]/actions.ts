@@ -29,7 +29,13 @@ const RESERVATION_MINUTES = 30;
 export type Checkout = { click?: string; payme?: string };
 
 export type ClaimResult =
-  | { ok: true; checkout?: Checkout }
+  /**
+   * `imageFailed` is a claim that went through with no picture on it. The
+   * number is bought and the profile exists, so this is not a failure — but a
+   * buyer who chose a photo and was shown none has to be told, or their first
+   * act as an owner is wondering whether it worked.
+   */
+  | { ok: true; checkout?: Checkout; imageFailed?: true }
   | { ok: false; error: string; needsAuth?: true };
 
 export async function claimHandle(
@@ -163,7 +169,11 @@ export async function claimHandle(
     });
   }
 
-  return { ok: true, checkout };
+  return {
+    ok: true,
+    checkout,
+    ...(read.imageFailed ? { imageFailed: true as const } : {}),
+  };
 }
 
 export type FollowResult = { following: boolean; error?: string; needsAuth?: true };

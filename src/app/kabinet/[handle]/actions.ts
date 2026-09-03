@@ -11,7 +11,13 @@ import { isDeviceType, DEFAULT_DEVICE_TYPE } from "@/lib/devices";
 import { requestDesign } from "@/lib/design-requests";
 import { offerTransfer, cancelTransfer, acceptTransfer } from "@/lib/transfers";
 
-export type UpdateResult = { ok: boolean; error?: string; saved?: true };
+export type UpdateResult = {
+  ok: boolean;
+  error?: string;
+  saved?: true;
+  /** Saved, but the picture did not reach the store. See readProfileForm. */
+  imageFailed?: true;
+};
 
 export async function updateProfile(
   rawHandle: string,
@@ -82,7 +88,7 @@ export async function updateProfile(
   revalidatePath(`/kabinet/${normalized}`);
   revalidatePath("/kabinet");
 
-  return { ok: true, saved: true };
+  return { ok: true, saved: true, ...(read.imageFailed ? { imageFailed: true as const } : {}) };
 }
 
 export type PostResult = { ok: boolean; error?: string };

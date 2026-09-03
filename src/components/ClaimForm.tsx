@@ -47,6 +47,13 @@ export default function ClaimForm({
           <span className="font-medium text-flex-black">{handle}</span> siz uchun 30 daqiqaga
           band qilindi. To&apos;lovni yakunlang:
         </p>
+        {/* Said here rather than saved for later: the buyer is about to leave
+            for a payment page, and this is the last moment they are looking. */}
+        {state.imageFailed && (
+          <p className="text-sm text-amber-700">
+            Rasm yuklanmadi — to&apos;lovdan keyin kabinetdan qo&apos;shasiz.
+          </p>
+        )}
         {state.checkout.click && (
           <a
             href={state.checkout.click}

@@ -403,7 +403,18 @@ export default function EditProfileForm({
       />
 
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
-      {state.saved && <p className="text-sm text-flex-black/60">Saqlandi.</p>}
+      {/* Saved and not saved are not the only two outcomes: the text can land
+          while the picture does not, and "Saqlandi." on its own is how somebody
+          concludes the upload worked and stops trying. */}
+      {state.saved && state.imageFailed && (
+        <p className="text-sm text-amber-700">
+          Ma&apos;lumotlar saqlandi, lekin rasm yuklanmadi. Birozdan keyin
+          qaytadan urinib ko&apos;ring — muammo davom etsa bizga yozing.
+        </p>
+      )}
+      {state.saved && !state.imageFailed && (
+        <p className="text-sm text-flex-black/60">Saqlandi.</p>
+      )}
 
       <button
         type="submit"

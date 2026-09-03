@@ -60,7 +60,7 @@ export function parseContactEmail(raw: string): string | null {
 }
 
 export type ProfileRead =
-  | { ok: true; profile: ProfileInput }
+  | { ok: true; profile: ProfileInput; imageFailed?: true }
   | { ok: false; error: string };
 
 // Shared by the claim form and the edit form: both accept the same fields and
@@ -92,12 +92,23 @@ export async function readProfileForm(
   });
 
   let avatarUrl = currentAvatarUrl;
+  // Whether a picture the owner chose failed to reach the bucket.
+  //
+  // It used to be swallowed: uploadImage returns null when the store refuses,
+  // the url fell back to whatever was there before, and the form said "saved".
+  // Somebody picking their first photo got no photo and no reason, so they
+  // picked it again. The rest of the edit still saves — losing a rewritten bio
+  // because an image host is down would be the worse trade — but they are told.
+  let imageFailed = false;
+
   const avatar = formData.get("avatar");
   if (avatar instanceof File && avatar.size > 0) {
     const check = checkAvatar(avatar);
     if (!check.ok) return { ok: false, error: check.error };
 
-    if (isStorageConfigured) {
+    if (!isStorageConfigured) {
+      imageFailed = true;
+    } else {
       const buffer = Buffer.from(await avatar.arrayBuffer());
       // Overwrites the previous avatar for this handle; a stale file would
       // otherwise linger in the bucket with nothing pointing at it.
@@ -108,6 +119,7 @@ export async function readProfileForm(
       );
       // A cache-busting suffix, since the object key stays the same.
       avatarUrl = uploaded ? `${uploaded}?v=${Date.now()}` : avatarUrl;
+      if (!uploaded) imageFailed = true;
     }
   }
 
@@ -120,7 +132,9 @@ export async function readProfileForm(
     const check = checkBanner(banner);
     if (!check.ok) return { ok: false, error: check.error };
 
-    if (isStorageConfigured) {
+    if (!isStorageConfigured) {
+      imageFailed = true;
+    } else {
       const buffer = Buffer.from(await banner.arrayBuffer());
       const uploaded = await uploadImage(
         `banners/${normalized}.${check.extension}`,
@@ -128,6 +142,7 @@ export async function readProfileForm(
         check.contentType,
       );
       bannerUrl = uploaded ? `${uploaded}?v=${Date.now()}` : bannerUrl;
+      if (!uploaded) imageFailed = true;
     }
   }
 
@@ -137,6 +152,7 @@ export async function readProfileForm(
 
   return {
     ok: true,
+    ...(imageFailed ? { imageFailed: true as const } : {}),
     profile: {
       name,
       bio,
