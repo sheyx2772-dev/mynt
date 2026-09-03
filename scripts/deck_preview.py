@@ -27,22 +27,34 @@ ROOT = Path(__file__).resolve().parent.parent
 SCALE = 2
 W, H = 960 * SCALE, 540 * SCALE
 
-# Space Grotesk and Inter are not installed here. Helvetica is close enough in
-# width to show whether a line fits; where it disagrees it runs slightly wide,
-# which errs toward catching overflow rather than hiding it.
+# The deck's own faces, so the preview measures the same widths PowerPoint will.
+# Helvetica stands in if they are not installed — close enough in width to show
+# whether a line fits, and it errs wide, which catches overflow rather than
+# hiding it.
+HOME = Path.home() / "Library" / "Fonts"
 FONTS = {
-    (False,): "/System/Library/Fonts/Helvetica.ttc",
-    (True,): "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+    ("Space Grotesk", False): HOME / "SpaceGrotesk-Regular.ttf",
+    ("Space Grotesk", True): HOME / "SpaceGrotesk-Bold.ttf",
+    ("Inter", False): HOME / "Inter-Regular.ttf",
+    ("Inter", True): HOME / "Inter-Bold.ttf",
+}
+FALLBACK = {
+    False: "/System/Library/Fonts/Helvetica.ttc",
+    True: "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
 }
 _cache = {}
+missing = set()
 
 
-def font(size, bold):
-    key = (round(size * SCALE), bold)
+def font(size, bold, name="Inter"):
+    key = (round(size * SCALE), bold, name)
     if key not in _cache:
-        path = FONTS[(bold,)]
+        path = FONTS.get((name, bold))
+        if path is None or not path.exists():
+            missing.add(name)
+            path = FALLBACK[bold]
         try:
-            _cache[key] = ImageFont.truetype(path, key[0])
+            _cache[key] = ImageFont.truetype(str(path), key[0])
         except OSError:
             _cache[key] = ImageFont.load_default()
     return _cache[key]
@@ -186,7 +198,7 @@ def render(lang):
             for para in shape.text_frame.paragraphs:
                 for run in para.runs:
                     f = font(run.font.size.pt if run.font.size else 12,
-                             bool(run.font.bold))
+                             bool(run.font.bold), run.font.name or "Inter")
                     colour = (0, 0, 0)
                     try:
                         colour = tuple(run.font.color.rgb)
@@ -206,7 +218,8 @@ def render(lang):
 
         img.convert("RGB").save(out / f"{index:02d}.png", quality=92)
 
-    print(f"  {len(prs.slides._sldIdLst)} slides → deck/preview-{lang}/")
+    note = f"  (substituted: {', '.join(sorted(missing))})" if missing else ""
+    print(f"  {len(prs.slides._sldIdLst)} slides → deck/preview-{lang}/{note}")
 
 
 if __name__ == "__main__":
