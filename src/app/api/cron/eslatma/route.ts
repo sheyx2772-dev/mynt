@@ -1,5 +1,5 @@
 import { after } from "next/server";
-import { sendPlanReminders } from "@/lib/notify/reminders";
+import { sendPlanReminders, sendVenuePlanReminders } from "@/lib/notify/reminders";
 
 // The daily reminder run.
 //
@@ -29,7 +29,10 @@ export async function GET(request: Request) {
   // response keeps a slow Telegram from turning into a timed-out cron that
   // gets retried and sends everything twice.
   after(async () => {
+    // Sequential, not parallel: both walk the same notification channel, and a
+    // burst of Telegram calls is the one way this run gets rate limited.
     await sendPlanReminders();
+    await sendVenuePlanReminders();
   });
 
   return Response.json({ ok: true });

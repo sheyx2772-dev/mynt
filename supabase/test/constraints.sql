@@ -1480,3 +1480,63 @@ begin
   delete from auth.users where id = owner_id;
   delete from handles where id = hid;
 end $$;
+
+-- 0042 — telling a venue before its tables go quiet
+do $$
+declare
+  owner_id uuid;
+  hid uuid;
+  vid uuid;
+  found integer;
+  expiry timestamptz;
+begin
+  insert into auth.users (id) values (gen_random_uuid()) returning id into owner_id;
+  insert into handles (letters, digits, status, user_id, claimed_at)
+    values ('ESL', '001', 'claimed', owner_id, now()) returning id into hid;
+  insert into venues (handle_id, name) values (hid, 'Sinov kafe') returning id into vid;
+
+  -- Thirty days out is not news.
+  select count(*) into found from venues_needing_plan_reminder(7) where venue_id = vid;
+  if found <> 0 then raise exception 'erta eslatma yuborildi'; end if;
+  raise notice '   ok   a venue with a month left is left alone';
+
+  update venues set plan_expires_at = now() + interval '3 days' where id = vid;
+  select count(*) into found from venues_needing_plan_reminder(7) where venue_id = vid;
+  if found <> 1 then raise exception 'eslatma topilmadi'; end if;
+  raise notice '   ok   a venue three days out is due a warning';
+
+  -- Told once, not every morning for a week.
+  select plan_expires_at into expiry from venues where id = vid;
+  perform mark_venue_reminded(vid, expiry);
+  select count(*) into found from venues_needing_plan_reminder(7) where venue_id = vid;
+  if found <> 0 then raise exception 'eslatma takrorlandi'; end if;
+  raise notice '   ok   told once, not every morning';
+
+  -- Paying moves the expiry, which earns a fresh warning next period.
+  update venues set plan_expires_at = now() + interval '5 days' where id = vid;
+  select count(*) into found from venues_needing_plan_reminder(7) where venue_id = vid;
+  if found <> 1 then raise exception 'yangi muddat uchun eslatma yoʻq'; end if;
+  raise notice '   ok   renewing earns a fresh warning next period';
+
+  -- The day it lapses is its own event, and the one that gets a venue back.
+  update venues set plan_expires_at = now() - interval '2 hours' where id = vid;
+  select count(*) into found from venues_just_expired(3) where venue_id = vid;
+  if found <> 1 then raise exception 'tugagani haqida xabar yoʻq'; end if;
+
+  select plan_expires_at into expiry from venues where id = vid;
+  perform mark_venue_expired_told(vid, expiry);
+  select count(*) into found from venues_just_expired(3) where venue_id = vid;
+  if found <> 0 then raise exception 'tugagan xabari takrorlandi'; end if;
+  raise notice '   ok   the day it lapses is announced once';
+
+  -- A venue that lapsed in March is not told about it every morning since.
+  update venues set plan_expires_at = now() - interval '90 days',
+                    plan_expired_told_for = null
+    where id = vid;
+  select count(*) into found from venues_just_expired(3) where venue_id = vid;
+  if found <> 0 then raise exception 'eski tugash haqida xabar yuborildi'; end if;
+  raise notice '   ok   an old lapse is not announced forever';
+
+  delete from auth.users where id = owner_id;
+  delete from handles where id = hid;
+end $$;

@@ -392,6 +392,11 @@ the whole product before any money moves. When the date passes, the guest's menu
 keeps working — a sticker on a table cannot die because an invoice is late — and
 the call button and the report are what stop.
 
+The daily run at `/api/cron/eslatma` warns a venue seven days out and tells it
+again on the day it lapses, since the second notice is the one that gets a venue
+back. Both are recorded against the expiry they were sent for, so paying earns a
+fresh pair next period rather than silencing the venue forever.
+
 ## Commands
 
 | Command | Purpose |
