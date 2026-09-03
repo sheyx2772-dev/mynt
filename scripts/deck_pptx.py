@@ -22,6 +22,7 @@ from pptx import Presentation
 from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
 from pptx.util import Inches, Pt
 
+import deck_notes
 from deck_lib import (
     BODY, CARD_INK, DIM, FAINT, HEAD, INK, INK_DIM, LIME, LINE_INK, LINE_PAPER,
     M, OLIVE, PAPER, TOP, W, WHITE, H,
@@ -532,6 +533,16 @@ def build(lang):
     prs.slide_width, prs.slide_height = Inches(13.333), Inches(7.5)
     for make in SLIDES:
         make(prs, t)
+
+    # What to say over each slide, in the file's own speaker notes. A deck read
+    # aloud from its bullet points is the commonest way a good product pitches
+    # badly; the words belong here, where only the presenter sees them.
+    notes = deck_notes.UZ if lang == "uz" else deck_notes.EN
+    for index, (slide, line) in enumerate(zip(prs.slides, notes), start=1):
+        mark = "  ·  [3 DAQIQA]" if index in deck_notes.SHORT else ""
+        if lang != "uz":
+            mark = mark.replace("3 DAQIQA", "3-MINUTE CUT")
+        slide.notes_slide.notes_text_frame.text = f"{index}/{len(notes)}{mark}\n\n{line}"
 
     out = ROOT / "deck" / f"flex-pitch-{lang}.pptx"
     prs.save(out)
