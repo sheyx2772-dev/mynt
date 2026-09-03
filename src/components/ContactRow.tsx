@@ -22,6 +22,7 @@ const STRIPE: Record<Exclude<Reason, null>, string> = {
   today: "bg-lime",
   unanswered: "bg-amber-400",
   quiet: "bg-black/15",
+  neglected: "bg-blue-400",
 };
 
 const CHIP: Record<Exclude<Reason, null>, string> = {
@@ -29,6 +30,7 @@ const CHIP: Record<Exclude<Reason, null>, string> = {
   today: "bg-lime text-flex-black",
   unanswered: "bg-amber-50 text-amber-800",
   quiet: "bg-black/[0.05] text-flex-black/50",
+  neglected: "bg-blue-50 text-blue-700",
 };
 
 /** Two letters, because a photo is not something a tap ever collects. */

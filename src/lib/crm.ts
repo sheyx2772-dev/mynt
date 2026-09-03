@@ -45,13 +45,40 @@ export type Contact = {
  * somebody handed over their number, nobody replied, and no diary entry was
  * ever made — nothing anywhere is going to raise it again.
  */
-export type Reason = "overdue" | "today" | "unanswered" | "quiet" | null;
+export type Reason =
+  | "overdue"
+  | "today"
+  | "unanswered"
+  | "quiet"
+  | "neglected"
+  | null;
 
 /** A contact left alone this long has gone cold whether or not it says so. */
 export const QUIET_DAYS = 30;
 
 /** A tap that gets no reply for this long has been dropped, not deferred. */
 export const UNANSWERED_DAYS = 2;
+
+/**
+ * And after this long it stops being a task.
+ *
+ * A tap is a moment of interest and the interest decays: within a week a reply
+ * is still natural, after it "we met recently" is no longer true. Without an
+ * upper bound the list fills with taps from six months ago that nobody is ever
+ * going to answer — a backlog of guilt that produces nothing and teaches the
+ * owner to stop opening the screen. It falls through to nothing; the stage can
+ * be moved to cold by hand if they want it said out loud.
+ */
+export const UNANSWERED_UNTIL = 7;
+
+/**
+ * A customer nobody has spoken to in this long.
+ *
+ * Marking somebody a client is not the end of the relationship, and a list that
+ * treats it as one quietly loses the accounts that were already won. This is
+ * the cheapest revenue on the screen: they have already bought once.
+ */
+export const NEGLECTED_DAYS = 30;
 
 const DAY = 86_400_000;
 
@@ -68,12 +95,17 @@ function dayOffset(isoDate: string, today: Date): number {
 }
 
 export function reasonFor(contact: Contact, today: Date = new Date()): Reason {
-  // A closed relationship is not a task. Somebody who became a customer and
-  // somebody who was written off are both dealt with, and a list that keeps
-  // proposing them is a list that gets ignored.
+  // A written-off contact is not a task, and a list that keeps proposing them
+  // is a list that gets ignored. A customer is different: they are the one
+  // relationship already paid for, and leaving them off entirely is how a won
+  // account is lost quietly.
   if (contact.stage === "client" || contact.stage === "cold") {
     if (contact.followUpOn && dayOffset(contact.followUpOn, today) <= 0) {
       return dayOffset(contact.followUpOn, today) < 0 ? "overdue" : "today";
+    }
+    if (contact.stage === "client") {
+      const since = contact.lastTouchAt ?? contact.createdAt;
+      if (daysBetween(since, today) >= NEGLECTED_DAYS) return "neglected";
     }
     return null;
   }
@@ -87,8 +119,9 @@ export function reasonFor(contact: Contact, today: Date = new Date()): Reason {
     return null;
   }
 
-  if (contact.stage === "new" && daysBetween(contact.createdAt, today) >= UNANSWERED_DAYS) {
-    return "unanswered";
+  if (contact.stage === "new") {
+    const age = daysBetween(contact.createdAt, today);
+    if (age >= UNANSWERED_DAYS && age <= UNANSWERED_UNTIL) return "unanswered";
   }
 
   const since = contact.lastTouchAt ?? contact.createdAt;
@@ -104,6 +137,21 @@ const RANK: Record<Exclude<Reason, null>, number> = {
   today: 1,
   unanswered: 2,
   quiet: 3,
+  neglected: 4,
+};
+
+/**
+ * Which conversation is worth more when two are equally late.
+ *
+ * A deal in motion beats a first hello beats a customer beats somebody written
+ * off. Applied inside a tier only — it never lifts anybody past a broken
+ * promise.
+ */
+const STAGE_WEIGHT: Record<Stage, number> = {
+  talking: 0,
+  new: 1,
+  client: 2,
+  cold: 3,
 };
 
 /**
@@ -123,6 +171,9 @@ export function byAttention(
       if (ra === null) return 1;
       if (rb === null) return -1;
       return RANK[ra] - RANK[rb];
+    }
+    if (ra !== null && a.stage !== b.stage) {
+      return STAGE_WEIGHT[a.stage] - STAGE_WEIGHT[b.stage];
     }
     const wa = new Date(a.followUpOn ?? a.lastTouchAt ?? a.createdAt).getTime();
     const wb = new Date(b.followUpOn ?? b.lastTouchAt ?? b.createdAt).getTime();
@@ -186,6 +237,7 @@ const WORDS: Record<Lang, { stages: Record<Stage, string>; reasons: Record<Exclu
       today: "Bugun",
       unanswered: "Javob berilmagan",
       quiet: "Uzoq vaqt jim",
+      neglected: "Mijoz unutilgan",
     },
   },
   ru: {
@@ -200,6 +252,7 @@ const WORDS: Record<Lang, { stages: Record<Stage, string>; reasons: Record<Exclu
       today: "Сегодня",
       unanswered: "Без ответа",
       quiet: "Давно тишина",
+      neglected: "Клиент забыт",
     },
   },
   en: {
@@ -214,6 +267,7 @@ const WORDS: Record<Lang, { stages: Record<Stage, string>; reasons: Record<Exclu
       today: "Today",
       unanswered: "Never answered",
       quiet: "Gone quiet",
+      neglected: "Customer neglected",
     },
   },
 };
@@ -237,6 +291,7 @@ export const REASON_ICON: Record<Exclude<Reason, null>, string> = {
   today: "clock",
   unanswered: "mail-question-mark",
   quiet: "moon",
+  neglected: "heart-handshake",
 };
 
 export function stageLabel(stage: Stage, lang: Lang): string {

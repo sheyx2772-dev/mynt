@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  NEGLECTED_DAYS,
   QUIET_DAYS,
   UNANSWERED_DAYS,
+  UNANSWERED_UNTIL,
   byAttention,
   isStage,
   reasonFor,
@@ -81,11 +83,38 @@ describe("reasonFor", () => {
     expect(reasonFor(live, TODAY)).toBeNull();
   });
 
-  it("stops proposing people who are dealt with", () => {
-    // A customer and a write-off are both finished. A list that keeps offering
-    // them is a list somebody stops opening.
-    expect(reasonFor(contact({ stage: "client", createdAt: daysAgo(90) }), TODAY)).toBeNull();
+  it("stops proposing somebody who was written off", () => {
+    // A list that keeps offering a write-off is a list somebody stops opening.
     expect(reasonFor(contact({ stage: "cold", createdAt: daysAgo(90) }), TODAY)).toBeNull();
+  });
+
+  it("leaves a customer alone while they are being looked after", () => {
+    const recent = contact({ stage: "client", lastTouchAt: daysAgo(5) });
+
+    expect(reasonFor(recent, TODAY)).toBeNull();
+  });
+
+  it("raises a customer nobody has spoken to", () => {
+    // The cheapest revenue on the screen: they have already bought once, and a
+    // list that treats "client" as finished loses won accounts quietly.
+    const ignored = contact({ stage: "client", lastTouchAt: daysAgo(NEGLECTED_DAYS) });
+
+    expect(reasonFor(ignored, TODAY)).toBe("neglected");
+  });
+
+  it("stops nagging about a tap nobody will ever answer", () => {
+    // Without an upper bound the list fills with taps from six months ago —
+    // a backlog of guilt that produces nothing and teaches somebody to stop
+    // opening the screen.
+    const stale = contact({ createdAt: daysAgo(UNANSWERED_UNTIL + 1) });
+
+    expect(reasonFor(stale, TODAY)).toBeNull();
+  });
+
+  it("still raises one inside the window", () => {
+    expect(reasonFor(contact({ createdAt: daysAgo(UNANSWERED_UNTIL) }), TODAY)).toBe(
+      "unanswered",
+    );
   });
 
   it("still honours a diary entry on a closed contact", () => {
@@ -96,7 +125,7 @@ describe("reasonFor", () => {
   });
 
   it("counts an unanswered tap from the tap, not from a note", () => {
-    const written = contact({ createdAt: daysAgo(9), lastTouchAt: daysAgo(1) });
+    const written = contact({ createdAt: daysAgo(4), lastTouchAt: daysAgo(1) });
 
     // Still 'new', but somebody has been in the row since — the owner dealt
     // with them and left them where they were, so this is not a dropped tap.
@@ -120,10 +149,22 @@ describe("byAttention", () => {
   it("breaks a tie on who has waited longest, not who is newest", () => {
     const list = [
       contact({ id: 1, name: "Yaqinda", createdAt: daysAgo(3) }),
-      contact({ id: 2, name: "Uzoq", createdAt: daysAgo(30) }),
+      contact({ id: 2, name: "Uzoq", createdAt: daysAgo(6) }),
     ];
 
     // Two people equally overdue are not equally patient.
+    expect(byAttention(list, TODAY).map((c) => c.id)).toEqual([2, 1]);
+  });
+
+  it("prefers a deal in motion when two are equally late", () => {
+    // Three days overdue on a live negotiation beats twenty on one written
+    // off. Applied inside a tier only — it never lifts anybody past a broken
+    // promise.
+    const list = [
+      contact({ id: 1, stage: "cold", followUpOn: "2026-08-21" }),
+      contact({ id: 2, stage: "talking", followUpOn: "2026-09-07" }),
+    ];
+
     expect(byAttention(list, TODAY).map((c) => c.id)).toEqual([2, 1]);
   });
 
@@ -189,7 +230,13 @@ describe("words", () => {
       for (const stage of ["new", "talking", "client", "cold"] as Stage[]) {
         expect(stageLabel(stage, lang)).toBeTruthy();
       }
-      for (const reason of ["overdue", "today", "unanswered", "quiet"] as const) {
+      for (const reason of [
+        "overdue",
+        "today",
+        "unanswered",
+        "quiet",
+        "neglected",
+      ] as const) {
         expect(reasonLabel(reason, lang)).toBeTruthy();
       }
       expect(reasonLabel(null, lang)).toBeNull();

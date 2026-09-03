@@ -12,6 +12,7 @@ import {
   MessagesSquare,
   Moon,
   Snowflake,
+  HeartHandshake,
   Sparkles,
   type LucideIcon,
 } from "lucide-react";
@@ -35,6 +36,7 @@ const ICONS: Record<string, LucideIcon> = {
   clock: Clock,
   "mail-question-mark": MailQuestionMark,
   moon: Moon,
+  "heart-handshake": HeartHandshake,
 };
 
 const PARCEL: Record<string, LucideIcon> = {
