@@ -64,6 +64,7 @@ export const profiles: Profile[] = [
     organization: "O'zbekiston Respublikasi Yoshlar ishlari agentligi",
     orgShort: "Yoshlar ishlari agentligi",
     department: "Agentlik rahbariyati",
+    website: "gov.uz/oz/yoshlar",
     avatar: "/figma-make/alisher-sadullayev.jpeg",
     bannerPosition: "center 32%",
     coverColor: "#0b2f4a",
@@ -84,10 +85,7 @@ export const profiles: Profile[] = [
     organization: "O'zbekiston Respublikasi Yoshlar ishlari agentligi",
     orgShort: "Yoshlar ishlari agentligi",
     department: "Yoshlar siyosati",
-    // No website until the agency's own domain is confirmed. yoshlar.uz answers
-    // with a "Coming Soon" page and yia.uz renders from script, so neither could
-    // be verified as theirs — a wrong domain on a card shown to the agency is
-    // worse than no domain at all.
+    website: "gov.uz/oz/yoshlar",
     bannerPosition: "center 32%",
     coverColor: "#0b2f4a",
     coverAccent: "#38bdf8",
