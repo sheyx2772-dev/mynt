@@ -41,7 +41,11 @@ export function verticalStrip(lang: Lang): StripItem[] {
   return VERTICALS.map((id) => {
     const shot = verticalShot(id);
     return {
-      href: "/biznes",
+      // Every tile used to land on the top of /biznes, which made the strip
+      // decoration rather than navigation: a cafe and a clinic arrived at the
+      // same place and had to go looking again. Each now opens the price
+      // picker with its own vertical already chosen.
+      href: `/biznes?soha=${id}#soha`,
       src: shot ? productShot(shot) : null,
       name: t.verticals[id].name,
       note: t.verticals[id].pointsWord,

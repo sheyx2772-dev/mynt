@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { isVertical } from "@/lib/venues";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -47,7 +48,7 @@ export async function generateMetadata({
 }
 
 export default async function BusinessPage({ searchParams }: PageProps<"/biznes">) {
-  const { til } = await searchParams;
+  const { til, soha } = await searchParams;
   const lang = await getLang(til);
   const t = b2b(lang);
   const s = site(lang);
@@ -184,7 +185,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
         </section>
 
         {/* Vertical picker + price */}
-        <section className="border-t border-black/5 bg-black/[0.02] py-14 sm:py-20">
+        <section id="soha" className="scroll-mt-20 border-t border-black/5 bg-black/[0.02] py-14 sm:py-20">
           <div className="mx-auto max-w-6xl px-6">
             <p className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
               {t.priceEyebrow}
@@ -198,6 +199,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
               <VenuePicker
                 t={t}
                 lang={lang}
+                initial={isVertical(soha) ? soha : undefined}
                 shots={{
                   cafe: [productShot("kafe")].filter(Boolean) as string[],
                   hotel: [productShot("mehmonxona")].filter(Boolean) as string[],
