@@ -10,7 +10,8 @@ const imgUnitedVentures = "/figma-make/image-16.png";
 const imgICTWeek = "/figma-make/image-17.png";
 const imgATKRV = "/figma-make/image-18.png";
 const imgProkuratura = "/figma-make/image-19.png";
-const imgYIA = "/figma-make/yia-banner.jpeg";   // supplied by the client
+const imgYIA = "/figma-make/yia-banner.jpeg";            // supplied by the client
+const imgUzCombinator = "/figma-make/uzcombinator-banner.jpeg";  // supplied by the client
 
 const BANNER: Record<string, string> = {
   "tashkent-inn": imgStartupGarage,
@@ -27,10 +28,9 @@ const BANNER: Record<string, string> = {
   "chamber":      imgStartupGarage,
   "uzreport":     imgICTWeek,
   "yakubov":           imgYoshlarVentures,
-  // No UzCombinator banner: LinkedIn serves that logo at 100x100 and signs the
-  // URL per size, so the larger crops are refused. Upscaled to the banner it
-  // was soft, and its white ground sat on the dark card as a floating box.
-  // These three cards run on the brand colour alone until a real file arrives.
+  "ismatov":           imgUzCombinator,
+  "xondamirovna":      imgUzCombinator,
+  "ismailov":          imgUzCombinator,
   "yoshlar-agentligi": imgYIA,
   "sadullayev":        imgYIA,
 };
@@ -50,6 +50,17 @@ const CFG: Record<string, Cfg> = {
   "uzfar":        { overlay:"linear-gradient(180deg,rgba(5,38,20,.45) 0%,rgba(8,55,30,.84) 100%)",   cardBg:"#052614", bodyBg:"#021209", accent:"#6ee7b7", accent2:"#10b981", iconBg:"#073520" },
   "itpark":       { overlay:"linear-gradient(180deg,rgba(14,48,6,.45) 0%,rgba(22,68,8,.82) 100%)",   cardBg:"#0e3006", bodyBg:"#071803", accent:"#a3e635", accent2:"#84cc16", iconBg:"#174008" },
   "chamber":      { overlay:"linear-gradient(180deg,rgba(28,12,80,.45) 0%,rgba(45,18,120,.84) 100%)",cardBg:"#1c0c50", bodyBg:"#0e0630", accent:"#c4b5fd", accent2:"#8b5cf6", iconBg:"#2a1268" },
+  // Youth agency — its lockup is already on deep blue, so the wash stays light.
+  "sadullayev":   { overlay:"linear-gradient(180deg,rgba(6,20,40,.30) 0%,rgba(11,47,74,.86) 100%)", cardBg:"#0b2f4a", bodyBg:"#061a2b", accent:"#38bdf8", accent2:"#0284c7", iconBg:"#123c5c" },
+  "yoshlar-agentligi": { overlay:"linear-gradient(180deg,rgba(6,20,40,.30) 0%,rgba(11,47,74,.86) 100%)", cardBg:"#0b2f4a", bodyBg:"#061a2b", accent:"#38bdf8", accent2:"#0284c7", iconBg:"#123c5c" },
+  // Yoshlar Ventures — its banner is on white and needs a heavier wash to sit
+  // on a dark card; matches the fund's own entry above.
+  "yakubov":      { overlay:"linear-gradient(180deg,rgba(30,14,0,.40) 0%,rgba(60,25,0,.82) 100%)", cardBg:"#1e0e00", bodyBg:"#0f0700", accent:"#fb923c", accent2:"#ea580c", iconBg:"#2e1600" },
+  // UzCombinator — the banner is the brand orange itself, so barely wash it at
+  // the top or the mark turns brown.
+  "ismatov":      { overlay:"linear-gradient(180deg,rgba(60,25,0,.12) 0%,rgba(28,17,9,.80) 100%)", cardBg:"#1c1109", bodyBg:"#0d0804", accent:"#f97316", accent2:"#ea580c", iconBg:"#2e1c0e" },
+  "xondamirovna": { overlay:"linear-gradient(180deg,rgba(60,25,0,.12) 0%,rgba(28,17,9,.80) 100%)", cardBg:"#1c1109", bodyBg:"#0d0804", accent:"#f97316", accent2:"#ea580c", iconBg:"#2e1c0e" },
+  "ismailov":     { overlay:"linear-gradient(180deg,rgba(60,25,0,.12) 0%,rgba(28,17,9,.80) 100%)", cardBg:"#1c1109", bodyBg:"#0d0804", accent:"#f97316", accent2:"#ea580c", iconBg:"#2e1c0e" },
   "uzreport":     { overlay:"linear-gradient(180deg,rgba(5,18,60,.48) 0%,rgba(8,28,90,.88) 100%)",   cardBg:"#05123c", bodyBg:"#020a22", accent:"#38bdf8", accent2:"#0284c7", iconBg:"#0a1e5a" },
 };
 const getCfg = (p: Profile): Cfg =>
