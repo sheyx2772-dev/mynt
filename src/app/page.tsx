@@ -292,6 +292,23 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             label={p.groupDirections}
             note={p.groupDirectionsNote}
           />
+
+          {/* The third question a buyer has, after what to hold and which room:
+              what their own page will look like. The seven layouts answer it,
+              and until now they sat five clicks deep behind a chip at the far
+              end of a scrolling filter row, which is the same as not existing. */}
+          <div className="mx-auto max-w-6xl px-6 pt-2">
+            <Link
+              href="/katalog?bolim=layouts"
+              className="group flex items-center justify-between gap-4 rounded-2xl border border-black/10 px-5 py-4 transition-colors hover:bg-black/[0.03]"
+            >
+              <span>
+                <span className="block font-semibold">{p.samplesLabel}</span>
+                <span className="block text-sm text-flex-black/50">{p.samplesCta}</span>
+              </span>
+              <ArrowUpRight className="h-5 w-5 shrink-0 text-flex-black/40 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
         </div>
 
         {/* Who has just joined, and how much of the namespace is gone. Directly
@@ -319,6 +336,8 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             devicesNote: p.groupDevicesNote,
             directions: p.groupDirections,
             directionsNote: p.groupDirectionsNote,
+            samples: p.samplesLabel,
+            samplesCta: p.samplesCta,
           }}
           owner={owner}
         />

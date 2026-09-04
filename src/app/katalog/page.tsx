@@ -9,6 +9,7 @@
 // collide with the theme attribute the rest of the app already owns.
 
 import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import ProfileCard from "@/components/figma/ProfileCard";
 import { profiles } from "@/components/figma/profiles";
 import { LAYOUTS } from "@/components/ui/LayoutSamples";
@@ -58,7 +59,13 @@ const CAT_ICON: Record<string, () => React.ReactElement> = {
 export default function KatalogPage() {
   const [lang,  setLang]  = useState<Lang>("uz");
   const [theme, setTheme] = useState<Theme>("dark");
-  const [cat,   setCat]   = useState("all");
+  // The chip row is the page's navigation, so it has to be addressable: a link
+  // to the layouts from the entry page has to land on the layouts, not on the
+  // far end of a filter row somebody then has to scroll.
+  const wanted = useSearchParams().get("bolim");
+  const [cat,   setCat]   = useState(
+    CATS.some((c) => c.id === wanted) ? (wanted as string) : "all",
+  );
 
   const filtered =
     cat === "all" ? profiles
