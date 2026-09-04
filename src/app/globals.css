@@ -209,7 +209,7 @@
    dark one — the only theme where the sheet sits on night rather than day. */
 [data-theme="registon"] {
   --color-ink: #14294b;
-  --color-lime: #4fd6d6;
+  --color-lime: #d7b364;
   --color-paper: #0e1e3a;
   --color-sheet: #f3f6fb;
   --color-mute: #5a6c8c;
@@ -217,14 +217,14 @@
   --color-page-ink: #eaf1fb;
   --color-page-mute: #9db2d0;
   --color-engraved: #e2c27a;
+  --color-on-accent: #16233d;
   --card-base: #10254a;
   --card-face: linear-gradient(155deg, #1c3a6b 0%, #10254a 55%, #0a1730 100%);
   --page-pattern: repeating-linear-gradient(
-      60deg,
-      rgb(255 255 255 / 0.05) 0 1px,
-      transparent 1px 26px
-    ),
-    repeating-linear-gradient(-60deg, rgb(255 255 255 / 0.05) 0 1px, transparent 1px 26px);
+      62deg,
+      rgb(215 179 100 / 0.05) 0 1px,
+      transparent 1px 44px
+    );
 }
 
 /* Adras. The ikat is dyed before it is woven, so the pattern bleeds sideways —
@@ -378,18 +378,18 @@
  * platform marks carry all the colour on that page, so everything under them
  * has to get out of the way. */
 [data-theme="ijtimoiy"] {
-  --color-ink: #16181d;
-  --color-lime: #ffd21e;
-  --color-paper: #eef1f5;
+  --color-ink: #17171a;
+  --color-lime: #17171a;
+  --color-paper: #f1efeb;
   --color-sheet: #ffffff;
-  --color-mute: #5f6672;
-  --color-gold: #9aa3b0;
+  --color-mute: #6b6862;
+  --color-gold: #a5a099;
   --color-engraved: #dfe5ec;
-  --color-slab: #16181d;
+  --color-slab: #17171a;
   --color-on-slab: #ffffff;
-  --color-on-accent: #16181d;
-  --card-base: #1d2027;
-  --card-face: linear-gradient(140deg, #262a33 0%, #16181d 70%);
+  --color-on-accent: #ffffff;
+  --card-base: #1e1e22;
+  --card-face: linear-gradient(140deg, #2a2a30 0%, #17171a 70%);
   --page-pattern: none;
 }
 

@@ -161,18 +161,36 @@ export default function BrandTile({
       aria-label={label ?? b.name}
       // 22% of the width, which is the corner an app icon actually has — a
       // fixed radius makes a small tile look round and a large one look square.
-      className="block aspect-square w-full overflow-hidden rounded-[22%] shadow-photo transition-transform active:translate-y-px"
-      style={{ background: b.fill }}
+      className="group relative block aspect-square w-full overflow-hidden rounded-[22%] transition-transform duration-[120ms] active:translate-y-px active:scale-[0.97]"
+      style={{
+        background: b.fill,
+        // What separates an icon from a coloured square. Four things, and all
+        // four are on every icon on the phone this will be read on: a light
+        // wash down the face so it is lit from above, a hairline of white
+        // along the top edge and a darker one along the bottom — the glass —
+        // and a real shadow underneath so the tile sits on the page rather
+        // than being printed on it.
+        boxShadow:
+          "inset 0 1px 0 rgb(255 255 255 / 0.34), inset 0 -1px 0 rgb(0 0 0 / 0.22), inset 0 0 0 1px rgb(0 0 0 / 0.06), 0 1px 2px rgb(14 10 27 / 0.18), 0 6px 14px -5px rgb(14 10 27 / 0.35)",
+      }}
     >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(180deg, rgb(255 255 255 / 0.20) 0%, rgb(255 255 255 / 0.05) 42%, rgb(0 0 0 / 0) 58%, rgb(0 0 0 / 0.12) 100%)",
+        }}
+      />
       {b.mark ? (
-        <svg viewBox="0 0 48 48" className="size-full p-[18%]" aria-hidden>
+        <svg viewBox="0 0 48 48" className="relative size-full p-[19%]" aria-hidden>
           {b.mark}
         </svg>
       ) : (
         // No mark of theirs to hand, so the name is set as type rather than
         // guessed at as a glyph. A logo I have not got is a logo I must not
         // draw.
-        <span className="flex size-full items-center justify-center px-1 text-center text-[clamp(11px,3.4vw,15px)] font-bold tracking-[-0.02em] text-white">
+        <span className="relative flex size-full items-center justify-center px-1 text-center text-[clamp(11px,3.4vw,15px)] font-bold tracking-[-0.02em] text-white [text-shadow:0_1px_1px_rgb(0_0_0_/_0.25)]">
           {b.name}
         </span>
       )}

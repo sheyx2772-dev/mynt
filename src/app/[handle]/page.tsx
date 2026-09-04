@@ -270,7 +270,7 @@ async function VanityHandlePage({
 
           {/* Slid under the card, and casting its shadow upward — which is what
               tells the eye which of the two is on top. */}
-          <div className="relative z-10 -mt-12 mx-3 rounded-2xl bg-sheet px-5 pt-16 pb-6 shadow-sheet">
+          <div className="relative z-10 -mt-12 mx-3 rounded-2xl bg-sheet px-5 pt-16 pb-6 text-ink shadow-sheet">
             <div className="flex items-end gap-4">
               <div className="relative -mt-10 shrink-0">
                 {profile.avatarUrl ? (
@@ -474,7 +474,7 @@ async function VanityHandlePage({
               </Link>
             </div>
 
-            <div className="relative z-10 rounded-2xl bg-sheet px-5 pt-2 pb-6 shadow-sheet">
+            <div className="relative z-10 rounded-2xl bg-sheet px-5 pt-2 pb-6 text-ink shadow-sheet">
               {tab === "vizitka" && (
                 <div className="flex flex-col gap-8">
                   <section>
@@ -653,7 +653,7 @@ async function VanityHandlePage({
               paid promise, and removing a small label while adding a larger
               block would be keeping the letter of it and breaking the rest. */}
           {profile.plan === "free" && (
-            <div className="mx-3 mt-5 rounded-2xl bg-sheet px-5 py-5 shadow-sheet">
+            <div className="mx-3 mt-5 rounded-2xl bg-sheet px-5 py-5 text-ink shadow-sheet">
               <p className="text-[16px] font-semibold">{t.ownItTitle}</p>
               <p className="mt-2 text-[16px] leading-relaxed text-mute">
                 {t.ownItLead}

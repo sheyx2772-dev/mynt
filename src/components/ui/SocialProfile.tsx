@@ -48,10 +48,10 @@ export default function SocialProfile({
             alt={name}
             width={88}
             height={88}
-            className="size-22 rounded-full object-cover shadow-photo"
+            className="size-24 rounded-full border-[3px] border-sheet object-cover shadow-photo"
           />
         ) : (
-          <div className="flex size-22 items-center justify-center rounded-full bg-slab text-[28px] font-bold text-on-slab shadow-photo">
+          <div className="flex size-24 items-center justify-center rounded-full border-[3px] border-sheet bg-slab text-[30px] font-bold text-on-slab shadow-photo">
             {name
               .split(" ")
               .map((p) => p[0])
@@ -78,10 +78,14 @@ export default function SocialProfile({
 
       {pay && pay.length > 0 && (
         <>
-          <p className="mt-8 text-center text-[16px] leading-6 text-mute">
-            To&apos;lov
-          </p>
-          <ul className="mt-3 grid grid-cols-4 gap-4">
+          <div className="mt-8 flex items-center gap-3">
+            <span className="h-px flex-1 bg-ink/10" aria-hidden />
+            <span className="text-[16px] leading-6 tracking-[0.14em] text-mute uppercase">
+              To&apos;lov
+            </span>
+            <span className="h-px flex-1 bg-ink/10" aria-hidden />
+          </div>
+          <ul className="mt-4 grid grid-cols-4 gap-4">
             {pay.map((t) => (
               <li key={t.id}>
                 <BrandTile id={t.id} href={t.href} />
