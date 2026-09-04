@@ -35,6 +35,82 @@ Ikkita mijoz turi bor va ular butunlay boshqacha:
 
 ---
 
+## Bu qanday mahsulot
+
+Bu **"raqamli vizitka ilovasi" emas.** Farqi muhim, chunki dizayn shunga
+bog'liq.
+
+**Sotiladigan narsa — raqamning o'zi.** `AAA000` — bu taxallus emas, berilgan
+nomer. Shuning uchun u saytning ildizini egallaydi: `flex.com.uz/MYN042`, hech
+qanday `/profil/` yoki `/u/` yo'q. Til prefiksi (`/ru/...`) ham shu sababli
+qilinmagan — ildiz raqamlarniki.
+
+**Narx kamyoblikka qarab belgilanadi.** Oddiy kombinatsiya 100 000 so'm.
+Undan yuqorisi ko'paytiruvchilar bilan:
+
+| Nima | Necha marta |
+|---|---|
+| Uchta bir xil harf (AAA) | ×30 |
+| Tanish qisqa so'z (VIP) | ×20 |
+| Uchta bir xil raqam (000, 777) | ×40 |
+| Boshida ikkita nol (007) | ×15 |
+| Ketma-ket raqam (123) | ×12 |
+
+Har bir raqam **darajaga** tushadi va daraja nomi bor. Kodda hisoblab
+tekshirdim:
+
+| Raqam | Narx | Daraja |
+|---|---|---|
+| `MYN042` | 100 000 so'm | common |
+| `XYZ123` | 1 200 000 so'm | epic |
+| `MYN777` | 4 000 000 so'm | epic |
+| `VIP007` | 30 000 000 so'm | legendary |
+| `AAA000` | 120 000 000 so'm | genesis |
+
+Bu o'ylab topilgan narx emas: bu yurtda **777 avtoraqam va 001 telefon raqami
+pulga sotiladi**, odamlar farqni allaqachon biladi. Ko'paytiruvchi yolg'iz
+o'zi hech nima demaydi — «×30» hech kimga tushunarli emas. Daraja nomi esa
+raqamni **egallashga arziydigan narsaga** aylantiradi.
+
+Dizayn raqamni satr emas, **berilgan nomer** qilib ko'rsatishi kerak.
+
+**Ilova — o'rnatilmaydigan narsa.** Na egasi, na tegizgan odam hech nima
+o'rnatmaydi. Shuning uchun "ilovani yuklab oling" degan chaqiruv yo'q va
+bo'lmaydi ham. Buni kuch sifatida ko'rsatish kerak, izoh sifatida emas.
+
+**Uchta sirt, bitta kod:**
+
+1. **Profil** — begona odam tushadigan sahifa. Mahsulotning o'zi shu.
+2. **Kabinet** — egasi tahrirlaydigan joy: menyu, buyumlar, nuqtalar,
+   so'rovnomalar, statistika, hisobotlar, jamoa.
+3. **Sayt** — sotib olinadigan joy. Siz shuni chizyapsiz.
+
+## Vazifasi
+
+**Shaxs uchun:** qo'l berib ko'rishish payti. Tegizasiz — kontakt saqlandi.
+Qog'oz vizitka, "menga yozing" degan ovora bo'lish, xato terilgan raqam —
+hammasi tugadi. O'lchanadigan natija: tanishuv necha soniyada tugaydi.
+
+**Biznes uchun:** stol, xona, nuqta. Kafe stolidagi taglik menyuni ochadi,
+mehmonxona xonasidagi karta xizmatlarni, do'kon nuqtasidagi stiker so'rovnomani.
+Bosilgan menyudan farqi — uni tahrirlash mumkin va u kim, qachon, nechta marta
+ochganini qaytarib aytadi.
+
+## Bozor va yo'nalish
+
+O'zbekiston. Raqobatchi bor — **UNQX**, Farg'ona vodiysida ishlaydi, xuddi
+shu `AAA000` formatida. Ya'ni format bozorga tanish, tushuntirish shart emas.
+
+Global raqobatchilar (Popl va shu kabilar) bilan solishtirish **kerak emas** —
+bu bozorda hech kim ikkisi orasidan tanlamaydi. Solishtirish jadvali bir marta
+chizilgan va olib tashlangan: u mijoz uchun emas, o'zimiz uchun edi.
+
+Yo'nalish — raqamni **egalik qilinadigan aktiv** sifatida ko'rsatish. Past
+raqamni qayta ishlab chiqarib bo'lmaydi; kartaga bosilgan logotipni esa
+xohlagan odam bosadi. Kamyoblik — yagona haqiqiy ustunlik.
+
+---
+
 ## Sahifada bo'lishi kerak
 
 ### 1. Raqam tanlash
