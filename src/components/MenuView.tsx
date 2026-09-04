@@ -30,7 +30,7 @@ export default function MenuView({
 }) {
   return (
     <div>
-      <header className="rounded-card border border-line bg-white p-4">
+      <header className="-mx-5 border-b border-line px-5 pb-4">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h1 className="text-[24px] leading-7 font-semibold tracking-[-0.01em]">
@@ -52,7 +52,7 @@ export default function MenuView({
         </div>
 
         {(venue.address || venue.wifiName) && (
-          <div className="mt-4 flex flex-wrap gap-2 border-t border-line pt-4">
+          <div className="mt-4 flex flex-wrap gap-2">
             {venue.wifiName && (
               <span className="flex items-center gap-1.5 rounded-full bg-fill px-3 py-1.5 text-[13px] leading-[18px] text-ink-2">
                 <Wifi className="h-4 w-4 shrink-0" />
@@ -78,14 +78,14 @@ export default function MenuView({
         </p>
       ) : (
         categories.map((category) => (
-          <section key={category.id} className="mt-8">
+          <section key={category.id} className="mt-6">
             {category.name && (
               <h2 className="mb-2 text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
                 {category.name}
               </h2>
             )}
 
-            <div className="divide-y divide-line border-y border-line">
+            <div className="-mx-5 divide-y divide-line border-y border-line px-5">
               {category.items.map((item) => (
                 <div
                   key={item.id}

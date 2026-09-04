@@ -152,7 +152,9 @@ async function VanityHandlePage({
       }
 
       return (
-        <PageShell>
+        // The same object logic as a profile: a menu is a printed thing lying
+        // on a table, so it is a card lying on a ground rather than a page.
+        <div data-surface="ink" className="relative min-h-full">
           {/* A guest reading a menu is a stranger who tapped a sticker on a
               table. Four of our tabs along the bottom of their screen are four
               things to press by accident on the way out — and one of them is a
@@ -160,10 +162,21 @@ async function VanityHandlePage({
               below and missing here, so every cafe menu carried it. */}
           <span data-no-app-bar hidden />
 
-          <MenuView venue={venue} categories={categories} point={point} w={w} />
+          <div className="mx-auto w-full max-w-md px-4 pt-5 pb-[120px]">
+            <div className="mb-4 flex h-11 items-center justify-between">
+              <Link
+                href="/"
+                className="flex items-center gap-2 text-[15px] font-semibold text-paper"
+              >
+                <Mark tone="dark" />
+                FLEX
+              </Link>
+              <LangSwitch lang={lang} next={`/${normalized}`} tone="dark" />
+            </div>
 
-          <div className="mt-8 flex justify-end border-t border-black/10 pt-4">
-            <LangSwitch lang={lang} next={`/${normalized}`} />
+            <article className="overflow-hidden rounded-tile bg-white px-5 py-5 text-ink shadow-[0_24px_60px_-24px_rgba(0,0,0,0.6)]">
+              <MenuView venue={venue} categories={categories} point={point} w={w} />
+            </article>
           </div>
 
           {/* The call button is what the venue pays for, so it is what stops
@@ -172,12 +185,9 @@ async function VanityHandlePage({
               a cafe in front of its own guests over our billing is not a thing
               we get to do to them. */}
           {planState(venue.planExpiresAt).active && (
-            <>
-              <div className="h-24" aria-hidden />
-              <MenuRequests handle={normalized} point={point} s={menuBar(lang)} w={w} />
-            </>
+            <MenuRequests handle={normalized} point={point} s={menuBar(lang)} w={w} />
           )}
-        </PageShell>
+        </div>
       );
     }
 
@@ -225,407 +235,440 @@ async function VanityHandlePage({
     const telegram = profile.links.find((l) => /telegram/i.test(l.label));
     const telegramIndex = telegram ? profile.links.indexOf(telegram) : -1;
 
-    // No number in the header slot: it is said at full size under the name a
-    // few centimetres below, and saying it twice makes neither of them the one
-    // to read off a card.
     return (
-      <PageShell>
+      // The profile is an object lying on a surface, not a page.
+      //
+      // A flat white column reads as a document that happened to load. What a
+      // stranger has just done is touch a physical card, and the screen should
+      // answer that with a thing they could pick up — which is what every
+      // competitor here understood before we did.
+      //
+      // The ground is the owner's own card artwork, thrown out of focus and
+      // sunk into the ink. Nobody else can build this ground: it exists only
+      // because the person holds that exact card, and it is the reason the
+      // digital twin looks like the object in their hand rather than like a
+      // template with their name dropped into it.
+      <div data-surface="ink" className="relative min-h-full overflow-hidden">
         {/* Keeps the app bar off somebody else's card. */}
         <span data-no-app-bar hidden />
 
-        {/* No card around the card.
-            This used to be a black slab floating on the page with a shadow
-            under it, which is an application's idea of a profile. What a
-            stranger has in their hand is a document: a face, a name, a number,
-            and a list of ways to reach somebody. So the page is the sheet, and
-            the only boxes on it are the lists. */}
-        {/* The physical thing, above the person.
-            Somebody arrives here by touching a card, and the first thing on
-            the screen should be the card they are holding — same artwork, same
-            number. It used to be blurred out under a dark gradient to make
-            room for white text, which meant an owner who paid for an engraved
-            face never saw it anywhere. Here it is the object: full bleed,
-            printed aspect ratio, and nothing written over it. */}
         {banner && (
-          <div className="relative mb-6 aspect-[1.586/1] overflow-hidden rounded-card border border-line bg-fill">
+          <>
             {/* eslint-disable-next-line @next/next/no-img-element -- a static file in public/, sized by CSS */}
             <img
               src={banner}
               alt=""
               aria-hidden
-              className="absolute inset-0 h-full w-full object-cover"
+              className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover opacity-70 blur-[64px]"
             />
-          </div>
-        )}
-
-        <div className="flex items-start justify-between gap-4">
-          {profile.avatarUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
-            <img
-              src={profile.avatarUrl}
-              alt={profile.name}
-              width={88}
-              height={88}
-              className="h-22 w-22 shrink-0 rounded-full bg-fill object-cover"
-            />
-          ) : (
-            <div className="flex h-22 w-22 shrink-0 items-center justify-center rounded-full bg-ink font-display text-[32px] font-semibold text-paper">
-              {profile.name
-                .split(" ")
-                .map((part) => part[0])
-                .join("")
-                .slice(0, 2)}
-            </div>
-          )}
-
-          <ShareButton handle={normalized} name={profile.name} />
-        </div>
-
-        <h1 className="mt-5 text-[24px] leading-7 font-semibold tracking-[-0.01em]">
-          {profile.name}
-        </h1>
-
-        {(profile.position || profile.company) && (
-          <p className="mt-1 text-[16px] leading-6 text-ink-2">
-            {[profile.position, profile.company].filter(Boolean).join(" · ")}
-          </p>
-        )}
-
-        <div className="mt-4">
-          <Plate n={normalized} size="lg" />
-        </div>
-
-        {profile.bio && (
-          <p className="mt-4 text-[16px] leading-6 text-ink-2">{profile.bio}</p>
-        )}
-
-        {profile.tags.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {profile.tags.map((tag) => (
-              <span
-                key={tag}
-                className="inline-flex h-8 items-center rounded-full bg-fill px-3 text-[13px] font-medium text-ink-2"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {(profile.phone || telegram) && (
-          <div className="mt-5 grid grid-cols-2 gap-2">
-            {profile.phone && (
-              <a
-                href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
-                className={paperButton.secondary}
-              >
-                <Phone className="h-5 w-5" />
-                {t.call}
-              </a>
-            )}
-            {telegram && (
-              <a
-                href={`/${normalized}/go?to=${telegramIndex}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={paperButton.secondary}
-              >
-                <Send className="h-5 w-5" />
-                Telegram
-              </a>
-            )}
-          </div>
-        )}
-
-        {!isOwner && (
-          <div className="mt-3 flex flex-col gap-2">
-            <RecommendButton
-              handle={normalized}
-              count={profile.recommendCount}
-              recommended={viewerRecommends}
-              recommenders={recommenders}
-              labels={{
-                recommend: t.recommend,
-                recommended: t.recommended,
-                whoDid: t.whoRecommended,
-              }}
-            />
-
-            <FollowButton
-              handle={normalized}
-              initialFollowing={following}
-              labels={{ follow: t.follow, following: t.following }}
-            />
-
-            {/* Premium, and only for a visitor: the owner has no reason to
-                send themselves a contact, and seeing the form on their own
-                page would read as something they are meant to fill in. */}
-            {profile.plan === "premium" && (
-              <ExchangeContactForm
-                handle={normalized}
-                source={source ?? undefined}
-                t={{
-                  sent: t.sent,
-                  sendContact: t.sendContact,
-                  reachYou: t.reachYou(firstName),
-                  contactHint: t.contactHint(firstName),
-                  yourName: t.yourName,
-                  phone: t.phone,
-                  company: t.company,
-                  note: t.note,
-                  send: t.send,
-                  sending: t.sending,
-                  cancel: t.cancel,
-                }}
-              />
-            )}
-          </div>
-        )}
-
-        <div className="mt-6 flex gap-8 border-t border-line pt-5">
-          {(profile.followerCount > 0 || followingCount > 0) && (
-            <>
-              <div>
-                <p className="num text-[17px] leading-6 font-semibold">
-                  {profile.followerCount}
-                </p>
-                <p className="text-[13px] leading-[18px] text-ink-3">{t.followers}</p>
-              </div>
-              <div>
-                <p className="num text-[17px] leading-6 font-semibold">{followingCount}</p>
-                <p className="text-[13px] leading-[18px] text-ink-3">{t.follows}</p>
-              </div>
-            </>
-          )}
-          <div>
-            <p className="num text-[17px] leading-6 font-semibold">{profile.viewCount}</p>
-            <p className="text-[13px] leading-[18px] text-ink-3">{t.views}</p>
-          </div>
-          {lastSeen && (
-            <div>
-              <p className="text-[17px] leading-6 font-semibold">{lastSeen}</p>
-              <p className="text-[13px] leading-[18px] text-ink-3">{t.lastSeen}</p>
-            </div>
-          )}
-        </div>
-
-        <div className="mt-5 flex gap-6 border-b border-line text-[15px]">
-          <Link
-            href={`/${normalized}`}
-            className={
-              tab === "vizitka"
-                ? "-mb-px border-b-2 border-ink pb-2.5 font-semibold"
-                : "-mb-px border-b-2 border-transparent pb-2.5 text-ink-3"
-            }
-          >
-            {t.card}
-          </Link>
-          <Link
-            href={`/${normalized}?bolim=postlar`}
-            className={
-              tab === "postlar"
-                ? "-mb-px flex items-center gap-1.5 border-b-2 border-ink pb-2.5 font-semibold"
-                : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-ink-3"
-            }
-          >
-            {t.posts}
-            {profile.postCount > 0 && (
-              <span className="num text-ink-3">{profile.postCount}</span>
-            )}
-          </Link>
-        </div>
-
-        {tab === "vizitka" && (
-          <div className="mt-5 overflow-hidden rounded-card border border-line bg-white">
-            {profile.phone && (
-              <ActionRow
-                label={t.call}
-                icon="call"
-                value={profile.phone}
-                href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
-              />
-            )}
-            {profile.contactEmail && (
-              <ActionRow
-                label={t.email}
-                icon="email"
-                value={profile.contactEmail}
-                href={`mailto:${profile.contactEmail}`}
-              />
-            )}
-            {profile.city && (
-              <ActionRow
-                label={t.address}
-                icon="Veb-sayt"
-                value={profile.city}
-                href={`/rezidentlar?q=${encodeURIComponent(profile.city)}`}
-              />
-            )}
-            {/* Stored in full, shown by plan: an owner who fills in eight and
-                lets premium lapse keeps all eight in the form and gets them
-                back on renewal. */}
-            {/* Labelled with the company's name rather than "Veb-sayt", which
-                the member may also have: two rows reading the same word and
-                pointing at different places is worse than either one alone. */}
-            {profile.team?.website && (
-              <ActionRow
-                label={profile.team.name}
-                icon="Veb-sayt"
-                value={linkValue({ label: "Veb-sayt", href: profile.team.website })}
-                href={profile.team.website}
-                external
-              />
-            )}
-
-            {profile.links
-              .map((link, index) => ({ link, index }))
-              .slice(0, profile.plan === "premium" ? undefined : FREE_LINK_LIMIT)
-              .map(({ link, index }) => (
-                <ActionRow
-                  key={link.href}
-                  // A platform names itself; only "Uchrashuv" and "Veb-sayt"
-                  // are ours to translate.
-                  label={
-                    link.label === "Uchrashuv"
-                      ? t.meeting
-                      : link.label === "Veb-sayt"
-                        ? t.website
-                        : link.label
-                  }
-                  icon={link.label}
-                  value={linkValue(link)}
-                  // Routed through /go so the click is counted; the destination
-                  // is resolved from this index server-side, not from the URL.
-                  href={`/${normalized}/go?to=${index}`}
-                  external
-                />
-              ))}
-          </div>
-        )}
-
-        {tab === "vizitka" && profile.services.length > 0 && (
-          <div className="mt-6">
-            <h2 className="mb-2 text-[17px] leading-6 font-semibold">{t.services}</h2>
-            <ul className="overflow-hidden rounded-card border border-line bg-white">
-              {profile.services.slice(0, serviceLimit(profile.plan)).map((service) => (
-                <li
-                  key={service.name}
-                  className="flex min-h-[56px] items-center justify-between gap-4 border-b border-line px-4 py-3 last:border-b-0"
-                >
-                  <span className="min-w-0 text-[16px] leading-6">{service.name}</span>
-                  {service.price && (
-                    <span className="num shrink-0 text-[16px] leading-6 font-semibold">
-                      {service.price}
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {tab === "vizitka" && profile.commentsOpen && (
-          <ProfileComments
-            handle={normalized}
-            comments={comments}
-            viewerId={viewer?.id ?? null}
-            ownerId={profile.userId}
-            labels={{
-              title: t.comments,
-              placeholder: t.commentPlaceholder,
-              send: t.commentSend,
-              sending: t.commentSending,
-              empty: t.commentsEmpty,
-              signIn: t.commentSignIn,
-            }}
-          />
-        )}
-
-        {isOwner && (
-          <Link
-            href={`/kabinet/${normalized}`}
-            className={`${paperButton.secondary} mt-5 w-full`}
-          >
-            Tahrirlash
-          </Link>
-        )}
-
-        {/* The one lime on this screen, and it stays on it: a stranger who
-            scrolled to the services should not have to scroll back to save the
-            contact they came for. Room is reserved below so the last row is
-            never sitting under the bar. */}
-        {!isOwner && (
-          <>
-            <div className="h-[92px]" aria-hidden />
-            <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper/95 px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] backdrop-blur-[2px]">
-              <div className="mx-auto max-w-md">
-                <SaveContactButton
-                  fullName={profile.name}
-                  handle={normalized}
-                  bio={profile.bio}
-                  phone={profile.phone}
-                  email={profile.contactEmail}
-                  position={profile.position}
-                  company={profile.company}
-                  label={t.saveContact}
-                  savedLabel={t.contactSaved}
-                />
-              </div>
-            </div>
+            {/* Held down hard. It is a ground, and a ground that competes with
+                the card standing on it has stopped being one. */}
+            <div aria-hidden className="absolute inset-0 bg-ink/60" />
           </>
         )}
 
-        {/* Under the card, not above it.
-            Somebody opening a profile tapped a physical card or followed a
-            forwarded link: they came to see a person, and half a phone screen
-            of our search box and our price tag before that person's name is
-            the shop talking over them. The moment of wanting one of these
-            arrives after the card has been read, not before — which is what
-            this block is for, and where it now waits. */}
-        <div className="mt-8 flex justify-end border-t border-black/10 pt-4">
-          <LangSwitch lang={lang} next={backTo} />
+        <div className="relative mx-auto w-full max-w-md px-4 pt-5 pb-[120px]">
+          <div className="mb-4 flex h-11 items-center justify-between">
+            <Link href="/" className="flex items-center gap-2 text-[15px] font-semibold text-paper">
+              <Mark tone="dark" />
+              FLEX
+            </Link>
+            <ShareButton handle={normalized} name={profile.name} />
+          </div>
+
+          <article className="overflow-hidden rounded-tile bg-white text-ink shadow-[0_24px_60px_-24px_rgba(0,0,0,0.6)]">
+            {/* The card itself, at the top of the card. Printed aspect ratio,
+                nothing written over it: an owner who paid for an engraved face
+                should be able to see the engraving. */}
+            {banner && (
+              <div className="relative aspect-[1.586/1] w-full bg-fill">
+                {/* eslint-disable-next-line @next/next/no-img-element -- a static file in public/, sized by CSS */}
+                <img
+                  src={banner}
+                  alt=""
+                  aria-hidden
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
+            )}
+
+            <div className="px-5 pb-5">
+              {/* Lapping the artwork, the way a photograph is mounted over the
+                  edge of the thing it belongs to. */}
+              <div className={banner ? "relative z-10 -mt-11" : "pt-5"}>
+                {profile.avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
+                  <img
+                    src={profile.avatarUrl}
+                    alt={profile.name}
+                    width={88}
+                    height={88}
+                    className="h-22 w-22 rounded-full border-4 border-white bg-fill object-cover"
+                  />
+                ) : (
+                  <div className="flex h-22 w-22 items-center justify-center rounded-full border-4 border-white bg-ink font-display text-[30px] font-semibold text-paper">
+                    {profile.name
+                      .split(" ")
+                      .map((part) => part[0])
+                      .join("")
+                      .slice(0, 2)}
+                  </div>
+                )}
+              </div>
+
+              <h1 className="mt-3 text-[24px] leading-7 font-semibold tracking-[-0.01em]">
+                {profile.name}
+              </h1>
+
+              {(profile.position || profile.company) && (
+                <p className="mt-1 text-[16px] leading-6 text-ink-2">
+                  {[profile.position, profile.company].filter(Boolean).join(" · ")}
+                </p>
+              )}
+
+              <div className="mt-3">
+                <Plate n={normalized} size="lg" />
+              </div>
+
+              {profile.bio && (
+                <p className="mt-4 text-[16px] leading-6 text-ink-2">{profile.bio}</p>
+              )}
+
+              {profile.tags.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {profile.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex h-8 items-center rounded-full bg-fill px-3 text-[13px] font-medium text-ink-2"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {(profile.phone || telegram) && (
+                <div className="mt-5 grid grid-cols-2 gap-2">
+                  {profile.phone && (
+                    <a
+                      href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
+                      className={paperButton.secondary}
+                    >
+                      <Phone className="h-5 w-5" />
+                      {t.call}
+                    </a>
+                  )}
+                  {telegram && (
+                    <a
+                      href={`/${normalized}/go?to=${telegramIndex}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={paperButton.secondary}
+                    >
+                      <Send className="h-5 w-5" />
+                      Telegram
+                    </a>
+                  )}
+                </div>
+              )}
+
+              {!isOwner && (
+                <div className="mt-2 flex flex-col gap-2">
+                  <RecommendButton
+                    handle={normalized}
+                    count={profile.recommendCount}
+                    recommended={viewerRecommends}
+                    recommenders={recommenders}
+                    labels={{
+                      recommend: t.recommend,
+                      recommended: t.recommended,
+                      whoDid: t.whoRecommended,
+                    }}
+                  />
+
+                  <FollowButton
+                    handle={normalized}
+                    initialFollowing={following}
+                    labels={{ follow: t.follow, following: t.following }}
+                  />
+
+                  {/* Premium, and only for a visitor: the owner has no reason
+                      to send themselves a contact, and seeing the form on
+                      their own page would read as something they are meant to
+                      fill in. */}
+                  {profile.plan === "premium" && (
+                    <ExchangeContactForm
+                      handle={normalized}
+                      source={source ?? undefined}
+                      t={{
+                        sent: t.sent,
+                        sendContact: t.sendContact,
+                        reachYou: t.reachYou(firstName),
+                        contactHint: t.contactHint(firstName),
+                        yourName: t.yourName,
+                        phone: t.phone,
+                        company: t.company,
+                        note: t.note,
+                        send: t.send,
+                        sending: t.sending,
+                        cancel: t.cancel,
+                      }}
+                    />
+                  )}
+                </div>
+              )}
+
+              <div className="mt-5 flex gap-8 border-t border-line pt-4">
+                {(profile.followerCount > 0 || followingCount > 0) && (
+                  <>
+                    <div>
+                      <p className="num text-[17px] leading-6 font-semibold">
+                        {profile.followerCount}
+                      </p>
+                      <p className="text-[13px] leading-[18px] text-ink-3">{t.followers}</p>
+                    </div>
+                    <div>
+                      <p className="num text-[17px] leading-6 font-semibold">
+                        {followingCount}
+                      </p>
+                      <p className="text-[13px] leading-[18px] text-ink-3">{t.follows}</p>
+                    </div>
+                  </>
+                )}
+                <div>
+                  <p className="num text-[17px] leading-6 font-semibold">
+                    {profile.viewCount}
+                  </p>
+                  <p className="text-[13px] leading-[18px] text-ink-3">{t.views}</p>
+                </div>
+                {lastSeen && (
+                  <div>
+                    <p className="text-[17px] leading-6 font-semibold">{lastSeen}</p>
+                    <p className="text-[13px] leading-[18px] text-ink-3">{t.lastSeen}</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-4 flex gap-6 border-b border-line text-[15px]">
+                <Link
+                  href={`/${normalized}`}
+                  className={
+                    tab === "vizitka"
+                      ? "-mb-px border-b-2 border-ink pb-2.5 font-semibold"
+                      : "-mb-px border-b-2 border-transparent pb-2.5 text-ink-3"
+                  }
+                >
+                  {t.card}
+                </Link>
+                <Link
+                  href={`/${normalized}?bolim=postlar`}
+                  className={
+                    tab === "postlar"
+                      ? "-mb-px flex items-center gap-1.5 border-b-2 border-ink pb-2.5 font-semibold"
+                      : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-ink-3"
+                  }
+                >
+                  {t.posts}
+                  {profile.postCount > 0 && (
+                    <span className="num text-ink-3">{profile.postCount}</span>
+                  )}
+                </Link>
+              </div>
+
+              {/* No box around these. The article is already the card, and a
+                  card drawn inside a card is a card nobody can find the edge
+                  of — so the rows are ruled instead, the way a printed list
+                  is. */}
+              {tab === "vizitka" && (
+                <div className="-mx-5">
+                  {profile.phone && (
+                    <ActionRow
+                      label={t.call}
+                      icon="call"
+                      value={profile.phone}
+                      href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
+                    />
+                  )}
+                  {profile.contactEmail && (
+                    <ActionRow
+                      label={t.email}
+                      icon="email"
+                      value={profile.contactEmail}
+                      href={`mailto:${profile.contactEmail}`}
+                    />
+                  )}
+                  {profile.city && (
+                    <ActionRow
+                      label={t.address}
+                      icon="Veb-sayt"
+                      value={profile.city}
+                      href={`/rezidentlar?q=${encodeURIComponent(profile.city)}`}
+                    />
+                  )}
+                  {/* Stored in full, shown by plan: an owner who fills in
+                      eight and lets premium lapse keeps all eight in the form
+                      and gets them back on renewal. */}
+                  {/* Labelled with the company's name rather than "Veb-sayt",
+                      which the member may also have: two rows reading the same
+                      word and pointing at different places is worse than
+                      either one alone. */}
+                  {profile.team?.website && (
+                    <ActionRow
+                      label={profile.team.name}
+                      icon="Veb-sayt"
+                      value={linkValue({ label: "Veb-sayt", href: profile.team.website })}
+                      href={profile.team.website}
+                      external
+                    />
+                  )}
+
+                  {profile.links
+                    .map((link, index) => ({ link, index }))
+                    .slice(0, profile.plan === "premium" ? undefined : FREE_LINK_LIMIT)
+                    .map(({ link, index }) => (
+                      <ActionRow
+                        key={link.href}
+                        // A platform names itself; only "Uchrashuv" and
+                        // "Veb-sayt" are ours to translate.
+                        label={
+                          link.label === "Uchrashuv"
+                            ? t.meeting
+                            : link.label === "Veb-sayt"
+                              ? t.website
+                              : link.label
+                        }
+                        icon={link.label}
+                        value={linkValue(link)}
+                        // Routed through /go so the click is counted; the
+                        // destination is resolved from this index server-side,
+                        // not from the URL.
+                        href={`/${normalized}/go?to=${index}`}
+                        external
+                      />
+                    ))}
+                </div>
+              )}
+
+              {tab === "vizitka" && profile.services.length > 0 && (
+                <div className="mt-5">
+                  <h2 className="text-[17px] leading-6 font-semibold">{t.services}</h2>
+                  <ul className="-mx-5 mt-1">
+                    {profile.services.slice(0, serviceLimit(profile.plan)).map((service) => (
+                      <li
+                        key={service.name}
+                        className="flex min-h-[56px] items-center justify-between gap-4 border-b border-line px-5 py-3 last:border-b-0"
+                      >
+                        <span className="min-w-0 text-[16px] leading-6">{service.name}</span>
+                        {service.price && (
+                          <span className="num shrink-0 text-[16px] leading-6 font-semibold">
+                            {service.price}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {tab === "vizitka" && profile.commentsOpen && (
+                <ProfileComments
+                  handle={normalized}
+                  comments={comments}
+                  viewerId={viewer?.id ?? null}
+                  ownerId={profile.userId}
+                  labels={{
+                    title: t.comments,
+                    placeholder: t.commentPlaceholder,
+                    send: t.commentSend,
+                    sending: t.commentSending,
+                    empty: t.commentsEmpty,
+                    signIn: t.commentSignIn,
+                  }}
+                />
+              )}
+
+              {tab === "postlar" && (
+                <div className="mt-5">
+                  <PostList
+                    posts={posts}
+                    emptyMessage={
+                      isOwner
+                        ? "Hali post yozmadingiz. Kabinetdan birinchi postni joylang."
+                        : t.noPosts
+                    }
+                  />
+                </div>
+              )}
+
+              {isOwner && (
+                <Link
+                  href={`/kabinet/${normalized}`}
+                  className={`${paperButton.secondary} mt-5 w-full`}
+                >
+                  Tahrirlash
+                </Link>
+              )}
+            </div>
+          </article>
+
+          {/* Off the card, on the ground it lies on. Everything below here
+              belongs to us rather than to the person whose card this is. */}
+          <div className="mt-5 flex justify-end">
+            <LangSwitch lang={lang} next={backTo} tone="dark" />
+          </div>
+
+          {/* The cheapest customer we will ever get.
+              Most people meet Flex by tapping a stranger's card, and this page
+              used to answer the question they arrive with — "is my own number
+              free?" — by showing them this person's handle and its price,
+              beside a handle that is plainly taken. It read as a price tag on
+              somebody else's name.
+
+              So it says what the thing is first, and only then offers the
+              search.
+
+              Not on premium: "the Flex mark is removed from the page" is a
+              paid promise, and removing a small label while adding a larger
+              block would be keeping the letter of it and breaking the rest. */}
+          {profile.plan === "free" && (
+            <div className="mt-5 rounded-card border border-ink-line bg-ink-s1 p-5">
+              <div className="flex items-center gap-2">
+                <Mark className="h-5 w-5" tone="dark" />
+                <p className="text-[17px] leading-6 font-semibold text-paper">
+                  {t.ownItTitle}
+                </p>
+              </div>
+              <p className="mt-2 text-[14px] leading-5 text-paper-2">{t.ownItLead}</p>
+
+              <p className="mt-4 mb-2 text-[12px] leading-4 font-medium tracking-[0.04em] text-paper-3 uppercase">
+                {t.ownItCta}
+              </p>
+              <ProfileHandleSearch />
+            </div>
+          )}
         </div>
 
-        {/* The cheapest customer we will ever get.
-            Most people meet Flex by tapping a stranger's card, and this page
-            used to answer the question they arrive with — "is my own number
-            free?" — by showing them this person's handle and its price, beside
-            a handle that is plainly taken. It read as a price tag on somebody
-            else's name.
-
-            So it says what the thing is first, and only then offers the search.
-
-            Not on premium: "the Flex mark is removed from the page" is a paid
-            promise, and removing a small label while adding a larger block
-            would be keeping the letter of it and breaking the rest. */}
-        {profile.plan === "free" && (
-          <div className="mt-6 rounded-3xl border border-black/10 bg-black/[0.02] px-5 py-5">
-            <div className="flex items-center gap-2">
-              <Mark className="h-5 w-5" />
-              <p className="font-display font-semibold tracking-tight">{t.ownItTitle}</p>
+        {/* The one lime on this screen, and it stays on it: a stranger who
+            scrolled to the services should not have to scroll back up to save
+            the contact they came for. */}
+        {!isOwner && (
+          <div className="fixed inset-x-0 bottom-0 z-40 border-t border-ink-line bg-ink/95 px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] backdrop-blur-[2px]">
+            <div className="mx-auto max-w-md">
+              <SaveContactButton
+                fullName={profile.name}
+                handle={normalized}
+                bio={profile.bio}
+                phone={profile.phone}
+                email={profile.contactEmail}
+                position={profile.position}
+                company={profile.company}
+                label={t.saveContact}
+                savedLabel={t.contactSaved}
+              />
             </div>
-            <p className="mt-2 text-sm leading-relaxed text-flex-black/60">{t.ownItLead}</p>
-
-            <p className="mt-4 mb-2 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
-              {t.ownItCta}
-            </p>
-            <ProfileHandleSearch />
           </div>
         )}
-
-        {tab === "postlar" && (
-          <div className="mt-6">
-            <PostList
-              posts={posts}
-              emptyMessage={
-                isOwner
-                  ? "Hali post yozmadingiz. Kabinetdan birinchi postni joylang."
-                  : t.noPosts
-              }
-            />
-          </div>
-        )}
-      </PageShell>
+      </div>
     );
   }
 
