@@ -12,6 +12,7 @@ const imgATKRV = "/figma-make/image-18.png";
 const imgProkuratura = "/figma-make/image-19.png";
 const imgYIA = "/figma-make/yia-banner.jpeg";            // supplied by the client
 const imgUzCombinator = "/figma-make/uzcombinator-banner.jpeg";  // supplied by the client
+const imgMOQ = "/figma-make/moq-banner.jpeg";                    // supplied by the client
 
 const BANNER: Record<string, string> = {
   "tashkent-inn": imgStartupGarage,
@@ -28,6 +29,7 @@ const BANNER: Record<string, string> = {
   "chamber":      imgStartupGarage,
   "uzreport":     imgICTWeek,
   "yakubov":           imgYoshlarVentures,
+  "umarov":            imgMOQ,
   "sharipov":          imgUnitedVentures,
   "shukurlaev":        imgUnitedVentures,
   "nodirov":           imgITPark,

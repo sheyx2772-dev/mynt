@@ -447,6 +447,7 @@ export const profiles: Profile[] = [
     orgShort: "Milliy Olimpiya Qo'mitasi",
     department: "Osiyo Olimpiya Kengashi vitse-prezidenti · FIA Senati a'zosi",
     website: "olympic.uz",
+    bannerPosition: "center 38%",
     avatar: "/figma-make/otabek-umarov.jpeg",
     coverColor: "#10182f",
     coverAccent: "#f5c451",
