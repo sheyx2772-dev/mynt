@@ -264,7 +264,7 @@ async function VanityHandlePage({
               tells the eye which of the two is on top. */}
           <div className="relative z-10 -mt-12 mx-3 rounded-2xl bg-sheet px-5 pt-16 pb-6 shadow-sheet">
             <div className="flex items-end gap-4">
-              <div className="relative -mt-14 shrink-0">
+              <div className="relative -mt-10 shrink-0">
                 {profile.avatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
                   <img
@@ -351,23 +351,41 @@ async function VanityHandlePage({
 
             {!isOwner && (
               <div className="mt-3 flex flex-col gap-3">
-                <RecommendButton
-                  handle={normalized}
-                  count={profile.recommendCount}
-                  recommended={viewerRecommends}
-                  recommenders={recommenders}
-                  labels={{
-                    recommend: t.recommend,
-                    recommended: t.recommended,
-                    whoDid: t.whoRecommended,
-                  }}
-                />
+                {/* A pair, so they sit as a pair. Stacked, each one read as a
+                    separate decision and the sheet grew two rows taller for
+                    nothing. */}
+                <div className="grid grid-cols-2 gap-3">
+                  <RecommendButton
+                    handle={normalized}
+                    count={profile.recommendCount}
+                    recommended={viewerRecommends}
+                    labels={{ recommend: t.recommend, recommended: t.recommended }}
+                  />
 
-                <FollowButton
-                  handle={normalized}
-                  initialFollowing={following}
-                  labels={{ follow: t.follow, following: t.following }}
-                />
+                  <FollowButton
+                    handle={normalized}
+                    initialFollowing={following}
+                    labels={{ follow: t.follow, following: t.following }}
+                  />
+                </div>
+
+                {/* Who vouched, by their own handle. A name is a claim; a
+                    handle is a profile the reader can open and judge. */}
+                {recommenders.length > 0 && (
+                  <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[16px] leading-6 text-mute">
+                    <span>{t.whoRecommended}</span>
+                    {recommenders.map((r) => (
+                      <Link
+                        key={r.handle}
+                        href={`/${r.handle}`}
+                        title={r.name}
+                        className="font-mono transition-colors hover:text-ink"
+                      >
+                        {r.handle}
+                      </Link>
+                    ))}
+                  </p>
+                )}
 
                 {/* Premium, and only for a visitor: the owner has no reason to
                     send themselves a contact, and seeing the form on their own

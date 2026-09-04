@@ -12,9 +12,8 @@ import { Nfc } from "lucide-react";
 //
 //   - the corner radius is a percentage, because a real card's corner is a
 //     fixed physical radius and so scales with the card, not with the screen;
-//   - it is rotated two and a half degrees and hangs slightly wider than the
-//     sheet beneath it, because a card put down on a desk is never square to
-//     the edge;
+//   - it hangs slightly wider than the sheet beneath it, so the sheet reads as
+//     having been slid underneath rather than butted up against it;
 //   - the shadow has an inner highlight and an inner darkness, which is what
 //     the lit and unlit edges of plastic look like;
 //   - a diagonal sheen runs across it, brighter at the top left, because that
@@ -38,7 +37,7 @@ export default function CardObject({
 }) {
   return (
     <figure
-      className={`settle relative z-20 mx-auto w-[calc(100%-1.5rem)] max-w-[420px] origin-center rotate-[2.5deg] overflow-hidden rounded-[4%/6.3%] bg-ink shadow-card ${className}`}
+      className={`settle relative z-20 mx-auto w-[calc(100%-1.5rem)] max-w-[420px] overflow-hidden rounded-[4%/6.3%] bg-ink shadow-card ${className}`}
       style={{ aspectRatio: "1.586 / 1" }}
     >
       {artwork && (

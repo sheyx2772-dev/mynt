@@ -44,18 +44,18 @@ export default function FollowButton({
         disabled={pending}
         className={
           following
-            ? "flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 text-[16px] font-medium text-mute"
-            : "flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-paper px-3 text-[16px] font-medium text-ink shadow-deboss active:bg-ink/5"
+            ? "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute"
+            : "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-paper px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5"
         }
       >
         {following ? (
           <>
-            <UserCheck className="h-5 w-5" />
+            <UserCheck className="size-5 shrink-0" />
             {labels.following}
           </>
         ) : (
           <>
-            <UserPlus className="h-5 w-5" />
+            <UserPlus className="size-5 shrink-0" />
             {labels.follow}
           </>
         )}

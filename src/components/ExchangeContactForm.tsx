@@ -48,7 +48,7 @@ export default function ExchangeContactForm({
 
   if (sent) {
     return (
-      <div className="flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 text-[16px] font-medium text-mute">
+      <div className="flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute">
         <Check className="h-5 w-5" />
         {t.sent}
       </div>
@@ -59,7 +59,7 @@ export default function ExchangeContactForm({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-paper px-3 text-[16px] font-medium text-ink shadow-deboss active:bg-ink/5"
+        className="flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-paper px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5"
       >
         <UserRoundPlus className="h-5 w-5" />
         {t.sendContact}
