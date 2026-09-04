@@ -1,62 +1,75 @@
-import { useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect, useState } from "react";
 
-// The panel has no screens yet, and this one says so honestly.
+import { signOut, whoAmI } from "./api/session";
+import Give from "./pages/Give";
+import Handles from "./pages/Handles";
+import Orders from "./pages/Orders";
+import Overview from "./pages/Overview";
+import SignIn from "./pages/SignIn";
+import { Waiting } from "./ui/parts";
+
+const TABS = [
+  { id: "umumiy", label: "Umumiy", view: <Overview /> },
+  { id: "buyurtmalar", label: "Buyurtmalar", view: <Orders /> },
+  { id: "raqamlar", label: "Raqamlar", view: <Handles /> },
+  { id: "sovga", label: "Sovg'a", view: <Give /> },
+] as const;
+
+// The panel, which is four screens and a sign-in.
 //
-// What it does do is exercise the whole chain the real screens will use: the
-// browser asks this origin, Vite's proxy forwards /v1 to the Go backend, the
-// backend asks Postgres, and the answer comes back. When that works, every
-// piece of the plumbing is connected — and when it does not, this page says
-// which end is quiet instead of a blank screen with a console error.
-
-type Health = { ok: boolean; database: string };
-
-function useBackendHealth() {
-  return useQuery<Health>({
-    queryKey: ["sogliq"],
-    queryFn: async () => {
-      const response = await fetch("/v1/sogliq");
-      if (!response.ok) throw response;
-      return response.json();
-    },
-    retry: false,
-  });
-}
-
+// Tabs rather than routes: nothing here is linked to from anywhere, nothing is
+// bookmarked, and a router for four screens behind one login is machinery with
+// no work to do.
 export default function App() {
-  const health = useBackendHealth();
+  const [email, setEmail] = useState<string | null>(null);
+  const [checking, setChecking] = useState(true);
+  const [tab, setTab] = useState<string>(TABS[0].id);
+
+  const check = useCallback(() => {
+    whoAmI()
+      .then((account) => setEmail(account?.email ?? null))
+      .finally(() => setChecking(false));
+  }, []);
+
+  useEffect(check, [check]);
+
+  if (checking) return <Waiting />;
+  if (!email) return <SignIn onSignedIn={check} />;
 
   return (
-    <main className="mx-auto max-w-xl px-6 py-20">
-      <p className="text-xs uppercase tracking-[0.2em] text-flex-black/40">Flex</p>
-      <h1 className="mt-2 font-semibold text-3xl text-flex-black">Boshqaruv paneli</h1>
-      <p className="mt-3 text-flex-black/60">
-        Ekranlar hali yozilmagan. Bu sahifa faqat bitta narsani tekshiradi:
-        panel backend bilan, backend esa baza bilan gaplasha oladimi.
-      </p>
+    <div className="mx-auto max-w-4xl px-6 py-10">
+      <header className="flex items-baseline justify-between">
+        <div>
+          <p className="text-xs uppercase tracking-[0.2em] text-flex-black/40">Flex</p>
+          <h1 className="mt-1 font-semibold text-2xl">Boshqaruv</h1>
+        </div>
+        <button
+          type="button"
+          onClick={() => signOut().then(() => setEmail(null))}
+          className="text-flex-black/45 text-sm transition-colors hover:text-flex-black"
+        >
+          {email} · chiqish
+        </button>
+      </header>
 
-      <div className="mt-10 rounded-2xl border border-flex-black/10 p-6">
-        <h2 className="font-medium text-sm text-flex-black/50">Ulanish</h2>
+      <nav className="mt-8 flex gap-1 border-flex-black/10 border-b">
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => setTab(t.id)}
+            className={`-mb-px border-b-2 px-3 pb-2.5 text-sm transition-colors ${
+              tab === t.id
+                ? "border-lime font-medium text-flex-black"
+                : "border-transparent text-flex-black/45 hover:text-flex-black"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </nav>
 
-        {health.isPending && <p className="mt-3 text-flex-black/50">Tekshirilyapti…</p>}
-
-        {health.isError && (
-          <div className="mt-3">
-            <p className="font-medium text-red-700">Backend javob bermadi.</p>
-            <p className="mt-1 text-flex-black/60 text-sm">
-              Uni ishga tushiring: <code className="rounded bg-flex-black/5 px-1.5 py-0.5">cd backend &amp;&amp; make db &amp;&amp; make dev</code>
-            </p>
-          </div>
-        )}
-
-        {health.data && (
-          <div className="mt-3 flex items-center gap-3">
-            <span className="inline-block size-2.5 rounded-full bg-lime" aria-hidden />
-            <p className="text-flex-black">
-              Backend ishlayapti, baza — <span className="text-lime-ink">{health.data.database}</span>
-            </p>
-          </div>
-        )}
-      </div>
-    </main>
+      <main className="mt-8">{TABS.find((t) => t.id === tab)?.view}</main>
+    </div>
   );
 }

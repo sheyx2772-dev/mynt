@@ -55,6 +55,17 @@ type Config struct {
 	ResendAPIKey string
 	MailFrom     string
 
+	// Who may use the admin panel, by email address.
+	//
+	// A list in the environment rather than a table, because there is one
+	// company running this and the list is two lines long. It moves to a table
+	// the day somebody needs to grant access without a deploy — and the guard
+	// that reads it does not change when it does.
+	//
+	// Empty means nobody, which is the safe direction: a deployment that forgot
+	// the variable has no admin rather than an open one.
+	AdminEmails []string
+
 	// Whether X-Forwarded-For may be believed.
 	//
 	// Off by default, because a client can put anything in that header. Believing
@@ -73,10 +84,14 @@ func (c Config) IsDevelopment() bool { return c.Env == "development" }
 // Load builds the configuration, or explains what is missing.
 func Load() (Config, error) {
 	cfg := Config{
-		DatabaseURL:            os.Getenv("DATABASE_URL"),
-		Addr:                   withDefault("ADDR", ":8080"),
-		Env:                    normaliseEnv(os.Getenv("APP_ENV")),
-		SiteURL:                withDefault("SITE_URL", "https://flex.com.uz"),
+		DatabaseURL: os.Getenv("DATABASE_URL"),
+		Addr:        withDefault("ADDR", ":8080"),
+		Env:         normaliseEnv(os.Getenv("APP_ENV")),
+		// Trimmed here so every caller building a link from it gets one slash.
+		// The sign-in service trimmed it for itself and the checkout builder did
+		// not, which is how a payment return address came to be
+		// "https://flex.com.uz//buyurtma/...".
+		SiteURL:                strings.TrimSuffix(withDefault("SITE_URL", "https://flex.com.uz"), "/"),
 		SupabaseURL:            strings.TrimSuffix(os.Getenv("SUPABASE_URL"), "/"),
 		SupabaseServiceRoleKey: os.Getenv("SUPABASE_SERVICE_ROLE_KEY"),
 		PaymeMerchantID:        os.Getenv("PAYME_MERCHANT_ID"),
@@ -84,6 +99,7 @@ func Load() (Config, error) {
 		ClickMerchantID:        os.Getenv("CLICK_MERCHANT_ID"),
 		ResendAPIKey:           os.Getenv("RESEND_API_KEY"),
 		MailFrom:               withDefault("MAIL_FROM", "Flex <kirish@flex.com.uz>"),
+		AdminEmails:            readList(os.Getenv("ADMIN_EMAILS")),
 		TrustProxy:             os.Getenv("TRUST_PROXY") == "true",
 		ReadTimeout:            15 * time.Second,
 		WriteTimeout:           30 * time.Second,
@@ -117,6 +133,34 @@ func Load() (Config, error) {
 	}
 
 	return cfg, nil
+}
+
+// IsAdmin reports whether an address may use the admin panel.
+//
+// Compared lowercased, because an address typed into a config file and one
+// stored by the account system are the same address written by two people.
+func (c Config) IsAdmin(email string) bool {
+	if email == "" {
+		return false
+	}
+	for _, allowed := range c.AdminEmails {
+		if strings.EqualFold(allowed, email) {
+			return true
+		}
+	}
+	return false
+}
+
+// readList splits a comma-separated setting, dropping the spaces somebody put
+// after the commas.
+func readList(raw string) []string {
+	var out []string
+	for _, piece := range strings.Split(raw, ",") {
+		if trimmed := strings.TrimSpace(piece); trimmed != "" {
+			out = append(out, trimmed)
+		}
+	}
+	return out
 }
 
 func withDefault(key, fallback string) string {

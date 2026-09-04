@@ -20,6 +20,7 @@ import (
 	"github.com/danielgtaylor/huma/v2/adapters/humago"
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/sheyx2772-dev/flex/backend/internal/admin"
 	"github.com/sheyx2772-dev/flex/backend/internal/auth"
 	"github.com/sheyx2772-dev/flex/backend/internal/config"
 	"github.com/sheyx2772-dev/flex/backend/internal/handles"
@@ -38,6 +39,7 @@ type Server struct {
 	leads   *leads.Store
 	stats   *stats.Store
 	orders  *orders.Store
+	admin   *admin.Store
 }
 
 func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.Handler {
@@ -54,6 +56,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 			ClickMerchantID: cfg.ClickMerchantID,
 			SiteURL:         cfg.SiteURL,
 		}, cfg.IsDevelopment()),
+		admin: admin.NewStore(pool),
 	}
 
 	mux := http.NewServeMux()
@@ -78,6 +81,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 	s.registerLeads(api)
 	s.registerStats(api)
 	s.registerOrders(api)
+	s.registerAdmin(api)
 
 	return mux
 }

@@ -4,6 +4,77 @@
  */
 
 export interface paths {
+    "/boshqaruv/buyurtmalar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Buyurtmalar */
+        get: operations["boshqaruv-buyurtmalar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/boshqaruv/raqamlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Raqamlarni qidirish */
+        get: operations["boshqaruv-raqamlar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/boshqaruv/sovga": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Raqamni sotmasdan berish
+         * @description Sabab yoziladi va hisobotda qoladi. Sovg'a sotuvdek ko'rinsa, birinchi oy raqamlari yolg'on bo'ladi.
+         */
+        post: operations["boshqaruv-sovga"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/boshqaruv/umumiy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Panelning bosh sahifasi */
+        get: operations["boshqaruv-umumiy"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/buyurtmalar/{id}": {
         parameters: {
             query?: never;
@@ -314,6 +385,52 @@ export interface components {
             email: string;
             id: string;
         };
+        AdminHandle: {
+            egasi?: string;
+            holat: string;
+            ism?: string;
+            /** Format: int64 */
+            korishlar: number;
+            /** Format: date-time */
+            olingan?: string;
+            raqam: string;
+            sovga_sababi?: string;
+            tarif: string;
+            /** Format: int64 */
+            tolangan?: number;
+        };
+        AdminHandlesOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/AdminHandlesOutputBody.json
+             */
+            readonly $schema?: string;
+            raqamlar: components["schemas"]["AdminHandle"][] | null;
+        };
+        AdminOrder: {
+            holat: string;
+            id: string;
+            /** Format: date-time */
+            ochilgan?: string;
+            raqam: string;
+            /** Format: int64 */
+            summa: number;
+            /** Format: date-time */
+            tolangan?: string;
+            tolov?: string;
+            turi: string;
+            xaridor: string;
+        };
+        AdminOrdersOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/AdminOrdersOutputBody.json
+             */
+            readonly $schema?: string;
+            buyurtmalar: components["schemas"]["AdminOrder"][] | null;
+        };
         AliveOutputHeader: {
             CacheControl: string;
         };
@@ -396,6 +513,30 @@ export interface components {
              * @example https://example.com/errors/example
              */
             type: string;
+        };
+        GiveInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/GiveInputBody.json
+             */
+            readonly $schema?: string;
+            /** @description Qabul qiluvchining mavjud hisobi */
+            email: string;
+            ism?: string;
+            /** @example MYN042 */
+            raqam: string;
+            /** @description Nima uchun berildi — hisobotda qoladi */
+            sababi: string;
+        };
+        GiveOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/GiveOutputBody.json
+             */
+            readonly $schema?: string;
+            raqam: string;
         };
         Handle: {
             bio: string;
@@ -551,6 +692,29 @@ export interface components {
             readonly $schema?: string;
             buyurtma: components["schemas"]["Order"];
         };
+        Overview: {
+            /** Format: int64 */
+            band: number;
+            /** Format: int64 */
+            kutilayotgan_buyurtmalar: number;
+            /** Format: int64 */
+            olingan: number;
+            /** Format: int64 */
+            tolangan_buyurtmalar: number;
+            /** Format: int64 */
+            tushum: number;
+            /** Format: int64 */
+            vizitkalar: number;
+        };
+        OverviewOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/OverviewOutputBody.json
+             */
+            readonly $schema?: string;
+            umumiy: components["schemas"]["Overview"];
+        };
         ProfileInput: {
             /**
              * Format: uri
@@ -658,6 +822,134 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    "boshqaruv-buyurtmalar": {
+        parameters: {
+            query?: {
+                holat?: "pending" | "paid" | "cancelled" | "failed";
+                soni?: number;
+                otkazish?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminOrdersOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "boshqaruv-raqamlar": {
+        parameters: {
+            query?: {
+                /** @description Raqam, ism yoki egasining manzili */
+                qidiruv?: string;
+                soni?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminHandlesOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "boshqaruv-sovga": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GiveInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GiveOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "boshqaruv-umumiy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OverviewOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     buyurtma: {
         parameters: {
             query?: never;
