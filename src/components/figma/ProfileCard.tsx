@@ -10,6 +10,7 @@ const imgUnitedVentures = "/figma-make/image-16.png";
 const imgICTWeek = "/figma-make/image-17.png";
 const imgATKRV = "/figma-make/image-18.png";
 const imgProkuratura = "/figma-make/image-19.png";
+const imgYIA = "/figma-make/yia-banner.jpeg";   // supplied by the client
 
 const BANNER: Record<string, string> = {
   "tashkent-inn": imgStartupGarage,
@@ -25,6 +26,8 @@ const BANNER: Record<string, string> = {
   "itpark":       imgITPark,
   "chamber":      imgStartupGarage,
   "uzreport":     imgICTWeek,
+  "yoshlar-agentligi": imgYIA,
+  "sadullayev":        imgYIA,
 };
 
 // ── Per-profile color config ─────────────────────────────────────────────────
@@ -122,7 +125,7 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
           <img
             src={banner}
             alt={profile.orgShort}
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center",
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: profile.bannerPosition ?? "center",
               WebkitMaskImage: "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)", maskImage: "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)" }}
           />
         )}
@@ -162,9 +165,13 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
               border: `3px solid ${c.accent}`,
               boxShadow: `0 4px 20px rgba(0,0,0,0.45), 0 0 0 3px ${c.cardBg}`,
             }}>
-              {/* This was a stock photograph of a real stranger standing in for an
-                  invented official. An organisation's monogram says the same
-                  thing about the layout without borrowing anyone's face. */}
+              {/* A photograph only where we hold one for that named person. The
+                  organisation cards carry no face at all — the stock strangers
+                  that used to stand in for invented officials are gone. */}
+              {profile.avatar ? (
+                <img src={profile.avatar} alt={profile.fullName}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+              ) : (
               <div style={{
                 width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center",
                 background: c.iconBg, color: c.accent,
@@ -172,6 +179,7 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
               }}>
                 {profile.logoText}
               </div>
+              )}
             </div>
             {profile.verified && (
               <div style={{

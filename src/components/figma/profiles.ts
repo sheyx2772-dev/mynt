@@ -21,6 +21,8 @@ export interface Profile {
   orgShort: string;
   department?: string;
   website?: string;   // only when the organisation actually publishes one
+  avatar?: string;    // a real photograph, supplied by us for a named person
+  bannerPosition?: string;  // square logos need a higher crop than photographs
   coverColor: string;
   coverAccent: string;
   logoText: string;
@@ -51,6 +53,26 @@ export const profiles: Profile[] = [
     verified: true,
   },
   {
+    id: "sadullayev",
+    category: "gov",
+    categoryLabel: "Agentlik Rahbari",
+    name: "Alisher Sadullayev",
+    fullName: "Alisher Sadullayev",
+    position: "Yoshlar ishlari agentligi rahbari",
+    positionRu: "Руководитель Агентства по делам молодёжи",
+    organization: "O'zbekiston Respublikasi Yoshlar ishlari agentligi",
+    orgShort: "Yoshlar ishlari agentligi",
+    department: "Agentlik rahbariyati",
+    avatar: "/figma-make/alisher-sadullayev.jpeg",
+    bannerPosition: "center 32%",
+    coverColor: "#0b2f4a",
+    coverAccent: "#38bdf8",
+    logoText: "AS",
+    socials: [],
+    tags: ["Yoshlar siyosati", "Investitsiya", "Tadbirkorlik"],
+    verified: true,
+  },
+  {
     id: "yoshlar-agentligi",
     category: "gov",
     categoryLabel: "Davlat Agentligi",
@@ -65,6 +87,7 @@ export const profiles: Profile[] = [
     // with a "Coming Soon" page and yia.uz renders from script, so neither could
     // be verified as theirs — a wrong domain on a card shown to the agency is
     // worse than no domain at all.
+    bannerPosition: "center 32%",
     coverColor: "#0b2f4a",
     coverAccent: "#38bdf8",
     logoText: "YIA",
