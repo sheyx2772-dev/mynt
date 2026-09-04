@@ -1,13 +1,10 @@
 "use server";
 
-import { activePlan } from "@/lib/plans";
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { parseHandle } from "@/lib/pricing";
 import { getUser } from "@/lib/auth";
-import { readProfileForm } from "@/lib/profile-form";
-import { isCardDesign, DEFAULT_CARD_DESIGN } from "@/lib/card-designs";
-import { isDeviceType, DEFAULT_DEVICE_TYPE } from "@/lib/devices";
+import { saveProfile } from "@/lib/profile-save";
 import { requestDesign } from "@/lib/design-requests";
 import { offerTransfer, cancelTransfer, acceptTransfer } from "@/lib/transfers";
 
@@ -27,68 +24,17 @@ export async function updateProfile(
   const parsed = parseHandle(rawHandle);
   if (!parsed) return { ok: false, error: "Handle formati noto'g'ri." };
 
-  const normalized = `${parsed.letters}${parsed.digits}`;
-
   const user = await getUser();
   if (!user) return { ok: false, error: "Avval hisobingizga kiring." };
 
-  if (!supabaseAdmin) return { ok: false, error: "Baza ulanmagan." };
+  // The write itself lives in `@/lib/profile-save`, which the mobile route
+  // also calls. What is left here is the half that is particular to a form
+  // posted from this page: who the cookie says is asking, and the shape
+  // `useActionState` expects back.
+  const result = await saveProfile(`${parsed.letters}${parsed.digits}`, user.id, formData);
+  if (!result.ok) return { ok: false, error: result.error };
 
-  // Read the current row through the ownership filter. This is the
-  // authorization check: a handle the user does not own simply is not found,
-  // and the update below carries the same filter so it cannot be widened.
-  const { data: existing } = await supabaseAdmin
-    .from("handles")
-    .select("avatar_url, banner_url, plan, plan_expires_at")
-    .eq("normalized", normalized)
-    .eq("user_id", user.id)
-    .maybeSingle();
-
-  if (!existing) return { ok: false, error: "Bu handle sizga tegishli emas." };
-
-  const design = String(formData.get("cardDesign") ?? "");
-  const device = String(formData.get("deviceType") ?? "");
-  const read = await readProfileForm(
-    formData,
-    normalized,
-    existing.avatar_url,
-    existing.banner_url,
-    activePlan(existing.plan, existing.plan_expires_at),
-  );
-  if (!read.ok) return { ok: false, error: read.error };
-
-  const { error } = await supabaseAdmin
-    .from("handles")
-    .update({
-      owner_name: read.profile.name,
-      bio: read.profile.bio,
-      links: read.profile.links,
-      avatar_url: read.profile.avatarUrl,
-      banner_url: read.profile.bannerUrl,
-      city: read.profile.city,
-      contact_email: read.profile.contactEmail,
-      phone: read.profile.phone,
-      position: read.profile.position,
-      company: read.profile.company,
-      services: read.profile.services,
-      comments_open: read.profile.commentsOpen,
-      tags: read.profile.tags,
-      // Anything the renderer does not know is refused here and by a check
-      // constraint, so a card can never reference a design that cannot draw.
-      card_design: isCardDesign(design) ? design : DEFAULT_CARD_DESIGN,
-      device_type: isDeviceType(device) ? device : DEFAULT_DEVICE_TYPE,
-    })
-    .eq("normalized", normalized)
-    .eq("user_id", user.id);
-
-  if (error) return { ok: false, error: "Saqlanmadi. Qaytadan urinib ko'ring." };
-
-  revalidatePath(`/${normalized}`);
-  revalidatePath(`/kabinet/${normalized}/tahrirlash`);
-  revalidatePath(`/kabinet/${normalized}`);
-  revalidatePath("/kabinet");
-
-  return { ok: true, saved: true, ...(read.imageFailed ? { imageFailed: true as const } : {}) };
+  return { ok: true, saved: true, ...(result.imageFailed ? { imageFailed: true as const } : {}) };
 }
 
 export type PostResult = { ok: boolean; error?: string };
