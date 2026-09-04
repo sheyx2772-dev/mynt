@@ -143,14 +143,14 @@ export default function MenuRequests({
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
       <div className="pointer-events-auto w-full max-w-md">
         {confirmation && (
-          <p className="mb-2 flex items-center justify-center gap-2 rounded-xl bg-lime px-4 py-2.5 text-center text-sm font-medium text-flex-black shadow-lg">
+          <p className="mb-2 flex items-center justify-center gap-2 rounded-input border border-line bg-white px-4 py-2.5 text-center text-[14px] leading-5 font-medium text-ink">
             <Check className="h-4 w-4 shrink-0" />
             {confirmation}
           </p>
         )}
 
         {error && !sheet && (
-          <p className="mb-2 rounded-xl bg-white px-4 py-2.5 text-center text-sm text-red-600 shadow-lg ring-1 ring-black/10">
+          <p className="mb-2 rounded-input border border-danger/30 bg-white px-4 py-2.5 text-center text-[14px] leading-5 text-danger">
             {error}
           </p>
         )}
@@ -158,7 +158,7 @@ export default function MenuRequests({
         {/* A cafe gets two buttons, a shop one, and the review is always the
             third slot — so the columns are counted rather than written. */}
         <div
-          className="grid gap-1.5 rounded-2xl bg-flex-black p-1.5 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.55)]"
+          className="grid gap-2 rounded-card border border-line bg-paper/95 p-2 backdrop-blur-[2px]"
           style={{ gridTemplateColumns: `repeat(${w.actions.length}, minmax(0, 1fr)) auto` }}
         >
           {w.actions.map((action, index) => (
@@ -168,9 +168,11 @@ export default function MenuRequests({
               onClick={() => press(action.kind)}
               disabled={pending}
               className={
+                // The first action is what the venue is paying for — calling
+                // somebody over — and it is the only lime on a guest's screen.
                 index === 0
-                  ? "flex items-center justify-center gap-2 rounded-xl bg-lime px-4 py-3 text-sm font-semibold text-flex-black disabled:opacity-60"
-                  : "flex items-center justify-center gap-2 rounded-xl bg-white/10 px-4 py-3 text-sm font-medium text-white disabled:opacity-60"
+                  ? "flex h-[52px] items-center justify-center gap-2 rounded-full bg-lime px-4 text-[16px] font-semibold text-ink transition-transform duration-[120ms] active:scale-[0.98] active:bg-lime-press disabled:bg-fill disabled:text-ink-3"
+                  : "flex h-[52px] items-center justify-center gap-2 rounded-full border border-line-2 bg-white px-4 text-[16px] font-semibold text-ink transition-transform duration-[120ms] active:scale-[0.98] active:bg-fill disabled:text-ink-3"
               }
             >
               <ActionIcon kind={action.kind} />
@@ -183,7 +185,7 @@ export default function MenuRequests({
             onClick={() => press("review")}
             disabled={pending}
             aria-label={s.menuLeaveReview}
-            className="flex items-center justify-center rounded-xl bg-white/10 px-3.5 py-3 text-white disabled:opacity-60"
+            className="flex h-[52px] items-center justify-center rounded-full border border-line-2 bg-white px-4 text-ink transition-transform duration-[120ms] active:scale-[0.98] active:bg-fill disabled:text-ink-3"
           >
             <Star className="h-4 w-4" />
           </button>
@@ -200,7 +202,7 @@ export default function MenuRequests({
         type="button"
         aria-label="Yopish"
         onClick={() => setSheet(null)}
-        className="absolute inset-0 bg-flex-black/50"
+        className="absolute inset-0 bg-ink/50"
       />
 
       <div className="relative w-full max-w-md rounded-t-[1.75rem] bg-white px-6 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
@@ -211,14 +213,14 @@ export default function MenuRequests({
               : (w.actions.find((a) => a.kind === sheet)?.label ?? s.menuCallWaiter)}
           </h2>
           <button type="button" onClick={() => setSheet(null)} aria-label="Yopish">
-            <X className="h-5 w-5 text-flex-black/40" />
+            <X className="h-5 w-5 text-ink-3" />
           </button>
         </div>
 
         {/* Asked for once and then remembered. Everything after this is
             answerable — "table 7 wants the bill" reaches somebody, "somebody
             wants the bill" reaches nobody. */}
-        <label htmlFor="req-point" className="mb-1 block text-[11px] font-medium tracking-wide text-flex-black/45 uppercase">
+        <label htmlFor="req-point" className="mb-1.5 block text-[13px] leading-[18px] font-medium text-ink-2">
           {w.pointLabel}
         </label>
         <input
@@ -228,7 +230,7 @@ export default function MenuRequests({
           inputMode="numeric"
           autoFocus={!table}
           placeholder={w.pointPlaceholder}
-          className="w-full rounded-xl border border-black/10 bg-white px-3 py-2.5 text-sm outline-none focus:border-flex-black/30"
+          className="h-[52px] w-full rounded-input border border-line-2 bg-white px-4 text-[16px] outline-none placeholder:text-ink-3 focus:border-ink"
         />
 
         {sheet === "review" && (
@@ -242,8 +244,8 @@ export default function MenuRequests({
                   aria-label={`${n}`}
                   className={
                     n <= rating
-                      ? "flex h-11 flex-1 items-center justify-center rounded-xl bg-lime text-flex-black"
-                      : "flex h-11 flex-1 items-center justify-center rounded-xl border border-black/10 text-flex-black/25"
+                      ? "flex h-11 flex-1 items-center justify-center rounded-input bg-ink text-paper"
+                      : "flex h-11 flex-1 items-center justify-center rounded-input border border-line-2 text-ink-3"
                   }
                 >
                   <Star className={n <= rating ? "h-5 w-5 fill-current" : "h-5 w-5"} />
@@ -256,7 +258,7 @@ export default function MenuRequests({
               onChange={(e) => setNote(e.target.value.slice(0, 500))}
               rows={3}
               placeholder={s.menuReviewPlaceholder}
-              className="mt-3 w-full resize-none rounded-xl border border-black/10 bg-white px-3 py-2.5 text-sm outline-none focus:border-flex-black/30"
+              className="mt-3 w-full resize-none rounded-input border border-line-2 bg-white px-4 py-3.5 text-[16px] leading-6 outline-none placeholder:text-ink-3 focus:border-ink"
             />
           </>
         )}
@@ -267,7 +269,7 @@ export default function MenuRequests({
           type="button"
           disabled={pending || (sheet !== "review" && !table.trim())}
           onClick={() => send(sheet, table.trim())}
-          className="mt-4 w-full rounded-xl bg-flex-black px-5 py-3.5 font-medium text-white disabled:opacity-40"
+          className="mt-4 h-[52px] w-full rounded-full bg-lime px-5 text-[16px] font-semibold text-ink transition-transform duration-[120ms] active:scale-[0.98] active:bg-lime-press disabled:bg-fill disabled:text-ink-3"
         >
           {s.menuReviewSend}
         </button>

@@ -44,7 +44,7 @@ export default function ProfileComments({
 
   return (
     <div className="mt-6">
-      <p className="text-[10px] font-medium tracking-[0.18em] text-white/35 uppercase">
+      <p className="text-[17px] leading-6 font-semibold">
         {labels.title}
       </p>
 
@@ -75,13 +75,13 @@ export default function ProfileComments({
             rows={2}
             maxLength={500}
             placeholder={labels.placeholder}
-            className="w-full resize-none rounded-xl border border-white/12 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white outline-none placeholder:text-white/25 focus:border-white/30"
+            className="w-full resize-none rounded-input border border-line-2 bg-white px-4 py-3.5 text-[16px] leading-6 text-ink outline-none placeholder:text-ink-3 focus:border-ink"
           />
-          {error && <p className="mt-1.5 text-xs text-red-400">{error}</p>}
+          {error && <p className="mt-1.5 text-[13px] leading-[18px] text-danger">{error}</p>}
           <button
             type="submit"
             disabled={pending || body.trim().length === 0}
-            className="mt-2 rounded-xl border border-white/12 bg-white/[0.05] px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-white uppercase transition-colors hover:border-white/30 disabled:opacity-40"
+            className="mt-2 h-[52px] rounded-full border border-line-2 bg-white px-5 text-[16px] font-semibold text-ink transition-transform duration-[120ms] active:scale-[0.98] active:bg-fill disabled:text-ink-3"
           >
             {pending ? labels.sending : labels.send}
           </button>
@@ -89,18 +89,18 @@ export default function ProfileComments({
       )}
 
       {comments.length === 0 ? (
-        <p className="mt-3 text-sm text-white/35">{labels.empty}</p>
+        <p className="mt-3 text-[16px] leading-6 text-ink-3">{labels.empty}</p>
       ) : (
-        <ul className="mt-4 divide-y divide-white/[0.07]">
+        <ul className="mt-4 divide-y divide-line">
           {comments.map((c) => (
             <li key={c.id} className="py-3">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-xs text-white/45">
+                  <p className="text-[13px] leading-[18px] text-ink-3">
                     {c.authorHandle ? (
                       <Link
                         href={`/${c.authorHandle}`}
-                        className="font-tabular transition-colors hover:text-white/80"
+                        className="num text-ink-2 transition-colors hover:text-ink"
                       >
                         {c.authorHandle}
                       </Link>
@@ -108,7 +108,7 @@ export default function ProfileComments({
                       c.authorName
                     )}
                   </p>
-                  <p className="mt-1 text-sm break-words whitespace-pre-wrap text-white/80">
+                  <p className="mt-1 text-[16px] leading-6 break-words whitespace-pre-wrap text-ink">
                     {c.body}
                   </p>
                 </div>
@@ -123,9 +123,9 @@ export default function ProfileComments({
                       })
                     }
                     aria-label="O'chirish"
-                    className="shrink-0 text-white/25 transition-colors hover:text-white/60"
+                    className="shrink-0 text-ink-3 transition-colors hover:text-danger"
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
+                    <Trash2 className="h-4 w-4" />
                   </button>
                 )}
               </div>

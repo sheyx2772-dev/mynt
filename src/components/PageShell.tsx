@@ -1,7 +1,7 @@
 import Mark from "@/components/Mark";
 import Link from "next/link";
 
-// Shared frame: dot grid, lime glow, and the wordmark linking home.
+// Shared frame: the wordmark linking home, and a measure.
 //
 // Two widths, because two kinds of page live here. A profile or a sign-in form
 // is a column and stays one — max-w-md is the right measure for reading and the
@@ -12,17 +12,27 @@ import Link from "next/link";
 // The queue asked for max-w-4xl and never got it: nested inside this, an inner
 // max-w-4xl cannot exceed the max-w-md around it. It had been 448px wide on a
 // 1440px screen since it was written.
+//
+// There used to be a blurred lime disc bleeding across the top right corner of
+// every page in the product. It was the accent used as scenery, which is the
+// one thing the accent is not for — and on a guest screen it meant the first
+// colour a stranger saw was spent on nothing.
 export default function PageShell({
   children,
   wide = false,
+  surface = "paper",
+  aside,
 }: {
   children: React.ReactNode;
   /** A working screen rather than a column of text. */
   wide?: boolean;
+  /** Which of the product's faces this page is. */
+  surface?: "paper" | "ink";
+  /** Sits opposite the wordmark. The number, where a page has one. */
+  aside?: React.ReactNode;
 }) {
   return (
-    <div className="relative min-h-full overflow-hidden">
-      <div className="absolute -top-24 right-[-4rem] h-72 w-72 rounded-full bg-lime/20 blur-[90px]" />
+    <div data-surface={surface} className="relative min-h-full">
       <div
         className={
           wide
@@ -30,13 +40,13 @@ export default function PageShell({
             : "relative mx-auto flex min-h-full max-w-md flex-col px-6 py-8 sm:py-16"
         }
       >
-        <Link
-          href="/"
-          className="mb-6 flex items-center gap-2 self-start font-display text-lg font-semibold sm:mb-10"
-        >
-          <Mark />
-          flex
-        </Link>
+        <div className="mb-6 flex h-14 items-center justify-between gap-4 sm:mb-8">
+          <Link href="/" className="flex items-center gap-2 text-[15px] font-semibold">
+            <Mark />
+            FLEX
+          </Link>
+          {aside}
+        </div>
         {children}
       </div>
     </div>

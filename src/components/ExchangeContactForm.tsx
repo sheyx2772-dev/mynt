@@ -48,8 +48,8 @@ export default function ExchangeContactForm({
 
   if (sent) {
     return (
-      <div className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-white/12 bg-white/[0.04] px-6 py-3.5 text-[11px] font-semibold tracking-[0.16em] text-white/70 uppercase">
-        <Check className="h-4 w-4 text-[color:var(--accent)]" />
+      <div className="flex h-[52px] items-center justify-center gap-2 rounded-full border border-line bg-fill px-5 text-[16px] font-semibold text-ink-2">
+        <Check className="h-5 w-5" />
         {t.sent}
       </div>
     );
@@ -59,16 +59,19 @@ export default function ExchangeContactForm({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-white/12 bg-white/[0.04] px-6 py-3.5 text-[11px] font-semibold tracking-[0.16em] text-white uppercase transition-colors hover:border-white/30 hover:bg-white/[0.09]"
+        className="flex h-[52px] w-full items-center justify-center gap-2 rounded-full border border-line-2 bg-white px-5 text-[16px] font-semibold text-ink transition-transform duration-[120ms] active:scale-[0.98] active:bg-fill"
       >
-        <UserRoundPlus className="h-4 w-4" />
+        <UserRoundPlus className="h-5 w-5" />
         {t.sendContact}
       </button>
     );
   }
 
   const field =
-    "w-full rounded-lg border border-white/12 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white outline-none placeholder:text-white/25 focus:border-white/30";
+    // 16px and not a pixel less: Android Chrome zooms the page when a field
+    // under that size takes focus, and on a form this tall the send button
+    // then leaves the screen.
+    "h-[52px] w-full rounded-input border border-line-2 bg-white px-4 text-[16px] text-ink outline-none placeholder:text-ink-3 focus:border-ink";
 
   return (
     <form
@@ -80,9 +83,9 @@ export default function ExchangeContactForm({
           else setError(result.error ?? "Yuborilmadi.");
         })
       }
-      className="mt-3 rounded-xl border border-white/12 bg-white/[0.03] p-4"
+      className="rounded-card border border-line bg-white p-4"
     >
-      <p className="text-[11px] tracking-[0.14em] text-white/45 uppercase">
+      <p className="text-[17px] leading-6 font-semibold">
         {t.reachYou}
       </p>
 
@@ -107,24 +110,24 @@ export default function ExchangeContactForm({
         />
       </div>
 
-      <p className="mt-2 text-[11px] leading-snug text-white/35">
+      <p className="mt-2 text-[13px] leading-[18px] text-ink-3">
         {t.contactHint}
       </p>
 
-      {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
+      {error && <p className="mt-2 text-[13px] leading-[18px] text-danger">{error}</p>}
 
       <div className="mt-3 flex gap-2">
         <button
           type="submit"
           disabled={pending}
-          className="flex-1 rounded-lg bg-white px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-flex-black uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="h-[52px] flex-1 rounded-full bg-ink px-5 text-[16px] font-semibold text-paper transition-transform duration-[120ms] active:scale-[0.98] disabled:bg-fill disabled:text-ink-3"
         >
           {pending ? t.sending : t.send}
         </button>
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="rounded-lg border border-white/12 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-white/50 uppercase transition-colors hover:text-white/80"
+          className="h-[52px] rounded-full px-5 text-[16px] font-medium text-ink-2"
         >
           {t.cancel}
         </button>

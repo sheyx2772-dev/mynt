@@ -44,23 +44,23 @@ export default function FollowButton({
         disabled={pending}
         className={
           following
-            ? "flex w-full items-center justify-center gap-1.5 rounded-xl border border-white/15 px-6 py-3 text-[11px] font-semibold tracking-[0.16em] text-white/55 uppercase transition-colors hover:bg-white/5 disabled:opacity-60"
-            : "flex w-full items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/[0.05] px-6 py-3 text-[11px] font-semibold tracking-[0.16em] text-white uppercase transition-colors hover:border-white/30 hover:bg-white/[0.09] disabled:opacity-60"
+            ? "flex h-[52px] w-full items-center justify-center gap-2 rounded-full border border-line bg-fill px-5 text-[16px] font-semibold text-ink-2 disabled:text-ink-3"
+            : "flex h-[52px] w-full items-center justify-center gap-2 rounded-full border border-line-2 bg-white px-5 text-[16px] font-semibold text-ink transition-transform duration-[120ms] active:scale-[0.98] active:bg-fill disabled:text-ink-3"
         }
       >
         {following ? (
           <>
-            <UserCheck className="h-4 w-4" />
+            <UserCheck className="h-5 w-5" />
             {labels.following}
           </>
         ) : (
           <>
-            <UserPlus className="h-4 w-4" />
+            <UserPlus className="h-5 w-5" />
             {labels.follow}
           </>
         )}
       </button>
-      {error && <p className="mt-2 text-center text-xs text-red-400">{error}</p>}
+      {error && <p className="mt-2 text-center text-[13px] leading-[18px] text-danger">{error}</p>}
     </div>
   );
 }

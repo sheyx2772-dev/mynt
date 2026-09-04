@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { after } from "next/server";
 import type { Metadata } from "next";
-import { Nfc } from "lucide-react";
+import { Nfc, Phone, Send } from "lucide-react";
 import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRarity } from "@/lib/pricing";
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
@@ -11,7 +11,7 @@ import { dict, menuBar, type Lang } from "@/lib/i18n";
 import { venueWords } from "@/lib/venue-words";
 import { planState } from "@/lib/venue-billing";
 import { getLang } from "@/lib/lang";
-import { PLAN_ACCENT, serviceLimit, FREE_LINK_LIMIT } from "@/lib/plans";
+import { serviceLimit, FREE_LINK_LIMIT } from "@/lib/plans";
 import { cardDesign } from "@/lib/card-designs";
 import SaveContactButton from "@/components/SaveContactButton";
 import ShareButton from "@/components/ShareButton";
@@ -19,6 +19,8 @@ import ProfileHandleSearch from "@/components/ProfileHandleSearch";
 import LangSwitch from "@/components/LangSwitch";
 import Mark from "@/components/Mark";
 import MenuView from "@/components/MenuView";
+import Plate from "@/components/ui/Plate";
+import { paperButton } from "@/components/ui/paper/Button";
 import MenuRequests from "@/components/MenuRequests";
 import { getVenueByHandle, getMenu } from "@/lib/menu";
 import ActionRow from "@/components/ActionRow";
@@ -151,6 +153,13 @@ async function VanityHandlePage({
 
       return (
         <PageShell>
+          {/* A guest reading a menu is a stranger who tapped a sticker on a
+              table. Four of our tabs along the bottom of their screen are four
+              things to press by accident on the way out — and one of them is a
+              cabinet they will never have. This was on the profile branch
+              below and missing here, so every cafe menu carried it. */}
+          <span data-no-app-bar hidden />
+
           <MenuView venue={venue} categories={categories} point={point} w={w} />
 
           <div className="mt-8 flex justify-end border-t border-black/10 pt-4">
@@ -210,117 +219,346 @@ async function VanityHandlePage({
     const banner =
       profile.bannerUrl ?? profile.team?.logoUrl ?? cardDesign(profile.cardDesign).image ?? null;
 
+    // Two quick actions above the fold, because a stranger holding a phone
+    // wants to ring or message and nothing else. Derived rather than
+    // configured: whatever the owner actually filled in.
+    const telegram = profile.links.find((l) => /telegram/i.test(l.label));
+    const telegramIndex = telegram ? profile.links.indexOf(telegram) : -1;
+
+    // No number in the header slot: it is said at full size under the name a
+    // few centimetres below, and saying it twice makes neither of them the one
+    // to read off a card.
     return (
       <PageShell>
         {/* Keeps the app bar off somebody else's card. */}
         <span data-no-app-bar hidden />
 
-        <div
-          style={{ "--accent": PLAN_ACCENT[profile.plan] } as React.CSSProperties}
-          className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0B0B0F] text-white shadow-[0_40px_80px_-30px_rgba(0,0,0,0.75)]"
-        >
-          {/* Two channels, so neither has to give way. The banner shows the
-              artwork of the card the owner actually holds — a person who tapped
-              a gold-engraved card sees that engraving here — while the accent
-              above marks whether the subscription is live. The handle sits over
-              both as a watermark, the way a serial is put on the object rather
-              than printed on its sleeve. */}
-          <div className="relative h-24 bg-[linear-gradient(160deg,#17171e_0%,#0B0B0F_75%)]">
-            {banner ? (
-              <>
-                {/* eslint-disable-next-line @next/next/no-img-element -- a static file in public/, sized by CSS */}
-                <img
-                  src={banner}
-                  alt=""
-                  aria-hidden
-                  className="absolute inset-0 h-full w-full object-cover opacity-60"
-                />
-                {/* The artwork is a card face, not a header: it has to sink far
-                    enough for white text and a lapping avatar to sit on it. */}
-                <div
-                  aria-hidden
-                  className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,11,15,0.35)_0%,rgba(11,11,15,0.8)_100%)]"
-                />
-              </>
-            ) : (
-              <div
-                aria-hidden
-                className="absolute inset-0 opacity-[0.16]"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(85% 130% at 12% -20%, var(--accent) 0%, transparent 62%)",
+        {/* No card around the card.
+            This used to be a black slab floating on the page with a shadow
+            under it, which is an application's idea of a profile. What a
+            stranger has in their hand is a document: a face, a name, a number,
+            and a list of ways to reach somebody. So the page is the sheet, and
+            the only boxes on it are the lists. */}
+        {/* The physical thing, above the person.
+            Somebody arrives here by touching a card, and the first thing on
+            the screen should be the card they are holding — same artwork, same
+            number. It used to be blurred out under a dark gradient to make
+            room for white text, which meant an owner who paid for an engraved
+            face never saw it anywhere. Here it is the object: full bleed,
+            printed aspect ratio, and nothing written over it. */}
+        {banner && (
+          <div className="relative mb-6 aspect-[1.586/1] overflow-hidden rounded-card border border-line bg-fill">
+            {/* eslint-disable-next-line @next/next/no-img-element -- a static file in public/, sized by CSS */}
+            <img
+              src={banner}
+              alt=""
+              aria-hidden
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          </div>
+        )}
+
+        <div className="flex items-start justify-between gap-4">
+          {profile.avatarUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
+            <img
+              src={profile.avatarUrl}
+              alt={profile.name}
+              width={88}
+              height={88}
+              className="h-22 w-22 shrink-0 rounded-full bg-fill object-cover"
+            />
+          ) : (
+            <div className="flex h-22 w-22 shrink-0 items-center justify-center rounded-full bg-ink font-display text-[32px] font-semibold text-paper">
+              {profile.name
+                .split(" ")
+                .map((part) => part[0])
+                .join("")
+                .slice(0, 2)}
+            </div>
+          )}
+
+          <ShareButton handle={normalized} name={profile.name} />
+        </div>
+
+        <h1 className="mt-5 text-[24px] leading-7 font-semibold tracking-[-0.01em]">
+          {profile.name}
+        </h1>
+
+        {(profile.position || profile.company) && (
+          <p className="mt-1 text-[16px] leading-6 text-ink-2">
+            {[profile.position, profile.company].filter(Boolean).join(" · ")}
+          </p>
+        )}
+
+        <div className="mt-4">
+          <Plate n={normalized} size="lg" />
+        </div>
+
+        {profile.bio && (
+          <p className="mt-4 text-[16px] leading-6 text-ink-2">{profile.bio}</p>
+        )}
+
+        {profile.tags.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {profile.tags.map((tag) => (
+              <span
+                key={tag}
+                className="inline-flex h-8 items-center rounded-full bg-fill px-3 text-[13px] font-medium text-ink-2"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {(profile.phone || telegram) && (
+          <div className="mt-5 grid grid-cols-2 gap-2">
+            {profile.phone && (
+              <a
+                href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
+                className={paperButton.secondary}
+              >
+                <Phone className="h-5 w-5" />
+                {t.call}
+              </a>
+            )}
+            {telegram && (
+              <a
+                href={`/${normalized}/go?to=${telegramIndex}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={paperButton.secondary}
+              >
+                <Send className="h-5 w-5" />
+                Telegram
+              </a>
+            )}
+          </div>
+        )}
+
+        {!isOwner && (
+          <div className="mt-3 flex flex-col gap-2">
+            <RecommendButton
+              handle={normalized}
+              count={profile.recommendCount}
+              recommended={viewerRecommends}
+              recommenders={recommenders}
+              labels={{
+                recommend: t.recommend,
+                recommended: t.recommended,
+                whoDid: t.whoRecommended,
+              }}
+            />
+
+            <FollowButton
+              handle={normalized}
+              initialFollowing={following}
+              labels={{ follow: t.follow, following: t.following }}
+            />
+
+            {/* Premium, and only for a visitor: the owner has no reason to
+                send themselves a contact, and seeing the form on their own
+                page would read as something they are meant to fill in. */}
+            {profile.plan === "premium" && (
+              <ExchangeContactForm
+                handle={normalized}
+                source={source ?? undefined}
+                t={{
+                  sent: t.sent,
+                  sendContact: t.sendContact,
+                  reachYou: t.reachYou(firstName),
+                  contactHint: t.contactHint(firstName),
+                  yourName: t.yourName,
+                  phone: t.phone,
+                  company: t.company,
+                  note: t.note,
+                  send: t.send,
+                  sending: t.sending,
+                  cancel: t.cancel,
                 }}
               />
             )}
-            <span
-              aria-hidden
-              className="pointer-events-none absolute top-5 left-6 font-display text-[2.6rem] leading-none font-semibold tracking-[0.08em] text-[color:var(--accent)] opacity-[0.09] select-none"
-            >
-              {normalized}
-            </span>
-            <div className="absolute top-4 right-4 z-10">
-              <ShareButton handle={normalized} name={profile.name} />
-            </div>
           </div>
+        )}
 
-          <div className="relative px-6 pb-6">
-            <div className="-mt-10 mb-5">
-              {profile.avatarUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
-                <img
-                  src={profile.avatarUrl}
-                  alt={profile.name}
-                  className="h-20 w-20 rounded-xl border border-white/15 object-cover shadow-[0_12px_30px_-12px_rgba(0,0,0,0.9)]"
-                />
-              ) : (
-                <div className="flex h-20 w-20 items-center justify-center rounded-xl border border-white/15 bg-[#15151b] font-display text-xl font-semibold tracking-wide text-white/80">
-                  {profile.name
-                    .split(" ")
-                    .map((p) => p[0])
-                    .join("")}
-                </div>
-              )}
-            </div>
-
-            <h1 className="font-display text-[1.65rem] leading-tight font-semibold tracking-tight">
-              {profile.name}
-            </h1>
-
-            {(profile.position || profile.company) && (
-              <p className="mt-2 text-[11px] font-medium tracking-[0.18em] text-white/45 uppercase">
-                {[profile.position, profile.company].filter(Boolean).join(" · ")}
-              </p>
-            )}
-
-            {lastSeen && (
-              <p className="mt-2 text-xs text-[color:var(--accent)]">
-                {t.lastSeen} — {lastSeen}
-              </p>
-            )}
-
-            {profile.bio && (
-              <p className="mt-4 text-sm leading-relaxed text-white/60">{profile.bio}</p>
-            )}
-
-            {profile.tags.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5">
-                {profile.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[10px] tracking-[0.14em] text-white/30 uppercase"
-                  >
-                    {tag}
-                  </span>
-                ))}
+        <div className="mt-6 flex gap-8 border-t border-line pt-5">
+          {(profile.followerCount > 0 || followingCount > 0) && (
+            <>
+              <div>
+                <p className="num text-[17px] leading-6 font-semibold">
+                  {profile.followerCount}
+                </p>
+                <p className="text-[13px] leading-[18px] text-ink-3">{t.followers}</p>
               </div>
+              <div>
+                <p className="num text-[17px] leading-6 font-semibold">{followingCount}</p>
+                <p className="text-[13px] leading-[18px] text-ink-3">{t.follows}</p>
+              </div>
+            </>
+          )}
+          <div>
+            <p className="num text-[17px] leading-6 font-semibold">{profile.viewCount}</p>
+            <p className="text-[13px] leading-[18px] text-ink-3">{t.views}</p>
+          </div>
+          {lastSeen && (
+            <div>
+              <p className="text-[17px] leading-6 font-semibold">{lastSeen}</p>
+              <p className="text-[13px] leading-[18px] text-ink-3">{t.lastSeen}</p>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-5 flex gap-6 border-b border-line text-[15px]">
+          <Link
+            href={`/${normalized}`}
+            className={
+              tab === "vizitka"
+                ? "-mb-px border-b-2 border-ink pb-2.5 font-semibold"
+                : "-mb-px border-b-2 border-transparent pb-2.5 text-ink-3"
+            }
+          >
+            {t.card}
+          </Link>
+          <Link
+            href={`/${normalized}?bolim=postlar`}
+            className={
+              tab === "postlar"
+                ? "-mb-px flex items-center gap-1.5 border-b-2 border-ink pb-2.5 font-semibold"
+                : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-ink-3"
+            }
+          >
+            {t.posts}
+            {profile.postCount > 0 && (
+              <span className="num text-ink-3">{profile.postCount}</span>
+            )}
+          </Link>
+        </div>
+
+        {tab === "vizitka" && (
+          <div className="mt-5 overflow-hidden rounded-card border border-line bg-white">
+            {profile.phone && (
+              <ActionRow
+                label={t.call}
+                icon="call"
+                value={profile.phone}
+                href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
+              />
+            )}
+            {profile.contactEmail && (
+              <ActionRow
+                label={t.email}
+                icon="email"
+                value={profile.contactEmail}
+                href={`mailto:${profile.contactEmail}`}
+              />
+            )}
+            {profile.city && (
+              <ActionRow
+                label={t.address}
+                icon="Veb-sayt"
+                value={profile.city}
+                href={`/rezidentlar?q=${encodeURIComponent(profile.city)}`}
+              />
+            )}
+            {/* Stored in full, shown by plan: an owner who fills in eight and
+                lets premium lapse keeps all eight in the form and gets them
+                back on renewal. */}
+            {/* Labelled with the company's name rather than "Veb-sayt", which
+                the member may also have: two rows reading the same word and
+                pointing at different places is worse than either one alone. */}
+            {profile.team?.website && (
+              <ActionRow
+                label={profile.team.name}
+                icon="Veb-sayt"
+                value={linkValue({ label: "Veb-sayt", href: profile.team.website })}
+                href={profile.team.website}
+                external
+              />
             )}
 
-            {/* A rectangle, not a pill, and white rather than brand-filled. A
-                saturated lime slab is the loudest thing on a screen and reads as
-                an app's call to action; the card wants the quietest possible
-                statement of the one thing to do. */}
-            <div className="mt-6 flex flex-col gap-2">
-              <div className="min-w-0">
+            {profile.links
+              .map((link, index) => ({ link, index }))
+              .slice(0, profile.plan === "premium" ? undefined : FREE_LINK_LIMIT)
+              .map(({ link, index }) => (
+                <ActionRow
+                  key={link.href}
+                  // A platform names itself; only "Uchrashuv" and "Veb-sayt"
+                  // are ours to translate.
+                  label={
+                    link.label === "Uchrashuv"
+                      ? t.meeting
+                      : link.label === "Veb-sayt"
+                        ? t.website
+                        : link.label
+                  }
+                  icon={link.label}
+                  value={linkValue(link)}
+                  // Routed through /go so the click is counted; the destination
+                  // is resolved from this index server-side, not from the URL.
+                  href={`/${normalized}/go?to=${index}`}
+                  external
+                />
+              ))}
+          </div>
+        )}
+
+        {tab === "vizitka" && profile.services.length > 0 && (
+          <div className="mt-6">
+            <h2 className="mb-2 text-[17px] leading-6 font-semibold">{t.services}</h2>
+            <ul className="overflow-hidden rounded-card border border-line bg-white">
+              {profile.services.slice(0, serviceLimit(profile.plan)).map((service) => (
+                <li
+                  key={service.name}
+                  className="flex min-h-[56px] items-center justify-between gap-4 border-b border-line px-4 py-3 last:border-b-0"
+                >
+                  <span className="min-w-0 text-[16px] leading-6">{service.name}</span>
+                  {service.price && (
+                    <span className="num shrink-0 text-[16px] leading-6 font-semibold">
+                      {service.price}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {tab === "vizitka" && profile.commentsOpen && (
+          <ProfileComments
+            handle={normalized}
+            comments={comments}
+            viewerId={viewer?.id ?? null}
+            ownerId={profile.userId}
+            labels={{
+              title: t.comments,
+              placeholder: t.commentPlaceholder,
+              send: t.commentSend,
+              sending: t.commentSending,
+              empty: t.commentsEmpty,
+              signIn: t.commentSignIn,
+            }}
+          />
+        )}
+
+        {isOwner && (
+          <Link
+            href={`/kabinet/${normalized}`}
+            className={`${paperButton.secondary} mt-5 w-full`}
+          >
+            Tahrirlash
+          </Link>
+        )}
+
+        {/* The one lime on this screen, and it stays on it: a stranger who
+            scrolled to the services should not have to scroll back to save the
+            contact they came for. Room is reserved below so the last row is
+            never sitting under the bar. */}
+        {!isOwner && (
+          <>
+            <div className="h-[92px]" aria-hidden />
+            <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper/95 px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] backdrop-blur-[2px]">
+              <div className="mx-auto max-w-md">
                 <SaveContactButton
                   fullName={profile.name}
                   handle={normalized}
@@ -330,241 +568,12 @@ async function VanityHandlePage({
                   position={profile.position}
                   company={profile.company}
                   label={t.saveContact}
+                  savedLabel={t.contactSaved}
                 />
               </div>
-              {!isOwner && (
-                <RecommendButton
-                  handle={normalized}
-                  count={profile.recommendCount}
-                  recommended={viewerRecommends}
-                  recommenders={recommenders}
-                  labels={{
-                    recommend: t.recommend,
-                    recommended: t.recommended,
-                    whoDid: t.whoRecommended,
-                  }}
-                />
-              )}
-
-              {!isOwner && <FollowButton
-                  handle={normalized}
-                  initialFollowing={following}
-                  labels={{ follow: t.follow, following: t.following }}
-                />}
-
-              {/* Premium, and only for a visitor: the owner has no reason to
-                  send themselves a contact, and seeing the form on their own
-                  page would read as something they are meant to fill in. */}
-              {!isOwner && profile.plan === "premium" && (
-                <ExchangeContactForm
-                  handle={normalized}
-                  source={source ?? undefined}
-                  t={{
-                    sent: t.sent,
-                    sendContact: t.sendContact,
-                    reachYou: t.reachYou(firstName),
-                    contactHint: t.contactHint(firstName),
-                    yourName: t.yourName,
-                    phone: t.phone,
-                    company: t.company,
-                    note: t.note,
-                    send: t.send,
-                    sending: t.sending,
-                    cancel: t.cancel,
-                  }}
-                />
-              )}
             </div>
-
-            <div className="mt-6 flex gap-7 border-t border-white/[0.08] pt-5">
-              {(profile.followerCount > 0 || followingCount > 0) && (
-                <>
-                  <div>
-                    <p className="font-display text-base font-semibold tabular-nums">
-                      {profile.followerCount}
-                    </p>
-                    <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
-                      {t.followers}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-display text-base font-semibold tabular-nums">
-                      {followingCount}
-                    </p>
-                    <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
-                      {t.follows}
-                    </p>
-                  </div>
-                </>
-              )}
-              <div>
-                <p className="font-display text-base font-semibold tabular-nums">
-                  {profile.viewCount}
-                </p>
-                <p className="mt-0.5 text-[10px] tracking-[0.14em] text-white/30 uppercase">
-                  {t.views}
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-6 flex gap-7 border-b border-white/[0.08] text-[11px] tracking-[0.16em] uppercase">
-              <Link
-                href={`/${normalized}`}
-                className={
-                  tab === "vizitka"
-                    ? "-mb-px border-b border-[color:var(--accent)] pb-3 font-medium text-white"
-                    : "-mb-px border-b border-transparent pb-3 text-white/35 transition-colors hover:text-white/70"
-                }
-              >
-                {t.card}
-              </Link>
-              <Link
-                href={`/${normalized}?bolim=postlar`}
-                className={
-                  tab === "postlar"
-                    ? "-mb-px flex items-center gap-1.5 border-b border-[color:var(--accent)] pb-3 font-medium text-white"
-                    : "-mb-px flex items-center gap-1.5 border-b border-transparent pb-3 text-white/35 transition-colors hover:text-white/70"
-                }
-              >
-                {t.posts}
-                {profile.postCount > 0 && (
-                  <span className="font-tabular text-white/25">{profile.postCount}</span>
-                )}
-              </Link>
-            </div>
-
-            {tab === "vizitka" && (
-              <div className="mt-5 divide-y divide-white/[0.07] overflow-hidden rounded-xl border border-white/[0.08]">
-                {profile.phone && (
-                  <ActionRow
-                    label={t.call}
-                    icon="call"
-                    value={profile.phone}
-                    href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
-                  />
-                )}
-                {profile.contactEmail && (
-                  <ActionRow
-                    label={t.email}
-                    icon="email"
-                    value={profile.contactEmail}
-                    href={`mailto:${profile.contactEmail}`}
-                  />
-                )}
-                {profile.city && (
-                  <ActionRow label={t.address} icon="Veb-sayt" value={profile.city} href={`/rezidentlar?q=${encodeURIComponent(profile.city)}`} />
-                )}
-                {/* Stored in full, shown by plan: an owner who fills in eight
-                    and lets premium lapse keeps all eight in the form and gets
-                    them back on renewal. */}
-                {/* Labelled with the company's name rather than "Veb-sayt",
-                    which the member may also have: two rows reading the same
-                    word and pointing at different places is worse than either
-                    one alone. */}
-                {profile.team?.website && (
-                  <ActionRow
-                    label={profile.team.name}
-                    icon="Veb-sayt"
-                    value={linkValue({ label: "Veb-sayt", href: profile.team.website })}
-                    href={profile.team.website}
-                    external
-                  />
-                )}
-
-                {profile.links
-                  .map((link, index) => ({ link, index }))
-                  .slice(0, profile.plan === "premium" ? undefined : FREE_LINK_LIMIT)
-                  .map(({ link, index }) => (
-                    <ActionRow
-                      key={link.href}
-                      // A platform names itself; only "Uchrashuv" and
-                      // "Veb-sayt" are ours to translate.
-                      label={
-                        link.label === "Uchrashuv"
-                          ? t.meeting
-                          : link.label === "Veb-sayt"
-                            ? t.website
-                            : link.label
-                      }
-                      icon={link.label}
-                      value={linkValue(link)}
-                      // Routed through /go so the click is counted; the
-                      // destination is resolved from this index server-side,
-                      // not from the URL.
-                      href={`/${normalized}/go?to=${index}`}
-                      external
-                    />
-                  ))}
-              </div>
-            )}
-
-            {tab === "vizitka" && profile.services.length > 0 && (
-              <div className="mt-6">
-                <p className="text-[10px] font-medium tracking-[0.18em] text-white/35 uppercase">
-                  {t.services}
-                </p>
-                <ul className="mt-3 divide-y divide-white/[0.07] overflow-hidden rounded-xl border border-white/[0.08]">
-                  {profile.services.slice(0, serviceLimit(profile.plan)).map((service) => (
-                    <li
-                      key={service.name}
-                      className="flex items-baseline justify-between gap-4 px-4 py-3"
-                    >
-                      <span className="min-w-0 text-sm text-white/85">{service.name}</span>
-                      {service.price && (
-                        <span className="shrink-0 font-tabular text-sm text-[color:var(--accent)]">
-                          {service.price}
-                        </span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {tab === "vizitka" && profile.commentsOpen && (
-              <ProfileComments
-                handle={normalized}
-                comments={comments}
-                viewerId={viewer?.id ?? null}
-                ownerId={profile.userId}
-                labels={{
-                  title: t.comments,
-                  placeholder: t.commentPlaceholder,
-                  send: t.commentSend,
-                  sending: t.commentSending,
-                  empty: t.commentsEmpty,
-                  signIn: t.commentSignIn,
-                }}
-              />
-            )}
-
-            {isOwner && (
-              <Link
-                href={`/kabinet/${normalized}`}
-                className="mt-4 block rounded-xl border border-white/12 py-3 text-center text-[11px] font-medium tracking-[0.16em] text-white/55 uppercase transition-colors hover:border-white/25 hover:text-white"
-              >
-                Tahrirlash
-              </Link>
-            )}
-
-            {/* The foot of the card, the way an object is marked: what it is
-                and nothing else. */}
-            <div className="mt-7 flex justify-end border-t border-white/[0.08] pt-5">
-              {profile.plan === "free" && (
-                <Link
-                  href="/tarif"
-                  className="flex items-center gap-1.5 text-[10px] tracking-[0.2em] text-white/25 uppercase transition-colors hover:text-white/45"
-                >
-                  <span className="h-1 w-1 rounded-full bg-[color:var(--accent)]" />
-                  Flex
-                </Link>
-              )}
-            </div>
-
-
-          </div>
-        </div>
-
+          </>
+        )}
 
         {/* Under the card, not above it.
             Somebody opening a profile tapped a physical card or followed a
