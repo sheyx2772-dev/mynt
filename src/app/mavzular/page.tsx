@@ -136,7 +136,7 @@ function PlaqueSample() {
         company="MC LEGAL"
         lastSeen="Oxirgi faollik: 2 kun oldin"
         bio="Korporativ huquq, shartnomalar va sud vakilligi — 12 yillik amaliyot."
-        badges={[{ label: "Top #1 shu hafta" }, { label: "Obuna bo'lish", href: "#" }]}
+        badges={[{ label: "Top #1" }, { label: "Obuna", href: "#" }]}
         stats={[
           { value: "823", label: "Ko'rish" },
           { value: "12", label: "Tavsiya" },
@@ -154,7 +154,7 @@ function PlaqueSample() {
       >
         <a
           href="#"
-          className="flex h-14 w-full items-center justify-center rounded-full bg-lime font-serif text-[16px] font-bold tracking-[0.08em] text-on-accent uppercase"
+          className="flex h-12 w-full items-center justify-center rounded-full bg-lime font-serif text-[13px] font-bold tracking-[0.09em] text-on-accent uppercase"
         >
           Kontaktni saqlash
         </a>

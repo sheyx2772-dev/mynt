@@ -461,6 +461,36 @@
   background-image: var(--page-pattern, none);
 }
 
+/* Arriving.
+ *
+ * The panel comes up and settles; its contents follow a beat behind, staggered
+ * by row. Two keyframes, 700ms and 550ms, on an ease that decelerates hard —
+ * the curve matters more than the distance, because a linear entrance reads as
+ * a page that is still loading rather than one that has arrived.
+ *
+ * Both are off under prefers-reduced-motion by the blanket rule further down. */
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+}
+
+.enter {
+  animation: enter 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.rise-in {
+  animation: rise-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 /* Gold struck into black.
  *
  * Two text shadows and no more: a dark line under the glyph and a warm light
