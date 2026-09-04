@@ -560,7 +560,6 @@ export const profiles: Profile[] = [
     position: "Startap ekotizimi va venchur investitsiyalar menejeri",
     positionRu: "Менеджер по развитию стартап-экосистемы и венчурным инвестициям",
     department: "Women in Tech Uzbekistan direktori yordamchisi",
-    education: "IT Park University",
     avatar: "/figma-make/vaisbek-matyakubov.jpeg",
     organization: "IT Park Uzbekistan",
     orgShort: "IT Park Uzbekistan",
