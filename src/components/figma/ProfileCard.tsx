@@ -13,6 +13,11 @@ const imgProkuratura = "/figma-make/image-19.png";
 const imgYIA = "/figma-make/yia-banner.jpeg";            // supplied by the client
 const imgUzCombinator = "/figma-make/uzcombinator-banner.jpeg";  // supplied by the client
 const imgMOQ = "/figma-make/moq-banner.jpeg";                    // supplied by the client
+const imgKorzinka   = "/figma-make/korzinka-banner.png";
+const imgMU         = "/figma-make/mu-banner.png";
+const imgFintellect = "/figma-make/fintellect-banner.jpeg";
+const imgAyol       = "/figma-make/ayol-banner.jpeg";
+const imgEYU        = "/figma-make/eyu-banner.jpeg";
 
 const BANNER: Record<string, string> = {
   "tashkent-inn": imgStartupGarage,
@@ -30,6 +35,11 @@ const BANNER: Record<string, string> = {
   "uzreport":     imgICTWeek,
   "yakubov":           imgYoshlarVentures,
   "umarov":            imgMOQ,
+  "khashimov":         imgKorzinka,
+  "ishmukhamedov":     imgMU,
+  "kurbanova":         imgFintellect,
+  "ibragimova":        imgAyol,
+  "ismailova":         imgEYU,
   "sharipov":          imgUnitedVentures,
   "shukurlaev":        imgUnitedVentures,
   "nodirov":           imgITPark,
@@ -60,32 +70,32 @@ const CFG: Record<string, Cfg> = {
   "chamber":      { overlay:"linear-gradient(180deg,rgba(28,12,80,.45) 0%,rgba(45,18,120,.84) 100%)",cardBg:"#1c0c50", bodyBg:"#0e0630", accent:"#c4b5fd", accent2:"#8b5cf6", iconBg:"#2a1268" },
   // Five founders and directors, each on a ground of its own so no two read
   // alike. No banner artwork for any of them yet — the client is sending it.
-  "khashimov":    { overlay:"linear-gradient(180deg,rgba(8,15,6,.35) 0%,rgba(18,36,15,.86) 100%)", cardBg:"#12240f", bodyBg:"#080f06", accent:"#fbbf24", accent2:"#f59e0b", iconBg:"#1c3517" },
-  "ishmukhamedov":{ overlay:"linear-gradient(180deg,rgba(18,8,24,.35) 0%,rgba(36,18,46,.86) 100%)", cardBg:"#24122e", bodyBg:"#140a1a", accent:"#d8b4fe", accent2:"#a855f7", iconBg:"#341a42" },
-  "kurbanova":    { overlay:"linear-gradient(180deg,rgba(5,16,24,.35) 0%,rgba(10,31,46,.86) 100%)", cardBg:"#0a1f2e", bodyBg:"#05121b", accent:"#67e8f9", accent2:"#06b6d4", iconBg:"#0f3247" },
-  "ibragimova":   { overlay:"linear-gradient(180deg,rgba(22,8,16,.35) 0%,rgba(43,16,32,.86) 100%)", cardBg:"#2b1020", bodyBg:"#180913", accent:"#f9a8d4", accent2:"#ec4899", iconBg:"#3d1830" },
-  "ismailova":    { overlay:"linear-gradient(180deg,rgba(10,14,26,.35) 0%,rgba(20,29,51,.86) 100%)", cardBg:"#141d33", bodyBg:"#0b111f", accent:"#93c5fd", accent2:"#3b82f6", iconBg:"#1e2b48" },
+  "khashimov":    { overlay:"linear-gradient(180deg,rgba(61,20,24,.34) 0%,rgba(61,20,24,.86) 100%)", cardBg:"#3d1418", bodyBg:"#2a0d10", accent:"#ff9a9a", accent2:"#e40000", iconBg:"#521c21" },
+  "ishmukhamedov":{ overlay:"linear-gradient(180deg,rgba(58,47,36,.34) 0%,rgba(58,47,36,.86) 100%)", cardBg:"#3a2f24", bodyBg:"#29211a", accent:"#e0c8a4", accent2:"#a8906c", iconBg:"#4d3f30" },
+  "kurbanova":    { overlay:"linear-gradient(180deg,rgba(16,53,70,.30) 0%,rgba(16,53,70,.86) 100%)", cardBg:"#103546", bodyBg:"#0b2635", accent:"#7dd3fc", accent2:"#22d3ee", iconBg:"#17475d" },
+  "ibragimova":   { overlay:"linear-gradient(180deg,rgba(18,70,63,.30) 0%,rgba(18,70,63,.86) 100%)", cardBg:"#12463f", bodyBg:"#0c332e", accent:"#e4cca8", accent2:"#d4b384", iconBg:"#1a5b52" },
+  "ismailova":    { overlay:"linear-gradient(180deg,rgba(16,48,94,.18) 0%,rgba(16,48,94,.82) 100%)", cardBg:"#10305e", bodyBg:"#0a2246", accent:"#9dc0f0", accent2:"#4a7fd4", iconBg:"#1a4278" },
   // Olympic committee — gold on a deeper navy than the city administration's,
   // so the two do not read as the same card.
-  "umarov":       { overlay:"linear-gradient(180deg,rgba(8,14,28,.35) 0%,rgba(16,24,47,.86) 100%)", cardBg:"#10182f", bodyBg:"#080e1c", accent:"#f5c451", accent2:"#d4a02e", iconBg:"#1a2440" },
+  "umarov":       { overlay:"linear-gradient(180deg,rgba(26,39,72,.24) 0%,rgba(26,39,72,.84) 100%)", cardBg:"#1a2748", bodyBg:"#121b33", accent:"#f5c451", accent2:"#d4a02e", iconBg:"#263558" },
   // United Ventures pair — same family as the fund's own card above.
-  "sharipov":     { overlay:"linear-gradient(180deg,rgba(5,38,20,.45) 0%,rgba(8,55,30,.84) 100%)", cardBg:"#052614", bodyBg:"#021209", accent:"#6ee7b7", accent2:"#10b981", iconBg:"#073520" },
-  "shukurlaev":   { overlay:"linear-gradient(180deg,rgba(5,38,20,.45) 0%,rgba(8,55,30,.84) 100%)", cardBg:"#052614", bodyBg:"#021209", accent:"#6ee7b7", accent2:"#10b981", iconBg:"#073520" },
-  "nodirov":      { overlay:"linear-gradient(180deg,rgba(14,48,6,.45) 0%,rgba(22,68,8,.82) 100%)", cardBg:"#0e3006", bodyBg:"#071803", accent:"#a3e635", accent2:"#84cc16", iconBg:"#174008" },
+  "sharipov":     { overlay:"linear-gradient(180deg,rgba(12,64,35,.28) 0%,rgba(12,64,35,.84) 100%)", cardBg:"#0c4023", bodyBg:"#082d18", accent:"#86efac", accent2:"#22c55e", iconBg:"#135233" },
+  "shukurlaev":   { overlay:"linear-gradient(180deg,rgba(12,64,35,.28) 0%,rgba(12,64,35,.84) 100%)", cardBg:"#0c4023", bodyBg:"#082d18", accent:"#86efac", accent2:"#22c55e", iconBg:"#135233" },
+  "nodirov":      { overlay:"linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)", cardBg:"#17470c", bodyBg:"#0f3208", accent:"#bef264", accent2:"#84cc16", iconBg:"#1f5c12" },
   // AloqaVentures — a teal of its own, so it does not read as one of the greens.
-  "gaybulloev":   { overlay:"linear-gradient(180deg,rgba(3,24,26,.35) 0%,rgba(6,42,46,.86) 100%)", cardBg:"#062a2e", bodyBg:"#03181a", accent:"#2dd4bf", accent2:"#14b8a6", iconBg:"#0a3d43" },
-  "sanakulov":    { overlay:"linear-gradient(180deg,rgba(3,24,26,.35) 0%,rgba(6,42,46,.86) 100%)", cardBg:"#062a2e", bodyBg:"#03181a", accent:"#2dd4bf", accent2:"#14b8a6", iconBg:"#0a3d43" },
+  "gaybulloev":   { overlay:"linear-gradient(180deg,rgba(12,67,72,.24) 0%,rgba(12,67,72,.84) 100%)", cardBg:"#0c4348", bodyBg:"#082f33", accent:"#5eead4", accent2:"#14b8a6", iconBg:"#12565c" },
+  "sanakulov":    { overlay:"linear-gradient(180deg,rgba(12,67,72,.24) 0%,rgba(12,67,72,.84) 100%)", cardBg:"#0c4348", bodyBg:"#082f33", accent:"#5eead4", accent2:"#14b8a6", iconBg:"#12565c" },
   // Youth agency — its lockup is already on deep blue, so the wash stays light.
-  "sadullayev":   { overlay:"linear-gradient(180deg,rgba(6,20,40,.30) 0%,rgba(11,47,74,.86) 100%)", cardBg:"#0b2f4a", bodyBg:"#061a2b", accent:"#38bdf8", accent2:"#0284c7", iconBg:"#123c5c" },
-  "yoshlar-agentligi": { overlay:"linear-gradient(180deg,rgba(6,20,40,.30) 0%,rgba(11,47,74,.86) 100%)", cardBg:"#0b2f4a", bodyBg:"#061a2b", accent:"#38bdf8", accent2:"#0284c7", iconBg:"#123c5c" },
+  "sadullayev":   { overlay:"linear-gradient(180deg,rgba(10,32,58,.24) 0%,rgba(18,64,95,.82) 100%)", cardBg:"#12405f", bodyBg:"#0c2c43", accent:"#7dd3fc", accent2:"#38bdf8", iconBg:"#1b5478" },
+  "yoshlar-agentligi": { overlay:"linear-gradient(180deg,rgba(10,32,58,.24) 0%,rgba(18,64,95,.82) 100%)", cardBg:"#12405f", bodyBg:"#0c2c43", accent:"#7dd3fc", accent2:"#38bdf8", iconBg:"#1b5478" },
   // Yoshlar Ventures — its banner is on white and needs a heavier wash to sit
   // on a dark card; matches the fund's own entry above.
-  "yakubov":      { overlay:"linear-gradient(180deg,rgba(30,14,0,.40) 0%,rgba(60,25,0,.82) 100%)", cardBg:"#1e0e00", bodyBg:"#0f0700", accent:"#fb923c", accent2:"#ea580c", iconBg:"#2e1600" },
+  "yakubov":      { overlay:"linear-gradient(180deg,rgba(58,32,8,.30) 0%,rgba(58,32,8,.84) 100%)", cardBg:"#3a2008", bodyBg:"#281505", accent:"#fdba74", accent2:"#f97316", iconBg:"#4d2c0c" },
   // UzCombinator — the banner is the brand orange itself, so barely wash it at
   // the top or the mark turns brown.
-  "ismatov":      { overlay:"linear-gradient(180deg,rgba(60,25,0,.12) 0%,rgba(28,17,9,.80) 100%)", cardBg:"#1c1109", bodyBg:"#0d0804", accent:"#f97316", accent2:"#ea580c", iconBg:"#2e1c0e" },
-  "xondamirovna": { overlay:"linear-gradient(180deg,rgba(60,25,0,.12) 0%,rgba(28,17,9,.80) 100%)", cardBg:"#1c1109", bodyBg:"#0d0804", accent:"#f97316", accent2:"#ea580c", iconBg:"#2e1c0e" },
-  "ismailov":     { overlay:"linear-gradient(180deg,rgba(60,25,0,.12) 0%,rgba(28,17,9,.80) 100%)", cardBg:"#1c1109", bodyBg:"#0d0804", accent:"#f97316", accent2:"#ea580c", iconBg:"#2e1c0e" },
+  "ismatov":      { overlay:"linear-gradient(180deg,rgba(53,32,15,.10) 0%,rgba(53,32,15,.80) 100%)", cardBg:"#35200f", bodyBg:"#24160a", accent:"#fdba74", accent2:"#f97316", iconBg:"#472c15" },
+  "xondamirovna": { overlay:"linear-gradient(180deg,rgba(53,32,15,.10) 0%,rgba(53,32,15,.80) 100%)", cardBg:"#35200f", bodyBg:"#24160a", accent:"#fdba74", accent2:"#f97316", iconBg:"#472c15" },
+  "ismailov":     { overlay:"linear-gradient(180deg,rgba(53,32,15,.10) 0%,rgba(53,32,15,.80) 100%)", cardBg:"#35200f", bodyBg:"#24160a", accent:"#fdba74", accent2:"#f97316", iconBg:"#472c15" },
   "uzreport":     { overlay:"linear-gradient(180deg,rgba(5,18,60,.48) 0%,rgba(8,28,90,.88) 100%)",   cardBg:"#05123c", bodyBg:"#020a22", accent:"#38bdf8", accent2:"#0284c7", iconBg:"#0a1e5a" },
 };
 const getCfg = (p: Profile): Cfg =>
