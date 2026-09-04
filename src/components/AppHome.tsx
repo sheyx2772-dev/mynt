@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Calculator, ChevronRight, CreditCard, Nfc, Store, User, Users } from "lucide-react";
 import HandleChecker from "@/components/HandleChecker";
+import FloatingProduct from "@/components/FloatingProduct";
 import LoadoutStrip, { type StripItem } from "@/components/LoadoutStrip";
 import OwnerHome from "@/components/OwnerHome";
 import type { OwnedHandle } from "@/lib/handles";
@@ -89,7 +90,8 @@ export default function AppHome({
         <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_0%,black,transparent)]" />
         <div className="absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-lime/[0.15] blur-[110px]" />
 
-        <div className="relative">
+        <div className="relative lg:grid lg:grid-cols-[minmax(0,1fr)_26rem] lg:items-center lg:gap-12">
+          <div className="relative">
           <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-[10px] font-medium tracking-wide text-white/70 uppercase">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
             {s.heroBadge}
@@ -138,6 +140,20 @@ export default function AppHome({
               {s.leftWord}
             </p>
           )}
+          </div>
+
+          {/* The card, suspended. It is the object the number is issued on, so
+              it belongs beside the number rather than further down a page. */}
+          <div className="mx-auto mt-9 w-full max-w-[19rem] px-2 sm:max-w-[22rem] lg:mt-0 lg:max-w-none lg:px-0">
+            <FloatingProduct
+              src="/mahsulot/kesilgan/karta.png"
+              alt={s.navDevices}
+              href="/qurilmalar/card"
+              width={1454}
+              height={981}
+              priority
+            />
+          </div>
         </div>
       </section>
       )}

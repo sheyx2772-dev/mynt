@@ -766,3 +766,23 @@ body:has([data-no-app-bar]) {
     page-break-inside: avoid;
   }
 }
+
+/* A product suspended over the hero.
+   The object and its shadow share one period: as the thing rises the shadow
+   narrows and fades, which is what sells the height. Both stop for anyone who
+   asked their system not to animate — a page that moves on its own is the
+   first thing that setting exists to stop. */
+@keyframes float-bob {
+  0%, 100% { transform: translateY(0) rotate(-2.5deg); }
+  50%      { transform: translateY(-14px) rotate(-1.2deg); }
+}
+@keyframes float-cast {
+  0%, 100% { transform: scaleX(1); opacity: 0.5; }
+  50%      { transform: scaleX(0.84); opacity: 0.26; }
+}
+.float-bob  { animation: float-bob 6s ease-in-out infinite; }
+.float-cast { animation: float-cast 6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .float-bob, .float-cast { animation: none; }
+}
