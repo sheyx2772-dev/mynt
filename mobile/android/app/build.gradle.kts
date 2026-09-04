@@ -6,7 +6,15 @@ plugins {
 
 android {
     namespace = "uz.com.flex"
-    compileSdk = flutter.compileSdkVersion
+    // 37 rather than Flutter's default, because flutter_secure_storage 11
+    // declares that anything depending on it must compile against 37 or later
+    // — and that package is where the session lives, so it is not optional.
+    //
+    // The Android Gradle Plugin warns that 36 is its maximum *recommended*
+    // level. Compiling against a newer platform than the plugin was tested with
+    // is the normal way round: the app still runs on everything from minSdk up,
+    // and targetSdk below is what decides which behaviours it opts into.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

@@ -45,6 +45,7 @@ dependencies:
   app_links: ^7.2.1
   url_launcher: ^6.3.2
   intl: ^0.20.3
+  ndef_record: ^1.4.2
 
 dev_dependencies:
   flutter_test:

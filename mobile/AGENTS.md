@@ -44,6 +44,22 @@ crash report is read by whoever asks for it.
 was written by somebody else. Its host is checked before it is opened and it is
 never followed straight into an authenticated action.
 
+## Building for Android
+
+The release build needs a real JDK — Fedora's `java-*-openjdk` package is a JRE
+and Gradle stops with "does not provide the required capabilities:
+[JAVA_COMPILER]". Point `JAVA_HOME` at a JDK before building.
+
+If Gradle stops with **"Failed to find target with hash string 'android-37'"**
+while `~/Android/Sdk/platforms/` contains `android-37.0`, that is a naming
+mismatch rather than a missing package: the SDK has moved to major.minor API
+levels and the Android Gradle Plugin still asks for the old name. The
+command-line `sdkmanager` cannot install `platforms;android-37` because it does
+not exist under that name. A symlink beside it is the fix, and it is a fix to
+the machine rather than to this repository:
+
+    ln -s ~/Android/Sdk/platforms/android-37.0 ~/Android/Sdk/platforms/android-37
+
 ## The brand
 
 `lib/brand/` holds the colours and the mark, copied from the landing site's
