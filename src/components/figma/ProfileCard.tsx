@@ -18,6 +18,7 @@ const imgMU         = "/figma-make/mu-banner.png";
 const imgFintellect = "/figma-make/fintellect-banner.jpeg";
 const imgAyol       = "/figma-make/ayol-banner.jpeg";
 const imgEYU        = "/figma-make/eyu-banner.jpeg";
+const imgAloqaV     = "/figma-make/aloqaventures-banner.jpeg";  // the fund's own, supplied
 
 const BANNER: Record<string, string> = {
   "tashkent-inn": imgStartupGarage,
@@ -35,10 +36,10 @@ const BANNER: Record<string, string> = {
   "uzreport":     imgICTWeek,
   "yakubov":           imgYoshlarVentures,
   "umarov":            imgMOQ,
-  // No AloqaVentures banner. The file pulled off their own site turned out to
-  // be a portfolio company's mark, not the fund's — it rendered STARTUP GARAGE
-  // across four cards. Their colours below come from the fund's own share
-  // image; the logo waits for a file from the client.
+  "gaybulloev":        imgAloqaV,
+  "sanakulov":         imgAloqaV,
+  "parmonov":          imgAloqaV,
+  "abdullaev":         imgAloqaV,
   "khashimov":         imgKorzinka,
   "ishmukhamedov":     imgMU,
   "kurbanova":         imgFintellect,
