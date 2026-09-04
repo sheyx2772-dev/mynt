@@ -8,6 +8,7 @@
 import React, { useState } from "react";
 import ProfileCard from "@/components/figma/ProfileCard";
 import { profiles } from "@/components/figma/profiles";
+import { LAYOUTS } from "@/components/ui/LayoutSamples";
 import "@/components/figma/katalog.css";
 
 type Lang  = "uz" | "ru";
@@ -25,6 +26,10 @@ const CATS = [
   { id: "venture",  uz: "Venture / Fondlar",  ru: "Фонды" },
   { id: "startup",  uz: "Startaplar",          ru: "Стартапы" },
   { id: "corp",     uz: "Boshqa sohalar",     ru: "Другие сферы" },
+  // Not profiles at all but the shapes a profile can take — the seven layouts
+  // from the bench, shown here so a card can be pitched by form as well as by
+  // who is on it.
+  { id: "layouts",  uz: "Maketlar",           ru: "Макеты" },
 ];
 
 /* ── SVG icons (monoline 16px, 1.5px stroke) ── */
@@ -35,6 +40,7 @@ function IconBank()     { return <svg width="16" height="16" viewBox="0 0 24 24"
 function IconVC()       { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/></svg>; }
 function IconStartup()  { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>; }
 function IconCorp()     { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>; }
+function IconLayouts()  { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="8" rx="1"/><rect x="14" y="15" width="7" height="6" rx="1"/></svg>; }
 function IconOrg()      { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21h18"/><path d="M5 21V6l7-3 7 3v15"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01M9 17h.01M15 17h.01"/></svg>; }
 function IconMoon()     { return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>; }
 function IconSun()      { return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>; }
@@ -43,7 +49,7 @@ function IconNFC()      { return <svg width="20" height="20" viewBox="0 0 24 24"
 const CAT_ICON: Record<string, () => React.ReactElement> = {
   all: IconAll, gov: IconGov, ministry: IconMin,
   bank: IconBank, venture: IconVC, startup: IconStartup, corp: IconCorp,
-  org: IconOrg,
+  org: IconOrg, layouts: IconLayouts,
 };
 
 export default function KatalogPage() {
@@ -184,6 +190,29 @@ export default function KatalogPage() {
         </div>
       </div>
 
+      {cat === "layouts" ? (
+        <div style={{
+          display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+          gap: 28, padding: "24px 16px 40px", maxWidth: 1280, margin: "0 auto",
+          // the catalogue redefines --font-sans as Nunito; these layouts are
+          // drawn in the app's own face and must not inherit that
+          fontFamily: "var(--font-inter), system-ui, sans-serif",
+        }}>
+          {LAYOUTS.map((l) => (
+            <section key={l.name}>
+              <header style={{ marginBottom: 10 }}>
+                <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--text-primary)", margin: 0 }}>{l.name}</h3>
+                <p style={{ fontSize: 12, lineHeight: "17px", color: "var(--text-muted)", margin: "3px 0 0" }}>{l.note}</p>
+                <p style={{ fontSize: 12, lineHeight: "17px", color: "var(--text-muted)", margin: "2px 0 0" }}>{l.who}</p>
+              </header>
+              <div style={{ borderRadius: "var(--r-2xl)", overflow: "hidden", boxShadow: "var(--card-shadow)" }}>
+                {l.render()}
+              </div>
+            </section>
+          ))}
+        </div>
+      ) : (
+      <>
       {/* ══ CARD GRID ════════════════════════════════════════ */}
       <div style={{
         display: "grid",
@@ -219,6 +248,9 @@ export default function KatalogPage() {
           </div>
         ))}
       </div>
+
+      </>
+      )}
 
       {/* ══ FOOTER ═══════════════════════════════════════════ */}
       <footer style={{ background: "var(--header-bg)", padding: "16px 16px calc(96px + var(--safe-bottom))", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
