@@ -45,7 +45,7 @@ export default function DevicePicker({
   const [selectedDevice, setSelectedDevice] = useState<DeviceTypeId>(device);
   const [selectedDesign, setSelectedDesign] = useState<CardDesignId>(design);
 
-  const legend = "mb-1.5 block text-xs font-medium tracking-wide text-flex-black/50 uppercase";
+  const legend = "mb-1.5 block text-xs font-medium tracking-wide text-paper-2 uppercase";
 
   return (
     <div className="space-y-6">
@@ -83,7 +83,7 @@ export default function DevicePicker({
                   {active && <Check className="h-3.5 w-3.5" />}
                 </span>
                 {prices && (
-                  <span className="mt-0.5 block px-1 text-xs text-flex-black/50">
+                  <span className="mt-0.5 block px-1 text-xs text-paper-2">
                     {formatUZS(type.price, "uz")}
                   </span>
                 )}
@@ -103,8 +103,8 @@ export default function DevicePicker({
                 key={d.id}
                 className={
                   active
-                    ? "cursor-pointer rounded-full bg-flex-black px-4 py-2 text-sm font-medium text-white"
-                    : "cursor-pointer rounded-full border border-black/10 px-4 py-2 text-sm text-flex-black/60 transition-colors hover:bg-black/[0.03]"
+                    ? "cursor-pointer rounded-full bg-ink-s2 px-4 py-2 text-sm font-medium text-paper"
+                    : "cursor-pointer rounded-full border border-ink-line px-4 py-2 text-sm text-paper-2 transition-colors hover:bg-ink-s2"
                 }
               >
                 <input
@@ -120,7 +120,7 @@ export default function DevicePicker({
             );
           })}
         </div>
-        <p className="mt-2 text-xs text-flex-black/35">
+        <p className="mt-2 text-xs text-paper-3">
           Tanlovingiz qurilmangizga tushadi. Istalgan vaqtda almashtirasiz.
         </p>
       </fieldset>

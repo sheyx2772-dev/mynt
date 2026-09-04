@@ -28,15 +28,15 @@ export default async function SubscriptionPage({
   const invoices = await listVenueInvoices(venue.id);
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <SubScreen handle={normalized} title="Obuna" hint={venue.name}>
         {/* What state the venue is in, said in one line, before anything is
             asked of them. */}
         <div
           className={
             plan.active
-              ? "relative overflow-hidden rounded-2xl bg-flex-black px-5 py-5 text-white"
-              : "rounded-2xl border-l-[3px] border-red-500 bg-red-50 px-5 py-5"
+              ? "relative overflow-hidden rounded-2xl bg-ink-s2 px-5 py-5 text-paper"
+              : "rounded-2xl border-l-[3px] border-danger-ink bg-danger-ink/10 px-5 py-5"
           }
         >
           {plan.active ? (
@@ -44,7 +44,7 @@ export default async function SubscriptionPage({
               <p className="font-display text-lg font-semibold">
                 {formatDate(venue.planExpiresAt)} gacha
               </p>
-              <p className="mt-1 text-sm text-white/55">
+              <p className="mt-1 text-sm text-paper">
                 {plan.endingSoon
                   ? `${plan.daysLeft} kun qoldi — muddat tugasa chaqiruv tugmasi o'chadi.`
                   : `${plan.daysLeft} kun qoldi.`}
@@ -53,7 +53,7 @@ export default async function SubscriptionPage({
           ) : (
             <>
               <p className="font-display text-lg font-semibold">Muddat tugagan</p>
-              <p className="mt-1 text-sm text-flex-black/65">
+              <p className="mt-1 text-sm text-paper-2">
                 {w.listTitle} mehmonlarga ochiq — stol ustidagi belgi ishlayveradi. Ammo
                 chaqiruv tugmasi va hisobot to&apos;lovgacha yopiq.
               </p>

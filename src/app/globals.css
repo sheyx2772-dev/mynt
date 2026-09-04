@@ -168,6 +168,27 @@ body:has(> [data-surface="wall"]) {
   }
 }
 
+/* The bar follows the page it sits under.
+ *
+ * It is fixed to the viewport and rendered as a sibling of the page, so it
+ * cannot inherit the surface — but it can be told which one is on screen. A
+ * white bar under a dark cabinet is the one piece of furniture that never got
+ * the memo. */
+body:has([data-surface="ink"]) .app-bar {
+  border-color: var(--color-ink-line);
+  background: color-mix(in oklab, var(--color-ink) 95%, transparent);
+}
+
+/* The tabs come with it. `aria-current` already says which one is the page,
+   so the active state does not need a second class to carry it here. */
+body:has([data-surface="ink"]) .app-bar a {
+  color: var(--color-paper-3);
+}
+
+body:has([data-surface="ink"]) .app-bar a[aria-current="page"] {
+  color: var(--color-paper);
+}
+
 /* A page that carries somebody else's card asks for the app bar to stay away,
    and for the space the bar reserves to come back. Answered in CSS so it is
    settled before hydration rather than after it. */

@@ -47,14 +47,14 @@ export default function EditProfileForm({
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
 
   const inputClass =
-    "w-full rounded-xl border border-black/10 bg-black/[0.02] px-4 py-2.5 text-sm outline-none transition-colors focus:border-flex-black/30 focus:bg-white";
-  const labelClass = "mb-1.5 block text-xs font-medium tracking-wide text-flex-black/50 uppercase";
+    "w-full rounded-xl border border-ink-line bg-ink-s2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-flex-black/30 focus:bg-ink-s1";
+  const labelClass = "mb-1.5 block text-xs font-medium tracking-wide text-paper-2 uppercase";
 
   return (
     <form action={formAction} className="space-y-4 text-left">
       <div>
         <span className={labelClass}>Profil rasmi</span>
-        <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/15 bg-black/[0.02] px-4 py-2.5 text-sm text-flex-black/50">
+        <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-ink-line bg-ink-s2 px-4 py-2.5 text-sm text-paper-2">
           <span>Yangi rasm tanlang</span>
           <input
             type="file"
@@ -63,7 +63,7 @@ export default function EditProfileForm({
             className="max-w-[45%] text-xs"
           />
         </label>
-        <p className="mt-1 text-xs text-flex-black/35">
+        <p className="mt-1 text-xs text-paper-3">
           Bo&apos;sh qoldirsangiz hozirgi rasm saqlanadi. JPG, PNG yoki WEBP, 2 MB gacha.
         </p>
       </div>
@@ -71,7 +71,7 @@ export default function EditProfileForm({
       {defaults.plan === "premium" ? (
         <div>
           <span className={labelClass}>Fon rasmi</span>
-          <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/15 bg-black/[0.02] px-4 py-2.5 text-sm text-flex-black/50">
+          <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-ink-line bg-ink-s2 px-4 py-2.5 text-sm text-paper-2">
             <span>Yangi fon tanlang</span>
             <input
               type="file"
@@ -80,20 +80,20 @@ export default function EditProfileForm({
               className="max-w-[45%] text-xs"
             />
           </label>
-          <p className="mt-1 text-xs text-flex-black/35">
+          <p className="mt-1 text-xs text-paper-3">
             Kartaning tepasidagi keng rasm. JPG, PNG yoki WEBP, 4 MB gacha.
           </p>
           {defaults.bannerUrl && (
-            <label className="mt-2 flex items-center gap-2 text-xs text-flex-black/45">
+            <label className="mt-2 flex items-center gap-2 text-xs text-paper-3">
               <input type="checkbox" name="bannerClear" value="1" />
               Fon rasmini olib tashlash — kartangiz dizayni qaytadi
             </label>
           )}
         </div>
       ) : (
-        <div className="rounded-xl border border-black/10 bg-black/[0.02] px-4 py-3">
-          <p className="text-xs text-flex-black/50">
-            <span className="font-medium text-flex-black/70">Fon rasmi</span> — premium
+        <div className="rounded-xl border border-ink-line bg-ink-s2 px-4 py-3">
+          <p className="text-xs text-paper-2">
+            <span className="font-medium text-paper-2">Fon rasmi</span> — premium
             rejada o&apos;z rasmingizni qo&apos;yish mumkin. Hozir kartangiz dizayni
             ko&apos;rinadi.{" "}
             <Link href="/tarif" className="underline underline-offset-2">
@@ -219,7 +219,7 @@ export default function EditProfileForm({
           defaultValue={defaults.booking}
           className={inputClass}
         />
-        <p className="mt-1 text-xs text-flex-black/35">
+        <p className="mt-1 text-xs text-paper-3">
           Calendly, Google Calendar yoki bot &mdash; qaysi biridan foydalansangiz,
           havolasini qo&apos;ying. Profilda birinchi bo&apos;lib chiqadi.
         </p>
@@ -249,7 +249,7 @@ export default function EditProfileForm({
           defaultValue={defaults.tags}
           className={inputClass}
         />
-        <p className="mt-1 text-xs text-flex-black/35">
+        <p className="mt-1 text-xs text-paper-3">
           Vergul bilan ajrating, 5 tagacha. Profilda #teg ko&apos;rinishida chiqadi.
         </p>
       </div>
@@ -284,7 +284,7 @@ export default function EditProfileForm({
             }
           />
           {defaults.teamName !== null && (
-            <p className="mt-1 text-xs text-flex-black/35">
+            <p className="mt-1 text-xs text-paper-3">
               Firma tomonidan belgilangan.
             </p>
           )}
@@ -304,14 +304,14 @@ export default function EditProfileForm({
           defaultValue={defaults.phone}
           className={inputClass}
         />
-        <p className="mt-1 text-xs text-flex-black/35">
+        <p className="mt-1 text-xs text-paper-3">
           Profilda &laquo;Qo&apos;ng&apos;iroq&raquo; tugmasi chiqadi &mdash; bosilsa telefon o&apos;zi teradi.
         </p>
       </div>
 
       <div>
         <label className={labelClass}>Xizmatlar va narxlar</label>
-        <p className="mb-2 text-xs text-flex-black/35">
+        <p className="mb-2 text-xs text-paper-3">
           Nima taklif qilasiz va qanchaga. Narxni bo&apos;sh qoldirsangiz ham bo&apos;ladi,
           yoki &laquo;kelishilgan holda&raquo; deb yozing.
           {defaults.plan === "free" && (
@@ -344,7 +344,7 @@ export default function EditProfileForm({
         </div>
       </div>
 
-      <div className="rounded-xl border border-black/10 bg-black/[0.02] px-4 py-3">
+      <div className="rounded-xl border border-ink-line bg-ink-s2 px-4 py-3">
         <label className="flex cursor-pointer items-start gap-2.5 text-sm">
           <input
             type="checkbox"
@@ -355,7 +355,7 @@ export default function EditProfileForm({
           />
           <span>
             <span className="font-medium">Izohlarni ochish</span>
-            <span className="mt-0.5 block text-xs text-flex-black/45">
+            <span className="mt-0.5 block text-xs text-paper-3">
               Profilingizga kirgan odamlar izoh yoza oladi. Har kim bittadan, va
               istalganini o&apos;zingiz o&apos;chira olasiz. Yopiq bo&apos;lsa
               izohlar umuman ko&apos;rinmaydi.
@@ -391,7 +391,7 @@ export default function EditProfileForm({
           />
         </div>
       </div>
-      <p className="text-xs text-flex-black/35">
+      <p className="text-xs text-paper-3">
         Shahar va email profilda ochiq ko&apos;rinadi.
       </p>
 
@@ -402,24 +402,24 @@ export default function EditProfileForm({
         customImage={defaults.customDesignUrl ?? null}
       />
 
-      {state.error && <p className="text-sm text-red-600">{state.error}</p>}
+      {state.error && <p className="text-sm text-danger-ink">{state.error}</p>}
       {/* Saved and not saved are not the only two outcomes: the text can land
           while the picture does not, and "Saqlandi." on its own is how somebody
           concludes the upload worked and stops trying. */}
       {state.saved && state.imageFailed && (
-        <p className="text-sm text-amber-700">
+        <p className="text-sm text-warn-ink">
           Ma&apos;lumotlar saqlandi, lekin rasm yuklanmadi. Birozdan keyin
           qaytadan urinib ko&apos;ring — muammo davom etsa bizga yozing.
         </p>
       )}
       {state.saved && !state.imageFailed && (
-        <p className="text-sm text-flex-black/60">Saqlandi.</p>
+        <p className="text-sm text-paper-2">Saqlandi.</p>
       )}
 
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01] disabled:opacity-60"
+        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-ink shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01] disabled:opacity-60"
       >
         {isPending ? "Saqlanmoqda..." : "Saqlash"}
       </button>

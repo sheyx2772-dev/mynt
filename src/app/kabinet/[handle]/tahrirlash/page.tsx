@@ -15,7 +15,7 @@ export default async function EditProfilePage({
   const { normalized, owned } = await requireOwnHandle(handle, "/kabinet/[handle]/tahrirlash");
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <SubScreen
         handle={normalized}
         title="Profil"

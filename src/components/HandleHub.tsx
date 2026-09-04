@@ -66,7 +66,7 @@ export default function HandleHub({
       {/* The card, which is also the way to look at the public page. */}
       <Link
         href={`/${handle.normalized}`}
-        className="relative block overflow-hidden rounded-[1.75rem] bg-flex-black px-6 py-6 text-white transition-transform active:scale-[0.995]"
+        className="relative block overflow-hidden rounded-[1.75rem] bg-ink-s2 px-6 py-6 text-paper transition-transform active:scale-[0.995]"
       >
 
         <div className="relative flex items-start justify-between gap-3">
@@ -74,13 +74,13 @@ export default function HandleHub({
             <p className="font-display text-3xl font-semibold tracking-tight">
               {handle.normalized}
             </p>
-            <p className="mt-1 truncate font-tabular text-sm text-white/45">
+            <p className="mt-1 truncate font-tabular text-sm text-paper">
               flex.com.uz/{handle.normalized}
             </p>
           </div>
 
           {handle.status === "reserved" ? (
-            <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-amber-300/90 px-3 py-1 text-xs font-medium text-amber-950">
+            <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-warn-ink px-3 py-1 text-xs font-medium text-warn-ink">
               <Clock className="h-3 w-3" />
               To&apos;lov kutilmoqda
             </span>
@@ -115,14 +115,14 @@ export default function HandleHub({
         <div className="mt-3 space-y-2.5">
           <Link
             href={at("sorovlar")}
-            className="flex items-center justify-between gap-3 rounded-2xl bg-lime px-5 py-4 font-medium text-flex-black transition-transform active:scale-[0.99]"
+            className="flex items-center justify-between gap-3 rounded-2xl bg-lime px-5 py-4 font-medium text-ink transition-transform active:scale-[0.99]"
           >
             <span className="flex items-center gap-2">
               <BellRing className="h-4 w-4" />
               So&apos;rovlar
             </span>
             {waiting > 0 && (
-              <span className="rounded-lg bg-flex-black px-2.5 py-1 font-tabular text-sm text-lime">
+              <span className="rounded-lg bg-ink-s2 px-2.5 py-1 font-tabular text-sm text-lime">
                 {waiting}
               </span>
             )}
@@ -131,9 +131,9 @@ export default function HandleHub({
           <div className="grid gap-2.5 sm:grid-cols-2">
             <Link
               href={at("menyu")}
-              className="flex items-center gap-2 rounded-2xl border border-black/10 bg-white px-5 py-4 font-medium transition-transform active:scale-[0.99]"
+              className="flex items-center gap-2 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-4 font-medium transition-transform active:scale-[0.99]"
             >
-              <UtensilsCrossed className="h-4 w-4 text-flex-black/60" />
+              <UtensilsCrossed className="h-4 w-4 text-paper-2" />
               {w.listTitle}
             </Link>
 
@@ -141,13 +141,13 @@ export default function HandleHub({
                 can reach, so the count is on the button. */}
             <Link
               href={at("nuqtalar")}
-              className="flex items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white px-5 py-4 font-medium transition-transform active:scale-[0.99]"
+              className="flex items-center justify-between gap-3 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-4 font-medium transition-transform active:scale-[0.99]"
             >
               <span className="flex items-center gap-2">
-                <QrCode className="h-4 w-4 text-flex-black/60" />
+                <QrCode className="h-4 w-4 text-paper-2" />
                 {w.pointsTitle}
               </span>
-              <span className="font-tabular text-xs text-flex-black/40">
+              <span className="font-tabular text-xs text-paper-3">
                 {venue.points.length || "—"}
               </span>
             </Link>
@@ -157,21 +157,21 @@ export default function HandleHub({
             {/* Not a tile: this is the weekly question, not a daily one. */}
             <Link
               href={at("hisobot")}
-              className="flex items-center gap-2 rounded-2xl border border-black/10 bg-white px-5 py-4 font-medium transition-transform active:scale-[0.99]"
+              className="flex items-center gap-2 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-4 font-medium transition-transform active:scale-[0.99]"
             >
-              <BarChart3 className="h-4 w-4 text-flex-black/60" />
+              <BarChart3 className="h-4 w-4 text-paper-2" />
               Hisobot
             </Link>
 
             <Link
               href={at("obuna")}
-              className="flex items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white px-5 py-4 font-medium transition-transform active:scale-[0.99]"
+              className="flex items-center justify-between gap-3 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-4 font-medium transition-transform active:scale-[0.99]"
             >
               <span className="flex items-center gap-2">
-                <CalendarClock className="h-4 w-4 text-flex-black/60" />
+                <CalendarClock className="h-4 w-4 text-paper-2" />
                 Obuna
               </span>
-              <span className="font-tabular text-xs text-flex-black/40">
+              <span className="font-tabular text-xs text-paper-3">
                 {plan?.active ? `${plan.daysLeft} kun` : "tugagan"}
               </span>
             </Link>
@@ -183,7 +183,7 @@ export default function HandleHub({
           {plan && !plan.active && (
             <Link
               href={at("obuna")}
-              className="flex items-center gap-3 rounded-2xl border-l-[3px] border-red-500 bg-red-50 px-5 py-4 text-sm"
+              className="flex items-center gap-3 rounded-2xl border-l-[3px] border-danger-ink bg-danger-ink/10 px-5 py-4 text-sm"
             >
               <span className="flex-1">
                 <strong className="font-medium">Obuna muddati tugagan.</strong>{" "}
@@ -195,7 +195,7 @@ export default function HandleHub({
           {plan?.endingSoon && (
             <Link
               href={at("obuna")}
-              className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white px-5 py-3.5 text-sm text-flex-black/65"
+              className="flex items-center gap-3 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-3.5 text-sm text-paper-2"
             >
               Obunaga {plan.daysLeft} kun qoldi.
             </Link>
@@ -222,15 +222,15 @@ export default function HandleHub({
       {!venue && handle.status === "claimed" && (
         <Link
           href={at("obyekt")}
-          className="mt-3 flex items-center gap-3 rounded-2xl border border-dashed border-black/15 px-5 py-4 text-sm text-flex-black/55 transition-colors hover:bg-black/[0.02]"
+          className="mt-3 flex items-center gap-3 rounded-2xl border border-dashed border-ink-line px-5 py-4 text-sm text-paper-2 transition-colors hover:bg-ink-s2"
         >
-          <Store className="h-4 w-4 shrink-0 text-flex-black/35" strokeWidth={1.7} />
+          <Store className="h-4 w-4 shrink-0 text-paper-3" strokeWidth={1.7} />
           Kafe, mehmonxona yoki do&apos;konmi? Obyekt oching — menyu va so&apos;rovlar.
         </Link>
       )}
 
       {handle.status === "reserved" && (
-        <p className="mt-4 rounded-2xl border border-dashed border-black/15 px-5 py-4 text-sm text-flex-black/55">
+        <p className="mt-4 rounded-2xl border border-dashed border-ink-line px-5 py-4 text-sm text-paper-2">
           Raqam siz uchun band qilingan. To&apos;lov yakunlangach profil ochiladi va post
           joylay olasiz.
         </p>
@@ -243,7 +243,7 @@ function Stat({ value, label }: { value: number; label: string }) {
   return (
     <div>
       <p className="font-display font-tabular text-xl font-semibold">{formatNumber(value)}</p>
-      <p className="mt-0.5 text-[10px] tracking-widest text-white/40 uppercase">{label}</p>
+      <p className="mt-0.5 text-[10px] tracking-widest text-paper uppercase">{label}</p>
     </div>
   );
 }
@@ -263,14 +263,14 @@ function Tile({
   return (
     <Link
       href={href}
-      className="relative flex flex-col items-center gap-2 rounded-2xl border border-black/10 bg-white px-2 py-4 text-center transition-transform active:scale-[0.98]"
+      className="relative flex flex-col items-center gap-2 rounded-2xl border border-ink-line bg-ink-s1 px-2 py-4 text-center transition-transform active:scale-[0.98]"
     >
       {count > 0 && (
-        <span className="absolute top-2 right-2 rounded-full bg-lime px-1.5 py-0.5 font-tabular text-[10px] font-semibold text-flex-black">
+        <span className="absolute top-2 right-2 rounded-full bg-lime px-1.5 py-0.5 font-tabular text-[10px] font-semibold text-ink">
           {count}
         </span>
       )}
-      <Icon className="h-5 w-5 text-flex-black/60" strokeWidth={1.7} />
+      <Icon className="h-5 w-5 text-paper-2" strokeWidth={1.7} />
       <span className="text-xs leading-tight font-medium">{label}</span>
     </Link>
   );
@@ -292,14 +292,14 @@ export function SubScreen({
     <>
       <Link
         href={`/kabinet/${handle}`}
-        className="mb-6 inline-flex items-center gap-1.5 self-start text-sm text-flex-black/50 transition-colors hover:text-flex-black"
+        className="mb-6 inline-flex items-center gap-1.5 self-start text-sm text-paper-2 transition-colors hover:text-paper"
       >
         <ArrowLeft className="h-4 w-4" />
         {handle}
       </Link>
 
       <h1 className="font-display text-2xl font-semibold tracking-tight">{title}</h1>
-      {hint && <p className="mt-1 text-sm text-flex-black/50">{hint}</p>}
+      {hint && <p className="mt-1 text-sm text-paper-2">{hint}</p>}
 
       <div className="mt-7">{children}</div>
     </>

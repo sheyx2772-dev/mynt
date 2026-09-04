@@ -14,8 +14,8 @@ import type { VenueWords } from "@/lib/venue-words";
 // underneath it in the order somebody would think of it.
 
 const field =
-  "w-full rounded-xl border border-black/10 bg-white px-3 py-2.5 text-sm outline-none focus:border-flex-black/30";
-const label = "mb-1 block text-[11px] font-medium tracking-wide text-flex-black/45 uppercase";
+  "w-full rounded-xl border border-ink-line bg-ink-s1 px-3 py-2.5 text-sm outline-none focus:border-flex-black/30";
+const label = "mb-1 block text-[11px] font-medium tracking-wide text-paper-3 uppercase";
 
 const idle: EditResult = { ok: true };
 
@@ -46,7 +46,7 @@ export default function EditDishForm({
       <input type="hidden" name="handle" value={handle} />
       <input type="hidden" name="id" value={item.id} />
 
-      <div className="rounded-2xl border border-black/10 bg-white p-5">
+      <div className="rounded-2xl border border-ink-line bg-ink-s1 p-5">
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
             <label htmlFor="ed-price" className={label}>
@@ -156,16 +156,16 @@ export default function EditDishForm({
             </div>
             {/* Said plainly, because the opposite is what somebody fears when
                 they open this screen to change a price. */}
-            <p className="mt-1 text-xs text-flex-black/40">
+            <p className="mt-1 text-xs text-paper-3">
               Bo&apos;sh qoldirsangiz hozirgi rasm saqlanadi.
             </p>
           </div>
         </div>
 
-        {!state.ok && <p className="mt-3 text-sm text-red-600">{state.error}</p>}
+        {!state.ok && <p className="mt-3 text-sm text-danger-ink">{state.error}</p>}
         <button
           disabled={busy}
-          className="mt-4 w-full rounded-xl bg-lime px-5 py-3.5 font-medium text-flex-black disabled:opacity-60"
+          className="mt-4 w-full rounded-xl bg-lime px-5 py-3.5 font-medium text-ink disabled:opacity-60"
         >
           {busy ? "Saqlanmoqda…" : "Saqlash"}
         </button>
@@ -173,7 +173,7 @@ export default function EditDishForm({
 
       <Link
         href={`/kabinet/${handle}/menyu`}
-        className="mt-4 block text-center text-sm text-flex-black/50 hover:text-flex-black"
+        className="mt-4 block text-center text-sm text-paper-2 hover:text-paper"
       >
         {w.listTitle}ga qaytish
       </Link>

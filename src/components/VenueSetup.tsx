@@ -25,10 +25,10 @@ export default function VenueSetup({
   const done = steps.filter((step) => step.done).length;
 
   return (
-    <section className="rounded-[1.75rem] border border-black/10 bg-white p-6 shadow-[0_20px_45px_-30px_rgba(14,10,27,0.3)]">
+    <section className="rounded-[1.75rem] border border-ink-line bg-ink-s1 p-6 shadow-[0_20px_45px_-30px_rgba(14,10,27,0.3)]">
       <div className="mb-4 flex items-baseline justify-between gap-3">
         <h2 className="font-display font-semibold tracking-tight">Ishga tushirish</h2>
-        <span className="font-tabular text-sm text-flex-black/40">
+        <span className="font-tabular text-sm text-paper-3">
           {done}/{steps.length}
         </span>
       </div>
@@ -43,17 +43,17 @@ export default function VenueSetup({
                 href={`/kabinet/${handle}/${step.screen}`}
                 className={
                   isNext
-                    ? "flex items-center gap-3 rounded-2xl bg-flex-black px-4 py-3.5 text-white transition-transform active:scale-[0.99]"
-                    : "flex items-center gap-3 rounded-2xl px-4 py-3 transition-colors hover:bg-black/[0.02]"
+                    ? "flex items-center gap-3 rounded-2xl bg-ink-s2 px-4 py-3.5 text-paper transition-transform active:scale-[0.99]"
+                    : "flex items-center gap-3 rounded-2xl px-4 py-3 transition-colors hover:bg-ink-s2"
                 }
               >
                 <span
                   className={
                     step.done
-                      ? "flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lime text-flex-black"
+                      ? "flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lime text-ink"
                       : isNext
-                        ? "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/25 font-tabular text-xs text-white/70"
-                        : "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-black/10 font-tabular text-xs text-flex-black/35"
+                        ? "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/25 font-tabular text-xs text-paper"
+                        : "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-ink-line font-tabular text-xs text-paper-3"
                   }
                 >
                   {step.done ? <Check className="h-3.5 w-3.5" /> : index + 1}
@@ -63,7 +63,7 @@ export default function VenueSetup({
                   <span
                     className={
                       step.done && !isNext
-                        ? "block text-sm font-medium text-flex-black/45"
+                        ? "block text-sm font-medium text-paper-3"
                         : "block text-sm font-medium"
                     }
                   >
@@ -72,15 +72,15 @@ export default function VenueSetup({
                   <span
                     className={
                       isNext
-                        ? "mt-0.5 block text-xs text-white/55"
-                        : "mt-0.5 block text-xs text-flex-black/40"
+                        ? "mt-0.5 block text-xs text-paper"
+                        : "mt-0.5 block text-xs text-paper-3"
                     }
                   >
                     {step.hint}
                   </span>
                 </span>
 
-                {isNext && <ChevronRight className="h-4 w-4 shrink-0 text-white/50" />}
+                {isNext && <ChevronRight className="h-4 w-4 shrink-0 text-paper" />}
               </Link>
             </li>
           );

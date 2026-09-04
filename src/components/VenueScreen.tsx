@@ -20,7 +20,7 @@ export default function VenueScreen({
   vertical: "cafe" | "hotel" | "shop" | "other";
 }) {
   return (
-    <div className="w-full text-flex-black">
+    <div className="w-full text-paper">
       {/* Who and where. The point is the whole trick: the page knows which
           table or room it was opened from. */}
       <div className="flex items-start justify-between gap-3">
@@ -28,9 +28,9 @@ export default function VenueScreen({
           <p className="truncate font-display text-base font-semibold tracking-tight">
             {screen.venue}
           </p>
-          <p className="mt-0.5 text-[11px] text-flex-black/40">flex.com.uz</p>
+          <p className="mt-0.5 text-[11px] text-paper-3">flex.com.uz</p>
         </div>
-        <span className="shrink-0 rounded-lg bg-flex-black px-2.5 py-1 font-tabular text-[11px] font-medium text-lime">
+        <span className="shrink-0 rounded-lg bg-ink-s2 px-2.5 py-1 font-tabular text-[11px] font-medium text-lime">
           {screen.point}
         </span>
       </div>
@@ -41,13 +41,13 @@ export default function VenueScreen({
             key={chip}
             className={
               i === 0 && vertical === "cafe"
-                ? "rounded-full bg-flex-black px-2.5 py-1 text-[11px] font-medium text-white"
-                : "rounded-full border border-black/10 px-2.5 py-1 text-[11px] text-flex-black/55"
+                ? "rounded-full bg-ink-s2 px-2.5 py-1 text-[11px] font-medium text-paper"
+                : "rounded-full border border-ink-line px-2.5 py-1 text-[11px] text-paper-2"
             }
           >
             {vertical === "hotel" && i === 0 ? (
               <span className="flex items-center gap-1.5">
-                <Wifi className="h-3 w-3 text-lime-ink" />
+                <Wifi className="h-3 w-3 text-lime" />
                 {chip}
               </span>
             ) : (
@@ -59,7 +59,7 @@ export default function VenueScreen({
 
       {/* The rows. A dish and its price, a checkout time, a service and what it
           costs — the same three columns each time. */}
-      <div className="mt-4 divide-y divide-black/6 border-y border-black/6">
+      <div className="mt-4 divide-y divide-ink-line border-y border-ink-line">
         {screen.rows.map(([name, note, value], i) => (
           <div
             key={name}
@@ -74,7 +74,7 @@ export default function VenueScreen({
             <div className="min-w-0">
               <p className="text-[13px] leading-tight font-medium">{name}</p>
               {note && (
-                <p className="mt-0.5 text-[11px] leading-tight text-flex-black/40">{note}</p>
+                <p className="mt-0.5 text-[11px] leading-tight text-paper-3">{note}</p>
               )}
             </div>
             {value && (
@@ -89,7 +89,7 @@ export default function VenueScreen({
           {screen.actions.map((action) => (
             <span
               key={action}
-              className="rounded-xl border border-black/10 bg-black/[0.02] px-2.5 py-2 text-[11px] leading-tight font-medium"
+              className="rounded-xl border border-ink-line bg-ink-s2 px-2.5 py-2 text-[11px] leading-tight font-medium"
             >
               {action}
             </span>
@@ -98,7 +98,7 @@ export default function VenueScreen({
       )}
 
       <div className="mt-3 space-y-1.5">
-        <div className="flex items-center justify-center gap-1.5 rounded-xl bg-lime px-4 py-2.5 text-[13px] font-medium text-flex-black shadow-[0_10px_22px_-10px_rgba(171,255,9,0.9)]">
+        <div className="flex items-center justify-center gap-1.5 rounded-xl bg-lime px-4 py-2.5 text-[13px] font-medium text-ink shadow-[0_10px_22px_-10px_rgba(171,255,9,0.9)]">
           {/* A shop's primary action is a payment, not a confirmation. */}
           {vertical === "shop" ? (
             <CreditCard className="h-3.5 w-3.5" strokeWidth={2.2} />
@@ -107,7 +107,7 @@ export default function VenueScreen({
           )}
           {screen.primary}
         </div>
-        <div className="rounded-xl border border-black/10 bg-white px-4 py-2.5 text-center text-[13px] font-medium">
+        <div className="rounded-xl border border-ink-line bg-ink-s1 px-4 py-2.5 text-center text-[13px] font-medium">
           {screen.secondary}
         </div>
       </div>

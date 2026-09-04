@@ -19,7 +19,7 @@ export default async function NewVenuePage({ params }: PageProps<"/kabinet/[hand
   if (existing) redirect(`/kabinet/${normalized}/menyu`);
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <SubScreen
         handle={normalized}
         title="Obyekt ochish"

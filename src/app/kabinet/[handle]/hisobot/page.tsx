@@ -38,17 +38,17 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
   // and much worse message than "this is behind the subscription".
   if (!plan.active) {
     return (
-      <PageShell>
+      <PageShell surface="ink">
         <SubScreen handle={normalized} title="Hisobot" hint={venue.name}>
-          <div className="rounded-2xl border-l-[3px] border-red-500 bg-red-50 px-6 py-6">
+          <div className="rounded-2xl border-l-[3px] border-danger-ink bg-danger-ink/10 px-6 py-6">
             <p className="font-display font-semibold">Obuna muddati tugagan</p>
-            <p className="mt-1.5 text-sm leading-relaxed text-flex-black/65">
+            <p className="mt-1.5 text-sm leading-relaxed text-paper-2">
               Hisobot to&apos;lovdan keyin ochiladi. {w.listTitle} mehmonlarga
               ko&apos;rinib turibdi va so&apos;rovlar tarixi saqlanib qoladi.
             </p>
             <Link
               href={`/kabinet/${normalized}/obuna`}
-              className="mt-5 inline-block rounded-full bg-flex-black px-5 py-2.5 text-sm font-medium text-white"
+              className="mt-5 inline-block rounded-full bg-ink-s2 px-5 py-2.5 text-sm font-medium text-paper"
             >
               Obuna
             </Link>
@@ -65,21 +65,21 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
   const busiest = report.points[0]?.count ?? 0;
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <SubScreen
         handle={normalized}
         title="Hisobot"
         hint={`${venue.name} — so'nggi ${DAYS} kun.`}
       >
         {report.total === 0 ? (
-          <div className="rounded-2xl border border-dashed border-black/15 px-6 py-12 text-center">
-            <p className="text-sm text-flex-black/50">
+          <div className="rounded-2xl border border-dashed border-ink-line px-6 py-12 text-center">
+            <p className="text-sm text-paper-2">
               Hali so&apos;rov kelmagan. {w.pointsTitle} belgilanib, kodlar
               qo&apos;yilgach shu yerda ko&apos;rinadi.
             </p>
             <Link
               href={`/kabinet/${normalized}/nuqtalar`}
-              className="mt-5 inline-block rounded-full border border-black/10 px-5 py-2.5 text-sm font-medium hover:bg-black/[0.03]"
+              className="mt-5 inline-block rounded-full border border-ink-line px-5 py-2.5 text-sm font-medium hover:bg-ink-s2"
             >
               {w.pointsTitle}
             </Link>
@@ -88,19 +88,19 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
           <>
             {/* The two numbers worth a glance: how many, and how fast. */}
             <div className="grid grid-cols-2 gap-2.5">
-              <div className="relative overflow-hidden rounded-2xl bg-flex-black px-5 py-5 text-white">
+              <div className="relative overflow-hidden rounded-2xl bg-ink-s2 px-5 py-5 text-paper">
                 <p className="font-display font-tabular text-3xl font-semibold">
                   {formatNumber(report.total)}
                 </p>
-                <p className="mt-1 text-xs tracking-widest text-white/40 uppercase">
+                <p className="mt-1 text-xs tracking-widest text-paper uppercase">
                   So&apos;rov
                 </p>
               </div>
-              <div className="rounded-2xl border border-black/10 bg-white px-5 py-5">
+              <div className="rounded-2xl border border-ink-line bg-ink-s1 px-5 py-5">
                 <p className="font-display font-tabular text-3xl font-semibold">
                   {formatWait(report.medianWait)}
                 </p>
-                <p className="mt-1 text-xs tracking-widest text-flex-black/40 uppercase">
+                <p className="mt-1 text-xs tracking-widest text-paper-3 uppercase">
                   O&apos;rtacha javob
                 </p>
               </div>
@@ -109,8 +109,8 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             {/* The worst one is the number that changes behaviour: an owner who
                 learns a table waited forty minutes goes and asks why. */}
             {report.worstWait !== null && (
-              <p className="mt-2.5 rounded-2xl border border-black/10 bg-white px-5 py-3.5 text-sm text-flex-black/60">
-                Eng uzoq kutish — <strong className="font-medium text-flex-black">
+              <p className="mt-2.5 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-3.5 text-sm text-paper-2">
+                Eng uzoq kutish — <strong className="font-medium text-paper">
                   {formatWait(report.worstWait)}
                 </strong>
                 . {report.waiting > 0 && `Hozir ${report.waiting} ta ochiq.`}
@@ -118,7 +118,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             )}
 
             <section className="mt-8">
-              <h2 className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+              <h2 className="mb-3 text-xs font-semibold tracking-widest text-paper-3 uppercase">
                 Nima so&apos;ralgan
               </h2>
               <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
@@ -130,27 +130,27 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             </section>
 
             <section className="mt-8">
-              <h2 className="mb-1 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+              <h2 className="mb-1 text-xs font-semibold tracking-widest text-paper-3 uppercase">
                 Qaysi {w.pointPrefix.toLowerCase()}dan
               </h2>
-              <p className="mb-3 text-sm text-flex-black/50">
+              <p className="mb-3 text-sm text-paper-2">
                 Ko&apos;p chaqirgani yuqorida.
               </p>
 
-              <div className="divide-y divide-black/6 rounded-2xl border border-black/10 bg-white">
+              <div className="divide-y divide-ink-line rounded-2xl border border-ink-line bg-ink-s1">
                 {report.points.slice(0, 12).map((entry) => (
                   <div key={entry.point} className="flex items-center gap-3 px-4 py-3">
                     <span className="w-16 shrink-0 font-tabular text-sm font-semibold">
                       {entry.point}
                     </span>
                     {/* The bar is the comparison; the number is the fact. */}
-                    <span className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-black/[0.06]">
+                    <span className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-ink-s2">
                       <span
                         className="block h-full rounded-full bg-lime-ink"
                         style={{ width: `${Math.max(4, (entry.count / busiest) * 100)}%` }}
                       />
                     </span>
-                    <span className="w-8 shrink-0 text-right font-tabular text-sm text-flex-black/60">
+                    <span className="w-8 shrink-0 text-right font-tabular text-sm text-paper-2">
                       {entry.count}
                     </span>
                   </div>
@@ -159,10 +159,10 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             </section>
 
             <section className="mt-8">
-              <h2 className="mb-1 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+              <h2 className="mb-1 text-xs font-semibold tracking-widest text-paper-3 uppercase">
                 Qaysi soatlarda
               </h2>
-              <p className="mb-4 text-sm text-flex-black/50">
+              <p className="mb-4 text-sm text-paper-2">
                 Toshkent vaqti bilan.
               </p>
 
@@ -176,7 +176,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
                   />
                 ))}
               </div>
-              <div className="mt-2 flex justify-between font-tabular text-[10px] text-flex-black/35">
+              <div className="mt-2 flex justify-between font-tabular text-[10px] text-paper-3">
                 <span>00</span>
                 <span>06</span>
                 <span>12</span>
@@ -186,12 +186,12 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             </section>
 
             {report.reviews.count > 0 && (
-              <section className="mt-8 rounded-2xl border border-black/10 bg-white px-5 py-5">
+              <section className="mt-8 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-5">
                 <div className="flex items-baseline gap-3">
                   <p className="font-display font-tabular text-3xl font-semibold">
                     {report.reviews.average}
                   </p>
-                  <p className="text-sm text-flex-black/50">
+                  <p className="text-sm text-paper-2">
                     {report.reviews.count} ta izoh bo&apos;yicha
                   </p>
                 </div>
@@ -201,7 +201,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
                       key={n}
                       className={
                         n <= Math.round(report.reviews.average ?? 0)
-                          ? "h-4 w-4 fill-lime-ink text-lime-ink"
+                          ? "h-4 w-4 fill-lime-ink text-lime"
                           : "h-4 w-4 text-black/15"
                       }
                     />
@@ -211,7 +211,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             )}
 
             {capped && (
-              <p className="mt-6 text-xs text-flex-black/40">
+              <p className="mt-6 text-xs text-paper-3">
                 So&apos;rov juda ko&apos;p — eng so&apos;nggilari hisobga olindi.
               </p>
             )}
@@ -232,12 +232,12 @@ function Kind({
   value: number;
 }) {
   return (
-    <div className="rounded-2xl border border-black/10 bg-white px-4 py-4">
-      <span className="text-flex-black/40">{icon}</span>
+    <div className="rounded-2xl border border-ink-line bg-ink-s1 px-4 py-4">
+      <span className="text-paper-3">{icon}</span>
       <p className="mt-2 font-display font-tabular text-xl font-semibold">
         {formatNumber(value)}
       </p>
-      <p className="mt-0.5 text-xs text-flex-black/45">{label}</p>
+      <p className="mt-0.5 text-xs text-paper-3">{label}</p>
     </div>
   );
 }

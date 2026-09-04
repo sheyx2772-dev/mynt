@@ -60,7 +60,7 @@ function Move({
       <input type="hidden" name="direction" value={direction} />
       <button
         title={direction === "up" ? "Yuqoriga" : "Pastga"}
-        className="flex h-8 w-6 items-center justify-center rounded-lg text-flex-black/35 hover:bg-black/[0.03] hover:text-flex-black"
+        className="flex h-8 w-6 items-center justify-center rounded-lg text-paper-3 hover:bg-ink-s2 hover:text-paper"
       >
         {direction === "up" ? (
           <ChevronUp className="h-4 w-4" />
@@ -90,18 +90,18 @@ export default async function MenuAdminPage({
   const w = venueWords(venue.kind, "uz");
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <div className="mb-8 flex items-center justify-between gap-4">
         <Link
           href={`/kabinet/${normalized}`}
-          className="flex items-center gap-2 text-sm font-medium text-flex-black/60 hover:text-flex-black"
+          className="flex items-center gap-2 text-sm font-medium text-paper-2 hover:text-paper"
         >
           <ArrowLeft className="h-4 w-4" />
           {normalized}
         </Link>
         <Link
           href={`/${normalized}`}
-          className="flex items-center gap-1.5 text-sm font-medium text-flex-black/60 hover:text-flex-black"
+          className="flex items-center gap-1.5 text-sm font-medium text-paper-2 hover:text-paper"
         >
           {w.listTitle}
           <ExternalLink className="h-3.5 w-3.5" />
@@ -111,7 +111,7 @@ export default async function MenuAdminPage({
       <h1 className="font-display text-2xl font-semibold tracking-tight">
         {venue.name}
       </h1>
-      <p className="mt-1 mb-8 text-sm text-flex-black/50">
+      <p className="mt-1 mb-8 text-sm text-paper-2">
         O&apos;zgartirish darhol ko&apos;rinadi — qayta chop etish kerak emas.
       </p>
 
@@ -127,7 +127,7 @@ export default async function MenuAdminPage({
       {categories.map((category) => (
         <section key={category.id} className="mt-8">
           <div className="mb-3 flex items-baseline justify-between gap-3">
-            <h2 className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+            <h2 className="text-xs font-semibold tracking-widest text-paper-3 uppercase">
               {category.name || "Bo'limsiz"}
             </h2>
             {category.id !== "boshqa" && (
@@ -135,7 +135,7 @@ export default async function MenuAdminPage({
                 <Link
                   href={`/kabinet/${normalized}/menyu/bolim/${category.id}`}
                   title="Nomini o'zgartirish"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg text-flex-black/35 hover:bg-black/[0.03] hover:text-flex-black"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg text-paper-3 hover:bg-ink-s2 hover:text-paper"
                 >
                   <Pencil className="h-3.5 w-3.5" />
                 </Link>
@@ -154,7 +154,7 @@ export default async function MenuAdminPage({
                 <form action={removeCategoryAction}>
                   <input type="hidden" name="handle" value={normalized} />
                   <input type="hidden" name="id" value={category.id} />
-                  <button className="ml-1.5 text-xs text-flex-black/35 hover:text-red-600">
+                  <button className="ml-1.5 text-xs text-paper-3 hover:text-danger-ink">
                     O&apos;chirish
                   </button>
                 </form>
@@ -162,7 +162,7 @@ export default async function MenuAdminPage({
             )}
           </div>
 
-          <div className="divide-y divide-black/6 rounded-2xl border border-black/10 bg-white">
+          <div className="divide-y divide-ink-line rounded-2xl border border-ink-line bg-ink-s1">
             {category.items.map((item) => (
               // Two lines, not one. The controls outgrew the row the moment
               // reordering and editing joined them, and a dish called "Bahor
@@ -189,7 +189,7 @@ export default async function MenuAdminPage({
                       {item.name}
                     </p>
                     {item.note && (
-                      <p className="mt-0.5 text-xs text-flex-black/45">
+                      <p className="mt-0.5 text-xs text-paper-3">
                         {item.note}
                       </p>
                     )}
@@ -197,7 +197,7 @@ export default async function MenuAdminPage({
 
                   <p className="shrink-0 font-tabular text-sm font-semibold">
                     {item.price === 0 ? (
-                      <span className="text-xs font-medium text-flex-black/45">
+                      <span className="text-xs font-medium text-paper-3">
                         {w.freeWord}
                       </span>
                     ) : (
@@ -223,7 +223,7 @@ export default async function MenuAdminPage({
                   <Link
                     href={`/kabinet/${normalized}/menyu/${item.id}`}
                     title="Tahrirlash"
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-black/10 text-flex-black/50 hover:bg-black/[0.03]"
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink-line text-paper-2 hover:bg-ink-s2"
                   >
                     <Pencil className="h-4 w-4" />
                   </Link>
@@ -248,7 +248,7 @@ export default async function MenuAdminPage({
                           ? `${w.soldOut} deb belgilash`
                           : "Ro'yxatga qaytarish"
                       }
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 text-flex-black/50 hover:bg-black/[0.03]"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-ink-line text-paper-2 hover:bg-ink-s2"
                     >
                       {item.available ? (
                         <Eye className="h-4 w-4" />
@@ -263,7 +263,7 @@ export default async function MenuAdminPage({
                     <input type="hidden" name="id" value={item.id} />
                     <button
                       title="O'chirish"
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 text-flex-black/40 hover:bg-red-50 hover:text-red-600"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-ink-line text-paper-3 hover:bg-danger-ink/10 hover:text-danger-ink"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>

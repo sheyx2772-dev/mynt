@@ -35,18 +35,18 @@ export default function VenuePlanPanel({
   return (
     <div>
       {monthly === null ? (
-        <div className="rounded-2xl border border-black/10 bg-white p-5 text-sm text-flex-black/60">
+        <div className="rounded-2xl border border-ink-line bg-ink-s1 p-5 text-sm text-paper-2">
           {points} ta nuqta — bu o&apos;lchamdagi obyekt uchun narx alohida kelishiladi.
           Biz bilan bog&apos;laning, hisob-fakturani qo&apos;lda yozamiz.
         </div>
       ) : (
-        <form action={action} className="rounded-2xl border border-black/10 bg-white p-5">
+        <form action={action} className="rounded-2xl border border-ink-line bg-ink-s1 p-5">
           <input type="hidden" name="handle" value={handle} />
           <input type="hidden" name="months" value={months} />
 
-          <p className="text-sm text-flex-black/60">
+          <p className="text-sm text-paper-2">
             {points} ta nuqta —{" "}
-            <strong className="font-medium text-flex-black">
+            <strong className="font-medium text-paper">
               {formatUZS(monthly)}
             </strong>{" "}
             oyiga.
@@ -61,8 +61,8 @@ export default function VenuePlanPanel({
                 aria-pressed={months === option}
                 className={
                   months === option
-                    ? "rounded-xl bg-flex-black px-3 py-3 font-tabular text-sm font-medium text-white"
-                    : "rounded-xl border border-black/10 px-3 py-3 font-tabular text-sm text-flex-black/60 hover:bg-black/[0.03]"
+                    ? "rounded-xl bg-ink-s2 px-3 py-3 font-tabular text-sm font-medium text-paper"
+                    : "rounded-xl border border-ink-line px-3 py-3 font-tabular text-sm text-paper-2 hover:bg-ink-s2"
                 }
               >
                 {option} oy
@@ -74,9 +74,9 @@ export default function VenuePlanPanel({
             {formatUZS(venueInvoiceTotal(points, months, monthly).total)}
           </p>
 
-          {!state.ok && <p className="mt-3 text-sm text-red-600">{state.error}</p>}
+          {!state.ok && <p className="mt-3 text-sm text-danger-ink">{state.error}</p>}
           {state.ok && state.issued && (
-            <p className="mt-3 flex items-center gap-1.5 text-sm text-lime-ink">
+            <p className="mt-3 flex items-center gap-1.5 text-sm text-lime">
               <Check className="h-4 w-4" />
               №{state.issued} hisob-faktura tayyor — quyida.
             </p>
@@ -84,14 +84,14 @@ export default function VenuePlanPanel({
 
           <button
             disabled={busy}
-            className="mt-4 w-full rounded-xl bg-lime px-5 py-3.5 font-medium text-flex-black disabled:opacity-60"
+            className="mt-4 w-full rounded-xl bg-lime px-5 py-3.5 font-medium text-ink disabled:opacity-60"
           >
             {busy ? "Yozilmoqda…" : "Hisob-faktura olish"}
           </button>
 
           {/* Said before they press it, not after: nothing here takes money,
               and a cafe expecting a card form should know that now. */}
-          <p className="mt-3 text-xs leading-relaxed text-flex-black/45">
+          <p className="mt-3 text-xs leading-relaxed text-paper-3">
             Hisob-faktura chiqadi, siz bank orqali to&apos;laysiz. Pul kelgach muddat
             uzayadi — karta ma&apos;lumoti so&apos;ralmaydi.
           </p>
@@ -100,19 +100,19 @@ export default function VenuePlanPanel({
 
       {invoices.length > 0 && (
         <section className="mt-8">
-          <h2 className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+          <h2 className="mb-3 text-xs font-semibold tracking-widest text-paper-3 uppercase">
             Hisob-fakturalar
           </h2>
-          <div className="divide-y divide-black/6 rounded-2xl border border-black/10 bg-white">
+          <div className="divide-y divide-ink-line rounded-2xl border border-ink-line bg-ink-s1">
             {invoices.map((invoice) => (
               <Link
                 key={invoice.id}
                 href={`/kabinet/${handle}/hisob/${invoice.id}`}
-                className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-black/[0.02]"
+                className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-ink-s2"
               >
-                <FileText className="h-4 w-4 shrink-0 text-flex-black/35" />
+                <FileText className="h-4 w-4 shrink-0 text-paper-3" />
                 <span className="font-tabular text-sm font-medium">№{invoice.number}</span>
-                <span className="min-w-0 flex-1 truncate text-sm text-flex-black/50">
+                <span className="min-w-0 flex-1 truncate text-sm text-paper-2">
                   {invoice.months} oy · {invoice.points} nuqta
                 </span>
                 <span className="shrink-0 font-tabular text-sm">
@@ -121,8 +121,8 @@ export default function VenuePlanPanel({
                 <span
                   className={
                     invoice.status === "paid"
-                      ? "shrink-0 rounded-full bg-lime/25 px-2.5 py-1 text-xs font-medium text-flex-black/70"
-                      : "shrink-0 rounded-full border border-black/10 px-2.5 py-1 text-xs text-flex-black/50"
+                      ? "shrink-0 rounded-full bg-lime/25 px-2.5 py-1 text-xs font-medium text-paper-2"
+                      : "shrink-0 rounded-full border border-ink-line px-2.5 py-1 text-xs text-paper-2"
                   }
                 >
                   {invoice.status === "paid"

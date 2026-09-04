@@ -47,9 +47,9 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
   const returned = order.fulfilment === "returned";
 
   return (
-    <PageShell wide>
+    <PageShell wide surface="ink">
       <SubScreen handle={order.handle} title={device.name}>
-        <section className="relative overflow-hidden rounded-[1.75rem] bg-flex-black p-6 text-white sm:p-7">
+        <section className="relative overflow-hidden rounded-[1.75rem] bg-ink-s2 p-6 text-paper sm:p-7">
 
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
@@ -57,11 +57,11 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
                 <p className="font-display text-[22px] leading-tight font-semibold tracking-tight">
                   {device.name}
                 </p>
-                <p className="mt-1 font-tabular text-[13px] text-white/45">
+                <p className="mt-1 font-tabular text-[13px] text-paper">
                   {order.handle} · {formatUZS(order.amount, "uz")}
                 </p>
               </div>
-              <span className="flex shrink-0 items-center gap-1.5 rounded-lg bg-white/10 px-2.5 py-1.5 text-[11px] font-medium">
+              <span className="flex shrink-0 items-center gap-1.5 rounded-lg bg-ink-s1/10 px-2.5 py-1.5 text-[11px] font-medium">
                 {paid ? (
                   <>
                     <FulfilmentIcon state={order.fulfilment} className="h-3 w-3" />
@@ -93,14 +93,14 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
                         className={
                           done
                             ? "block h-1 rounded-full bg-lime"
-                            : "block h-1 rounded-full bg-white/15"
+                            : "block h-1 rounded-full bg-ink-s1/15"
                         }
                       />
                       <span
                         className={
                           i === reached
                             ? "mt-2 flex items-center gap-1 text-[10px] font-medium text-lime"
-                            : "mt-2 flex items-center gap-1 text-[10px] text-white/25"
+                            : "mt-2 flex items-center gap-1 text-[10px] text-paper"
                         }
                       >
                         <FulfilmentIcon state={state} className="h-3 w-3" />
@@ -120,27 +120,27 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
         )}
 
         {order.recipient && order.region && order.address && (
-          <section className="mt-5 rounded-[1.5rem] border border-black/6 bg-white p-6">
-            <h2 className="flex items-center gap-2 text-[13px] font-semibold tracking-wide text-flex-black/40 uppercase">
+          <section className="mt-5 rounded-[1.5rem] border border-ink-line bg-ink-s1 p-6">
+            <h2 className="flex items-center gap-2 text-[13px] font-semibold tracking-wide text-paper-3 uppercase">
               <MapPin className="h-3.5 w-3.5" />
               Manzil
             </h2>
             <div className="mt-3 flex items-start gap-3">
               <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lime">
-                <Check className="h-3.5 w-3.5 text-flex-black" />
+                <Check className="h-3.5 w-3.5 text-paper" />
               </span>
               <p className="text-[14px] leading-relaxed">
                 <span className="font-semibold">{order.recipient}</span>
                 <br />
-                <span className="text-flex-black/60">{order.phone}</span>
+                <span className="text-paper-2">{order.phone}</span>
                 <br />
-                <span className="text-flex-black/60">
+                <span className="text-paper-2">
                   {addressLine({ region: order.region, address: order.address })}
                 </span>
                 {order.note && (
                   <>
                     <br />
-                    <span className="text-flex-black/35">{order.note}</span>
+                    <span className="text-paper-3">{order.note}</span>
                   </>
                 )}
               </p>
@@ -148,7 +148,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
             {/* Deliberately not editable here. Once it is in the queue the
                 address may already be on a label, and changing it silently is
                 worse than asking somebody. */}
-            <p className="mt-4 text-[12px] text-flex-black/40">
+            <p className="mt-4 text-[12px] text-paper-3">
               O&apos;zgartirish kerak bo&apos;lsa bizga yozing.
             </p>
           </section>

@@ -54,7 +54,7 @@ export default function NewVenueForm({ handle }: { handle: string }) {
 
       <label
         htmlFor="venue-name"
-        className="mb-1 block text-[11px] font-medium tracking-wide text-flex-black/45 uppercase"
+        className="mb-1 block text-[11px] font-medium tracking-wide text-paper-3 uppercase"
       >
         Obyekt nomi
       </label>
@@ -63,10 +63,10 @@ export default function NewVenueForm({ handle }: { handle: string }) {
         name="name"
         required
         placeholder="Choyxona Navro'z"
-        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2.5 text-sm outline-none focus:border-flex-black/30"
+        className="w-full rounded-xl border border-ink-line bg-ink-s1 px-3 py-2.5 text-sm outline-none focus:border-flex-black/30"
       />
 
-      <p className="mt-6 mb-2 text-[11px] font-medium tracking-wide text-flex-black/45 uppercase">
+      <p className="mt-6 mb-2 text-[11px] font-medium tracking-wide text-paper-3 uppercase">
         Turi
       </p>
 
@@ -79,27 +79,27 @@ export default function NewVenueForm({ handle }: { handle: string }) {
             aria-pressed={kind === id}
             className={
               kind === id
-                ? "flex w-full items-center gap-4 rounded-2xl border-2 border-flex-black bg-white px-5 py-4 text-left"
-                : "flex w-full items-center gap-4 rounded-2xl border border-black/10 bg-white px-5 py-4 text-left transition-colors hover:bg-black/[0.02]"
+                ? "flex w-full items-center gap-4 rounded-2xl border-2 border-flex-black bg-ink-s1 px-5 py-4 text-left"
+                : "flex w-full items-center gap-4 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-4 text-left transition-colors hover:bg-ink-s2"
             }
           >
             <Icon
-              className={kind === id ? "h-5 w-5 text-flex-black" : "h-5 w-5 text-flex-black/40"}
+              className={kind === id ? "h-5 w-5 text-paper" : "h-5 w-5 text-paper-3"}
               strokeWidth={1.7}
             />
             <span className="min-w-0 flex-1">
               <span className="block font-medium">{name}</span>
-              <span className="mt-0.5 block text-xs text-flex-black/45">{hint}</span>
+              <span className="mt-0.5 block text-xs text-paper-3">{hint}</span>
             </span>
           </button>
         ))}
       </div>
 
-      {!state.ok && <p className="mt-4 text-sm text-red-600">{state.error}</p>}
+      {!state.ok && <p className="mt-4 text-sm text-danger-ink">{state.error}</p>}
 
       <button
         disabled={busy}
-        className="mt-6 w-full rounded-xl bg-lime px-5 py-3.5 font-medium text-flex-black disabled:opacity-60"
+        className="mt-6 w-full rounded-xl bg-lime px-5 py-3.5 font-medium text-ink disabled:opacity-60"
       >
         {busy ? "Ochilmoqda…" : "Obyektni ochish"}
       </button>

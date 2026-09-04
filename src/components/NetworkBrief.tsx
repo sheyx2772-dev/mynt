@@ -52,7 +52,7 @@ function DraftActions({ draft, phone }: { draft: string; phone: string | null })
             // screen and can be selected.
           }
         }}
-        className="flex items-center gap-1.5 rounded-lg bg-white/10 px-2.5 py-1.5 text-[12px] font-medium text-white/80 transition-colors hover:bg-white/15"
+        className="flex items-center gap-1.5 rounded-lg bg-ink-s1/10 px-2.5 py-1.5 text-[12px] font-medium text-paper transition-colors hover:bg-ink-s1/15"
       >
         {copied ? <Check className="h-3 w-3 text-lime" /> : <Copy className="h-3 w-3" />}
         {copied ? "Nusxa olindi" : "Nusxa olish"}
@@ -63,7 +63,7 @@ function DraftActions({ draft, phone }: { draft: string; phone: string | null })
           href={`https://t.me/+${phone.replace(/[^0-9]/g, "")}`}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center gap-1.5 rounded-lg bg-white/10 px-2.5 py-1.5 text-[12px] font-medium text-white/80 transition-colors hover:bg-white/15"
+          className="flex items-center gap-1.5 rounded-lg bg-ink-s1/10 px-2.5 py-1.5 text-[12px] font-medium text-paper transition-colors hover:bg-ink-s1/15"
         >
           <Send className="h-3 w-3" />
           Telegram
@@ -92,7 +92,7 @@ export default function NetworkBrief({
   const enough = contactCount >= 4;
 
   return (
-    <section className="relative overflow-hidden rounded-[1.75rem] bg-flex-black text-white">
+    <section className="relative overflow-hidden rounded-[1.75rem] bg-ink-s2 text-paper">
 
       {/* While it is thinking, a band travels across the panel. Honest about
           what it knows: there is no percentage to show, because nobody is
@@ -107,13 +107,13 @@ export default function NetworkBrief({
               : "flex h-7 w-7 items-center justify-center rounded-lg bg-lime"
           }
         >
-          <Sparkles className="h-3.5 w-3.5 text-flex-black" />
+          <Sparkles className="h-3.5 w-3.5 text-paper" />
         </span>
         <h2 className="font-display text-[15px] font-semibold tracking-tight">
           Yordamchi
         </h2>
         {brief && (
-          <span className="ml-auto font-tabular text-[11px] text-white/35">
+          <span className="ml-auto font-tabular text-[11px] text-paper">
             {timeAgo(brief.builtAt, "uz")}
             {stale && " · ro'yxat o'zgargan"}
           </span>
@@ -122,16 +122,16 @@ export default function NetworkBrief({
 
       {brief ? (
         <>
-          <p className="relative px-6 pt-4 text-[15px] leading-relaxed text-white/85 sm:px-7">
+          <p className="relative px-6 pt-4 text-[15px] leading-relaxed text-paper sm:px-7">
             {brief.summary}
           </p>
 
           {brief.suggestions.length > 0 && (
-            <ul className="relative mt-5 space-y-px bg-white/8">
+            <ul className="relative mt-5 space-y-px bg-ink-s1/8">
               {brief.suggestions.map((s, i) => (
                 <li
                   key={s.contactId}
-                  className="rise bg-flex-black px-6 py-5 sm:px-7"
+                  className="rise bg-ink-s2 px-6 py-5 sm:px-7"
                   style={{ animationDelay: `${i * 70}ms` }}
                 >
                   <div className="flex items-baseline gap-2.5">
@@ -140,11 +140,11 @@ export default function NetworkBrief({
                     </span>
                     <p className="text-[15px] font-semibold tracking-tight">{s.name}</p>
                   </div>
-                  <p className="mt-1.5 pl-[26px] text-[13px] leading-relaxed text-white/50">
+                  <p className="mt-1.5 pl-[26px] text-[13px] leading-relaxed text-paper">
                     {s.why}
                   </p>
                   <div className="mt-3 pl-[26px]">
-                    <p className="rounded-xl bg-white/[0.06] p-3.5 text-[13px] leading-relaxed text-white/90">
+                    <p className="rounded-xl bg-ink-s1/[0.06] p-3.5 text-[13px] leading-relaxed text-paper">
                       {s.draft}
                     </p>
                     <DraftActions draft={s.draft} phone={s.phone} />
@@ -160,7 +160,7 @@ export default function NetworkBrief({
               <button
                 type="submit"
                 disabled={working}
-                className="rounded-xl bg-white/10 px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-white/15 disabled:opacity-40"
+                className="rounded-xl bg-ink-s1/10 px-4 py-2 text-[13px] font-medium text-paper transition-colors hover:bg-ink-s1/15 disabled:opacity-40"
               >
                 {working ? "O'qiyapti…" : "Yangilash"}
               </button>
@@ -169,7 +169,7 @@ export default function NetworkBrief({
               <input type="hidden" name="handle" value={handle} />
               <button
                 type="submit"
-                className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] text-white/35 transition-colors hover:text-red-400"
+                className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] text-paper transition-colors hover:text-red-400"
               >
                 <Trash2 className="h-3.5 w-3.5" />
                 O&apos;chirish
@@ -179,7 +179,7 @@ export default function NetworkBrief({
         </>
       ) : (
         <div className="relative px-6 pb-6 pt-3 sm:px-7">
-          <p className="text-[15px] leading-relaxed text-white/60">
+          <p className="text-[15px] leading-relaxed text-paper">
             {enough
               ? "Ro'yxatni o'qib, bugun kimga javob berish kerakligini va nima yozishni aytadi."
               : `Kamida to'rtta kontakt kerak. Hozir ${contactCount} ta.`}
@@ -191,7 +191,7 @@ export default function NetworkBrief({
           <button
             type="button"
             onClick={() => setShowTerms((was) => !was)}
-            className="mt-4 flex items-center gap-1.5 text-[12px] text-white/45 transition-colors hover:text-white/70"
+            className="mt-4 flex items-center gap-1.5 text-[12px] text-paper transition-colors hover:text-ink/70"
           >
             <Shield className="h-3.5 w-3.5" />
             Nima yuboriladi
@@ -201,8 +201,8 @@ export default function NetworkBrief({
           </button>
 
           {showTerms && (
-            <p className="mt-3 rounded-xl bg-white/[0.06] p-4 text-[13px] leading-relaxed text-white/60">
-              Ism, telefon va email <strong className="text-white/90">yuborilmaydi</strong>.
+            <p className="mt-3 rounded-xl bg-ink-s1/[0.06] p-4 text-[13px] leading-relaxed text-paper">
+              Ism, telefon va email <strong className="text-paper">yuborilmaydi</strong>.
               Faqat kompaniya, bosqich, kunlar soni va izohlar ketadi; har bir odam
               K1, K2 kabi belgi bilan boradi va ismni faqat siz ko&apos;rasiz.
               Izohlar o&apos;zgartirilmay yuboriladi — ularda boshqa odamning ismi
@@ -215,7 +215,7 @@ export default function NetworkBrief({
             <button
               type="submit"
               disabled={working || !enough}
-              className="w-full rounded-2xl bg-lime px-6 py-3.5 text-[14px] font-semibold text-flex-black shadow-[0_10px_30px_-12px_rgba(171,255,9,0.8)] transition-transform hover:scale-[1.02] active:scale-[0.99] disabled:opacity-25 disabled:shadow-none sm:w-auto sm:px-8"
+              className="w-full rounded-2xl bg-lime px-6 py-3.5 text-[14px] font-semibold text-ink shadow-[0_10px_30px_-12px_rgba(171,255,9,0.8)] transition-transform hover:scale-[1.02] active:scale-[0.99] disabled:opacity-25 disabled:shadow-none sm:w-auto sm:px-8"
             >
               {working ? "O'qiyapti…" : "Tahlil qilish"}
             </button>

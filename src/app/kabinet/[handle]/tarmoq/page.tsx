@@ -103,11 +103,11 @@ export default async function NetworkPage({
 
   const pill = (active: boolean) =>
     active
-      ? "flex shrink-0 items-center gap-1.5 rounded-xl bg-flex-black px-3.5 py-2 text-[12px] font-semibold text-white shadow-[0_4px_14px_-6px_rgba(14,10,27,0.6)]"
-      : "flex shrink-0 items-center gap-1.5 rounded-xl bg-black/[0.04] px-3.5 py-2 text-[12px] font-medium text-flex-black/55 transition-all hover:bg-black/[0.07] hover:text-flex-black";
+      ? "flex shrink-0 items-center gap-1.5 rounded-xl bg-ink-s2 px-3.5 py-2 text-[12px] font-semibold text-paper shadow-[0_4px_14px_-6px_rgba(14,10,27,0.6)]"
+      : "flex shrink-0 items-center gap-1.5 rounded-xl bg-ink-s2 px-3.5 py-2 text-[12px] font-medium text-paper-2 transition-all hover:bg-ink-s2 hover:text-paper";
 
   return (
-    <PageShell wide>
+    <PageShell wide surface="ink">
       <SubScreen handle={normalized} title="Tarmoq">
         {/* Side by side once there is room. The list is what somebody works
             through and the assistant is what they consult while working, so on
@@ -119,10 +119,10 @@ export default async function NetworkPage({
             that decision deserves — and on the brand's own ground rather than
             on white, because a card that is white on white is a page and this
             is meant to be an application. */}
-        <section className="relative overflow-hidden rounded-[1.75rem] bg-flex-black p-6 text-white sm:p-7">
+        <section className="relative overflow-hidden rounded-[1.75rem] bg-ink-s2 p-6 text-paper sm:p-7">
 
           <div className="relative">
-            <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-white/40 uppercase">
+            <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-paper uppercase">
               <UsersRound className="h-3.5 w-3.5" />
               Javob kutmoqda
             </div>
@@ -136,17 +136,17 @@ export default async function NetworkPage({
               )}
             </div>
 
-            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[13px] text-white/45">
+            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[13px] text-paper">
               <span className="flex items-center gap-1.5">
                 <Contact2 className="h-3.5 w-3.5" />
-                <span className="font-tabular text-white">{shape.total}</span> ta
+                <span className="font-tabular text-paper">{shape.total}</span> ta
                 kontakt
               </span>
               {shape.companies.slice(0, 2).map((firm) => (
                 <span key={firm.name} className="flex items-center gap-1.5">
                   <Building2 className="h-3.5 w-3.5" />
                   {firm.name}{" "}
-                  <span className="font-tabular text-white">{firm.count}</span>
+                  <span className="font-tabular text-paper">{firm.count}</span>
                 </span>
               ))}
             </div>
@@ -195,11 +195,11 @@ export default async function NetworkPage({
         )}
 
         {contacts.length === 0 ? (
-          <section className="mt-6 rounded-[1.75rem] border border-black/6 bg-white p-10 text-center">
+          <section className="mt-6 rounded-[1.75rem] border border-ink-line bg-ink-s1 p-10 text-center">
             <p className="font-display text-[17px] font-semibold tracking-tight">
               Hali hech kim kontakt qoldirmagan
             </p>
-            <p className="mx-auto mt-2 max-w-sm text-[13px] leading-relaxed text-flex-black/50">
+            <p className="mx-auto mt-2 max-w-sm text-[13px] leading-relaxed text-paper-2">
               Kartangizni tegizgan odam o&apos;z ismini va raqamini shu yerga
               yuboradi. Qog&apos;ozda olingan raqamlarni esa o&apos;zingiz
               qo&apos;shasiz.
@@ -225,7 +225,7 @@ export default async function NetworkPage({
             </ul>
 
             {shown.length === 0 && (
-              <p className="mt-4 rounded-2xl border border-dashed border-black/12 p-8 text-center text-[13px] text-flex-black/45">
+              <p className="mt-4 rounded-2xl border border-dashed border-ink-line p-8 text-center text-[13px] text-paper-3">
                 Bu bo&apos;limda hech kim yo&apos;q.
               </p>
             )}

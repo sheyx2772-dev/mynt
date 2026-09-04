@@ -31,7 +31,7 @@ function TagAddress({ token }: { token: string }) {
 
   return (
     <div className="mt-3 flex items-center gap-2">
-      <code className="min-w-0 flex-1 truncate rounded-xl bg-black/[0.04] px-3 py-2 font-tabular text-[12px] text-flex-black/60">
+      <code className="min-w-0 flex-1 truncate rounded-xl bg-ink-s2 px-3 py-2 font-tabular text-[12px] text-paper-2">
         {url}
       </code>
       <button
@@ -46,14 +46,14 @@ function TagAddress({ token }: { token: string }) {
             // screen and can be selected.
           }
         }}
-        className="flex shrink-0 items-center gap-1.5 rounded-xl bg-black/[0.04] px-3 py-2 text-[12px] font-medium transition-colors hover:bg-black/[0.08]"
+        className="flex shrink-0 items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
       >
-        {copied ? <Check className="h-3.5 w-3.5 text-lime-ink" /> : <Copy className="h-3.5 w-3.5" />}
+        {copied ? <Check className="h-3.5 w-3.5 text-lime" /> : <Copy className="h-3.5 w-3.5" />}
         {copied ? "Nusxa olindi" : "Nusxa"}
       </button>
       <a
         href={`/${token}/qr`}
-        className="flex shrink-0 items-center gap-1.5 rounded-xl bg-black/[0.04] px-3 py-2 text-[12px] font-medium transition-colors hover:bg-black/[0.08]"
+        className="flex shrink-0 items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
         aria-label="QR"
       >
         <QrCode className="h-3.5 w-3.5" />
@@ -75,15 +75,15 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
           return (
             <li
               key={tag.id}
-              className="rise rounded-2xl border border-black/6 bg-white p-4"
+              className="rise rounded-2xl border border-ink-line bg-ink-s1 p-4"
               style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
             >
               <div className="flex items-center gap-3.5">
                 <span
                   className={
                     tag.active
-                      ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-flex-black text-white"
-                      : "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-black/[0.05] text-flex-black/30"
+                      ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink-s2 text-paper"
+                      : "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink-s2 text-paper-3"
                   }
                 >
                   <Icon className="h-4 w-4" />
@@ -93,18 +93,18 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
                   <p className="truncate text-[14px] font-semibold tracking-tight">
                     {tag.label ?? KIND_NAME[tag.kind]}
                     {!tag.active && (
-                      <span className="ml-2 font-normal text-flex-black/35">
+                      <span className="ml-2 font-normal text-paper-3">
                         to&apos;xtatilgan
                       </span>
                     )}
                   </p>
-                  <p className="mt-0.5 text-[12px] text-flex-black/45">
+                  <p className="mt-0.5 text-[12px] text-paper-3">
                     {KIND_NAME[tag.kind]}
                   </p>
                 </div>
 
                 {tag.unread > 0 && (
-                  <span className="shrink-0 rounded-lg bg-lime px-2 py-1 font-tabular text-[11px] font-semibold text-flex-black">
+                  <span className="shrink-0 rounded-lg bg-lime px-2 py-1 font-tabular text-[11px] font-semibold text-ink">
                     {tag.unread}
                   </span>
                 )}
@@ -115,7 +115,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
                   <input type="hidden" name="active" value={tag.active ? "0" : "1"} />
                   <button
                     type="submit"
-                    className="rounded-xl px-3 py-2 text-[12px] text-flex-black/45 transition-colors hover:text-flex-black"
+                    className="rounded-xl px-3 py-2 text-[12px] text-paper-3 transition-colors hover:text-paper"
                   >
                     {tag.active ? "To'xtatish" : "Yoqish"}
                   </button>
@@ -137,7 +137,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
       {open ? (
         <form
           action={action}
-          className="mt-4 rounded-[1.5rem] border border-black/6 bg-white p-5"
+          className="mt-4 rounded-[1.5rem] border border-ink-line bg-ink-s1 p-5"
         >
           <input type="hidden" name="handle" value={handle} />
           <input type="hidden" name="kind" value={kind} />
@@ -152,8 +152,8 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
                   onClick={() => setKind(k)}
                   className={
                     kind === k
-                      ? "flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-flex-black px-3 py-2.5 text-[12px] font-semibold text-white"
-                      : "flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-black/[0.04] px-3 py-2.5 text-[12px] text-flex-black/55 transition-colors hover:bg-black/[0.08]"
+                      ? "flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2.5 text-[12px] font-semibold text-paper"
+                      : "flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2.5 text-[12px] text-paper-2 transition-colors hover:bg-ink-s2"
                   }
                 >
                   <Icon className="h-3.5 w-3.5" />
@@ -166,30 +166,30 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
           <input
             name="label"
             placeholder={kind === "pet" ? "Rex" : kind === "car" ? "Malibu" : "Kalitlar"}
-            className="mt-3 w-full rounded-xl bg-black/[0.03] px-4 py-3 text-[14px] outline-none placeholder:text-flex-black/25 focus:bg-black/[0.05]"
+            className="mt-3 w-full rounded-xl bg-ink-s2 px-4 py-3 text-[14px] outline-none placeholder:text-paper-3 focus:bg-ink-s2"
           />
           {/* Said here because it is not obvious and it matters: a stranger who
               is greeted by name sounds like somebody who knows you. */}
-          <p className="mt-1.5 text-[12px] text-flex-black/40">
+          <p className="mt-1.5 text-[12px] text-paper-3">
             Faqat siz ko&apos;rasiz — xabar yozayotgan odamga ko&apos;rsatilmaydi.
           </p>
 
           {state.error && (
-            <p className="mt-3 text-[13px] text-red-700">{state.error}</p>
+            <p className="mt-3 text-[13px] text-danger-ink">{state.error}</p>
           )}
 
           <div className="mt-4 flex gap-2">
             <button
               type="submit"
               disabled={saving}
-              className="rounded-xl bg-flex-black px-5 py-2.5 text-[13px] font-semibold text-white disabled:opacity-40"
+              className="rounded-xl bg-ink-s2 px-5 py-2.5 text-[13px] font-semibold text-paper disabled:opacity-40"
             >
               {saving ? "Qo'shilyapti…" : "Qo'shish"}
             </button>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-2.5 text-[13px] text-flex-black/45"
+              className="rounded-xl px-4 py-2.5 text-[13px] text-paper-3"
             >
               Yopish
             </button>
@@ -199,7 +199,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="mt-4 flex items-center gap-2 rounded-2xl border border-dashed border-black/20 px-5 py-3 text-[13px] text-flex-black/55 transition-colors hover:border-black/40"
+          className="mt-4 flex items-center gap-2 rounded-2xl border border-dashed border-ink-line px-5 py-3 text-[13px] text-paper-2 transition-colors hover:border-black/40"
         >
           <Plus className="h-4 w-4" />
           Buyum qo&apos;shish

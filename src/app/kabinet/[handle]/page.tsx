@@ -44,18 +44,18 @@ export default async function HandlePage(props: PageProps<"/kabinet/[handle]">) 
     : null;
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <div className="mb-6 flex items-center justify-between gap-4">
         <Link
           href="/kabinet"
-          className="inline-flex items-center gap-1.5 text-sm text-flex-black/50 transition-colors hover:text-flex-black"
+          className="inline-flex items-center gap-1.5 text-sm text-paper-2 transition-colors hover:text-paper"
         >
           <ArrowLeft className="h-4 w-4" />
           Kabinet
         </Link>
         <Link
           href={`/${normalized}`}
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-flex-black/60 transition-colors hover:text-flex-black"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-paper-2 transition-colors hover:text-paper"
         >
           Profilni ko&apos;rish
           <ExternalLink className="h-3.5 w-3.5" />

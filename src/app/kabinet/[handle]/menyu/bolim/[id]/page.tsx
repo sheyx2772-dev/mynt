@@ -26,7 +26,7 @@ export default async function EditCategoryPage({
   if (!category) notFound();
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <SubScreen handle={normalized} title={category.name} hint="Bo'lim nomi">
         <EditCategoryForm
           handle={normalized}

@@ -115,7 +115,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
   after(() => touchLastSeen(user.id));
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <div className="mb-7 flex items-center justify-between gap-3">
         <div className="min-w-0">
           <h1 className="font-display text-2xl font-semibold tracking-tight">Kabinet</h1>
@@ -123,20 +123,20 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
               so Supabase has something to key the user on. Showing it would be
               showing the person a mailbox that is not theirs, so the name they
               signed in with wins whenever there is one. */}
-          <p className="mt-0.5 truncate text-sm text-flex-black/50">{accountLabel}</p>
+          <p className="mt-0.5 truncate text-sm text-paper-2">{accountLabel}</p>
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
           <Link
             href="/kabinet/xabarlar"
             aria-label="Xabarlar"
-            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-black/10 text-flex-black/60 transition-colors hover:bg-black/[0.03]"
+            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-ink-line text-paper-2 transition-colors hover:bg-ink-s2"
           >
             <Bell className="h-4 w-4" />
             {/* A count rather than a dot: "three leads waiting" is worth
                 opening the page for, "something happened" is not. */}
             {unread > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-lime px-1 font-tabular text-[11px] font-semibold text-flex-black">
+              <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-lime px-1 font-tabular text-[11px] font-semibold text-ink">
                 {unread}
               </span>
             )}
@@ -144,7 +144,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
           <Link
             href="/lenta"
             aria-label="Lenta"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 text-flex-black/60 transition-colors hover:bg-black/[0.03] lg:flex"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-ink-line text-paper-2 transition-colors hover:bg-ink-s2 lg:flex"
           >
             <Rss className="h-4 w-4" />
           </Link>
@@ -160,14 +160,14 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
       {team && (
         <Link
           href="/kabinet/jamoa"
-          className="mb-4 flex items-center gap-4 rounded-[1.5rem] border border-black/10 bg-flex-black px-6 py-5 text-white transition-transform active:scale-[0.995]"
+          className="mb-4 flex items-center gap-4 rounded-[1.5rem] border border-ink-line bg-ink-s2 px-6 py-5 text-paper transition-transform active:scale-[0.995]"
         >
           <Building2 className="h-5 w-5 shrink-0 text-lime" strokeWidth={1.75} />
           <div className="min-w-0 flex-1">
             <p className="font-display font-semibold tracking-tight">{team.name}</p>
-            <p className="mt-0.5 text-xs text-white/50">Firma hisobi</p>
+            <p className="mt-0.5 text-xs text-paper">Firma hisobi</p>
           </div>
-          <ChevronRight className="h-4 w-4 shrink-0 text-white/40" />
+          <ChevronRight className="h-4 w-4 shrink-0 text-paper" />
         </Link>
       )}
 
@@ -178,28 +178,28 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
       {queue > 0 && (
         <Link
           href="/kabinet/buyurtmalar"
-          className="mb-4 flex items-center gap-4 rounded-[1.5rem] border border-lime/50 bg-lime px-6 py-5 text-flex-black transition-transform active:scale-[0.995]"
+          className="mb-4 flex items-center gap-4 rounded-[1.5rem] border border-lime/50 bg-lime px-6 py-5 text-ink transition-transform active:scale-[0.995]"
         >
           <Package className="h-5 w-5 shrink-0" strokeWidth={1.75} />
           <div className="min-w-0 flex-1">
             <p className="font-display font-semibold tracking-tight">
               {queue} ta buyurtma
             </p>
-            <p className="mt-0.5 text-xs text-flex-black/60">Yasash va yuborish</p>
+            <p className="mt-0.5 text-xs text-paper-2">Yasash va yuborish</p>
           </div>
-          <ChevronRight className="h-4 w-4 shrink-0 text-flex-black/40" />
+          <ChevronRight className="h-4 w-4 shrink-0 text-paper-3" />
         </Link>
       )}
 
       {!open || !detail ? (
-        <div className="rounded-[1.75rem] border border-dashed border-black/15 p-8 text-center">
-          <p className="text-sm text-flex-black/60">
+        <div className="rounded-[1.75rem] border border-dashed border-ink-line p-8 text-center">
+          <p className="text-sm text-paper-2">
             Hali raqam olmagansiz. Bosh sahifadagi hisoblagichda narxni ko&apos;rib,
             o&apos;zingizga mos kombinatsiyani tanlang.
           </p>
           <Link
             href="/shaxsiy#narx"
-            className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+            className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-ink shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
           >
             Raqam tanlash
           </Link>
@@ -212,7 +212,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
                 h.normalized === open.normalized ? (
                   <span
                     key={h.normalized}
-                    className="flex shrink-0 items-center gap-1.5 rounded-full bg-flex-black px-4 py-2 font-tabular text-sm font-medium text-white"
+                    className="flex shrink-0 items-center gap-1.5 rounded-full bg-ink-s2 px-4 py-2 font-tabular text-sm font-medium text-paper"
                   >
                     {h.normalized}
                   </span>
@@ -220,7 +220,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
                   <Link
                     key={h.normalized}
                     href={`/kabinet/${h.normalized}`}
-                    className="flex shrink-0 items-center gap-1.5 rounded-full border border-black/10 px-4 py-2 font-tabular text-sm text-flex-black/60 transition-colors hover:bg-black/[0.03]"
+                    className="flex shrink-0 items-center gap-1.5 rounded-full border border-ink-line px-4 py-2 font-tabular text-sm text-paper-2 transition-colors hover:bg-ink-s2"
                   >
                     {h.normalized}
                     {h.status === "reserved" && <Clock className="h-3 w-3" />}

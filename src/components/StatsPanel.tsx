@@ -9,9 +9,9 @@ import type { PlanId } from "@/lib/plans";
 
 function StatTile({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-2xl border border-black/8 bg-black/[0.02] px-4 py-3">
+    <div className="rounded-2xl border border-ink-line bg-ink-s2 px-4 py-3">
       <p className="font-display text-2xl font-semibold tracking-tight tabular-nums">{value}</p>
-      <p className="mt-0.5 text-xs text-flex-black/45">{label}</p>
+      <p className="mt-0.5 text-xs text-paper-3">{label}</p>
     </div>
   );
 }
@@ -40,18 +40,18 @@ const SOURCE_LABEL: Record<string, string> = {
 // without a line of new analytics code.
 function PremiumTeaser() {
   return (
-    <div className="mt-7 rounded-2xl border border-black/10 bg-black/[0.02] px-5 py-5">
-      <p className="text-xs font-medium tracking-[0.14em] text-flex-black/45 uppercase">
+    <div className="mt-7 rounded-2xl border border-ink-line bg-ink-s2 px-5 py-5">
+      <p className="text-xs font-medium tracking-[0.14em] text-paper-3 uppercase">
         Premium
       </p>
-      <ul className="mt-3 space-y-1.5 text-sm text-flex-black/65">
+      <ul className="mt-3 space-y-1.5 text-sm text-paper-2">
         <li>Kunlik grafik — qaysi kuni necha marta ochilgan</li>
         <li>Har bir havola bo&apos;yicha bosishlar</li>
         <li>Qayerdan kelgan — kartani tegizib, QR orqali yoki havoladan</li>
       </ul>
       <Link
         href="/tarif"
-        className="mt-4 inline-block rounded-xl bg-flex-black px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-white uppercase transition-opacity hover:opacity-90"
+        className="mt-4 inline-block rounded-xl bg-ink-s2 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-paper uppercase transition-opacity hover:opacity-90"
       >
         Tariflar
       </Link>
@@ -64,9 +64,9 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
   const busiest = stats.daily.find((d) => d.views === peak && peak > 0);
 
   return (
-    <section className="rounded-[1.75rem] border border-black/10 bg-white p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+    <section className="rounded-[1.75rem] border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
       <h2 className="font-display text-lg font-semibold tracking-tight">Statistika</h2>
-      <p className="mt-1 text-sm text-flex-black/50">So&apos;nggi 30 kun.</p>
+      <p className="mt-1 text-sm text-paper-2">So&apos;nggi 30 kun.</p>
 
       <div className="mt-6 grid grid-cols-3 gap-3">
         <StatTile label="Tashrif" value={stats.totalViews} />
@@ -77,18 +77,18 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
       {plan === "free" ? (
         <PremiumTeaser />
       ) : peak === 0 ? (
-        <p className="mt-7 rounded-2xl border border-dashed border-black/12 px-4 py-6 text-center text-sm text-flex-black/45">
+        <p className="mt-7 rounded-2xl border border-dashed border-ink-line px-4 py-6 text-center text-sm text-paper-3">
           Hali tashrif yo&apos;q. Profilingizni ulashganingizdan keyin bu yerda kunlik
           statistika paydo bo&apos;ladi.
         </p>
       ) : (
         <figure className="mt-7">
-          <figcaption className="mb-3 text-xs text-flex-black/45">
+          <figcaption className="mb-3 text-xs text-paper-3">
             Kunlik tashriflar
             {busiest && (
               <>
                 {" — eng ko'p "}
-                <span className="font-medium text-flex-black/70">
+                <span className="font-medium text-paper-2">
                   {dayLabel(busiest.day)} kuni {peak} ta
                 </span>
               </>
@@ -97,7 +97,7 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
 
           {/* Columns sit on a hairline baseline, 2px of surface between each. */}
           <div
-            className="flex h-28 items-end gap-[2px] border-b border-black/10"
+            className="flex h-28 items-end gap-[2px] border-b border-ink-line"
             role="img"
             aria-label={`So'nggi 30 kunda ${stats.totalViews} ta tashrif`}
           >
@@ -116,7 +116,7 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
             ))}
           </div>
 
-          <div className="mt-2 flex justify-between font-tabular text-[11px] text-flex-black/35">
+          <div className="mt-2 flex justify-between font-tabular text-[11px] text-paper-3">
             <span>{dayLabel(stats.daily[0]!.day)}</span>
             <span>{dayLabel(stats.daily[stats.daily.length - 1]!.day)}</span>
           </div>
@@ -125,14 +125,14 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
 
       {stats.links.length > 0 && (
         <div className="mt-7">
-          <h3 className="mb-3 text-xs font-medium tracking-wide text-flex-black/45 uppercase">
+          <h3 className="mb-3 text-xs font-medium tracking-wide text-paper-3 uppercase">
             Havolalar bo&apos;yicha
           </h3>
           <table className="w-full text-sm">
             <tbody>
               {stats.links.map((link) => (
-                <tr key={link.label} className="border-t border-black/5">
-                  <td className="py-2.5 text-flex-black/70">{link.label}</td>
+                <tr key={link.label} className="border-t border-ink-line">
+                  <td className="py-2.5 text-paper-2">{link.label}</td>
                   <td className="py-2.5 text-right font-tabular font-medium">{link.clicks}</td>
                 </tr>
               ))}
@@ -143,18 +143,18 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
 
       {stats.sources.length > 0 && (
         <div className="mt-7">
-          <h3 className="mb-1 text-xs font-medium tracking-wide text-flex-black/45 uppercase">
+          <h3 className="mb-1 text-xs font-medium tracking-wide text-paper-3 uppercase">
             Qayerdan kelgan
           </h3>
-          <p className="mb-3 text-xs text-flex-black/40">
+          <p className="mb-3 text-xs text-paper-3">
             Kartani tegizib kelganmi, QR orqalimi yoki havoladan &mdash; qurilmangiz
             ishlayotganini shu ko&apos;rsatadi.
           </p>
           <table className="w-full text-sm">
             <tbody>
               {stats.sources.map((s) => (
-                <tr key={s.source} className="border-t border-black/5">
-                  <td className="py-2.5 text-flex-black/70">{SOURCE_LABEL[s.source] ?? s.source}</td>
+                <tr key={s.source} className="border-t border-ink-line">
+                  <td className="py-2.5 text-paper-2">{SOURCE_LABEL[s.source] ?? s.source}</td>
                   <td className="py-2.5 text-right font-tabular font-medium">{s.views}</td>
                 </tr>
               ))}
@@ -165,12 +165,12 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
 
       {peak > 0 && (
         <details className="mt-6">
-          <summary className="cursor-pointer text-xs text-flex-black/45">
+          <summary className="cursor-pointer text-xs text-paper-3">
             Kunlik raqamlar jadvali
           </summary>
           <table className="mt-3 w-full font-tabular text-xs">
             <thead>
-              <tr className="text-flex-black/45">
+              <tr className="text-paper-3">
                 <th className="py-1 text-left font-medium">Kun</th>
                 <th className="py-1 text-right font-medium">Tashrif</th>
                 <th className="py-1 text-right font-medium">Bosish</th>
@@ -180,7 +180,7 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
               {stats.daily
                 .filter((d) => d.views > 0 || d.clicks > 0)
                 .map((d) => (
-                  <tr key={d.day} className="border-t border-black/5">
+                  <tr key={d.day} className="border-t border-ink-line">
                     <td className="py-1.5">{dayLabel(d.day)}</td>
                     <td className="py-1.5 text-right">{d.views}</td>
                     <td className="py-1.5 text-right">{d.clicks}</td>

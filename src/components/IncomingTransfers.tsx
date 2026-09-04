@@ -17,13 +17,13 @@ export default function IncomingTransfers({ transfers }: { transfers: Transfer[]
     <section className="mb-6 rounded-3xl border border-lime/40 bg-lime/[0.07] p-6 sm:p-8">
       <div className="flex items-start gap-3">
         <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime">
-          <Gift className="h-4 w-4 text-flex-black" />
+          <Gift className="h-4 w-4 text-paper" />
         </span>
         <div>
           <h2 className="font-display text-lg font-semibold">
             Sizga handle taklif qilingan
           </h2>
-          <p className="mt-1 text-sm text-flex-black/60">
+          <p className="mt-1 text-sm text-paper-2">
             Qabul qilsangiz, u sizniki bo&apos;ladi va kabinetingizda paydo bo&apos;ladi.
           </p>
         </div>
@@ -33,7 +33,7 @@ export default function IncomingTransfers({ transfers }: { transfers: Transfer[]
         {transfers.map((t) => (
           <li
             key={t.id}
-            className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-black/8 bg-white px-5 py-4"
+            className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-4"
           >
             <span className="font-display text-lg font-semibold tracking-tight">
               {t.handle}
@@ -47,7 +47,7 @@ export default function IncomingTransfers({ transfers }: { transfers: Transfer[]
                   setError(result.ok ? null : (result.error ?? "Qabul qilinmadi."));
                 })
               }
-              className="rounded-full bg-flex-black px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-flex-black/85 disabled:bg-black/20"
+              className="rounded-full bg-ink-s2 px-6 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink/90 disabled:bg-black/20"
             >
               {pending ? "Qabul qilinmoqda…" : "Qabul qilish"}
             </button>
@@ -55,7 +55,7 @@ export default function IncomingTransfers({ transfers }: { transfers: Transfer[]
         ))}
       </ul>
 
-      {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-3 text-sm text-danger-ink">{error}</p>}
     </section>
   );
 }

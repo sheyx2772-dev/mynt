@@ -56,8 +56,8 @@ export default function PointsEditor({
       <form action={action}>
         <input type="hidden" name="handle" value={handle} />
 
-        <div className="rounded-2xl border border-black/10 bg-white p-5">
-          <p className="mb-1 text-[11px] font-medium tracking-wide text-flex-black/45 uppercase">
+        <div className="rounded-2xl border border-ink-line bg-ink-s1 p-5">
+          <p className="mb-1 text-[11px] font-medium tracking-wide text-paper-3 uppercase">
             Raqamlab to&apos;ldirish
           </p>
           <div className="flex items-center gap-2">
@@ -66,20 +66,20 @@ export default function PointsEditor({
               onChange={(e) => setFrom(e.target.value)}
               inputMode="numeric"
               aria-label="Boshlanishi"
-              className="w-20 rounded-xl border border-black/10 px-3 py-2.5 text-center font-tabular text-sm outline-none focus:border-flex-black/30"
+              className="w-20 rounded-xl border border-ink-line px-3 py-2.5 text-center font-tabular text-sm outline-none focus:border-flex-black/30"
             />
-            <span className="text-flex-black/35">—</span>
+            <span className="text-paper-3">—</span>
             <input
               value={to}
               onChange={(e) => setTo(e.target.value)}
               inputMode="numeric"
               aria-label="Tugashi"
-              className="w-20 rounded-xl border border-black/10 px-3 py-2.5 text-center font-tabular text-sm outline-none focus:border-flex-black/30"
+              className="w-20 rounded-xl border border-ink-line px-3 py-2.5 text-center font-tabular text-sm outline-none focus:border-flex-black/30"
             />
             <button
               type="button"
               onClick={fill}
-              className="rounded-xl border border-black/10 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-black/[0.03]"
+              className="rounded-xl border border-ink-line px-4 py-2.5 text-sm font-medium transition-colors hover:bg-ink-s2"
             >
               Qo&apos;shish
             </button>
@@ -87,7 +87,7 @@ export default function PointsEditor({
 
           <label
             htmlFor="points"
-            className="mt-5 mb-1 block text-[11px] font-medium tracking-wide text-flex-black/45 uppercase"
+            className="mt-5 mb-1 block text-[11px] font-medium tracking-wide text-paper-3 uppercase"
           >
             Ro&apos;yxat — har qatorda bittadan
           </label>
@@ -98,14 +98,14 @@ export default function PointsEditor({
             onChange={(e) => setText(e.target.value)}
             rows={8}
             placeholder={`1\n2\n3\nTerrasa 1`}
-            className="w-full resize-y rounded-xl border border-black/10 bg-white px-3 py-2.5 font-tabular text-sm outline-none focus:border-flex-black/30"
+            className="w-full resize-y rounded-xl border border-ink-line bg-ink-s1 px-3 py-2.5 font-tabular text-sm outline-none focus:border-flex-black/30"
           />
 
-          {!state.ok && <p className="mt-3 text-sm text-red-600">{state.error}</p>}
+          {!state.ok && <p className="mt-3 text-sm text-danger-ink">{state.error}</p>}
 
           <button
             disabled={busy}
-            className="mt-4 w-full rounded-xl bg-flex-black px-5 py-3 font-medium text-white disabled:opacity-60"
+            className="mt-4 w-full rounded-xl bg-ink-s2 px-5 py-3 font-medium text-paper disabled:opacity-60"
           >
             {busy ? "Saqlanmoqda…" : "Saqlash"}
           </button>
@@ -116,7 +116,7 @@ export default function PointsEditor({
         <>
           <Link
             href={`/kabinet/${handle}/nuqtalar/chop`}
-            className="mt-3 flex items-center justify-center gap-2 rounded-2xl bg-lime px-5 py-4 font-medium text-flex-black transition-transform active:scale-[0.99]"
+            className="mt-3 flex items-center justify-center gap-2 rounded-2xl bg-lime px-5 py-4 font-medium text-ink transition-transform active:scale-[0.99]"
           >
             <Printer className="h-4 w-4" />
             {points.length} ta {w.pointPrefix.toLowerCase()}ni chop etish
@@ -126,14 +126,14 @@ export default function PointsEditor({
               written one at a time with a phone held against it, so the address
               has to be copyable one at a time. */}
           <section className="mt-8">
-            <h2 className="mb-1 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+            <h2 className="mb-1 text-xs font-semibold tracking-widest text-paper-3 uppercase">
               NFC uchun manzillar
             </h2>
-            <p className="mb-3 text-sm text-flex-black/50">
+            <p className="mb-3 text-sm text-paper-2">
               Har bir chipga o&apos;ziniki yoziladi.
             </p>
 
-            <div className="divide-y divide-black/6 rounded-2xl border border-black/10 bg-white">
+            <div className="divide-y divide-ink-line rounded-2xl border border-ink-line bg-ink-s1">
               {points.map((point) => {
                 // Exactly what the QR carries, except that a chip records
                 // itself as a tap rather than a scan.
@@ -143,7 +143,7 @@ export default function PointsEditor({
                     <span className="w-16 shrink-0 font-tabular text-sm font-semibold">
                       {point}
                     </span>
-                    <span className="min-w-0 flex-1 truncate font-tabular text-xs text-flex-black/45">
+                    <span className="min-w-0 flex-1 truncate font-tabular text-xs text-paper-3">
                       {url}
                     </span>
                     <button
@@ -158,10 +158,10 @@ export default function PointsEditor({
                         }
                       }}
                       aria-label="Nusxalash"
-                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-black/10 text-flex-black/50 hover:bg-black/[0.03]"
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink-line text-paper-2 hover:bg-ink-s2"
                     >
                       {copied === point ? (
-                        <Check className="h-4 w-4 text-lime-ink" />
+                        <Check className="h-4 w-4 text-lime" />
                       ) : (
                         <Copy className="h-4 w-4" />
                       )}

@@ -32,7 +32,11 @@ export default async function CounterPage({ params }: PageProps<"/z/[token]">) {
   const waiting = requests.filter((r) => r.status === "new");
 
   return (
-    <div className="mx-auto min-h-full max-w-md px-5 py-6">
+    // The signal face. Read from a metre or two, in a room that is louder and
+    // brighter than an office, on a phone that is never off — so the ground is
+    // ink and nothing on it is small.
+    <div data-surface="wall" className="min-h-full">
+      <div className="mx-auto max-w-md px-5 py-6">
       {/* Not one of our screens: a phone propped up by a till has nowhere to
           navigate to, and the bar would be four things to tap by accident. */}
       <span data-no-app-bar hidden />
@@ -51,6 +55,7 @@ export default async function CounterPage({ params }: PageProps<"/z/[token]">) {
         fields={{ token }}
         emptyText="Hozircha chaqiruv yo'q."
       />
+      </div>
     </div>
   );
 }

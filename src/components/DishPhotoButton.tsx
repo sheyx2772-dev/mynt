@@ -29,7 +29,7 @@ export default function DishPhotoButton({
   return (
     <div className="flex shrink-0 items-center gap-1.5">
       {!state.ok && (
-        <span className="max-w-32 text-right text-xs leading-tight text-red-600">
+        <span className="max-w-32 text-right text-xs leading-tight text-danger-ink">
           {state.error}
         </span>
       )}
@@ -41,8 +41,8 @@ export default function DishPhotoButton({
           title={hasPhoto ? "Rasmni almashtirish" : "Rasm qo'shish"}
           className={
             hasPhoto
-              ? "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-black/10 bg-lime/20 text-flex-black/60 hover:bg-lime/35"
-              : "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-black/10 text-flex-black/40 hover:bg-black/[0.03]"
+              ? "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-ink-line bg-lime/20 text-paper-2 hover:bg-lime/35"
+              : "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-ink-line text-paper-3 hover:bg-ink-s2"
           }
         >
           <ImagePlus className="h-4 w-4" />
@@ -63,7 +63,7 @@ export default function DishPhotoButton({
           <input type="hidden" name="remove" value="1" />
           <button
             title="Rasmni olib tashlash"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 text-flex-black/40 hover:bg-red-50 hover:text-red-600"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-ink-line text-paper-3 hover:bg-danger-ink/10 hover:text-danger-ink"
           >
             <ImageOff className="h-4 w-4" />
           </button>

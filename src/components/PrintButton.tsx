@@ -10,7 +10,7 @@ export default function PrintButton() {
     <button
       type="button"
       onClick={() => window.print()}
-      className="inline-flex items-center gap-2 rounded-full bg-flex-black px-5 py-2.5 text-sm font-medium text-white transition-transform active:scale-[0.98]"
+      className="inline-flex items-center gap-2 rounded-full bg-ink-s2 px-5 py-2.5 text-sm font-medium text-paper transition-transform active:scale-[0.98]"
     >
       <Printer className="h-4 w-4" />
       Chop etish
