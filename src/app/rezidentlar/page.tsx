@@ -67,6 +67,17 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
           )}
         </p>
 
+        {/* The showcase is the sibling of this page — this lists the handles
+            people actually hold, that shows what a card can look like. It is
+            noindexed, so this link is the only way anyone arrives at it. */}
+        <Link
+          href="/katalog"
+          className="mt-3 inline-flex items-center gap-1.5 text-sm text-flex-black/60 underline-offset-4 hover:text-flex-black hover:underline"
+        >
+          {lang === "ru" ? "Образцы карточек и макеты" : "Karta namunalari va maketlar"}
+          <span aria-hidden>→</span>
+        </Link>
+
         <form className="mt-7 flex gap-2">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-flex-black/30" />

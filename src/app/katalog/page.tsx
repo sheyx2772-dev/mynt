@@ -1,5 +1,8 @@
 "use client";
 
+// Metadata cannot live in a client component, so the title and the crawler
+// directive sit in katalog/layout.tsx beside this file.
+
 // Copied from the Figma Make project. Only the four edits Next.js requires:
 // the "use client" directive (this screen holds state), the import paths, the
 // stylesheet import, and data-theme renamed to data-figma-theme so it cannot
