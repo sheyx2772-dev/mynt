@@ -22,9 +22,12 @@ fi
 
 cleanup
 echo "Starting $IMAGE ..."
+# No published port. Every query below goes through `docker exec`, so the
+# container needs no address on the host — and binding one made this script
+# fail whenever anything else on the machine already held that port.
 docker run -d --name "$CONTAINER" \
   -e POSTGRES_PASSWORD=test -e POSTGRES_DB="$DB" \
-  -p 55432:5432 "$IMAGE" >/dev/null
+  "$IMAGE" >/dev/null
 
 # pg_isready reports success while the server is still finishing its own
 # start-up, so wait on a query that actually needs the database to be up.
@@ -46,8 +49,16 @@ run() { docker exec -i "$CONTAINER" psql -U postgres -d "$DB" -v ON_ERROR_STOP=1
 
 # The assertion file returns a row per check; only its NOTICE lines (on stderr)
 # are worth showing, so drop the blank result rows from stdout.
+#
+# psql runs on its own line rather than into a pipe. `grep -v` exits 1 when it
+# filters everything away, which is the normal case here, and the `|| true` that
+# covered it also covered psql — so a failed assertion printed its ERROR and the
+# script still finished by saying every constraint held. Capturing the output
+# first keeps psql's exit status, which `set -e` then acts on.
 run_quiet() {
-  docker exec -i "$CONTAINER" psql -U postgres -d "$DB" -v ON_ERROR_STOP=1 -qtA | grep -v '^$' || true
+  local out
+  out=$(docker exec -i "$CONTAINER" psql -U postgres -d "$DB" -v ON_ERROR_STOP=1 -qtA)
+  printf '%s\n' "$out" | grep -v '^$' || true
 }
 
 echo "Applying Supabase shim ..."

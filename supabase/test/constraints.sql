@@ -55,6 +55,60 @@ select assert_rejected(
   $q$insert into handles (letters, digits) values ('QQQ','483')$q$,
   'duplicate handle');
 
+
+-- What an owner may write on their own row ----------------------------------
+--
+-- Row level security answers which row, and grants answer which column. The
+-- policy from 0002 passes here — `auth.uid()` is set to the owner of ZZZ999
+-- below — so the only thing left that can refuse these writes is 0047.
+--
+-- The plan is the one that costs money. Before 0047 an owner could set it from
+-- a browser console with the public anon key, because "may edit their handle"
+-- had never been narrowed to the columns a profile is made of.
+
+do $$
+declare
+  owner_id constant text := '11111111-1111-1111-1111-111111111111';
+begin
+  perform set_config('request.jwt.claim.sub', owner_id, true);
+  set local role authenticated;
+
+  begin
+    update handles set plan = 'premium', plan_expires_at = now() + interval '99 years'
+      where normalized = 'ZZZ999';
+    raise exception 'egasi oʻz tarifini premium qila oldi';
+  exception when insufficient_privilege then
+    raise notice '   ok   rejected: an owner granting themselves the paid plan';
+  end;
+
+  begin
+    update handles set user_id = gen_random_uuid() where normalized = 'ZZZ999';
+    raise exception 'raqam egasini oʻzgartirib boʻldi';
+  exception when insufficient_privilege then
+    raise notice '   ok   rejected: handing a number to somebody by writing the row';
+  end;
+
+  begin
+    update handles set status = 'claimed', price_paid = 0
+      where normalized = 'QQQ483';
+    raise exception 'toʻlovsiz raqam egallandi';
+  exception when insufficient_privilege then
+    raise notice '   ok   rejected: claiming a number without paying for it';
+  end;
+
+  begin
+    insert into handles (letters, digits) values ('WWW','111');
+    raise exception 'anon kalit bilan yangi raqam qoʻshildi';
+  exception when insufficient_privilege then
+    raise notice '   ok   rejected: minting a number from the client';
+  end;
+
+  -- The one write the cabinet still makes as the signed-in user. If this
+  -- starts failing, `touchLastSeen` has been broken by a later revoke.
+  update handles set last_seen_at = now() where normalized = 'ZZZ999';
+  raise notice '   ok   an owner is still marked as recently active';
+end $$;
+
 -- orders -------------------------------------------------------------------
 
 select assert_rejected(

@@ -37,3 +37,18 @@ $$ language sql stable;
 create or replace function auth.jwt() returns jsonb as $$
   select coalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb, '{}'::jsonb);
 $$ language sql stable;
+
+-- Supabase hands the API roles full table access and relies on row level
+-- security to narrow it: `grant all on all tables in schema public to anon,
+-- authenticated, service_role`, plus a default privilege so every table made
+-- later starts the same way.
+--
+-- Without that here, a migration that takes a privilege back is untestable —
+-- it revokes something the local roles never held, and a test asserting the
+-- write is refused would pass against a database that had simply never granted
+-- it. Starting from Supabase's position is what makes those revokes mean
+-- something locally.
+alter default privileges in schema public
+  grant all on tables to anon, authenticated, service_role;
+alter default privileges in schema public
+  grant all on sequences to anon, authenticated, service_role;
