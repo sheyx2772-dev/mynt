@@ -60,6 +60,28 @@ func (q *Queries) CountRecentLoginTokens(ctx context.Context, arg CountRecentLog
 	return count, err
 }
 
+const countRecentLoginTokensByIP = `-- name: CountRecentLoginTokensByIP :one
+select count(*) from login_tokens
+where ip = $1
+  and created_at > now() - $2::int * interval '1 second'
+`
+
+type CountRecentLoginTokensByIPParams struct {
+	Ip            *netip.Addr `json:"ip"`
+	WindowSeconds int32       `json:"window_seconds"`
+}
+
+// The second window: one address may only be asked for so many links an hour,
+// however many addresses are tried. Counted separately from the per-address
+// limit because they stop different things — one protects a person from being
+// mailed a hundred times, the other protects the mail reputation from a script.
+func (q *Queries) CountRecentLoginTokensByIP(ctx context.Context, arg CountRecentLoginTokensByIPParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countRecentLoginTokensByIP, arg.Ip, arg.WindowSeconds)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createLoginToken = `-- name: CreateLoginToken :one
 insert into login_tokens (email, token_hash, expires_at, ip)
 values (lower($1::text), $2, $3, $4)
@@ -150,6 +172,21 @@ func (q *Queries) CreateUser(ctx context.Context, email string) (User, error) {
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const deleteExpiredLoginTokens = `-- name: DeleteExpiredLoginTokens :execrows
+delete from login_tokens
+where expires_at < now() - interval '1 day'
+`
+
+// Housekeeping. Spent and expired links are of no use to anybody and their
+// rows are the only place an address appears before an account exists.
+func (q *Queries) DeleteExpiredLoginTokens(ctx context.Context) (int64, error) {
+	result, err := q.db.Exec(ctx, deleteExpiredLoginTokens)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
 }
 
 const deleteExpiredSessions = `-- name: DeleteExpiredSessions :execrows

@@ -70,3 +70,18 @@ returning *;
 select count(*) from login_tokens
 where email = lower(sqlc.arg(email)::text)
   and created_at > now() - sqlc.arg(window_seconds)::int * interval '1 second';
+
+-- The second window: one address may only be asked for so many links an hour,
+-- however many addresses are tried. Counted separately from the per-address
+-- limit because they stop different things — one protects a person from being
+-- mailed a hundred times, the other protects the mail reputation from a script.
+-- name: CountRecentLoginTokensByIP :one
+select count(*) from login_tokens
+where ip = sqlc.arg(ip)
+  and created_at > now() - sqlc.arg(window_seconds)::int * interval '1 second';
+
+-- Housekeeping. Spent and expired links are of no use to anybody and their
+-- rows are the only place an address appears before an account exists.
+-- name: DeleteExpiredLoginTokens :execrows
+delete from login_tokens
+where expires_at < now() - interval '1 day';

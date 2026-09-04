@@ -20,6 +20,7 @@ import (
 	"github.com/danielgtaylor/huma/v2/adapters/humago"
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/sheyx2772-dev/flex/backend/internal/auth"
 	"github.com/sheyx2772-dev/flex/backend/internal/config"
 )
 
@@ -28,10 +29,11 @@ import (
 type Server struct {
 	cfg  config.Config
 	pool *pgxpool.Pool
+	auth *auth.Service
 }
 
-func New(cfg config.Config, pool *pgxpool.Pool) http.Handler {
-	s := &Server{cfg: cfg, pool: pool}
+func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.Handler {
+	s := &Server{cfg: cfg, pool: pool, auth: authService}
 
 	mux := http.NewServeMux()
 
@@ -45,7 +47,12 @@ func New(cfg config.Config, pool *pgxpool.Pool) http.Handler {
 
 	api := humago.NewWithPrefix(mux, "/v1", humaConfig)
 
+	// Runs before every handler and attaches the account when the request
+	// carries a live session. It refuses nothing — see `authenticate`.
+	api.UseMiddleware(s.authenticate)
+
 	s.registerHealth(api)
+	s.registerAuth(api)
 
 	return mux
 }

@@ -19,8 +19,10 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/sheyx2772-dev/flex/backend/internal/api"
+	"github.com/sheyx2772-dev/flex/backend/internal/auth"
 	"github.com/sheyx2772-dev/flex/backend/internal/config"
 	"github.com/sheyx2772-dev/flex/backend/internal/database"
+	"github.com/sheyx2772-dev/flex/backend/internal/mail"
 )
 
 // How long a shutdown waits for requests already in flight. Longer than any
@@ -60,9 +62,15 @@ func run() error {
 	}
 	defer pool.Close()
 
+	authService := auth.NewService(pool, newMailer(cfg), cfg.SiteURL)
+
+	// Housekeeping, on the same context as everything else — one signal stops
+	// it with the rest.
+	go authService.Sweep(ctx)
+
 	server := &http.Server{
 		Addr:    cfg.Addr,
-		Handler: api.New(cfg, pool),
+		Handler: api.New(cfg, pool, authService),
 		// A client that opens a connection and then says nothing holds a
 		// goroutine and a file descriptor for as long as it likes. These are
 		// the deadlines that make that a bounded problem.
@@ -102,6 +110,20 @@ func run() error {
 
 	slog.Info("to'xtadi")
 	return nil
+}
+
+// newMailer picks how sign-in links go out.
+//
+// With no provider configured the links are written to the log, which is what
+// development wants — no account, no key, no waiting. It is announced loudly
+// because a log holding live sign-in tokens is a log that grants accounts, and
+// `config.Load` refuses to start a production process in this state at all.
+func newMailer(cfg config.Config) mail.Mailer {
+	if cfg.ResendAPIKey == "" {
+		slog.Warn("pochta xizmati sozlanmagan — kirish havolalari jurnalga yoziladi")
+		return mail.LogMailer{}
+	}
+	return mail.NewResend(cfg.ResendAPIKey, cfg.MailFrom)
 }
 
 // Text for a person reading a terminal, JSON for a machine reading a log file.
