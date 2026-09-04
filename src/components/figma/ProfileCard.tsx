@@ -56,6 +56,13 @@ const CFG: Record<string, Cfg> = {
   "uzfar":        { overlay:"linear-gradient(180deg,rgba(5,38,20,.45) 0%,rgba(8,55,30,.84) 100%)",   cardBg:"#052614", bodyBg:"#021209", accent:"#6ee7b7", accent2:"#10b981", iconBg:"#073520" },
   "itpark":       { overlay:"linear-gradient(180deg,rgba(14,48,6,.45) 0%,rgba(22,68,8,.82) 100%)",   cardBg:"#0e3006", bodyBg:"#071803", accent:"#a3e635", accent2:"#84cc16", iconBg:"#174008" },
   "chamber":      { overlay:"linear-gradient(180deg,rgba(28,12,80,.45) 0%,rgba(45,18,120,.84) 100%)",cardBg:"#1c0c50", bodyBg:"#0e0630", accent:"#c4b5fd", accent2:"#8b5cf6", iconBg:"#2a1268" },
+  // Five founders and directors, each on a ground of its own so no two read
+  // alike. No banner artwork for any of them yet — the client is sending it.
+  "khashimov":    { overlay:"linear-gradient(180deg,rgba(8,15,6,.35) 0%,rgba(18,36,15,.86) 100%)", cardBg:"#12240f", bodyBg:"#080f06", accent:"#fbbf24", accent2:"#f59e0b", iconBg:"#1c3517" },
+  "ishmukhamedov":{ overlay:"linear-gradient(180deg,rgba(18,8,24,.35) 0%,rgba(36,18,46,.86) 100%)", cardBg:"#24122e", bodyBg:"#140a1a", accent:"#d8b4fe", accent2:"#a855f7", iconBg:"#341a42" },
+  "kurbanova":    { overlay:"linear-gradient(180deg,rgba(5,16,24,.35) 0%,rgba(10,31,46,.86) 100%)", cardBg:"#0a1f2e", bodyBg:"#05121b", accent:"#67e8f9", accent2:"#06b6d4", iconBg:"#0f3247" },
+  "ibragimova":   { overlay:"linear-gradient(180deg,rgba(22,8,16,.35) 0%,rgba(43,16,32,.86) 100%)", cardBg:"#2b1020", bodyBg:"#180913", accent:"#f9a8d4", accent2:"#ec4899", iconBg:"#3d1830" },
+  "ismailova":    { overlay:"linear-gradient(180deg,rgba(10,14,26,.35) 0%,rgba(20,29,51,.86) 100%)", cardBg:"#141d33", bodyBg:"#0b111f", accent:"#93c5fd", accent2:"#3b82f6", iconBg:"#1e2b48" },
   // Olympic committee — gold on a deeper navy than the city administration's,
   // so the two do not read as the same card.
   "umarov":       { overlay:"linear-gradient(180deg,rgba(8,14,28,.35) 0%,rgba(16,24,47,.86) 100%)", cardBg:"#10182f", bodyBg:"#080e1c", accent:"#f5c451", accent2:"#d4a02e", iconBg:"#1a2440" },
