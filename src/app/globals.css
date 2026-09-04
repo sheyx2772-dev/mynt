@@ -381,11 +381,18 @@
   color: var(--color-ink);
 }
 
+/* The page wears its theme's pattern.
+ *
+ * Deliberately not `background-attachment: fixed`. It was, so the pattern
+ * would read as the surface the paper lies on rather than as texture printed
+ * on it — but a fixed background is composited against the viewport every
+ * frame, and with several on one page the browser gives up and paints none of
+ * them. It is also among the more expensive things to ask a cheap Android for
+ * while somebody is scrolling. The pattern scrolls with the page. */
 .themed {
   background-color: var(--color-paper);
   color: var(--color-page-ink);
   background-image: var(--page-pattern, none);
-  background-attachment: fixed;
 }
 
 /* Gold struck into black.
