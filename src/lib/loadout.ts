@@ -55,3 +55,17 @@ export function devicePriceOrNull(id: LoadoutDeviceId): number | null {
 
 export { VERTICALS };
 export type { VerticalId };
+
+/** The same objects with their background removed, for the suspended hero. */
+const CUTOUTS: Record<string, string> = {
+  card: "karta",
+  ring: "uzuk",
+  bracelet: "braslet",
+  avtovizitka: "avtovizitka",
+  "hayvon-teg": "hayvon-teg",
+};
+
+export function deviceCutout(id: string): string | null {
+  const name = CUTOUTS[id];
+  return name ? `/mahsulot/kesilgan/${name}.png` : null;
+}

@@ -7,11 +7,13 @@ import {
   LOADOUT_DEVICES,
   VERTICALS,
   deviceShot,
+  deviceCutout,
   verticalShot,
   devicePriceOrNull,
   UNPRICED_DEVICE,
 } from "@/lib/loadout";
 import type { StripItem } from "@/components/LoadoutStrip";
+import type { CarouselItem } from "@/components/FloatingCarousel";
 
 // The strip is a client component, so the photographs have to be resolved on
 // the server and handed over as plain strings. Built here rather than in each
@@ -52,4 +54,36 @@ export function verticalStrip(lang: Lang): StripItem[] {
       price: p.openCta,
     };
   });
+}
+
+/**
+ * The hero's carousel: the same objects as the shelf, cut out so they can hang
+ * in the air, and the pet tag as well — it is sold like the rest even though it
+ * has no row in DEVICE_TYPES.
+ *
+ * Built here rather than in the two hero components, for the same reason the
+ * shelf is: the phone and the desktop both draw it and they must not drift.
+ */
+export function heroCarousel(lang: Lang): CarouselItem[] {
+  const p = picker(lang);
+  const c = catalogue(lang);
+
+  const made = LOADOUT_DEVICES.map((id) => {
+    const price = devicePriceOrNull(id);
+    return {
+      href: `/qurilmalar/${id}`,
+      src: deviceCutout(id)!,
+      name: id === UNPRICED_DEVICE ? p.avtovizitka.name : c.devices[id].name,
+      price: price === null ? p.priceUnknown : formatUZS(price, lang),
+    };
+  });
+
+  const petTag = {
+    href: "/qurilmalar",
+    src: deviceCutout("hayvon-teg")!,
+    name: lang === "ru" ? "Жетон для животного" : lang === "en" ? "Pet tag" : "Hayvon jetoni",
+    price: p.priceUnknown,
+  };
+
+  return [...made, petTag];
 }

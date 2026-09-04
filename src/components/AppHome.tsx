@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Calculator, ChevronRight, CreditCard, Nfc, Store, User, Users } from "lucide-react";
 import HandleChecker from "@/components/HandleChecker";
-import FloatingProduct from "@/components/FloatingProduct";
+import FloatingCarousel, { type CarouselItem } from "@/components/FloatingCarousel";
 import LoadoutStrip, { type StripItem } from "@/components/LoadoutStrip";
 import OwnerHome from "@/components/OwnerHome";
 import type { OwnedHandle } from "@/lib/handles";
@@ -48,6 +48,7 @@ export default function AppHome({
   namespace,
   devices,
   verticals,
+  carousel,
   stripLabels,
   owner,
 }: {
@@ -57,6 +58,7 @@ export default function AppHome({
   namespace: number;
   devices: StripItem[];
   verticals: StripItem[];
+  carousel: CarouselItem[];
   stripLabels: {
     devices: string;
     devicesNote: string;
@@ -145,14 +147,7 @@ export default function AppHome({
           {/* The card, suspended. It is the object the number is issued on, so
               it belongs beside the number rather than further down a page. */}
           <div className="mx-auto mt-9 w-full max-w-[19rem] px-2 sm:max-w-[22rem] lg:mt-0 lg:max-w-none lg:px-0">
-            <FloatingProduct
-              src="/mahsulot/kesilgan/karta.png"
-              alt={s.navDevices}
-              href="/qurilmalar/card"
-              width={1454}
-              height={981}
-              priority
-            />
+            <FloatingCarousel items={carousel} />
           </div>
         </div>
       </section>

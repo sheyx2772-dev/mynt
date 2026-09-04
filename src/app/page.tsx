@@ -47,7 +47,7 @@ import LiveResidents from "@/components/LiveResidents";
 import AppHome from "@/components/AppHome";
 import TwoWays from "@/components/TwoWays";
 import LoadoutStrip from "@/components/LoadoutStrip";
-import { deviceStrip, verticalStrip } from "@/lib/strip-items";
+import { deviceStrip, verticalStrip, heroCarousel } from "@/lib/strip-items";
 import MobileMenu from "@/components/MobileMenu";
 import { getLang } from "@/lib/lang";
 import { home } from "@/lib/i18n-home";
@@ -191,6 +191,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const carShot = productShot("avtovizitka");
   const devices = deviceStrip(lang);
   const verticals = verticalStrip(lang);
+  const carousel = heroCarousel(lang);
   const familyShot = productShot("oila");
 
   return (
@@ -278,7 +279,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             side should not have to scroll past a pitch to find out we have one.
             The phone gets the same pair inside AppHome. */}
         <div className="hidden lg:block">
-          <TwoWays s={s} />
+          <TwoWays s={s} carousel={carousel} />
         </div>
 
         {/* Third block, straight after the offer. Somebody who has read the
@@ -331,6 +332,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           namespace={counts.namespace}
           devices={devices}
           verticals={verticals}
+          carousel={carousel}
           stripLabels={{
             devices: p.groupDevices,
             devicesNote: p.groupDevicesNote,

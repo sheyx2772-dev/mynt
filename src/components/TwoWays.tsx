@@ -1,6 +1,6 @@
 import Link from "next/link";
 import HandleChecker from "@/components/HandleChecker";
-import FloatingProduct from "@/components/FloatingProduct";
+import FloatingCarousel, { type CarouselItem } from "@/components/FloatingCarousel";
 import { ArrowRight, User, Store } from "lucide-react";
 import type { site } from "@/lib/i18n";
 
@@ -18,7 +18,7 @@ import type { site } from "@/lib/i18n";
 
 type Site = ReturnType<typeof site>;
 
-export default function TwoWays({ s }: { s: Site }) {
+export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselItem[] }) {
   return (
     <section className="mx-auto max-w-6xl px-6 pt-12 pb-14 sm:pt-16 sm:pb-20">
       {/* The number and the object it is issued on, side by side: one is what
@@ -58,14 +58,7 @@ export default function TwoWays({ s }: { s: Site }) {
         </div>
 
         <div className="mx-auto mt-10 w-full max-w-[20rem] lg:mt-0 lg:max-w-none">
-          <FloatingProduct
-            src="/mahsulot/kesilgan/karta.png"
-            alt={s.navDevices}
-            href="/qurilmalar/card"
-            width={1454}
-            height={981}
-            priority
-          />
+          <FloatingCarousel items={carousel} />
         </div>
       </div>
 
