@@ -169,13 +169,21 @@ function PlaqueSample() {
   );
 }
 
-const SOCIALS = [
-  { label: "Telegram", href: "#", handle: "@azizkarimov" },
-  { label: "Instagram", href: "#", handle: "@aziz.karimov" },
-  { label: "WhatsApp", href: "#", handle: "+998 90 123 45 67" },
-  { label: "YouTube", href: "#", handle: "@azizkarimov" },
-  { label: "LinkedIn", href: "#", handle: "in/azizkarimov" },
-  { label: "Facebook", href: "#", handle: "aziz.karimov" },
+const REACH = [
+  { id: "phone" as const, href: "tel:+998901234567" },
+  { id: "sms" as const, href: "sms:+998901234567" },
+  { id: "telegram" as const, href: "#" },
+  { id: "whatsapp" as const, href: "#" },
+  { id: "instagram" as const, href: "#" },
+  { id: "youtube" as const, href: "#" },
+  { id: "linkedin" as const, href: "#" },
+  { id: "facebook" as const, href: "#" },
+];
+
+const PAY = [
+  { id: "payme" as const, href: "#" },
+  { id: "click" as const, href: "#" },
+  { id: "uzum" as const, href: "#" },
 ];
 
 const ROWS = [
@@ -198,7 +206,8 @@ function SocialSample() {
         n="MYN042"
         name="Aziz Karimov"
         tagline="Fotograf · Toshkent"
-        socials={SOCIALS}
+        reach={REACH}
+        pay={PAY}
       >
         <a
           href="#"
@@ -259,7 +268,7 @@ const LAYOUTS = [
   },
   {
     name: "Ijtimoiy",
-    note: "Hisoblar sahifaning o'zi: ikki ustunli plitkalar, har biri o'z platformasining rangi va belgisi bilan. Ism kichik, hisoblar katta.",
+    note: "Telefon ekrani. To'liq logolar, o'z ranglarida, to'rttadan qatorda, ostida yozuvsiz. Pastda alohida to'lov qatori.",
     who: "Profili aynan hisoblaridan iborat odam — bloger, do'kon, fotograf.",
     render: () => <SocialSample />,
   },
