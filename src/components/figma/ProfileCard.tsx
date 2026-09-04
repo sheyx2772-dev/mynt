@@ -72,6 +72,10 @@ const CFG: Record<string, Cfg> = {
   "uzfar":        { overlay:"linear-gradient(180deg,rgba(5,38,20,.45) 0%,rgba(8,55,30,.84) 100%)",   cardBg:"#052614", bodyBg:"#021209", accent:"#6ee7b7", accent2:"#10b981", iconBg:"#073520" },
   "itpark":       { overlay:"linear-gradient(180deg,rgba(14,48,6,.45) 0%,rgba(22,68,8,.82) 100%)",   cardBg:"#0e3006", bodyBg:"#071803", accent:"#a3e635", accent2:"#84cc16", iconBg:"#174008" },
   "chamber":      { overlay:"linear-gradient(180deg,rgba(28,12,80,.45) 0%,rgba(45,18,120,.84) 100%)",cardBg:"#1c0c50", bodyBg:"#0e0630", accent:"#c4b5fd", accent2:"#8b5cf6", iconBg:"#2a1268" },
+  // Graphite with amber for the reform agency, plum for the entrepreneur —
+  // neither hue is in use elsewhere in the catalogue.
+  "umurzakov":    { overlay:"linear-gradient(180deg,rgba(30,30,36,.30) 0%,rgba(43,43,51,.86) 100%)", cardBg:"#2b2b33", bodyBg:"#1e1e24", accent:"#f0c674", accent2:"#d4a02e", iconBg:"#3d3d47" },
+  "baxtiyarovich":{ overlay:"linear-gradient(180deg,rgba(36,22,40,.30) 0%,rgba(51,32,58,.86) 100%)", cardBg:"#33203a", bodyBg:"#241628", accent:"#f0b8e0", accent2:"#d946a6", iconBg:"#452d4d" },
   // Five founders and directors, each on a ground of its own so no two read
   // alike. No banner artwork for any of them yet — the client is sending it.
   "khashimov":    { overlay:"linear-gradient(180deg,rgba(61,20,24,.34) 0%,rgba(61,20,24,.86) 100%)", cardBg:"#3d1418", bodyBg:"#2a0d10", accent:"#ff9a9a", accent2:"#e40000", iconBg:"#521c21" },
