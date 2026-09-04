@@ -19,6 +19,7 @@ const imgFintellect = "/figma-make/fintellect-banner.jpeg";
 const imgAyol       = "/figma-make/ayol-banner.jpeg";
 const imgEYU        = "/figma-make/eyu-banner.jpeg";
 const imgAloqaV     = "/figma-make/aloqaventures-banner.jpeg";  // the fund's own, supplied
+const imgFlex       = "/figma-make/flex-banner.png";
 
 const BANNER: Record<string, string> = {
   "tashkent-inn": imgStartupGarage,
@@ -36,6 +37,9 @@ const BANNER: Record<string, string> = {
   "uzreport":     imgICTWeek,
   "yakubov":           imgYoshlarVentures,
   "umarov":            imgMOQ,
+  "abrorov":           imgFlex,
+  "ahmadjonov":        imgFlex,
+  "abduvohidov":       imgFlex,
   "gaybulloev":        imgAloqaV,
   "sanakulov":         imgAloqaV,
   "parmonov":          imgAloqaV,
@@ -73,6 +77,10 @@ const CFG: Record<string, Cfg> = {
   "uzfar":        { overlay:"linear-gradient(180deg,rgba(5,38,20,.45) 0%,rgba(8,55,30,.84) 100%)",   cardBg:"#052614", bodyBg:"#021209", accent:"#6ee7b7", accent2:"#10b981", iconBg:"#073520" },
   "itpark":       { overlay:"linear-gradient(180deg,rgba(14,48,6,.45) 0%,rgba(22,68,8,.82) 100%)",   cardBg:"#0e3006", bodyBg:"#071803", accent:"#a3e635", accent2:"#84cc16", iconBg:"#174008" },
   "chamber":      { overlay:"linear-gradient(180deg,rgba(28,12,80,.45) 0%,rgba(45,18,120,.84) 100%)",cardBg:"#1c0c50", bodyBg:"#0e0630", accent:"#c4b5fd", accent2:"#8b5cf6", iconBg:"#2a1268" },
+  // FLEX itself — the app's ink and the lime off its own icon.
+  "abrorov":      { overlay:"linear-gradient(180deg,rgba(13,10,24,.30) 0%,rgba(22,26,46,.86) 100%)", cardBg:"#161a2e", bodyBg:"#0f1220", accent:"#b4f01e", accent2:"#8fc417", iconBg:"#232842" },
+  "ahmadjonov":   { overlay:"linear-gradient(180deg,rgba(13,10,24,.30) 0%,rgba(22,26,46,.86) 100%)", cardBg:"#161a2e", bodyBg:"#0f1220", accent:"#b4f01e", accent2:"#8fc417", iconBg:"#232842" },
+  "abduvohidov":  { overlay:"linear-gradient(180deg,rgba(13,10,24,.30) 0%,rgba(22,26,46,.86) 100%)", cardBg:"#161a2e", bodyBg:"#0f1220", accent:"#b4f01e", accent2:"#8fc417", iconBg:"#232842" },
   // Graphite with amber for the reform agency, plum for the entrepreneur —
   // neither hue is in use elsewhere in the catalogue.
   "umurzakov":    { overlay:"linear-gradient(180deg,rgba(30,30,36,.30) 0%,rgba(43,43,51,.86) 100%)", cardBg:"#2b2b33", bodyBg:"#1e1e24", accent:"#f0c674", accent2:"#d4a02e", iconBg:"#3d3d47" },
@@ -373,6 +381,13 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
               addresses on real institutions' domains, so they are gone rather
               than replaced — the website below is the one contact on this card
               that is genuinely published by the organisation itself. */}
+
+          {profile.education && (
+            <p style={{ fontSize: 10, lineHeight: "15px", color: "rgba(255,255,255,0.42)", margin: "8px 0 0" }}>
+              <span style={{ color: c.accent, fontWeight: 700 }}>Ta&apos;lim · </span>
+              {profile.education}
+            </p>
+          )}
 
           {/* Tags */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginTop: 10 }}>
