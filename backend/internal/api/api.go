@@ -22,18 +22,25 @@ import (
 
 	"github.com/sheyx2772-dev/flex/backend/internal/auth"
 	"github.com/sheyx2772-dev/flex/backend/internal/config"
+	"github.com/sheyx2772-dev/flex/backend/internal/handles"
 )
 
 // Server holds what the handlers need. Passed in rather than reached for:
 // a package-level pool cannot be swapped for a test one.
 type Server struct {
-	cfg  config.Config
-	pool *pgxpool.Pool
-	auth *auth.Service
+	cfg     config.Config
+	pool    *pgxpool.Pool
+	auth    *auth.Service
+	handles *handles.Store
 }
 
 func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.Handler {
-	s := &Server{cfg: cfg, pool: pool, auth: authService}
+	s := &Server{
+		cfg:     cfg,
+		pool:    pool,
+		auth:    authService,
+		handles: handles.NewStore(pool),
+	}
 
 	mux := http.NewServeMux()
 
@@ -53,6 +60,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 
 	s.registerHealth(api)
 	s.registerAuth(api)
+	s.registerHandles(api)
 
 	return mux
 }

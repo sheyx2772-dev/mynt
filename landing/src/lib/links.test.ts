@@ -189,3 +189,22 @@ describe("buildProfileLinks", () => {
     expect(links).toEqual([{ label: "Telegram", href: "https://t.me/aziz" }]);
   });
 });
+
+describe("a username that is only punctuation", () => {
+  // Found by porting this file to Go and testing the port: ".." passes the
+  // character class, and a base address plus ".." is a link to the base.
+  it.each(["..", ".", "...", "---", "___", "._-"])("refuses %s", (value) => {
+    expect(socialLink("Telegram", value, "https://t.me/")).toBeNull();
+  });
+
+  it("still accepts the ones people have", () => {
+    expect(socialLink("Telegram", "aziz.karimov", "https://t.me/")).toEqual({
+      label: "Telegram",
+      href: "https://t.me/aziz.karimov",
+    });
+    expect(socialLink("LinkedIn", "aziz-karimov-1a2b", "https://linkedin.com/in/")).toEqual({
+      label: "LinkedIn",
+      href: "https://linkedin.com/in/aziz-karimov-1a2b",
+    });
+  });
+});

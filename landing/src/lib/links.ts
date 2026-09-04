@@ -10,10 +10,18 @@ export type Link = { label: string; href: string };
 // LinkedIn address a person would actually paste is rejected.
 const USERNAME = /^[A-Za-z0-9._-]{1,64}$/;
 
+// The second test is the one a port to Go found. A dot is a legal character in
+// a username, so USERNAME accepts ".." — and ".." appended to a base address is
+// a path segment meaning "up one", which turns "instagram.com/" plus ".." into
+// a link to instagram.com itself. Requiring one alphanumeric refuses that, and
+// "." and "---" with it, while accepting every username a person actually has.
+const HAS_ALPHANUMERIC = /[A-Za-z0-9]/;
+
 export function socialLink(label: string, raw: string, base: string): Link | null {
   const value = raw.trim().replace(/^@/, "");
   if (!value) return null;
   if (!USERNAME.test(value)) return null;
+  if (!HAS_ALPHANUMERIC.test(value)) return null;
   return { label, href: `${base}${value}` };
 }
 

@@ -11,6 +11,89 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type ClaimAttempt struct {
+	ID        int64              `json:"id"`
+	UserID    *uuid.UUID         `json:"user_id"`
+	Ip        *netip.Addr        `json:"ip"`
+	Handle    *string            `json:"handle"`
+	Succeeded bool               `json:"succeeded"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type GenesisCard struct {
+	ID          uuid.UUID          `json:"id"`
+	Serial      int32              `json:"serial"`
+	Normalized  *string            `json:"normalized"`
+	OwnerHandle *string            `json:"owner_handle"`
+	OwnerName   *string            `json:"owner_name"`
+	Status      string             `json:"status"`
+	MintedAt    pgtype.Timestamptz `json:"minted_at"`
+	ClaimedAt   pgtype.Timestamptz `json:"claimed_at"`
+}
+
+type Handle struct {
+	ID              uuid.UUID          `json:"id"`
+	Letters         string             `json:"letters"`
+	Digits          string             `json:"digits"`
+	Normalized      *string            `json:"normalized"`
+	Status          string             `json:"status"`
+	UserID          *uuid.UUID         `json:"user_id"`
+	ReservedUntil   pgtype.Timestamptz `json:"reserved_until"`
+	OwnerName       *string            `json:"owner_name"`
+	Bio             *string            `json:"bio"`
+	AvatarUrl       *string            `json:"avatar_url"`
+	BannerUrl       *string            `json:"banner_url"`
+	Links           []byte             `json:"links"`
+	Services        []byte             `json:"services"`
+	City            *string            `json:"city"`
+	ContactEmail    *string            `json:"contact_email"`
+	Phone           *string            `json:"phone"`
+	Position        *string            `json:"position"`
+	Company         *string            `json:"company"`
+	Tags            []string           `json:"tags"`
+	CardDesign      string             `json:"card_design"`
+	DeviceType      string             `json:"device_type"`
+	CustomDesignUrl *string            `json:"custom_design_url"`
+	Plan            string             `json:"plan"`
+	PlanExpiresAt   pgtype.Timestamptz `json:"plan_expires_at"`
+	PlanRemindedFor pgtype.Timestamptz `json:"plan_reminded_for"`
+	PricePaid       *int64             `json:"price_paid"`
+	GiftReason      *string            `json:"gift_reason"`
+	ViewCount       int64              `json:"view_count"`
+	LastSeenAt      pgtype.Timestamptz `json:"last_seen_at"`
+	CreatedAt       pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt       pgtype.Timestamptz `json:"updated_at"`
+	ClaimedAt       pgtype.Timestamptz `json:"claimed_at"`
+}
+
+type Lead struct {
+	ID        int64              `json:"id"`
+	HandleID  uuid.UUID          `json:"handle_id"`
+	Name      string             `json:"name"`
+	Phone     *string            `json:"phone"`
+	Email     *string            `json:"email"`
+	Company   *string            `json:"company"`
+	Note      *string            `json:"note"`
+	Source    *string            `json:"source"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type LeadAttempt struct {
+	ID        int64              `json:"id"`
+	Ip        *netip.Addr        `json:"ip"`
+	Handle    *string            `json:"handle"`
+	Succeeded bool               `json:"succeeded"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type LinkClick struct {
+	ID          int64              `json:"id"`
+	Handle      string             `json:"handle"`
+	Label       string             `json:"label"`
+	VisitorHash *string            `json:"visitor_hash"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+}
+
 type LoginToken struct {
 	ID         uuid.UUID          `json:"id"`
 	Email      string             `json:"email"`
@@ -19,6 +102,15 @@ type LoginToken struct {
 	ConsumedAt pgtype.Timestamptz `json:"consumed_at"`
 	CreatedAt  pgtype.Timestamptz `json:"created_at"`
 	Ip         *netip.Addr        `json:"ip"`
+}
+
+type ProfileView struct {
+	ID           int64              `json:"id"`
+	Handle       string             `json:"handle"`
+	VisitorHash  *string            `json:"visitor_hash"`
+	ReferrerHost *string            `json:"referrer_host"`
+	Source       *string            `json:"source"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
 }
 
 type Session struct {

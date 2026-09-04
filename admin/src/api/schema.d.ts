@@ -81,6 +81,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/raqamlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Hisobingizdagi raqamlar */
+        get: operations["raqamlarim"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bitta raqam */
+        get: operations["raqam"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/profil": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Profilni tahrirlash
+         * @description Tarif, holat va egalik bu yerdan o'zgarmaydi — ular profilning qismi emas.
+         */
+        put: operations["profilni-saqlash"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sogliq": {
         parameters: {
             query?: never;
@@ -183,6 +237,50 @@ export interface components {
              */
             type: string;
         };
+        Handle: {
+            bio: string;
+            dizayn: string;
+            email?: string;
+            havolalar: components["schemas"]["Link"][] | null;
+            /** @enum {string} */
+            holat: "available" | "reserved" | "claimed";
+            ism: string;
+            kompaniya?: string;
+            /** Format: int64 */
+            korishlar: number;
+            lavozim?: string;
+            /** Format: date-time */
+            olingan?: string;
+            /** @enum {string} */
+            qurilma: "card" | "ring" | "bracelet";
+            /** @example MYN042 */
+            raqam: string;
+            rasm?: string;
+            shahar?: string;
+            /** @enum {string} */
+            tarif: "free" | "premium";
+            teglar: string[] | null;
+            telefon?: string;
+            xizmatlar: components["schemas"]["Service"][] | null;
+        };
+        HandleListOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/HandleListOutputBody.json
+             */
+            readonly $schema?: string;
+            raqamlar: components["schemas"]["Handle"][] | null;
+        };
+        HandleOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/HandleOutputBody.json
+             */
+            readonly $schema?: string;
+            raqam: components["schemas"]["Handle"];
+        };
         HealthOutputBody: {
             /**
              * Format: uri
@@ -198,6 +296,20 @@ export interface components {
             /** @description Baza javob berdimi */
             ok: boolean;
         };
+        Link: {
+            href: string;
+            label: string;
+        };
+        LinkInput: {
+            booking?: string;
+            facebook?: string;
+            instagram?: string;
+            linkedin?: string;
+            telegram?: string;
+            website?: string;
+            whatsapp?: string;
+            youtube?: string;
+        };
         MeOutputBody: {
             /**
              * Format: uri
@@ -206,6 +318,28 @@ export interface components {
              */
             readonly $schema?: string;
             account: components["schemas"]["AccountBody"];
+        };
+        ProfileInput: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/ProfileInput.json
+             */
+            readonly $schema?: string;
+            bio?: string;
+            cardDesign?: string;
+            city?: string;
+            company?: string;
+            contactEmail?: string;
+            deviceType?: string;
+            links?: components["schemas"]["LinkInput"];
+            /** @description Yagona majburiy maydon */
+            name: string;
+            phone?: string;
+            position?: string;
+            services?: components["schemas"]["Service"][] | null;
+            /** @description Vergul yoki bo'sh joy bilan ajratilgan */
+            tags?: string;
         };
         RequestLinkInputBody: {
             /**
@@ -225,6 +359,10 @@ export interface components {
              */
             readonly $schema?: string;
             message: string;
+        };
+        Service: {
+            name: string;
+            price: string;
         };
         SessionOutputBody: {
             /**
@@ -357,6 +495,102 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MeOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    raqamlarim: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HandleListOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    raqam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Uch harf va uch raqam */
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HandleOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "profilni-saqlash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProfileInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HandleOutputBody"];
                 };
             };
             /** @description Error */
