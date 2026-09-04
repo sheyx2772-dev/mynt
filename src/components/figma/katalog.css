@@ -1,0 +1,146 @@
+/* Copied from the Figma Make project, unchanged apart from scoping.
+   Three mechanical edits were required and nothing else:
+   - `@import 'tailwindcss'` dropped: globals.css already loads it once.
+   - `:root` and `[data-theme]` became `.figma-katalog[data-figma-theme]`. The
+     app's own themes already own the bare `data-theme` attribute, so leaving
+     these at the root would have had the two systems overwrite each other.
+   - `html, body, #root` became the wrapper, since this is one route in a larger
+     document rather than the whole page. */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+/* ── Design tokens ─────────────────────────────────────── */
+.figma-katalog {
+  /* Spacing */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-8: 32px;
+
+  /* Radius */
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  20px;
+  --r-2xl: 24px;
+  --r-icon: 12px;   /* icon button = 22% of 56px */
+  --r-chip: 100px;
+
+  /* Icon grid */
+  --icon-size: 52px;
+  --icon-gap:  8px;
+
+  /* Typography */
+  --fs-xs:   10px; --lh-xs: 14px;
+  --fs-sm:   12px; --lh-sm: 16px;
+  --fs-base: 14px; --lh-base: 20px;
+  --fs-lg:   16px; --lh-lg: 22px;
+  --fs-xl:   20px; --lh-xl: 26px;
+  --fs-2xl:  24px; --lh-2xl: 30px;
+
+  /* Safe area */
+  --safe-top:    env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* Font families */
+  --font-sans:  'Nunito', system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+}
+
+/* ── Light theme (default) ─────────────────────────────── */
+.figma-katalog,
+.figma-katalog[data-figma-theme="light"] {
+  --bg-app:       #f2f0eb;
+  --bg-surface:   #ffffff;
+  --bg-muted:     #f5f3ee;
+  --text-primary: #111111;
+  --text-secondary:#444444;
+  --text-muted:   #888888;
+  --border:       #e2ddd6;
+  --header-bg:    #1a3a6b;
+  --header-text:  #ffffff;
+  --card-shadow:  0 4px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+  --chip-bg:      #ffffff;
+  --chip-active-bg:   #1a3a6b;
+  --chip-active-text: #ffffff;
+  --chip-border:  #d4cfc8;
+  --fade-end:     rgba(242,240,235,0);
+  --fade-start:   rgba(242,240,235,1);
+}
+
+/* ── Dark theme ────────────────────────────────────────── */
+.figma-katalog[data-figma-theme="dark"] {
+  --bg-app:       #0e0e12;
+  --bg-surface:   #18181e;
+  --bg-muted:     #111116;
+  --text-primary: #f0f0f0;
+  --text-secondary:#aaaaaa;
+  --text-muted:   #666666;
+  --border:       #2a2a35;
+  --header-bg:    #08091a;
+  --header-text:  #ffffff;
+  --card-shadow:  0 4px 32px rgba(0,0,0,0.5), 0 1px 6px rgba(0,0,0,0.3);
+  --chip-bg:      #1e1e28;
+  --chip-active-bg:   #ffffff;
+  --chip-active-text: #111111;
+  --chip-border:  #2e2e3e;
+  --fade-end:     rgba(14,14,18,0);
+  --fade-start:   rgba(14,14,18,1);
+}
+
+/* ── Base ──────────────────────────────────────────────── */
+.figma-katalog {
+  font-family: var(--font-sans);
+  background: var(--bg-app);
+  color: var(--text-primary);
+  transition: background 0.25s, color 0.25s;
+}
+
+.figma-katalog * { box-sizing: border-box; }
+
+/* ── Scrollbar ─────────────────────────────────────────── */
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* ── Interactive states ────────────────────────────────── */
+.btn-primary {
+  transition: opacity 0.15s, transform 0.1s;
+}
+.btn-primary:active  { opacity: 0.75; transform: scale(0.97); }
+.btn-primary:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.icon-btn {
+  transition: transform 0.1s, opacity 0.15s;
+  cursor: pointer;
+}
+.icon-btn:active  { transform: scale(0.90); opacity: 0.8; }
+.icon-btn:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  border-radius: var(--r-icon);
+}
+
+.chip-btn {
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+  cursor: pointer;
+}
+.chip-btn:active { transform: scale(0.95); }
+
+/* ── NFC pulse animation ───────────────────────────────── */
+@keyframes nfc-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(1.15); }
+}
+.nfc-badge { animation: nfc-pulse 2.2s ease-in-out infinite; }
+
+/* ── Card fade-bottom ──────────────────────────────────── */
+.card-fade::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 64px;
+  background: linear-gradient(to bottom, var(--fade-end), var(--fade-start));
+  border-radius: 0 0 var(--r-2xl) var(--r-2xl);
+  pointer-events: none;
+}
