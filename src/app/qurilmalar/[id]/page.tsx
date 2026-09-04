@@ -151,7 +151,7 @@ export default async function DevicePage({
             {price === null ? (
               <a
                 href={`tel:${COMPANY.phoneHref}`}
-                className="mt-9 flex items-center justify-center gap-2 rounded-2xl bg-lime px-6 py-4 font-medium text-flex-black shadow-[0_16px_40px_-16px_rgba(171,255,9,0.8)] transition-transform hover:scale-[1.01]"
+                className="mt-9 flex items-center justify-center gap-2 rounded-2xl bg-lime px-6 py-4 font-medium text-flex-black transition-transform hover:scale-[1.01]"
               >
                 <Phone className="h-4 w-4" />
                 {p.askPrice}
@@ -159,7 +159,7 @@ export default async function DevicePage({
             ) : (
               <Link
                 href={order.href}
-                className="mt-9 flex items-center justify-center gap-2 rounded-2xl bg-lime px-6 py-4 font-medium text-flex-black shadow-[0_16px_40px_-16px_rgba(171,255,9,0.8)] transition-transform hover:scale-[1.01]"
+                className="mt-9 flex items-center justify-center gap-2 rounded-2xl bg-lime px-6 py-4 font-medium text-flex-black transition-transform hover:scale-[1.01]"
               >
                 {order.label}
                 <ArrowRight className="h-4 w-4" />

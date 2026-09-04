@@ -162,7 +162,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
           href="/kabinet/jamoa"
           className="mb-4 flex items-center gap-4 rounded-[1.5rem] border border-ink-line bg-ink-s2 px-6 py-5 text-paper transition-transform active:scale-[0.995]"
         >
-          <Building2 className="h-5 w-5 shrink-0 text-lime" strokeWidth={1.75} />
+          <Building2 className="h-5 w-5 shrink-0 text-paper" strokeWidth={1.75} />
           <div className="min-w-0 flex-1">
             <p className="font-display font-semibold tracking-tight">{team.name}</p>
             <p className="mt-0.5 text-xs text-paper">Firma hisobi</p>
@@ -199,7 +199,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
           </p>
           <Link
             href="/shaxsiy#narx"
-            className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-ink shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+            className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-ink transition-transform hover:scale-[1.01]"
           >
             Raqam tanlash
           </Link>

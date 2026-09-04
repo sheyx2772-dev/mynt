@@ -56,7 +56,7 @@ export default function StaffLink({
               aria-label="Nusxalash"
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink-line text-paper-2 hover:bg-ink-s1"
             >
-              {copied ? <Check className="h-4 w-4 text-lime" /> : <Copy className="h-4 w-4" />}
+              {copied ? <Check className="h-4 w-4 text-paper" /> : <Copy className="h-4 w-4" />}
             </button>
           </div>
 

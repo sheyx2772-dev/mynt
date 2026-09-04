@@ -28,7 +28,7 @@ export default function ClaimForm({
       <div className="mt-8">
         <Link
           href={`/kirish?keyin=${encodeURIComponent(`/${handle}`)}`}
-          className="block w-full rounded-full bg-lime px-6 py-3 text-center font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+          className="block w-full rounded-full bg-lime px-6 py-3 text-center font-medium text-flex-black transition-transform hover:scale-[1.01]"
         >
           Kirib, band qilish
         </Link>
@@ -65,7 +65,7 @@ export default function ClaimForm({
         {state.checkout.payme && (
           <a
             href={state.checkout.payme}
-            className="block rounded-full bg-lime px-6 py-3 text-center font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+            className="block rounded-full bg-lime px-6 py-3 text-center font-medium text-flex-black transition-transform hover:scale-[1.01]"
           >
             Payme orqali to&apos;lash — {priceLabel}
           </a>
@@ -108,7 +108,7 @@ export default function ClaimForm({
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01] disabled:opacity-60"
+        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-flex-black transition-transform hover:scale-[1.01] disabled:opacity-60"
       >
         {isPending
           ? "Yuborilmoqda..."

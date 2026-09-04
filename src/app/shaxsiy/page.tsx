@@ -95,7 +95,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
                 <div className="mt-6 flex flex-wrap gap-4">
                   <a
                     href="#narx"
-                    className="rounded-full bg-lime px-6 py-3 text-sm font-medium text-flex-black shadow-[0_12px_36px_-8px_rgba(171,255,9,0.5)] transition-transform hover:scale-[1.03] sm:px-7 sm:py-3.5 sm:text-base"
+                    className="rounded-full bg-lime px-6 py-3 text-sm font-medium text-flex-black transition-transform hover:scale-[1.03] sm:px-7 sm:py-3.5 sm:text-base"
                   >
                     {s.calcPrice}
                   </a>
@@ -169,7 +169,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
                       <span className="relative h-16 w-24 rotate-[-8deg] rounded-lg border border-white/20 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
                         <span className="absolute bottom-2 left-2 h-1 w-6 rounded-full bg-lime" />
                       </span>
-                      <span className="h-16 w-16 rounded-full border-[6px] border-white/20 bg-[linear-gradient(140deg,#312653,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95),inset_0_0_0_2px_rgba(171,255,9,0.5)]" />
+                      <span className="h-16 w-16 rounded-full border-[6px] border-white/20 bg-[linear-gradient(140deg,#312653,#0c0818)]" />
                       <span className="relative h-20 w-9 rotate-[6deg] rounded-full border border-white/20 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
                         <span className="absolute top-1/2 left-1/2 h-6 w-4 -translate-x-1/2 -translate-y-1/2 rounded-[40%] bg-black ring-1 ring-lime/60" />
                       </span>
@@ -204,7 +204,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
                     <span className="absolute h-16 w-16 rounded-full border border-lime/25" />
                     <span className="absolute h-28 w-28 rounded-full border border-lime/15" />
                     <span className="absolute h-44 w-44 rounded-full border border-lime/10" />
-                    <span className="relative flex h-11 w-11 items-center justify-center rounded-full bg-lime shadow-[0_0_40px_rgba(171,255,9,0.5)]">
+                    <span className="relative flex h-11 w-11 items-center justify-center rounded-full bg-lime">
                       <Nfc className="h-5 w-5 text-flex-black" />
                     </span>
                   </>

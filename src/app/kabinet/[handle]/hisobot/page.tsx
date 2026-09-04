@@ -201,7 +201,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
                       key={n}
                       className={
                         n <= Math.round(report.reviews.average ?? 0)
-                          ? "h-4 w-4 fill-lime-ink text-lime"
+                          ? "h-4 w-4 fill-lime-ink text-paper"
                           : "h-4 w-4 text-black/15"
                       }
                     />

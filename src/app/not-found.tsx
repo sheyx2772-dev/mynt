@@ -15,7 +15,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="mt-8 rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+          className="mt-8 rounded-full bg-lime px-6 py-3 font-medium text-flex-black transition-transform hover:scale-[1.01]"
         >
           Bosh sahifaga
         </Link>

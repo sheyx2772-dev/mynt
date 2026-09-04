@@ -76,7 +76,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
               </span>
             </div>
 
-            <p className="mt-4 text-[14px] leading-relaxed text-lime">
+            <p className="mt-4 text-[14px] leading-relaxed text-paper">
               {paid ? fulfilmentForBuyer(order.fulfilment, "uz") : "To'lov kutilmoqda"}
             </p>
 
@@ -99,7 +99,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
                       <span
                         className={
                           i === reached
-                            ? "mt-2 flex items-center gap-1 text-[10px] font-medium text-lime"
+                            ? "mt-2 flex items-center gap-1 text-[10px] font-medium text-paper"
                             : "mt-2 flex items-center gap-1 text-[10px] text-paper"
                         }
                       >

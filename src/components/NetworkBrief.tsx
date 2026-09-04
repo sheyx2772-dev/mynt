@@ -54,7 +54,7 @@ function DraftActions({ draft, phone }: { draft: string; phone: string | null })
         }}
         className="flex items-center gap-1.5 rounded-lg bg-ink-s1/10 px-2.5 py-1.5 text-[12px] font-medium text-paper transition-colors hover:bg-ink-s1/15"
       >
-        {copied ? <Check className="h-3 w-3 text-lime" /> : <Copy className="h-3 w-3" />}
+        {copied ? <Check className="h-3 w-3 text-paper" /> : <Copy className="h-3 w-3" />}
         {copied ? "Nusxa olindi" : "Nusxa olish"}
       </button>
 
@@ -135,7 +135,7 @@ export default function NetworkBrief({
                   style={{ animationDelay: `${i * 70}ms` }}
                 >
                   <div className="flex items-baseline gap-2.5">
-                    <span className="font-tabular text-[11px] text-lime">
+                    <span className="font-tabular text-[11px] text-paper">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <p className="text-[15px] font-semibold tracking-tight">{s.name}</p>
@@ -215,7 +215,7 @@ export default function NetworkBrief({
             <button
               type="submit"
               disabled={working || !enough}
-              className="w-full rounded-2xl bg-lime px-6 py-3.5 text-[14px] font-semibold text-ink shadow-[0_10px_30px_-12px_rgba(171,255,9,0.8)] transition-transform hover:scale-[1.02] active:scale-[0.99] disabled:opacity-25 disabled:shadow-none sm:w-auto sm:px-8"
+              className="w-full rounded-2xl bg-lime px-6 py-3.5 text-[14px] font-semibold text-ink transition-transform hover:scale-[1.02] active:scale-[0.99] disabled:opacity-25 disabled:shadow-none sm:w-auto sm:px-8"
             >
               {working ? "O'qiyapti…" : "Tahlil qilish"}
             </button>

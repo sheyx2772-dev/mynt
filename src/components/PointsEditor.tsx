@@ -161,7 +161,7 @@ export default function PointsEditor({
                       className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink-line text-paper-2 hover:bg-ink-s2"
                     >
                       {copied === point ? (
-                        <Check className="h-4 w-4 text-lime" />
+                        <Check className="h-4 w-4 text-paper" />
                       ) : (
                         <Copy className="h-4 w-4" />
                       )}

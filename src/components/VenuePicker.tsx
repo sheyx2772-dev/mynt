@@ -188,7 +188,7 @@ export default function VenuePicker({
               </>
             ) : (
               <>
-                <p className="rounded-2xl bg-lime px-5 py-3 font-display text-2xl font-semibold text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.7)]">
+                <p className="rounded-2xl bg-lime px-5 py-3 font-display text-2xl font-semibold text-flex-black">
                   {formatUZS(monthly, lang)}
                 </p>
                 <p className="mt-2 font-tabular text-xs text-flex-black/45">

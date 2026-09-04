@@ -419,7 +419,7 @@ export default function EditProfileForm({
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-ink shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01] disabled:opacity-60"
+        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-ink transition-transform hover:scale-[1.01] disabled:opacity-60"
       >
         {isPending ? "Saqlanmoqda..." : "Saqlash"}
       </button>

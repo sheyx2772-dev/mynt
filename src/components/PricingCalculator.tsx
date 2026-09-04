@@ -136,7 +136,7 @@ export default function PricingCalculator({
           </div>
           <div className="flex items-center justify-between pt-5">
             <div className="font-display text-lg font-semibold">{labels.total}</div>
-            <div className="rounded-xl bg-lime px-4 py-2 font-display text-xl font-semibold text-flex-black shadow-[0_10px_24px_-8px_rgba(171,255,9,0.7)]">
+            <div className="rounded-xl bg-lime px-4 py-2 font-display text-xl font-semibold text-flex-black">
               {formatUZS(total, lang)}
             </div>
           </div>

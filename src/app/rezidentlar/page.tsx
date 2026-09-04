@@ -123,7 +123,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
               </p>
               <Link
                 href={query ? "/rezidentlar" : "/shaxsiy#narx"}
-                className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+                className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-flex-black transition-transform hover:scale-[1.01]"
               >
                 {query ? t.seeAll : t.pickHandleCta}
               </Link>

@@ -48,7 +48,7 @@ function TagAddress({ token }: { token: string }) {
         }}
         className="flex shrink-0 items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
       >
-        {copied ? <Check className="h-3.5 w-3.5 text-lime" /> : <Copy className="h-3.5 w-3.5" />}
+        {copied ? <Check className="h-3.5 w-3.5 text-paper" /> : <Copy className="h-3.5 w-3.5" />}
         {copied ? "Nusxa olindi" : "Nusxa"}
       </button>
       <a

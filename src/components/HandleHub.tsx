@@ -122,7 +122,7 @@ export default function HandleHub({
               So&apos;rovlar
             </span>
             {waiting > 0 && (
-              <span className="rounded-lg bg-ink-s2 px-2.5 py-1 font-tabular text-sm text-lime">
+              <span className="rounded-lg bg-ink-s2 px-2.5 py-1 font-tabular text-sm text-paper">
                 {waiting}
               </span>
             )}

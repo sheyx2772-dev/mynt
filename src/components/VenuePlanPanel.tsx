@@ -76,7 +76,7 @@ export default function VenuePlanPanel({
 
           {!state.ok && <p className="mt-3 text-sm text-danger-ink">{state.error}</p>}
           {state.ok && state.issued && (
-            <p className="mt-3 flex items-center gap-1.5 text-sm text-lime">
+            <p className="mt-3 flex items-center gap-1.5 text-sm text-paper">
               <Check className="h-4 w-4" />
               №{state.issued} hisob-faktura tayyor — quyida.
             </p>

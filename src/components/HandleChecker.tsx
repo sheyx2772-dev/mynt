@@ -75,8 +75,8 @@ export default function HandleChecker({
             placeholder="000"
             className={
               dark
-                ? "w-16 rounded-xl bg-lime/15 py-2 text-center font-display font-tabular text-lg font-semibold text-lime outline-none placeholder:text-lime/30"
-                : "w-16 rounded-xl bg-lime/15 py-2 text-center font-display font-tabular text-lg font-semibold outline-none placeholder:text-flex-black/20"
+                ? "num w-16 rounded-plate py-2 text-center font-display text-lg font-semibold text-paper outline-none placeholder:text-paper-3"
+                : "num w-16 rounded-plate py-2 text-center font-display text-lg font-semibold text-ink outline-none placeholder:text-ink-3"
             }
           />
         </div>

@@ -58,7 +58,7 @@ export default async function TagsPage({
               Yangi xabar
             </div>
             <div className="mt-2 flex items-end gap-3">
-              <p className="font-display text-[52px] leading-[0.9] font-semibold tracking-tight text-lime">
+              <p className="font-display text-[52px] leading-[0.9] font-semibold tracking-tight text-paper">
                 {unread}
               </p>
               {unread > 0 && (
