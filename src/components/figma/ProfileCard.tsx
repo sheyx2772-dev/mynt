@@ -41,6 +41,7 @@ const BANNER: Record<string, string> = {
   "tojiev":            imgDomo,
   "tohirova":          imgITPark,
   "obidjonova":        imgITPark,
+  "yuldasheva":        imgITPark,
   "matyakubov":        imgITPark,
   "abrorov":           imgFlex,
   "ahmadjonov":        imgFlex,
@@ -82,6 +83,7 @@ const CFG: Record<string, Cfg> = {
   "uzfar":        { overlay:"linear-gradient(180deg,rgba(5,38,20,.45) 0%,rgba(8,55,30,.84) 100%)",   cardBg:"#052614", bodyBg:"#021209", accent:"#6ee7b7", accent2:"#10b981", iconBg:"#073520" },
   "itpark":       { overlay:"linear-gradient(180deg,rgba(14,48,6,.45) 0%,rgba(22,68,8,.82) 100%)",   cardBg:"#0e3006", bodyBg:"#071803", accent:"#a3e635", accent2:"#84cc16", iconBg:"#174008" },
   "chamber":      { overlay:"linear-gradient(180deg,rgba(28,12,80,.45) 0%,rgba(45,18,120,.84) 100%)",cardBg:"#1c0c50", bodyBg:"#0e0630", accent:"#c4b5fd", accent2:"#8b5cf6", iconBg:"#2a1268" },
+  "yuldasheva":   { overlay:"linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)", cardBg:"#17470c", bodyBg:"#0f3208", accent:"#bef264", accent2:"#84cc16", iconBg:"#1f5c12" },
   "obidjonova":   { overlay:"linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)", cardBg:"#17470c", bodyBg:"#0f3208", accent:"#bef264", accent2:"#84cc16", iconBg:"#1f5c12" },
   "matyakubov":   { overlay:"linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)", cardBg:"#17470c", bodyBg:"#0f3208", accent:"#bef264", accent2:"#84cc16", iconBg:"#1f5c12" },
   // DOMO on its own royal blue, brighter than the foundation's navy so the two
