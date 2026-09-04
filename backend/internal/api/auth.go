@@ -4,11 +4,7 @@ import (
 	"context"
 	"errors"
 	"log/slog"
-	"net"
-	"net/http"
 	"net/netip"
-	"strings"
-	"time"
 
 	"github.com/danielgtaylor/huma/v2"
 
@@ -107,85 +103,4 @@ func requireAccount(ctx context.Context) (auth.Account, error) {
 		return auth.Account{}, huma.Error401Unauthorized("Avval hisobingizga kiring.")
 	}
 	return account, nil
-}
-
-// bearerToken pulls the token out of an Authorization header.
-//
-// The scheme is compared without case because RFC 7235 says it is
-// case-insensitive and clients differ.
-func bearerToken(header string) string {
-	space := strings.IndexByte(header, ' ')
-	if space < 0 || !strings.EqualFold(header[:space], "bearer") {
-		return ""
-	}
-	return strings.TrimSpace(header[space+1:])
-}
-
-// clientIP is the address the rate limits count against.
-//
-// X-Forwarded-For is believed only when the deployment says something trusted
-// sets it. A client can put anything in that header, so believing it without a
-// proxy in front turns every per-address limit in the system into no limit at
-// all — a different number each request.
-func (s *Server) clientIP(ctx huma.Context) *netip.Addr {
-	if s.cfg.TrustProxy {
-		// The left-most entry is the original client; everything after it was
-		// added by the hops in between.
-		if forwarded := ctx.Header("X-Forwarded-For"); forwarded != "" {
-			first, _, _ := strings.Cut(forwarded, ",")
-			if addr, err := netip.ParseAddr(strings.TrimSpace(first)); err == nil {
-				return &addr
-			}
-		}
-	}
-
-	host, _, err := net.SplitHostPort(ctx.RemoteAddr())
-	if err != nil {
-		host = ctx.RemoteAddr()
-	}
-	addr, err := netip.ParseAddr(host)
-	if err != nil {
-		return nil
-	}
-	return &addr
-}
-
-// sessionCookieFor is the cookie a browser is signed in with.
-//
-// Returned from the handler rather than written from the middleware, because
-// Huma renders an `http.Cookie` in an output struct — which means it also
-// appears in the OpenAPI document, and the panel's generated types know about
-// it.
-func (s *Server) sessionCookieFor(token string) http.Cookie {
-	return http.Cookie{
-		Name:  sessionCookie,
-		Value: token,
-		Path:  "/",
-		// Unreadable from JavaScript, so a cross-site scripting bug on any page
-		// cannot walk off with the session.
-		HttpOnly: true,
-		// Not sent over plain HTTP. Development is the exception, where there
-		// is no certificate and the cookie would otherwise never be stored.
-		Secure: !s.cfg.IsDevelopment(),
-		// Lax rather than Strict: the sign-in link arrives from a mail client,
-		// which is a cross-site navigation, and Strict would drop the cookie on
-		// exactly that hop. Lax still refuses to attach it to a cross-site POST,
-		// which is what a forged request would be.
-		SameSite: http.SameSiteLaxMode,
-		MaxAge:   int(auth.SessionLifetime.Seconds()),
-		Expires:  time.Now().Add(auth.SessionLifetime),
-	}
-}
-
-// expiredSessionCookie is the same cookie, told to go away.
-func (s *Server) expiredSessionCookie() http.Cookie {
-	return http.Cookie{
-		Name:     sessionCookie,
-		Value:    "",
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   !s.cfg.IsDevelopment(),
-		SameSite: http.SameSiteLaxMode,
-		MaxAge:   -1,
-	}
 }

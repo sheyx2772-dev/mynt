@@ -81,6 +81,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/profil/{raqam}/vizitka": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Profilga kontakt qoldirish
+         * @description Hisob talab qilinmaydi — bu kartani tegizgan odam to'ldiradigan forma.
+         */
+        post: operations["vizitka-qoldirish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/raqamlar": {
         parameters: {
             query?: never;
@@ -130,6 +150,63 @@ export interface paths {
         put: operations["profilni-saqlash"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/statistika": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Tashriflar, bosishlar va ular qayerdan kelgani
+         * @description Tashrifchi haqidagi hech narsa saqlanmaydi va qaytarilmaydi — faqat yig'ma sonlar.
+         */
+        get: operations["statistika"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/vizitkalar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Raqamga qoldirilgan kontaktlar */
+        get: operations["vizitkalar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/vizitkalar/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Bitta kontaktni o'chirish
+         * @description Odam o'z ma'lumotini olib tashlashni so'rashi mumkin, va egasi buni qila olishi kerak.
+         */
+        delete: operations["vizitkani-ochirish"];
         options?: never;
         head?: never;
         patch?: never;
@@ -189,6 +266,16 @@ export interface components {
             readonly $schema?: string;
             /** @description Xatdagi havoladan olingan token */
             token: string;
+        };
+        Day: {
+            /** Format: int64 */
+            bosishlar: number;
+            /** Format: int64 */
+            korishlar: number;
+            /** @example 2026-09-04 */
+            kun: string;
+            /** Format: int64 */
+            tashrifchilar: number;
         };
         ErrorDetail: {
             /** @description Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id' */
@@ -296,6 +383,53 @@ export interface components {
             /** @description Baza javob berdimi */
             ok: boolean;
         };
+        Input: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/Input.json
+             */
+            readonly $schema?: string;
+            email?: string;
+            /** @description Majburiy */
+            ism: string;
+            izoh?: string;
+            kompaniya?: string;
+            /** @enum {string} */
+            manba?: "nfc" | "qr" | "share";
+            telefon?: string;
+        };
+        Lead: {
+            email?: string;
+            /** Format: int64 */
+            id: number;
+            ism: string;
+            izoh?: string;
+            kompaniya?: string;
+            /** @enum {string} */
+            manba?: "nfc" | "qr" | "share";
+            telefon?: string;
+            /** Format: date-time */
+            vaqt: string;
+        };
+        LeadListOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/LeadListOutputBody.json
+             */
+            readonly $schema?: string;
+            vizitkalar: components["schemas"]["Lead"][] | null;
+        };
+        LeaveLeadOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/LeaveLeadOutputBody.json
+             */
+            readonly $schema?: string;
+            message: string;
+        };
         Link: {
             href: string;
             label: string;
@@ -309,6 +443,11 @@ export interface components {
             website?: string;
             whatsapp?: string;
             youtube?: string;
+        };
+        LinkStat: {
+            /** Format: int64 */
+            bosishlar: number;
+            havola: string;
         };
         MeOutputBody: {
             /**
@@ -340,6 +479,17 @@ export interface components {
             services?: components["schemas"]["Service"][] | null;
             /** @description Vergul yoki bo'sh joy bilan ajratilgan */
             tags?: string;
+        };
+        Report: {
+            havolalar: components["schemas"]["LinkStat"][] | null;
+            /** Format: int64 */
+            jami_bosishlar: number;
+            /** Format: int64 */
+            jami_korishlar: number;
+            /** Format: int64 */
+            jami_tashrifchilar_kunlik: number;
+            kunlar: components["schemas"]["Day"][] | null;
+            manbalar: components["schemas"]["SourceStat"][] | null;
         };
         RequestLinkInputBody: {
             /**
@@ -374,6 +524,23 @@ export interface components {
             account: components["schemas"]["AccountBody"];
             /** @description Sessiya kaliti — faqat mobil ilova uchun */
             token: string;
+        };
+        SourceStat: {
+            /** Format: int64 */
+            korishlar: number;
+            /** @example nfc */
+            manba: string;
+        };
+        StatsOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/StatsOutputBody.json
+             */
+            readonly $schema?: string;
+            hisobot: components["schemas"]["Report"];
+            /** Format: int64 */
+            kun: number;
         };
     };
     responses: never;
@@ -508,6 +675,41 @@ export interface operations {
             };
         };
     };
+    "vizitka-qoldirish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Input"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeaveLeadOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     raqamlarim: {
         parameters: {
             query?: never;
@@ -592,6 +794,102 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HandleOutputBody"];
                 };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    statistika: {
+        parameters: {
+            query?: {
+                /** @description Necha kunlik */
+                kun?: number;
+            };
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatsOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    vizitkalar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Uch harf va uch raqam */
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadListOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "vizitkani-ochirish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error */
             default: {

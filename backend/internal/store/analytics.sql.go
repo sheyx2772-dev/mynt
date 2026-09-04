@@ -7,10 +7,17 @@ package store
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const handleLinkStats = `-- name: HandleLinkStats :many
-select handle_link_stats from handle_link_stats($1, $2::int)
+select label, count(*)::bigint as clicks
+from link_clicks
+where handle = $1::text
+  and created_at >= (current_date - ($2::int - 1))
+group by label
+order by clicks desc
 `
 
 type HandleLinkStatsParams struct {
@@ -18,19 +25,24 @@ type HandleLinkStatsParams struct {
 	Days   int32  `json:"days"`
 }
 
-func (q *Queries) HandleLinkStats(ctx context.Context, arg HandleLinkStatsParams) ([]interface{}, error) {
+type HandleLinkStatsRow struct {
+	Label  string `json:"label"`
+	Clicks int64  `json:"clicks"`
+}
+
+func (q *Queries) HandleLinkStats(ctx context.Context, arg HandleLinkStatsParams) ([]HandleLinkStatsRow, error) {
 	rows, err := q.db.Query(ctx, handleLinkStats, arg.Handle, arg.Days)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []interface{}{}
+	items := []HandleLinkStatsRow{}
 	for rows.Next() {
-		var handle_link_stats interface{}
-		if err := rows.Scan(&handle_link_stats); err != nil {
+		var i HandleLinkStatsRow
+		if err := rows.Scan(&i.Label, &i.Clicks); err != nil {
 			return nil, err
 		}
-		items = append(items, handle_link_stats)
+		items = append(items, i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -39,7 +51,12 @@ func (q *Queries) HandleLinkStats(ctx context.Context, arg HandleLinkStatsParams
 }
 
 const handleSourceStats = `-- name: HandleSourceStats :many
-select handle_source_stats from handle_source_stats($1, $2::int)
+select coalesce(source, 'togridan') as source, count(*)::bigint as views
+from profile_views
+where handle = $1::text
+  and created_at >= (current_date - ($2::int - 1))
+group by 1
+order by 2 desc
 `
 
 type HandleSourceStatsParams struct {
@@ -47,19 +64,26 @@ type HandleSourceStatsParams struct {
 	Days   int32  `json:"days"`
 }
 
-func (q *Queries) HandleSourceStats(ctx context.Context, arg HandleSourceStatsParams) ([]interface{}, error) {
+type HandleSourceStatsRow struct {
+	Source string `json:"source"`
+	Views  int64  `json:"views"`
+}
+
+// "togridan" is everything we did not issue a link for: somebody typing the
+// address, or a browser that sent no referrer.
+func (q *Queries) HandleSourceStats(ctx context.Context, arg HandleSourceStatsParams) ([]HandleSourceStatsRow, error) {
 	rows, err := q.db.Query(ctx, handleSourceStats, arg.Handle, arg.Days)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []interface{}{}
+	items := []HandleSourceStatsRow{}
 	for rows.Next() {
-		var handle_source_stats interface{}
-		if err := rows.Scan(&handle_source_stats); err != nil {
+		var i HandleSourceStatsRow
+		if err := rows.Scan(&i.Source, &i.Views); err != nil {
 			return nil, err
 		}
-		items = append(items, handle_source_stats)
+		items = append(items, i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -68,27 +92,78 @@ func (q *Queries) HandleSourceStats(ctx context.Context, arg HandleSourceStatsPa
 }
 
 const handleStats = `-- name: HandleStats :many
-select handle_stats from handle_stats($1, $2::int)
+
+with bounds as (
+  select (current_date - ($1::int - 1)) as first_day
+),
+days as (
+  select generate_series((select first_day from bounds), current_date, interval '1 day')::date as day
+),
+v as (
+  select created_at::date as day, count(*) as n, count(distinct visitor_hash) as u
+  from profile_views
+  where handle = $2::text and created_at >= (select first_day from bounds)
+  group by 1
+),
+c as (
+  select created_at::date as day, count(*) as n
+  from link_clicks
+  where handle = $2::text and created_at >= (select first_day from bounds)
+  group by 1
+)
+select days.day::date as day,
+       coalesce(v.n, 0)::bigint as views,
+       coalesce(c.n, 0)::bigint as clicks,
+       coalesce(v.u, 0)::bigint as visitors
+from days
+left join v on v.day = days.day
+left join c on c.day = days.day
+order by days.day
 `
 
 type HandleStatsParams struct {
-	Handle string `json:"handle"`
 	Days   int32  `json:"days"`
+	Handle string `json:"handle"`
 }
 
-func (q *Queries) HandleStats(ctx context.Context, arg HandleStatsParams) ([]interface{}, error) {
-	rows, err := q.db.Query(ctx, handleStats, arg.Handle, arg.Days)
+type HandleStatsRow struct {
+	Day      pgtype.Date `json:"day"`
+	Views    int64       `json:"views"`
+	Clicks   int64       `json:"clicks"`
+	Visitors int64       `json:"visitors"`
+}
+
+// The three reports, as queries rather than as calls to a function.
+//
+// In Supabase they were `security definer` functions, because row level
+// security had to be got around: the tables carry visitor hashes and the
+// browser held a key. Neither is true here — the backend is the only thing with
+// a connection, and it checks ownership before it asks — so the wrapper was
+// protecting against a client that no longer exists.
+//
+// Written out, they are also typed. sqlc cannot see into a set-returning
+// function and gives back `interface{}`; it reads a plain select completely.
+// Zero-filled, so a quiet day is a gap in the bars rather than a missing one.
+// A chart that silently drops empty days reads as though the quiet period
+// never happened.
+func (q *Queries) HandleStats(ctx context.Context, arg HandleStatsParams) ([]HandleStatsRow, error) {
+	rows, err := q.db.Query(ctx, handleStats, arg.Days, arg.Handle)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []interface{}{}
+	items := []HandleStatsRow{}
 	for rows.Next() {
-		var handle_stats interface{}
-		if err := rows.Scan(&handle_stats); err != nil {
+		var i HandleStatsRow
+		if err := rows.Scan(
+			&i.Day,
+			&i.Views,
+			&i.Clicks,
+			&i.Visitors,
+		); err != nil {
 			return nil, err
 		}
-		items = append(items, handle_stats)
+		items = append(items, i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

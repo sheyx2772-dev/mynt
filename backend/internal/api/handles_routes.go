@@ -7,6 +7,7 @@ import (
 
 	"github.com/danielgtaylor/huma/v2"
 
+	"github.com/sheyx2772-dev/flex/backend/internal/auth"
 	"github.com/sheyx2772-dev/flex/backend/internal/handles"
 )
 
@@ -114,10 +115,34 @@ func (s *Server) registerHandles(api huma.API) {
 	})
 }
 
-// owned is the door: signed in, the number is a real one, and it is theirs.
+// ownedNumber is the door: signed in, the number is a real one, and it is
+// theirs. It answers with the caller and the number's canonical form, which is
+// all a route needs that is not about the profile itself.
 //
 // A number somebody else owns gets the same 404 an invented one gets, so a
 // guesser cannot use the difference to find out which numbers are taken.
+func (s *Server) ownedNumber(ctx context.Context, raw string) (auth.Account, string, error) {
+	account, err := requireAccount(ctx)
+	if err != nil {
+		return auth.Account{}, "", err
+	}
+
+	parsed, ok := handles.Parse(raw)
+	if !ok {
+		return auth.Account{}, "", huma.Error404NotFound("Bunday raqam yo'q.")
+	}
+
+	if _, err := s.handles.Owned(ctx, parsed.Normalized(), account.ID); err != nil {
+		if errors.Is(err, handles.ErrNotFound) {
+			return auth.Account{}, "", huma.Error404NotFound("Bunday raqam yo'q.")
+		}
+		return auth.Account{}, "", internalError(err, "raqam o'qilmadi")
+	}
+
+	return account, parsed.Normalized(), nil
+}
+
+// owned is the same door, for the routes that go on to render the profile.
 func (s *Server) owned(ctx context.Context, raw string) (handles.Handle, error) {
 	account, err := requireAccount(ctx)
 	if err != nil {

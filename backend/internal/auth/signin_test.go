@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"fmt"
-	"net/netip"
 	"os"
 	"strings"
 	"testing"
@@ -178,112 +177,5 @@ func TestAnInventedTokenIsRefused(t *testing.T) {
 
 	if _, _, err := service.ConsumeLink(context.Background(), "buTokenHechQachonBerilmagan", "test", nil); err != ErrBadToken {
 		t.Errorf("soxta token %v qaytardi, ErrBadToken kutilgandi", err)
-	}
-}
-
-func TestSigningOutEndsThatSessionOnly(t *testing.T) {
-	service, mailer, email := newService(t)
-	ctx := context.Background()
-
-	// Two sessions for one account: a phone and a laptop.
-	sessions := make([]string, 0, 2)
-	for range 2 {
-		if err := service.RequestLink(ctx, email, nil); err != nil {
-			t.Fatalf("havola so'ralmadi: %v", err)
-		}
-		token, _, err := service.ConsumeLink(ctx, mailer.lastToken(t), "test", nil)
-		if err != nil {
-			t.Fatalf("havola sarflanmadi: %v", err)
-		}
-		sessions = append(sessions, token)
-	}
-
-	if err := service.SignOut(ctx, sessions[0]); err != nil {
-		t.Fatalf("chiqib bo'lmadi: %v", err)
-	}
-
-	if _, err := service.Authenticate(ctx, sessions[0]); err != ErrNoSession {
-		t.Errorf("chiqilgan sessiya hali ham tanilyapti: %v", err)
-	}
-	// Signing out of a phone must not sign somebody out of their laptop.
-	if _, err := service.Authenticate(ctx, sessions[1]); err != nil {
-		t.Errorf("boshqa qurilmadagi sessiya ham o'chdi: %v", err)
-	}
-}
-
-func TestAnExpiredSessionStopsWorking(t *testing.T) {
-	service, mailer, email := newService(t)
-	ctx := context.Background()
-
-	if err := service.RequestLink(ctx, email, nil); err != nil {
-		t.Fatalf("havola so'ralmadi: %v", err)
-	}
-	token, account, err := service.ConsumeLink(ctx, mailer.lastToken(t), "test", nil)
-	if err != nil {
-		t.Fatalf("havola sarflanmadi: %v", err)
-	}
-
-	// Expiry is decided by the statement, not by Go. This is the test of that.
-	if _, err := service.pool.Exec(ctx,
-		`update sessions set expires_at = now() - interval '1 second' where user_id = $1`,
-		account.ID,
-	); err != nil {
-		t.Fatalf("muddat o'zgartirilmadi: %v", err)
-	}
-
-	if _, err := service.Authenticate(ctx, token); err != ErrNoSession {
-		t.Errorf("eskirgan sessiya %v qaytardi, ErrNoSession kutilgandi", err)
-	}
-}
-
-func TestTooManyRequestsStopSendingWithoutSayingSo(t *testing.T) {
-	service, mailer, email := newService(t)
-	ctx := context.Background()
-
-	for i := range linksPerEmailPerHour + 3 {
-		// The refusal is deliberately silent. An endpoint that answers "too
-		// many attempts for this address" differently from "sent" is an
-		// endpoint that answers whether an address has an account here.
-		if err := service.RequestLink(ctx, email, nil); err != nil {
-			t.Fatalf("%d-urinish xato qaytardi: %v", i+1, err)
-		}
-	}
-
-	if len(mailer.messages) != linksPerEmailPerHour {
-		t.Errorf("%d ta xat yuborildi, chegara %d edi", len(mailer.messages), linksPerEmailPerHour)
-	}
-}
-
-func TestAddressesThatAreNotAddressesAreRefused(t *testing.T) {
-	service, _, _ := newService(t)
-	ctx := context.Background()
-
-	for _, bad := range []string{"", "salom", "a@b", "@example.com", "aziz@", "aziz example@x.uz", strings.Repeat("a", 250) + "@example.com"} {
-		if err := service.RequestLink(ctx, bad, nil); err != ErrInvalidEmail {
-			t.Errorf("%q uchun %v qaytdi, ErrInvalidEmail kutilgandi", bad, err)
-		}
-	}
-}
-
-func TestTheSourceAddressIsRateLimitedSeparately(t *testing.T) {
-	service, mailer, _ := newService(t)
-	ctx := context.Background()
-
-	source := netip.MustParseAddr("203.0.113.42")
-	t.Cleanup(func() {
-		_, _ = service.pool.Exec(context.Background(), `delete from login_tokens where ip = $1`, source)
-	})
-
-	// Every request from one place, each naming a different address — a script
-	// working through a list, which the per-address window cannot see.
-	for i := range linksPerIPPerHour + 5 {
-		address := fmt.Sprintf("scan-%d-%d@example.com", time.Now().UnixNano(), i)
-		if err := service.RequestLink(ctx, address, &source); err != nil {
-			t.Fatalf("%d-urinish xato qaytardi: %v", i+1, err)
-		}
-	}
-
-	if len(mailer.messages) != linksPerIPPerHour {
-		t.Errorf("%d ta xat yuborildi, manba chegarasi %d edi", len(mailer.messages), linksPerIPPerHour)
 	}
 }

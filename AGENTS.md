@@ -50,3 +50,28 @@ commit messages are English.
 reason a thing is done the harder way is what the next person cannot recover
 from reading it. Most of the comments in this repository are the second kind
 and new ones should be too.
+
+**A file is about one thing, and stays under about 200 lines.** Not a rule
+about counting — a file that has grown past it has almost always taken on a
+second job, and the fix is to name the second job and give it its own file.
+`internal/auth` is sign-in, sessions and tokens in three files rather than one,
+and each is openable without scrolling. Generated files are exempt: nobody
+reads `internal/store`, and it says so at the top.
+
+**Security decisions get written down where they are made.** Every one of them
+in this repository looks like unnecessary work until the paragraph above it
+explains what it stops. The paragraph is what stops the next person removing
+it, so it is not optional:
+
+- Authorization is a filter on the query, never a check afterwards. A row
+  somebody does not own comes back as no rows, and gets the same answer an
+  invented one gets — so a guesser learns nothing from the difference.
+- A write names the columns it may write. "The owner's own row" is not a
+  permission; `landing/supabase/migrations/0047` is what that mistake cost.
+- Identity comes from the session. A user id in a body or a query string is a
+  claim the sender made about themselves.
+- Anything that decides money or ownership is decided on the server, from the
+  stored row, never from the request.
+- Errors sent to a caller carry no internals. The detail goes to the log.
+- Input rendered to other people is rebuilt from validated parts, never
+  passed through.

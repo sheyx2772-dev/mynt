@@ -23,6 +23,8 @@ import (
 	"github.com/sheyx2772-dev/flex/backend/internal/auth"
 	"github.com/sheyx2772-dev/flex/backend/internal/config"
 	"github.com/sheyx2772-dev/flex/backend/internal/handles"
+	"github.com/sheyx2772-dev/flex/backend/internal/leads"
+	"github.com/sheyx2772-dev/flex/backend/internal/stats"
 )
 
 // Server holds what the handlers need. Passed in rather than reached for:
@@ -32,6 +34,8 @@ type Server struct {
 	pool    *pgxpool.Pool
 	auth    *auth.Service
 	handles *handles.Store
+	leads   *leads.Store
+	stats   *stats.Store
 }
 
 func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.Handler {
@@ -40,6 +44,8 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 		pool:    pool,
 		auth:    authService,
 		handles: handles.NewStore(pool),
+		leads:   leads.NewStore(pool),
+		stats:   stats.NewStore(pool),
 	}
 
 	mux := http.NewServeMux()
@@ -61,6 +67,8 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 	s.registerHealth(api)
 	s.registerAuth(api)
 	s.registerHandles(api)
+	s.registerLeads(api)
+	s.registerStats(api)
 
 	return mux
 }
