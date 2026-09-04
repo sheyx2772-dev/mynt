@@ -25,9 +25,22 @@ func (p Providers) HasClick() bool {
 	return p.ClickServiceID != "" && p.ClickMerchantID != ""
 }
 
-// Any reports whether anybody can be charged at all. With nobody configured a
-// number is given away rather than sold.
+// Any reports whether anybody can be charged at all.
 func (p Providers) Any() bool { return p.HasPayme() || p.HasClick() }
+
+// GiveAway reports whether a number should be handed over free.
+//
+// Only in development, and this is narrower than it looks. The website decides
+// the same question from the merchant id *and* the secret key; this process
+// only ever sees the id, because the key belongs where the protocol is. So the
+// two can disagree — an id set here without a key set there, or the reverse —
+// and the dangerous direction is this one giving away a number worth millions
+// because a variable was missing.
+//
+// Production therefore refuses to sell rather than defaulting to free. A
+// misconfigured deployment stops taking orders, which somebody notices within
+// the hour, instead of quietly handing out numbers nobody paid for.
+func (p Providers) GiveAway(development bool) bool { return development && !p.Any() }
 
 // Checkout is where to send a buyer for one order.
 type Checkout struct {

@@ -20,7 +20,21 @@ export class FakePaymentStore implements PaymentStore {
   async markOrderPaid(orderId: string, provider: "click" | "payme", providerTxId: string) {
     this.paidCalls.push({ orderId, provider, txId: providerTxId });
     const order = this.orders.get(orderId);
-    if (order) order.status = "paid";
+    if (order) {
+      order.status = "paid";
+      order.provider = provider;
+    }
+  }
+
+  /**
+   * Whether the number is still the buyer's. True unless a test says otherwise,
+   * because the reservation lapsing is the exception rather than the rule.
+   */
+  heldHandles = new Set<string>();
+  handleLost = false;
+
+  async isHandleStillHeld(orderId: string) {
+    return !this.handleLost && this.orders.has(orderId);
   }
 
   async markOrderCancelled(orderId: string) {

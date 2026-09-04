@@ -8,7 +8,7 @@ const SECRET = "secret";
 const PRICE = 99_000;
 
 function order(overrides: Partial<Order> = {}): Order {
-  return { id: "order-1", userId: "u1", handle: "MYN042", amount: PRICE, status: "pending", ...overrides };
+  return { id: "order-1", userId: "u1", handle: "MYN042", amount: PRICE, status: "pending", provider: null, ...overrides };
 }
 
 function store(...orders: Order[]) {
@@ -141,4 +141,31 @@ describe("handleClickComplete", () => {
     const res = await handleClickComplete(store(), { ...completeReq(), sign_string: "0".repeat(32) }, SECRET);
     expect(res.error).toBe(CLICK_ERROR.SIGN_CHECK_FAILED);
   });
+
+  // The double charge, from Click's side: the buyer started in Payme, which
+  // performed, and Click's complete arrives afterwards. Answering success here
+  // would have Click debit a card for a number already paid for.
+  it("refuses to complete an order Payme already settled", async () => {
+    const s = store();
+    await s.markOrderPaid("order-1", "payme", "payme-tx-9");
+
+    const res = await handleClickComplete(s, completeReq(), SECRET);
+
+    expect(res.error).toBe(CLICK_ERROR.TRANSACTION_CANCELLED);
+    expect(s.paidCalls).toEqual([{ orderId: "order-1", provider: "payme", txId: "payme-tx-9" }]);
+  });
+
+  // A reservation lasts thirty minutes and a bank transfer does not always. By
+  // the time this payment arrives the number belongs to somebody else, so the
+  // card must not be charged for it.
+  it("refuses to complete an order whose number is no longer held", async () => {
+    const s = store();
+    s.handleLost = true;
+
+    const res = await handleClickComplete(s, completeReq(), SECRET);
+
+    expect(res.error).toBe(CLICK_ERROR.TRANSACTION_CANCELLED);
+    expect(s.paidCalls).toEqual([]);
+  });
+
 });

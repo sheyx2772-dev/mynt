@@ -53,7 +53,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 			ClickServiceID:  cfg.ClickServiceID,
 			ClickMerchantID: cfg.ClickMerchantID,
 			ReturnURL:       cfg.SiteURL + "/kabinet",
-		}),
+		}, cfg.IsDevelopment()),
 	}
 
 	mux := http.NewServeMux()

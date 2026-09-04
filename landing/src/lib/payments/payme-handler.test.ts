@@ -15,6 +15,7 @@ function order(overrides: Partial<Order> = {}): Order {
     handle: "MYN042",
     amount: PRICE,
     status: "pending",
+    provider: null,
     ...overrides,
   };
 }
@@ -130,6 +131,39 @@ describe("PerformTransaction", () => {
       result: { state: PAYME_STATE.PERFORMED, perform_time: T0 + 1000 },
     });
     expect(s.paidCalls).toEqual([{ orderId: "order-1", provider: "payme", txId: "tx-1" }]);
+  });
+
+  // The double charge. A buyer opens Payme, leaves it held — Payme allows twelve
+  // hours — pays with Click instead, and then Payme performs. Both providers
+  // debit a card for one number.
+  it("refuses to perform an order Click already settled", async () => {
+    const s = store();
+    await handlePaymeRequest(s, create(), clock(T0));
+
+    // Click settles it while Payme's transaction sits waiting.
+    await s.markOrderPaid("order-1", "click", "click-tx-9");
+
+    const res = await handlePaymeRequest(s, perform(), clock(T0 + 60_000));
+
+    expect(res).toMatchObject({ error: { code: PAYME_ERROR.CANT_PERFORM } });
+    // The money is not taken and then refunded — it is not taken.
+    expect(s.paidCalls).toEqual([{ orderId: "order-1", provider: "click", txId: "click-tx-9" }]);
+    // And the transaction is closed, so Payme stops asking.
+    expect(s.paymeTransactions.get("tx-1")?.state).toBe(PAYME_STATE.CANCELLED);
+  });
+
+  // Thirty minutes of reservation against twelve hours of Payme transaction.
+  // By the time this performs, the number belongs to somebody else.
+  it("refuses to perform when the number is no longer held", async () => {
+    const s = store();
+    await handlePaymeRequest(s, create(), clock(T0));
+    s.handleLost = true;
+
+    const res = await handlePaymeRequest(s, perform(), clock(T0 + 60_000));
+
+    expect(res).toMatchObject({ error: { code: PAYME_ERROR.CANT_PERFORM } });
+    expect(s.paidCalls).toEqual([]);
+    expect(s.paymeTransactions.get("tx-1")?.state).toBe(PAYME_STATE.CANCELLED);
   });
 
   // A repeat must not charge the order a second time.

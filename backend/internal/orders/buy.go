@@ -62,10 +62,24 @@ func (s *Store) Buy(ctx context.Context, parsed handles.Parsed, userID, name str
 	owned := optional(name)
 
 	if !s.paid.Any() {
+		if !s.paid.GiveAway(s.development) {
+			return Order{}, ErrCannotSell
+		}
 		return s.giveAway(ctx, parsed, owner, address, owned, price)
 	}
 
-	row, err := s.queries.ReserveHandle(ctx, store.ReserveHandleParams{
+	// One transaction. A reservation without an order is a number held for
+	// thirty minutes that nobody can pay for, and the website's own claim path
+	// cleans that case up while this one did not.
+	tx, err := s.pool.Begin(ctx)
+	if err != nil {
+		return Order{}, err
+	}
+	defer func() { _ = tx.Rollback(ctx) }()
+
+	q := s.queries.WithTx(tx)
+
+	row, err := q.ReserveHandle(ctx, store.ReserveHandleParams{
 		Letters:       parsed.Letters,
 		Digits:        parsed.Digits,
 		UserID:        &owner,
@@ -81,12 +95,16 @@ func (s *Store) Buy(ctx context.Context, parsed handles.Parsed, userID, name str
 		return Order{}, err
 	}
 
-	order, err := s.queries.CreateOrder(ctx, store.CreateOrderParams{
+	order, err := q.CreateOrder(ctx, store.CreateOrderParams{
 		UserID: owner,
 		Handle: normalized,
 		Amount: price,
 	})
 	if err != nil {
+		return Order{}, err
+	}
+
+	if err := tx.Commit(ctx); err != nil {
 		return Order{}, err
 	}
 

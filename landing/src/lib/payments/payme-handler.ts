@@ -9,6 +9,7 @@ import {
   cancelledState,
   type RpcRequest,
 } from "./payme";
+import { settledByAnother } from "./settlement";
 import type { PaymentStore, PaymeTransaction } from "./store";
 
 // Payme's Merchant API as a pure function of (store, request, clock), so the
@@ -170,6 +171,33 @@ async function performTransaction(
   }
 
   if (isTransactionExpired(tx.createTime, now())) {
+    await store.updatePaymeTransaction(txId, {
+      state: PAYME_STATE.CANCELLED,
+      cancelTime: now(),
+      reason: 4,
+    });
+    await store.markOrderCancelled(tx.orderId);
+    return rpcError(id, PAYME_ERROR.CANT_PERFORM, PAYME_MESSAGE.expired);
+  }
+
+  // Click may have settled this order while Payme's transaction sat waiting.
+  // Without this, both providers debit a card for one number — see
+  // `settlement.ts`. Refusing here means Payme does not take the money at all,
+  // rather than taking it and being refunded afterwards.
+  const order = await store.findOrder(tx.orderId);
+  if (order && settledByAnother(order, "payme")) {
+    await store.updatePaymeTransaction(txId, {
+      state: PAYME_STATE.CANCELLED,
+      cancelTime: now(),
+      reason: 4,
+    });
+    return rpcError(id, PAYME_ERROR.CANT_PERFORM, PAYME_MESSAGE.cancelled);
+  }
+
+  // And the number may have lapsed while the transaction was held — thirty
+  // minutes of reservation against twelve hours of Payme transaction. Taking
+  // the money now would buy nothing.
+  if (!(await store.isHandleStillHeld(tx.orderId))) {
     await store.updatePaymeTransaction(txId, {
       state: PAYME_STATE.CANCELLED,
       cancelTime: now(),

@@ -9,6 +9,15 @@ export type Order = {
   handle: string;
   amount: number; // so'm
   status: "pending" | "paid" | "cancelled" | "failed";
+  /**
+   * Which provider settled it, once one has.
+   *
+   * Read by both handlers before they settle, because one order is offered to
+   * both: a buyer can open Payme, leave it held, pay with Click, and then let
+   * Payme perform. Without this the second one answers success and the card is
+   * charged twice for one number.
+   */
+  provider: "click" | "payme" | null;
 };
 
 export type PaymeTransaction = {
@@ -37,6 +46,23 @@ export interface PaymentStore {
   // Marks the order paid and turns the handle reservation into a claim.
   // Must be idempotent: providers retry, and Payme may call Perform twice.
   markOrderPaid(orderId: string, provider: "click" | "payme", providerTxId: string): Promise<void>;
+
+  /**
+   * Whether the number this order is for is still held by the buyer.
+   *
+   * Asked before a provider is allowed to take money. A reservation lasts
+   * thirty minutes and a bank transfer does not always: the buyer opens the
+   * payment page, the reservation lapses, somebody else buys the number, and
+   * the first buyer's payment then arrives for a number that is no longer
+   * theirs. Refusing here means the card is not charged, rather than charged
+   * and refunded afterwards by somebody who noticed.
+   *
+   * One question covers all three kinds of order, because all three answer it
+   * the same way: is there a row in `handles` for this number belonging to this
+   * buyer. A lapsed reservation was deleted or was taken over, and either way
+   * the answer is no.
+   */
+  isHandleStillHeld(orderId: string): Promise<boolean>;
 
   // Releases the reservation so the handle returns to the pool.
   markOrderCancelled(orderId: string): Promise<void>;

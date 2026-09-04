@@ -38,6 +38,9 @@ var (
 	// is nothing to disclose: they know what they just tried to do.
 	ErrRateLimited = errors.New("juda ko'p urinish")
 	ErrNotFound    = errors.New("topilmadi")
+	// ErrCannotSell is a production deployment with no payment provider
+	// configured. It refuses to sell rather than giving the number away.
+	ErrCannotSell = errors.New("to'lov tizimi sozlanmagan")
 )
 
 type Store struct {
@@ -47,10 +50,18 @@ type Store struct {
 	// outright and free — which is what development and a preview deployment
 	// want, and what the website already does.
 	paid Providers
+	// Whether this process is a development one. Only development gives a
+	// number away free — see Providers.GiveAway.
+	development bool
 }
 
-func NewStore(pool *pgxpool.Pool, providers Providers) *Store {
-	return &Store{pool: pool, queries: store.New(pool), paid: providers}
+func NewStore(pool *pgxpool.Pool, providers Providers, development bool) *Store {
+	return &Store{
+		pool:        pool,
+		queries:     store.New(pool),
+		paid:        providers,
+		development: development,
+	}
 }
 
 // State is what somebody typing a number into the app needs to know.

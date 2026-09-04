@@ -1,6 +1,7 @@
 import "server-only";
 
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { cancellationEffect } from "./cancellation";
 import { announcePaidDeviceOrder } from "@/lib/device-orders";
 import type { PaymentStore, Order, PaymeTransaction, ClickTransaction } from "./store";
 
@@ -21,7 +22,7 @@ export class SupabasePaymentStore implements PaymentStore {
 
     const { data } = await requireClient()
       .from("orders")
-      .select("id, user_id, handle, amount, status")
+      .select("id, user_id, handle, amount, status, provider")
       .eq("id", orderId)
       .maybeSingle();
 
@@ -33,6 +34,7 @@ export class SupabasePaymentStore implements PaymentStore {
       handle: data.handle,
       amount: Number(data.amount),
       status: data.status,
+      provider: data.provider ?? null,
     };
   }
 
@@ -92,6 +94,22 @@ export class SupabasePaymentStore implements PaymentStore {
       .eq("status", "reserved");
   }
 
+  async isHandleStillHeld(orderId: string): Promise<boolean> {
+    const client = requireClient();
+
+    const order = await this.findOrder(orderId);
+    if (!order) return false;
+
+    const { data } = await client
+      .from("handles")
+      .select("normalized")
+      .eq("normalized", order.handle)
+      .eq("user_id", order.userId)
+      .maybeSingle();
+
+    return Boolean(data);
+  }
+
   async markOrderCancelled(orderId: string) {
     const client = requireClient();
 
@@ -115,29 +133,43 @@ export class SupabasePaymentStore implements PaymentStore {
 
     if (!updated) return;
 
-    // A cancelled subscription must never touch the handle. The number was
-    // bought separately and is the owner's; deleting it because a 49,000 so'm
-    // renewal was refunded would destroy a paid asset over a monthly fee.
-    if (before?.kind === "subscription") {
-      // Only a refund needs undoing. An order cancelled before payment never
-      // extended anything, so subtracting would take time the owner paid for.
-      if (before.status === "paid") {
+    // What a cancellation undoes lives in `cancellation.ts`, where it is a pure
+    // function and can be tested without a database. This carries it out.
+    const effect = cancellationEffect(before?.kind, before?.status, before?.months);
+
+    switch (effect.undo) {
+      case "subtract-months":
         await client.rpc("extend_premium", {
           target_handle: updated.handle,
-          add_months: -(before.months ?? 1),
+          add_months: -effect.months,
         });
-      }
-      return;
-    }
+        return;
 
-    // Release the handle so it returns to the pool. This also covers a refund
-    // after payment: the buyer got their money back, so they do not keep it.
-    await client
-      .from("handles")
-      .delete()
-      .eq("normalized", updated.handle)
-      .eq("user_id", updated.user_id)
-      .in("status", ["reserved", "claimed"]);
+      case "release-handle": {
+        const { error } = await client
+          .from("handles")
+          .delete()
+          .eq("normalized", updated.handle)
+          .eq("user_id", updated.user_id)
+          .in("status", ["reserved", "claimed"]);
+
+        // Logged rather than thrown: the order is already cancelled and the
+        // provider is owed an answer. But a number still held by somebody who
+        // was refunded for it has to be findable, and until now this failed in
+        // silence — nothing in this file read an error.
+        if (error) {
+          console.error("handle not released after cancellation", {
+            orderId,
+            handle: updated.handle,
+            code: error.code,
+          });
+        }
+        return;
+      }
+
+      case "nothing":
+        return;
+    }
   }
 
   async findPaymeTransaction(id: string): Promise<PaymeTransaction | null> {

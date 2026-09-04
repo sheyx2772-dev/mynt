@@ -83,15 +83,43 @@ func (q *Queries) ClaimHandleOutright(ctx context.Context, arg ClaimHandleOutrig
 }
 
 const clearExpiredReservation = `-- name: ClearExpiredReservation :execrows
-delete from handles
-where normalized = $1
-  and status = 'reserved'
-  and reserved_until < now()
+delete from handles h
+where h.normalized = $1
+  and h.status = 'reserved'
+  and h.reserved_until < now()
+  and not exists (
+    select 1 from orders o
+    where o.handle = h.normalized
+      and o.status = 'pending'
+      and (
+        exists (
+          select 1 from payme_transactions t
+          where t.order_id = o.id and t.state = 1
+        )
+        or exists (
+          select 1 from click_transactions c
+          where c.order_id = o.id
+            and c.prepared_at is not null
+            and c.completed_at is null
+            and c.cancelled_at is null
+        )
+      )
+  )
 `
 
 // A reservation nobody paid for must not hold a number forever. Cleared
 // immediately before an insert attempt rather than only by a sweep, so a buyer
 // is never told a number is taken by an order that expired an hour ago.
+//
+// Except while somebody is in the middle of paying for it. Thirty minutes of
+// reservation is measured against a bank transfer that does not always take
+// thirty minutes: a Payme transaction may be held for twelve hours, and a Click
+// prepare sits open until its complete arrives. Deleting the number underneath
+// one of those produced a buyer charged for a number somebody else had by then
+// bought — the payment handlers now refuse that, but refusing it means a real
+// buyer loses a real number, so the reservation is left alone instead.
+//
+// The order must still be pending. A settled or cancelled one holds nothing.
 func (q *Queries) ClearExpiredReservation(ctx context.Context, normalized *string) (int64, error) {
 	result, err := q.db.Exec(ctx, clearExpiredReservation, normalized)
 	if err != nil {

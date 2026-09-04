@@ -98,6 +98,11 @@ func (s *Server) registerOrders(api huma.API) {
 			// The race being lost and a number sold last week are one message,
 			// because the buyer does the same thing either way.
 			return nil, huma.Error409Conflict("Bu raqam allaqachon band qilingan.")
+		case errors.Is(err, orders.ErrCannotSell):
+			// A production deployment with no provider configured. Refusing is
+			// the safe direction: the alternative was handing over a number
+			// worth millions because a variable was missing.
+			return nil, huma.Error503ServiceUnavailable("To'lov tizimi hozir ishlamayapti. Keyinroq urinib ko'ring.")
 		case errors.Is(err, orders.ErrRateLimited):
 			return nil, huma.Error429TooManyRequests("Bir soatda juda ko'p urinish. Birozdan so'ng qayta urining.")
 		case err != nil:

@@ -1,3 +1,4 @@
+import { settledByAnother } from "./settlement";
 import { CLICK_ERROR, CLICK_ACTION, verifyClickSignature, clickAmountMatches, type ClickRequest } from "./click";
 import type { PaymentStore } from "./store";
 
@@ -99,6 +100,23 @@ export async function handleClickComplete(
 
   if (order.status === "cancelled" || order.status === "failed") {
     return { error: CLICK_ERROR.TRANSACTION_CANCELLED, error_note: "Transaction cancelled" };
+  }
+
+  // Payme may have settled this order while the buyer was in Click. Answering
+  // success here would have Click debit a card for a number that is already
+  // paid for — see `settlement.ts`.
+  if (settledByAnother(order, "click")) {
+    return { error: CLICK_ERROR.TRANSACTION_CANCELLED, error_note: "Already paid" };
+  }
+
+  // The reservation lasts thirty minutes and a bank transfer does not always.
+  // By now the number may have lapsed and been bought by somebody else, and
+  // charging this card would buy nothing — see `isHandleStillHeld`. Checked
+  // only while the order is still pending, so Click retrying its own completed
+  // payment is not refused for a number that is by then correctly claimed.
+  if (order.status === "pending" && !(await store.isHandleStillHeld(order.id))) {
+    await store.markOrderCancelled(order.id);
+    return { error: CLICK_ERROR.TRANSACTION_CANCELLED, error_note: "Reservation expired" };
   }
 
   // Retries must not settle the order twice.
