@@ -1,5 +1,6 @@
 import '../models/handle.dart';
 import '../models/lead.dart';
+import '../models/purchase.dart';
 import '../models/stats.dart';
 import 'client.dart';
 
@@ -79,5 +80,28 @@ class FlexApi {
       query: {'kun': days},
     );
     return Stats.fromJson(body['hisobot'] as Map<String, dynamic>? ?? const {});
+  }
+
+  // Sotib olish ---------------------------------------------------------------
+
+  /// What a number costs, and whether anybody has it. No session needed — the
+  /// whole product is somebody trying a number and being told.
+  Future<NumberState> check(String number) async {
+    final body = await _client.get('/qidirish/$number');
+    return NumberState.fromJson(body);
+  }
+
+  /// Takes a number off the market for thirty minutes and opens an order.
+  Future<Order> buy(String number, String name) async {
+    final body = await _client.post('/qidirish/$number/olish', body: {'ism': name});
+    return Order.fromJson(body['buyurtma'] as Map<String, dynamic>? ?? const {});
+  }
+
+  /// Whether an order has been paid. Asked again after the buyer comes back
+  /// from a provider's page, because the confirmation reaches the server on a
+  /// callback rather than through the phone.
+  Future<Order> order(String id) async {
+    final body = await _client.get('/buyurtmalar/$id');
+    return Order.fromJson(body['buyurtma'] as Map<String, dynamic>? ?? const {});
   }
 }

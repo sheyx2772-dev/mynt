@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'screens/buy_screen.dart';
 import 'screens/edit_profile_screen.dart';
 import 'screens/leads_screen.dart';
 import 'screens/number_screen.dart';
@@ -55,6 +56,7 @@ GoRouter buildRouter(Ref ref) {
         ),
       ),
       GoRoute(path: '/', builder: (_, _) => const NumbersScreen()),
+      GoRoute(path: '/olish', builder: (_, _) => const BuyScreen()),
       GoRoute(
         path: '/raqam/:raqam',
         builder: (_, state) => NumberScreen(number: state.pathParameters['raqam']!),

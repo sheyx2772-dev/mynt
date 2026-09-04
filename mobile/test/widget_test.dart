@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flex/core/config.dart';
+import 'package:flex/core/money.dart';
 
 void main() {
   group('Config', () {
@@ -16,6 +17,18 @@ void main() {
 
     test('an API path is built under the version prefix', () {
       expect(Config.api('/sogliq').toString(), 'https://flex.com.uz/v1/sogliq');
+    });
+  });
+
+  group('som', () {
+    test('groups by three with a space, as prices are written here', () {
+      // 120000000 on a screen is unreadable, and a comma is not the separator
+      // used in Uzbekistan.
+      expect(som(120000000), "120 000 000 so'm");
+      expect(som(100000), "100 000 so'm");
+      expect(som(500), "500 so'm");
+      expect(som(0), "0 so'm");
+      expect(som(1000), "1 000 so'm");
     });
   });
 }

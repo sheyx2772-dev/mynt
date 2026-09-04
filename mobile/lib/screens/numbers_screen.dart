@@ -35,6 +35,13 @@ class NumbersScreen extends ConsumerWidget {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => context.push('/olish'),
+        backgroundColor: Brand.lime,
+        foregroundColor: Brand.black,
+        icon: const Icon(Icons.add),
+        label: const Text('Raqam olish'),
+      ),
       body: RefreshIndicator(
         color: Brand.limeInk,
         onRefresh: () async => ref.invalidate(myNumbersProvider),
@@ -77,8 +84,8 @@ class _NothingYet extends StatelessWidget {
         SizedBox(height: 80),
         Empty(
           title: 'Hali raqamingiz yo\'q',
-          detail: 'Raqam flex.com.uz saytidan olinadi. '
-              'Olganingizdan keyin u shu yerda ko\'rinadi.',
+          detail: 'Uch harf va uch raqam tanlang — masalan MYN042. '
+              'Pastdagi tugmadan boshlang.',
         ),
       ],
     );
