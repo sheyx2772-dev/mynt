@@ -165,46 +165,6 @@
   --page-pattern: none;
 }
 
-/* Suzani. Cream ground, madder red, the rosette that is embroidered onto every
-   dowry cloth in the country. The red is the thread colour, not a web red. */
-[data-theme="suzani"] {
-  --color-ink: #241a12;
-  --color-lime: #f0836f;
-  --color-paper: #f6f1e7;
-  --color-sheet: #fffdf8;
-  --color-mute: #6b6152;
-  --color-gold: #c8873f;
-  --color-engraved: #e8b06a;
-  --card-base: #3d1414;
-  --card-face: radial-gradient(circle at 78% 26%, #7e2b2b 0%, #3d1414 46%, #241010 100%);
-  --page-pattern: radial-gradient(
-      circle at 50% 50%,
-      rgb(193 68 58 / 0.09) 0 3px,
-      transparent 3px
-    )
-    0 0 / 34px 34px;
-}
-
-/* Ganch. Carved plaster: bone white, and the shadow in the cut is the only
-   dark thing on it. Turquoise because that is what sits in the niches. */
-[data-theme="ganch"] {
-  --color-ink: #2a2724;
-  --color-lime: #3fb9b9;
-  --color-paper: #f4f1ea;
-  --color-sheet: #ffffff;
-  --color-mute: #6b665c;
-  --color-gold: #b08d55;
-  --color-engraved: #4a4437;
-  --card-base: #ddd4c2;
-  --card-face: linear-gradient(150deg, #efe9dc 0%, #d9d0be 60%, #c6bba5 100%);
-  --page-pattern: repeating-linear-gradient(
-      45deg,
-      rgb(42 39 36 / 0.045) 0 1px,
-      transparent 1px 22px
-    ),
-    repeating-linear-gradient(-45deg, rgb(42 39 36 / 0.045) 0 1px, transparent 1px 22px);
-}
-
 /* Registon. Lapis and turquoise off the madrasa tilework, and the page is the
    dark one — the only theme where the sheet sits on night rather than day. */
 [data-theme="registon"] {
@@ -225,34 +185,6 @@
       rgb(215 179 100 / 0.05) 0 1px,
       transparent 1px 44px
     );
-}
-
-/* Adras. The ikat is dyed before it is woven, so the pattern bleeds sideways —
-   which is why the bands here have soft edges rather than clean ones. */
-[data-theme="adras"] {
-  --color-ink: #2b1f1a;
-  --color-lime: #ef7382;
-  --color-paper: #fbf6f0;
-  --color-sheet: #ffffff;
-  --color-mute: #6f6055;
-  --color-gold: #c2903c;
-  --color-engraved: #f2e3cf;
-  --card-base: #3a2224;
-  --card-face: linear-gradient(
-    100deg,
-    #7c1f2c 0%,
-    #a8442c 18%,
-    #1d5f66 42%,
-    #12343c 68%,
-    #23181a 100%
-  );
-  --page-pattern: repeating-linear-gradient(
-    92deg,
-    rgb(194 47 63 / 0.05) 0 8px,
-    transparent 8px 15px,
-    rgb(29 95 102 / 0.05) 15px 23px,
-    transparent 23px 34px
-  );
 }
 
 /* Samarkand paper. Made from mulberry bark, uneven, warm, and the colour of

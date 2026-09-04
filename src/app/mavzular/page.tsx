@@ -28,10 +28,7 @@ export const metadata: Metadata = {
 
 const THEMES = [
   { id: "paper", name: "Qog'oz", note: "Oq varaq, qora karta. Asosiy." },
-  { id: "suzani", name: "Suzani", note: "Krem yer, qizil ipak, gul." },
-  { id: "ganch", name: "Ganch", note: "O'yilgan gips va feruza." },
   { id: "registon", name: "Registon", note: "Lojuvard tunda oq varaq." },
-  { id: "adras", name: "Adras", note: "Bo'yalgan ip, chetlari oqadi." },
   { id: "qogoz", name: "Samarqand qog'ozi", note: "Tut po'stlog'i, yong'oq siyoh." },
   { id: "polat", name: "Po'lat", note: "Ishqalangan metall, signal rangi." },
   { id: "shaffof", name: "Shaffof", note: "Muzli plastik, sovuq yorug'lik." },
@@ -288,7 +285,7 @@ export default function ThemesPage() {
           Mavzular
         </h1>
         <p className="mt-2 max-w-[60ch] text-[16px] leading-6 text-mute">
-          To&apos;qqiztasi ham bir xil profilni ko&apos;rsatadi — bir xil ism, bir
+          Oltitasi ham bir xil profilni ko&apos;rsatadi — bir xil ism, bir
           xil raqam, bir xil to&apos;rtta tugma. Har biri o&apos;z matni bilan
           bezansa, hammasi chiroyli chiqadi; farqni faqat shunday ko&apos;rish
           mumkin. Kontrasti <code className="font-mono">npm run themes</code>{" "}
@@ -322,7 +319,7 @@ export default function ThemesPage() {
         </div>
 
         <h2 className="mt-14 text-[20px] leading-6 font-semibold">
-          Bitta maket, to&apos;qqizta rang
+          Bitta maket, oltita rang
         </h2>
         <div className="mt-4 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
           {THEMES.map((t) => {

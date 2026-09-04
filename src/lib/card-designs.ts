@@ -84,7 +84,7 @@ export const CARD_DESIGNS = [
   },
   {
     id: "naqsh",
-    theme: "ganch",
+    theme: "tungi",
     name: "Naqsh",
     description:
       "Sakkiz burchakli geometrik panjara. An'anaviy koshinkorlik geometriyasidan ilhomlangan original chizma.",
@@ -116,7 +116,7 @@ export const CARD_DESIGNS = [
   },
   {
     id: "suzani",
-    theme: "suzani",
+    theme: "qogoz",
     name: "Suzani",
     description:
       "Chuqur indigo fonda suzani medalyoni — kashta tekstura kabi, o'z fonidan bir oz ochiqroq, bitta oltin ip bilan.",
