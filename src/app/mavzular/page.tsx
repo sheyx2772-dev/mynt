@@ -4,6 +4,9 @@ import { Clock, Eye, Phone, Send } from "lucide-react";
 
 import CardObject from "@/components/ui/CardObject";
 import PlaqueProfile, { plaquePill } from "@/components/ui/PlaqueProfile";
+import SocialProfile from "@/components/ui/SocialProfile";
+import PosterProfile from "@/components/ui/PosterProfile";
+import ReceiptProfile from "@/components/ui/ReceiptProfile";
 import Plate from "@/components/ui/Plate";
 import { CARD_DESIGNS } from "@/lib/card-designs";
 
@@ -166,6 +169,114 @@ function PlaqueSample() {
   );
 }
 
+const SOCIALS = [
+  { label: "Telegram", href: "#", handle: "@azizkarimov" },
+  { label: "Instagram", href: "#", handle: "@aziz.karimov" },
+  { label: "WhatsApp", href: "#", handle: "+998 90 123 45 67" },
+  { label: "YouTube", href: "#", handle: "@azizkarimov" },
+  { label: "LinkedIn", href: "#", handle: "in/azizkarimov" },
+  { label: "Facebook", href: "#", handle: "aziz.karimov" },
+];
+
+const ROWS = [
+  { label: "Telefon", value: "+998 90 123 45 67", href: "tel:+998901234567" },
+  { label: "Email", value: "aziz@mclegal.uz", href: "mailto:aziz@mclegal.uz" },
+  { label: "Shahar", value: "Toshkent · Ташкент", href: "#" },
+  { label: "Veb-sayt", value: "mclegal.uz", href: "#" },
+];
+
+const SERVICES = [
+  { name: "Shartnoma ekspertizasi", price: "500\u00a0000\u00a0so'm" },
+  { name: "Yuridik konsultatsiya", price: "200\u00a0000\u00a0so'm" },
+  { name: "Sudda vakillik", price: "4\u00a0000\u00a0000\u00a0so'm" },
+];
+
+function SocialSample() {
+  return (
+    <div data-theme="ijtimoiy" className="themed rounded-2xl">
+      <SocialProfile
+        n="MYN042"
+        name="Aziz Karimov"
+        tagline="Fotograf · Toshkent"
+        socials={SOCIALS}
+      >
+        <a
+          href="#"
+          className="mt-6 flex h-14 w-full items-center justify-center rounded-2xl bg-lime text-[16px] font-bold text-on-accent"
+        >
+          Kontaktni saqlash
+        </a>
+      </SocialProfile>
+    </div>
+  );
+}
+
+function PosterSample() {
+  return (
+    <div data-theme="plakat" className="themed rounded-2xl">
+      <PosterProfile n="MYN042" name="Aziz Karimov" role="Direktor · MC LEGAL" rows={ROWS}>
+        <a
+          href="#"
+          className="mt-10 flex h-16 w-full items-center justify-center bg-lime text-[18px] font-bold tracking-[0.14em] text-on-accent uppercase"
+        >
+          Kontaktni saqlash
+        </a>
+      </PosterProfile>
+    </div>
+  );
+}
+
+function ReceiptSample() {
+  return (
+    <div data-theme="kvitansiya" className="themed rounded-2xl">
+      <ReceiptProfile
+        n="MYN042"
+        name="Aziz Karimov"
+        role="Direktor · MC LEGAL"
+        rows={ROWS}
+        services={SERVICES}
+      >
+        <a
+          href="#"
+          className="flex h-14 w-full items-center justify-center bg-lime font-mono text-[16px] font-bold tracking-[0.1em] text-on-accent uppercase"
+        >
+          Kontaktni saqlash
+        </a>
+        <p className="mt-4 text-center font-mono text-[16px] text-mute">
+          * * * flex.com.uz/MYN042 * * *
+        </p>
+      </ReceiptProfile>
+    </div>
+  );
+}
+
+const LAYOUTS = [
+  {
+    name: "Zarbof",
+    note: "Markazda, serif, konturli tabletkalar, halqadagi portret. Varaq yo'q — bitta panel.",
+    who: "Fotograf, restoran, raqamni chiroyli bo'lgani uchun olgan odam.",
+    render: () => <PlaqueSample />,
+  },
+  {
+    name: "Ijtimoiy",
+    note: "Hisoblar sahifaning o'zi: ikki ustunli plitkalar, har biri o'z platformasining rangi va belgisi bilan. Ism kichik, hisoblar katta.",
+    who: "Profili aynan hisoblaridan iborat odam — bloger, do'kon, fotograf.",
+    render: () => <SocialSample />,
+  },
+  {
+    name: "Plakat",
+    note: "Bitta narsa juda katta, qolgani chetda. Ism chetdan chetga, havolalar quti emas — chiziq. Hech narsa sahifadan ko'tarilmaydi.",
+    who: "Ismning o'zi mahsulot bo'lgan holat — musiqachi, brend, deraza ortidagi raqam.",
+    render: () => <PosterSample />,
+  },
+  {
+    name: "Kvitansiya",
+    note: "Tor, monoshrift, ikki uchi yirtilgan. Hamma narsa — qator: ism ham, narx ham. Oq-qorada bosilsa ham yashaydi.",
+    who: "Hunarmand — usta, haydovchi, quruvchi. Kartasi hisoblagich ortiga qistiriladi.",
+    render: () => <ReceiptSample />,
+  },
+] as const;
+
 export default function ThemesPage() {
   return (
     <div className="min-h-full bg-paper px-4 py-10 text-ink">
@@ -186,22 +297,28 @@ export default function ThemesPage() {
           </Link>
         </p>
 
-        <section className="mt-8">
-          <h2 className="text-[17px] leading-6 font-semibold">
-            Zarbof — boshqa maket, boshqa rang emas
-          </h2>
-          <p className="max-w-[70ch] text-[16px] leading-6 text-mute">
-            Markazda tekislangan, serif shrift, konturli tugmalar, doiradagi
-            portret, oq varaq yo&apos;q — butun sahifa bitta panel, ichkarisiga
-            chekindirilgan chiziq bilan. Quyidagi to&apos;qqiztasi bitta maketning
-            to&apos;qqizta rangi; bu esa boshqa narsa.
-          </p>
-          <div className="mt-4 max-w-[520px]">
-            <PlaqueSample />
-          </div>
-        </section>
+        <h2 className="mt-10 text-[20px] leading-6 font-semibold">
+          To&apos;rtta maket
+        </h2>
+        <p className="mt-1 max-w-[70ch] text-[16px] leading-6 text-mute">
+          Bular bir-birining rangi emas. Har birida tekislash, shrift, tugma
+          shakli va tuzilma boshqa — va har biri boshqa odam uchun.
+        </p>
 
-        <h2 className="mt-12 text-[17px] leading-6 font-semibold">
+        <div className="mt-6 grid gap-10 lg:grid-cols-2">
+          {LAYOUTS.map((l) => (
+            <section key={l.name}>
+              <header className="mb-3">
+                <h3 className="text-[17px] leading-6 font-semibold">{l.name}</h3>
+                <p className="text-[16px] leading-6 text-mute">{l.note}</p>
+                <p className="mt-0.5 text-[16px] leading-6 text-mute">{l.who}</p>
+              </header>
+              {l.render()}
+            </section>
+          ))}
+        </div>
+
+        <h2 className="mt-14 text-[20px] leading-6 font-semibold">
           Bitta maket, to&apos;qqizta rang
         </h2>
         <div className="mt-4 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">

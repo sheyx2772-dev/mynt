@@ -374,12 +374,82 @@
     );
 }
 
+/* Ijtimoiy — the social layout's ground. Pale and quiet on purpose: the
+ * platform marks carry all the colour on that page, so everything under them
+ * has to get out of the way. */
+[data-theme="ijtimoiy"] {
+  --color-ink: #16181d;
+  --color-lime: #ffd21e;
+  --color-paper: #eef1f5;
+  --color-sheet: #ffffff;
+  --color-mute: #5f6672;
+  --color-gold: #9aa3b0;
+  --color-engraved: #dfe5ec;
+  --color-slab: #16181d;
+  --color-on-slab: #ffffff;
+  --color-on-accent: #16181d;
+  --card-base: #1d2027;
+  --card-face: linear-gradient(140deg, #262a33 0%, #16181d 70%);
+  --page-pattern: none;
+}
+
+/* Plakat — the poster. Newsprint white, one black, and a red that exists to be
+ * the only thing on the page that is not black. */
+[data-theme="plakat"] {
+  --color-ink: #111111;
+  --color-lime: #c4200a;
+  --color-paper: #f2f0eb;
+  --color-sheet: #f2f0eb;
+  --color-mute: #6a6660;
+  --color-gold: #b8b2a6;
+  --color-engraved: #e8e4dc;
+  --color-slab: #111111;
+  --color-on-slab: #f2f0eb;
+  --color-on-accent: #f6f4ef;
+  --card-base: #191919;
+  --card-face: linear-gradient(135deg, #232323 0%, #111111 72%);
+  --page-pattern: none;
+}
+
+/* Kvitansiya — the receipt. Thermal paper, which is warm and slightly grey,
+ * and an ink that is never quite black because a till printer's never is. */
+[data-theme="kvitansiya"] {
+  --color-ink: #26241f;
+  --color-lime: #1f6a4b;
+  --color-paper: #d8d5cd;
+  --color-sheet: #f7f5ef;
+  --color-mute: #6c675d;
+  --color-gold: #8d8779;
+  --color-engraved: #efece4;
+  --color-slab: #26241f;
+  --color-on-slab: #f7f5ef;
+  --color-on-accent: #f7f5ef;
+  --color-page-mute: #4d4941;
+  --card-base: #2e2b25;
+  --card-face: linear-gradient(140deg, #3a362e 0%, #26241f 70%);
+  --page-pattern: repeating-linear-gradient(
+    0deg,
+    rgb(38 36 31 / 0.03) 0 1px,
+    transparent 1px 3px
+  );
+}
+
 /* The page wears its theme's pattern. Fixed, so it does not scroll with the
    content and read as texture printed on the paper rather than as the surface
    the paper is lying on. */
 [data-theme] {
   color: var(--color-ink);
 }
+
+/* Ijtimoiy — the social layout's ground. Pale and quiet on purpose: the
+ * platform marks carry all the colour on that page, so everything under them
+ * has to get out of the way. */
+
+/* Plakat — the poster. Newsprint white, one black, and a red that exists to be
+ * the only thing on the page that is not black. */
+
+/* Kvitansiya — the receipt. Thermal paper, which is warm and slightly grey,
+ * and an ink that is never quite black because a till printer's never is. */
 
 /* The page wears its theme's pattern.
  *
