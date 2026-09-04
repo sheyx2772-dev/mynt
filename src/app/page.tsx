@@ -294,6 +294,35 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           />
         </div>
 
+        {/* Who has just joined, and how much of the namespace is gone. Directly
+            under the hero, because it is the first thing a scroll reveals and
+            it is the only proof on the page that other people are buying. */}
+        <div className="hidden bg-flex-black lg:block">
+          <LiveResidents
+            residents={newest}
+            claimed={counts.claimed}
+            namespace={counts.namespace}
+            labels={{ taken: s.takenWord, left: s.leftWord, latest: s.latestWord }}
+          />
+        </div>
+
+        {/* On a phone this is the whole entry screen. See AppHome. */}
+        <AppHome
+          s={s}
+          residents={newest}
+          claimed={counts.claimed}
+          namespace={counts.namespace}
+          devices={devices}
+          verticals={verticals}
+          stripLabels={{
+            devices: p.groupDevices,
+            devicesNote: p.groupDevicesNote,
+            directions: p.groupDirections,
+            directionsNote: p.groupDirectionsNote,
+          }}
+          owner={owner}
+        />
+
         {/* 2 — try it before buying ------------------------------------ */}
         <section
           id="sinash"
@@ -490,34 +519,6 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </section>
 
 
-        {/* Who has just joined, and how much of the namespace is gone. Directly
-            under the hero, because it is the first thing a scroll reveals and
-            it is the only proof on the page that other people are buying. */}
-        <div className="hidden bg-flex-black lg:block">
-          <LiveResidents
-            residents={newest}
-            claimed={counts.claimed}
-            namespace={counts.namespace}
-            labels={{ taken: s.takenWord, left: s.leftWord, latest: s.latestWord }}
-          />
-        </div>
-
-        {/* On a phone this is the whole entry screen. See AppHome. */}
-        <AppHome
-          s={s}
-          residents={newest}
-          claimed={counts.claimed}
-          namespace={counts.namespace}
-          devices={devices}
-          verticals={verticals}
-          stripLabels={{
-            devices: p.groupDevices,
-            devicesNote: p.groupDevicesNote,
-            directions: p.groupDirections,
-            directionsNote: p.groupDirectionsNote,
-          }}
-          owner={owner}
-        />
 
         {/* FAQ */}
         <section id="savollar" className="scroll-mt-20 mx-auto max-w-3xl px-6 py-14 sm:py-24">
