@@ -3,8 +3,8 @@ import type { Profile } from "./profiles";
 
 // ── Brand banner images ──────────────────────────────────────────────────────
 const imgMarkaziyBank = "/figma-make/image-10.png";
-const imgYoshlarVentures = "/figma-make/image-12.png";
-const imgITPark = "/figma-make/image-14.png";
+const imgYoshlarVentures = "/figma-make/image-12-fit.png";
+const imgITPark = "/figma-make/image-14-fit.png";
 const imgStartupGarage = "/figma-make/image-15.png";
 const imgUnitedVentures = "/figma-make/image-16.png";
 const imgICTWeek = "/figma-make/image-17.png";
@@ -15,10 +15,10 @@ const imgUzCombinator = "/figma-make/uzcombinator-banner.jpeg";  // supplied by 
 const imgMOQ = "/figma-make/moq-banner.jpeg";                    // supplied by the client
 const imgKorzinka   = "/figma-make/korzinka-banner.png";
 const imgMU         = "/figma-make/mu-banner.png";
-const imgFintellect = "/figma-make/fintellect-banner.jpeg";
+const imgFintellect = "/figma-make/fintellect-banner-fit.png";
 const imgAyol       = "/figma-make/ayol-banner.jpeg";
-const imgEYU        = "/figma-make/eyu-banner.jpeg";
-const imgAloqaV     = "/figma-make/aloqaventures-banner.jpeg";  // the fund's own, supplied
+const imgEYU        = "/figma-make/eyu-banner-fit.png";
+const imgAloqaV     = "/figma-make/aloqaventures-banner-fit.png";  // the fund's own, supplied
 const imgFlex       = "/figma-make/flex-banner.png";
 const imgDomo       = "/figma-make/domo-banner.png";
 
