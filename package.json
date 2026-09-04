@@ -14,7 +14,8 @@
     "db:status": "node scripts/migrate.mjs --dry-run",
     "db:test": "bash scripts/db-test.sh",
     "icons": "node scripts/make-icons.mjs",
-    "themes": "node scripts/theme-contrast.mjs"
+    "themes": "node scripts/theme-contrast.mjs",
+    "figma": "node scripts/figma-pull.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1121.0",

@@ -43,3 +43,6 @@ next-env.d.ts
 
 # PowerPoint leaves these beside a file it has open.
 ~$*
+
+# Raw Figma export — tokens.md and tokens.css are the useful part
+figma/document.json
