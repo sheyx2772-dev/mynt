@@ -19,6 +19,7 @@ const CATS = [
   { id: "ministry", uz: "Vazirliklar",        ru: "Министерства" },
   { id: "bank",     uz: "Banklar",            ru: "Банки" },
   { id: "venture",  uz: "Venture / Fondlar",  ru: "Фонды" },
+  { id: "startup",  uz: "Startaplar",          ru: "Стартапы" },
   { id: "corp",     uz: "Tashkilotlar",       ru: "Организации" },
 ];
 
@@ -28,6 +29,7 @@ function IconGov()      { return <svg width="16" height="16" viewBox="0 0 24 24"
 function IconMin()      { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M12 3v1m0 16v1M5.6 5.6l.7.7m11.4-.7-.7.7M3 12h1m16 0h1"/><circle cx="12" cy="12" r="4"/></svg>; }
 function IconBank()     { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>; }
 function IconVC()       { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/></svg>; }
+function IconStartup()  { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>; }
 function IconCorp()     { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>; }
 function IconMoon()     { return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>; }
 function IconSun()      { return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>; }
@@ -35,7 +37,7 @@ function IconNFC()      { return <svg width="20" height="20" viewBox="0 0 24 24"
 
 const CAT_ICON: Record<string, () => React.ReactElement> = {
   all: IconAll, gov: IconGov, ministry: IconMin,
-  bank: IconBank, venture: IconVC, corp: IconCorp,
+  bank: IconBank, venture: IconVC, startup: IconStartup, corp: IconCorp,
 };
 
 export default function KatalogPage() {

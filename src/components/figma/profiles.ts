@@ -11,7 +11,7 @@
 
 export interface Profile {
   id: string;
-  category: "gov" | "ministry" | "bank" | "venture" | "corp";
+  category: "gov" | "ministry" | "bank" | "venture" | "startup" | "corp";
   categoryLabel: string;
   name: string;
   fullName: string;      // the organisation — this demo carries no people
@@ -378,7 +378,7 @@ export const profiles: Profile[] = [
   },
   {
     id: "kurbanova",
-    category: "corp",
+    category: "startup",
     categoryLabel: "Asoschi va Rahbar",
     name: "Tamilla Kurbanova",
     fullName: "Tamilla Kurbanova",
@@ -594,7 +594,7 @@ export const profiles: Profile[] = [
   },
   {
     id: "tojiev",
-    category: "corp",
+    category: "startup",
     categoryLabel: "Asoschi va Rahbar",
     name: "Alisher Tojiev",
     // Titles as published on his own LinkedIn profile.
@@ -636,7 +636,7 @@ export const profiles: Profile[] = [
   },
   {
     id: "abrorov",
-    category: "corp",
+    category: "startup",
     categoryLabel: "Asoschi va Rahbar",
     name: "Javohir Abrorov",
     fullName: "Javohir Abrorov",
@@ -657,7 +657,7 @@ export const profiles: Profile[] = [
   },
   {
     id: "ahmadjonov",
-    category: "corp",
+    category: "startup",
     categoryLabel: "Hammuassis",
     name: "Abdujabbor Ahmadjonov",
     fullName: "Abdujabbor Ahmadjonov",
@@ -678,7 +678,7 @@ export const profiles: Profile[] = [
   },
   {
     id: "abduvohidov",
-    category: "corp",
+    category: "startup",
     categoryLabel: "Bosh Texnolog",
     name: "Zoyirjon Abduvohidov",
     fullName: "Zoyirjon Abduvohidov",
