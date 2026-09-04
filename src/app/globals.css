@@ -363,15 +363,11 @@
   --card-base: #121722;
   --card-face: linear-gradient(150deg, #1b2233 0%, #10151f 58%, #080b12 100%);
   --page-pattern: radial-gradient(
-      ellipse 120% 60% at 50% 0%,
-      rgb(216 193 132 / 0.07) 0%,
-      transparent 60%
+      ellipse 130% 55% at 50% 0%,
+      rgb(216 193 132 / 0.10) 0%,
+      transparent 62%
     ),
-    repeating-linear-gradient(
-      -18deg,
-      rgb(216 193 132 / 0.035) 0 1px,
-      transparent 1px 40px
-    );
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='300' viewBox='0 0 420 300' fill='none'%3E%3Cg stroke='%23d8c184' stroke-opacity='0.12' stroke-width='1' fill='none'%3E%3Cpath d='M-40 54C70 8 150 96 250 62 330 34 380 82 460 58'/%3E%3Cpath d='M-40 96C60 62 160 140 262 104 342 76 386 120 460 98'/%3E%3Cpath d='M-40 168C80 132 140 208 248 178 336 154 392 190 460 172'/%3E%3Cpath d='M-40 214C74 186 158 250 258 224 340 202 390 234 460 220'/%3E%3Cpath d='M-40 268C90 240 150 292 254 274 344 258 396 282 460 272'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 /* Ijtimoiy — the social layout's ground. Pale and quiet on purpose: the

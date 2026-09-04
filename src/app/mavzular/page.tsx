@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Clock, Eye, Phone, Send } from "lucide-react";
 
 import CardObject from "@/components/ui/CardObject";
-import PlaqueProfile, { plaquePill } from "@/components/ui/PlaqueProfile";
+import PlaqueProfile from "@/components/ui/PlaqueProfile";
 import SocialProfile from "@/components/ui/SocialProfile";
 import PosterProfile from "@/components/ui/PosterProfile";
 import ReceiptProfile from "@/components/ui/ReceiptProfile";
@@ -134,36 +134,30 @@ function PlaqueSample() {
         name="Aziz Karimov"
         role="Direktor"
         company="MC LEGAL"
+        lastSeen="Oxirgi faollik: 2 kun oldin"
         bio="Korporativ huquq, shartnomalar va sud vakilligi — 12 yillik amaliyot."
+        badges={[{ label: "Top #1 shu hafta" }, { label: "Obuna bo'lish", href: "#" }]}
+        stats={[
+          { value: "823", label: "Ko'rish" },
+          { value: "12", label: "Tavsiya" },
+        ]}
+        tabs={[
+          { label: "Vizitka", active: true, href: "#" },
+          { label: "Postlar", active: false, href: "#" },
+        ]}
+        links={[
+          { label: "Telegram", text: "Telegram kanal", href: "#" },
+          { label: "Instagram", text: "Instagram", href: "#" },
+          { label: "WhatsApp", text: "WhatsApp", href: "#" },
+          { label: "Veb-sayt", text: "mclegal.uz", href: "#" },
+        ]}
       >
-        <div className="flex flex-col gap-3">
-          <span className={plaquePill}>Qo&apos;ng&apos;iroq</span>
-          <span className={plaquePill}>Telegram</span>
-          <span className={plaquePill}>Tavsiya qilaman</span>
-        </div>
-
-        <dl className="mt-8 flex flex-col text-left">
-          {[
-            ["Telefon", "+998 90 123 45 67"],
-            ["Email", "aziz@mclegal.uz"],
-            ["Shahar", "Toshkent · Ташкент"],
-          ].map(([k, v]) => (
-            <div key={k} className="rule flex min-h-14 items-baseline gap-3 py-3 last:bg-none">
-              <dt className="text-[16px] tracking-[0.06em] text-mute uppercase">{k}</dt>
-              <span
-                aria-hidden
-                className="mb-1.5 min-w-6 flex-1 self-end border-b border-dotted border-gold/35"
-              />
-              <dd className="shrink-0 text-[16px] whitespace-nowrap">{v}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <div className="mt-8">
-          <span className="flex h-14 items-center justify-center rounded-full bg-lime font-serif text-[16px] font-bold tracking-[0.08em] text-on-accent uppercase">
-            Kontaktni saqlash
-          </span>
-        </div>
+        <a
+          href="#"
+          className="flex h-14 w-full items-center justify-center rounded-full bg-lime font-serif text-[16px] font-bold tracking-[0.08em] text-on-accent uppercase"
+        >
+          Kontaktni saqlash
+        </a>
       </PlaqueProfile>
     </div>
   );
@@ -262,7 +256,7 @@ function ReceiptSample() {
 const LAYOUTS = [
   {
     name: "Zarbof",
-    note: "Markazda, serif, konturli tabletkalar, halqadagi portret. Varaq yo'q — bitta panel.",
+    note: "Markazda, oltin serif, ikonkali konturli tabletkalar, halqadagi portret. Fonda oqim chiziqlari. Varaq yo'q — bitta panel.",
     who: "Fotograf, restoran, raqamni chiroyli bo'lgani uchun olgan odam.",
     render: () => <PlaqueSample />,
   },
