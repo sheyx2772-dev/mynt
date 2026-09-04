@@ -3,7 +3,7 @@ import { site } from "@/lib/i18n";
 import { venueTab } from "@/lib/venue-nav";
 import { getLang } from "@/lib/lang";
 import BottomNav from "@/components/BottomNav";
-import { inter, mono } from "./fonts";
+import { inter, mono, serif } from "./fonts";
 import "./globals.css";
 import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
 
@@ -36,7 +36,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang={lang}
-      className={`${inter.variable} ${mono.variable} h-full antialiased`}
+      className={`${inter.variable} ${mono.variable} ${serif.variable} h-full antialiased`}
     >
       {/* The bar is fixed, so the page needs room under it. Phones only —
           `pb-16` is undone at the breakpoint where the bar disappears. */}

@@ -51,7 +51,7 @@ export default function Plate({
         <span className={`font-medium tracking-wide text-mute ${s.mark}`}>№</span>
       )}
       <span
-        className={`inline-flex items-stretch overflow-hidden rounded-md bg-ink text-sheet shadow-slab ${s.box}`}
+        className={`inline-flex items-stretch overflow-hidden rounded-md bg-slab text-on-slab shadow-slab ${s.box}`}
       >
         <span className={`bg-gold/90 ${s.edge}`} aria-hidden />
         {split ? (

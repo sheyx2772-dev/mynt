@@ -50,6 +50,9 @@ const themes = [...css.matchAll(/\[data-theme="([a-z-]+)"\]\s*\{([^}]+)\}/g)].ma
       // gold engraving on it — gold on cream, which is nothing at all.
       engraved: token("engraved") ?? token("gold"),
       cardBase: token("base"),
+      slab: token("slab") ?? token("ink"),
+      onSlab: token("on-slab") ?? token("sheet"),
+      onAccent: token("on-accent") ?? token("ink"),
     };
   },
 );
@@ -66,14 +69,14 @@ const CHECKS = [
   ["page ink on paper", (t) => [t.pageInk, t.paper], 4.5],
   ["mute on sheet", (t) => [t.mute, t.sheet], 4.5],
   ["page mute on paper", (t) => [t.pageMute, t.paper], 4.5],
-  ["ink on accent", (t) => [t.ink, t.accent], 4.5],
+  ["text on accent", (t) => [t.onAccent, t.accent], 4.5],
   // The plate, the solid buttons and the avatar are ink surfaces with light
   // text on them. That text used to be `paper`, which is the page — fine until
   // a theme made the page dark and put dark text on a dark plate.
-  ["sheet on ink", (t) => [t.sheet, t.ink], 4.5],
+  ["text on slab", (t) => [t.onSlab, t.slab], 4.5],
   // The engraving is large and wide-tracked, so it is held to the large-text
   // bar rather than the body one.
-  ["plate edge on plate", (t) => [t.gold, t.ink], 3],
+  ["plate edge on slab", (t) => [t.gold, t.slab], 3],
   ["engraving on card", (t) => [t.engraved, t.cardBase], 3],
 ];
 

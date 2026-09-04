@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Clock, Eye, Phone, Send } from "lucide-react";
 
 import CardObject from "@/components/ui/CardObject";
+import PlaqueProfile, { plaquePill } from "@/components/ui/PlaqueProfile";
 import Plate from "@/components/ui/Plate";
 import { CARD_DESIGNS } from "@/lib/card-designs";
 
@@ -121,6 +122,50 @@ function Sample({ theme }: { theme: string }) {
   );
 }
 
+// The ceremonial layout, rendered from the same data as the rest.
+function PlaqueSample() {
+  return (
+    <div data-theme="zarbof" className="themed rounded-2xl">
+      <PlaqueProfile
+        n="MYN042"
+        name="Aziz Karimov"
+        role="Direktor"
+        company="MC LEGAL"
+        bio="Korporativ huquq, shartnomalar va sud vakilligi — 12 yillik amaliyot."
+      >
+        <div className="flex flex-col gap-3">
+          <span className={plaquePill}>Qo&apos;ng&apos;iroq</span>
+          <span className={plaquePill}>Telegram</span>
+          <span className={plaquePill}>Tavsiya qilaman</span>
+        </div>
+
+        <dl className="mt-8 flex flex-col text-left">
+          {[
+            ["Telefon", "+998 90 123 45 67"],
+            ["Email", "aziz@mclegal.uz"],
+            ["Shahar", "Toshkent · Ташкент"],
+          ].map(([k, v]) => (
+            <div key={k} className="rule flex min-h-14 items-baseline gap-3 py-3 last:bg-none">
+              <dt className="text-[16px] tracking-[0.06em] text-mute uppercase">{k}</dt>
+              <span
+                aria-hidden
+                className="mb-1.5 min-w-6 flex-1 self-end border-b border-dotted border-gold/35"
+              />
+              <dd className="shrink-0 text-[16px] whitespace-nowrap">{v}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <div className="mt-8">
+          <span className="flex h-14 items-center justify-center rounded-full bg-lime font-serif text-[16px] font-bold tracking-[0.08em] text-on-accent uppercase">
+            Kontaktni saqlash
+          </span>
+        </div>
+      </PlaqueProfile>
+    </div>
+  );
+}
+
 export default function ThemesPage() {
   return (
     <div className="min-h-full bg-paper px-4 py-10 text-ink">
@@ -141,7 +186,25 @@ export default function ThemesPage() {
           </Link>
         </p>
 
-        <div className="mt-8 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
+        <section className="mt-8">
+          <h2 className="text-[17px] leading-6 font-semibold">
+            Zarbof — boshqa maket, boshqa rang emas
+          </h2>
+          <p className="max-w-[70ch] text-[16px] leading-6 text-mute">
+            Markazda tekislangan, serif shrift, konturli tugmalar, doiradagi
+            portret, oq varaq yo&apos;q — butun sahifa bitta panel, ichkarisiga
+            chekindirilgan chiziq bilan. Quyidagi to&apos;qqiztasi bitta maketning
+            to&apos;qqizta rangi; bu esa boshqa narsa.
+          </p>
+          <div className="mt-4 max-w-[520px]">
+            <PlaqueSample />
+          </div>
+        </section>
+
+        <h2 className="mt-12 text-[17px] leading-6 font-semibold">
+          Bitta maket, to&apos;qqizta rang
+        </h2>
+        <div className="mt-4 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
           {THEMES.map((t) => {
             const designs = designsIn(t.id);
             return (

@@ -51,7 +51,7 @@ import PostList from "@/components/PostList";
 // difference is real: one sticks up off the sheet and moves down a pixel when
 // pressed, the other is already pressed into it.
 const inkButton =
-  "flex h-14 items-center justify-center gap-2.5 rounded-xl bg-ink text-[16px] font-semibold text-sheet shadow-slab active:translate-y-px active:shadow-none";
+  "flex h-14 items-center justify-center gap-2.5 rounded-xl bg-slab text-[16px] font-semibold text-on-slab shadow-slab active:translate-y-px active:shadow-none";
 
 const paperButton =
   "flex h-14 items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 text-[16px] font-medium text-ink shadow-deboss active:bg-ink/5";
@@ -283,7 +283,7 @@ async function VanityHandlePage({
                     className="size-24 rounded-[14px] border-[3px] border-sheet bg-ink/[0.04] object-cover shadow-photo"
                   />
                 ) : (
-                  <div className="flex size-24 items-center justify-center rounded-[14px] border-[3px] border-sheet bg-ink text-[28px] font-semibold text-sheet shadow-photo">
+                  <div className="flex size-24 items-center justify-center rounded-[14px] border-[3px] border-sheet bg-slab text-[28px] font-semibold text-on-slab shadow-photo">
                     {profile.name
                       .split(" ")
                       .map((part) => part[0])

@@ -120,7 +120,7 @@ export default function ExchangeContactForm({
         <button
           type="submit"
           disabled={pending}
-          className="flex h-14 flex-1 items-center justify-center rounded-xl bg-ink px-5 text-[16px] font-semibold text-sheet shadow-slab active:translate-y-px active:shadow-none disabled:bg-ink/20 disabled:shadow-none"
+          className="flex h-14 flex-1 items-center justify-center rounded-xl bg-slab px-5 text-[16px] font-semibold text-on-slab shadow-slab active:translate-y-px active:shadow-none disabled:bg-ink/20 disabled:shadow-none"
         >
           {pending ? t.sending : t.send}
         </button>

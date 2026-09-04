@@ -12,7 +12,7 @@ const BASE =
   "flex h-14 items-center justify-center gap-2.5 rounded-xl text-[16px] transition-transform duration-[120ms]";
 
 export const button = {
-  lime: `${BASE} bg-lime font-semibold text-ink shadow-slab active:translate-y-px active:shadow-none`,
-  ink: `${BASE} bg-ink font-semibold text-paper shadow-slab active:translate-y-px active:shadow-none`,
+  lime: `${BASE} bg-lime font-semibold text-on-accent shadow-slab active:translate-y-px active:shadow-none`,
+  ink: `${BASE} bg-slab font-semibold text-on-slab shadow-slab active:translate-y-px active:shadow-none`,
   paper: `${BASE} bg-ink/[0.04] px-3 font-medium text-ink shadow-deboss active:bg-ink/10`,
 } as const;

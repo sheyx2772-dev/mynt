@@ -56,6 +56,8 @@
      sans now — the screen is made recognisable by the number, not a headline
      face, so there is no third font to download. */
   --font-display: var(--font-inter), system-ui, sans-serif;
+  /* Only the ceremonial layouts reach for this. */
+  --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
 
   /* The white a sheet of paper is, as distinct from the off-white the page
      under it is. Two whites, and the difference is the whole trick. */
@@ -67,6 +69,16 @@
      and not a decoration; it appears on the card face and on the edge of the
      plate, and nowhere else. */
   --color-gold: #c9a961;
+  /* The struck slab — the plate's body, a solid button — and the text that
+     goes on it and on the accent. Separate from `ink` because a dark theme's
+     text is light and its slab still is not. Declared here so Tailwind emits
+     the utilities; the per-theme values are set further down. */
+  --color-slab: #0e0a1b;
+  --color-on-slab: #fafaf8;
+  --color-on-accent: #0e0a1b;
+  /* Text printed straight onto the page rather than onto the sheet. */
+  --color-page-ink: #0e0a1b;
+  --color-page-mute: #5c586a;
 
   --radius-plate: 8px;
   --radius-input: 12px;
@@ -134,6 +146,9 @@
 :root {
   --color-page-ink: var(--color-ink);
   --color-page-mute: var(--color-mute);
+  --color-slab: var(--color-ink);
+  --color-on-slab: var(--color-sheet);
+  --color-on-accent: var(--color-ink);
 }
 
 /* The default. Off-white page, white sheet, black card with gold. */
@@ -321,11 +336,54 @@
     0 0 / 20px 20px;
 }
 
+/* Zarbof — brocade. A second LAYOUT, not a second palette.
+ *
+ * The nine above are one arrangement in nine colours, which is a set of
+ * paint tins rather than a set of designs. This one is built differently:
+ * centred rather than left-aligned, a serif rather than a sans, hairline
+ * outlined pills rather than solid slabs, a circular portrait in a ring
+ * rather than a square print, and no white sheet at all — the whole page is
+ * one panel, the way a certificate is one piece of card.
+ *
+ * It suits somebody who did not buy a business card. A photographer, a
+ * restaurant, somebody who bought the number because it is a good number. */
+[data-theme="zarbof"] {
+  --color-ink: #f0e4c8;
+  --color-lime: #d8c184;
+  --color-paper: #0b0e16;
+  --color-sheet: #10151f;
+  --color-mute: #9d8f70;
+  --color-gold: #cdb375;
+  --color-page-ink: #f0e4c8;
+  --color-page-mute: #9d8f70;
+  --color-engraved: #e2c98f;
+  --color-slab: #161c29;
+  --color-on-slab: #f0e4c8;
+  --color-on-accent: #0b0e16;
+  --card-base: #121722;
+  --card-face: linear-gradient(150deg, #1b2233 0%, #10151f 58%, #080b12 100%);
+  --page-pattern: radial-gradient(
+      ellipse 120% 60% at 50% 0%,
+      rgb(216 193 132 / 0.07) 0%,
+      transparent 60%
+    ),
+    repeating-linear-gradient(
+      -18deg,
+      rgb(216 193 132 / 0.035) 0 1px,
+      transparent 1px 40px
+    );
+}
+
 /* The page wears its theme's pattern. Fixed, so it does not scroll with the
    content and read as texture printed on the paper rather than as the surface
    the paper is lying on. */
+[data-theme] {
+  color: var(--color-ink);
+}
+
 .themed {
   background-color: var(--color-paper);
+  color: var(--color-page-ink);
   background-image: var(--page-pattern, none);
   background-attachment: fixed;
 }

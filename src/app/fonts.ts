@@ -1,4 +1,4 @@
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Playfair_Display } from "next/font/google";
 
 // Two families, and the second one is for numbers.
 //
@@ -24,5 +24,21 @@ export const mono = JetBrains_Mono({
   subsets: ["latin", "cyrillic"],
   weight: ["500", "600"],
   variable: "--font-jetbrains",
+  display: "swap",
+});
+
+// The ceremonial face.
+//
+// Not every profile wants to look like a form. A wedding photographer, a
+// restaurant, somebody who bought the number because it is a nice number —
+// they want a certificate, and a certificate is set in a serif.
+//
+// Playfair rather than one of the fashionable ones because it carries
+// Cyrillic: half the audience reads it, and a display face that drops to a
+// fallback halfway through a Russian name is worse than no display face.
+export const serif = Playfair_Display({
+  subsets: ["latin", "cyrillic"],
+  weight: ["500", "700"],
+  variable: "--font-playfair",
   display: "swap",
 });
