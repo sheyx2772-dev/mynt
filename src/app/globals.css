@@ -98,13 +98,245 @@
     0 -1px 0 rgb(14 10 27 / 0.08), 0 -6px 12px -8px rgb(14 10 27 / 0.25);
 }
 
+/* Themes.
+ *
+ * A theme overrides the six surface tokens and nothing else. No component
+ * knows themes exist — they read `bg-sheet` and `text-mute` as always, and the
+ * values underneath change. That is the whole reason the palette was cut to
+ * six: a theme with twenty variables is a theme nobody can add.
+ *
+ * Why there are eight rather than one. A number somebody owns for life should
+ * not arrive wearing the same suit as everybody else's, and the competitor
+ * here understood that before we did — their profiles each carry a complete
+ * palette and pattern, and it is most of why people buy from them.
+ *
+ * Where these come from: the material is local and nobody is using it. Suzani
+ * and adras, ganch carving, the tilework at Registan, Samarkand paper. Beside
+ * those, four honest materials — black, steel, frosted plastic, night. Nothing
+ * here reproduces anyone's mark; a card sold with a registered logo on it
+ * infringes the moment money changes hands, and it is the weaker product too,
+ * because a logo can be reprinted by anyone with the same machine.
+ *
+ * Every pair below is measured, not judged by eye: `npm run themes` fails the
+ * build if any body text drops under 4.5:1 on the ground it is drawn on. This
+ * is exactly where an unreadable palette slips in — eight of them, each
+ * approved on a good monitor, one at 3.9:1 and gone in the sun.
+ *
+ * `--color-lime` is the accent slot rather than a colour: it keeps its name so
+ * no component has to be edited, and each theme puts its own single accent in
+ * it. The rule that it is worn by exactly one element per screen does not
+ * change with the theme. */
+
+/* Two more tokens, and only two, for the themes whose page is darker than the
+ * sheet lying on it. Everything drawn on the sheet keeps `ink` and `mute`;
+ * the few things printed straight onto the page read these instead. They
+ * default to the same values, so a light theme never has to mention them. */
+:root {
+  --color-page-ink: var(--color-ink);
+  --color-page-mute: var(--color-mute);
+}
+
+/* The default. Off-white page, white sheet, black card with gold. */
+[data-theme="paper"] {
+  --color-ink: #0e0a1b;
+  --color-lime: #abff09;
+  --color-paper: #fafaf8;
+  --color-sheet: #ffffff;
+  --color-mute: #5c586a;
+  --color-gold: #c9a961;
+  --color-engraved: #c9a961;
+  --card-base: #12102a;
+  --card-face: linear-gradient(140deg, #17132b 0%, #0e0a1b 70%);
+  --page-pattern: none;
+}
+
+/* Suzani. Cream ground, madder red, the rosette that is embroidered onto every
+   dowry cloth in the country. The red is the thread colour, not a web red. */
+[data-theme="suzani"] {
+  --color-ink: #241a12;
+  --color-lime: #f0836f;
+  --color-paper: #f6f1e7;
+  --color-sheet: #fffdf8;
+  --color-mute: #6b6152;
+  --color-gold: #c8873f;
+  --color-engraved: #e8b06a;
+  --card-base: #3d1414;
+  --card-face: radial-gradient(circle at 78% 26%, #7e2b2b 0%, #3d1414 46%, #241010 100%);
+  --page-pattern: radial-gradient(
+      circle at 50% 50%,
+      rgb(193 68 58 / 0.09) 0 3px,
+      transparent 3px
+    )
+    0 0 / 34px 34px;
+}
+
+/* Ganch. Carved plaster: bone white, and the shadow in the cut is the only
+   dark thing on it. Turquoise because that is what sits in the niches. */
+[data-theme="ganch"] {
+  --color-ink: #2a2724;
+  --color-lime: #3fb9b9;
+  --color-paper: #f4f1ea;
+  --color-sheet: #ffffff;
+  --color-mute: #6b665c;
+  --color-gold: #b08d55;
+  --color-engraved: #4a4437;
+  --card-base: #ddd4c2;
+  --card-face: linear-gradient(150deg, #efe9dc 0%, #d9d0be 60%, #c6bba5 100%);
+  --page-pattern: repeating-linear-gradient(
+      45deg,
+      rgb(42 39 36 / 0.045) 0 1px,
+      transparent 1px 22px
+    ),
+    repeating-linear-gradient(-45deg, rgb(42 39 36 / 0.045) 0 1px, transparent 1px 22px);
+}
+
+/* Registon. Lapis and turquoise off the madrasa tilework, and the page is the
+   dark one — the only theme where the sheet sits on night rather than day. */
+[data-theme="registon"] {
+  --color-ink: #14294b;
+  --color-lime: #4fd6d6;
+  --color-paper: #0e1e3a;
+  --color-sheet: #f3f6fb;
+  --color-mute: #5a6c8c;
+  --color-gold: #d7b364;
+  --color-page-ink: #eaf1fb;
+  --color-page-mute: #9db2d0;
+  --color-engraved: #e2c27a;
+  --card-base: #10254a;
+  --card-face: linear-gradient(155deg, #1c3a6b 0%, #10254a 55%, #0a1730 100%);
+  --page-pattern: repeating-linear-gradient(
+      60deg,
+      rgb(255 255 255 / 0.05) 0 1px,
+      transparent 1px 26px
+    ),
+    repeating-linear-gradient(-60deg, rgb(255 255 255 / 0.05) 0 1px, transparent 1px 26px);
+}
+
+/* Adras. The ikat is dyed before it is woven, so the pattern bleeds sideways —
+   which is why the bands here have soft edges rather than clean ones. */
+[data-theme="adras"] {
+  --color-ink: #2b1f1a;
+  --color-lime: #ef7382;
+  --color-paper: #fbf6f0;
+  --color-sheet: #ffffff;
+  --color-mute: #6f6055;
+  --color-gold: #c2903c;
+  --color-engraved: #f2e3cf;
+  --card-base: #3a2224;
+  --card-face: linear-gradient(
+    100deg,
+    #7c1f2c 0%,
+    #a8442c 18%,
+    #1d5f66 42%,
+    #12343c 68%,
+    #23181a 100%
+  );
+  --page-pattern: repeating-linear-gradient(
+    92deg,
+    rgb(194 47 63 / 0.05) 0 8px,
+    transparent 8px 15px,
+    rgb(29 95 102 / 0.05) 15px 23px,
+    transparent 23px 34px
+  );
+}
+
+/* Samarkand paper. Made from mulberry bark, uneven, warm, and the colour of
+   something that has been in a drawer. Walnut ink because that is what was
+   written on it. */
+[data-theme="qogoz"] {
+  --color-ink: #33291c;
+  --color-lime: #dda45f;
+  --color-paper: #efe7d8;
+  --color-sheet: #f9f3e6;
+  --color-mute: #6d6050;
+  --color-gold: #a8834a;
+  --color-engraved: #4d3d24;
+  --card-base: #cdbb9a;
+  --card-face: linear-gradient(160deg, #e5d9c1 0%, #cdbb9a 55%, #b6a17c 100%);
+  --page-pattern: radial-gradient(circle at 20% 30%, rgb(51 41 28 / 0.05) 0 1px, transparent 1px)
+      0 0 / 17px 19px,
+    radial-gradient(circle at 70% 80%, rgb(51 41 28 / 0.04) 0 1px, transparent 1px) 0 0 / 23px 13px;
+}
+
+/* Brushed steel. No pattern to speak of — the grain is the material. The
+   accent is a signal orange, which is what you paint on metal when you want
+   somebody to press it. */
+[data-theme="polat"] {
+  --color-ink: #14171a;
+  --color-lime: #e4572e;
+  --color-paper: #ecedef;
+  --color-sheet: #ffffff;
+  --color-mute: #5b636b;
+  --color-gold: #98a1aa;
+  --color-engraved: #1c2025;
+  --card-base: #7d858d;
+  --card-face: linear-gradient(112deg, #4a5158 0%, #6d757d 28%, #3d434a 55%, #5b6169 100%);
+  --page-pattern: repeating-linear-gradient(
+    90deg,
+    rgb(20 23 26 / 0.035) 0 1px,
+    transparent 1px 4px
+  );
+}
+
+/* Frosted polycarbonate. The card is translucent, so its face is the page
+   showing through — cooler and paler than anything else here. */
+[data-theme="shaffof"] {
+  --color-ink: #101418;
+  --color-lime: #6f9dff;
+  --color-paper: #e9edf0;
+  --color-sheet: #ffffff;
+  --color-mute: #5a6470;
+  --color-gold: #93a3b5;
+  --color-engraved: #3f4a56;
+  --card-base: #c3d0dc;
+  --card-face: linear-gradient(
+    128deg,
+    rgb(255 255 255 / 0.55) 0%,
+    rgb(210 222 232 / 0.75) 40%,
+    rgb(160 178 194 / 0.85) 100%
+  );
+  --page-pattern: none;
+}
+
+/* Night. The face this product was already wearing, kept as one of eight
+   rather than pretended away — it is the right answer for somebody who wants
+   the plain black card, and the wrong one as the only answer. */
+[data-theme="tungi"] {
+  --color-ink: #0e0a1b;
+  --color-lime: #abff09;
+  --color-paper: #120e22;
+  --color-sheet: #ffffff;
+  --color-mute: #56525f;
+  --color-gold: #c9a961;
+  --color-page-ink: #f4f2f8;
+  --color-page-mute: #a09ab2;
+  --color-engraved: #c9a961;
+  --card-base: #141029;
+  --card-face: linear-gradient(150deg, #1b1630 0%, #0e0a1b 62%, #05030c 100%);
+  --page-pattern: radial-gradient(
+      circle at 50% 50%,
+      rgb(14 10 27 / 0.05) 0 1px,
+      transparent 1px
+    )
+    0 0 / 20px 20px;
+}
+
+/* The page wears its theme's pattern. Fixed, so it does not scroll with the
+   content and read as texture printed on the paper rather than as the surface
+   the paper is lying on. */
+.themed {
+  background-color: var(--color-paper);
+  background-image: var(--page-pattern, none);
+  background-attachment: fixed;
+}
+
 /* Gold struck into black.
  *
  * Two text shadows and no more: a dark line under the glyph and a warm light
  * one over it. That is what an engraving does to the light falling on it, and
  * it is the difference between gold-coloured text and text that looks cut. */
 .engraved {
-  color: var(--color-gold);
+  color: var(--color-engraved, var(--color-gold));
   text-shadow:
     0 1px 0 rgb(0 0 0 / 0.9),
     0 -1px 0 rgb(255 240 200 / 0.18);

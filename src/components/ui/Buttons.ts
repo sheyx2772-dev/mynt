@@ -14,5 +14,5 @@ const BASE =
 export const button = {
   lime: `${BASE} bg-lime font-semibold text-ink shadow-slab active:translate-y-px active:shadow-none`,
   ink: `${BASE} bg-ink font-semibold text-paper shadow-slab active:translate-y-px active:shadow-none`,
-  paper: `${BASE} bg-paper px-3 font-medium text-ink shadow-deboss active:bg-ink/5`,
+  paper: `${BASE} bg-ink/[0.04] px-3 font-medium text-ink shadow-deboss active:bg-ink/10`,
 } as const;

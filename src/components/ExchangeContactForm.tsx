@@ -59,7 +59,7 @@ export default function ExchangeContactForm({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-paper px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5"
+        className="flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5"
       >
         <UserRoundPlus className="h-5 w-5" />
         {t.sendContact}
@@ -83,7 +83,7 @@ export default function ExchangeContactForm({
           else setError(result.error ?? "Yuborilmadi.");
         })
       }
-      className="rounded-xl bg-paper p-4 shadow-deboss"
+      className="rounded-xl bg-ink/[0.04] p-4 shadow-deboss"
     >
       <p className="text-[17px] leading-6 font-semibold">
         {t.reachYou}
@@ -120,7 +120,7 @@ export default function ExchangeContactForm({
         <button
           type="submit"
           disabled={pending}
-          className="flex h-14 flex-1 items-center justify-center rounded-xl bg-ink px-5 text-[16px] font-semibold text-paper shadow-slab active:translate-y-px active:shadow-none disabled:bg-ink/20 disabled:shadow-none"
+          className="flex h-14 flex-1 items-center justify-center rounded-xl bg-ink px-5 text-[16px] font-semibold text-sheet shadow-slab active:translate-y-px active:shadow-none disabled:bg-ink/20 disabled:shadow-none"
         >
           {pending ? t.sending : t.send}
         </button>

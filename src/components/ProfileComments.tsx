@@ -75,13 +75,13 @@ export default function ProfileComments({
             rows={2}
             maxLength={500}
             placeholder={labels.placeholder}
-            className="w-full resize-none rounded-lg border border-ink/15 bg-paper px-4 py-3.5 text-[16px] leading-6 text-ink outline-none placeholder:text-mute focus:border-ink"
+            className="w-full resize-none rounded-lg border border-ink/15 bg-sheet px-4 py-3.5 text-[16px] leading-6 text-ink outline-none placeholder:text-mute focus:border-ink"
           />
           {error && <p className="mt-1.5 text-[16px] leading-6 text-danger">{error}</p>}
           <button
             type="submit"
             disabled={pending || body.trim().length === 0}
-            className="mt-2 flex h-14 items-center justify-center rounded-xl bg-paper px-5 text-[16px] font-medium text-ink shadow-deboss active:bg-ink/5"
+            className="mt-2 flex h-14 items-center justify-center rounded-xl bg-ink/[0.04] px-5 text-[16px] font-medium text-ink shadow-deboss active:bg-ink/5"
           >
             {pending ? labels.sending : labels.send}
           </button>

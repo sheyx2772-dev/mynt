@@ -37,7 +37,7 @@ export default function HandlePicker({
   const complete = letters.length === 3 && digits.length === 3;
 
   const field =
-    "w-[3.6ch] bg-transparent text-center font-mono text-[30px] font-semibold tracking-[0.16em] tabular-nums text-paper outline-none placeholder:text-paper/30";
+    "w-[3.6ch] bg-transparent text-center font-mono text-[30px] font-semibold tracking-[0.16em] tabular-nums text-sheet outline-none placeholder:text-sheet/30";
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -70,7 +70,7 @@ export default function HandlePicker({
             className={field}
           />
         </span>
-        <span className="my-4 w-px bg-paper/25" aria-hidden />
+        <span className="my-4 w-px bg-sheet/25" aria-hidden />
         <span className="flex flex-1 items-center justify-center">
           <input
             aria-label={labels.digits}
@@ -90,7 +90,7 @@ export default function HandlePicker({
       <button
         type="submit"
         disabled={!complete}
-        className={`${button.lime} mt-3 w-full disabled:bg-paper disabled:text-mute disabled:shadow-deboss disabled:active:translate-y-0`}
+        className={`${button.lime} mt-3 w-full disabled:bg-ink/[0.04] disabled:text-mute disabled:shadow-deboss disabled:active:translate-y-0`}
       >
         {labels.submit}
         <ArrowRight className="size-5" />

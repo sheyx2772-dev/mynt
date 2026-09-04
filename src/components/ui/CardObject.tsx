@@ -37,8 +37,12 @@ export default function CardObject({
 }) {
   return (
     <figure
-      className={`settle relative z-20 mx-auto w-[calc(100%-1.5rem)] max-w-[420px] overflow-hidden rounded-[4%/6.3%] bg-ink shadow-card ${className}`}
-      style={{ aspectRatio: "1.586 / 1" }}
+      // The face is the theme's, not the component's: a suzani card is a deep
+      // madder ground and a steel one is brushed metal, and neither is a
+      // photograph. Artwork, where the owner bought a design that has some,
+      // lies over it.
+      className={`settle relative z-20 mx-auto w-[calc(100%-1.5rem)] max-w-[420px] overflow-hidden rounded-[4%/6.3%] shadow-card ${className}`}
+      style={{ aspectRatio: "1.586 / 1", background: "var(--card-face)" }}
     >
       {artwork && (
         // eslint-disable-next-line @next/next/no-img-element -- a static file in public/, sized by CSS

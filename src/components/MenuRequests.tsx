@@ -244,7 +244,7 @@ export default function MenuRequests({
                   aria-label={`${n}`}
                   className={
                     n <= rating
-                      ? "flex h-11 flex-1 items-center justify-center rounded-input bg-ink text-paper"
+                      ? "flex h-11 flex-1 items-center justify-center rounded-input bg-ink text-sheet"
                       : "flex h-11 flex-1 items-center justify-center rounded-input border border-line-2 text-ink-3"
                   }
                 >

@@ -12,7 +12,7 @@ import { venueWords } from "@/lib/venue-words";
 import { planState } from "@/lib/venue-billing";
 import { getLang } from "@/lib/lang";
 import { serviceLimit, FREE_LINK_LIMIT } from "@/lib/plans";
-import { cardDesign } from "@/lib/card-designs";
+import { cardDesign, designTheme } from "@/lib/card-designs";
 import SaveContactButton from "@/components/SaveContactButton";
 import ProfileHandleSearch from "@/components/ProfileHandleSearch";
 import LangSwitch from "@/components/LangSwitch";
@@ -51,10 +51,10 @@ import PostList from "@/components/PostList";
 // difference is real: one sticks up off the sheet and moves down a pixel when
 // pressed, the other is already pressed into it.
 const inkButton =
-  "flex h-14 items-center justify-center gap-2.5 rounded-xl bg-ink text-[16px] font-semibold text-paper shadow-slab active:translate-y-px active:shadow-none";
+  "flex h-14 items-center justify-center gap-2.5 rounded-xl bg-ink text-[16px] font-semibold text-sheet shadow-slab active:translate-y-px active:shadow-none";
 
 const paperButton =
-  "flex h-14 items-center justify-center gap-2 rounded-xl bg-paper px-3 text-[16px] font-medium text-ink shadow-deboss active:bg-ink/5";
+  "flex h-14 items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 text-[16px] font-medium text-ink shadow-deboss active:bg-ink/5";
 
 export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
@@ -253,7 +253,15 @@ async function VanityHandlePage({
       // underneath. Everything below the card is one continuous sheet: the
       // tabs are cut from it, and the sections are ruled rather than boxed,
       // because a document does not have cards inside it.
-      <div className="min-h-full bg-paper pb-32 text-ink">
+      // The theme belongs to the card the owner bought, so it is read from
+      // the design rather than from a setting: somebody who paid for the gold
+      // engraving sees gold when a stranger taps it, and that is a rank rather
+      // than a paint colour — one the competitor cannot copy without making
+      // the cards too.
+      <div
+        data-theme={designTheme(profile.cardDesign)}
+        className="themed min-h-full pb-32 text-page-ink"
+      >
         {/* Keeps the app bar off somebody else's card. */}
         <span data-no-app-bar hidden />
 
@@ -272,10 +280,10 @@ async function VanityHandlePage({
                     alt={profile.name}
                     width={96}
                     height={96}
-                    className="size-24 rounded-[14px] border-[3px] border-sheet bg-paper object-cover shadow-photo"
+                    className="size-24 rounded-[14px] border-[3px] border-sheet bg-ink/[0.04] object-cover shadow-photo"
                   />
                 ) : (
-                  <div className="flex size-24 items-center justify-center rounded-[14px] border-[3px] border-sheet bg-ink text-[28px] font-semibold text-paper shadow-photo">
+                  <div className="flex size-24 items-center justify-center rounded-[14px] border-[3px] border-sheet bg-ink text-[28px] font-semibold text-sheet shadow-photo">
                     {profile.name
                       .split(" ")
                       .map((part) => part[0])
@@ -316,7 +324,7 @@ async function VanityHandlePage({
                 {profile.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex h-9 items-center rounded-lg bg-paper px-3 text-[16px] text-mute shadow-deboss"
+                    className="inline-flex h-9 items-center rounded-lg bg-ink/[0.04] px-3 text-[16px] text-mute shadow-deboss"
                   >
                     {tag}
                   </span>
@@ -622,9 +630,9 @@ async function VanityHandlePage({
 
           {/* Stamped at the foot of the document, the way a form carries its
               own reference number. */}
-          <div className="mt-6 flex items-center justify-center gap-3 text-[16px] text-mute">
+          <div className="mt-6 flex items-center justify-center gap-3 text-[16px] text-page-mute">
             <span>FLEX</span>
-            <span className="font-mono font-medium tracking-[0.12em] text-ink tabular-nums">
+            <span className="font-mono font-medium tracking-[0.12em] text-page-ink tabular-nums">
               {normalized}
             </span>
             <span aria-hidden>·</span>

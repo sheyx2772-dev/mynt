@@ -40,44 +40,65 @@ export type CardDesign = {
   artworkHasNfc?: boolean;
   /** Defaults to the brand lime when the artwork carries no metal of its own. */
   accent?: Accent;
+  /**
+   * The look the whole profile opens in, not only the card.
+   *
+   * A number somebody owns for life should not arrive wearing the same suit as
+   * everybody else's, and the competitor here understood that before we did:
+   * their profiles each carry a complete palette, pattern and type treatment,
+   * and it is most of why people buy from them.
+   *
+   * The name matches a `[data-theme]` block in globals.css, which overrides the
+   * six surface tokens and nothing else — so a theme can change how a profile
+   * feels without any component learning that themes exist. Absent means the
+   * default paper face.
+   */
+  theme?: string;
 };
 
 export const CARD_DESIGNS = [
   {
     id: "genesis",
+    theme: "paper",
     name: "Genesis",
     description:
       "Asosiy karta. Chuqur qora fon, donador tekstura va lime nuqta — FLEX CARD seriyasining o'zi.",
   },
   {
     id: "lime",
+    theme: "paper",
     name: "Lime",
     description: "Teskari variant: to'liq lime maydon, qora yozuv. Uzoqdan ham ko'zga tashlanadi.",
   },
   {
     id: "grid",
+    theme: "polat",
     name: "Grid",
     description: "Nuqtali to'r. Muhandislik chizmasi kabi quruq va aniq.",
   },
   {
     id: "sheen",
+    theme: "shaffof",
     name: "Sheen",
     description: "Diagonal yorug'lik oqimi — qo'lda burilganda metall kabi tovlanadi.",
   },
   {
     id: "naqsh",
+    theme: "ganch",
     name: "Naqsh",
     description:
       "Sakkiz burchakli geometrik panjara. An'anaviy koshinkorlik geometriyasidan ilhomlangan original chizma.",
   },
   {
     id: "paper",
+    theme: "qogoz",
     name: "Paper",
     description: "Oq, deyarli bo'sh. Faqat handle va ingichka chegara.",
     accent: "steel",
   },
   {
     id: "rahbar",
+    theme: "tungi",
     name: "Rahbar",
     description:
       "Mutlaq qora, o'rtasidan bitta sayqallangan kumush chiziq. Eng kam narsa ko'rsatadigan, eng ko'p narsa aytadigan variant.",
@@ -87,6 +108,7 @@ export const CARD_DESIGNS = [
   },
   {
     id: "devops",
+    theme: "polat",
     name: "DevOps",
     description:
       "Qora fonda past kontrastli plata chizmasi, bittasi lime bo'lib yonadi. Texnik, ammo shovqinsiz.",
@@ -94,6 +116,7 @@ export const CARD_DESIGNS = [
   },
   {
     id: "suzani",
+    theme: "suzani",
     name: "Suzani",
     description:
       "Chuqur indigo fonda suzani medalyoni — kashta tekstura kabi, o'z fonidan bir oz ochiqroq, bitta oltin ip bilan.",
@@ -103,6 +126,7 @@ export const CARD_DESIGNS = [
   },
   {
     id: "xarita",
+    theme: "registon",
     name: "Xarita",
     description:
       "Qora fonda oltin o'ymakori: O'zbekiston xaritasi va yonida Humo medalyoni. Davlat ramzi emas — o'z chizmamiz.",
@@ -126,6 +150,11 @@ export function designAccent(id: CardDesignId): Accent {
 
 export function accentHex(id: CardDesignId): string {
   return ACCENT_HEX[designAccent(id)];
+}
+
+/** The theme a design opens its profile in. */
+export function designTheme(id: CardDesignId): string {
+  return cardDesign(id).theme ?? "paper";
 }
 
 export function isCardDesign(value: unknown): value is CardDesignId {
