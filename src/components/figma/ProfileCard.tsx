@@ -35,6 +35,10 @@ const BANNER: Record<string, string> = {
   "uzreport":     imgICTWeek,
   "yakubov":           imgYoshlarVentures,
   "umarov":            imgMOQ,
+  // No AloqaVentures banner. The file pulled off their own site turned out to
+  // be a portfolio company's mark, not the fund's — it rendered STARTUP GARAGE
+  // across four cards. Their colours below come from the fund's own share
+  // image; the logo waits for a file from the client.
   "khashimov":         imgKorzinka,
   "ishmukhamedov":     imgMU,
   "kurbanova":         imgFintellect,
@@ -83,8 +87,10 @@ const CFG: Record<string, Cfg> = {
   "shukurlaev":   { overlay:"linear-gradient(180deg,rgba(12,64,35,.28) 0%,rgba(12,64,35,.84) 100%)", cardBg:"#0c4023", bodyBg:"#082d18", accent:"#86efac", accent2:"#22c55e", iconBg:"#135233" },
   "nodirov":      { overlay:"linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)", cardBg:"#17470c", bodyBg:"#0f3208", accent:"#bef264", accent2:"#84cc16", iconBg:"#1f5c12" },
   // AloqaVentures — a teal of its own, so it does not read as one of the greens.
-  "gaybulloev":   { overlay:"linear-gradient(180deg,rgba(12,67,72,.24) 0%,rgba(12,67,72,.84) 100%)", cardBg:"#0c4348", bodyBg:"#082f33", accent:"#5eead4", accent2:"#14b8a6", iconBg:"#12565c" },
-  "sanakulov":    { overlay:"linear-gradient(180deg,rgba(12,67,72,.24) 0%,rgba(12,67,72,.84) 100%)", cardBg:"#0c4348", bodyBg:"#082f33", accent:"#5eead4", accent2:"#14b8a6", iconBg:"#12565c" },
+  "parmonov":     { overlay:"linear-gradient(180deg,rgba(0,24,88,.24) 0%,rgba(0,32,102,.84) 100%)", cardBg:"#002066", bodyBg:"#001648", accent:"#7cc8fb", accent2:"#0098f8", iconBg:"#0a3183" },
+  "abdullaev":    { overlay:"linear-gradient(180deg,rgba(0,24,88,.24) 0%,rgba(0,32,102,.84) 100%)", cardBg:"#002066", bodyBg:"#001648", accent:"#7cc8fb", accent2:"#0098f8", iconBg:"#0a3183" },
+  "gaybulloev":   { overlay:"linear-gradient(180deg,rgba(0,24,88,.24) 0%,rgba(0,32,102,.84) 100%)", cardBg:"#002066", bodyBg:"#001648", accent:"#7cc8fb", accent2:"#0098f8", iconBg:"#0a3183" },
+  "sanakulov":    { overlay:"linear-gradient(180deg,rgba(0,24,88,.24) 0%,rgba(0,32,102,.84) 100%)", cardBg:"#002066", bodyBg:"#001648", accent:"#7cc8fb", accent2:"#0098f8", iconBg:"#0a3183" },
   // Youth agency — its lockup is already on deep blue, so the wash stays light.
   "sadullayev":   { overlay:"linear-gradient(180deg,rgba(10,32,58,.24) 0%,rgba(18,64,95,.82) 100%)", cardBg:"#12405f", bodyBg:"#0c2c43", accent:"#7dd3fc", accent2:"#38bdf8", iconBg:"#1b5478" },
   "yoshlar-agentligi": { overlay:"linear-gradient(180deg,rgba(10,32,58,.24) 0%,rgba(18,64,95,.82) 100%)", cardBg:"#12405f", bodyBg:"#0c2c43", accent:"#7dd3fc", accent2:"#38bdf8", iconBg:"#1b5478" },
