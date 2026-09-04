@@ -47,7 +47,7 @@ func TestTheSourceAddressIsRateLimitedSeparately(t *testing.T) {
 
 	source := netip.MustParseAddr("203.0.113.42")
 	t.Cleanup(func() {
-		_, _ = service.pool.Exec(context.Background(), `delete from login_tokens where ip = $1`, source)
+		_, _ = service.pool.Exec(context.Background(), `delete from flex_login_tokens where ip = $1`, source)
 	})
 
 	// Every request from one place, each naming a different address — a script

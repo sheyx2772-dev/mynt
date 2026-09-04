@@ -52,7 +52,7 @@ func TestAnExpiredSessionStopsWorking(t *testing.T) {
 
 	// Expiry is decided by the statement, not by Go. This is the test of that.
 	if _, err := service.pool.Exec(ctx,
-		`update sessions set expires_at = now() - interval '1 second' where user_id = $1`,
+		`update flex_sessions set expires_at = now() - interval '1 second' where user_id = $1`,
 		account.ID,
 	); err != nil {
 		t.Fatalf("muddat o'zgartirilmadi: %v", err)

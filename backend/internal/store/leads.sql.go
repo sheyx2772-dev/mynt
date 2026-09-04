@@ -7,7 +7,6 @@ package store
 
 import (
 	"context"
-	"net/netip"
 
 	"github.com/google/uuid"
 )
@@ -37,8 +36,8 @@ where ip = $1
 `
 
 type CountRecentLeadAttemptsByIPParams struct {
-	Ip            *netip.Addr `json:"ip"`
-	WindowSeconds int32       `json:"window_seconds"`
+	Ip            *string `json:"ip"`
+	WindowSeconds int32   `json:"window_seconds"`
 }
 
 func (q *Queries) CountRecentLeadAttemptsByIP(ctx context.Context, arg CountRecentLeadAttemptsByIPParams) (int64, error) {
@@ -54,7 +53,7 @@ select h.id, $1, $2, $3,
        $4, $5, $6
 from handles h
 where h.normalized = $7 and h.status = 'claimed'
-returning id, handle_id, name, phone, email, company, note, source, created_at
+returning id, handle_id, name, phone, email, company, note, source, created_at, status, owner_note, follow_up_on, last_touch_at, tags
 `
 
 type CreateLeadParams struct {
@@ -88,6 +87,11 @@ func (q *Queries) CreateLead(ctx context.Context, arg CreateLeadParams) (Lead, e
 		&i.Note,
 		&i.Source,
 		&i.CreatedAt,
+		&i.Status,
+		&i.OwnerNote,
+		&i.FollowUpOn,
+		&i.LastTouchAt,
+		&i.Tags,
 	)
 	return i, err
 }
@@ -119,7 +123,7 @@ func (q *Queries) DeleteLead(ctx context.Context, arg DeleteLeadParams) (int64, 
 
 const leadsForHandle = `-- name: LeadsForHandle :many
 
-select l.id, l.handle_id, l.name, l.phone, l.email, l.company, l.note, l.source, l.created_at from leads l
+select l.id, l.handle_id, l.name, l.phone, l.email, l.company, l.note, l.source, l.created_at, l.status, l.owner_note, l.follow_up_on, l.last_touch_at, l.tags from leads l
 join handles h on h.id = l.handle_id
 where h.normalized = $1
   and h.user_id = $2
@@ -152,6 +156,11 @@ func (q *Queries) LeadsForHandle(ctx context.Context, arg LeadsForHandleParams) 
 			&i.Note,
 			&i.Source,
 			&i.CreatedAt,
+			&i.Status,
+			&i.OwnerNote,
+			&i.FollowUpOn,
+			&i.LastTouchAt,
+			&i.Tags,
 		); err != nil {
 			return nil, err
 		}
@@ -169,9 +178,9 @@ values ($1, $2, $3)
 `
 
 type RecordLeadAttemptParams struct {
-	Ip        *netip.Addr `json:"ip"`
-	Handle    *string     `json:"handle"`
-	Succeeded bool        `json:"succeeded"`
+	Ip        *string `json:"ip"`
+	Handle    *string `json:"handle"`
+	Succeeded bool    `json:"succeeded"`
 }
 
 // A refused attempt is recorded too, so hammering the limit does not reset it.

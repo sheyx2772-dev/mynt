@@ -21,9 +21,12 @@ end $$;
 
 create schema if not exists auth;
 
+-- Supabase's own table has a unique index on the address; without it here, a
+-- test that signs the same person in twice creates two accounts and passes
+-- against a shape production does not have.
 create table if not exists auth.users (
   id uuid primary key default gen_random_uuid(),
-  email text
+  email text unique
 );
 
 -- Supabase derives this from the request JWT. Locally it just returns

@@ -61,18 +61,21 @@ type Service struct {
 	pool    *pgxpool.Pool
 	queries *store.Queries
 	mailer  mail.Mailer
+	// Where accounts live, which is not here — see directory.go.
+	directory Directory
 	// Where a sign-in link points. Configuration rather than a request header:
 	// a Host an attacker controls would otherwise end up inside a link mailed
 	// to a victim, pointing their one-time token at a server the attacker owns.
 	siteURL string
 }
 
-func NewService(pool *pgxpool.Pool, mailer mail.Mailer, siteURL string) *Service {
+func NewService(pool *pgxpool.Pool, mailer mail.Mailer, directory Directory, siteURL string) *Service {
 	return &Service{
-		pool:    pool,
-		queries: store.New(pool),
-		mailer:  mailer,
-		siteURL: strings.TrimSuffix(siteURL, "/"),
+		pool:      pool,
+		queries:   store.New(pool),
+		mailer:    mailer,
+		directory: directory,
+		siteURL:   strings.TrimSuffix(siteURL, "/"),
 	}
 }
 

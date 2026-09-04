@@ -74,11 +74,14 @@ func newService(t *testing.T) (*Service, *capturedMail, string) {
 
 	t.Cleanup(func() {
 		ctx := context.Background()
-		_, _ = pool.Exec(ctx, `delete from login_tokens where email = $1`, email)
-		_, _ = pool.Exec(ctx, `delete from users where email = $1`, email)
+		// Only what this backend owns. Accounts live in `auth.users`, which the
+		// fake directory above stands in for, so there is nothing there to
+		// clean up.
+		_, _ = pool.Exec(ctx, `delete from flex_login_tokens where email = $1`, email)
+		_, _ = pool.Exec(ctx, `delete from auth.users where email = $1`, email)
 	})
 
-	return NewService(pool, mailer, "http://localhost:3000"), mailer, email
+	return NewService(pool, mailer, &fakeDirectory{pool: pool}, "http://localhost:3000"), mailer, email
 }
 
 func TestSignInCreatesAnAccountAndASession(t *testing.T) {
@@ -161,7 +164,7 @@ func TestAnExpiredLinkIsRefused(t *testing.T) {
 
 	// Moved into the past rather than waiting a quarter of an hour.
 	if _, err := service.pool.Exec(ctx,
-		`update login_tokens set expires_at = now() - interval '1 minute' where email = $1`,
+		`update flex_login_tokens set expires_at = now() - interval '1 minute' where email = $1`,
 		email,
 	); err != nil {
 		t.Fatalf("muddat o'zgartirilmadi: %v", err)

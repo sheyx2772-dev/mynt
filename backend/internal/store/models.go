@@ -11,13 +11,68 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type AuthUser struct {
+	ID    uuid.UUID `json:"id"`
+	Email *string   `json:"email"`
+}
+
 type ClaimAttempt struct {
 	ID        int64              `json:"id"`
 	UserID    *uuid.UUID         `json:"user_id"`
-	Ip        *netip.Addr        `json:"ip"`
+	Ip        *string            `json:"ip"`
 	Handle    *string            `json:"handle"`
 	Succeeded bool               `json:"succeeded"`
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type ClickTransaction struct {
+	ID          string             `json:"id"`
+	OrderID     uuid.UUID          `json:"order_id"`
+	Amount      int64              `json:"amount"`
+	PreparedAt  pgtype.Timestamptz `json:"prepared_at"`
+	CompletedAt pgtype.Timestamptz `json:"completed_at"`
+	CancelledAt pgtype.Timestamptz `json:"cancelled_at"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+}
+
+type DesignRequest struct {
+	ID        uuid.UUID          `json:"id"`
+	Handle    string             `json:"handle"`
+	UserID    uuid.UUID          `json:"user_id"`
+	Wish      string             `json:"wish"`
+	Prompt    string             `json:"prompt"`
+	Status    string             `json:"status"`
+	ImageUrl  *string            `json:"image_url"`
+	Note      *string            `json:"note"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	FilledAt  pgtype.Timestamptz `json:"filled_at"`
+}
+
+type FlexLoginToken struct {
+	ID         uuid.UUID          `json:"id"`
+	Email      string             `json:"email"`
+	TokenHash  []byte             `json:"token_hash"`
+	ExpiresAt  pgtype.Timestamptz `json:"expires_at"`
+	ConsumedAt pgtype.Timestamptz `json:"consumed_at"`
+	CreatedAt  pgtype.Timestamptz `json:"created_at"`
+	Ip         *netip.Addr        `json:"ip"`
+}
+
+type FlexSession struct {
+	ID         uuid.UUID          `json:"id"`
+	UserID     uuid.UUID          `json:"user_id"`
+	TokenHash  []byte             `json:"token_hash"`
+	ExpiresAt  pgtype.Timestamptz `json:"expires_at"`
+	CreatedAt  pgtype.Timestamptz `json:"created_at"`
+	LastUsedAt pgtype.Timestamptz `json:"last_used_at"`
+	UserAgent  *string            `json:"user_agent"`
+	Ip         *netip.Addr        `json:"ip"`
+}
+
+type Follow struct {
+	FollowerUserID uuid.UUID          `json:"follower_user_id"`
+	FollowedHandle string             `json:"followed_handle"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
 }
 
 type GenesisCard struct {
@@ -37,50 +92,73 @@ type Handle struct {
 	Digits          string             `json:"digits"`
 	Normalized      *string            `json:"normalized"`
 	Status          string             `json:"status"`
-	UserID          *uuid.UUID         `json:"user_id"`
-	ReservedUntil   pgtype.Timestamptz `json:"reserved_until"`
 	OwnerName       *string            `json:"owner_name"`
 	Bio             *string            `json:"bio"`
 	AvatarUrl       *string            `json:"avatar_url"`
-	BannerUrl       *string            `json:"banner_url"`
 	Links           []byte             `json:"links"`
-	Services        []byte             `json:"services"`
+	PricePaid       *int64             `json:"price_paid"`
+	CreatedAt       pgtype.Timestamptz `json:"created_at"`
+	ClaimedAt       pgtype.Timestamptz `json:"claimed_at"`
+	UserID          *uuid.UUID         `json:"user_id"`
+	UpdatedAt       pgtype.Timestamptz `json:"updated_at"`
+	ReservedUntil   pgtype.Timestamptz `json:"reserved_until"`
 	City            *string            `json:"city"`
 	ContactEmail    *string            `json:"contact_email"`
-	Phone           *string            `json:"phone"`
-	Position        *string            `json:"position"`
-	Company         *string            `json:"company"`
 	Tags            []string           `json:"tags"`
+	LastSeenAt      pgtype.Timestamptz `json:"last_seen_at"`
+	ViewCount       int64              `json:"view_count"`
+	FollowerCount   int64              `json:"follower_count"`
+	PostCount       int64              `json:"post_count"`
+	OwnerDeletedAt  pgtype.Timestamptz `json:"owner_deleted_at"`
 	CardDesign      string             `json:"card_design"`
 	DeviceType      string             `json:"device_type"`
 	CustomDesignUrl *string            `json:"custom_design_url"`
 	Plan            string             `json:"plan"`
 	PlanExpiresAt   pgtype.Timestamptz `json:"plan_expires_at"`
-	PlanRemindedFor pgtype.Timestamptz `json:"plan_reminded_for"`
-	PricePaid       *int64             `json:"price_paid"`
 	GiftReason      *string            `json:"gift_reason"`
-	ViewCount       int64              `json:"view_count"`
-	LastSeenAt      pgtype.Timestamptz `json:"last_seen_at"`
-	CreatedAt       pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt       pgtype.Timestamptz `json:"updated_at"`
-	ClaimedAt       pgtype.Timestamptz `json:"claimed_at"`
+	Phone           *string            `json:"phone"`
+	Position        *string            `json:"position"`
+	Company         *string            `json:"company"`
+	Services        []byte             `json:"services"`
+	BannerUrl       *string            `json:"banner_url"`
+	TeamID          *uuid.UUID         `json:"team_id"`
+	PlanRemindedFor pgtype.Timestamptz `json:"plan_reminded_for"`
+	CommentsOpen    bool               `json:"comments_open"`
+	RecommendCount  int32              `json:"recommend_count"`
+}
+
+type HandleTransfer struct {
+	ID         uuid.UUID          `json:"id"`
+	Handle     string             `json:"handle"`
+	FromUserID uuid.UUID          `json:"from_user_id"`
+	ToEmail    string             `json:"to_email"`
+	ToUserID   *uuid.UUID         `json:"to_user_id"`
+	Status     string             `json:"status"`
+	CreatedAt  pgtype.Timestamptz `json:"created_at"`
+	ExpiresAt  pgtype.Timestamptz `json:"expires_at"`
+	SettledAt  pgtype.Timestamptz `json:"settled_at"`
 }
 
 type Lead struct {
-	ID        int64              `json:"id"`
-	HandleID  uuid.UUID          `json:"handle_id"`
-	Name      string             `json:"name"`
-	Phone     *string            `json:"phone"`
-	Email     *string            `json:"email"`
-	Company   *string            `json:"company"`
-	Note      *string            `json:"note"`
-	Source    *string            `json:"source"`
-	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	ID          int64              `json:"id"`
+	HandleID    uuid.UUID          `json:"handle_id"`
+	Name        string             `json:"name"`
+	Phone       *string            `json:"phone"`
+	Email       *string            `json:"email"`
+	Company     *string            `json:"company"`
+	Note        *string            `json:"note"`
+	Source      *string            `json:"source"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	Status      string             `json:"status"`
+	OwnerNote   *string            `json:"owner_note"`
+	FollowUpOn  pgtype.Date        `json:"follow_up_on"`
+	LastTouchAt pgtype.Timestamptz `json:"last_touch_at"`
+	Tags        []string           `json:"tags"`
 }
 
 type LeadAttempt struct {
 	ID        int64              `json:"id"`
-	Ip        *netip.Addr        `json:"ip"`
+	Ip        *string            `json:"ip"`
 	Handle    *string            `json:"handle"`
 	Succeeded bool               `json:"succeeded"`
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
@@ -94,14 +172,126 @@ type LinkClick struct {
 	CreatedAt   pgtype.Timestamptz `json:"created_at"`
 }
 
-type LoginToken struct {
+type MenuCategory struct {
+	ID        uuid.UUID          `json:"id"`
+	VenueID   uuid.UUID          `json:"venue_id"`
+	Name      string             `json:"name"`
+	NameRu    *string            `json:"name_ru"`
+	NameEn    *string            `json:"name_en"`
+	Position  int32              `json:"position"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type MenuItem struct {
 	ID         uuid.UUID          `json:"id"`
-	Email      string             `json:"email"`
-	TokenHash  []byte             `json:"token_hash"`
-	ExpiresAt  pgtype.Timestamptz `json:"expires_at"`
-	ConsumedAt pgtype.Timestamptz `json:"consumed_at"`
+	VenueID    uuid.UUID          `json:"venue_id"`
+	CategoryID *uuid.UUID         `json:"category_id"`
+	Name       string             `json:"name"`
+	NameRu     *string            `json:"name_ru"`
+	NameEn     *string            `json:"name_en"`
+	Note       *string            `json:"note"`
+	NoteRu     *string            `json:"note_ru"`
+	NoteEn     *string            `json:"note_en"`
+	Price      int64              `json:"price"`
+	Available  bool               `json:"available"`
+	PhotoUrl   *string            `json:"photo_url"`
+	Position   int32              `json:"position"`
 	CreatedAt  pgtype.Timestamptz `json:"created_at"`
-	Ip         *netip.Addr        `json:"ip"`
+	UpdatedAt  pgtype.Timestamptz `json:"updated_at"`
+}
+
+type NetworkBrief struct {
+	HandleID     uuid.UUID          `json:"handle_id"`
+	Summary      string             `json:"summary"`
+	Suggestions  []byte             `json:"suggestions"`
+	ContactsSeen int32              `json:"contacts_seen"`
+	BuiltAt      pgtype.Timestamptz `json:"built_at"`
+}
+
+type Notification struct {
+	ID        int64              `json:"id"`
+	UserID    uuid.UUID          `json:"user_id"`
+	Kind      string             `json:"kind"`
+	Handle    *string            `json:"handle"`
+	Title     string             `json:"title"`
+	Body      *string            `json:"body"`
+	Href      *string            `json:"href"`
+	ReadAt    pgtype.Timestamptz `json:"read_at"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type NotificationSetting struct {
+	UserID                uuid.UUID          `json:"user_id"`
+	TelegramChatID        *int64             `json:"telegram_chat_id"`
+	TelegramLinkCode      *string            `json:"telegram_link_code"`
+	TelegramLinkExpiresAt pgtype.Timestamptz `json:"telegram_link_expires_at"`
+	LeadAlerts            bool               `json:"lead_alerts"`
+	PlanAlerts            bool               `json:"plan_alerts"`
+	UpdatedAt             pgtype.Timestamptz `json:"updated_at"`
+}
+
+type ObjectTag struct {
+	ID        uuid.UUID          `json:"id"`
+	HandleID  uuid.UUID          `json:"handle_id"`
+	Token     string             `json:"token"`
+	Kind      string             `json:"kind"`
+	Label     *string            `json:"label"`
+	Active    bool               `json:"active"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type Order struct {
+	ID           uuid.UUID          `json:"id"`
+	UserID       uuid.UUID          `json:"user_id"`
+	Handle       string             `json:"handle"`
+	Amount       int64              `json:"amount"`
+	Status       string             `json:"status"`
+	Provider     *string            `json:"provider"`
+	ProviderTxID *string            `json:"provider_tx_id"`
+	PaidAt       pgtype.Timestamptz `json:"paid_at"`
+	CancelledAt  pgtype.Timestamptz `json:"cancelled_at"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt    pgtype.Timestamptz `json:"updated_at"`
+	Kind         string             `json:"kind"`
+	Months       *int32             `json:"months"`
+	DeviceType   *string            `json:"device_type"`
+	Design       *string            `json:"design"`
+	Recipient    *string            `json:"recipient"`
+	Phone        *string            `json:"phone"`
+	Region       *string            `json:"region"`
+	Address      *string            `json:"address"`
+	DeliveryNote *string            `json:"delivery_note"`
+	Fulfilment   *string            `json:"fulfilment"`
+	ShippedAt    pgtype.Timestamptz `json:"shipped_at"`
+	DeliveredAt  pgtype.Timestamptz `json:"delivered_at"`
+}
+
+type PaymeTransaction struct {
+	ID          string             `json:"id"`
+	OrderID     uuid.UUID          `json:"order_id"`
+	Amount      int64              `json:"amount"`
+	State       int16              `json:"state"`
+	CreateTime  int64              `json:"create_time"`
+	PerformTime int64              `json:"perform_time"`
+	CancelTime  int64              `json:"cancel_time"`
+	Reason      *int16             `json:"reason"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+}
+
+type Post struct {
+	ID        uuid.UUID          `json:"id"`
+	Handle    string             `json:"handle"`
+	UserID    uuid.UUID          `json:"user_id"`
+	Body      string             `json:"body"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type ProfileComment struct {
+	ID        int64              `json:"id"`
+	HandleID  uuid.UUID          `json:"handle_id"`
+	AuthorID  uuid.UUID          `json:"author_id"`
+	Body      string             `json:"body"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
 }
 
 type ProfileView struct {
@@ -109,26 +299,141 @@ type ProfileView struct {
 	Handle       string             `json:"handle"`
 	VisitorHash  *string            `json:"visitor_hash"`
 	ReferrerHost *string            `json:"referrer_host"`
-	Source       *string            `json:"source"`
 	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+	Source       *string            `json:"source"`
 }
 
-type Session struct {
-	ID         uuid.UUID          `json:"id"`
-	UserID     uuid.UUID          `json:"user_id"`
-	TokenHash  []byte             `json:"token_hash"`
-	ExpiresAt  pgtype.Timestamptz `json:"expires_at"`
-	CreatedAt  pgtype.Timestamptz `json:"created_at"`
-	LastUsedAt pgtype.Timestamptz `json:"last_used_at"`
-	UserAgent  *string            `json:"user_agent"`
-	Ip         *netip.Addr        `json:"ip"`
+type Recommendation struct {
+	HandleID  uuid.UUID          `json:"handle_id"`
+	UserID    uuid.UUID          `json:"user_id"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
 }
 
-type User struct {
+type TagMessage struct {
+	ID        int64              `json:"id"`
+	TagID     uuid.UUID          `json:"tag_id"`
+	Kind      string             `json:"kind"`
+	Body      *string            `json:"body"`
+	ReplyTo   *string            `json:"reply_to"`
+	Place     *string            `json:"place"`
+	Ip        *string            `json:"ip"`
+	ReadAt    pgtype.Timestamptz `json:"read_at"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type Team struct {
 	ID              uuid.UUID          `json:"id"`
-	Email           string             `json:"email"`
-	EmailVerifiedAt pgtype.Timestamptz `json:"email_verified_at"`
-	TelegramID      *int64             `json:"telegram_id"`
+	Name            string             `json:"name"`
+	OwnerUserID     uuid.UUID          `json:"owner_user_id"`
+	Seats           int32              `json:"seats"`
+	PlanExpiresAt   pgtype.Timestamptz `json:"plan_expires_at"`
 	CreatedAt       pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt       pgtype.Timestamptz `json:"updated_at"`
+	LogoUrl         *string            `json:"logo_url"`
+	Website         *string            `json:"website"`
+	City            *string            `json:"city"`
+	LegalName       *string            `json:"legal_name"`
+	Inn             *string            `json:"inn"`
+	Address         *string            `json:"address"`
+	BankName        *string            `json:"bank_name"`
+	BankAccount     *string            `json:"bank_account"`
+	BankMfo         *string            `json:"bank_mfo"`
+	Director        *string            `json:"director"`
+	PlanRemindedFor pgtype.Timestamptz `json:"plan_reminded_for"`
+}
+
+type TeamInvoice struct {
+	ID          uuid.UUID          `json:"id"`
+	TeamID      uuid.UUID          `json:"team_id"`
+	Number      int64              `json:"number"`
+	Seats       int32              `json:"seats"`
+	Months      int32              `json:"months"`
+	SeatMonthly int64              `json:"seat_monthly"`
+	VatPercent  pgtype.Numeric     `json:"vat_percent"`
+	Total       int64              `json:"total"`
+	Status      string             `json:"status"`
+	IssuedAt    pgtype.Timestamptz `json:"issued_at"`
+	PaidAt      pgtype.Timestamptz `json:"paid_at"`
+	Note        *string            `json:"note"`
+}
+
+type TeamMember struct {
+	TeamID    uuid.UUID          `json:"team_id"`
+	UserID    uuid.UUID          `json:"user_id"`
+	Role      string             `json:"role"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
+type TeamRequest struct {
+	ID          uuid.UUID          `json:"id"`
+	Company     string             `json:"company"`
+	ContactName string             `json:"contact_name"`
+	Phone       string             `json:"phone"`
+	Email       *string            `json:"email"`
+	TeamSize    *int32             `json:"team_size"`
+	Note        *string            `json:"note"`
+	Status      string             `json:"status"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	Vertical    *string            `json:"vertical"`
+	Points      *int32             `json:"points"`
+}
+
+type TelegramLogin struct {
+	Code        string             `json:"code"`
+	ChatID      *int64             `json:"chat_id"`
+	DisplayName *string            `json:"display_name"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	ExpiresAt   pgtype.Timestamptz `json:"expires_at"`
+	ConsumedAt  pgtype.Timestamptz `json:"consumed_at"`
+	Ip          *string            `json:"ip"`
+}
+
+type Venue struct {
+	ID           uuid.UUID          `json:"id"`
+	HandleID     uuid.UUID          `json:"handle_id"`
+	Name         string             `json:"name"`
+	Kind         string             `json:"kind"`
+	Hours        *string            `json:"hours"`
+	Address      *string            `json:"address"`
+	WifiName     *string            `json:"wifi_name"`
+	WifiPassword *string            `json:"wifi_password"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt    pgtype.Timestamptz `json:"updated_at"`
+	// Labels for the tags: tables in a cafe, rooms in a hotel. Order is print order.
+	Points []string `json:"points"`
+	// Secret in the counter link. Rotating it revokes every phone that had the old one.
+	StaffToken *string `json:"staff_token"`
+	// When this venue stops being paid for. Thirty days from creation is the trial.
+	PlanExpiresAt      pgtype.Timestamptz `json:"plan_expires_at"`
+	PlanRemindedFor    pgtype.Timestamptz `json:"plan_reminded_for"`
+	PlanExpiredToldFor pgtype.Timestamptz `json:"plan_expired_told_for"`
+}
+
+type VenueInvoice struct {
+	ID         uuid.UUID          `json:"id"`
+	VenueID    uuid.UUID          `json:"venue_id"`
+	Number     int64              `json:"number"`
+	Points     int32              `json:"points"`
+	Months     int32              `json:"months"`
+	Monthly    int64              `json:"monthly"`
+	VatPercent pgtype.Numeric     `json:"vat_percent"`
+	Total      int64              `json:"total"`
+	Status     string             `json:"status"`
+	IssuedAt   pgtype.Timestamptz `json:"issued_at"`
+	PaidAt     pgtype.Timestamptz `json:"paid_at"`
+	Note       *string            `json:"note"`
+}
+
+type VenueRequest struct {
+	ID      uuid.UUID `json:"id"`
+	VenueID uuid.UUID `json:"venue_id"`
+	// Where the request came from, as written on the tag: a table in a cafe, a room in a hotel.
+	Point     *string            `json:"point"`
+	Kind      string             `json:"kind"`
+	Rating    *int16             `json:"rating"`
+	Note      *string            `json:"note"`
+	Status    string             `json:"status"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	DoneAt    pgtype.Timestamptz `json:"done_at"`
+	Ip        *string            `json:"ip"`
 }

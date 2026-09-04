@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
+
 	"github.com/jackc/pgx/v5"
 
 	"github.com/sheyx2772-dev/flex/backend/internal/mail"
@@ -128,19 +130,18 @@ func (s *Service) ConsumeLink(ctx context.Context, linkToken, userAgent string, 
 		return "", Account{}, err
 	}
 
-	// Following a link proves the address, so an account is made here rather
-	// than at the point somebody typed it. Nothing exists for an address that
-	// was only ever entered into a form.
-	account, err := q.UserByEmail(ctx, link.Email)
-	if errors.Is(err, pgx.ErrNoRows) {
-		account, err = q.CreateUser(ctx, link.Email)
-	}
+	// Following a link proves the address, so the account is made here rather
+	// than when somebody typed it into a form — and it is made in `auth.users`,
+	// where the website's accounts already are. One person, one account,
+	// whichever door they came through.
+	account, err := s.directory.FindOrCreate(ctx, link.Email)
 	if err != nil {
 		return "", Account{}, err
 	}
 
-	if err := q.MarkEmailVerified(ctx, account.ID); err != nil {
-		return "", Account{}, err
+	owner, err := uuid.Parse(account.ID)
+	if err != nil {
+		return "", Account{}, fmt.Errorf("hisob id o'qilmadi: %w", err)
 	}
 
 	sessionToken, hash, err := NewToken()
@@ -154,7 +155,7 @@ func (s *Service) ConsumeLink(ctx context.Context, linkToken, userAgent string, 
 	}
 
 	if _, err := q.CreateSession(ctx, store.CreateSessionParams{
-		UserID:    account.ID,
+		UserID:    owner,
 		TokenHash: hash,
 		ExpiresAt: timestamp(time.Now().Add(SessionLifetime)),
 		UserAgent: agent,
@@ -167,9 +168,5 @@ func (s *Service) ConsumeLink(ctx context.Context, linkToken, userAgent string, 
 		return "", Account{}, err
 	}
 
-	return sessionToken, Account{
-		ID:       account.ID.String(),
-		Email:    account.Email,
-		Verified: true,
-	}, nil
+	return sessionToken, account, nil
 }

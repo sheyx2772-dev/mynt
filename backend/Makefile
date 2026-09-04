@@ -17,6 +17,25 @@ help: ## Show this list
 .PHONY: db
 db: ## Start Postgres on its own, which is what development needs
 	docker compose up -d db
+	@until docker compose exec -T db psql -U flex -d flex -c 'select 1' >/dev/null 2>&1; do sleep 1; done
+
+.PHONY: schema
+schema: db ## Build a local copy of the real schema, then apply our own migrations
+	@# The product's schema is not this backend's to create. It lives in
+	@# landing/supabase/migrations, it is already applied to the database the
+	@# website serves, and development wants a copy of that rather than an
+	@# invention of its own — a query that works here and not there is worse
+	@# than one that fails in both places.
+	@#
+	@# The shim first, standing in for the parts Supabase provides: the `auth`
+	@# schema, and the API roles the migrations grant to by name.
+	docker compose exec -T db psql -U flex -d flex -q -v ON_ERROR_STOP=1 \
+		< ../landing/supabase/test/local-shim.sql
+	@for f in ../landing/supabase/migrations/*.sql; do \
+		docker compose exec -T db psql -U flex -d flex -q -v ON_ERROR_STOP=1 < "$$f" || exit 1; \
+	done
+	@$(MAKE) --no-print-directory migrate
+	@echo "Schema OK — the website's tables and this backend's sessions."
 
 .PHONY: dev
 dev: ## Run the API from source against the local database

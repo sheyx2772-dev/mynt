@@ -16,7 +16,7 @@ Read the guide inside a folder before working in it. Each one carries its own
 ## Getting the whole thing running
 
 ```bash
-cd backend  && make db && make migrate && make dev   # :8090
+cd backend  && make schema && make dev                # :8090
 cd landing  && npm install && npm run dev            # :3000
 cd admin    && npm install && npm run dev            # :5174
 cd mobile   && flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8090
@@ -26,14 +26,33 @@ cd mobile   && flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8090
 in a container because a rebuild on save is the point of development; `docker
 compose up` runs both and is how the image is checked before it is deployed.
 
-## Where things are in the middle of moving
+## One database, and who owns which part of it
 
-`landing/` still reads Supabase directly — it was the whole product until the
-backend existed, and it keeps working while the backend grows underneath it.
-`landing/supabase/` holds the migrations that live database was built from.
-`backend/db/migrations/` is the new one, owned by us, and the two are not yet
-the same database. Nothing is deleted from the first until the second answers
-for it.
+All four applications read the same Postgres — today that is the Supabase
+project the website has always used, because a number bought on the site has to
+exist in the app.
+
+The product's schema is **not** the backend's to create. It lives in
+`landing/supabase/migrations`, forty-six files, already applied to the database
+that is serving real customers. `backend/db/migrations` adds exactly two tables
+— `flex_sessions` and `flex_login_tokens` — because an app cannot hold a cookie
+and needs a token instead. Everything else the backend reads is already there.
+
+Identity is `auth.users`. The website authenticates against it and so does the
+backend, so a person is one account whichever door they came through. The
+backend owns the session, not the identity: `internal/auth.Directory` is the
+one place that knows accounts live in Supabase, and it is an interface so that
+the day they do not, one implementation changes and nothing above it does.
+
+`make schema` in `backend/` builds a local copy of all of it — the shim that
+stands in for what Supabase provides, then the website's migrations, then ours.
+Development gets the real shape rather than an invention of its own, because a
+query that works locally and not in production is worse than one that fails in
+both places.
+
+Moving off Supabase later is two changes: `DATABASE_URL`, and a `Directory`
+that writes to a table of ours. `LocalDirectory` already does the second, for
+development.
 
 ## What is true of all four
 

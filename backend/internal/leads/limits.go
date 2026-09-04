@@ -25,6 +25,17 @@ const (
 // A refused attempt is recorded by the caller as well as an accepted one, so
 // hammering the limit does not reset it — otherwise the counter measures how
 // often somebody stopped trying.
+// `lead_attempts.ip` is text in the schema the website created, not inet, so
+// the address is rendered before it is counted against. Kept as the same string
+// on both sides of the window so a count and a record cannot disagree.
+func addressText(ip *netip.Addr) *string {
+	if ip == nil {
+		return nil
+	}
+	text := ip.String()
+	return &text
+}
+
 func (s *Store) allowed(ctx context.Context, normalized string, ip *netip.Addr) (bool, error) {
 	seconds := int32(window.Seconds())
 
@@ -46,7 +57,7 @@ func (s *Store) allowed(ctx context.Context, normalized string, ip *netip.Addr) 
 	}
 
 	bySource, err := s.queries.CountRecentLeadAttemptsByIP(ctx, store.CountRecentLeadAttemptsByIPParams{
-		Ip:            ip,
+		Ip:            addressText(ip),
 		WindowSeconds: seconds,
 	})
 	if err != nil {
@@ -63,7 +74,7 @@ func (s *Store) allowed(ctx context.Context, normalized string, ip *netip.Addr) 
 // trade in every direction.
 func (s *Store) record(ctx context.Context, normalized string, ip *netip.Addr, succeeded bool) {
 	_ = s.queries.RecordLeadAttempt(ctx, store.RecordLeadAttemptParams{
-		Ip:        ip,
+		Ip:        addressText(ip),
 		Handle:    &normalized,
 		Succeeded: succeeded,
 	})

@@ -27,10 +27,18 @@ func (s *Service) Authenticate(ctx context.Context, sessionToken string) (Accoun
 		return Account{}, err
 	}
 
+	// `auth.users.email` is nullable — an account created through Telegram has
+	// no address — so it is dereferenced rather than assumed.
+	email := ""
+	if row.Email != nil {
+		email = *row.Email
+	}
+
 	return Account{
-		ID:       row.UserID.String(),
-		Email:    row.Email,
-		Verified: row.EmailVerifiedAt.Valid,
+		ID:    row.UserID.String(),
+		Email: email,
+		// Holding a session means the address was proved when it was issued.
+		Verified: true,
 	}, nil
 }
 

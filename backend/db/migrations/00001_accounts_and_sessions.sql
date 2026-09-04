@@ -1,53 +1,37 @@
--- Who somebody is, and how they stay signed in.
+-- Sessions for the clients that cannot hold a cookie.
 --
--- The first migration of the backend that owns its own database. Until now
--- identity came from Supabase's `auth` schema, which meant the rule for what a
--- session is lived in somebody else's product and could only be read from a
--- dashboard. It lives here now.
+-- This is the only thing this backend adds to the schema. Everything else it
+-- reads — handles, leads, profile_views, link_clicks — is already there,
+-- created by the forty-six migrations under `landing/supabase/migrations` and
+-- already holding the real data. Recreating any of it here would have produced
+-- a second, empty copy of the product: a number bought on the website would not
+-- exist in the app.
 --
--- Two decisions are worth stating, because both look like extra work until the
--- day they are not:
+-- Identity is `auth.users`, which Supabase owns and the website already
+-- authenticates against. So an account is one account: the same person, the
+-- same numbers, whether they signed in on the site with a cookie or in the app
+-- with a token. What this backend owns is the session, not the identity.
 --
--- A session token is stored **hashed**. What the browser or the phone holds is
--- a long random string; what this table holds is its SHA-256. A dump of this
--- database — a backup on somebody's laptop, a log that printed a row — hands
--- over nobody's session, because the column cannot be replayed. Hashing needs
--- no salt here for the same reason a password does: the input is 32 bytes of
--- entropy, not a word a person chose, so there is nothing to guess.
+-- Two things are worth stating, because both look like extra work until the day
+-- they are not:
+--
+-- A session token is stored **hashed**. What the app holds is a long random
+-- string; what this table holds is its SHA-256. A dump of this database hands
+-- over nobody's session, because the column cannot be replayed. No salt and no
+-- work factor: the input is 32 bytes of entropy, not a word somebody chose, so
+-- there is nothing to guess and making it slow would only make every
+-- authenticated request slow.
 --
 -- And the token is opaque rather than a JWT. A JWT is checked without asking
 -- the database, which is exactly why it cannot be withdrawn: a stolen one stays
 -- valid until it expires, and "sign out everywhere" needs a list of the ones
 -- that no longer count — which is this table, arrived at the long way round.
--- One round trip per request buys the ability to end a session in the moment
--- somebody asks for it.
 
 -- +goose Up
 
-create table users (
+create table if not exists flex_sessions (
   id uuid primary key default gen_random_uuid(),
-
-  -- Addresses are compared as written by nobody: stored lowercase and checked,
-  -- so `Aziz@Example.com` and `aziz@example.com` cannot become two accounts.
-  email text not null unique
-    check (email = lower(email) and email ~ '^[^@[:space:]]+@[^@[:space:]]+\.[^@[:space:]]+$'),
-
-  -- Set the first time a sign-in link is followed. Null means the address was
-  -- offered but never proved, which is the state a half-finished sign-up
-  -- leaves behind.
-  email_verified_at timestamptz,
-
-  -- Telegram sign-in, when it is used. Nullable and unique: an account may
-  -- have one, and no two accounts may share it.
-  telegram_id bigint unique,
-
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
-);
-
-create table sessions (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references users (id) on delete cascade,
+  user_id uuid not null references auth.users (id) on delete cascade,
 
   -- sha256 of the token the client holds. Never the token itself.
   token_hash bytea not null unique check (octet_length(token_hash) = 32),
@@ -65,16 +49,20 @@ create table sessions (
   ip inet
 );
 
-create index sessions_user_idx on sessions (user_id, last_used_at desc);
--- Expired rows are deleted on a schedule; this is the index that sweep reads.
-create index sessions_expiry_idx on sessions (expires_at);
+create index if not exists flex_sessions_user_idx
+  on flex_sessions (user_id, last_used_at desc);
+-- Expired rows are swept on a schedule; this is the index that sweep reads.
+create index if not exists flex_sessions_expiry_idx on flex_sessions (expires_at);
 
 -- A sign-in link, which is a password that lasts fifteen minutes.
 --
 -- Hashed for the same reason a session is, and single-use: `consumed_at` is set
 -- in the same statement that reads the row, so a link forwarded to somebody
--- else, or replayed from a mail scanner that followed it first, is spent.
-create table login_tokens (
+-- else, or replayed by a mail scanner that followed it first, is spent.
+--
+-- No foreign key: a link is issued to an address, and the account may not exist
+-- until the link is followed.
+create table if not exists flex_login_tokens (
   id uuid primary key default gen_random_uuid(),
   email text not null check (email = lower(email)),
   token_hash bytea not null unique check (octet_length(token_hash) = 32),
@@ -82,34 +70,30 @@ create table login_tokens (
   consumed_at timestamptz,
   created_at timestamptz not null default now(),
 
-  -- Counted per address and per source so a script cannot mail somebody a
-  -- hundred sign-in links, which is a way of attacking a person rather than
+  -- Counted per address and per source, so a script cannot mail somebody a
+  -- hundred sign-in links — which is a way of attacking a person rather than
   -- the server.
   ip inet
 );
 
-create index login_tokens_email_idx on login_tokens (email, created_at desc);
-create index login_tokens_expiry_idx on login_tokens (expires_at);
+create index if not exists flex_login_tokens_email_idx
+  on flex_login_tokens (email, created_at desc);
+create index if not exists flex_login_tokens_expiry_idx
+  on flex_login_tokens (expires_at);
 
--- goose splits a file on semicolons, so a function body full of them has to be
--- marked as one statement.
--- +goose StatementBegin
-create function touch_updated_at() returns trigger as $$
-begin
-  new.updated_at = now();
-  return new;
-end;
-$$ language plpgsql;
--- +goose StatementEnd
+-- Row level security on both, with no policy at all.
+--
+-- The anon key is public — it ships in every page the website serves — and
+-- these tables are sessions. Nothing but the service role, which lives on this
+-- server, may read or write them. Belt and braces alongside the grants below,
+-- because the two fail in different ways.
+alter table flex_sessions enable row level security;
+alter table flex_login_tokens enable row level security;
 
-create trigger users_touch_updated_at
-  before update on users
-  for each row execute function touch_updated_at();
+revoke all on flex_sessions from anon, authenticated;
+revoke all on flex_login_tokens from anon, authenticated;
 
 -- +goose Down
 
-drop trigger if exists users_touch_updated_at on users;
-drop function if exists touch_updated_at();
-drop table if exists login_tokens;
-drop table if exists sessions;
-drop table if exists users;
+drop table if exists flex_login_tokens;
+drop table if exists flex_sessions;

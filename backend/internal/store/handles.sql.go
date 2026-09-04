@@ -34,7 +34,7 @@ func (q *Queries) GenesisCard(ctx context.Context, normalized *string) (GenesisC
 
 const handlesForUser = `-- name: HandlesForUser :many
 
-select id, letters, digits, normalized, status, user_id, reserved_until, owner_name, bio, avatar_url, banner_url, links, services, city, contact_email, phone, position, company, tags, card_design, device_type, custom_design_url, plan, plan_expires_at, plan_reminded_for, price_paid, gift_reason, view_count, last_seen_at, created_at, updated_at, claimed_at from handles
+select id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count from handles
 where user_id = $1
 order by claimed_at desc nulls last
 `
@@ -59,33 +59,39 @@ func (q *Queries) HandlesForUser(ctx context.Context, userID *uuid.UUID) ([]Hand
 			&i.Digits,
 			&i.Normalized,
 			&i.Status,
-			&i.UserID,
-			&i.ReservedUntil,
 			&i.OwnerName,
 			&i.Bio,
 			&i.AvatarUrl,
-			&i.BannerUrl,
 			&i.Links,
-			&i.Services,
+			&i.PricePaid,
+			&i.CreatedAt,
+			&i.ClaimedAt,
+			&i.UserID,
+			&i.UpdatedAt,
+			&i.ReservedUntil,
 			&i.City,
 			&i.ContactEmail,
-			&i.Phone,
-			&i.Position,
-			&i.Company,
 			&i.Tags,
+			&i.LastSeenAt,
+			&i.ViewCount,
+			&i.FollowerCount,
+			&i.PostCount,
+			&i.OwnerDeletedAt,
 			&i.CardDesign,
 			&i.DeviceType,
 			&i.CustomDesignUrl,
 			&i.Plan,
 			&i.PlanExpiresAt,
-			&i.PlanRemindedFor,
-			&i.PricePaid,
 			&i.GiftReason,
-			&i.ViewCount,
-			&i.LastSeenAt,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-			&i.ClaimedAt,
+			&i.Phone,
+			&i.Position,
+			&i.Company,
+			&i.Services,
+			&i.BannerUrl,
+			&i.TeamID,
+			&i.PlanRemindedFor,
+			&i.CommentsOpen,
+			&i.RecommendCount,
 		); err != nil {
 			return nil, err
 		}
@@ -98,7 +104,7 @@ func (q *Queries) HandlesForUser(ctx context.Context, userID *uuid.UUID) ([]Hand
 }
 
 const ownedHandle = `-- name: OwnedHandle :one
-select id, letters, digits, normalized, status, user_id, reserved_until, owner_name, bio, avatar_url, banner_url, links, services, city, contact_email, phone, position, company, tags, card_design, device_type, custom_design_url, plan, plan_expires_at, plan_reminded_for, price_paid, gift_reason, view_count, last_seen_at, created_at, updated_at, claimed_at from handles
+select id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count from handles
 where normalized = $1
   and user_id = $2
 `
@@ -117,33 +123,39 @@ func (q *Queries) OwnedHandle(ctx context.Context, arg OwnedHandleParams) (Handl
 		&i.Digits,
 		&i.Normalized,
 		&i.Status,
-		&i.UserID,
-		&i.ReservedUntil,
 		&i.OwnerName,
 		&i.Bio,
 		&i.AvatarUrl,
-		&i.BannerUrl,
 		&i.Links,
-		&i.Services,
+		&i.PricePaid,
+		&i.CreatedAt,
+		&i.ClaimedAt,
+		&i.UserID,
+		&i.UpdatedAt,
+		&i.ReservedUntil,
 		&i.City,
 		&i.ContactEmail,
-		&i.Phone,
-		&i.Position,
-		&i.Company,
 		&i.Tags,
+		&i.LastSeenAt,
+		&i.ViewCount,
+		&i.FollowerCount,
+		&i.PostCount,
+		&i.OwnerDeletedAt,
 		&i.CardDesign,
 		&i.DeviceType,
 		&i.CustomDesignUrl,
 		&i.Plan,
 		&i.PlanExpiresAt,
-		&i.PlanRemindedFor,
-		&i.PricePaid,
 		&i.GiftReason,
-		&i.ViewCount,
-		&i.LastSeenAt,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.ClaimedAt,
+		&i.Phone,
+		&i.Position,
+		&i.Company,
+		&i.Services,
+		&i.BannerUrl,
+		&i.TeamID,
+		&i.PlanRemindedFor,
+		&i.CommentsOpen,
+		&i.RecommendCount,
 	)
 	return i, err
 }
@@ -252,7 +264,7 @@ update handles set
   device_type = $12
 where normalized = $13
   and user_id = $14
-returning id, letters, digits, normalized, status, user_id, reserved_until, owner_name, bio, avatar_url, banner_url, links, services, city, contact_email, phone, position, company, tags, card_design, device_type, custom_design_url, plan, plan_expires_at, plan_reminded_for, price_paid, gift_reason, view_count, last_seen_at, created_at, updated_at, claimed_at
+returning id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count
 `
 
 type UpdateProfileParams struct {
@@ -301,33 +313,39 @@ func (q *Queries) UpdateProfile(ctx context.Context, arg UpdateProfileParams) (H
 		&i.Digits,
 		&i.Normalized,
 		&i.Status,
-		&i.UserID,
-		&i.ReservedUntil,
 		&i.OwnerName,
 		&i.Bio,
 		&i.AvatarUrl,
-		&i.BannerUrl,
 		&i.Links,
-		&i.Services,
+		&i.PricePaid,
+		&i.CreatedAt,
+		&i.ClaimedAt,
+		&i.UserID,
+		&i.UpdatedAt,
+		&i.ReservedUntil,
 		&i.City,
 		&i.ContactEmail,
-		&i.Phone,
-		&i.Position,
-		&i.Company,
 		&i.Tags,
+		&i.LastSeenAt,
+		&i.ViewCount,
+		&i.FollowerCount,
+		&i.PostCount,
+		&i.OwnerDeletedAt,
 		&i.CardDesign,
 		&i.DeviceType,
 		&i.CustomDesignUrl,
 		&i.Plan,
 		&i.PlanExpiresAt,
-		&i.PlanRemindedFor,
-		&i.PricePaid,
 		&i.GiftReason,
-		&i.ViewCount,
-		&i.LastSeenAt,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.ClaimedAt,
+		&i.Phone,
+		&i.Position,
+		&i.Company,
+		&i.Services,
+		&i.BannerUrl,
+		&i.TeamID,
+		&i.PlanRemindedFor,
+		&i.CommentsOpen,
+		&i.RecommendCount,
 	)
 	return i, err
 }

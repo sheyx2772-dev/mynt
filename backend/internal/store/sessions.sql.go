@@ -14,7 +14,7 @@ import (
 )
 
 const consumeLoginToken = `-- name: ConsumeLoginToken :one
-update login_tokens
+update flex_login_tokens
 set consumed_at = now()
 where token_hash = $1
   and consumed_at is null
@@ -27,9 +27,9 @@ returning id, email, token_hash, expires_at, consumed_at, created_at, ip
 // The read and the write are one statement so the link cannot be used twice,
 // however many requests arrive at once: the second `update` matches no row
 // because the first has already set `consumed_at`.
-func (q *Queries) ConsumeLoginToken(ctx context.Context, tokenHash []byte) (LoginToken, error) {
+func (q *Queries) ConsumeLoginToken(ctx context.Context, tokenHash []byte) (FlexLoginToken, error) {
 	row := q.db.QueryRow(ctx, consumeLoginToken, tokenHash)
-	var i LoginToken
+	var i FlexLoginToken
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
@@ -43,7 +43,7 @@ func (q *Queries) ConsumeLoginToken(ctx context.Context, tokenHash []byte) (Logi
 }
 
 const countRecentLoginTokens = `-- name: CountRecentLoginTokens :one
-select count(*) from login_tokens
+select count(*) from flex_login_tokens
 where email = lower($1::text)
   and created_at > now() - $2::int * interval '1 second'
 `
@@ -61,7 +61,7 @@ func (q *Queries) CountRecentLoginTokens(ctx context.Context, arg CountRecentLog
 }
 
 const countRecentLoginTokensByIP = `-- name: CountRecentLoginTokensByIP :one
-select count(*) from login_tokens
+select count(*) from flex_login_tokens
 where ip = $1
   and created_at > now() - $2::int * interval '1 second'
 `
@@ -71,10 +71,10 @@ type CountRecentLoginTokensByIPParams struct {
 	WindowSeconds int32       `json:"window_seconds"`
 }
 
-// The second window: one address may only be asked for so many links an hour,
-// however many addresses are tried. Counted separately from the per-address
-// limit because they stop different things — one protects a person from being
-// mailed a hundred times, the other protects the mail reputation from a script.
+// The second window: one source may only ask for so many links an hour, however
+// many addresses it tries. Counted separately from the per-address limit
+// because they stop different things — one protects a person from being mailed
+// a hundred times, the other protects the sending reputation from a script.
 func (q *Queries) CountRecentLoginTokensByIP(ctx context.Context, arg CountRecentLoginTokensByIPParams) (int64, error) {
 	row := q.db.QueryRow(ctx, countRecentLoginTokensByIP, arg.Ip, arg.WindowSeconds)
 	var count int64
@@ -83,7 +83,7 @@ func (q *Queries) CountRecentLoginTokensByIP(ctx context.Context, arg CountRecen
 }
 
 const createLoginToken = `-- name: CreateLoginToken :one
-insert into login_tokens (email, token_hash, expires_at, ip)
+insert into flex_login_tokens (email, token_hash, expires_at, ip)
 values (lower($1::text), $2, $3, $4)
 returning id, email, token_hash, expires_at, consumed_at, created_at, ip
 `
@@ -95,14 +95,14 @@ type CreateLoginTokenParams struct {
 	Ip        *netip.Addr        `json:"ip"`
 }
 
-func (q *Queries) CreateLoginToken(ctx context.Context, arg CreateLoginTokenParams) (LoginToken, error) {
+func (q *Queries) CreateLoginToken(ctx context.Context, arg CreateLoginTokenParams) (FlexLoginToken, error) {
 	row := q.db.QueryRow(ctx, createLoginToken,
 		arg.Email,
 		arg.TokenHash,
 		arg.ExpiresAt,
 		arg.Ip,
 	)
-	var i LoginToken
+	var i FlexLoginToken
 	err := row.Scan(
 		&i.ID,
 		&i.Email,
@@ -116,7 +116,8 @@ func (q *Queries) CreateLoginToken(ctx context.Context, arg CreateLoginTokenPara
 }
 
 const createSession = `-- name: CreateSession :one
-insert into sessions (user_id, token_hash, expires_at, user_agent, ip)
+
+insert into flex_sessions (user_id, token_hash, expires_at, user_agent, ip)
 values ($1, $2, $3, $4, $5)
 returning id, user_id, token_hash, expires_at, created_at, last_used_at, user_agent, ip
 `
@@ -129,7 +130,13 @@ type CreateSessionParams struct {
 	Ip        *netip.Addr        `json:"ip"`
 }
 
-func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error) {
+// Sessions, and the links that create them.
+//
+// Identity lives in `auth.users`, which the website already authenticates
+// against. Creating an account is therefore not a statement here — it goes
+// through Supabase's admin API, the same door `landing/src/lib/auth/telegram-login.ts`
+// uses — and everything below takes a user id that already exists.
+func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (FlexSession, error) {
 	row := q.db.QueryRow(ctx, createSession,
 		arg.UserID,
 		arg.TokenHash,
@@ -137,7 +144,7 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (S
 		arg.UserAgent,
 		arg.Ip,
 	)
-	var i Session
+	var i FlexSession
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
@@ -151,35 +158,12 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (S
 	return i, err
 }
 
-const createUser = `-- name: CreateUser :one
-
-insert into users (email)
-values (lower($1::text))
-returning id, email, email_verified_at, telegram_id, created_at, updated_at
-`
-
-// Everything the sign-in flow does, as statements rather than as a query
-// builder. sqlc reads this file and writes the Go that calls it.
-func (q *Queries) CreateUser(ctx context.Context, email string) (User, error) {
-	row := q.db.QueryRow(ctx, createUser, email)
-	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.Email,
-		&i.EmailVerifiedAt,
-		&i.TelegramID,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
 const deleteExpiredLoginTokens = `-- name: DeleteExpiredLoginTokens :execrows
-delete from login_tokens
+delete from flex_login_tokens
 where expires_at < now() - interval '1 day'
 `
 
-// Housekeeping. Spent and expired links are of no use to anybody and their
+// Housekeeping. Spent and expired links are of no use to anybody, and their
 // rows are the only place an address appears before an account exists.
 func (q *Queries) DeleteExpiredLoginTokens(ctx context.Context) (int64, error) {
 	result, err := q.db.Exec(ctx, deleteExpiredLoginTokens)
@@ -190,7 +174,7 @@ func (q *Queries) DeleteExpiredLoginTokens(ctx context.Context) (int64, error) {
 }
 
 const deleteExpiredSessions = `-- name: DeleteExpiredSessions :execrows
-delete from sessions where expires_at < now()
+delete from flex_sessions where expires_at < now()
 `
 
 func (q *Queries) DeleteExpiredSessions(ctx context.Context) (int64, error) {
@@ -202,7 +186,7 @@ func (q *Queries) DeleteExpiredSessions(ctx context.Context) (int64, error) {
 }
 
 const deleteSession = `-- name: DeleteSession :exec
-delete from sessions where token_hash = $1
+delete from flex_sessions where token_hash = $1
 `
 
 func (q *Queries) DeleteSession(ctx context.Context, tokenHash []byte) error {
@@ -211,43 +195,30 @@ func (q *Queries) DeleteSession(ctx context.Context, tokenHash []byte) error {
 }
 
 const deleteUserSessions = `-- name: DeleteUserSessions :exec
-delete from sessions where user_id = $1
+delete from flex_sessions where user_id = $1
 `
 
-// Signing out everywhere. The reason the sessions table exists.
+// Signing out everywhere. The reason this table exists rather than a JWT.
 func (q *Queries) DeleteUserSessions(ctx context.Context, userID uuid.UUID) error {
 	_, err := q.db.Exec(ctx, deleteUserSessions, userID)
 	return err
 }
 
-const markEmailVerified = `-- name: MarkEmailVerified :exec
-update users set email_verified_at = now()
-where id = $1 and email_verified_at is null
-`
-
-func (q *Queries) MarkEmailVerified(ctx context.Context, id uuid.UUID) error {
-	_, err := q.db.Exec(ctx, markEmailVerified, id)
-	return err
-}
-
 const touchSession = `-- name: TouchSession :one
-update sessions s
+update flex_sessions s
 set last_used_at = now()
-from users u
+from auth.users u
 where s.token_hash = $1
   and s.expires_at > now()
   and u.id = s.user_id
-returning s.id as session_id, s.expires_at,
-          u.id as user_id, u.email, u.email_verified_at, u.telegram_id
+returning s.id as session_id, s.expires_at, u.id as user_id, u.email
 `
 
 type TouchSessionRow struct {
-	SessionID       uuid.UUID          `json:"session_id"`
-	ExpiresAt       pgtype.Timestamptz `json:"expires_at"`
-	UserID          uuid.UUID          `json:"user_id"`
-	Email           string             `json:"email"`
-	EmailVerifiedAt pgtype.Timestamptz `json:"email_verified_at"`
-	TelegramID      *int64             `json:"telegram_id"`
+	SessionID uuid.UUID          `json:"session_id"`
+	ExpiresAt pgtype.Timestamptz `json:"expires_at"`
+	UserID    uuid.UUID          `json:"user_id"`
+	Email     *string            `json:"email"`
 }
 
 // The whole of "who is this request from", in one statement.
@@ -265,44 +236,6 @@ func (q *Queries) TouchSession(ctx context.Context, tokenHash []byte) (TouchSess
 		&i.ExpiresAt,
 		&i.UserID,
 		&i.Email,
-		&i.EmailVerifiedAt,
-		&i.TelegramID,
-	)
-	return i, err
-}
-
-const userByEmail = `-- name: UserByEmail :one
-select id, email, email_verified_at, telegram_id, created_at, updated_at from users where email = lower($1::text)
-`
-
-func (q *Queries) UserByEmail(ctx context.Context, email string) (User, error) {
-	row := q.db.QueryRow(ctx, userByEmail, email)
-	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.Email,
-		&i.EmailVerifiedAt,
-		&i.TelegramID,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
-const userByID = `-- name: UserByID :one
-select id, email, email_verified_at, telegram_id, created_at, updated_at from users where id = $1
-`
-
-func (q *Queries) UserByID(ctx context.Context, id uuid.UUID) (User, error) {
-	row := q.db.QueryRow(ctx, userByID, id)
-	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.Email,
-		&i.EmailVerifiedAt,
-		&i.TelegramID,
-		&i.CreatedAt,
-		&i.UpdatedAt,
 	)
 	return i, err
 }

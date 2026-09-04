@@ -33,6 +33,12 @@ type Config struct {
 	// otherwise end up inside a one-time link mailed to a victim.
 	SiteURL string
 
+	// Where accounts live. Supabase owns `auth.users` and the website already
+	// authenticates against it, so this backend asks rather than keeping a
+	// second list — see internal/auth/directory.go.
+	SupabaseURL            string
+	SupabaseServiceRoleKey string
+
 	// Sending account for the sign-in mail. Empty means no provider is
 	// configured, and in development the link is written to the log instead.
 	ResendAPIKey string
@@ -56,20 +62,34 @@ func (c Config) IsDevelopment() bool { return c.Env == "development" }
 // Load builds the configuration, or explains what is missing.
 func Load() (Config, error) {
 	cfg := Config{
-		DatabaseURL:  os.Getenv("DATABASE_URL"),
-		Addr:         withDefault("ADDR", ":8080"),
-		Env:          normaliseEnv(os.Getenv("APP_ENV")),
-		SiteURL:      withDefault("SITE_URL", "https://flex.com.uz"),
-		ResendAPIKey: os.Getenv("RESEND_API_KEY"),
-		MailFrom:     withDefault("MAIL_FROM", "Flex <kirish@flex.com.uz>"),
-		TrustProxy:   os.Getenv("TRUST_PROXY") == "true",
-		ReadTimeout:  15 * time.Second,
-		WriteTimeout: 30 * time.Second,
+		DatabaseURL:            os.Getenv("DATABASE_URL"),
+		Addr:                   withDefault("ADDR", ":8080"),
+		Env:                    normaliseEnv(os.Getenv("APP_ENV")),
+		SiteURL:                withDefault("SITE_URL", "https://flex.com.uz"),
+		SupabaseURL:            strings.TrimSuffix(os.Getenv("SUPABASE_URL"), "/"),
+		SupabaseServiceRoleKey: os.Getenv("SUPABASE_SERVICE_ROLE_KEY"),
+		ResendAPIKey:           os.Getenv("RESEND_API_KEY"),
+		MailFrom:               withDefault("MAIL_FROM", "Flex <kirish@flex.com.uz>"),
+		TrustProxy:             os.Getenv("TRUST_PROXY") == "true",
+		ReadTimeout:            15 * time.Second,
+		WriteTimeout:           30 * time.Second,
 	}
 
 	var missing []string
 	if cfg.DatabaseURL == "" {
 		missing = append(missing, "DATABASE_URL")
+	}
+	// In production, accounts must come from the real directory. Without these
+	// the server would fall back to writing them straight to the database,
+	// which is the whole authentication system and belongs nowhere near real
+	// customers — so it refuses to start rather than doing it quietly.
+	if !cfg.IsDevelopment() {
+		if cfg.SupabaseURL == "" {
+			missing = append(missing, "SUPABASE_URL")
+		}
+		if cfg.SupabaseServiceRoleKey == "" {
+			missing = append(missing, "SUPABASE_SERVICE_ROLE_KEY")
+		}
 	}
 	// A production deployment with no mail provider cannot sign anybody in, and
 	// the fallback writes live sign-in links to the log. Better to refuse to
