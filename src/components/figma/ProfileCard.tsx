@@ -27,6 +27,10 @@ const BANNER: Record<string, string> = {
   "chamber":      imgStartupGarage,
   "uzreport":     imgICTWeek,
   "yakubov":           imgYoshlarVentures,
+  // No UzCombinator banner: LinkedIn serves that logo at 100x100 and signs the
+  // URL per size, so the larger crops are refused. Upscaled to the banner it
+  // was soft, and its white ground sat on the dark card as a floating box.
+  // These three cards run on the brand colour alone until a real file arrives.
   "yoshlar-agentligi": imgYIA,
   "sadullayev":        imgYIA,
 };
@@ -126,7 +130,7 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
           <img
             src={banner}
             alt={profile.orgShort}
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: profile.bannerPosition ?? "center",
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: profile.bannerFit ?? "cover", objectPosition: profile.bannerPosition ?? "center",
               WebkitMaskImage: "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)", maskImage: "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)" }}
           />
         )}
