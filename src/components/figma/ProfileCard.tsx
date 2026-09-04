@@ -53,15 +53,13 @@ const L = {
     email: "E-pochta", call: "Qo'ng'iroq", cal: "Uchrashuv", connect: "Havola",
     li: "LinkedIn", ig: "Instagram", yt: "YouTube", tg: "Telegram",
     add: "KONTAKTGA QO'SHISH", share: "ULASHISH", website: "Veb-sayt",
-    about: "Tashkilot haqida", verified: "Tasdiqlangan",
-    phone: "Telefon", mail: "Elektron pochta", addr: "Manzil",
+    about: "Tashkilot haqida", verified: "NAMUNA",
   },
   ru: {
     email: "E-mail", call: "Звонок", cal: "Встреча", connect: "Ссылка",
     li: "LinkedIn", ig: "Instagram", yt: "YouTube", tg: "Telegram",
     add: "В КОНТАКТЫ", share: "ПОДЕЛИТЬСЯ", website: "Сайт",
-    about: "Об организации", verified: "Подтверждён",
-    phone: "Телефон", mail: "Электронная почта", addr: "Адрес",
+    about: "Об организации", verified: "ОБРАЗЕЦ",
   },
 };
 
@@ -164,7 +162,16 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
               border: `3px solid ${c.accent}`,
               boxShadow: `0 4px 20px rgba(0,0,0,0.45), 0 0 0 3px ${c.cardBg}`,
             }}>
-              <img src={profile.avatar} alt={profile.fullName} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+              {/* This was a stock photograph of a real stranger standing in for an
+                  invented official. An organisation's monogram says the same
+                  thing about the layout without borrowing anyone's face. */}
+              <div style={{
+                width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+                background: c.iconBg, color: c.accent,
+                fontSize: profile.logoText.length > 3 ? 18 : 24, fontWeight: 800, letterSpacing: "0.02em",
+              }}>
+                {profile.logoText}
+              </div>
             </div>
             {profile.verified && (
               <div style={{
@@ -246,8 +253,9 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
         </button>
       </div>
 
-      {/* Website button */}
-      <div style={{ padding: "8px 16px 0" }}>
+      {/* Website button — omitted when the organisation publishes no site, rather
+          than printing a domain nobody confirmed. */}
+      {profile.website && <div style={{ padding: "8px 16px 0" }}>
         <button className="btn-primary" style={{
           width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
           padding: "11px", borderRadius: "var(--r-lg)", background: c.accent2, border: "none",
@@ -256,7 +264,7 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
           {I.web}
           {profile.website}
         </button>
-      </div>
+      </div>}
 
       {/* Divider */}
       <div style={{ margin: "16px 16px 0", display: "flex", alignItems: "center", gap: 10 }}>
@@ -291,19 +299,10 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
             {BIO[profile.id] ?? `${profile.organization} — O'zbekiston Respublikasida faoliyat yurituvchi tashkilot.`}
           </p>
 
-          {/* Contacts */}
-          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
-            {[
-              { icon: "📞", label: profile.phone },
-              { icon: "✉️", label: profile.email },
-              { icon: "📍", label: profile.address },
-            ].map(row => (
-              <div key={row.label} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                <span style={{ fontSize: 11, flexShrink: 0, lineHeight: "16px" }}>{row.icon}</span>
-                <span style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", lineHeight: "15px" }}>{row.label}</span>
-              </div>
-            ))}
-          </div>
+          {/* The phone, mail and address rows stood here. They carried invented
+              addresses on real institutions' domains, so they are gone rather
+              than replaced — the website below is the one contact on this card
+              that is genuinely published by the organisation itself. */}
 
           {/* Tags */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginTop: 10 }}>
