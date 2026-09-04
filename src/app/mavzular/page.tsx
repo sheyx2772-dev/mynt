@@ -7,6 +7,7 @@ import PlaqueProfile from "@/components/ui/PlaqueProfile";
 import SocialProfile from "@/components/ui/SocialProfile";
 import PosterProfile from "@/components/ui/PosterProfile";
 import ReceiptProfile from "@/components/ui/ReceiptProfile";
+import NfcCardProfile from "@/components/ui/NfcCardProfile";
 import Plate from "@/components/ui/Plate";
 import { CARD_DESIGNS } from "@/lib/card-designs";
 
@@ -250,7 +251,62 @@ function ReceiptSample() {
   );
 }
 
+const NFC_ACTIONS = [
+  { kind: "email", label: "Email", href: "mailto:aziz@mclegal.uz" },
+  { kind: "call", label: "Call", href: "tel:+998901234567" },
+  { kind: "calendar", label: "Calendar", href: "#" },
+  { kind: "connect", label: "Connect", href: "#" },
+  { kind: "LinkedIn", label: "Linkedin", href: "#" },
+  { kind: "Instagram", label: "Instagram", href: "#" },
+  { kind: "YouTube", label: "Youtube", href: "#" },
+  { kind: "Telegram", label: "Telegram", href: "#" },
+];
+
+function NfcSample({ theme }: { theme: string }) {
+  return (
+    <div data-theme={theme} className="themed overflow-hidden rounded-2xl">
+      <NfcCardProfile
+        name="Aziz Karimov"
+        org="MC LEGAL"
+        role="CEO"
+        locationHref="#"
+        actions={NFC_ACTIONS}
+        websiteHref="#"
+        labels={{ addToContacts: "Add to contacts", share: "Share" }}
+        logo={
+          <span className="text-[15px] font-black tracking-[0.24em] text-on-accent uppercase">
+            FLEX
+          </span>
+        }
+        about={{
+          title: "Aziz Karimov",
+          body:
+            "MC LEGAL direktori. Korporativ huquq, shartnomalar va sud vakilligi bo'yicha 12 yillik amaliyot. Toshkent.",
+        }}
+      />
+    </div>
+  );
+}
+
 const LAYOUTS = [
+  {
+    name: "NFC vizitka — ko'k",
+    note: "Papkadagi shablon: brend lentasi, ustidan chiqib turgan doira portret, 4×2 dumaloq tugmalar to'ri, ikkita tugma qatori, sayt tugmasi, va \"haqida\" bo'limi.",
+    who: "Tashkilot xodimi — bank, universitet, vazirlik. Brend rangi lentada va tugmalarda.",
+    render: () => <NfcSample theme="nfc-kok" />,
+  },
+  {
+    name: "NFC vizitka — tungi",
+    note: "Xuddi shu shablon, qora fon va to'q sariq aksent bilan.",
+    who: "Papkadagi uchinchi variant: gradient lenta, qora tana.",
+    render: () => <NfcSample theme="nfc-tun" />,
+  },
+  {
+    name: "NFC vizitka — yashil",
+    note: "Xuddi shu shablon, bank yashili bilan.",
+    who: "Papkadagi to'rtinchi variant.",
+    render: () => <NfcSample theme="nfc-yashil" />,
+  },
   {
     name: "Zarbof",
     note: "Markazda, oltin serif, ikonkali konturli tabletkalar, halqadagi portret. Fonda oqim chiziqlari. Varaq yo'q — bitta panel.",
@@ -298,7 +354,7 @@ export default function ThemesPage() {
         </p>
 
         <h2 className="mt-10 text-[20px] leading-6 font-semibold">
-          To&apos;rtta maket
+          Yettita maket
         </h2>
         <p className="mt-1 max-w-[70ch] text-[16px] leading-6 text-mute">
           Bular bir-birining rangi emas. Har birida tekislash, shrift, tugma

@@ -151,6 +151,27 @@
   --color-on-accent: var(--color-ink);
 }
 
+/* And again on every themed element, which is not redundant.
+ *
+ * `--color-page-ink: var(--color-ink)` declared on :root is computed once, at
+ * the root, against the root's own ink — and the resulting colour is then
+ * inherited downwards. A theme redefining `--color-ink` further down does not
+ * reach back and change it. So a light theme that never mentioned page-ink was
+ * getting the global near-black rather than its own, which is only invisible
+ * while the two happen to be the same colour.
+ *
+ * This block sits before every [data-theme="…"] block on purpose: the two have
+ * equal specificity, so a named theme wins on source order and its own values
+ * still override these. */
+[data-theme] {
+  --color-page-ink: var(--color-ink);
+  --color-page-mute: var(--color-mute);
+  --color-slab: var(--color-ink);
+  --color-on-slab: var(--color-sheet);
+  --color-on-accent: var(--color-ink);
+  color: var(--color-ink);
+}
+
 /* The default. Off-white page, white sheet, black card with gold. */
 [data-theme="paper"] {
   --color-ink: #0e0a1b;
@@ -362,13 +383,65 @@
   );
 }
 
+/* The four colourways the supplied design arrives in. One template, four
+ * brands: cyan, government blue, an orange gradient, and a bank green. Only
+ * the accent and the ground move; the layout is identical in all four, which
+ * is what made it a design rather than four designs. */
+[data-theme="nfc-kok"] {
+  --color-ink: #111418;
+  --color-lime: #17c3d4;
+  --color-paper: #ffffff;
+  --color-sheet: #ffffff;
+  --color-mute: #6b7280;
+  --color-gold: #9aa5b1;
+  --color-engraved: #e6eef0;
+  --color-slab: #111418;
+  --color-on-slab: #ffffff;
+  --color-on-accent: #ffffff;
+  --card-base: #16191e;
+  --card-face: linear-gradient(140deg, #23272e 0%, #111418 70%);
+  --page-pattern: none;
+}
+
+[data-theme="nfc-tun"] {
+  --color-ink: #f4f5f7;
+  --color-lime: #f97316;
+  --color-paper: #0b0c0f;
+  --color-sheet: #14161b;
+  --color-mute: #9aa0aa;
+  --color-gold: #8b929c;
+  --color-engraved: #e8eaee;
+  --color-page-ink: #f4f5f7;
+  --color-page-mute: #9aa0aa;
+  --color-slab: #23262d;
+  --color-on-slab: #f4f5f7;
+  --color-on-accent: #14161b;
+  --card-base: #1a1d23;
+  --card-face: linear-gradient(140deg, #262a32 0%, #14161b 70%);
+  --page-pattern: none;
+}
+
+[data-theme="nfc-yashil"] {
+  --color-ink: #f4f5f7;
+  --color-lime: #16a34a;
+  --color-paper: #0b0c0f;
+  --color-sheet: #14161b;
+  --color-mute: #9aa0aa;
+  --color-gold: #8b929c;
+  --color-engraved: #e8eaee;
+  --color-page-ink: #f4f5f7;
+  --color-page-mute: #9aa0aa;
+  --color-slab: #23262d;
+  --color-on-slab: #f4f5f7;
+  --color-on-accent: #ffffff;
+  --card-base: #1a1d23;
+  --card-face: linear-gradient(140deg, #262a32 0%, #14161b 70%);
+  --page-pattern: none;
+}
+
 /* The page wears its theme's pattern. Fixed, so it does not scroll with the
    content and read as texture printed on the paper rather than as the surface
    the paper is lying on. */
-[data-theme] {
-  color: var(--color-ink);
-}
-
 /* Ijtimoiy — the social layout's ground. Pale and quiet on purpose: the
  * platform marks carry all the colour on that page, so everything under them
  * has to get out of the way. */
@@ -378,6 +451,62 @@
 
 /* Kvitansiya — the receipt. Thermal paper, which is warm and slightly grey,
  * and an ink that is never quite black because a till printer's never is. */
+
+/* The four colourways the supplied design arrives in. One template, four
+ * brands: cyan, government blue, an orange gradient, and a bank green. Only
+ * the accent and the ground move; the layout is identical in all four, which
+ * is what made it a design rather than four designs. */
+[data-theme="nfc-kok"] {
+  --color-ink: #111418;
+  --color-lime: #17c3d4;
+  --color-paper: #ffffff;
+  --color-sheet: #ffffff;
+  --color-mute: #6b7280;
+  --color-gold: #9aa5b1;
+  --color-engraved: #e6eef0;
+  --color-slab: #111418;
+  --color-on-slab: #ffffff;
+  --color-on-accent: #ffffff;
+  --card-base: #16191e;
+  --card-face: linear-gradient(140deg, #23272e 0%, #111418 70%);
+  --page-pattern: none;
+}
+
+[data-theme="nfc-tun"] {
+  --color-ink: #f4f5f7;
+  --color-lime: #f97316;
+  --color-paper: #0b0c0f;
+  --color-sheet: #14161b;
+  --color-mute: #9aa0aa;
+  --color-gold: #8b929c;
+  --color-engraved: #e8eaee;
+  --color-page-ink: #f4f5f7;
+  --color-page-mute: #9aa0aa;
+  --color-slab: #23262d;
+  --color-on-slab: #f4f5f7;
+  --color-on-accent: #14161b;
+  --card-base: #1a1d23;
+  --card-face: linear-gradient(140deg, #262a32 0%, #14161b 70%);
+  --page-pattern: none;
+}
+
+[data-theme="nfc-yashil"] {
+  --color-ink: #f4f5f7;
+  --color-lime: #16a34a;
+  --color-paper: #0b0c0f;
+  --color-sheet: #14161b;
+  --color-mute: #9aa0aa;
+  --color-gold: #8b929c;
+  --color-engraved: #e8eaee;
+  --color-page-ink: #f4f5f7;
+  --color-page-mute: #9aa0aa;
+  --color-slab: #23262d;
+  --color-on-slab: #f4f5f7;
+  --color-on-accent: #ffffff;
+  --card-base: #1a1d23;
+  --card-face: linear-gradient(140deg, #262a32 0%, #14161b 70%);
+  --page-pattern: none;
+}
 
 /* The page wears its theme's pattern.
  *
