@@ -25,8 +25,38 @@ Ruxsat: "File content: Read-only" yetarli.
   process.exit(1);
 }
 
+// The usage text spells the token as a placeholder, and a placeholder pasted
+// verbatim comes back as an opaque 403. Name it before the network does.
+if (!/^figd_[A-Za-z0-9_-]{20,}$/.test(TOKEN)) {
+  console.error(`
+Bu token haqiqiy emas: "${TOKEN}"
+
+Haqiqiy token "figd_" bilan boshlanadi va uzun tasodifiy harflardan iborat,
+masalan: figd_XXXXXXXX
+
+Olish: figma.com -> Settings -> Security -> Personal access tokens
+       -> Generate new token -> "File content: Read-only"
+`);
+  process.exit(1);
+}
+
 // figma.com/design/KEY/Name?node-id=12-34  ->  KEY, "12:34"
-const key = target.match(/(?:file|design)\/([A-Za-z0-9]+)/)?.[1] ?? target;
+const key = target.match(/(?:file|design|make|board|slides)\/([A-Za-z0-9]+)/)?.[1] ?? target;
+
+// A Make project is generated code, not a canvas. The REST API returns almost
+// nothing for one, and the code itself is a download away — say so rather than
+// letting the walk report zero colours.
+if (/figma\.com\/make\//.test(target)) {
+  console.warn(`
+DIQQAT: bu Figma Make havolasi (/make/), oddiy dizayn fayli emas.
+
+Make loyihasi allaqachon React + Tailwind kodi. Uni tortib olishning hojati
+yo'q — Make ichida kodni ochib, to'g'ridan-to'g'ri yuklab olish kerak.
+Bu skript Make faylidan deyarli hech narsa topmaydi.
+
+Baribir urinib ko'raman...
+`);
+}
 const nodeId = (nodeArg ?? target.match(/node-id=([0-9%3A-]+)/)?.[1] ?? "")
   .replace(/%3A/gi, ":")
   .replace("-", ":");
@@ -35,7 +65,14 @@ const api = async (path) => {
   const res = await fetch(`https://api.figma.com/v1/${path}`, {
     headers: { "X-Figma-Token": TOKEN },
   });
-  if (!res.ok) throw new Error(`Figma ${res.status} ${res.statusText} — ${path}`);
+  if (!res.ok) {
+    const why = {
+      403: "token noto'g'ri, muddati o'tgan, yoki bu faylga ruxsati yo'q",
+      404: "bunday fayl yo'q — havolani tekshiring",
+      429: "so'rov ko'p ketdi, bir necha daqiqadan keyin urinib ko'ring",
+    }[res.status];
+    throw new Error(`Figma ${res.status} ${res.statusText}${why ? ` — ${why}` : ""} (${path})`);
+  }
   return res.json();
 };
 
