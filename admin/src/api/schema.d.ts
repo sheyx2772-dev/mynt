@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+    "/buyurtmalar/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Buyurtma holati
+         * @description To'lovdan keyin shu yerdan tekshiriladi.
+         */
+        get: operations["buyurtma"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/chiqish": {
         parameters: {
             query?: never;
@@ -95,6 +115,46 @@ export interface paths {
          * @description Hisob talab qilinmaydi — bu kartani tegizgan odam to'ldiradigan forma.
          */
         post: operations["vizitka-qoldirish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/qidirish/{raqam}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Raqam boshmi va qancha turadi
+         * @description Hisob talab qilinmaydi — bu qidiruv.
+         */
+        get: operations["raqamni-tekshirish"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/qidirish/{raqam}/olish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Raqamni band qilib, buyurtma ochish
+         * @description Raqam 30 daqiqaga band qilinadi va to'lov tasdiqlangach egangizga o'tadi.
+         */
+        post: operations["raqamni-band-qilish"];
         delete?: never;
         options?: never;
         head?: never;
@@ -256,6 +316,19 @@ export interface components {
         };
         AliveOutputHeader: {
             CacheControl: string;
+        };
+        BuyInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/BuyInputBody.json
+             */
+            readonly $schema?: string;
+            ism: string;
+        };
+        Checkout: {
+            click?: string;
+            payme?: string;
         };
         ConfirmLinkInputBody: {
             /**
@@ -458,6 +531,26 @@ export interface components {
             readonly $schema?: string;
             account: components["schemas"]["AccountBody"];
         };
+        Order: {
+            /** Format: date-time */
+            band_muddati?: string;
+            /** @enum {string} */
+            holat: "pending" | "paid" | "cancelled" | "failed";
+            id: string;
+            raqam: string;
+            /** Format: int64 */
+            summa: number;
+            tolov?: components["schemas"]["Checkout"];
+        };
+        OrderOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/OrderOutputBody.json
+             */
+            readonly $schema?: string;
+            buyurtma: components["schemas"]["Order"];
+        };
         ProfileInput: {
             /**
              * Format: uri
@@ -531,6 +624,20 @@ export interface components {
             /** @example nfc */
             manba: string;
         };
+        State: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/State.json
+             */
+            readonly $schema?: string;
+            bosh: boolean;
+            harflar: string;
+            /** Format: int64 */
+            narx: number;
+            raqam: string;
+            raqamlar: string;
+        };
         StatsOutputBody: {
             /**
              * Format: uri
@@ -551,6 +658,37 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    buyurtma: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrderOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     chiqish: {
         parameters: {
             query?: never;
@@ -697,6 +835,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LeaveLeadOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "raqamni-tekshirish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["State"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "raqamni-band-qilish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BuyInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrderOutputBody"];
                 };
             };
             /** @description Error */

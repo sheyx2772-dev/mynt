@@ -39,6 +39,17 @@ type Config struct {
 	SupabaseURL            string
 	SupabaseServiceRoleKey string
 
+	// Which payment providers can take money. Both optional: with neither, a
+	// number is claimed outright and free, which is what development wants and
+	// what the website already does — the two must not disagree about whether
+	// a number costs anything.
+	//
+	// Only the identifiers are here. The secret keys stay in the website, which
+	// is where the providers call back and where the protocol is implemented.
+	PaymeMerchantID string
+	ClickServiceID  string
+	ClickMerchantID string
+
 	// Sending account for the sign-in mail. Empty means no provider is
 	// configured, and in development the link is written to the log instead.
 	ResendAPIKey string
@@ -68,6 +79,9 @@ func Load() (Config, error) {
 		SiteURL:                withDefault("SITE_URL", "https://flex.com.uz"),
 		SupabaseURL:            strings.TrimSuffix(os.Getenv("SUPABASE_URL"), "/"),
 		SupabaseServiceRoleKey: os.Getenv("SUPABASE_SERVICE_ROLE_KEY"),
+		PaymeMerchantID:        os.Getenv("PAYME_MERCHANT_ID"),
+		ClickServiceID:         os.Getenv("CLICK_SERVICE_ID"),
+		ClickMerchantID:        os.Getenv("CLICK_MERCHANT_ID"),
 		ResendAPIKey:           os.Getenv("RESEND_API_KEY"),
 		MailFrom:               withDefault("MAIL_FROM", "Flex <kirish@flex.com.uz>"),
 		TrustProxy:             os.Getenv("TRUST_PROXY") == "true",
