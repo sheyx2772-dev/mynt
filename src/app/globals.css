@@ -570,10 +570,13 @@
  * the last item with a second class; this one goes away with `last:bg-none`,
  * and a row can still have a radius and a pressed state over the top of it. */
 .rule {
+  /* Drawn from the text colour rather than from a fixed ink, so the same class
+     gives a dark hairline on a pale sheet and a pale one on a dark page. It was
+     a literal near-black, which on a dark theme is a line nobody can see. */
   background-image: linear-gradient(
     to right,
-    rgb(14 10 27 / 0.12),
-    rgb(14 10 27 / 0.12)
+    color-mix(in oklab, currentColor 16%, transparent),
+    color-mix(in oklab, currentColor 16%, transparent)
   );
   background-position: bottom;
   background-repeat: no-repeat;

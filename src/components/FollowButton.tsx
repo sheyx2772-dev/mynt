@@ -9,10 +9,13 @@ export default function FollowButton({
   handle,
   initialFollowing,
   labels,
+  className,
 }: {
   handle: string;
   initialFollowing: boolean;
   labels: { follow: string; following: string };
+  /** The shape, supplied by whichever layout is rendering it. */
+  className?: string;
 }) {
   const [following, setFollowing] = useState(initialFollowing);
   const [error, setError] = useState<string | null>(null);
@@ -43,9 +46,10 @@ export default function FollowButton({
         onClick={onClick}
         disabled={pending}
         className={
-          following
+          className ??
+          (following
             ? "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute"
-            : "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5"
+            : "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5")
         }
       >
         {following ? (

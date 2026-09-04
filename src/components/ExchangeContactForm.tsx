@@ -32,6 +32,7 @@ export default function ExchangeContactForm({
   handle,
   source,
   t,
+  className,
 }: {
   handle: string;
   source?: string;
@@ -40,6 +41,8 @@ export default function ExchangeContactForm({
   // component. Resolving them on the server is also the only place the owner's
   // name is already known.
   t: Words;
+  /** The shape, supplied by whichever layout is rendering it. */
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [sent, setSent] = useState(false);
@@ -48,7 +51,12 @@ export default function ExchangeContactForm({
 
   if (sent) {
     return (
-      <div className="flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute">
+      <div
+        className={
+          className ??
+          "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute"
+        }
+      >
         <Check className="h-5 w-5" />
         {t.sent}
       </div>
@@ -59,7 +67,10 @@ export default function ExchangeContactForm({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5"
+        className={
+          className ??
+          "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5"
+        }
       >
         <UserRoundPlus className="h-5 w-5" />
         {t.sendContact}

@@ -16,6 +16,11 @@ import LinkIcon from "@/components/LinkIcon";
 //
 // The accent is a theme token, so the four brand colourways in the reference
 // come from the theme rather than from four copies of this file.
+//
+// Every muted word here is `page-mute` rather than `mute`. There is no sheet
+// on this layout — the text is printed straight onto the ground — and `mute`
+// is the tone measured against the sheet, which on a dark theme leaves these
+// labels too dim to read.
 
 export type GridAction = {
   /** Which glyph. The four platform names go to LinkIcon; the rest are ours. */
@@ -50,6 +55,9 @@ export default function NfcCardProfile({
   websiteLabel = "Website",
   about,
   labels,
+  addToContacts,
+  share,
+  children,
 }: {
   name: string;
   org?: string | null;
@@ -65,6 +73,14 @@ export default function NfcCardProfile({
   websiteLabel?: string;
   about?: { title: string; body: string; logo?: React.ReactNode } | null;
   labels: { addToContacts: string; share: string };
+  /** Supplied by the page: the vCard button and the share button. Rendered in
+   *  place of the reference's two, which do nothing. */
+  addToContacts?: React.ReactNode;
+  share?: React.ReactNode;
+  /** Everything the reference does not have and this product does: the number,
+   *  the tabs, the services, the posts. Inside the same padding so the widths
+   *  line up with the grid above them. */
+  children?: React.ReactNode;
 }) {
   const initials = name
     .split(" ")
@@ -110,7 +126,7 @@ export default function NfcCardProfile({
               className="size-22 rounded-full border-4 border-paper object-cover"
             />
           ) : (
-            <div className="flex size-22 items-center justify-center rounded-full border-4 border-paper bg-slab text-[26px] font-bold text-on-slab">
+            <div className="flex size-22 items-center justify-center rounded-full border-4 border-paper bg-sheet text-[26px] font-bold text-ink">
               {initials}
             </div>
           )}
@@ -125,7 +141,7 @@ export default function NfcCardProfile({
               <span className="flex size-8 items-center justify-center rounded-full bg-lime text-on-accent">
                 <MapPin className="size-4" strokeWidth={2.2} />
               </span>
-              <span className="text-[10px] leading-none text-mute">Location</span>
+              <span className="text-[10px] leading-none text-page-mute">Location</span>
             </a>
           )}
         </div>
@@ -157,20 +173,24 @@ export default function NfcCardProfile({
               >
                 <ActionGlyph kind={a.kind} />
               </a>
-              <span className="text-[10px] leading-none text-mute">{a.label}</span>
+              <span className="text-[10px] leading-none text-page-mute">{a.label}</span>
             </li>
           ))}
         </ul>
 
         <div className="mt-6 grid grid-cols-2 gap-2">
-          <button className="flex h-10 items-center justify-center gap-1.5 rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase">
-            <UserPlus className="size-3.5" strokeWidth={2.4} />
-            {labels.addToContacts}
-          </button>
-          <button className="flex h-10 items-center justify-center gap-1.5 rounded-md bg-lime text-[11px] font-bold tracking-[0.04em] text-on-accent uppercase">
-            <Share2 className="size-3.5" strokeWidth={2.4} />
-            {labels.share}
-          </button>
+          {addToContacts ?? (
+            <span className="flex h-10 items-center justify-center gap-1.5 rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase">
+              <UserPlus className="size-3.5" strokeWidth={2.4} />
+              {labels.addToContacts}
+            </span>
+          )}
+          {share ?? (
+            <span className="flex h-10 items-center justify-center gap-1.5 rounded-md bg-lime text-[11px] font-bold tracking-[0.04em] text-on-accent uppercase">
+              <Share2 className="size-3.5" strokeWidth={2.4} />
+              {labels.share}
+            </span>
+          )}
         </div>
 
         {websiteHref && (
@@ -188,14 +208,14 @@ export default function NfcCardProfile({
           <>
             <div className="mt-8 flex items-center gap-3">
               <span className="h-px flex-1 bg-ink/12" aria-hidden />
-              <Link2 className="size-4 text-mute" />
+              <Link2 className="size-4 text-page-mute" />
               <span className="h-px flex-1 bg-ink/12" aria-hidden />
             </div>
 
             <h2 className="mt-5 text-center text-[19px] leading-tight font-bold text-balance">
               {about.title}
             </h2>
-            <p className="mt-3 text-center text-[13px] leading-relaxed text-mute">
+            <p className="mt-3 text-center text-[13px] leading-relaxed text-page-mute">
               {about.body}
             </p>
 
@@ -206,6 +226,8 @@ export default function NfcCardProfile({
             )}
           </>
         )}
+
+        {children}
       </div>
     </div>
   );

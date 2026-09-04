@@ -20,11 +20,14 @@ export default function RecommendButton({
   count,
   recommended,
   labels,
+  className,
 }: {
   handle: string;
   count: number;
   recommended: boolean;
   labels: { recommend: string; recommended: string };
+  /** The shape, supplied by whichever layout is rendering it. */
+  className?: string;
 }) {
   const [on, setOn] = useState(recommended);
   const [total, setTotal] = useState(count);
@@ -49,9 +52,10 @@ export default function RecommendButton({
         }
         disabled={pending}
         className={
-          on
+          className ??
+          (on
             ? "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute"
-            : "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5"
+            : "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5")
         }
       >
         <BadgeCheck className="size-5 shrink-0" />

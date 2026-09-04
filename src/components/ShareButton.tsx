@@ -10,7 +10,19 @@ import { Share2, Check } from "lucide-react";
 // button that issues it, the source would be recorded and never produced —
 // which is the state this was in until now.
 
-export default function ShareButton({ handle, name }: { handle: string; name: string }) {
+export default function ShareButton({
+  handle,
+  name,
+  className,
+  label,
+}: {
+  handle: string;
+  name: string;
+  /** The shape, supplied by whichever layout is rendering it. */
+  className?: string;
+  /** Set where the layout wants words rather than a glyph alone. */
+  label?: string;
+}) {
   const [copied, setCopied] = useState(false);
   // Shown when the clipboard refuses. Some browsers deny the write outright,
   // and a button that then does nothing looks broken — so the link is put on
@@ -66,9 +78,13 @@ export default function ShareButton({ handle, name }: { handle: string; name: st
       onClick={share}
       aria-label="Profilni ulashish"
       title="Profilni ulashish"
-      className="flex h-11 w-11 items-center justify-center rounded-full border border-line-2 bg-white text-ink-2 transition-colors active:bg-fill"
+      className={
+        className ??
+        "flex h-11 w-11 items-center justify-center rounded-full border border-line-2 bg-white text-ink-2 transition-colors active:bg-fill"
+      }
     >
-      {copied ? <Check className="h-5 w-5" /> : <Share2 className="h-5 w-5" />}
+      {copied ? <Check className="size-4" /> : <Share2 className="size-4" />}
+      {label}
     </button>
   );
 }

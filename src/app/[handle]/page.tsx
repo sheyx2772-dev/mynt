@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { after } from "next/server";
 import type { Metadata } from "next";
-import { Clock, Eye, Nfc, Phone, Send } from "lucide-react";
+import { Clock, Eye, Nfc } from "lucide-react";
 import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRarity } from "@/lib/pricing";
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
@@ -19,7 +19,8 @@ import LangSwitch from "@/components/LangSwitch";
 import Mark from "@/components/Mark";
 import MenuView from "@/components/MenuView";
 import Plate from "@/components/ui/Plate";
-import CardObject from "@/components/ui/CardObject";
+import NfcCardProfile from "@/components/ui/NfcCardProfile";
+import ShareButton from "@/components/ShareButton";
 import MenuRequests from "@/components/MenuRequests";
 import { getVenueByHandle, getMenu } from "@/lib/menu";
 import ActionRow from "@/components/ActionRow";
@@ -43,18 +44,6 @@ import { listPostsForHandle } from "@/lib/posts";
 import { isFollowing } from "@/lib/follows";
 import FollowButton from "@/components/FollowButton";
 import PostList from "@/components/PostList";
-
-// The two button shapes this page uses, named once.
-//
-// A raised slab in ink for the things a stranger actually came to do — ring,
-// message — and a pressed-in one in paper for the things they might. The
-// difference is real: one sticks up off the sheet and moves down a pixel when
-// pressed, the other is already pressed into it.
-const inkButton =
-  "flex h-14 items-center justify-center gap-2.5 rounded-xl bg-slab text-[16px] font-semibold text-on-slab shadow-slab active:translate-y-px active:shadow-none";
-
-const paperButton =
-  "flex h-14 items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 text-[16px] font-medium text-ink shadow-deboss active:bg-ink/5";
 
 export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
@@ -239,400 +228,347 @@ async function VanityHandlePage({
     const banner =
       profile.bannerUrl ?? profile.team?.logoUrl ?? cardDesign(profile.cardDesign).image ?? null;
 
-    // Two quick actions above the fold, because a stranger holding a phone
-    // wants to ring or message and nothing else. Derived rather than
-    // configured: whatever the owner actually filled in.
-    const telegram = profile.links.find((l) => /telegram/i.test(l.label));
-    const telegramIndex = telegram ? profile.links.indexOf(telegram) : -1;
+    // The eight the grid can hold, in the order the reference puts them:
+    // ours first — write, ring, book, open — then whichever platforms the
+    // owner actually filled in. Anything past eight keeps its place in the
+    // ledger further down rather than being dropped.
+    const GRID_PLATFORMS = ["LinkedIn", "Instagram", "YouTube", "Telegram", "Facebook", "WhatsApp"];
+
+    const gridActions: { kind: string; label: string; href: string }[] = [];
+    if (profile.contactEmail) {
+      gridActions.push({
+        kind: "email",
+        label: t.email,
+        href: `mailto:${profile.contactEmail}`,
+      });
+    }
+    if (profile.phone) {
+      gridActions.push({
+        kind: "call",
+        label: t.call,
+        href: `tel:${profile.phone.replace(/[^0-9+]/g, "")}`,
+      });
+    }
+    const meeting = profile.links.findIndex((l) => l.label === "Uchrashuv");
+    if (meeting >= 0) {
+      gridActions.push({
+        kind: "calendar",
+        label: t.meeting,
+        href: `/${normalized}/go?to=${meeting}`,
+      });
+    }
+    const site = profile.links.findIndex((l) => l.label === "Veb-sayt");
+    if (site >= 0) {
+      gridActions.push({
+        kind: "connect",
+        label: t.website,
+        href: `/${normalized}/go?to=${site}`,
+      });
+    }
+    for (const label of GRID_PLATFORMS) {
+      if (gridActions.length >= 8) break;
+      const at = profile.links.findIndex((l) => l.label === label);
+      if (at >= 0) {
+        gridActions.push({ kind: label, label, href: `/${normalized}/go?to=${at}` });
+      }
+    }
+
+    const inGrid = new Set(gridActions.map((a) => a.href));
+    const restLinks = profile.links
+      .map((link, index) => ({ link, index }))
+      .slice(0, profile.plan === "premium" ? undefined : FREE_LINK_LIMIT)
+      .filter(({ index }) => !inGrid.has(`/${normalized}/go?to=${index}`));
 
     return (
-      // A card on a desk, with a sheet of paper slid under it.
-      //
-      // The stranger reading this has just touched a piece of plastic, so the
-      // screen answers with that piece of plastic and then puts the paperwork
-      // underneath. Everything below the card is one continuous sheet: the
-      // tabs are cut from it, and the sections are ruled rather than boxed,
-      // because a document does not have cards inside it.
-      // The theme belongs to the card the owner bought, so it is read from
-      // the design rather than from a setting: somebody who paid for the gold
+      // The theme belongs to the card the owner bought, so it is read from the
+      // design rather than from a setting: somebody who paid for the gold
       // engraving sees gold when a stranger taps it, and that is a rank rather
-      // than a paint colour — one the competitor cannot copy without making
-      // the cards too.
+      // than a paint colour — one the competitor cannot copy without making the
+      // cards too.
       <div
         data-theme={designTheme(profile.cardDesign)}
-        className="themed min-h-full pb-32 text-page-ink"
+        className="themed min-h-full pb-28"
       >
         {/* Keeps the app bar off somebody else's card. */}
         <span data-no-app-bar hidden />
 
-        <main className="mx-auto flex w-full max-w-[460px] flex-col pt-8">
-          <CardObject n={normalized} name={profile.name} artwork={banner} />
-
-          {/* Slid under the card, and casting its shadow upward — which is what
-              tells the eye which of the two is on top. */}
-          <div className="relative z-10 -mt-12 mx-3 rounded-2xl bg-sheet px-5 pt-16 pb-6 text-ink shadow-sheet">
-            <div className="flex items-end gap-4">
-              <div className="relative -mt-10 shrink-0">
-                {profile.avatarUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- external R2 URL, avoids next.config remotePatterns coupling
-                  <img
-                    src={profile.avatarUrl}
-                    alt={profile.name}
-                    width={96}
-                    height={96}
-                    className="size-24 rounded-[14px] border-[3px] border-sheet bg-ink/[0.04] object-cover shadow-photo"
-                  />
-                ) : (
-                  <div className="flex size-24 items-center justify-center rounded-[14px] border-[3px] border-sheet bg-slab text-[28px] font-semibold text-on-slab shadow-photo">
-                    {profile.name
-                      .split(" ")
-                      .map((part) => part[0])
-                      .join("")
-                      .slice(0, 2)}
-                  </div>
-                )}
-              </div>
-
-              <div className="min-w-0 pb-1">
-                <h1 className="text-[24px] leading-tight font-semibold tracking-[-0.01em] text-balance">
-                  {profile.name}
-                </h1>
-                {(profile.position || profile.company) && (
-                  <p className="mt-1 text-[16px] leading-6 text-mute">
-                    {profile.position}
-                    {profile.position && profile.company && " · "}
-                    {profile.company && (
-                      <span className="font-medium text-ink">{profile.company}</span>
-                    )}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-5">
-              <Plate n={normalized} size="lg" />
-            </div>
-
-            {profile.bio && (
-              <p className="mt-5 text-[16px] leading-relaxed text-ink/85 text-pretty">
-                {profile.bio}
-              </p>
-            )}
-
-            {profile.tags.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-2">
-                {profile.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="inline-flex h-9 items-center rounded-lg bg-ink/[0.04] px-3 text-[16px] text-mute shadow-deboss"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {(profile.phone || telegram) && (
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                {profile.phone && (
-                  <a
-                    href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
-                    className={inkButton}
-                  >
-                    <Phone className="size-5" />
-                    {t.call}
-                  </a>
-                )}
-                {telegram && (
-                  <a
-                    href={`/${normalized}/go?to=${telegramIndex}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={inkButton}
-                  >
-                    <Send className="size-5" />
-                    Telegram
-                  </a>
-                )}
-              </div>
-            )}
-
-            {!isOwner && (
-              <div className="mt-3 flex flex-col gap-3">
-                {/* A pair, so they sit as a pair. Stacked, each one read as a
-                    separate decision and the sheet grew two rows taller for
-                    nothing. */}
-                <div className="grid grid-cols-2 gap-3">
-                  <RecommendButton
-                    handle={normalized}
-                    count={profile.recommendCount}
-                    recommended={viewerRecommends}
-                    labels={{ recommend: t.recommend, recommended: t.recommended }}
-                  />
-
-                  <FollowButton
-                    handle={normalized}
-                    initialFollowing={following}
-                    labels={{ follow: t.follow, following: t.following }}
-                  />
-                </div>
-
-                {/* Who vouched, by their own handle. A name is a claim; a
-                    handle is a profile the reader can open and judge. */}
-                {recommenders.length > 0 && (
-                  <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[16px] leading-6 text-mute">
-                    <span>{t.whoRecommended}</span>
-                    {recommenders.map((r) => (
-                      <Link
-                        key={r.handle}
-                        href={`/${r.handle}`}
-                        title={r.name}
-                        className="font-mono transition-colors hover:text-ink"
-                      >
-                        {r.handle}
-                      </Link>
-                    ))}
-                  </p>
-                )}
-
-                {/* Premium, and only for a visitor: the owner has no reason to
-                    send themselves a contact, and seeing the form on their own
-                    page would read as something they are meant to fill in. */}
-                {profile.plan === "premium" && (
-                  <ExchangeContactForm
-                    handle={normalized}
-                    source={source ?? undefined}
-                    t={{
-                      sent: t.sent,
-                      sendContact: t.sendContact,
-                      reachYou: t.reachYou(firstName),
-                      contactHint: t.contactHint(firstName),
-                      yourName: t.yourName,
-                      phone: t.phone,
-                      company: t.company,
-                      note: t.note,
-                      send: t.send,
-                      sending: t.sending,
-                      cancel: t.cancel,
-                    }}
-                  />
-                )}
-              </div>
-            )}
-
-            <dl className="mt-5 flex items-center gap-5 text-[16px] leading-6 text-mute">
-              <div className="flex items-center gap-2">
-                <Eye className="size-4" />
-                <dt className="sr-only">{t.views}</dt>
-                <dd>
-                  <span className="font-medium text-ink tabular-nums">
-                    {profile.viewCount}
-                  </span>{" "}
-                  {t.views.toLowerCase()}
-                </dd>
-              </div>
-              {lastSeen && (
-                <>
-                  <span className="size-1 rounded-full bg-mute/50" aria-hidden />
-                  <div className="flex items-center gap-2">
-                    <Clock className="size-4" />
-                    <dt className="sr-only">{t.lastSeen}</dt>
-                    <dd>{lastSeen}</dd>
-                  </div>
-                </>
-              )}
-            </dl>
+        <NfcCardProfile
+          name={profile.name}
+          org={profile.company}
+          role={profile.position}
+          // The band carries the artwork of the card they actually hold, which
+          // is the one thing here nobody else can print.
+          bandImage={banner}
+          logo={
+            <span className="text-[15px] font-black tracking-[0.24em] text-on-accent uppercase">
+              FLEX
+            </span>
+          }
+          avatarUrl={profile.avatarUrl}
+          locationHref={
+            profile.city ? `/rezidentlar?q=${encodeURIComponent(profile.city)}` : null
+          }
+          actions={gridActions}
+          websiteHref={site >= 0 ? `/${normalized}/go?to=${site}` : null}
+          websiteLabel={t.website}
+          about={profile.bio ? { title: profile.name, body: profile.bio } : null}
+          labels={{ addToContacts: t.saveContact, share: t.share }}
+          addToContacts={
+            !isOwner ? (
+              <SaveContactButton
+                fullName={profile.name}
+                handle={normalized}
+                bio={profile.bio}
+                phone={profile.phone}
+                email={profile.contactEmail}
+                position={profile.position}
+                company={profile.company}
+                label={t.saveContact}
+                savedLabel={t.contactSaved}
+                className="flex h-10 w-full items-center justify-center gap-1.5 rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
+              />
+            ) : undefined
+          }
+          share={
+            <ShareButton
+              handle={normalized}
+              name={profile.name}
+              label={t.share}
+              className="flex h-10 w-full items-center justify-center gap-1.5 rounded-md bg-lime text-[11px] font-bold tracking-[0.04em] text-on-accent uppercase"
+            />
+          }
+        >
+          {/* The number. Not in the reference, because the reference is not
+              selling one — here it is the product, so it is stamped under the
+              card rather than left off. */}
+          <div className="mt-8 flex justify-center">
+            <Plate n={normalized} size="md" />
           </div>
 
-          {/* Folder tabs, cut from the sheet below them. The active one has no
-              bottom edge — it joins the paper it belongs to — and the inactive
-              one sits recessed behind. */}
-          <div className="mx-3 mt-4">
-            <div className="flex gap-1.5 px-1">
-              <Link
-                href={`/${normalized}`}
-                className={
-                  tab === "vizitka"
-                    ? "relative z-10 flex h-14 flex-1 items-center justify-center rounded-t-xl bg-sheet text-[16px] font-semibold text-ink shadow-tab"
-                    : "flex h-14 flex-1 items-center justify-center rounded-t-xl bg-ink/[0.045] text-[16px] font-medium text-mute active:bg-ink/10"
-                }
-              >
-                {t.card}
-              </Link>
-              <Link
-                href={`/${normalized}?bolim=postlar`}
-                className={
-                  tab === "postlar"
-                    ? "relative z-10 flex h-14 flex-1 items-center justify-center gap-2 rounded-t-xl bg-sheet text-[16px] font-semibold text-ink shadow-tab"
-                    : "flex h-14 flex-1 items-center justify-center gap-2 rounded-t-xl bg-ink/[0.045] text-[16px] font-medium text-mute active:bg-ink/10"
-                }
-              >
-                {t.posts}
-                {profile.postCount > 0 && (
-                  <span className="tabular-nums text-mute">{profile.postCount}</span>
-                )}
-              </Link>
+          {!isOwner && (
+            <div className="mt-6 grid grid-cols-2 gap-2">
+              <RecommendButton
+                handle={normalized}
+                count={profile.recommendCount}
+                recommended={viewerRecommends}
+                labels={{ recommend: t.recommend, recommended: t.recommended }}
+                className="flex h-10 w-full items-center justify-center gap-1.5 rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
+              />
+              <FollowButton
+                handle={normalized}
+                initialFollowing={following}
+                labels={{ follow: t.follow, following: t.following }}
+                className="flex h-10 w-full items-center justify-center gap-1.5 rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
+              />
             </div>
+          )}
 
-            <div className="relative z-10 rounded-2xl bg-sheet px-5 pt-2 pb-6 text-ink shadow-sheet">
-              {tab === "vizitka" && (
-                <div className="flex flex-col gap-8">
-                  <section>
-                    <h2 className="rule pb-3 text-[16px] font-semibold tracking-[0.1em] uppercase">
-                      {t.contacts}
-                    </h2>
-                    <ul className="flex flex-col">
-                      {profile.phone && (
-                        <ActionRow
-                          label={t.call}
-                          icon="call"
-                          value={profile.phone}
-                          href={`tel:${profile.phone.replace(/[^0-9+]/g, "")}`}
-                        />
-                      )}
-                      {profile.contactEmail && (
-                        <ActionRow
-                          label={t.email}
-                          icon="email"
-                          value={profile.contactEmail}
-                          href={`mailto:${profile.contactEmail}`}
-                        />
-                      )}
-                      {profile.city && (
-                        <ActionRow
-                          label={t.address}
-                          icon="Veb-sayt"
-                          value={profile.city}
-                          href={`/rezidentlar?q=${encodeURIComponent(profile.city)}`}
-                        />
-                      )}
-                      {/* Stored in full, shown by plan: an owner who fills in
-                          eight and lets premium lapse keeps all eight in the
-                          form and gets them back on renewal. */}
-                      {/* Labelled with the company's name rather than
-                          "Veb-sayt", which the member may also have: two rows
-                          reading the same word and pointing at different
-                          places is worse than either one alone. */}
-                      {profile.team?.website && (
-                        <ActionRow
-                          label={profile.team.name}
-                          icon="Veb-sayt"
-                          value={linkValue({ label: "Veb-sayt", href: profile.team.website })}
-                          href={profile.team.website}
-                          external
-                        />
-                      )}
+          {/* Who vouched, by their own handle. A name is a claim; a handle is a
+              profile the reader can open and judge. */}
+          {recommenders.length > 0 && (
+            <p className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[13px] leading-5 text-mute">
+              <span>{t.whoRecommended}</span>
+              {recommenders.map((r) => (
+                <Link key={r.handle} href={`/${r.handle}`} title={r.name} className="font-mono">
+                  {r.handle}
+                </Link>
+              ))}
+            </p>
+          )}
 
-                      {profile.links
-                        .map((link, index) => ({ link, index }))
-                        .slice(0, profile.plan === "premium" ? undefined : FREE_LINK_LIMIT)
-                        .map(({ link, index }) => (
-                          <ActionRow
-                            key={link.href}
-                            // A platform names itself; only "Uchrashuv" and
-                            // "Veb-sayt" are ours to translate.
-                            label={
-                              link.label === "Uchrashuv"
-                                ? t.meeting
-                                : link.label === "Veb-sayt"
-                                  ? t.website
-                                  : link.label
-                            }
-                            icon={link.label}
-                            value={linkValue(link)}
-                            // Routed through /go so the click is counted; the
-                            // destination is resolved from this index
-                            // server-side, not from the URL.
-                            href={`/${normalized}/go?to=${index}`}
-                            external
-                          />
-                        ))}
-                    </ul>
-                  </section>
+          {/* Premium, and only for a visitor: the owner has no reason to send
+              themselves a contact, and seeing the form on their own page would
+              read as something they are meant to fill in. */}
+          {!isOwner && profile.plan === "premium" && (
+            <div className="mt-3">
+              <ExchangeContactForm
+                handle={normalized}
+                source={source ?? undefined}
+                t={{
+                  sent: t.sent,
+                  sendContact: t.sendContact,
+                  reachYou: t.reachYou(firstName),
+                  contactHint: t.contactHint(firstName),
+                  yourName: t.yourName,
+                  phone: t.phone,
+                  company: t.company,
+                  note: t.note,
+                  send: t.send,
+                  sending: t.sending,
+                  cancel: t.cancel,
+                }}
+                className="flex h-10 w-full items-center justify-center gap-1.5 rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
+              />
+            </div>
+          )}
 
-                  {profile.services.length > 0 && (
-                    <section>
-                      <h2 className="rule pb-3 text-[16px] font-semibold tracking-[0.1em] uppercase">
-                        {t.services}
-                      </h2>
-                      {/* A printed tariff sheet. The leader dots are not a
-                          flourish — they are what carries the eye from a long
-                          service name across to its price without a rule
-                          under every row. */}
-                      <ul className="flex flex-col">
-                        {profile.services
-                          .slice(0, serviceLimit(profile.plan))
-                          .map((service) => (
-                            <li
-                              key={service.name}
-                              className="rule flex min-h-14 items-baseline gap-3 py-3 last:bg-none"
-                            >
-                              <span className="text-[16px] leading-6 text-pretty">
-                                {service.name}
-                              </span>
-                              <span
-                                aria-hidden
-                                className="mb-1.5 min-w-6 flex-1 self-end border-b-2 border-dotted border-ink/35"
-                              />
-                              {service.price && (
-                                <span className="shrink-0 text-[16px] leading-6 font-semibold tabular-nums whitespace-nowrap">
-                                  {service.price}
-                                </span>
-                              )}
-                            </li>
-                          ))}
-                      </ul>
-                    </section>
-                  )}
+          <dl className="mt-6 flex items-center justify-center gap-5 text-[13px] leading-5 text-mute">
+            <div className="flex items-center gap-1.5">
+              <Eye className="size-4" />
+              <dt className="sr-only">{t.views}</dt>
+              <dd>
+                <span className="font-medium tabular-nums">{profile.viewCount}</span>{" "}
+                {t.views.toLowerCase()}
+              </dd>
+            </div>
+            {lastSeen && (
+              <>
+                <span className="size-1 rounded-full bg-mute/50" aria-hidden />
+                <div className="flex items-center gap-1.5">
+                  <Clock className="size-4" />
+                  <dt className="sr-only">{t.lastSeen}</dt>
+                  <dd>{lastSeen}</dd>
+                </div>
+              </>
+            )}
+          </dl>
 
-                  {profile.commentsOpen && (
-                    <ProfileComments
-                      handle={normalized}
-                      comments={comments}
-                      viewerId={viewer?.id ?? null}
-                      ownerId={profile.userId}
-                      labels={{
-                        title: t.comments,
-                        placeholder: t.commentPlaceholder,
-                        send: t.commentSend,
-                        sending: t.commentSending,
-                        empty: t.commentsEmpty,
-                        signIn: t.commentSignIn,
-                      }}
+          <div className="mt-6 flex justify-center gap-7 border-b border-ink/12">
+            <Link
+              href={`/${normalized}`}
+              className={
+                tab === "vizitka"
+                  ? "-mb-px border-b-2 border-lime pb-2.5 text-[14px] font-bold"
+                  : "-mb-px border-b-2 border-transparent pb-2.5 text-[14px] font-bold text-mute"
+              }
+            >
+              {t.card}
+            </Link>
+            <Link
+              href={`/${normalized}?bolim=postlar`}
+              className={
+                tab === "postlar"
+                  ? "-mb-px flex items-center gap-1.5 border-b-2 border-lime pb-2.5 text-[14px] font-bold"
+                  : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-[14px] font-bold text-mute"
+              }
+            >
+              {t.posts}
+              {profile.postCount > 0 && (
+                <span className="tabular-nums text-mute">{profile.postCount}</span>
+              )}
+            </Link>
+          </div>
+
+          {tab === "vizitka" && (
+            <div className="flex flex-col gap-7">
+              {/* Whatever the eight could not hold. Stored in full, shown by
+                  plan: an owner who fills in twelve and lets premium lapse
+                  keeps all twelve in the form and gets them back on renewal. */}
+              {(restLinks.length > 0 || profile.team?.website) && (
+                <ul className="mt-1 flex flex-col">
+                  {/* Labelled with the company's name rather than "Veb-sayt",
+                      which the member may also have: two rows reading the same
+                      word and pointing at different places is worse than either
+                      one alone. */}
+                  {profile.team?.website && (
+                    <ActionRow
+                      label={profile.team.name}
+                      icon="Veb-sayt"
+                      value={linkValue({ label: "Veb-sayt", href: profile.team.website })}
+                      href={profile.team.website}
+                      external
                     />
                   )}
-                </div>
+                  {restLinks.map(({ link, index }) => (
+                    <ActionRow
+                      key={link.href}
+                      // A platform names itself; only "Uchrashuv" and
+                      // "Veb-sayt" are ours to translate.
+                      label={
+                        link.label === "Uchrashuv"
+                          ? t.meeting
+                          : link.label === "Veb-sayt"
+                            ? t.website
+                            : link.label
+                      }
+                      icon={link.label}
+                      value={linkValue(link)}
+                      // Routed through /go so the click is counted; the
+                      // destination is resolved from this index server-side,
+                      // not from the URL.
+                      href={`/${normalized}/go?to=${index}`}
+                      external
+                    />
+                  ))}
+                </ul>
               )}
 
-              {tab === "postlar" && (
-                <div className="pt-3">
-                  <PostList
-                    posts={posts}
-                    emptyMessage={
-                      isOwner
-                        ? "Hali post yozmadingiz. Kabinetdan birinchi postni joylang."
-                        : t.noPosts
-                    }
-                  />
-                </div>
+              {profile.services.length > 0 && (
+                <section>
+                  <h2 className="rule pb-3 text-[13px] font-bold tracking-[0.12em] uppercase">
+                    {t.services}
+                  </h2>
+                  {/* A printed tariff sheet. The leader dots are not a flourish
+                      — they are what carries the eye from a long service name
+                      across to its price without a rule under every row. */}
+                  <ul className="flex flex-col">
+                    {profile.services.slice(0, serviceLimit(profile.plan)).map((service) => (
+                      <li
+                        key={service.name}
+                        className="rule flex min-h-14 items-baseline gap-3 py-3 last:bg-none"
+                      >
+                        <span className="text-[15px] leading-6 text-pretty">
+                          {service.name}
+                        </span>
+                        <span
+                          aria-hidden
+                          className="mb-1.5 min-w-6 flex-1 self-end border-b-2 border-dotted border-ink/30"
+                        />
+                        {service.price && (
+                          <span className="shrink-0 text-[15px] leading-6 font-bold tabular-nums whitespace-nowrap">
+                            {service.price}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
               )}
 
-              {isOwner && (
-                <Link
-                  href={`/kabinet/${normalized}`}
-                  className={`${paperButton} mt-6 w-full`}
-                >
-                  Tahrirlash
-                </Link>
+              {profile.commentsOpen && (
+                <ProfileComments
+                  handle={normalized}
+                  comments={comments}
+                  viewerId={viewer?.id ?? null}
+                  ownerId={profile.userId}
+                  labels={{
+                    title: t.comments,
+                    placeholder: t.commentPlaceholder,
+                    send: t.commentSend,
+                    sending: t.commentSending,
+                    empty: t.commentsEmpty,
+                    signIn: t.commentSignIn,
+                  }}
+                />
               )}
             </div>
-          </div>
+          )}
 
-          {/* Stamped at the foot of the document, the way a form carries its
-              own reference number. */}
-          <div className="mt-6 flex items-center justify-center gap-3 text-[16px] text-page-mute">
+          {tab === "postlar" && (
+            <div className="mt-4">
+              <PostList
+                posts={posts}
+                emptyMessage={
+                  isOwner
+                    ? "Hali post yozmadingiz. Kabinetdan birinchi postni joylang."
+                    : t.noPosts
+                }
+              />
+            </div>
+          )}
+
+          {isOwner && (
+            <Link
+              href={`/kabinet/${normalized}`}
+              className="mt-6 flex h-10 items-center justify-center rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
+            >
+              Tahrirlash
+            </Link>
+          )}
+
+          <div className="mt-8 flex items-center justify-center gap-3 text-[13px] text-mute">
             <span>FLEX</span>
-            <span className="font-mono font-medium tracking-[0.12em] text-page-ink tabular-nums">
+            <span className="font-mono font-medium tracking-[0.12em] tabular-nums">
               {normalized}
             </span>
             <span aria-hidden>·</span>
@@ -649,43 +585,20 @@ async function VanityHandlePage({
               So it says what the thing is first, and only then offers the
               search.
 
-              Not on premium: "the Flex mark is removed from the page" is a
-              paid promise, and removing a small label while adding a larger
-              block would be keeping the letter of it and breaking the rest. */}
+              Not on premium: "the Flex mark is removed from the page" is a paid
+              promise, and removing a small label while adding a larger block
+              would be keeping the letter of it and breaking the rest. */}
           {profile.plan === "free" && (
-            <div className="mx-3 mt-5 rounded-2xl bg-sheet px-5 py-5 text-ink shadow-sheet">
-              <p className="text-[16px] font-semibold">{t.ownItTitle}</p>
-              <p className="mt-2 text-[16px] leading-relaxed text-mute">
-                {t.ownItLead}
-              </p>
-              <p className="mt-4 mb-2 text-[16px] font-semibold tracking-[0.1em] uppercase">
+            <div className="mt-6 rounded-xl bg-ink/[0.04] px-5 py-5 text-center">
+              <p className="text-[15px] font-bold">{t.ownItTitle}</p>
+              <p className="mt-2 text-[13px] leading-relaxed text-mute">{t.ownItLead}</p>
+              <p className="mt-4 mb-2 text-[12px] font-bold tracking-[0.12em] uppercase">
                 {t.ownItCta}
               </p>
               <ProfileHandleSearch />
             </div>
           )}
-        </main>
-
-        {/* The one lime on this screen, and it stays on it: a stranger who
-            scrolled to the services should not have to scroll back up to save
-            the contact they came for. */}
-        {!isOwner && (
-          <div className="fixed inset-x-0 bottom-0 z-40 bg-gradient-to-t from-paper via-paper/90 to-transparent px-3 pt-8 pb-[calc(12px+env(safe-area-inset-bottom))]">
-            <div className="mx-auto max-w-[460px]">
-              <SaveContactButton
-                fullName={profile.name}
-                handle={normalized}
-                bio={profile.bio}
-                phone={profile.phone}
-                email={profile.contactEmail}
-                position={profile.position}
-                company={profile.company}
-                label={t.saveContact}
-                savedLabel={t.contactSaved}
-              />
-            </div>
-          </div>
-        )}
+        </NfcCardProfile>
       </div>
     );
   }

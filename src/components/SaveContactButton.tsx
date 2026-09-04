@@ -15,6 +15,8 @@ type Props = {
   label: string;
   /** What the button says once the file has been handed over. */
   savedLabel: string;
+  /** The shape, supplied by whichever layout is rendering it. */
+  className?: string;
 };
 
 // vCard treats a comma, a semicolon and a backslash as structure, and a raw
@@ -39,6 +41,7 @@ export default function SaveContactButton({
   company,
   label,
   savedLabel,
+  className,
 }: Props) {
   function handleSave() {
     // Only the fields the owner filled in — an empty TEL line makes a phone
@@ -91,7 +94,10 @@ export default function SaveContactButton({
         if (timer.current) clearTimeout(timer.current);
         timer.current = setTimeout(() => setSaved(false), 1500);
       }}
-      className="flex h-14 w-full items-center justify-center gap-2.5 rounded-xl bg-lime text-[16px] font-semibold text-on-accent shadow-slab transition-transform duration-[120ms] active:translate-y-px active:shadow-none"
+      className={
+        className ??
+        "flex h-14 w-full items-center justify-center gap-2.5 rounded-xl bg-lime text-[16px] font-semibold text-on-accent shadow-slab transition-transform duration-[120ms] active:translate-y-px active:shadow-none"
+      }
     >
       {saved ? (
         <>
