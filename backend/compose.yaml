@@ -1,0 +1,50 @@
+# Postgres and the backend, for development.
+#
+# The database is the reason this file exists: the backend itself runs faster
+# from `go run`, with a rebuild on save, than it does through a container. So
+# `make db` starts only Postgres and is what you want most days; `docker compose
+# up` starts both and is how you check that the image actually works before it
+# goes anywhere.
+
+name: flex
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: flex
+      POSTGRES_PASSWORD: flex
+      POSTGRES_DB: flex
+    ports:
+      # Published so psql, goose and `go run` on the host can reach it. The
+      # bind is to localhost only — an unauthenticated Postgres on 0.0.0.0 is
+      # found by scanners within the hour.
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      # `pg_isready` answers before the server finishes starting, so the check
+      # runs a query instead.
+      test: ["CMD-SHELL", "psql -U flex -d flex -c 'select 1' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # `db` is the service name, which is the hostname inside the compose
+      # network — not the address the host uses.
+      DATABASE_URL: postgres://flex:flex@db:5432/flex?sslmode=disable
+      APP_ENV: development
+      ADDR: ":8090"
+    ports:
+      - "127.0.0.1:8090:8090"
+
+volumes:
+  db-data:

@@ -1,6 +1,6 @@
-# mynt
+# flex
 
-A new Flutter project.
+Flex — raqamli shaxs va NFC profillari.
 
 ## Getting Started
 

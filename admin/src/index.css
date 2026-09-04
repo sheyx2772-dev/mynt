@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* The same tokens the landing site defines, because they are the same brand.
+   Kept as CSS variables rather than imported from the other workspace: the two
+   applications deploy separately and a shared stylesheet would tie their build
+   steps together for four colours. If a third place needs them, they move to a
+   package — not before. */
+@theme {
+  --color-lime: #abff09;
+  /* Data marks need contrast the brand lime cannot give: #abff09 sits at
+     1.2:1 on white. This is the same hue darkened until it passes. */
+  --color-lime-ink: #6b9e00;
+  --color-flex-black: #0e0a1b;
+}
+
+body {
+  background: #ffffff;
+  color: var(--color-flex-black);
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}

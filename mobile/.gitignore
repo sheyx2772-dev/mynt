@@ -46,8 +46,3 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
-
-# Local keys for --dart-define-from-file. Never committed.
-env.json
-env.web.json
-env.phone.json

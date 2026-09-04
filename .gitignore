@@ -1,8 +1,10 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Four applications, four sets of build output. The patterns are unanchored so
+# they match at any depth rather than only at the root — `node_modules` now
+# exists in two places and neither of them is here.
 
-# dependencies
-/node_modules
-/.pnp
+# Node
+node_modules/
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -10,36 +12,57 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
+# Next
+.next/
+out/
+next-env.d.ts
 
-# next.js
-/.next/
-/out/
+# Vite
+dist/
 
-# production
-/build
+# Go — the compiled binary, if it is built in place
+/backend/flex
+/backend/bin/
 
-# misc
+# Flutter
+.dart_tool/
+.flutter-plugins-dependencies
+build/
+*.iml
+# Local Android and iOS build settings, which name paths on one machine.
+/mobile/android/local.properties
+/mobile/android/.gradle/
+/mobile/ios/Pods/
+/mobile/ios/.symlinks/
+/mobile/ios/Flutter/Flutter.podspec
+/mobile/ios/Flutter/flutter_export_environment.sh
+/mobile/ios/Flutter/Generated.xcconfig
+
+# Testing
+coverage/
+
+# Secrets. Every application reads its own .env; none of them is committed.
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+
+# Editors and operating systems
 .DS_Store
 *.pem
+.idea/
+*.swp
 
-# debug
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-!.env.example
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
 
 # PowerPoint leaves these beside a file it has open.
 ~$*

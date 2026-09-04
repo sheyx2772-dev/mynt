@@ -1,8 +1,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The internet is the only permission this app asks for. NFC, the camera
+         and contacts are each declared by the plugin that needs them and are
+         asked for at the moment they are used, where the reason is on screen. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Two settings below are the reason this block is not the generated one.
+
+         allowBackup is off. With it on, `adb backup` and Google's own
+         auto-backup copy the app's private directory off the device — and that
+         directory is where the session lives, so a signed-in phone becomes a
+         signed-in restore on somebody else's phone. dataExtractionRules says
+         the same thing again for Android 12 and later, which asks separately.
+
+         usesCleartextTraffic is off. Android 9 and later already refuse plain
+         HTTP by default, but writing it down means a debug build pointed at a
+         laptop cannot quietly become the shipped behaviour. -->
     <application
-        android:label="mynt"
+        android:label="Flex"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:usesCleartextTraffic="false">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -23,6 +44,23 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <!-- The sign-in link, opened from the mail app.
+                 `autoVerify` makes Android check flex.com.uz for an
+                 assetlinks.json naming this app's signing certificate, and only
+                 then hand it the link without asking. Without that file the
+                 link opens a browser, which is the safe failure: a custom
+                 scheme like flex:// can be claimed by any app on the phone,
+                 and a one-time sign-in token handed to the wrong one is an
+                 account handed over with it. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https"
+                      android:host="flex.com.uz"
+                      android:pathPrefix="/kirish/tasdiq"/>
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
