@@ -26,6 +26,7 @@ const BANNER: Record<string, string> = {
   "itpark":       imgITPark,
   "chamber":      imgStartupGarage,
   "uzreport":     imgICTWeek,
+  "yakubov":           imgYoshlarVentures,
   "yoshlar-agentligi": imgYIA,
   "sadullayev":        imgYIA,
 };
@@ -358,6 +359,7 @@ const BIO: Record<string, string> = {
   "nbu":          "O'zbekiston Respublikasi Markaziy Banki — milliy valyuta barqarorligi, pul-kredit siyosati va mamlakatning butun bank tizimini nazorat qiluvchi davlat muassasasi.",
   "agrobank":     "Agro'sanoat Banki — qishloq xo'jaligi va oziq-ovqat sanoatiga ixtisoslashgan, fermerlar va agrobiznesni kredit bilan ta'minlovchi yetakchi bank.",
   "kapitalbank":  "Kapital Bank — innovatsion raqamli bank xizmatlari, to'lov kartalari va fintech mahsulotlari bilan O'zbekiston bank tizimida zamonaviy yetakchi.",
+  "yakubov":      "Yoshlar Ventures — erta bosqichdagi ta'sischilarni qo'llab-quvvatlovchi venchur fond; Markaziy Osiyo va yoshlar innovatsion ekotizimiga yo'naltirilgan.",
   "uzv-fund":     "Yoshlar Ventures — yosh tadbirkorlar va texnologiya startaplarini seed va Series A bosqichlarda investitsiya, mentorlik hamda tarmoq bilan qo'llab-quvvatlash.",
   "uzfar":        "United Ventures — iqtisodiy islohotlar va tezkor rivojlanish strategiyalarini ishlab chiqish hamda amalga oshirishga ixtisoslashgan strategik investitsiya fondi.",
   "itpark":       "IT Park Uzbekistan — mamlakatimizdagi IT tarmoqni rivojlantirish, startaplarga inkubatsiya, akseleratsiya va soliq imtiyozlarini taqdim etuvchi asosiy ekotizim.",

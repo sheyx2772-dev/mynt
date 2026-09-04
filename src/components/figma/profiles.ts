@@ -251,6 +251,27 @@ export const profiles: Profile[] = [
 
   // ── VENTURE ──────────────────────────────────────────────
   {
+    id: "yakubov",
+    category: "venture",
+    categoryLabel: "Fond Rahbari",
+    name: "Abdulaziz Yakubov",
+    fullName: "Abdulaziz Yakubov",
+    // Title, employer and dates as published on his own LinkedIn profile.
+    position: "Yoshlar Ventures bosh direktori",
+    positionRu: "Генеральный директор Yoshlar Ventures",
+    organization: "Yoshlar Ventures",
+    orgShort: "Yoshlar Ventures",
+    department: "UzCombinator kengashi a'zosi",
+    website: "yoshlarventures.uz",
+    avatar: "/figma-make/abdulaziz-yakubov.jpeg",
+    coverColor: "#1e0e00",
+    coverAccent: "#fb923c",
+    logoText: "YV",
+    socials: [{ type: "linkedin", handle: "abdulaziz-yakubov" }],
+    tags: ["Venchur kapital", "Investitsiya", "Startap"],
+    verified: true,
+  },
+  {
     id: "uzv-fund",
     category: "venture",
     categoryLabel: "Venture Fond",
@@ -261,7 +282,7 @@ export const profiles: Profile[] = [
     organization: "Yoshlar Ventures Fund",
     orgShort: "Yoshlar Ventures",
     department: "Portfolio boshqaruvi",
-    website: "yoshlar.vc",
+    website: "yoshlarventures.uz",
     coverColor: "#1e0e00",
     coverAccent: "#fb923c",
     logoText: "YV",
