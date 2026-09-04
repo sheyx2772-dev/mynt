@@ -332,6 +332,28 @@ export const profiles: Profile[] = [
     tags: ["Startap", "Dizayn", "Mahsulot"],
   },
   {
+    id: "umarov",
+    category: "corp",
+    categoryLabel: "Olimpiya Qo'mitasi",
+    name: "Otabek Umarov",
+    fullName: "Otabek Umarov",
+    // Roles as published on his own LinkedIn profile. The portrait was supplied
+    // by the client, not taken from that profile.
+    position: "O'zbekiston MOQ birinchi vitse-prezidenti",
+    positionRu: "Первый вице-президент НОК Узбекистана",
+    organization: "O'zbekiston Milliy Olimpiya Qo'mitasi",
+    orgShort: "Milliy Olimpiya Qo'mitasi",
+    department: "Osiyo Olimpiya Kengashi vitse-prezidenti · FIA Senati a'zosi",
+    website: "olympic.uz",
+    avatar: "/figma-make/otabek-umarov.jpeg",
+    coverColor: "#10182f",
+    coverAccent: "#f5c451",
+    logoText: "MOQ",
+    socials: [{ type: "linkedin", handle: "otabek-umarov" }],
+    tags: ["Olimpiya harakati", "Sport", "Xalqaro hamkorlik"],
+    verified: true,
+  },
+  {
     id: "sharipov",
     category: "venture",
     categoryLabel: "Fond Rahbari",
@@ -405,8 +427,7 @@ export const profiles: Profile[] = [
     organization: "AloqaVentures",
     orgShort: "AloqaVentures",
     department: "Aloqabank venchur yo'nalishi",
-    // aloqaventures.uz and .com do not resolve; the fund's own address is not
-    // confirmed, and the bank's domain is not the fund's.
+    website: "www.aloqaventures.uz",
     avatar: "/figma-make/sukhrob-gaybulloev.jpeg",
     coverColor: "#062a2e",
     coverAccent: "#2dd4bf",
@@ -426,6 +447,7 @@ export const profiles: Profile[] = [
     organization: "AloqaVentures",
     orgShort: "AloqaVentures",
     department: "Deal sourcing · Startap tahlili",
+    website: "www.aloqaventures.uz",
     avatar: "/figma-make/islombek-sanakulov.jpeg",
     coverColor: "#062a2e",
     coverAccent: "#2dd4bf",

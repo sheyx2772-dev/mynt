@@ -56,6 +56,9 @@ const CFG: Record<string, Cfg> = {
   "uzfar":        { overlay:"linear-gradient(180deg,rgba(5,38,20,.45) 0%,rgba(8,55,30,.84) 100%)",   cardBg:"#052614", bodyBg:"#021209", accent:"#6ee7b7", accent2:"#10b981", iconBg:"#073520" },
   "itpark":       { overlay:"linear-gradient(180deg,rgba(14,48,6,.45) 0%,rgba(22,68,8,.82) 100%)",   cardBg:"#0e3006", bodyBg:"#071803", accent:"#a3e635", accent2:"#84cc16", iconBg:"#174008" },
   "chamber":      { overlay:"linear-gradient(180deg,rgba(28,12,80,.45) 0%,rgba(45,18,120,.84) 100%)",cardBg:"#1c0c50", bodyBg:"#0e0630", accent:"#c4b5fd", accent2:"#8b5cf6", iconBg:"#2a1268" },
+  // Olympic committee — gold on a deeper navy than the city administration's,
+  // so the two do not read as the same card.
+  "umarov":       { overlay:"linear-gradient(180deg,rgba(8,14,28,.35) 0%,rgba(16,24,47,.86) 100%)", cardBg:"#10182f", bodyBg:"#080e1c", accent:"#f5c451", accent2:"#d4a02e", iconBg:"#1a2440" },
   // United Ventures pair — same family as the fund's own card above.
   "sharipov":     { overlay:"linear-gradient(180deg,rgba(5,38,20,.45) 0%,rgba(8,55,30,.84) 100%)", cardBg:"#052614", bodyBg:"#021209", accent:"#6ee7b7", accent2:"#10b981", iconBg:"#073520" },
   "shukurlaev":   { overlay:"linear-gradient(180deg,rgba(5,38,20,.45) 0%,rgba(8,55,30,.84) 100%)", cardBg:"#052614", bodyBg:"#021209", accent:"#6ee7b7", accent2:"#10b981", iconBg:"#073520" },
