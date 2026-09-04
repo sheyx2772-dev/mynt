@@ -54,14 +54,14 @@ class _Checkout extends StatelessWidget {
             if (order.paymeUrl.isNotEmpty) ...[
               LimeButton(
                 label: 'Payme orqali to\'lash',
-                onPressed: () => _open(order.paymeUrl),
+                onPressed: () => _open(context, order.paymeUrl),
               ),
               const SizedBox(height: 10),
             ],
             if (order.clickUrl.isNotEmpty)
               OutlineButton(
                 label: 'Click orqali to\'lash',
-                onPressed: () => _open(order.clickUrl),
+                onPressed: () => _open(context, order.clickUrl),
               ),
             const SizedBox(height: 18),
             Text(
@@ -77,7 +77,16 @@ class _Checkout extends StatelessWidget {
 
   /// Opens the provider's page outside the app, where its address is visible
   /// and where a bank app can take over.
-  void _open(String url) {
-    launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+  ///
+  /// The result is checked. A phone with nothing registered for https — rare,
+  /// but a locked-down work device is one — returns false, and an unchecked
+  /// call is a button that does nothing at all while somebody presses it again.
+  Future<void> _open(BuildContext context, String url) async {
+    final opened = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    if (opened || !context.mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Brauzer ochilmadi. To\'lovni saytdan qiling.')),
+    );
   }
 }

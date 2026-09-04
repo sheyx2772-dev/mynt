@@ -115,7 +115,7 @@ func (s *Store) Buy(ctx context.Context, parsed handles.Parsed, userID, name str
 		Number:        normalized,
 		Amount:        price,
 		Status:        order.Status,
-		Checkout:      s.paid.checkoutFor(order.ID.String(), price),
+		Checkout:      s.paid.checkoutFor(order.ID.String(), price, ReservationFor),
 		ReservedUntil: optionalTime(row.ReservedUntil),
 	}, nil
 }
@@ -172,7 +172,13 @@ func (s *Store) Order(ctx context.Context, id, userID string) (Order, error) {
 	}
 	// Somewhere to pay, but only while paying is still what the order needs.
 	if row.Status == "pending" {
-		order.Checkout = s.paid.checkoutFor(order.ID, order.Amount)
+		// What is left of the reservation, so a page opened now expires with
+		// the number rather than outliving it.
+		left := ReservationFor
+		if row.CreatedAt.Valid {
+			left = time.Until(row.CreatedAt.Time.Add(ReservationFor))
+		}
+		order.Checkout = s.paid.checkoutFor(order.ID, order.Amount, left)
 	}
 	return order, nil
 }

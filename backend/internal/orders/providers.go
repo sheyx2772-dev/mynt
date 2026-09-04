@@ -1,5 +1,7 @@
 package orders
 
+import "time"
+
 // Providers is what is configured to take money, and how to send a buyer there.
 //
 // Both are optional and the site works without either — the number is claimed
@@ -13,10 +15,13 @@ type Providers struct {
 	ClickServiceID  string
 	ClickMerchantID string
 
-	// Where a provider sends the buyer when they are done. Not where the money
-	// is confirmed — that arrives on the website's own callbacks, which are the
-	// endpoints registered in the merchant cabinets.
-	ReturnURL string
+	// Where a provider sends the buyer when they are done — the site, at the
+	// order's own address, which the app also claims as a deep link so that
+	// somebody who paid from the app comes back to the app.
+	//
+	// Not where the money is confirmed. That arrives on the website's own
+	// callbacks, which are the endpoints registered in the merchant cabinets.
+	SiteURL string
 }
 
 func (p Providers) HasPayme() bool { return p.PaymeMerchantID != "" }
@@ -48,13 +53,21 @@ type Checkout struct {
 	Click string `json:"click,omitempty"`
 }
 
-func (p Providers) checkoutFor(orderID string, amountSum int64) Checkout {
+func (p Providers) checkoutFor(orderID string, amountSum int64, validFor time.Duration) Checkout {
+	// Per order, not a constant: a buyer coming back from a payment page should
+	// land on the thing they just paid for, and on a phone that address opens
+	// the app rather than a website they are not signed into.
+	returnURL := ""
+	if p.SiteURL != "" {
+		returnURL = p.SiteURL + "/buyurtma/" + orderID
+	}
+
 	var links Checkout
 	if p.HasPayme() {
-		links.Payme = PaymeCheckoutURL(p.PaymeMerchantID, orderID, amountSum, p.ReturnURL)
+		links.Payme = PaymeCheckoutURL(p.PaymeMerchantID, orderID, amountSum, returnURL, validFor)
 	}
 	if p.HasClick() {
-		links.Click = ClickCheckoutURL(p.ClickServiceID, p.ClickMerchantID, orderID, amountSum, p.ReturnURL)
+		links.Click = ClickCheckoutURL(p.ClickServiceID, p.ClickMerchantID, orderID, amountSum, returnURL)
 	}
 	return links
 }

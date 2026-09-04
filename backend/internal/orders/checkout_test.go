@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 )
 
 // These addresses send somebody to a payment page with an amount on it. A
@@ -12,7 +13,7 @@ import (
 // rather than eyeballed.
 
 func TestPaymeIsGivenTiyinNotSom(t *testing.T) {
-	link := PaymeCheckoutURL("merchant-1", "order-1", 4_500_000, "")
+	link := PaymeCheckoutURL("merchant-1", "order-1", 4_500_000, "", 0)
 
 	payload, err := base64.StdEncoding.DecodeString(strings.TrimPrefix(link, "https://checkout.paycom.uz/"))
 	if err != nil {
@@ -28,12 +29,12 @@ func TestPaymeIsGivenTiyinNotSom(t *testing.T) {
 }
 
 func TestPaymeCarriesTheReturnAddressOnlyWhenThereIsOne(t *testing.T) {
-	with := decode(t, PaymeCheckoutURL("m", "o", 100, "https://flex.com.uz/kabinet"))
-	if !strings.Contains(with, ";c=https://flex.com.uz/kabinet") {
+	with := decode(t, PaymeCheckoutURL("m", "o", 100, "https://flex.com.uz/buyurtma/o", 0))
+	if !strings.Contains(with, ";c=https://flex.com.uz/buyurtma/o") {
 		t.Errorf("qaytish manzili yo'q: %q", with)
 	}
 
-	without := decode(t, PaymeCheckoutURL("m", "o", 100, ""))
+	without := decode(t, PaymeCheckoutURL("m", "o", 100, "", 0))
 	if strings.Contains(without, ";c=") {
 		t.Errorf("bo'sh qaytish manzili qo'shildi: %q", without)
 	}
@@ -77,4 +78,20 @@ func decode(t *testing.T, link string) string {
 		t.Fatalf("payload base64 emas: %v", err)
 	}
 	return string(payload)
+}
+
+func TestPaymeIsToldHowLongThePageStaysPayable(t *testing.T) {
+	// Without it the page is good for Payme's own twelve hours while the number
+	// underneath it is held for thirty minutes — so a buyer could pay for
+	// something somebody else had bought in the meantime.
+	payload := decode(t, PaymeCheckoutURL("m", "o", 100, "", 30*time.Minute))
+	if !strings.Contains(payload, ";ct=1800000") {
+		t.Errorf("muddat yo'q: %q", payload)
+	}
+
+	// A reservation with no time left asks for no page at all rather than one
+	// that is already expired.
+	if payload := decode(t, PaymeCheckoutURL("m", "o", 100, "", 0)); strings.Contains(payload, ";ct=") {
+		t.Errorf("nol muddat qo'shildi: %q", payload)
+	}
 }

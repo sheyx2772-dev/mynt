@@ -25,7 +25,10 @@ class _FlexAppState extends ConsumerState<FlexApp> {
     // Started once, for the life of the app: a sign-in link can arrive while
     // the app is cold, and while it is already open in front of somebody.
     _links = DeepLinks(
-      (token) => ref.read(sessionProvider.notifier).confirm(token),
+      onSignIn: (token) => ref.read(sessionProvider.notifier).confirm(token),
+      // Straight to the order rather than to the cabinet: somebody who has just
+      // paid wants to know about the thing they paid for.
+      onOrder: (id) => ref.read(_routerProvider).push('/buyurtma/$id'),
     )..listen();
   }
 

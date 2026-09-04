@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../brand/palette.dart';
 import '../core/api/errors.dart';
@@ -73,6 +74,11 @@ class _BuyScreenState extends ConsumerState<BuyScreen> {
       if (!mounted) return;
       if (order.needsPayment) {
         await showCheckoutSheet(context, order);
+        // Straight to the order, which asks the server whether the payment
+        // landed. Leaving somebody on a search box after they paid is how a
+        // successful purchase looks like a failed one.
+        if (mounted) context.pushReplacement('/buyurtma/${order.id}');
+        return;
       } else {
         // No provider configured: the number is already theirs.
         ScaffoldMessenger.of(context).showSnackBar(

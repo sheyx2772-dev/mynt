@@ -6,6 +6,7 @@ import 'screens/buy_screen.dart';
 import 'screens/edit_profile_screen.dart';
 import 'screens/leads_screen.dart';
 import 'screens/number_screen.dart';
+import 'screens/order_screen.dart';
 import 'screens/numbers_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'screens/stats_screen.dart';
@@ -57,6 +58,10 @@ GoRouter buildRouter(Ref ref) {
       ),
       GoRoute(path: '/', builder: (_, _) => const NumbersScreen()),
       GoRoute(path: '/olish', builder: (_, _) => const BuyScreen()),
+      GoRoute(
+        path: '/buyurtma/:id',
+        builder: (_, state) => OrderScreen(id: state.pathParameters['id']!),
+      ),
       GoRoute(
         path: '/raqam/:raqam',
         builder: (_, state) => NumberScreen(number: state.pathParameters['raqam']!),

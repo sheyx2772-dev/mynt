@@ -5,8 +5,8 @@ import 'config.dart';
 
 /// Links that open the app from outside it.
 ///
-/// There is one: the sign-in link, which carries a token worth an account for
-/// the next fifteen minutes. That makes this the most security-sensitive entry
+/// Two: the sign-in link, which carries a token worth an account for the next
+/// fifteen minutes, and the address a payment provider returns a buyer to. That makes this the most security-sensitive entry
 /// point in the app, because unlike everything else the input arrives from
 /// somewhere the app did not ask.
 ///
@@ -20,12 +20,15 @@ import 'config.dart';
 /// The token is used and forgotten. It is never stored, never logged, and never
 /// put into a route — a token in a route is a token in a back stack.
 class DeepLinks {
-  DeepLinks(this._confirm);
+  DeepLinks({required this.onSignIn, required this.onOrder});
 
-  /// Called with the token from a valid link. A function rather than a Ref so
-  /// that this class has no opinion about how the app holds its state, and so
-  /// a test can pass one that records what it was given.
-  final void Function(String token) _confirm;
+  /// Called with the token from a valid sign-in link. Functions rather than a
+  /// Ref so that this class has no opinion about how the app holds its state,
+  /// and so a test can pass ones that record what they were given.
+  final void Function(String token) onSignIn;
+
+  /// Called with the id of an order somebody has come back from paying for.
+  final void Function(String orderId) onOrder;
   final _links = AppLinks();
   StreamSubscription<Uri>? _subscription;
 
@@ -45,14 +48,24 @@ class DeepLinks {
   /// by nobody.
   void handle(Uri uri) {
     if (!_isOurs(uri)) return;
-    if (uri.path != '/kirish/tasdiq') return;
 
-    final token = uri.queryParameters['t'];
-    if (token == null || token.isEmpty) return;
+    if (uri.path == '/kirish/tasdiq') {
+      final token = uri.queryParameters['t'];
+      if (token == null || token.isEmpty) return;
 
-    // Spent immediately. If it fails — expired, already used — the session
-    // controller records the error and the sign-in screen shows it.
-    _confirm(token);
+      // Spent immediately. If it fails — expired, already used — the session
+      // controller records the error and the sign-in screen shows it.
+      onSignIn(token);
+      return;
+    }
+
+    // /buyurtma/{id}. The id is not a secret and carries no authority: the
+    // order is read back over an authenticated request, under the caller's own
+    // account, so a link to somebody else's order shows nothing.
+    final segments = uri.pathSegments;
+    if (segments.length == 2 && segments.first == 'buyurtma' && segments[1].isNotEmpty) {
+      onOrder(segments[1]);
+    }
   }
 
   /// Whether a link claims to be from the site this app belongs to.

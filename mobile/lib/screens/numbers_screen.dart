@@ -62,6 +62,10 @@ class NumbersScreen extends ConsumerWidget {
                     name: list[i].displayName,
                     views: list[i].viewCount,
                     premium: list[i].isPremium,
+                    // A reservation is not a number somebody owns. Showing one
+                    // the same way meant it appeared to be theirs and then
+                    // vanished when it lapsed, with no explanation.
+                    reserved: !list[i].isClaimed,
                     onTap: () => context.push('/raqam/${list[i].number}'),
                   ),
                 ),
@@ -98,6 +102,7 @@ class _NumberTile extends StatelessWidget {
     required this.name,
     required this.views,
     required this.premium,
+    required this.reserved,
     required this.onTap,
   });
 
@@ -105,6 +110,7 @@ class _NumberTile extends StatelessWidget {
   final String name;
   final int views;
   final bool premium;
+  final bool reserved;
   final VoidCallback onTap;
 
   @override
@@ -134,7 +140,7 @@ class _NumberTile extends StatelessWidget {
                             color: Brand.black,
                           ),
                         ),
-                        if (premium) ...[
+                        if (premium && !reserved) ...[
                           const SizedBox(width: 8),
                           const _PremiumDot(),
                         ],
@@ -142,8 +148,13 @@ class _NumberTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      name,
-                      style: TextStyle(fontSize: 14, color: Brand.black.withValues(alpha: 0.6)),
+                      reserved ? 'Band qilingan — to\'lov kutilmoqda' : name,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: reserved
+                            ? const Color(0xFFB45309)
+                            : Brand.black.withValues(alpha: 0.6),
+                      ),
                     ),
                   ],
                 ),

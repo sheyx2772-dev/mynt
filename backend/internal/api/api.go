@@ -52,7 +52,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 			PaymeMerchantID: cfg.PaymeMerchantID,
 			ClickServiceID:  cfg.ClickServiceID,
 			ClickMerchantID: cfg.ClickMerchantID,
-			ReturnURL:       cfg.SiteURL + "/kabinet",
+			SiteURL:         cfg.SiteURL,
 		}, cfg.IsDevelopment()),
 	}
 

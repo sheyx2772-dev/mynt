@@ -7,11 +7,13 @@ import 'package:flex/core/deep_links.dart';
 /// arrives from outside the app. These are the links that must not be acted on.
 void main() {
   late List<String> spent;
+  late List<String> orders;
   late DeepLinks links;
 
   setUp(() {
     spent = [];
-    links = DeepLinks(spent.add);
+    orders = [];
+    links = DeepLinks(onSignIn: spent.add, onOrder: orders.add);
   });
 
   test('a link from our own site signs in', () {
@@ -34,12 +36,27 @@ void main() {
     expect(spent, isEmpty);
   });
 
-  test('a link to any other path on our site is ignored', () {
+  test('a link to any other path on our site spends no token', () {
     // Being on the right host is not enough. Only one path spends a token.
     for (final path in ['/', '/MYN042', '/kirish', '/kirish/tasdiq/x']) {
       links.handle(Uri.parse('${Config.siteBaseUrl}$path?t=abc123'));
     }
     expect(spent, isEmpty);
+  });
+
+  test('a return from a payment opens that order', () {
+    links.handle(Uri.parse('${Config.siteBaseUrl}/buyurtma/order-9'));
+    expect(orders, ['order-9']);
+    // The order id carries no authority — it is read back over an
+    // authenticated request — but it is still not a sign-in token.
+    expect(spent, isEmpty);
+  });
+
+  test('an order link from anywhere else is ignored', () {
+    links.handle(Uri.parse('https://evil.com/buyurtma/order-9'));
+    links.handle(Uri.parse('${Config.siteBaseUrl}/buyurtma/'));
+    links.handle(Uri.parse('${Config.siteBaseUrl}/buyurtma/a/b'));
+    expect(orders, isEmpty);
   });
 
   test('a link with no token does nothing', () {

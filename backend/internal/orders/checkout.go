@@ -19,13 +19,14 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+	"time"
 )
 
 // Payme reads a base64 payload out of the path rather than taking query
 // parameters. The field names are theirs: `m` the merchant, `ac.order_id` the
 // account field this merchant is configured with, `a` the amount, `c` where to
 // return the buyer.
-func PaymeCheckoutURL(merchantID, orderID string, amountSum int64, returnURL string) string {
+func PaymeCheckoutURL(merchantID, orderID string, amountSum int64, returnURL string, validFor time.Duration) string {
 	parts := []string{
 		"m=" + merchantID,
 		"ac.order_id=" + orderID,
@@ -36,6 +37,15 @@ func PaymeCheckoutURL(merchantID, orderID string, amountSum int64, returnURL str
 	}
 	if returnURL != "" {
 		parts = append(parts, "c="+returnURL)
+	}
+	// How long the payment page itself stays payable, in milliseconds.
+	//
+	// Without it the page is good for Payme's own twelve hours while the number
+	// underneath it is held for thirty minutes — so a buyer could open it,
+	// leave it for an afternoon, and pay for something somebody else had bought
+	// in the meantime. The two windows are the same window now.
+	if validFor > 0 {
+		parts = append(parts, "ct="+strconv.FormatInt(validFor.Milliseconds(), 10))
 	}
 
 	payload := ""
