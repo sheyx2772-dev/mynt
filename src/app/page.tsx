@@ -1,44 +1,90 @@
-import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react";
+// The entry page.
+//
+// Its job is to route, not to explain: a visitor arrives not knowing whether
+// this is for a person or for a cafe, and every second spent working that out
+// is a second before they reach the room they came for. So the fork is stated
+// first, then the two shelves — devices and verticals — carry them into it,
+// each tile landing on its own destination rather than a shared page top.
+//
+// Everything under that answers what the router just offered, in the order a
+// first visit asks for it: see it work, how it works, the four usual doubts,
+// what is already true, what it costs, and the questions left over.
 
-import HandlePicker from "@/components/ui/HandlePicker";
-import LangSwitch from "@/components/LangSwitch";
-import MobileMenu from "@/components/MobileMenu";
-import Plate from "@/components/ui/Plate";
-import { paperButton } from "@/components/ui/paper/Button";
-import { COMPANY, DELIVERY } from "@/lib/company";
+import {
+  Link2,
+  Nfc,
+  Sparkles,
+  BarChart3,
+  Users,
+  Target,
+  RefreshCw,
+  TrendingUp,
+  Check,
+  Minus,
+  ChevronDown,
+  Car,
+} from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import Mark from "@/components/Mark";
+import PricingCalculator from "@/components/PricingCalculator";
+import ProfilePreview from "@/components/ProfilePreview";
+import PhoneFrame from "@/components/PhoneFrame";
+import HandleChecker from "@/components/HandleChecker";
+import HeroStage from "@/components/HeroStage";
+import Image from "next/image";
+import { productShot } from "@/lib/product-shots";
+import DeviceTile from "@/components/DeviceTile";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber, formatUZS } from "@/lib/format";
-import { getDirectoryCounts, listNewestResidents } from "@/lib/handles";
-import { catalogue, site } from "@/lib/i18n";
-import { home } from "@/lib/i18n-home";
+import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
+import { site, landing, catalogue, picker } from "@/lib/i18n";
+import { listNewestResidents, getDirectoryCounts, listHandlesForUser } from "@/lib/handles";
+import { getUser } from "@/lib/auth";
+import { getHandleStats } from "@/lib/analytics";
+import { listLeads } from "@/lib/leads";
+import LiveResidents from "@/components/LiveResidents";
+import AppHome from "@/components/AppHome";
+import TwoWays from "@/components/TwoWays";
+import LoadoutStrip from "@/components/LoadoutStrip";
+import { deviceStrip, verticalStrip } from "@/lib/strip-items";
+import MobileMenu from "@/components/MobileMenu";
 import { getLang } from "@/lib/lang";
-import { BASE_PRICE } from "@/lib/pricing";
-import { PLANS, TEAM_SEAT_MONTHLY } from "@/lib/plans";
+import { home } from "@/lib/i18n-home";
+import Plate from "@/components/ui/Plate";
 import { VENUE_BANDS } from "@/lib/venues";
+import { paperButton } from "@/components/ui/paper/Button";
+import { BASE_PRICE } from "@/lib/pricing";
+import { DELIVERY } from "@/lib/company";
+import { PLANS } from "@/lib/plans";
+import { ArrowUpRight } from "lucide-react";
+import LangSwitch from "@/components/LangSwitch";
+import { COMPANY } from "@/lib/company";
+import PlanTable from "@/components/PlanTable";
+import TeamOrderForm from "@/components/TeamOrderForm";
 
-// The front page.
-//
-// It used to be dark, and dark was the wrong answer. Somebody buying an NFC
-// card in Uzbekistan is not buying technology — they are asking whether this
-// works, whether it is a trick, and whether the company will still exist next
-// year. None of those are answered by a black background. They are answered by
-// showing things: a real face, a real place, a real price, a real address, and
-// a way to try the product before paying for it.
-//
-// So this is the paper face: white, bordered, no texture, one accent. The only
-// dark block on the page is the one that shows the owner's cabinet, where dark
-// is what the reader would actually see.
-//
-// Lime is rationed down the page — hero, the middle pricing column, the final
-// field — and nothing else on this page is ever lime. Not an icon, not a rule
-// under a heading, not a hover state.
-
-// A profile that exists, so the demo cannot show a menu that does not. If it is
-// ever released the block degrades to a link rather than breaking.
+// The profile the "try it" tile opens.
 const DEMO_HANDLE = "NAV001";
+
+const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
+
+// Which icon goes with which entry, in the dictionary's order. Kept out of the
+// dictionary because an icon is not a translation.
+const CONSUMER_ICONS = [Link2, Nfc, Sparkles, BarChart3, Car];
+const BUSINESS_ICONS = [Users, Target, RefreshCw, TrendingUp];
+
+// Who has what, in the same order as the dictionary's row labels. A claim about
+// a competitor is a fact rather than copy, so it does not move with the words —
+// and every row here is one this product actually does.
+const COMPARISON = [
+  { unqx: true, popl: false, flex: true },
+  { unqx: true, popl: false, flex: true },
+  { unqx: true, popl: true, flex: true },
+  { unqx: false, popl: true, flex: true },
+  { unqx: false, popl: true, flex: true },
+  { unqx: true, popl: false, flex: true },
+];
+
 
 export async function generateMetadata({
   searchParams,
@@ -53,69 +99,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const lang = await getLang(til);
   const s = site(lang);
   const h = home(lang);
-  const cat = catalogue(lang);
-
-  const [newest, counts] = await Promise.all([
-    listNewestResidents(5),
-    getDirectoryCounts(),
-  ]);
-
-  const premium = PLANS.find((p) => p.id === "premium")!;
-
-  // The three manufactured things carry real prices from the same constants
-  // the checkout reads. The rest are quoted, and say so rather than inventing
-  // a number the order form would then disagree with.
-  const devices = [
-    ...DEVICE_TYPES.map((d) => ({
-      name: cat.devices[d.id].name,
-      note: cat.devices[d.id].tagline,
-      price: formatUZS(d.price, lang),
-      photo:
-        d.id === "card"
-          ? "/mahsulot/karta.jpg"
-          : d.id === "ring"
-            ? "/mahsulot/uzuk.jpg"
-            : "/mahsulot/braslet.jpg",
-      href: `/qurilmalar/${d.id}`,
-    })),
-    {
-      name: lang === "ru" ? "Автовизитка" : lang === "en" ? "Windscreen tag" : "Avtovizitka",
-      note:
-        lang === "ru"
-          ? "На стекло, сообщение без номера"
-          : lang === "en"
-            ? "On the glass, a message with no number"
-            : "Oynaga, raqamsiz xabar",
-      price: h.priceOnRequest,
-      photo: "/mahsulot/avtovizitka.jpg",
-      href: "/qurilmalar",
-    },
-    {
-      name: lang === "ru" ? "Жетон для животного" : lang === "en" ? "Pet tag" : "Hayvon tegi",
-      note:
-        lang === "ru"
-          ? "На ошейник, сообщение хозяину"
-          : lang === "en"
-            ? "On the collar, a message to the owner"
-            : "Bo'yinbog'ga, egasiga xabar",
-      price: h.priceOnRequest,
-      photo: "/mahsulot/hayvon-teg.jpg",
-      href: "/qurilmalar",
-    },
-    {
-      name: lang === "ru" ? "Настольное устройство" : lang === "en" ? "Table stand" : "Stol qurilmasi",
-      note:
-        lang === "ru"
-          ? "Для кафе и ресторанов"
-          : lang === "en"
-            ? "For cafes and restaurants"
-            : "Kafe va restoranlar uchun",
-      price: h.priceOnRequest,
-      photo: "/mahsulot/kafe-stend.jpg",
-      href: "/biznes",
-    },
-  ];
-
+  const premium = PLANS.find((x) => x.id === "premium")!;
   const prices = [
     {
       name: h.audiences[0].name,
@@ -173,122 +157,142 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     },
   ];
 
-  const navItems = [
-    { href: "/shaxsiy", label: h.navPersonal },
-    { href: "/biznes", label: h.navBusiness },
-    { href: "/biznes#obyekt", label: h.navVenue },
-    { href: "#narxlar", label: h.navPrices },
-    { href: "#savollar", label: h.navFaq },
-  ];
+  const copy = landing(lang);
+  const c = catalogue(lang);
+  const p = picker(lang);
+
+  const [newest, counts, user] = await Promise.all([
+    listNewestResidents(),
+    getDirectoryCounts(),
+    getUser(),
+  ]);
+
+  // What an owner opens the app for. Only the newest claimed handle: somebody
+  // with several has a cabinet, and a home screen that lists everything is a
+  // cabinet with extra steps.
+  const owned = user ? await listHandlesForUser(user.id) : [];
+  const primary = owned.find((h) => h.status === "claimed") ?? null;
+
+  const owner = primary
+    ? await (async () => {
+        const [stats, leads] = await Promise.all([
+          getHandleStats(primary.normalized, 1),
+          listLeads(primary.normalized, user!.id),
+        ]);
+        return {
+          handle: primary,
+          todayViews: stats.totalViews,
+          leads: leads.length,
+        };
+      })()
+    : null;
+
+  const tapShot = productShot("tegizish");
+  const carShot = productShot("avtovizitka");
+  const devices = deviceStrip(lang);
+  const verticals = verticalStrip(lang);
+  const familyShot = productShot("oila");
 
   return (
-    <div data-surface="paper" className="flex min-h-full flex-col overflow-x-clip">
-      {/* 0 — navigation ------------------------------------------------- */}
-      <header className="sticky top-0 z-30 border-b border-line bg-paper/95 backdrop-blur-[2px]">
-        <div className="mx-auto flex h-16 max-w-[1120px] items-center justify-between gap-4 px-4 sm:px-6">
-          <div className="flex items-center gap-2">
+    <div className="flex min-h-full flex-col overflow-x-clip">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-flex-black/85 text-white backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-2 font-display text-xl font-semibold tracking-tight">
+            {/* Telefonda sarlavha qatoridagi yagona yo'l — desktopdagi
+                bo'limlar ro'yxati shu yerga yig'ilgan. */}
             <MobileMenu
               openLabel={s.menuOpen}
               closeLabel={s.menuClose}
-              cta={{ href: "#raqam", label: h.navCta }}
+              cta={{ href: "/shaxsiy#narx", label: s.getHandle }}
               items={[
-                ...navItems,
+                { href: "/shaxsiy#narx", label: s.navPricing },
+                { href: "/shaxsiy", label: s.navPersonal },
+                { href: "/biznes", label: s.navBusiness },
+                { href: "#savollar", label: s.navFaq },
                 { href: "/qurilmalar", label: s.navDevices },
+                { href: "/shaxsiy#tarif", label: s.navPlans },
                 { href: "/rezidentlar", label: s.navResidents },
                 { href: "/kabinet", label: s.navCabinet },
               ]}
             >
-              <LangSwitch lang={lang} next="/" tone="light" />
+              <LangSwitch lang={lang} next="/" tone="dark" />
             </MobileMenu>
-            <Link href="/" className="text-[18px] font-semibold tracking-tight">
-              FLEX
-            </Link>
+            <Mark className="h-7 w-7" tone="dark" />
+            flex
           </div>
-
-          <nav className="hidden gap-7 text-[14px] font-medium text-ink-2 lg:flex">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="transition-colors hover:text-ink"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-3">
-            {/* The phone number is on the bar, visible, because here that is
-                what tells somebody a company is real. */}
-            <a
-              href={`tel:${COMPANY.phoneHref}`}
-              className="num hidden text-[14px] font-medium text-ink-2 transition-colors hover:text-ink md:block"
+          <nav className="hidden gap-8 text-sm font-medium text-white/55 lg:flex">
+            <Link href="/shaxsiy#narx" className="transition-colors hover:text-white">
+              {s.navPricing}
+            </Link>
+            <Link
+              href="/shaxsiy"
+              className="transition-colors hover:text-white"
             >
-              {COMPANY.phone}
+              {s.navPersonal}
+            </Link>
+            <Link href="/biznes" className="transition-colors hover:text-white">
+              {s.navBusiness}
+            </Link>
+            <a href="#savollar" className="transition-colors hover:text-white">
+              {s.navFaq}
             </a>
+            {/* Signed-out visitors are sent to sign-in from there, which keeps
+                this page static rather than making it depend on a session. */}
+            <Link
+              href="/qurilmalar"
+              className="transition-colors hover:text-white"
+            >
+              {s.navDevices}
+            </Link>
+            <Link
+              href="/rezidentlar"
+              className="transition-colors hover:text-white"
+            >
+              {s.navResidents}
+            </Link>
+            <Link
+              href="/kabinet"
+              className="transition-colors hover:text-white"
+            >
+              {s.navCabinet}
+            </Link>
+          </nav>
+          <div className="flex items-center gap-3">
             <div className="hidden lg:block">
-              <LangSwitch lang={lang} next="/" tone="light" />
+              <LangSwitch lang={lang} next="/" tone="dark" />
             </div>
-            {/* Secondary, always. The hero already owns this viewport's lime,
-                and two lime buttons on one screen mean neither is the answer. */}
-            <a href="#raqam" className={`${paperButton.secondary} h-10 px-4 text-[14px]`}>
-              {h.navCta}
+            <a
+              href="#narx"
+              className="rounded-full bg-lime px-4 py-2 text-sm font-medium text-flex-black transition-colors hover:bg-lime/85"
+            >
+              {s.getHandle}
             </a>
           </div>
         </div>
       </header>
 
       <main className="flex-1">
-        {/* 1 — hero ---------------------------------------------------- */}
-        <section className="mx-auto max-w-[1120px] px-4 pt-12 pb-16 sm:px-6 sm:pt-16 sm:pb-24">
-          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
-            <div className="lg:col-span-7">
-              <p className="text-[13px] leading-[18px] text-ink-3">{h.heroEyebrow}</p>
+        {/* The fork is the first screen: two products, said as two, before
+            anything is explained. The hero that used to be here follows it —
+            it sells the personal side, and a visitor who came for the business
+            side should not have to scroll past a pitch to find out we have one.
+            The phone gets the same pair inside AppHome. */}
+        <div className="hidden lg:block">
+          <TwoWays s={s} />
+        </div>
 
-              <h1 className="mt-3 font-display text-[36px] leading-[40px] font-bold tracking-[-0.02em] text-balance sm:text-[48px] sm:leading-[52px] lg:text-[56px] lg:leading-[60px]">
-                {h.heroTitle}
-              </h1>
-
-              <p className="mt-5 max-w-[34ch] text-[18px] leading-[26px] text-ink-2 sm:text-[20px] sm:leading-[28px]">
-                {h.heroLead}
-              </p>
-
-              <div className="mt-7 flex items-center gap-3">
-                <Plate n="AAA000" size="lg" />
-                <span className="max-w-[16ch] text-[13px] leading-[18px] text-ink-3">
-                  {h.heroPlateNote}
-                </span>
-              </div>
-
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a href="#raqam" className={`${paperButton.primary} w-full sm:w-auto`}>
-                  {h.heroPrimary} — {formatUZS(BASE_PRICE, lang)}
-                  {lang === "uz" ? "dan" : ""}
-                </a>
-                <a href="#sinash" className={`${paperButton.secondary} w-full sm:w-auto`}>
-                  {h.heroSecondary}
-                </a>
-              </div>
-
-              <p className="mt-5 text-[13px] leading-[18px] text-ink-3">
-                {h.heroFacts.join(" · ")}
-              </p>
-            </div>
-
-            <div className="lg:col-span-5">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-card border border-line bg-white">
-                <Image
-                  src="/mahsulot/tegizish.jpg"
-                  alt={h.heroPhotoAlt}
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 440px, 100vw"
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* Third block, straight after the offer. Somebody who has read the
+            fork and then the offer is now deciding what the thing looks like,
+            and that is decided by looking rather than by reading — so nothing
+            goes between. Desktop only; AppHome carries the same two rows. */}
+        <div className="hidden pb-6 lg:block">
+          <LoadoutStrip items={devices} label={p.groupDevices} note={p.groupDevicesNote} />
+          <LoadoutStrip
+            items={verticals}
+            label={p.groupDirections}
+            note={p.groupDirectionsNote}
+          />
+        </div>
 
         {/* 2 — try it before buying ------------------------------------ */}
         <section
@@ -366,94 +370,16 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           </ol>
         </section>
 
-        {/* 4 — the things that carry it -------------------------------- */}
-        <section className="border-y border-line bg-white py-16 sm:py-24">
-          <div className="mx-auto max-w-[1120px] px-4 sm:px-6">
-            <div className="flex items-baseline justify-between gap-4">
-              <h2 className="font-display text-[28px] leading-[32px] font-semibold tracking-[-0.01em]">
-                {h.devicesTitle}
-              </h2>
-              <Link
-                href="/qurilmalar"
-                className="shrink-0 text-[14px] font-medium text-ink-2 transition-colors hover:text-ink"
-              >
-                {h.devicesAll} →
-              </Link>
-            </div>
-
-            <ul className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
-              {devices.map((d) => (
-                <li key={d.name}>
-                  <Link
-                    href={d.href}
-                    className="block rounded-card border border-line bg-white p-4 transition-colors hover:border-line-2"
-                  >
-                    <div className="relative aspect-square overflow-hidden rounded-input bg-paper">
-                      <Image
-                        src={d.photo}
-                        alt={d.name}
-                        fill
-                        sizes="(min-width: 1024px) 340px, 45vw"
-                        className="object-cover"
-                      />
-                    </div>
-                    <h3 className="mt-3 text-[17px] leading-6 font-semibold">{d.name}</h3>
-                    <p className="mt-0.5 text-[13px] leading-[18px] text-ink-3">
-                      {d.note}
-                    </p>
-                    <p className="num mt-2 text-[16px] leading-6 font-semibold">
-                      {d.price}
-                    </p>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* 5 — the three audiences ------------------------------------- */}
-        {/* The one dark block on the page, and dark for a reason: what it
-            shows is the owner's cabinet, which really is dark. */}
-        <section className="mx-auto max-w-[1120px] px-4 py-16 sm:px-6 sm:py-24">
-          <div
-            data-surface="ink"
-            className="rounded-tile px-6 py-12 sm:px-10 sm:py-14"
-          >
-            <h2 className="font-display text-[28px] leading-[32px] font-semibold tracking-[-0.01em] text-paper">
-              {h.audienceTitle}
-            </h2>
-
-            <div className="mt-8 grid gap-8 lg:grid-cols-3 lg:gap-8">
-              {h.audiences.map((a) => (
-                <div key={a.name}>
-                  <h3 className="text-[17px] leading-6 font-semibold text-paper">
-                    {a.name}
-                  </h3>
-                  <ul className="mt-3 space-y-2.5">
-                    {a.points.map((p) => (
-                      <li
-                        key={p}
-                        className="flex gap-2.5 text-[15px] leading-[22px] text-paper-2"
-                      >
-                        <span
-                          aria-hidden
-                          className="mt-2 h-1 w-1 shrink-0 rounded-full bg-paper-3"
-                        />
-                        {p}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href={a.href}
-                    className="mt-4 inline-flex h-10 items-center gap-1.5 rounded-lg border border-ink-line bg-ink-s2 px-4 text-[14px] font-semibold text-paper transition-colors hover:border-paper-3"
-                  >
-                    {h.audienceMore}
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* 7 — the four things people actually ask ---------------------- */}
+        <section className="mx-auto max-w-[1120px] px-4 py-14 sm:px-6 sm:py-16">
+          <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {h.trust.map((item) => (
+              <li key={item.q}>
+                <h3 className="text-[16px] leading-6 font-semibold">{item.q}</h3>
+                <p className="mt-1.5 text-[14px] leading-5 text-ink-2">{item.a}</p>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* 6 — traction, counted rather than claimed -------------------- */}
@@ -494,18 +420,6 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </div>
             )}
           </div>
-        </section>
-
-        {/* 7 — the four things people actually ask ---------------------- */}
-        <section className="mx-auto max-w-[1120px] px-4 py-14 sm:px-6 sm:py-16">
-          <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {h.trust.map((item) => (
-              <li key={item.q}>
-                <h3 className="text-[16px] leading-6 font-semibold">{item.q}</h3>
-                <p className="mt-1.5 text-[14px] leading-5 text-ink-2">{item.a}</p>
-              </li>
-            ))}
-          </ul>
         </section>
 
         {/* 8 — prices --------------------------------------------------- */}
@@ -575,166 +489,168 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           </div>
         </section>
 
-        {/* 9 — questions ------------------------------------------------ */}
-        <section
-          id="savollar"
-          className="mx-auto max-w-[720px] scroll-mt-20 px-4 py-16 sm:px-6 sm:py-24"
-        >
-          <h2 className="font-display text-[28px] leading-[32px] font-semibold tracking-[-0.01em]">
-            {h.faqTitle}
+
+        {/* Who has just joined, and how much of the namespace is gone. Directly
+            under the hero, because it is the first thing a scroll reveals and
+            it is the only proof on the page that other people are buying. */}
+        <div className="hidden bg-flex-black lg:block">
+          <LiveResidents
+            residents={newest}
+            claimed={counts.claimed}
+            namespace={counts.namespace}
+            labels={{ taken: s.takenWord, left: s.leftWord, latest: s.latestWord }}
+          />
+        </div>
+
+        {/* On a phone this is the whole entry screen. See AppHome. */}
+        <AppHome
+          s={s}
+          residents={newest}
+          claimed={counts.claimed}
+          namespace={counts.namespace}
+          devices={devices}
+          verticals={verticals}
+          stripLabels={{
+            devices: p.groupDevices,
+            devicesNote: p.groupDevicesNote,
+            directions: p.groupDirections,
+            directionsNote: p.groupDirectionsNote,
+          }}
+          owner={owner}
+        />
+
+        {/* FAQ */}
+        <section id="savollar" className="scroll-mt-20 mx-auto max-w-3xl px-6 py-14 sm:py-24">
+          <p className="mb-3 text-center text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+            Savollar
+          </p>
+          <h2 className="text-center font-display text-2xl font-semibold tracking-tight sm:text-4xl">
+            {s.faq}
           </h2>
-          <div className="mt-6">
-            {h.faqs.map((item) => (
-              <details key={item.q} className="group border-b border-line">
-                <summary className="flex min-h-[56px] cursor-pointer list-none items-center justify-between gap-4 py-3 text-[16px] leading-6 font-medium marker:content-none">
+          <div className="mt-10 space-y-3">
+            {copy.faqs.map((item) => (
+              <details
+                key={item.q}
+                className="group rounded-2xl border border-black/10 bg-white p-5 open:shadow-[0_12px_30px_-16px_rgba(14,10,27,0.2)]"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between font-medium marker:content-none">
                   {item.q}
-                  <ChevronDown className="h-5 w-5 shrink-0 text-ink-3 transition-transform duration-[200ms] group-open:rotate-180" />
+                  <ChevronDown className="h-4 w-4 text-flex-black/40 transition-transform duration-300 group-open:rotate-180" />
                 </summary>
-                <p className="pb-4 text-[16px] leading-6 text-ink-2">{item.a}</p>
+                <p className="mt-3 text-sm leading-relaxed text-flex-black/65">
+                  {item.a}
+                </p>
               </details>
             ))}
           </div>
         </section>
-
-        {/* 10 — the number, typed in ------------------------------------ */}
-        <section
-          id="raqam"
-          className="scroll-mt-20 border-t border-line bg-white py-16 text-center sm:py-24"
-        >
-          <div className="mx-auto max-w-[1120px] px-4 sm:px-6">
-            <h2 className="font-display text-[32px] leading-[36px] font-semibold tracking-[-0.01em] sm:text-[36px] sm:leading-[40px]">
-              {h.finalTitle}
-            </h2>
-            <div className="mt-8">
-              <HandlePicker
-                labels={{
-                  letters: h.finalLetters,
-                  digits: h.finalDigits,
-                  submit: h.finalSubmit,
-                  error: h.finalError,
-                  hint: h.finalHint,
-                }}
-              />
-            </div>
-          </div>
-        </section>
       </main>
 
-      {/* 11 — footer ---------------------------------------------------- */}
-      {/* The legal name, the tax number and a street address are not
-          decoration here: a shop without them does not get paid online. */}
-      <footer className="border-t border-line pt-12 pb-10">
-        <div className="mx-auto max-w-[1120px] px-4 sm:px-6">
-          <div className="grid gap-8 text-[13px] leading-[18px] sm:grid-cols-2 lg:grid-cols-4">
+      <footer className="grain relative overflow-hidden bg-flex-black pt-16 pb-10 text-white">
+        <div className="bg-dot-grid-light absolute inset-0 opacity-20 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]" />
+        <div className="relative mx-auto max-w-6xl px-6">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <p className="text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
-                {h.footProduct}
+              <div className="flex items-center gap-2 font-display text-xl font-semibold">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-lime">
+                  <span className="h-2 w-2 rounded-full bg-flex-black" />
+                </span>
+                flex
+              </div>
+              <p className="mt-3 max-w-[220px] text-sm text-white/50">
+                {s.tagline}
               </p>
-              <ul className="mt-3 space-y-1 text-ink-2">
-                <li>
-                  <Link href="/shaxsiy" className="block py-1 hover:text-ink">
-                    {h.navPersonal}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/qurilmalar" className="block py-1 hover:text-ink">
-                    {s.navDevices}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/rezidentlar" className="block py-1 hover:text-ink">
-                    {s.navResidents}
-                  </Link>
-                </li>
-              </ul>
             </div>
-
             <div>
-              <p className="text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
-                {h.footBusiness}
+              <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
+                {s.product}
               </p>
-              <ul className="mt-3 space-y-1 text-ink-2">
+              <ul className="mt-3 space-y-0.5 text-sm text-white/60">
                 <li>
-                  <Link href="/biznes" className="block py-1 hover:text-ink">
-                    {s.venueLine}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/biznes#jamoa" className="block py-1 hover:text-ink">
-                    {s.teamCards}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#narxlar" className="block py-1 hover:text-ink">
-                    {h.navPrices}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <p className="text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
-                {h.footHelp}
-              </p>
-              <ul className="mt-3 space-y-1 text-ink-2">
-                <li>
-                  <a href="#savollar" className="block py-1 hover:text-ink">
-                    {h.navFaq}
+                  <a
+                    href="#narx"
+                    className="block py-1.5 transition-colors hover:text-white"
+                  >
+                    {s.navPricing}
                   </a>
                 </li>
                 <li>
-                  <Link href="/shartlar" className="block py-1 hover:text-ink">
-                    {s.delivery}
-                  </Link>
+                  <a
+                    href="#individual"
+                    className="block py-1.5 transition-colors hover:text-white"
+                  >
+                    {s.personalProfile}
+                  </a>
                 </li>
                 <li>
-                  <Link href="/kabinet" className="block py-1 hover:text-ink">
-                    {s.navCabinet}
-                  </Link>
+                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
+                    FLEX CARD
+                  </a>
                 </li>
               </ul>
             </div>
-
             <div>
-              <p className="text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
-                {h.footCompany}
+              <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
+                {s.navBusiness}
               </p>
-              <address className="mt-3 space-y-1 text-ink-2 not-italic">
-                <p>{COMPANY.legalName}</p>
-                <p className="num">
-                  {h.footInn} {COMPANY.inn}
-                </p>
-                <p>{COMPANY.address}</p>
-                <p>
-                  <a href={`tel:${COMPANY.phoneHref}`} className="num hover:text-ink">
+              <ul className="mt-3 space-y-0.5 text-sm text-white/60">
+                <li>
+                  <a
+                    href="#biznes"
+                    className="block py-1.5 transition-colors hover:text-white"
+                  >
+                    {s.teamCards}
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
+                    {s.contactCollection}
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
+                    {lang === "ru" ? "Режим мероприятия" : lang === "en" ? "Event mode" : "Tadbir rejimi"}
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
+                {s.company}
+              </p>
+              <ul className="mt-3 space-y-0.5 text-sm text-white/60">
+                <li>
+                  <a
+                    href="#savollar"
+                    className="block py-1.5 transition-colors hover:text-white"
+                  >
+                    {s.navFaq}
+                  </a>
+                </li>
+                <li>
+                  <Link href="/shartlar" className="block py-1.5 transition-colors hover:text-white">
+                    {s.footerTerms}
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href={`tel:${COMPANY.phoneHref}`}
+                    className="block py-1.5 transition-colors hover:text-white"
+                  >
                     {COMPANY.phone}
                   </a>
-                </p>
-                <p>
-                  <a href={`mailto:${COMPANY.email}`} className="hover:text-ink">
-                    {COMPANY.email}
-                  </a>
-                </p>
-                <p className="text-ink-3">{h.footHours}</p>
-                <p className="text-ink-3">
-                  {lang === "ru"
-                    ? `Ташкент — ${DELIVERY.tashkentDays} день, области — ${DELIVERY.regionsDaysFrom}–${DELIVERY.regionsDaysTo} дня`
-                    : lang === "en"
-                      ? `Tashkent in ${DELIVERY.tashkentDays} day, regions in ${DELIVERY.regionsDaysFrom}–${DELIVERY.regionsDaysTo}`
-                      : `Toshkent — ${DELIVERY.tashkentDays} kun, viloyatlar — ${DELIVERY.regionsDaysFrom}–${DELIVERY.regionsDaysTo} kun`}
-                </p>
-              </address>
+                </li>
+              </ul>
             </div>
           </div>
-
-          <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-line pt-6 text-[13px] leading-[18px] text-ink-3 sm:flex-row sm:items-center">
+          <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-white/40 sm:flex-row">
             <p>
-              © {new Date().getFullYear()} FLEX ·{" "}
-              <Link href="/shartlar" className="hover:text-ink">
-                {h.footOffer}
-              </Link>
+              &copy; {new Date().getFullYear()} Flex &mdash; {COMPANY.legalName}. STIR{" "}
+              {COMPANY.inn}.
             </p>
-            <LangSwitch lang={lang} next="/" tone="light" />
+            <Link href="/shartlar" className="block py-1.5 transition-colors hover:text-white/70">
+              {s.delivery}
+            </Link>
           </div>
         </div>
       </footer>
