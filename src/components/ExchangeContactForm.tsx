@@ -48,7 +48,7 @@ export default function ExchangeContactForm({
 
   if (sent) {
     return (
-      <div className="flex h-[52px] items-center justify-center gap-2 rounded-full border border-line bg-fill px-5 text-[16px] font-semibold text-ink-2">
+      <div className="flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 text-[16px] font-medium text-mute">
         <Check className="h-5 w-5" />
         {t.sent}
       </div>
@@ -59,7 +59,7 @@ export default function ExchangeContactForm({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="flex h-[52px] w-full items-center justify-center gap-2 rounded-full border border-line-2 bg-white px-5 text-[16px] font-semibold text-ink transition-transform duration-[120ms] active:scale-[0.98] active:bg-fill"
+        className="flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-paper px-3 text-[16px] font-medium text-ink shadow-deboss active:bg-ink/5"
       >
         <UserRoundPlus className="h-5 w-5" />
         {t.sendContact}
@@ -71,7 +71,7 @@ export default function ExchangeContactForm({
     // 16px and not a pixel less: Android Chrome zooms the page when a field
     // under that size takes focus, and on a form this tall the send button
     // then leaves the screen.
-    "h-[52px] w-full rounded-input border border-line-2 bg-white px-4 text-[16px] text-ink outline-none placeholder:text-ink-3 focus:border-ink";
+    "h-14 w-full rounded-lg border border-ink/15 bg-sheet px-4 text-[16px] text-ink outline-none placeholder:text-mute focus:border-ink";
 
   return (
     <form
@@ -83,7 +83,7 @@ export default function ExchangeContactForm({
           else setError(result.error ?? "Yuborilmadi.");
         })
       }
-      className="rounded-card border border-line bg-white p-4"
+      className="rounded-xl bg-paper p-4 shadow-deboss"
     >
       <p className="text-[17px] leading-6 font-semibold">
         {t.reachYou}
@@ -110,24 +110,24 @@ export default function ExchangeContactForm({
         />
       </div>
 
-      <p className="mt-2 text-[13px] leading-[18px] text-ink-3">
+      <p className="mt-2 text-[16px] leading-6 text-mute">
         {t.contactHint}
       </p>
 
-      {error && <p className="mt-2 text-[13px] leading-[18px] text-danger">{error}</p>}
+      {error && <p className="mt-2 text-[16px] leading-6 text-danger">{error}</p>}
 
       <div className="mt-3 flex gap-2">
         <button
           type="submit"
           disabled={pending}
-          className="h-[52px] flex-1 rounded-full bg-ink px-5 text-[16px] font-semibold text-paper transition-transform duration-[120ms] active:scale-[0.98] disabled:bg-fill disabled:text-ink-3"
+          className="flex h-14 flex-1 items-center justify-center rounded-xl bg-ink px-5 text-[16px] font-semibold text-paper shadow-slab active:translate-y-px active:shadow-none disabled:bg-ink/20 disabled:shadow-none"
         >
           {pending ? t.sending : t.send}
         </button>
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="h-[52px] rounded-full px-5 text-[16px] font-medium text-ink-2"
+          className="h-14 rounded-xl px-5 text-[16px] font-medium text-mute"
         >
           {t.cancel}
         </button>

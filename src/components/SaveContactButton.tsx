@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
 
-import { paperButton } from "@/components/ui/paper/Button";
 
 type Props = {
   fullName: string;
@@ -92,7 +91,7 @@ export default function SaveContactButton({
         if (timer.current) clearTimeout(timer.current);
         timer.current = setTimeout(() => setSaved(false), 1500);
       }}
-      className={`${paperButton.primary} w-full`}
+      className="flex h-14 w-full items-center justify-center gap-2.5 rounded-xl bg-lime text-[16px] font-semibold text-ink shadow-slab transition-transform duration-[120ms] active:translate-y-px active:shadow-none"
     >
       {saved ? (
         <>

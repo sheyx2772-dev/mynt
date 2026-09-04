@@ -3,11 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react";
 
-import HandlePicker from "@/components/ui/paper/HandlePicker";
+import HandlePicker from "@/components/ui/HandlePicker";
 import LangSwitch from "@/components/LangSwitch";
 import MobileMenu from "@/components/MobileMenu";
 import Plate from "@/components/ui/Plate";
-import { paperButton } from "@/components/ui/paper/Button";
+import { button } from "@/components/ui/Buttons";
 import { COMPANY, DELIVERY } from "@/lib/company";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { formatNumber, formatUZS } from "@/lib/format";
@@ -231,7 +231,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             </div>
             {/* Secondary, always. The hero already owns this viewport's lime,
                 and two lime buttons on one screen mean neither is the answer. */}
-            <a href="#raqam" className={`${paperButton.secondary} h-10 px-4 text-[14px]`}>
+            <a href="#raqam" className={`${button.paper} h-10 px-4 text-[14px]`}>
               {h.navCta}
             </a>
           </div>
@@ -261,11 +261,11 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </div>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a href="#raqam" className={`${paperButton.primary} w-full sm:w-auto`}>
+                <a href="#raqam" className={`${button.lime} w-full sm:w-auto`}>
                   {h.heroPrimary} — {formatUZS(BASE_PRICE, lang)}
                   {lang === "uz" ? "dan" : ""}
                 </a>
-                <a href="#sinash" className={`${paperButton.secondary} w-full sm:w-auto`}>
+                <a href="#sinash" className={`${button.paper} w-full sm:w-auto`}>
                   {h.heroSecondary}
                 </a>
               </div>
@@ -307,7 +307,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                   phone displaying it — so the same demo is a link instead. */}
               <Link
                 href={`/${DEMO_HANDLE}`}
-                className={`${paperButton.secondary} mt-6 w-full sm:w-auto lg:hidden`}
+                className={`${button.paper} mt-6 w-full sm:w-auto lg:hidden`}
               >
                 {h.tryButton}
                 <ArrowUpRight className="h-5 w-5" />
@@ -565,7 +565,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
 
                   <Link
                     href={p.href}
-                    className={`${p.lead ? paperButton.primary : paperButton.secondary} mt-5 w-full`}
+                    className={`${p.lead ? button.lime : button.paper} mt-5 w-full`}
                   >
                     {h.pricesCta}
                   </Link>

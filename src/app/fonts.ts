@@ -1,16 +1,17 @@
-import { Inter, Unbounded } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 
-// Two families, and the reason is Cyrillic.
+// Two families, and the second one is for numbers.
 //
-// Space Grotesk, which this used to set headings in, has no Cyrillic at all.
-// Menus run in three languages; a Russian heading — "Салаты", "Горячее" —
-// silently fell back to whatever the device had, and the page came apart. Half
-// the audience here reads Cyrillic and nearly every cafe menu carries a Russian
-// column, so that was not a cosmetic problem.
+// Space Grotesk used to set the headings and it carries no Cyrillic at all.
+// Menus run in three languages and nearly every cafe here keeps a Russian
+// column, so a heading like "Салаты" was silently falling back to whatever the
+// device had and the page came apart. Both faces below have Cyrillic.
 //
-// Unbounded is wide, has Cyrillic, and keeps 0/O and 1/I apart — which is the
-// whole job, because the thing it mostly sets is a number somebody has to read
-// off a card and type back in.
+// There is no separate display face any more. What makes a FLEX screen
+// recognisable is the number, not a headline font — so the weight goes there:
+// JetBrains Mono, wide-tracked, for the plate, the engraving on the card and
+// every price. It keeps 0/O and 1/I apart, which is the whole job when the
+// thing being read is a number somebody types back in from a card.
 
 export const inter = Inter({
   subsets: ["latin", "latin-ext", "cyrillic"],
@@ -19,11 +20,9 @@ export const inter = Inter({
   display: "swap",
 });
 
-// Only the two weights the display face is ever used at. Every extra weight is
-// another file on a 3G connection.
-export const unbounded = Unbounded({
+export const mono = JetBrains_Mono({
   subsets: ["latin", "cyrillic"],
-  weight: ["600", "700"],
-  variable: "--font-unbounded",
+  weight: ["500", "600"],
+  variable: "--font-jetbrains",
   display: "swap",
 });

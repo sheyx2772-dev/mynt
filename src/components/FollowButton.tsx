@@ -44,8 +44,8 @@ export default function FollowButton({
         disabled={pending}
         className={
           following
-            ? "flex h-[52px] w-full items-center justify-center gap-2 rounded-full border border-line bg-fill px-5 text-[16px] font-semibold text-ink-2 disabled:text-ink-3"
-            : "flex h-[52px] w-full items-center justify-center gap-2 rounded-full border border-line-2 bg-white px-5 text-[16px] font-semibold text-ink transition-transform duration-[120ms] active:scale-[0.98] active:bg-fill disabled:text-ink-3"
+            ? "flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 text-[16px] font-medium text-mute"
+            : "flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-paper px-3 text-[16px] font-medium text-ink shadow-deboss active:bg-ink/5"
         }
       >
         {following ? (
@@ -60,7 +60,7 @@ export default function FollowButton({
           </>
         )}
       </button>
-      {error && <p className="mt-2 text-center text-[13px] leading-[18px] text-danger">{error}</p>}
+      {error && <p className="mt-2 text-center text-[16px] leading-6 text-danger">{error}</p>}
     </div>
   );
 }

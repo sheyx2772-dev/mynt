@@ -47,9 +47,26 @@
   /* Kept because 500 places still name it. It is the ink ground. */
   --color-flex-black: #0e0a1b;
 
-  --font-display: var(--font-unbounded), var(--font-inter), system-ui, sans-serif;
   --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", Roboto,
     sans-serif;
+  /* Numbers, and only numbers: the plate, the engraving on the card, prices.
+     A monospace with Cyrillic that keeps 0/O and 1/I apart. */
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  /* Kept because a hundred and sixty places still say font-display. It is the
+     sans now — the screen is made recognisable by the number, not a headline
+     face, so there is no third font to download. */
+  --font-display: var(--font-inter), system-ui, sans-serif;
+
+  /* The white a sheet of paper is, as distinct from the off-white the page
+     under it is. Two whites, and the difference is the whole trick. */
+  --color-sheet: #ffffff;
+  /* One grey. Not a ramp — a ramp is how a screen ends up with four greys and
+     no hierarchy. 5.9:1 on paper. */
+  --color-mute: #5c586a;
+  /* The engraving. A FLEX card is black and gold, so gold is a brand colour
+     and not a decoration; it appears on the card face and on the edge of the
+     plate, and nowhere else. */
+  --color-gold: #c9a961;
 
   --radius-plate: 8px;
   --radius-input: 12px;
@@ -57,6 +74,75 @@
   --radius-tile: 24px;
 
   --ease-out: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Five shadows, each describing a real object.
+   *
+   * `card` has an inner highlight and an inner darkness because that is what
+   * the edge of a piece of plastic looks like. `sheet` casts upward: the paper
+   * is under the card, so its shadow appears above it. `slab` is a struck
+   * plate lying on the paper. `deboss` is pressed in rather than raised, which
+   * is why its light comes from below. `photo` is a print, mounted. */
+  --shadow-card:
+    inset 0 1px 0 rgb(255 255 255 / 0.1), inset 0 -1px 0 rgb(0 0 0 / 0.7),
+    0 1px 1px rgb(14 10 27 / 0.28), 0 6px 10px -4px rgb(14 10 27 / 0.35),
+    0 24px 40px -16px rgb(14 10 27 / 0.45);
+  --shadow-sheet:
+    0 -1px 0 rgb(14 10 27 / 0.06), 0 -12px 32px -20px rgb(14 10 27 / 0.25);
+  --shadow-slab:
+    0 1px 0 rgb(14 10 27 / 0.3), 0 8px 20px -8px rgb(14 10 27 / 0.45);
+  --shadow-deboss:
+    inset 0 1px 2px rgb(14 10 27 / 0.12), inset 0 -1px 0 rgb(255 255 255 / 0.9);
+  --shadow-photo:
+    0 1px 1px rgb(14 10 27 / 0.2), 0 4px 10px -4px rgb(14 10 27 / 0.3);
+  --shadow-tab:
+    0 -1px 0 rgb(14 10 27 / 0.08), 0 -6px 12px -8px rgb(14 10 27 / 0.25);
+}
+
+/* Gold struck into black.
+ *
+ * Two text shadows and no more: a dark line under the glyph and a warm light
+ * one over it. That is what an engraving does to the light falling on it, and
+ * it is the difference between gold-coloured text and text that looks cut. */
+.engraved {
+  color: var(--color-gold);
+  text-shadow:
+    0 1px 0 rgb(0 0 0 / 0.9),
+    0 -1px 0 rgb(255 240 200 / 0.18);
+}
+
+/* A ruled line, drawn as a background rather than a border.
+ *
+ * A border would fight the row's own rounding and would need turning off on
+ * the last item with a second class; this one goes away with `last:bg-none`,
+ * and a row can still have a radius and a pressed state over the top of it. */
+.rule {
+  background-image: linear-gradient(
+    to right,
+    rgb(14 10 27 / 0.12),
+    rgb(14 10 27 / 0.12)
+  );
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+}
+
+/* The card lands.
+ *
+ * Once, on load, 640ms. It arrives from slightly above and slightly more
+ * rotated, with a longer shadow — the shadow shortening as it comes down is
+ * the whole reason it reads as landing rather than sliding. */
+@keyframes settle {
+  from {
+    transform: translateY(-10px) rotate(-3.5deg) scale(1.02);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.1), inset 0 -1px 0 rgb(0 0 0 / 0.7),
+      0 2px 2px rgb(14 10 27 / 0.2), 0 14px 20px -6px rgb(14 10 27 / 0.3),
+      0 44px 70px -20px rgb(14 10 27 / 0.4);
+  }
+}
+
+.settle {
+  animation: settle 0.64s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 :root {
