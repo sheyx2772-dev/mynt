@@ -304,7 +304,7 @@ Label tepada 13/18 `text-ink-2`. Xato: `border-danger` + pastda 13px matn.
 
 - HTML + CSS ≤ 40KB gzip. Mijoz JS: faqat vCard yaratish va nusxa olish — ≤ 15KB.
 - Shrift: Inter 400/600 + Unbounded 700, hammasi ≤ 90KB.
-- Avatar: Supabase transform `?width=176&quality=75`.
+- Avatar: `?width=176&quality=75` bilan kichiklashtiriladi.
 - **Maqsad:** Moto G / 3G Fast emulyatsiyasida LCP ≤ 1.8s. CI da Lighthouse gate.
 
 "Bir tegish, ilova o'rnatilmaydi" degan va'da agar sahifa 3G da 4 soniya
@@ -542,7 +542,7 @@ Bosish: `scale 0.97`, 120ms + 30ms `navigator.vibrate`.
   **Cheksiz miltillash — taqiq:** kassir ko'r bo'lib qoladi.
 - Ovoz: 1 ta qisqa signal (WAV, 200ms, ~880Hz). Ovoz sozlamasi obyekt
   kabinetida. 60 s dan keyin javob bo'lmasa — bitta qayta signal, boshqa yo'q.
-- Realtime: Supabase channel `requests:obj_id`. Ulanish uzilsa yuqorida `h-8
+- Realtime: `requests:obj_id` kanali. Ulanish uzilsa yuqorida `h-8
   bg-warn-ink text-ink text-[20px]` chiziq: "Aloqa yo'q — qayta ulanmoqda".
   Bu lime qoidasini buzmaydi (warn rang).
 - Ekran hech qachon "yuklanmoqda" holatida qolmaydi: birinchi render — bo'sh
@@ -681,7 +681,7 @@ stoli, FLEX stikeri ko'rinadi, ostida nom + tuman ("Bon Cafe · Yunusobod").
 Logotip emas — **foto**. Logotipni hamma o'zi chizadi, fotoni yo'q.
 
 Hali yo'q bo'lsa — **yolg'on logotip qo'ymang.** O'rniga: jonli hisoblagich
-Supabase dan: Unbounded 700 56px `num` "1 284" + "ta raqam berildi" + ostida
+Bazadan: Unbounded 700 56px `num` "1 284" + "ta raqam berildi" + ostida
 oxirgi 5 ta berilgan raqam (`<Plate size="sm">`, ism yo'q, faqat raqam va
 tuman). Haqiqiy son, haqiqiy vaqtda. *Kichik son ham ishonchli, katta yolg'on emas.*
 

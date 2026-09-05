@@ -28,31 +28,32 @@ compose up` runs both and is how the image is checked before it is deployed.
 
 ## One database, and who owns which part of it
 
-All four applications read the same Postgres — today that is the Supabase
-project the website has always used, because a number bought on the site has to
-exist in the app.
+All four applications read the same Postgres, so a number bought on the site
+exists in the app. The backend is the only thing that connects to it; the
+website, the panel and the phone ask the backend.
 
-The product's schema is **not** the backend's to create. It lives in
-`landing/supabase/migrations`, forty-six files, already applied to the database
-that is serving real customers. `backend/db/migrations` adds exactly two tables
-— `flex_sessions` and `flex_login_tokens` — because an app cannot hold a cookie
-and needs a token instead. Everything else the backend reads is already there.
+The whole schema is `backend/db/migrations` — fifty-five files applied in
+order by goose. Forty-seven of them built the product on Supabase and were
+moved here when it went; the first stands in for what Supabase provided, an
+`auth` schema and three API roles the grants still name; the last seven are
+what the backend added for sessions, promotions, passwords and the phone door.
+`make migrate` against an empty database produces the product, and sqlc
+type-checks every query against those files, so a query naming a column that a
+migration removed fails `make sqlc` rather than a request.
 
-Identity is `auth.users`. The website authenticates against it and so does the
-backend, so a person is one account whichever door they came through. The
-backend owns the session, not the identity: `internal/auth.Directory` is the
-one place that knows accounts live in Supabase, and it is an interface so that
-the day they do not, one implementation changes and nothing above it does.
+`make schema-test` replays them into a scratch database and runs the assertions
+in `db/test/constraints.sql`, which check that the schema refuses bad data on
+its own — a constraint quietly weakened by a migration written to fix something
+else is exactly what that catches.
 
-`make schema` in `backend/` builds a local copy of all of it — the shim that
-stands in for what Supabase provides, then the website's migrations, then ours.
-Development gets the real shape rather than an invention of its own, because a
-query that works locally and not in production is worse than one that fails in
-both places.
+Identity is `auth.users`, a table this database owns and `internal/auth`
+writes. The name is Supabase's and the table is not: renaming it is a migration
+and dozens of queries, which is work rather than a decision.
 
-Moving off Supabase later is two changes: `DATABASE_URL`, and a `Directory`
-that writes to a table of ours. `LocalDirectory` already does the second, for
-development.
+Nothing connects as `anon` or `authenticated`, so the row level security
+policies in the older migrations are inert. Who may see what is decided in SQL
+that filters — every read joins through `handles` and takes the reader's id as
+a parameter — rather than in a policy carried by a role.
 
 ## What is true of all four
 
@@ -86,7 +87,8 @@ it, so it is not optional:
   somebody does not own comes back as no rows, and gets the same answer an
   invented one gets — so a guesser learns nothing from the difference.
 - A write names the columns it may write. "The owner's own row" is not a
-  permission; `landing/supabase/migrations/0047` is what that mistake cost.
+  permission; migration 00048, `lock_down_handle_writes`, is what that mistake
+  cost.
 - Identity comes from the session. A user id in a body or a query string is a
   claim the sender made about themselves.
 - Anything that decides money or ownership is decided on the server, from the

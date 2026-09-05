@@ -16,7 +16,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 
 	"github.com/sheyx2772-dev/flex/backend/internal/api"
@@ -64,7 +63,7 @@ func run() error {
 	}
 	defer pool.Close()
 
-	authService := auth.NewService(pool, newMailer(cfg), newTexter(cfg), newDirectory(cfg, pool), cfg.SiteURL)
+	authService := auth.NewService(pool, newMailer(cfg), newTexter(cfg), auth.NewLocalDirectory(pool), cfg.SiteURL)
 
 	// Housekeeping, on the same context as everything else — one signal stops
 	// it with the rest.
@@ -139,19 +138,6 @@ func newTexter(cfg config.Config) sms.Sender {
 		return sms.LogSender{}
 	}
 	return sms.NewEskiz(cfg.EskizEmail, cfg.EskizPassword, cfg.SMSFrom)
-}
-
-// newDirectory picks where accounts come from.
-//
-// With no Supabase project configured they are written straight to the local
-// database, which is what development wants and what production must never do
-// — `config.Load` refuses to start a production process in this state at all.
-func newDirectory(cfg config.Config, pool *pgxpool.Pool) auth.Directory {
-	if cfg.SupabaseURL == "" {
-		slog.Warn("hisoblar xizmati sozlanmagan — hisoblar to'g'ridan-to'g'ri bazaga yoziladi")
-		return auth.NewLocalDirectory(pool)
-	}
-	return auth.NewSupabaseDirectory(cfg.SupabaseURL, cfg.SupabaseServiceRoleKey)
 }
 
 // Text for a person reading a terminal, JSON for a machine reading a log file.

@@ -23,11 +23,20 @@ profile data live in the database.
 
 ## Stack
 
-Next.js 16 (App Router) · React 19 · Tailwind v4 · Supabase (Postgres + Auth)
-· Cloudflare R2 for images.
+Next.js 16 (App Router) · React 19 · Tailwind v4 · Cloudflare R2 for images.
+
+This app renders pages and asks the backend. Every decision about a person, a
+number, a payment or a notice is made in Go, in `../backend`, and the only
+credential this app holds is the reader's own session cookie — there is no
+database key here, no merchant secret, no bot token, because nothing here
+decides anything that would need one. The one seam is
+[`src/lib/backend/client.ts`](src/lib/backend/client.ts), typed from the
+backend's OpenAPI document by `npm run api` so a field renamed in Go breaks
+`npm run typecheck` here rather than a page in front of somebody.
 
 Note that Next.js 16 renamed `middleware.ts` to `proxy.ts` — see
-[`src/proxy.ts`](src/proxy.ts), which keeps the Supabase auth session fresh.
+[`src/proxy.ts`](src/proxy.ts), which now does nothing per request and stays
+for the day something belongs there.
 
 ## Getting started
 
@@ -37,54 +46,23 @@ cp .env.example .env.local   # then fill in the values
 npm run dev
 ```
 
-The app degrades gracefully without credentials: with no Supabase keys it
-serves demo profiles, and with no R2 keys avatar uploads are skipped.
+The backend has to be running: `cd ../backend && make db && make dev`. With no
+R2 keys avatar uploads are skipped; everything else needs the backend.
 
 ### Database
 
-Migrations are plain SQL in [`supabase/migrations`](supabase/migrations),
-applied in filename order by `npm run db:migrate`. Each file runs once and is
-recorded in a `schema_migrations` table, so re-running is safe. The runner
-needs `SUPABASE_ACCESS_TOKEN` in `.env.local` — create one under
-[account tokens](https://supabase.com/dashboard/account/tokens). Use
-`npm run db:status` to see what is pending without applying it.
-
-`npm run db:test` replays every migration against a throwaway Postgres
-container and asserts that the schema rejects bad data on its own — wrong
-handle formats, claimed handles with no owner, negative order amounts, a
-second live transaction for one order. It needs Docker but no Supabase
-credentials, so schema changes can be checked before they reach the project.
-
-| Migration | What it adds |
-| --- | --- |
-| `0001_initial.sql` | `handles` and `genesis_cards` tables, public-read RLS |
-| `0002_auth_and_ownership.sql` | claim ownership, format constraints, rate limiting |
-| `0003_payments.sql` | orders, Click/Payme transactions, handle reservations |
-| `0004_analytics.sql` | profile views, link clicks, aggregation functions |
-| `0005_lock_down_stats_functions.sql` | revoke stats functions from the public roles |
-| `0006_social_profile.sql` | city, tags, last seen, public view count, leaderboard |
-| `0007_posts_and_follows.sql` | posts, follows, counter triggers |
-| `0008_account_deletion.sql` | privileges for cascades, orphaned-handle handling |
-| `0009_card_designs.sql` | per-handle card design, restricted to the known set |
-| `0010_device_types.sql` | which form factor an owner chose |
-| `0011_artwork_card_designs.sql` | widens the design set for the three artwork-backed fronts |
-| `0012_xarita_design.sql` | adds the Xarita design |
-| `0013_design_requests.sql` | made-to-order designs: the queue, and per-handle artwork |
-| `0014_handle_transfers.sql` | handing a handle to someone else |
-| `0015_plans.sql` | the subscription tier a handle is on |
-| `0016_team_requests.sql` | companies asking for a team order |
-| `0017_gift_reason.sql` | handles given rather than sold |
-| `0018_visit_source.sql` | whether a visit came from the device, the QR code or a link |
+There is none here. The schema and its migrations live in
+`../backend/db/migrations` — `make migrate` applies them, `make schema-test`
+replays them into a scratch database and asserts the schema rejects bad data on
+its own. See `../AGENTS.md`.
 
 ### Auth
 
-Sign-in is a one-time email link — Supabase creates the account on first use,
-so there is no separate registration step. Enable the email provider in
-Authentication → Providers. Supabase's built-in mail service is rate-limited
-and intended for testing; connect a real SMTP provider before launch.
-
-Phone/SMS sign-in is not enabled: it needs an SMS provider configured in the
-Supabase dashboard.
+Sign-in is a one-time link sent by email, or a code sent by SMS. Both are the
+backend's: it issues the token, it holds the mail and SMS credentials, and it
+sets the `flex_session` cookie this app reads. Following the link is what
+proves the address, so the account is made at that moment rather than when
+somebody typed an address into a form.
 
 ### Installable app (PWA)
 
@@ -208,8 +186,8 @@ The project was called Mynt until 31 August 2026. It was renamed to Flex
 because "Mynt" was heard as a coarse word by Russian speakers, and the site's
 whole distribution runs on people saying the name out loud.
 
-Migrations under `supabase/migrations` still say Mynt in their comments. They
-are the record of what was applied to the database, so they are left as
+Migrations under `../backend/db/migrations` still say Mynt in their comments.
+They are the record of what was applied to the database, so they are left as
 written rather than rewritten after the fact.
 
 The seed rows `MYN042` and `SIR555` keep their old handles; only their text
@@ -225,11 +203,12 @@ Deployed on Vercel as the project `flex`, building `main` on every push.
 | Live | `https://flex-five-kohl.vercel.app` |
 | Custom domain | `flex.com.uz` — added to the project, waiting on an `A` record at `@` pointing to `216.198.79.1` |
 | Payme | live — the endpoint answers, and was checked both ways in production: correct auth reaches the store, a forged key gets -32504 |
-| Click | half-configured. `CLICK_SERVICE_ID` is 99108; `CLICK_MERCHANT_ID` is not shown anywhere in the merchant cabinet and `CLICK_SECRET_KEY` is still to be copied, so `isClickConfigured` stays false and the endpoints refuse |
+| Click | half-configured. `CLICK_SERVICE_ID` is 99108; `CLICK_MERCHANT_ID` is not shown anywhere in the merchant cabinet and `CLICK_SECRET_KEY` is still to be copied, so the backend registers no Click callback and builds no Click checkout link |
 
 The apex is the canonical host on purpose: Vercel offers to redirect it to
-`www` and that offer was declined, because `NEXT_PUBLIC_SITE_URL`, the Supabase
-allow-list, the sitemap and every printed card say `flex.com.uz` without it.
+`www` and that offer was declined, because `NEXT_PUBLIC_SITE_URL`, the
+backend's `SITE_URL`, the sitemap and every printed card say `flex.com.uz`
+without it.
 
 `output: "standalone"` must stay out of `next.config.ts`. It bundles a server
 for running in a container, and Vercel's build step instead reads the default
@@ -238,14 +217,17 @@ build's file traces — with standalone set, the deploy fails looking for
 
 ### Migrations
 
-Everything through 0017 is applied to the project. There is a
-`SUPABASE_ACCESS_TOKEN` in `.env.local` now, so the runner does it:
+They live in `../backend/db/migrations` and goose applies them:
 
-    npm run db:migrate
+    cd ../backend && make migrate
 
-That was not the case for most of this project's life, which is why 0001-0013
-went in by hand through the SQL editor and why four of them piled up unapplied
-at one point. Write the migration, run the command.
+`make schema-test` replays the whole history into a scratch database and runs
+the constraint assertions first, which is how a migration is checked before it
+reaches anything real.
+
+For most of this project's life the schema went in by hand through a SQL
+editor, which is why four migrations piled up unapplied at one point. Write the
+migration, run the command.
 
 ### The payment accounts
 
@@ -264,23 +246,10 @@ it. That needs a call to +998 71 231 0883 quoting the contract number, asking
 for the merchant id, for service 99108 to be renamed to Flex against
 flex.com.uz, and for the two callbacks to be set:
 
-    https://flex.com.uz/api/click/prepare
-    https://flex.com.uz/api/click/complete
+    https://<backend host>/click/prepare
+    https://<backend host>/click/complete
 
 ### Before deploying
-
-**Supabase → Authentication → URL Configuration is done.** Site URL is
-`https://flex.com.uz`, and the allow-list holds only the endpoint the app
-actually redirects to:
-
-| Entry | Why |
-|-------|-----|
-| `https://flex.com.uz/auth/confirm*` | the only target `signInWithOtp` is given |
-| `http://localhost:*/auth/confirm*` | same endpoint in development, where the port varies |
-
-The list is deliberately not `https://flex.com.uz/**`. The app has exactly one
-redirect target, so widening the pattern to every path would give up the second
-line of defence for nothing.
 
 **Still outstanding: `NEXT_PUBLIC_SITE_URL=https://flex.com.uz` in the deployed
 environment.** When it is set, `getSiteOrigin()` never reads a request header.
@@ -289,23 +258,25 @@ the header — a `Host` or `X-Forwarded-Host` an attacker controls would otherwi
 end up inside the one-time sign-in link mailed to a victim. Leaving it unset is
 safe but leaves the guarantee resting on the fallback instead of on config.
 
-Set `ANALYTICS_SALT` there too, to any long random string, and then never change
-it: the visitor hash is salted with it, so rotating it silently breaks the
-continuity of every profile's view count.
+`ANALYTICS_SALT` moved to the backend, which is what counts a visit now. Set it
+there to any long random string and then never change it: the visitor hash is
+salted with it, so rotating it silently breaks the continuity of every
+profile's view count.
 
 ### Known issue: deleting an account
 
-Deleting a user through Supabase's admin API fails with "Database error
-deleting user" whenever that user still has rows in a table referencing
-`auth.users`. Migration 0008 fixed two contributing causes — the deleting role
-held no DELETE or UPDATE privilege on any of those tables, and the SET NULL on
-`handles` tripped the claimed-needs-an-owner constraint — but the failure
-persists and the remaining cause has not been identified. Row level security
-was ruled out by test.
+Deleting an account fails while that account still has rows in a table
+referencing `auth.users`. Migration 00009 fixed two contributing causes — the
+deleting role held no DELETE or UPDATE privilege on any of those tables, and
+the SET NULL on `handles` tripped the claimed-needs-an-owner constraint — but
+the failure persisted against Supabase's admin API and the remaining cause was
+never identified. Row level security was ruled out by test.
 
-The app exposes no account-deletion flow, so nothing user-facing is blocked.
-Removing a user's posts, follows and handles first and then deleting the
-account does work. Diagnosing this properly needs the project's auth logs.
+Nothing exposes an account-deletion flow, so nothing user-facing is blocked.
+Removing a person's posts, follows and handles first and then deleting the
+account does work. Worth retrying now that the delete would be an ordinary
+statement in `internal/auth` rather than a call to somebody's admin API — the
+error it raises will say which constraint, which is what was missing.
 
 ### Residents and the public profile
 
@@ -317,10 +288,9 @@ ranking.
 
 A profile shows its own view count, when the owner was last active, their
 city, contact email and tags. The count is denormalised onto the handle row:
-`profile_views` itself stays closed, because its rows carry visitor hashes and
-referrers that belong to the owner alone. The leaderboard reads that table
-through a `security definer` function that returns the aggregate and nothing
-else.
+`profile_views` itself is never read by anything public, because its rows carry
+visitor hashes and referrers that belong to the owner alone. The leaderboard
+reads the aggregate and nothing else.
 
 ### Analytics
 
@@ -349,23 +319,25 @@ unique index on `normalized`, so two buyers cannot race for one handle.
 With no provider keys the site still works: the claim completes immediately
 and free, which is what development and preview environments want.
 
-Both providers call back to this app, so their merchant cabinets need these
-endpoints:
+**The providers now call back to the backend, not to this app.** Both cabinets
+have to be repointed at its host — one callback URL per merchant account, so
+exactly one deployment may answer:
 
 | Provider | Setting | URL |
 | --- | --- | --- |
-| Click | Prepare | `https://flex.com.uz/api/click/prepare` |
-| Click | Complete | `https://flex.com.uz/api/click/complete` |
-| Payme | Endpoint | `https://flex.com.uz/api/payme` |
+| Click | Prepare | `https://<backend host>/click/prepare` |
+| Click | Complete | `https://<backend host>/click/complete` |
+| Payme | Endpoint | `https://<backend host>/payme` |
 
-The protocol logic lives in [`src/lib/payments`](src/lib/payments) and is
-tested against an in-memory store, including the cases Payme's sandbox
-certification checks: repeated calls returning identical timestamps, the
-12-hour transaction timeout, and cancel-before-perform (-1) versus
-cancel-after-perform (-2).
+Payme was certified against `https://flex.com.uz/api/payme`, which no longer
+exists — that route and the store behind it were deleted when the protocol
+moved. **Repoint the cabinet before taking another payment**, or a settlement
+will be posted to a 404 and retried for hours.
 
-`RUN_DB_TESTS=1 npm test` additionally runs the store against the live
-project, creating and then removing its own rows.
+The protocol lives in `../backend/internal/payments` and is tested against an
+in-memory store, including the cases Payme's sandbox certification checks:
+repeated calls returning identical timestamps, the 12-hour transaction timeout,
+and cancel-before-perform (-1) versus cancel-after-perform (-2).
 
 ## Taking money for a venue
 

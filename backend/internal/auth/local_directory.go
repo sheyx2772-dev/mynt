@@ -6,18 +6,18 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-// An account directory for development, which writes straight to the database.
+// The account directory: a table in this database.
 //
-// The same argument as the log mailer beside it: development should not need
-// somebody's Supabase project, and a person cloning this repository should be
-// able to sign in within a minute of `make schema`. `make schema` builds a
-// local copy of the real schema including the `auth` tables, so there is a
-// place to put an account.
+// It was written as the development stand-in for a Supabase project, and it is
+// the only one now — which changed nothing about it. What changed is that
+// nothing else can write to `auth.users`. When accounts lived behind an admin
+// API, the key that reached it also reached every row in every table; the door
+// is one function in one process now, and everything on the other side of it
+// goes through a session this package issued.
 //
-// It is chosen only when no Supabase project is configured, and `config.Load`
-// refuses to start a production process in that state — because an account
-// directory that anybody with a database connection can write to is the whole
-// authentication system, and it belongs nowhere near real customers.
+// The table keeps the name `auth.users` because the queries that read it
+// number in the dozens and renaming it is a migration, not a decision — the
+// schema is ours either way.
 type LocalDirectory struct {
 	pool *pgxpool.Pool
 }

@@ -271,10 +271,10 @@ type CreateSessionParams struct {
 
 // Sessions, and the links that create them.
 //
-// Identity lives in `auth.users`, which the website already authenticates
-// against. Creating an account is therefore not a statement here — it goes
-// through Supabase's admin API, the same door `landing/src/lib/auth/telegram-login.ts`
-// uses — and everything below takes a user id that already exists.
+// Identity lives in `auth.users`. Creating an account is one statement, in
+// internal/auth/local_directory.go, made at the moment a link or a code is
+// followed — because following one is what proves the address. Everything
+// below takes a user id that already exists.
 func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (FlexSession, error) {
 	row := q.db.QueryRow(ctx, createSession,
 		arg.UserID,

@@ -33,28 +33,21 @@ type Config struct {
 	// otherwise end up inside a one-time link mailed to a victim.
 	SiteURL string
 
-	// Where accounts live. Supabase owns `auth.users` and the website already
-	// authenticates against it, so this backend asks rather than keeping a
-	// second list — see internal/auth/directory.go.
-	SupabaseURL            string
-	SupabaseServiceRoleKey string
-
 	// Which payment providers can take money. Both optional: with neither, a
-	// number is claimed outright and free, which is what development wants and
-	// what the website already does — the two must not disagree about whether
-	// a number costs anything.
+	// number is claimed outright and free in development, and production
+	// refuses to sell rather than doing the same.
 	//
-	// Only the identifiers are here. The secret keys stay in the website, which
-	// is where the providers call back and where the protocol is implemented.
+	// The identifiers, which go into the checkout address a buyer is sent to.
+	// The secret keys, which verify a callback, are below.
 	PaymeMerchantID string
 	ClickServiceID  string
 	ClickMerchantID string
 
 	// The secret keys, which verify a callback rather than build a link.
 	//
-	// Set only on the deployment the merchant cabinets actually point at. Two
-	// servers holding these is two servers a provider could be talked into
-	// believing, and the state machine they drive is the same order.
+	// Set only on the deployment the merchant cabinets actually point at. Each
+	// provider holds one callback URL per merchant account, and two servers
+	// holding these keys is two state machines answering for one order.
 	PaymeSecretKey string
 	ClickSecretKey string
 
@@ -148,43 +141,29 @@ func Load() (Config, error) {
 		// The sign-in service trimmed it for itself and the checkout builder did
 		// not, which is how a payment return address came to be
 		// "https://flex.com.uz//buyurtma/...".
-		SiteURL:                strings.TrimSuffix(withDefault("SITE_URL", "https://flex.com.uz"), "/"),
-		SupabaseURL:            strings.TrimSuffix(os.Getenv("SUPABASE_URL"), "/"),
-		SupabaseServiceRoleKey: os.Getenv("SUPABASE_SERVICE_ROLE_KEY"),
-		PaymeMerchantID:        os.Getenv("PAYME_MERCHANT_ID"),
-		ClickServiceID:         os.Getenv("CLICK_SERVICE_ID"),
-		ClickMerchantID:        os.Getenv("CLICK_MERCHANT_ID"),
-		PaymeSecretKey:         os.Getenv("PAYME_SECRET_KEY"),
-		ClickSecretKey:         os.Getenv("CLICK_SECRET_KEY"),
-		EskizEmail:             os.Getenv("ESKIZ_EMAIL"),
-		EskizPassword:          os.Getenv("ESKIZ_PASSWORD"),
-		SMSFrom:                withDefault("SMS_FROM", "4546"),
-		CronSecret:             strings.TrimSpace(os.Getenv("CRON_SECRET")),
-		OperatorUserID:         strings.TrimSpace(os.Getenv("OPERATOR_USER_ID")),
-		TelegramBotToken:       os.Getenv("TELEGRAM_BOT_TOKEN"),
-		ResendAPIKey:           os.Getenv("RESEND_API_KEY"),
-		MailFrom:               withDefault("MAIL_FROM", "Flex <kirish@flex.com.uz>"),
-		AdminEmails:            readList(os.Getenv("ADMIN_EMAILS")),
-		TrustProxy:             os.Getenv("TRUST_PROXY") == "true",
-		ReadTimeout:            15 * time.Second,
-		WriteTimeout:           30 * time.Second,
+		SiteURL:          strings.TrimSuffix(withDefault("SITE_URL", "https://flex.com.uz"), "/"),
+		PaymeMerchantID:  os.Getenv("PAYME_MERCHANT_ID"),
+		ClickServiceID:   os.Getenv("CLICK_SERVICE_ID"),
+		ClickMerchantID:  os.Getenv("CLICK_MERCHANT_ID"),
+		PaymeSecretKey:   os.Getenv("PAYME_SECRET_KEY"),
+		ClickSecretKey:   os.Getenv("CLICK_SECRET_KEY"),
+		EskizEmail:       os.Getenv("ESKIZ_EMAIL"),
+		EskizPassword:    os.Getenv("ESKIZ_PASSWORD"),
+		SMSFrom:          withDefault("SMS_FROM", "4546"),
+		CronSecret:       strings.TrimSpace(os.Getenv("CRON_SECRET")),
+		OperatorUserID:   strings.TrimSpace(os.Getenv("OPERATOR_USER_ID")),
+		TelegramBotToken: os.Getenv("TELEGRAM_BOT_TOKEN"),
+		ResendAPIKey:     os.Getenv("RESEND_API_KEY"),
+		MailFrom:         withDefault("MAIL_FROM", "Flex <kirish@flex.com.uz>"),
+		AdminEmails:      readList(os.Getenv("ADMIN_EMAILS")),
+		TrustProxy:       os.Getenv("TRUST_PROXY") == "true",
+		ReadTimeout:      15 * time.Second,
+		WriteTimeout:     30 * time.Second,
 	}
 
 	var missing []string
 	if cfg.DatabaseURL == "" {
 		missing = append(missing, "DATABASE_URL")
-	}
-	// In production, accounts must come from the real directory. Without these
-	// the server would fall back to writing them straight to the database,
-	// which is the whole authentication system and belongs nowhere near real
-	// customers — so it refuses to start rather than doing it quietly.
-	if !cfg.IsDevelopment() {
-		if cfg.SupabaseURL == "" {
-			missing = append(missing, "SUPABASE_URL")
-		}
-		if cfg.SupabaseServiceRoleKey == "" {
-			missing = append(missing, "SUPABASE_SERVICE_ROLE_KEY")
-		}
 	}
 	// A production deployment with no mail provider cannot sign anybody in, and
 	// the fallback writes live sign-in links to the log. Better to refuse to

@@ -18,7 +18,7 @@ telefonlar uchun QR-kod zaxira variant sifatida ishlaydi.
 foydalanuvchi kabineti, tashriflar va havola bosishlari bo'yicha analitika, postlar
 va obunachilar, rezidentlar katalogi, QR generator, PWA (telefon ekraniga
 o'rnatiladi va oflaynda ham ochiladi). Click va Payme to'lov integratsiyalari
-yozilgan va test qilingan. Texnologiyalar: Next.js, TypeScript, Supabase
+yozilgan va test qilingan. Texnologiyalar: Next.js, TypeScript, Go, Postgres
 (PostgreSQL, RLS), Cloudflare R2. 128 ta avtomatlashtirilgan test yozilgan.
 
 **Biznes modeli.** Bazaviy narx 99 000 so'm. Yakuniy narx harflar va raqamlarning

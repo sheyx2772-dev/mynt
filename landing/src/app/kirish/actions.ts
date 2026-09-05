@@ -6,10 +6,10 @@ import { safePath } from "@/lib/safe-path";
 
 // The two doors, both answered by our own backend.
 //
-// This used to call Supabase, and there used to be a third door through
-// Telegram. The phone replaces it: SMS is what the app signs in with, it is
-// what every payment app here signs in with, and one person arriving twice
-// through two doors is one person with two accounts.
+// There used to be a third door through Telegram. The phone replaces it: SMS
+// is what the app signs in with, it is what every payment app here signs in
+// with, and one person arriving twice through two doors is one person with two
+// accounts.
 
 export type SignInResult = { sent: false; error: string } | { sent: true; email: string };
 

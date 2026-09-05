@@ -119,7 +119,7 @@ body([
     "o'rnatiladi va oflaynda ishlaydi).",
     "",
     "Click va Payme integratsiyalari yozilgan va testdan o'tgan.",
-    "Ma'lumotlar bazasi Supabase, rasmlar Cloudflare R2 da.",
+    "Ma'lumotlar bazasi o'zimizniki (Postgres), rasmlar Cloudflare R2 da.",
     "128 ta avtomat test, hammasi o'tadi.",
 ], False, y=H - 250)
 shot("uzuk.jpg", 600, 130, 150)

@@ -118,10 +118,10 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
       <div className="mb-7 flex items-center justify-between gap-3">
         <div className="min-w-0">
           <h1 className="font-display text-2xl font-semibold tracking-tight">Kabinet</h1>
-          {/* A Telegram account has an address nobody can write to — it exists
-              so Supabase has something to key the user on. Showing it would be
-              showing the person a mailbox that is not theirs, so the name they
-              signed in with wins whenever there is one. */}
+          {/* Somebody who signed in by phone has an address nobody can write
+              to — it exists because an account is keyed on one. Showing it
+              would be showing the person a mailbox that is not theirs, so the
+              name they signed in with wins whenever there is one. */}
           <p className="mt-0.5 truncate text-sm text-paper-2">{accountLabel}</p>
         </div>
 
