@@ -112,7 +112,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
 
   // The cabinet is the one page only an owner loads, which makes it the
   // natural place to stamp activity. Deferred so it never delays the render.
-  after(() => touchLastSeen(user.id));
+  after(() => touchLastSeen());
 
   return (
     <PageShell surface="ink">

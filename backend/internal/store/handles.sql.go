@@ -161,7 +161,7 @@ func (q *Queries) OwnedHandle(ctx context.Context, arg OwnedHandleParams) (Handl
 }
 
 const publicProfile = `-- name: PublicProfile :one
-select normalized, owner_name, bio, avatar_url, banner_url, links, services,
+select normalized, user_id, owner_name, bio, avatar_url, banner_url, links, services,
        city, contact_email, phone, position, company, tags,
        card_design, device_type, custom_design_url,
        plan, plan_expires_at, view_count, last_seen_at
@@ -171,6 +171,7 @@ where normalized = $1 and status = 'claimed'
 
 type PublicProfileRow struct {
 	Normalized      *string            `json:"normalized"`
+	UserID          *uuid.UUID         `json:"user_id"`
 	OwnerName       *string            `json:"owner_name"`
 	Bio             *string            `json:"bio"`
 	AvatarUrl       *string            `json:"avatar_url"`
@@ -199,6 +200,7 @@ func (q *Queries) PublicProfile(ctx context.Context, normalized *string) (Public
 	var i PublicProfileRow
 	err := row.Scan(
 		&i.Normalized,
+		&i.UserID,
 		&i.OwnerName,
 		&i.Bio,
 		&i.AvatarUrl,

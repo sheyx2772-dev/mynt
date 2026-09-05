@@ -3,12 +3,12 @@ import { readServices, type Service } from "@/lib/services";
 import { cache } from "react";
 import { DEFAULT_CARD_DESIGN, isCardDesign, type CardDesignId } from "@/lib/card-designs";
 import { DEFAULT_DEVICE_TYPE, isDeviceType, type DeviceTypeId } from "@/lib/devices";
-import { createServerSupabase } from "@/lib/supabase/server";
 import { asReader, backend } from "@/lib/backend/client";
 import type { paths } from "@/lib/backend/schema";
 
 export type ClaimedProfile = {
-  userId: string | null;
+  /** Whether the reader owns this number. */
+  isOwner: boolean;
   name: string;
   bio: string;
   avatarUrl: string | null;
@@ -33,84 +33,42 @@ export type ClaimedProfile = {
   postCount: number;
 };
 
-// Local fallback so the profile page works before a Supabase project is connected.
-const DEMO_PROFILES: Record<string, ClaimedProfile> = {
-  MYN042: {
-    userId: null,
-    city: "Toshkent",
-    contactEmail: null,
-    phone: null,
-    position: null,
-    company: null,
-    cardDesign: DEFAULT_CARD_DESIGN,
-    plan: "free",
-    services: [],
-    bannerUrl: null,
+export const getClaimedProfile = cache(async (normalized: string): Promise<ClaimedProfile | null> => {
+  const client = await asReader();
+  const { data, error } = await client.GET("/profil/{raqam}", {
+    params: { path: { raqam: normalized } },
+  });
+  if (error || !data?.profil) return null;
+
+  const p = data.profil;
+  return {
+    // The backend answers whether the reader owns this rather than saying who
+    // does. The page only ever asked the first question, and the second is a
+    // fact about a customer that a stranger tapping a card should not learn.
+    isOwner: p.meniki,
+    name: p.ism,
+    bio: p.tavsif ?? "",
+    avatarUrl: p.rasm ?? null,
+    links: (p.havolalar ?? []) as ClaimedProfile["links"],
+    city: p.shahar ?? null,
+    contactEmail: p.email ?? null,
+    phone: p.telefon ?? null,
+    position: p.lavozim ?? null,
+    company: p.kompaniya ?? null,
+    cardDesign: isCardDesign(p.dizayn) ? p.dizayn : DEFAULT_CARD_DESIGN,
+    plan: p.tarif as PlanId,
+    services: (p.xizmatlar ?? []) as Service[],
+    bannerUrl: p.banner ?? null,
+    tags: p.teglar ?? [],
+    lastSeenAt: p.oxirgi_faollik ?? null,
+    viewCount: p.korishlar,
+    // Not moved yet: comments, recommendations and follows are their own
+    // slice, and each keeps its own count.
     commentsOpen: false,
     recommendCount: 0,
     team: null,
-    tags: ["Startup"],
-    lastSeenAt: null,
-    viewCount: 0,
     followerCount: 0,
     postCount: 0,
-    name: "Aziz Karimov",
-    bio: "Flex asoschisi. Raqamli shaxs va networking bilan shug'ullanaman.",
-    avatarUrl: null,
-    links: [
-      { label: "Telegram", href: "https://t.me/azizkarimov" },
-      { label: "Instagram", href: "https://instagram.com/azizkarimov" },
-      { label: "Veb-sayt", href: "https://flex.com.uz" },
-    ],
-  },
-};
-
-export const getClaimedProfile = cache(async (normalized: string): Promise<ClaimedProfile | null> => {
-  const supabase = await createServerSupabase();
-  if (!supabase) {
-    return DEMO_PROFILES[normalized] ?? null;
-  }
-
-  const { data } = await supabase
-    .from("handles")
-    .select(
-      "user_id, owner_name, bio, avatar_url, links, city, contact_email, phone, position, company, tags, last_seen_at, view_count, follower_count, post_count, recommend_count, card_design, plan, plan_expires_at, services, banner_url, comments_open, team_id, teams (name, logo_url, website, city, plan_expires_at)"
-    )
-    .eq("normalized", normalized)
-    .eq("status", "claimed")
-    .maybeSingle();
-
-  if (!data) return null;
-
-  // PostgREST returns an embedded row as an object or, for some shapes, a
-  // single-element array. Normalising once here keeps every read below simple.
-  const team = teamOf(data.teams);
-
-  return {
-    userId: data.user_id ?? null,
-    name: data.owner_name ?? normalized,
-    bio: data.bio ?? "",
-    avatarUrl: data.avatar_url,
-    links: Array.isArray(data.links) ? data.links : [],
-    city: team?.city ?? data.city ?? null,
-    contactEmail: data.contact_email ?? null,
-    phone: data.phone ?? null,
-    position: data.position ?? null,
-    company: team?.name ?? data.company ?? null,
-    cardDesign: isCardDesign(data.card_design) ? data.card_design : DEFAULT_CARD_DESIGN,
-    plan: effectivePlan(data.plan, data.plan_expires_at, team?.plan_expires_at),
-    services: readServices(data.services),
-    bannerUrl: (data.banner_url as string) ?? null,
-    commentsOpen: Boolean(data.comments_open),
-    recommendCount: (data.recommend_count as number) ?? 0,
-    team: team
-      ? { name: team.name, logoUrl: team.logo_url, website: team.website }
-      : null,
-    tags: Array.isArray(data.tags) ? data.tags : [],
-    lastSeenAt: data.last_seen_at ?? null,
-    viewCount: Number(data.view_count ?? 0),
-    followerCount: Number(data.follower_count ?? 0),
-    postCount: Number(data.post_count ?? 0),
   };
 });
 
@@ -122,37 +80,19 @@ export type GenesisCard = {
   mintedAt: string | null;
 };
 
-// Local fallback: card #000001 exists as a demo before Supabase is connected.
-const DEMO_GENESIS: Record<string, GenesisCard> = {
-  "000001": {
-    serial: "000001",
-    status: "claimed",
-    ownerName: "Aziz Karimov",
-    ownerHandle: "MYN042",
-    mintedAt: "2026-01-01",
-  },
-};
-
 export const getGenesisCard = cache(async (serial: string): Promise<GenesisCard | null> => {
-  const supabase = await createServerSupabase();
-  if (!supabase) {
-    return DEMO_GENESIS[serial] ?? null;
-  }
+  const { data, error } = await backend.GET("/karta/{seriya}", {
+    params: { path: { seriya: serial } },
+  });
+  if (error || !data?.karta) return null;
 
-  const { data } = await supabase
-    .from("genesis_cards")
-    .select("normalized, status, owner_name, owner_handle, minted_at")
-    .eq("normalized", serial)
-    .maybeSingle();
-
-  if (!data) return null;
-
+  const c = data.karta;
   return {
-    serial: data.normalized,
-    status: data.status,
-    ownerName: data.owner_name,
-    ownerHandle: data.owner_handle,
-    mintedAt: data.minted_at ? String(data.minted_at).slice(0, 10) : null,
+    serial: c.seriya,
+    status: c.holat as GenesisCard["status"],
+    ownerName: c.ism ?? null,
+    ownerHandle: c.raqam ?? null,
+    mintedAt: c.chiqarilgan ? c.chiqarilgan.slice(0, 10) : null,
   };
 });
 
@@ -390,14 +330,9 @@ export async function getDirectoryCounts(): Promise<DirectoryCounts> {
   return { claimed: data.egallangan, namespace: data.jami };
 }
 
-// Stamps the owner's handles as recently active. Called from the cabinet,
-// which is the one page only an owner loads.
-export async function touchLastSeen(userId: string): Promise<void> {
-  const supabase = await createServerSupabase();
-  if (!supabase) return;
-
-  await supabase
-    .from("handles")
-    .update({ last_seen_at: new Date().toISOString() })
-    .eq("user_id", userId);
+// Stamps the owner's numbers as recently active, which a profile shows.
+// Called from the cabinet, the one page only an owner loads.
+export async function touchLastSeen(): Promise<void> {
+  const client = await asReader();
+  await client.POST("/men/faollik", {});
 }

@@ -182,7 +182,7 @@ async function VanityHandlePage({
       // Counted the same as a profile: a table that gets tapped is the number
       // a venue is paying us to learn.
       const viewer = await getUser();
-      const isOwner = Boolean(viewer && profile.userId && viewer.id === profile.userId);
+      const isOwner = profile.isOwner;
       if (!isOwner) {
         const visitor = await readVisitorContext(source);
         after(() => recordProfileView(normalized, visitor));
@@ -240,7 +240,7 @@ async function VanityHandlePage({
     const backTo = `/${normalized}${kept.size ? `?${kept}` : ""}`;
 
     const viewer = await getUser();
-    const isOwner = Boolean(viewer && profile.userId && viewer.id === profile.userId);
+    const isOwner = profile.isOwner;
 
     // Owners looking at their own page would otherwise inflate their numbers.
     // Recorded after the response so it never delays the profile.
@@ -591,7 +591,7 @@ async function VanityHandlePage({
                   handle={normalized}
                   comments={comments}
                   viewerId={viewer?.id ?? null}
-                  ownerId={profile.userId}
+                  isOwner={profile.isOwner}
                   labels={{
                     title: t.comments,
                     placeholder: t.commentPlaceholder,

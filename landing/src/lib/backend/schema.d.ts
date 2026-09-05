@@ -210,6 +210,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/karta/{seriya}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Genesis karta
+         * @description Birinchi partiyaning raqamlangan kartasi. Seriya — olti raqam, handle emas.
+         */
+        get: operations["genesis-karta"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/kirish": {
         parameters: {
             query?: never;
@@ -318,6 +338,26 @@ export interface paths {
         get: operations["men"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/men/faollik": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Raqamlarni faol deb belgilash
+         * @description Kabinet ochilganda chaqiriladi. Profilda "oxirgi faollik" shundan.
+         */
+        post: operations["faollik"];
         delete?: never;
         options?: never;
         head?: never;
@@ -785,6 +825,23 @@ export interface components {
              */
             type: string;
         };
+        GenesisCard: {
+            /** Format: date-time */
+            chiqarilgan?: string;
+            holat: string;
+            ism?: string;
+            raqam?: string;
+            seriya: string;
+        };
+        GenesisOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/GenesisOutputBody.json
+             */
+            readonly $schema?: string;
+            karta: components["schemas"]["GenesisCard"];
+        };
         GiveInputBody: {
             /**
              * Format: uri
@@ -1245,6 +1302,7 @@ export interface components {
             /** Format: int64 */
             korishlar: number;
             lavozim?: string;
+            meniki: boolean;
             /** Format: date-time */
             oxirgi_faollik?: string;
             qurilma?: string;
@@ -1802,6 +1860,37 @@ export interface operations {
             };
         };
     };
+    "genesis-karta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                seriya: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GenesisOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "kirish-sorash": {
         parameters: {
             query?: never;
@@ -1987,6 +2076,33 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["MeOutputBody"];
                 };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    faollik: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error */
             default: {

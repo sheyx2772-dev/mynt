@@ -3,6 +3,7 @@ package handles
 import (
 	"context"
 	"errors"
+	"github.com/google/uuid"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -40,12 +41,21 @@ type PublicProfile struct {
 
 	Views    int64      `json:"korishlar"`
 	LastSeen *time.Time `json:"oxirgi_faollik,omitempty"`
+
+	// Whether the reader owns this number.
+	//
+	// A boolean rather than the owner's id, which is what the website used to
+	// read. This endpoint is public, so publishing the id would let anybody
+	// group numbers by the person holding them — which is a fact about a
+	// customer that a stranger tapping a card has no business learning. The
+	// question every caller actually asked was this one.
+	Mine bool `json:"meniki"`
 }
 
 // Public reads one claimed profile. A number that is unclaimed, reserved or
 // invented is ErrNotFound — the same answer, because telling them apart tells
 // somebody enumerating numbers which ones are worth a second look.
-func (s *Store) Public(ctx context.Context, normalized string) (PublicProfile, error) {
+func (s *Store) Public(ctx context.Context, normalized, viewerID string) (PublicProfile, error) {
 	row, err := s.queries.PublicProfile(ctx, optional(normalized))
 	if errors.Is(err, pgx.ErrNoRows) {
 		return PublicProfile{}, ErrNotFound
@@ -54,7 +64,12 @@ func (s *Store) Public(ctx context.Context, normalized string) (PublicProfile, e
 		return PublicProfile{}, err
 	}
 
+	// Compared here rather than returned for the caller to compare, so the
+	// owner's id never leaves this function.
+	mine := viewerID != "" && row.UserID != nil && row.UserID.String() == viewerID
+
 	return PublicProfile{
+		Mine:     mine,
 		Handle:   deref(row.Normalized),
 		Name:     firstNonEmpty(deref(row.OwnerName), deref(row.Normalized)),
 		Bio:      deref(row.Bio),
@@ -84,4 +99,49 @@ func firstNonEmpty(values ...string) string {
 		}
 	}
 	return ""
+}
+
+// GenesisCard is one of the numbered first-run cards.
+//
+// A different namespace from a handle and not interchangeable with one: a
+// serial is six digits, a handle is three letters and three digits, and the
+// page that shows a card is not the page that shows a profile.
+type GenesisCard struct {
+	Serial string     `json:"seriya"`
+	Status string     `json:"holat"`
+	Name   string     `json:"ism,omitempty"`
+	Handle string     `json:"raqam,omitempty"`
+	Minted *time.Time `json:"chiqarilgan,omitempty"`
+}
+
+// Genesis reads one card by its serial.
+func (s *Store) Genesis(ctx context.Context, serial string) (GenesisCard, error) {
+	row, err := s.queries.GenesisCard(ctx, optional(serial))
+	if errors.Is(err, pgx.ErrNoRows) {
+		return GenesisCard{}, ErrNotFound
+	}
+	if err != nil {
+		return GenesisCard{}, err
+	}
+
+	return GenesisCard{
+		Serial: deref(row.Normalized),
+		Status: row.Status,
+		Name:   deref(row.OwnerName),
+		Handle: deref(row.OwnerHandle),
+		Minted: optionalTime(row.MintedAt),
+	}, nil
+}
+
+// TouchLastSeen stamps every number this account holds as recently active.
+//
+// Called from the cabinet, which is the one page only an owner loads — so a
+// profile showing "seen two days ago" means the owner opened their cabinet
+// rather than that somebody looked at the profile.
+func (s *Store) TouchLastSeen(ctx context.Context, userID string) error {
+	id, err := uuid.Parse(userID)
+	if err != nil {
+		return ErrNotFound
+	}
+	return s.queries.TouchLastSeen(ctx, &id)
 }

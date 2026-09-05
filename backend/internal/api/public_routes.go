@@ -22,6 +22,16 @@ type publicProfileInput struct {
 	Raqam string `path:"raqam" pattern:"^[A-Za-z]{3}[0-9]{3}$"`
 }
 
+type genesisInput struct {
+	Seriya string `path:"seriya" pattern:"^[0-9]{6}$"`
+}
+
+type genesisOutput struct {
+	Body struct {
+		Card handles.GenesisCard `json:"karta"`
+	}
+}
+
 type publicProfileOutput struct {
 	Body struct {
 		Profile handles.PublicProfile `json:"profil"`
@@ -45,7 +55,13 @@ func (s *Server) registerPublic(api huma.API) {
 			return nil, huma.Error404NotFound("Bunday raqam yo'q.")
 		}
 
-		profile, err := s.handles.Public(ctx, parsed.Normalized())
+		// Optional, not required: this is the page a stranger opens after
+		// tapping a card, and most readers have no session at all. The only
+		// thing a session changes here is whether the profile says it is
+		// theirs.
+		viewer, _ := accountFrom(ctx)
+
+		profile, err := s.handles.Public(ctx, parsed.Normalized(), viewer.ID)
 		if errors.Is(err, handles.ErrNotFound) {
 			// The same answer for unclaimed, reserved and invented. Telling
 			// them apart tells somebody working through the number space which
@@ -58,6 +74,27 @@ func (s *Server) registerPublic(api huma.API) {
 
 		out := &publicProfileOutput{}
 		out.Body.Profile = profile
+		return out, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID: "genesis-karta",
+		Method:      http.MethodGet,
+		Path:        "/karta/{seriya}",
+		Summary:     "Genesis karta",
+		Description: "Birinchi partiyaning raqamlangan kartasi. Seriya — olti raqam, handle emas.",
+		Tags:        []string{"profil"},
+	}, func(ctx context.Context, in *genesisInput) (*genesisOutput, error) {
+		card, err := s.handles.Genesis(ctx, in.Seriya)
+		if errors.Is(err, handles.ErrNotFound) {
+			return nil, huma.Error404NotFound("Bunday karta yo'q.")
+		}
+		if err != nil {
+			return nil, internalError(err, "karta o'qilmadi")
+		}
+
+		out := &genesisOutput{}
+		out.Body.Card = card
 		return out, nil
 	})
 }

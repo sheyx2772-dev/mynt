@@ -30,7 +30,7 @@ export default async function FeedPage() {
     listNewestResidents(4),
   ]);
 
-  after(() => touchLastSeen(user.id));
+  after(() => touchLastSeen());
 
   return (
     <PageShell wide>

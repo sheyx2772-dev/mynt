@@ -41,6 +41,25 @@ type saveProfileInput struct {
 
 func (s *Server) registerHandles(api huma.API) {
 	huma.Register(api, huma.Operation{
+		OperationID:   "faollik",
+		Method:        http.MethodPost,
+		Path:          "/men/faollik",
+		Summary:       "Raqamlarni faol deb belgilash",
+		Description:   "Kabinet ochilganda chaqiriladi. Profilda \"oxirgi faollik\" shundan.",
+		Tags:          []string{"raqamlar"},
+		DefaultStatus: http.StatusNoContent,
+	}, func(ctx context.Context, _ *struct{}) (*struct{}, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+		if err := s.handles.TouchLastSeen(ctx, account.ID); err != nil {
+			return nil, internalError(err, "faollik yozilmadi")
+		}
+		return nil, nil
+	})
+
+	huma.Register(api, huma.Operation{
 		OperationID: "raqamlarim",
 		Method:      http.MethodGet,
 		Path:        "/raqamlar",

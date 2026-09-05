@@ -25,7 +25,7 @@ select id, name from teams where id = any(sqlc.arg(ids)::uuid[]);
 -- What a visitor sees. Only claimed numbers: a reservation is an unfinished
 -- purchase, not a profile.
 -- name: PublicProfile :one
-select normalized, owner_name, bio, avatar_url, banner_url, links, services,
+select normalized, user_id, owner_name, bio, avatar_url, banner_url, links, services,
        city, contact_email, phone, position, company, tags,
        card_design, device_type, custom_design_url,
        plan, plan_expires_at, view_count, last_seen_at

@@ -17,14 +17,14 @@ export default function ProfileComments({
   handle,
   comments,
   viewerId,
-  ownerId,
+  isOwner,
   labels,
 }: {
   handle: string;
   comments: ProfileComment[];
   /** Null when signed out. */
   viewerId: string | null;
-  ownerId: string | null;
+  isOwner: boolean;
   labels: {
     title: string;
     placeholder: string;
@@ -39,7 +39,7 @@ export default function ProfileComments({
   const [pending, startTransition] = useTransition();
   const router = useRouter();
 
-  const isOwner = Boolean(viewerId && viewerId === ownerId);
+
   const alreadyWrote = comments.some((c) => c.authorId === viewerId);
 
   return (
