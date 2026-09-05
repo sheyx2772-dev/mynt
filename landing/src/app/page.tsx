@@ -27,7 +27,6 @@ import {
 import type { Metadata } from "next";
 import Link from "next/link";
 import Mark from "@/components/Mark";
-import PricingCalculator from "@/components/PricingCalculator";
 import ProfilePreview from "@/components/ProfilePreview";
 import PhoneFrame from "@/components/PhoneFrame";
 import HandleChecker from "@/components/HandleChecker";

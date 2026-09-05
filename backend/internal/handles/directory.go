@@ -42,9 +42,14 @@ type Listed struct {
 	Updated *time.Time `json:"yangilangan,omitempty"`
 }
 
-// The whole AAA000 space: 26³ letters by 10³ digits. A constant rather than a
-// count, because it is a property of the format and not of the data.
-const Namespace = 26 * 26 * 26 * 10 * 10 * 10
+// How many numbers there are: 26³ letters by 10³ digits, less the thousand
+// behind every blocked combination.
+//
+// A constant rather than a count, because it is a property of the format and
+// not of the data — but it is computed from the blocklist rather than written
+// out, so the figure the site prints stays true when a word is added to it. A
+// number nobody may buy is not a number we have.
+var Namespace = 26*26*26*10*10*10 - len(blockedWords)*1000
 
 // Residents lists the directory, filtered by a search term when there is one.
 func (s *Store) Residents(ctx context.Context, term string, limit int32) ([]Resident, error) {

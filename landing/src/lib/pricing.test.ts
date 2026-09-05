@@ -1,5 +1,7 @@
+import { createHash } from "node:crypto";
+
 import { describe, it, expect } from "vitest";
-import { BASE_PRICE, parseHandle, parseGenesisSerial, letterRarity, digitRarity, priceForHandle, rarityTier, RARE_WORDS } from "./pricing";
+import { BASE_PRICE, parseHandle, parseGenesisSerial, letterRarity, digitRarity, priceForHandle, rarityTier, RARE_WORDS, BLOCKED_WORDS } from "./pricing";
 
 describe("parseHandle", () => {
   it("accepts the AAA000 shape and normalizes case", () => {
@@ -152,12 +154,14 @@ describe("the word tier", () => {
   // The same list lives in `backend/internal/handles/pricing.go`. A word in one
   // and not the other is this site quoting a hundred thousand and the server
   // charging two million, so both are pinned by count.
-  it("holds exactly the words both sides agree on", () => {
-    expect(RARE_WORDS).toHaveLength(30);
-  });
-
   it("prices a word at twenty times the base", () => {
-    for (const word of ["VIP", "CEO", "BEK", "UZB", "NUR", "ZAR", "LUX", "ONE"]) {
+    for (const word of [
+      "VIP", "CEO", "BEK", "UZB", "NUR", "ZAR", "LUX", "ONE",
+      // The trades, which sell to a business rather than to a person.
+      "GYM", "LAW", "MED", "WEB",
+      // Uzbek, names and cities.
+      "OSH", "PUL", "OTA", "ALI", "SAM", "BUX",
+    ]) {
       expect(letterRarity(word).multiplier).toBe(20);
     }
   });
@@ -170,5 +174,48 @@ describe("the word tier", () => {
 
   it("ranks three identical letters above a word", () => {
     expect(letterRarity("WWW").multiplier).toBe(30);
+  });
+});
+
+describe("what may not be sold", () => {
+  it("refuses a blocked combination as though it did not exist", () => {
+    for (const raw of ["SEX777", "xxx001", "MVD000", "Gay123"]) {
+      expect(parseHandle(raw)).toBeNull();
+    }
+  });
+
+  it("takes nothing else with it", () => {
+    for (const raw of ["AAA777", "QXD483", "OSH001", "GYM555"]) {
+      expect(parseHandle(raw)).not.toBeNull();
+    }
+  });
+
+  it("prices nothing it refuses", () => {
+    for (const word of BLOCKED_WORDS) {
+      expect(RARE_WORDS).not.toContain(word);
+    }
+  });
+});
+
+// Both lists live twice: here, and in backend/internal/handles. The backend is
+// the authority — it refuses the sale — and this copy exists because the price
+// calculator runs in the browser and cannot wait for a round trip per
+// keystroke.
+//
+// Two copies of a pricing rule is two prices: the site quoting a hundred
+// thousand while the server charges two million. These fingerprints are how
+// the copies are held together. The same two values are asserted in
+// backend/internal/handles/blocked_test.go, so editing one list without the
+// other fails on one side or the other, naming the file to go and fix.
+describe("the two copies of each list", () => {
+  const fingerprint = (words: readonly string[]) =>
+    createHash("sha256").update([...words].sort().join(",")).digest("hex").slice(0, 8);
+
+  it("matches the backend's rare words", () => {
+    expect(fingerprint(RARE_WORDS)).toBe("043ff3dc");
+  });
+
+  it("matches the backend's blocked words", () => {
+    expect(fingerprint(BLOCKED_WORDS)).toBe("834c5b0a");
   });
 });

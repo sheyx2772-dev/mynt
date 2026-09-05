@@ -15,13 +15,72 @@ export const BASE_PRICE = 100_000;
   // is three letters of A–Z, and "O‘ZB" is four characters of which one is not
   // a letter.
 export const RARE_WORDS = [
-  // What a person is.
+  // What a person is, and what they do. The trades sell to a business rather
+  // than to one person, which is a different and larger buyer.
   "VIP", "CEO", "CTO", "CFO", "MBA", "DEV", "DOC", "PRO", "BOS", "SIR", "BEK", "XON",
-  // Where they are.
+  "GYM", "SPA", "LAW", "MED", "WEB", "APP", "HUB", "LAB", "BAR", "TAX", "PAY", "FIT",
+  "JOB", "CAR", "SEO", "NET",
+  // Uzbek, written the way the alphabet here allows. OSH is the strongest of
+  // them: every choyxona in the country wants it.
+  "OTA", "ONA", "AKA", "OPA", "OYI", "JON", "DIL", "YOR", "PUL", "NON", "OSH", "SUV",
+  "QOR", "KUN", "TUN", "YOZ", "KUZ", "TIL", "ISH", "GAP", "BOY", "SOZ",
+  // Names. Three letters is a short name here, so there are few — but a person
+  // buying their own name is the easiest sale there is.
+  "ALI", "ABU", "UMR", "MIR",
+  // Where they are: the cities, the way an airport writes them.
   "UZB", "NUR", "ZAR", "ASL", "TOY", "GUL",
+  "SAM", "BUX", "XIV", "NAV", "AND", "FAR",
   // What anybody recognises.
   "GOD", "ACE", "WOW", "TOP", "LUX", "MAX", "WIN", "ONE", "KEY", "NEW", "ART", "ZEN",
+  "SKY", "SUN", "GEM", "FLY", "FOX", "ICE", "BIG", "BUY",
 ];
+
+/**
+ * Letter combinations that are not for sale at any price.
+ *
+ * Not the rare-word list with the sign flipped. A rare word is priced high
+ * because somebody wants it; these are refused because selling them would do
+ * damage no price makes up for — and the damage is done to people who never
+ * bought anything. `backend/internal/handles/blocked.go` says what is on the
+ * list and why, group by group; it is the authority and this is the copy the
+ * price calculator needs, because that runs in the browser and cannot wait for
+ * a round trip per keystroke.
+ *
+ * A blocked combination is treated as though it were never part of the
+ * namespace: `parseHandle` refuses it, so the page says the number does not
+ * exist rather than naming a reason. A message that names the reason is a
+ * message that maps the list.
+ *
+ * Yes, this ships to the browser. Everything on it is a word somebody could
+ * guess in a minute; the alternative is quoting a price for a number that
+ * cannot be bought and letting the buyer find out at checkout.
+ */
+export const BLOCKED_WORDS = [
+  // Government bodies — the one group here that is a safety rule rather than
+  // a taste one.
+  "MVD", "IIB", "SSB", "DXX", "GAI", "YHX", "PRK", "GNK", "MCH", "SES",
+  // Obscene in English.
+  "SEX", "XXX", "PRN", "ASS", "FUK", "FCK", "CUM", "DIC", "DIK", "COK",
+  "TIT", "NUD", "POR",
+  // Obscene in Russian, written in Latin letters — which is how they are
+  // actually typed here.
+  "XUY", "XUI", "HUY", "HUI", "PIZ", "BLY", "BLD", "SUK", "EBA", "EBI",
+  "EBU", "PID", "MUD", "NAX",
+  // Obscene in Uzbek and Turkish. The shortest of the three, and the one most
+  // likely to be incomplete.
+  "SIK", "KOT", "AMK",
+  // Slurs.
+  "GAY", "FAG",
+  // Sacred names.
+  "ALH", "XUD", "QUR", "HAJ",
+];
+
+const BLOCKED = new Set(BLOCKED_WORDS);
+
+/** Whether a combination of letters may not be sold. */
+export function isBlocked(letters: string): boolean {
+  return BLOCKED.has(letters.toUpperCase());
+}
 
 export function letterRarity(letters: string): { multiplier: number; reason: string } {
   const l = letters.toUpperCase().split("");
@@ -59,6 +118,9 @@ export function digitRarity(digits: string): { multiplier: number; reason: strin
 export function parseHandle(raw: string): { letters: string; digits: string } | null {
   const match = raw.toUpperCase().match(/^([A-Z]{3})(\d{3})$/);
   if (!match) return null;
+  // A blocked combination fails here rather than being refused later, so every
+  // caller gets the refusal without having to remember to ask.
+  if (BLOCKED.has(match[1])) return null;
   return { letters: match[1], digits: match[2] };
 }
 

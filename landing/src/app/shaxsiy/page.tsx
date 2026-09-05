@@ -330,6 +330,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
                   randomise: s.randomise,
                   take: s.takeHandle,
                   formula: s.formulaLabel,
+                  notForSale: s.notForSale,
                 }}
               />
         </section>

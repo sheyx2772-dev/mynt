@@ -72,14 +72,16 @@ func TestParseSerialIsADifferentNamespace(t *testing.T) {
 // `landing/src/lib/pricing.ts`. A word in one and not the other is the site
 // quoting a hundred thousand and the server charging two million.
 //
-// Pinned by count and by a sample from each of the three groups, so adding a
-// word is a deliberate edit here as well as there.
+// Which list is which is pinned by fingerprint in blocked_test.go; this one
+// pins what the tier *does*, with a sample from every group.
 func TestTheWordTierIsWhatBothSidesThinkItIs(t *testing.T) {
-	if len(rareWords) != 30 {
-		t.Errorf("%d ta so'z — landing/src/lib/pricing.ts bilan bir xilmi?", len(rareWords))
-	}
-
-	for _, word := range []string{"VIP", "CEO", "BEK", "UZB", "NUR", "ZAR", "LUX", "ONE"} {
+	for _, word := range []string{
+		"VIP", "CEO", "BEK", "UZB", "NUR", "ZAR", "LUX", "ONE",
+		// The trades, which sell to a business rather than to a person.
+		"GYM", "LAW", "MED", "WEB",
+		// Uzbek, names and cities.
+		"OSH", "PUL", "OTA", "ALI", "SAM", "BUX",
+	} {
 		if LetterRarity(word).Multiplier != 20 {
 			t.Errorf("%s so'z tarifida emas", word)
 		}

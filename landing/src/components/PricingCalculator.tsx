@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Shuffle, ArrowRight } from "lucide-react";
 import { formatUZS, formatNumber } from "@/lib/format";
 import type { Lang } from "@/lib/i18n";
-import { BASE_PRICE, letterRarity, digitRarity, rarityTier } from "@/lib/pricing";
+import { BASE_PRICE, letterRarity, digitRarity, rarityTier, isBlocked } from "@/lib/pricing";
 import { useSanitisedInput } from "@/lib/use-sanitised-input";
 
 const onlyLetters = (raw: string) => raw.replace(/[^A-Za-z]/g, "").toUpperCase();
@@ -39,6 +39,8 @@ export default function PricingCalculator({
     /** Carries a {handle} placeholder, filled in with what is being priced. */
     take: string;
     formula: string;
+    /** Shown instead of a price when the combination is not sold at all. */
+    notForSale: string;
   };
 }) {
   const [letters, setLetters] = useState("MYN");
@@ -92,6 +94,11 @@ export default function PricingCalculator({
 
   const tier = rarityTier(cleanLetters, cleanDigits);
 
+  // Some combinations are not sold at any price — see BLOCKED_WORDS. Without
+  // this the calculator quotes one and the button under it leads to a page
+  // that does not exist, so the buyer finds out by hitting a 404.
+  const blocked = isBlocked(cleanLetters);
+
   return (
     <div className="relative w-full max-w-xl">
       <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-lime/10 blur-3xl" />
@@ -138,57 +145,70 @@ export default function PricingCalculator({
 
         {/* The band, named. "×1 oddiy kombinatsiya" is arithmetic; a name is a
             thing worth having, and it is the same information. */}
-        <div className="mb-5">
-          <span
-            className={`inline-block rounded-full px-3 py-1 text-[11px] font-semibold tracking-[0.14em] uppercase ${TIER_STYLE[tier]}`}
-          >
-            {labels.tiers[tier]}
-          </span>
-        </div>
+        {!blocked && (
+          <div className="mb-5">
+            <span
+              className={`inline-block rounded-full px-3 py-1 text-[11px] font-semibold tracking-[0.14em] uppercase ${TIER_STYLE[tier]}`}
+            >
+              {labels.tiers[tier]}
+            </span>
+          </div>
+        )}
 
         <div className="space-y-1 font-tabular text-sm">
-          <div className="flex items-center justify-between border-b border-line-soft py-3">
-            <div className="font-medium">{labels.base}</div>
-            <div>{formatUZS(BASE_PRICE, lang)}</div>
-          </div>
-          <div className="flex items-center justify-between border-b border-line-soft py-3">
-            <div>
-              <div className="font-medium">{labels.letterRarity}</div>
-              <div className="font-sans text-xs text-black/40">{letterReason}</div>
+          {blocked ? (
+            /* No price, and no way through to a page that would 404. The
+               reason is not named: a message saying which word it objected to
+               is a message that maps the list. */
+            <p className="rounded-2xl border border-line-soft bg-black/[0.03] px-4 py-6 text-center text-black/50">
+              {labels.notForSale}
+            </p>
+          ) : (
+            <>
+            <div className="flex items-center justify-between border-b border-line-soft py-3">
+              <div className="font-medium">{labels.base}</div>
+              <div>{formatUZS(BASE_PRICE, lang)}</div>
             </div>
-            <div className="font-semibold">&times;{letterMult}</div>
-          </div>
-          <div className="flex items-center justify-between border-b border-line-soft py-3">
-            <div>
-              <div className="font-medium">{labels.digitRarity}</div>
-              <div className="font-sans text-xs text-black/40">{digitReason}</div>
+            <div className="flex items-center justify-between border-b border-line-soft py-3">
+              <div>
+                <div className="font-medium">{labels.letterRarity}</div>
+                <div className="font-sans text-xs text-black/40">{letterReason}</div>
+              </div>
+              <div className="font-semibold">&times;{letterMult}</div>
             </div>
-            <div className="font-semibold">&times;{digitMult}</div>
-          </div>
-          <div className="flex items-center justify-between pt-5">
-            <div className="font-display text-lg font-semibold">{labels.total}</div>
-            <div className="rounded-xl bg-lime px-4 py-2 font-display text-xl font-semibold text-flex-black">
+            <div className="flex items-center justify-between border-b border-line-soft py-3">
+              <div>
+                <div className="font-medium">{labels.digitRarity}</div>
+                <div className="font-sans text-xs text-black/40">{digitReason}</div>
+              </div>
+              <div className="font-semibold">&times;{digitMult}</div>
+            </div>
+            <div className="flex items-center justify-between pt-5">
+              <div className="font-display text-lg font-semibold">{labels.total}</div>
+              <div className="rounded-xl bg-lime px-4 py-2 font-display text-xl font-semibold text-flex-black">
+                {formatUZS(total, lang)}
+              </div>
+            </div>
+
+            {/* The arithmetic written out. The rows above say what each factor is;
+                this says the sum is not something we made up. */}
+            <p className="pt-2 text-xs text-black/35">
+              {labels.formula}: {formatNumber(BASE_PRICE)} × {letterMult} × {digitMult} ={" "}
               {formatUZS(total, lang)}
-            </div>
-          </div>
+            </p>
 
-          {/* The arithmetic written out. The rows above say what each factor is;
-              this says the sum is not something we made up. */}
-          <p className="pt-2 text-xs text-black/35">
-            {labels.formula}: {formatNumber(BASE_PRICE)} × {letterMult} × {digitMult} ={" "}
-            {formatUZS(total, lang)}
-          </p>
-
-          {/* The calculator was a table. Somebody who has just been shown a
-              price and a name for what they are looking at is the likeliest
-              buyer on the page, and there was nothing here for them to press. */}
-          <Link
-            href={`/${cleanLetters}${cleanDigits}`}
-            className="mt-5 flex items-center justify-center gap-2 rounded-2xl bg-flex-black px-6 py-4 font-medium text-white transition-transform hover:scale-[1.01]"
-          >
-            {labels.take.replace("{handle}", `${cleanLetters}${cleanDigits}`)}
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+            {/* The calculator was a table. Somebody who has just been shown a
+                price and a name for what they are looking at is the likeliest
+                buyer on the page, and there was nothing here for them to press. */}
+            <Link
+              href={`/${cleanLetters}${cleanDigits}`}
+              className="mt-5 flex items-center justify-center gap-2 rounded-2xl bg-flex-black px-6 py-4 font-medium text-white transition-transform hover:scale-[1.01]"
+            >
+              {labels.take.replace("{handle}", `${cleanLetters}${cleanDigits}`)}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            </>
+          )}
           <p className="pt-3 font-sans text-xs leading-relaxed text-black/40">
             {labels.deviceNote}
           </p>

@@ -28,14 +28,30 @@ const BasePrice = 100_000
 // is three letters of A–Z, and "O‘ZB" is four characters of which one is not
 // a letter.
 var rareWords = map[string]bool{
-	// What a person is.
+	// What a person is, and what they do. The trades sell to a business rather
+	// than to one person, which is a different and larger buyer.
 	"VIP": true, "CEO": true, "CTO": true, "CFO": true, "MBA": true, "DEV": true,
 	"DOC": true, "PRO": true, "BOS": true, "SIR": true, "BEK": true, "XON": true,
-	// Where they are.
+	"GYM": true, "SPA": true, "LAW": true, "MED": true, "WEB": true, "APP": true,
+	"HUB": true, "LAB": true, "BAR": true, "TAX": true, "PAY": true, "FIT": true,
+	"JOB": true, "CAR": true, "SEO": true, "NET": true,
+	// Uzbek, written the way the alphabet here allows. `OSH` is the strongest
+	// of them: every choyxona in the country wants it.
+	"OTA": true, "ONA": true, "AKA": true, "OPA": true, "OYI": true, "JON": true,
+	"DIL": true, "YOR": true, "PUL": true, "NON": true, "OSH": true, "SUV": true,
+	"QOR": true, "KUN": true, "TUN": true, "YOZ": true, "KUZ": true, "TIL": true,
+	"ISH": true, "GAP": true, "BOY": true, "SOZ": true,
+	// Names. Three letters is a short name here, so there are few — but a
+	// person buying their own name is the easiest sale there is.
+	"ALI": true, "ABU": true, "UMR": true, "MIR": true,
+	// Where they are: the cities, the way an airport writes them.
 	"UZB": true, "NUR": true, "ZAR": true, "ASL": true, "TOY": true, "GUL": true,
+	"SAM": true, "BUX": true, "XIV": true, "NAV": true, "AND": true, "FAR": true,
 	// What anybody recognises.
 	"GOD": true, "ACE": true, "WOW": true, "TOP": true, "LUX": true, "MAX": true,
 	"WIN": true, "ONE": true, "KEY": true, "NEW": true, "ART": true, "ZEN": true,
+	"SKY": true, "SUN": true, "GEM": true, "FLY": true, "FOX": true, "ICE": true,
+	"BIG": true, "BUY": true,
 }
 
 var handlePattern = regexp.MustCompile(`^([A-Z]{3})([0-9]{3})$`)
@@ -112,6 +128,13 @@ func (p Parsed) Price() int         { return Price(p.Letters, p.Digits) }
 func Parse(raw string) (Parsed, bool) {
 	match := handlePattern.FindStringSubmatch(strings.ToUpper(strings.TrimSpace(raw)))
 	if match == nil {
+		return Parsed{}, false
+	}
+	// A blocked combination fails here rather than being refused later, so
+	// every caller gets the refusal without having to remember to ask: the
+	// search, the purchase, the profile page and the panel all go through this
+	// one function. See blocked.go for what is on the list and why.
+	if blockedWords[match[1]] {
 		return Parsed{}, false
 	}
 	return Parsed{Letters: match[1], Digits: match[2]}, true
