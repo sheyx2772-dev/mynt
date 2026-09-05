@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../brand/palette.dart';
@@ -7,11 +8,15 @@ import '../state/providers.dart';
 import '../state/session_controller.dart';
 import '../widgets/buttons.dart';
 
-/// Signing in, which is two steps and no password.
+/// Signing in, which is a phone number and a code.
 ///
-/// The address is typed here; the link arrives by mail and opens the app
-/// again through the deep link in `main.dart`. Nothing on this screen holds a
-/// secret, which is why it can be the only screen reachable signed out.
+/// A number rather than an address because the phone is the thing everybody
+/// here has and remembers, and because the card being sold is handed to people
+/// who will never be asked for an email. The website still signs in by link;
+/// somebody who starts there arrives through the deep link in `main.dart`.
+///
+/// Nothing on this screen holds a secret, which is why it can be the only
+/// screen reachable signed out.
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key, this.next});
 
@@ -23,30 +28,80 @@ class SignInScreen extends ConsumerStatefulWidget {
 }
 
 class _SignInScreenState extends ConsumerState<SignInScreen> {
-  final _email = TextEditingController();
-  bool _sending = false;
-  bool _sent = false;
+  // The country this sells in today. Typed over rather than locked: the
+  // backend stores a number in international form and reads the country from
+  // the dial code, so a Kazakh number works the moment somebody types one.
+  static const _defaultDialCode = '+998 ';
+
+  final _phone = TextEditingController(text: _defaultDialCode);
+  final _code = TextEditingController();
+  final _codeFocus = FocusNode();
+
+  bool _busy = false;
   String? _problem;
+
+  /// The number a code was sent to. Non-null means the second step.
+  String? _sentTo;
 
   @override
   void dispose() {
-    _email.dispose();
+    _phone.dispose();
+    _code.dispose();
+    _codeFocus.dispose();
     super.dispose();
   }
 
+  /// What the server wants: digits, with the dial code and no spaces.
+  String get _normalised => _phone.text.replaceAll(RegExp(r'[^0-9]'), '');
+
   Future<void> _send() async {
+    final phone = _normalised;
+    // Nine digits after a three-digit dial code is the shortest real number
+    // here. Checked so an obviously empty field does not spend an SMS.
+    if (phone.length < 9) {
+      setState(() => _problem = 'Raqamni to\'liq kiriting.');
+      return;
+    }
+
     setState(() {
-      _sending = true;
+      _busy = true;
       _problem = null;
     });
 
     try {
-      await ref.read(apiProvider).requestLink(_email.text.trim());
-      if (mounted) setState(() => _sent = true);
+      await ref.read(apiProvider).requestCode(phone);
+      if (!mounted) return;
+      setState(() => _sentTo = phone);
+      _codeFocus.requestFocus();
     } on ApiException catch (error) {
       if (mounted) setState(() => _problem = error.message);
     } finally {
-      if (mounted) setState(() => _sending = false);
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _confirm() async {
+    final code = _code.text.trim();
+    if (code.length != 6) return;
+
+    setState(() {
+      _busy = true;
+      _problem = null;
+    });
+
+    try {
+      await ref.read(sessionProvider.notifier).confirmCode(_sentTo!, code);
+      // Nothing to navigate to: the router sends a signed-in person on as soon
+      // as the session provider carries an account.
+    } on ApiException catch (error) {
+      if (mounted) {
+        setState(() {
+          _problem = error.message;
+          _code.clear();
+        });
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
     }
   }
 
@@ -54,8 +109,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   Widget build(BuildContext context) {
     // A link that failed — expired, already used — leaves the session in an
     // error state and the person back on this screen. Without this they would
-    // be returned here with no explanation, and would go looking in their mail
-    // for a link that will never work.
+    // be returned here with no explanation.
     final rejected = ref.watch(sessionProvider).error;
 
     return Scaffold(
@@ -65,75 +119,87 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: _sent ? _linkSent() : _askForAddress(rejected),
+            children: _sentTo == null ? _askForNumber(rejected) : _askForCode(),
           ),
         ),
       ),
     );
   }
 
-  List<Widget> _askForAddress(Object? rejected) => [
+  List<Widget> _askForNumber(Object? rejected) => [
         const _Wordmark(),
         const SizedBox(height: 28),
-        const Text(
-          'Kirish',
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: Brand.black),
-        ),
+        const _Title('Kirish'),
         const SizedBox(height: 8),
-        Text(
-          'Parol yo\'q. Manzilingizga bir martalik havola yuboramiz.',
-          style: TextStyle(fontSize: 15, height: 1.5, color: Brand.black.withValues(alpha: 0.6)),
-        ),
+        _Lead('Telefon raqamingizga 6 xonali kod yuboramiz. Parol kerak emas.'),
         const SizedBox(height: 28),
         TextField(
-          controller: _email,
-          keyboardType: TextInputType.emailAddress,
-          autocorrect: false,
-          // An address is not a name: capitalising the first letter is one more
-          // thing to undo on a phone keyboard.
-          textCapitalization: TextCapitalization.none,
-          autofillHints: const [AutofillHints.email],
+          controller: _phone,
+          keyboardType: TextInputType.phone,
+          autofillHints: const [AutofillHints.telephoneNumber],
           onSubmitted: (_) => _send(),
-          decoration: _fieldDecoration('siz@example.com'),
+          style: const TextStyle(fontSize: 18, letterSpacing: 0.5),
+          decoration: _field('+998 90 123 45 67'),
         ),
-        if (_problem != null || rejected != null) ...[
-          const SizedBox(height: 12),
-          Text(
-            _problem ??
-                (rejected is ApiException
-                    ? rejected.message
-                    : 'Havola ishlamadi. Yangisini so\'rang.'),
-            style: const TextStyle(fontSize: 14, color: Color(0xFFB91C1C)),
-          ),
-        ],
+        ..._problemLine(rejected),
         const SizedBox(height: 20),
-        LimeButton(label: 'Havola yuborish', busy: _sending, onPressed: _send),
+        LimeButton(label: 'Kod yuborish', busy: _busy, onPressed: _send),
       ];
 
-  List<Widget> _linkSent() => [
+  List<Widget> _askForCode() => [
         const _Wordmark(),
         const SizedBox(height: 28),
-        const Text(
-          'Xatingizni tekshiring',
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: Brand.black),
+        const _Title('Kodni kiriting'),
+        const SizedBox(height: 8),
+        _Lead('+$_sentTo raqamiga yuborildi. Kod 5 daqiqa amal qiladi.'),
+        const SizedBox(height: 28),
+        TextField(
+          controller: _code,
+          focusNode: _codeFocus,
+          keyboardType: TextInputType.number,
+          // Android reads the code straight out of the message with this, so
+          // most people never see the SMS at all.
+          autofillHints: const [AutofillHints.oneTimeCode],
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(6),
+          ],
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 28, letterSpacing: 12, fontWeight: FontWeight.w600),
+          // Six digits is the whole field, so there is nothing to press after
+          // the last one.
+          onChanged: (value) {
+            if (value.length == 6) _confirm();
+          },
+          decoration: _field('••••••'),
         ),
-        const SizedBox(height: 10),
-        Text(
-          // Deliberately not "we sent a link to this address". The server
-          // answers the same way whether an account exists, and the screen must
-          // not claim more than the server said.
-          'Agar manzil to\'g\'ri bo\'lsa, havola yuborildi. '
-          'U 15 daqiqa amal qiladi va bir marta ishlaydi.',
-          style: TextStyle(fontSize: 15, height: 1.5, color: Brand.black.withValues(alpha: 0.6)),
-        ),
-        const SizedBox(height: 24),
+        ..._problemLine(null),
+        const SizedBox(height: 20),
+        LimeButton(label: 'Kirish', busy: _busy, onPressed: _confirm),
+        const SizedBox(height: 12),
         OutlineButton(
-          label: 'Boshqa manzil',
-          onPressed: () => setState(() => _sent = false),
+          label: 'Boshqa raqam',
+          onPressed: () => setState(() {
+            _sentTo = null;
+            _code.clear();
+            _problem = null;
+          }),
         ),
       ];
 
-  InputDecoration _fieldDecoration(String hint) => InputDecoration(
+  List<Widget> _problemLine(Object? rejected) {
+    if (_problem == null && rejected == null) return const [];
+    return [
+      const SizedBox(height: 12),
+      Text(
+        _problem ??
+            (rejected is ApiException ? rejected.message : 'Kirib bo\'lmadi. Qayta urining.'),
+        style: const TextStyle(fontSize: 14, color: Color(0xFFB91C1C)),
+      ),
+    ];
+  }
+
+  InputDecoration _field(String hint) => InputDecoration(
         hintText: hint,
         filled: true,
         fillColor: Brand.black.withValues(alpha: 0.04),
@@ -142,6 +208,28 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide.none,
         ),
+      );
+}
+
+class _Title extends StatelessWidget {
+  const _Title(this.text);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Text(
+        text,
+        style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: Brand.black),
+      );
+}
+
+class _Lead extends StatelessWidget {
+  const _Lead(this.text);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Text(
+        text,
+        style: TextStyle(fontSize: 15, height: 1.5, color: Brand.black.withValues(alpha: 0.6)),
       );
 }
 

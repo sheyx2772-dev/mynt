@@ -17,12 +17,29 @@ class FlexApi {
 
   // Kirish -------------------------------------------------------------------
 
-  /// Asks for a sign-in link. The answer is the same whether the address has
-  /// an account or not, so there is nothing here to report but success.
-  Future<void> requestLink(String email) =>
-      _client.post('/kirish', body: {'email': email});
+  /// Sends a six-digit code to a phone.
+  ///
+  /// The answer is the same whether the number has an account or not — an
+  /// endpoint that says "no such account" is an endpoint that tells a stranger
+  /// which numbers are worth attacking. A number with no account gets one.
+  Future<void> requestCode(String phone) =>
+      _client.post('/kirish/telefon', body: {'telefon': phone});
 
-  /// Spends the link from the email and returns the session token.
+  /// Trades the code for a session, and says who it belongs to.
+  ///
+  /// The token is returned in the body rather than only as a cookie: this is
+  /// an app, not a browser, and it keeps the token in the phone's keystore.
+  Future<String> confirmCode(String phone, String code) async {
+    final body = await _client.post(
+      '/kirish/telefon/tasdiq',
+      body: {'telefon': phone, 'kod': code},
+    );
+    return body['token'] as String? ?? '';
+  }
+
+  /// Spends a sign-in link. Kept for the address that arrives from a browser —
+  /// the website still signs people in this way, and a person who started
+  /// there lands in the app through a deep link.
   Future<String> confirmLink(String token) async {
     final body = await _client.post('/kirish/tasdiq', body: {'token': token});
     return body['token'] as String? ?? '';

@@ -34,6 +34,18 @@ class SessionController extends AsyncNotifier<String?> {
     }
   }
 
+  /// Trades a code for a session and stores it.
+  Future<void> confirmCode(String phone, String code) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final token = await ref.read(apiProvider).confirmCode(phone, code);
+      if (token.isEmpty) throw ApiException.server;
+
+      await ref.read(sessionStoreProvider).write(token);
+      return ref.read(apiProvider).whoAmI();
+    });
+  }
+
   /// Spends a sign-in link and stores the session it returns.
   Future<void> confirm(String linkToken) async {
     state = const AsyncValue.loading();
