@@ -21,10 +21,13 @@ import (
 // why a hundred orders were cheaper than the price list, and deleting the code
 // deletes the reason.
 
+type promoListInput struct {
+	Limit int `query:"soni" minimum:"1" maximum:"200" default:"50"`
+	Skip  int `query:"otkazish" minimum:"0" default:"0"`
+}
+
 type promoListOutput struct {
-	Body struct {
-		Codes []admin.PromoCode `json:"kodlar"`
-	}
+	Body admin.Page[admin.PromoCode]
 }
 
 type createPromoInput struct {
@@ -52,19 +55,17 @@ func (s *Server) registerPromo(api huma.API) {
 		Path:        "/boshqaruv/promokodlar",
 		Summary:     "Promokodlar",
 		Tags:        []string{"boshqaruv"},
-	}, func(ctx context.Context, _ *struct{}) (*promoListOutput, error) {
+	}, func(ctx context.Context, in *promoListInput) (*promoListOutput, error) {
 		if _, err := s.requireAdmin(ctx); err != nil {
 			return nil, err
 		}
 
-		codes, err := s.admin.PromoCodes(ctx, 200)
+		page, err := s.admin.PromoCodesPage(ctx, int32(in.Limit), int32(in.Skip))
 		if err != nil {
 			return nil, internalError(err, "promokodlar o'qilmadi")
 		}
 
-		out := &promoListOutput{}
-		out.Body.Codes = codes
-		return out, nil
+		return &promoListOutput{Body: page}, nil
 	})
 
 	huma.Register(api, huma.Operation{

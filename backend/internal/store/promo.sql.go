@@ -51,6 +51,19 @@ func (q *Queries) ClaimPromoCode(ctx context.Context, arg ClaimPromoCodeParams) 
 	return i, err
 }
 
+const countPromoCodes = `-- name: CountPromoCodes :one
+
+select count(*) from promo_codes
+`
+
+// The panel.
+func (q *Queries) CountPromoCodes(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, countPromoCodes)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createPromoCode = `-- name: CreatePromoCode :one
 insert into promo_codes (code, kind, value, max_discount, applies_to, max_uses,
                          once_per_account, min_amount, starts_at, expires_at, note)
@@ -131,12 +144,16 @@ func (q *Queries) HasRedeemedPromo(ctx context.Context, arg HasRedeemedPromoPara
 }
 
 const promoCodes = `-- name: PromoCodes :many
-
 select c.code, c.kind, c.value, c.max_discount, c.applies_to, c.max_uses, c.used_count, c.once_per_account, c.min_amount, c.starts_at, c.expires_at, c.active, c.note, c.created_at, (select count(*) from promo_redemptions r where r.code = c.code)::bigint as redeemed
 from promo_codes c
 order by c.active desc, c.created_at desc
-limit $1::int
+limit $2::int offset $1::int
 `
+
+type PromoCodesParams struct {
+	Skip     int32 `json:"skip"`
+	PageSize int32 `json:"page_size"`
+}
 
 type PromoCodesRow struct {
 	Code           string             `json:"code"`
@@ -156,9 +173,10 @@ type PromoCodesRow struct {
 	Redeemed       int64              `json:"redeemed"`
 }
 
-// The panel.
-func (q *Queries) PromoCodes(ctx context.Context, pageSize int32) ([]PromoCodesRow, error) {
-	rows, err := q.db.Query(ctx, promoCodes, pageSize)
+// Live codes first, newest first within each: the one somebody is looking for
+// is almost always one they just made.
+func (q *Queries) PromoCodes(ctx context.Context, arg PromoCodesParams) ([]PromoCodesRow, error) {
+	rows, err := q.db.Query(ctx, promoCodes, arg.Skip, arg.PageSize)
 	if err != nil {
 		return nil, err
 	}

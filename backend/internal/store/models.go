@@ -12,8 +12,9 @@ import (
 )
 
 type AuthUser struct {
-	ID    uuid.UUID `json:"id"`
-	Email *string   `json:"email"`
+	ID        uuid.UUID          `json:"id"`
+	Email     *string            `json:"email"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
 }
 
 type ClaimAttempt struct {

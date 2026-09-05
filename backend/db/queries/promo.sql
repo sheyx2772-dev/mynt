@@ -32,11 +32,16 @@ from promo_codes c where c.code = upper(sqlc.arg(code)::text);
 
 -- The panel.
 
+-- name: CountPromoCodes :one
+select count(*) from promo_codes;
+
 -- name: PromoCodes :many
 select c.*, (select count(*) from promo_redemptions r where r.code = c.code)::bigint as redeemed
 from promo_codes c
+-- Live codes first, newest first within each: the one somebody is looking for
+-- is almost always one they just made.
 order by c.active desc, c.created_at desc
-limit sqlc.arg(page_size)::int;
+limit sqlc.arg(page_size)::int offset sqlc.arg(skip)::int;
 
 -- name: CreatePromoCode :one
 insert into promo_codes (code, kind, value, max_discount, applies_to, max_uses,

@@ -24,10 +24,19 @@ create schema if not exists auth;
 -- Supabase's own table has a unique index on the address; without it here, a
 -- test that signs the same person in twice creates two accounts and passes
 -- against a shape production does not have.
+-- Only the columns something here actually reads. Supabase's own table has
+-- forty; adding all of them would be pretending this is that table rather than
+-- a stand-in for it. But a column that is read has to be here, or a query that
+-- works in production fails locally for a reason that looks like a bug in the
+-- query — which is how `created_at` came to be added.
 create table if not exists auth.users (
   id uuid primary key default gen_random_uuid(),
-  email text unique
+  email text unique,
+  created_at timestamptz not null default now()
 );
+
+-- For a database created before that column existed.
+alter table auth.users add column if not exists created_at timestamptz not null default now();
 
 -- Supabase derives this from the request JWT. Locally it just returns
 -- whatever the session sets, so RLS policies still parse and run.

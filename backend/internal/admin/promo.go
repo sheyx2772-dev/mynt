@@ -56,8 +56,8 @@ type NewPromoCode struct {
 	Note           string   `json:"izoh,omitempty" maxLength:"200"`
 }
 
-func (s *Store) PromoCodes(ctx context.Context, limit int32) ([]PromoCode, error) {
-	rows, err := s.queries.PromoCodes(ctx, limit)
+func (s *Store) PromoCodes(ctx context.Context, size, skip int32) ([]PromoCode, error) {
+	rows, err := s.queries.PromoCodes(ctx, store.PromoCodesParams{PageSize: size, Skip: skip})
 	if err != nil {
 		return nil, err
 	}

@@ -219,9 +219,14 @@ const adminUserByEmail = `-- name: AdminUserByEmail :one
 select id, email from auth.users where lower(email) = lower($1::text)
 `
 
-func (q *Queries) AdminUserByEmail(ctx context.Context, email string) (AuthUser, error) {
+type AdminUserByEmailRow struct {
+	ID    uuid.UUID `json:"id"`
+	Email *string   `json:"email"`
+}
+
+func (q *Queries) AdminUserByEmail(ctx context.Context, email string) (AdminUserByEmailRow, error) {
 	row := q.db.QueryRow(ctx, adminUserByEmail, email)
-	var i AuthUser
+	var i AdminUserByEmailRow
 	err := row.Scan(&i.ID, &i.Email)
 	return i, err
 }

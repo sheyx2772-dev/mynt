@@ -35,19 +35,46 @@ type adminOrdersInput struct {
 }
 
 type adminOrdersOutput struct {
+	Body admin.Page[admin.AdminOrder]
+}
+
+type adminOrderInput struct {
+	ID string `path:"id" format:"uuid"`
+}
+
+type adminOrderOutput struct {
 	Body struct {
-		Orders []admin.AdminOrder `json:"buyurtmalar"`
+		Order admin.OrderDetail `json:"buyurtma"`
 	}
 }
 
 type adminHandlesInput struct {
 	Term  string `query:"qidiruv" maxLength:"80" required:"false" doc:"Raqam, ism yoki egasining manzili"`
 	Limit int    `query:"soni" minimum:"1" maximum:"200" default:"50"`
+	Skip  int    `query:"otkazish" minimum:"0" default:"0"`
 }
 
 type adminHandlesOutput struct {
+	Body admin.Page[admin.AdminHandle]
+}
+
+type adminAccountsInput struct {
+	Term  string `query:"qidiruv" maxLength:"80" required:"false" doc:"Email yoki telefon"`
+	Limit int    `query:"soni" minimum:"1" maximum:"200" default:"50"`
+	Skip  int    `query:"otkazish" minimum:"0" default:"0"`
+}
+
+type adminAccountsOutput struct {
+	Body admin.Page[admin.Account]
+}
+
+type adminAccountInput struct {
+	ID string `path:"id" format:"uuid"`
+}
+
+type adminAccountOutput struct {
 	Body struct {
-		Handles []admin.AdminHandle `json:"raqamlar"`
+		Orders []admin.AdminOrder `json:"buyurtmalar"`
 	}
 }
 
@@ -100,14 +127,12 @@ func (s *Server) registerAdmin(api huma.API) {
 			return nil, err
 		}
 
-		orders, err := s.admin.Orders(ctx, in.Status, int32(in.Limit), int32(in.Skip))
+		page, err := s.admin.OrdersPage(ctx, in.Status, int32(in.Limit), int32(in.Skip))
 		if err != nil {
 			return nil, internalError(err, "buyurtmalar o'qilmadi")
 		}
 
-		out := &adminOrdersOutput{}
-		out.Body.Orders = orders
-		return out, nil
+		return &adminOrdersOutput{Body: page}, nil
 	})
 
 	huma.Register(api, huma.Operation{
@@ -121,14 +146,12 @@ func (s *Server) registerAdmin(api huma.API) {
 			return nil, err
 		}
 
-		list, err := s.admin.Handles(ctx, in.Term, int32(in.Limit))
+		page, err := s.admin.HandlesPage(ctx, in.Term, int32(in.Limit), int32(in.Skip))
 		if err != nil {
 			return nil, internalError(err, "raqamlar o'qilmadi")
 		}
 
-		out := &adminHandlesOutput{}
-		out.Body.Handles = list
-		return out, nil
+		return &adminHandlesOutput{Body: page}, nil
 	})
 
 	huma.Register(api, huma.Operation{
