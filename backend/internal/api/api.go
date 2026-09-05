@@ -26,6 +26,7 @@ import (
 	"github.com/sheyx2772-dev/flex/backend/internal/handles"
 	"github.com/sheyx2772-dev/flex/backend/internal/leads"
 	"github.com/sheyx2772-dev/flex/backend/internal/orders"
+	"github.com/sheyx2772-dev/flex/backend/internal/payments"
 	"github.com/sheyx2772-dev/flex/backend/internal/stats"
 )
 
@@ -40,6 +41,8 @@ type Server struct {
 	stats   *stats.Store
 	orders  *orders.Store
 	admin   *admin.Store
+	// nil unless this deployment holds the provider secret keys.
+	payments payments.Store
 }
 
 func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.Handler {
@@ -59,7 +62,12 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 		admin: admin.NewStore(pool),
 	}
 
+	if cfg.TakesCallbacks() {
+		s.payments = payments.NewPostgres(pool)
+	}
+
 	mux := http.NewServeMux()
+	s.registerPaymentCallbacks(mux)
 
 	humaConfig := huma.DefaultConfig("Flex API", "0.1.0")
 	humaConfig.Info.Description = "Flex — raqamli shaxs va NFC profillari."

@@ -50,6 +50,14 @@ type Config struct {
 	ClickServiceID  string
 	ClickMerchantID string
 
+	// The secret keys, which verify a callback rather than build a link.
+	//
+	// Set only on the deployment the merchant cabinets actually point at. Two
+	// servers holding these is two servers a provider could be talked into
+	// believing, and the state machine they drive is the same order.
+	PaymeSecretKey string
+	ClickSecretKey string
+
 	// Sending account for the sign-in mail. Empty means no provider is
 	// configured, and in development the link is written to the log instead.
 	ResendAPIKey string
@@ -81,6 +89,15 @@ type Config struct {
 
 func (c Config) IsDevelopment() bool { return c.Env == "development" }
 
+// TakesCallbacks reports whether this deployment is the one the merchant
+// cabinets point at. Without a secret key a callback cannot be verified, so it
+// would have to be refused — and a route that refuses everything is better not
+// registered at all, since the provider then gets a 404 rather than a signature
+// error it will retry for hours.
+func (c Config) TakesCallbacks() bool {
+	return c.PaymeSecretKey != "" || c.ClickSecretKey != ""
+}
+
 // Load builds the configuration, or explains what is missing.
 func Load() (Config, error) {
 	cfg := Config{
@@ -97,6 +114,8 @@ func Load() (Config, error) {
 		PaymeMerchantID:        os.Getenv("PAYME_MERCHANT_ID"),
 		ClickServiceID:         os.Getenv("CLICK_SERVICE_ID"),
 		ClickMerchantID:        os.Getenv("CLICK_MERCHANT_ID"),
+		PaymeSecretKey:         os.Getenv("PAYME_SECRET_KEY"),
+		ClickSecretKey:         os.Getenv("CLICK_SECRET_KEY"),
 		ResendAPIKey:           os.Getenv("RESEND_API_KEY"),
 		MailFrom:               withDefault("MAIL_FROM", "Flex <kirish@flex.com.uz>"),
 		AdminEmails:            readList(os.Getenv("ADMIN_EMAILS")),
