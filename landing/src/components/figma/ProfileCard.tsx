@@ -2,25 +2,25 @@ import React from "react";
 import type { Profile } from "./profiles";
 
 // ── Brand banner images ──────────────────────────────────────────────────────
-const imgMarkaziyBank = "/figma-make/image-10.png";
-const imgYoshlarVentures = "/figma-make/image-12-fit.png";
-const imgITPark = "/figma-make/image-14-fit.png";
-const imgStartupGarage = "/figma-make/image-15.png";
-const imgUnitedVentures = "/figma-make/image-16.png";
-const imgICTWeek = "/figma-make/image-17.png";
-const imgATKRV = "/figma-make/image-18.png";
-const imgProkuratura = "/figma-make/image-19.png";
-const imgYIA = "/figma-make/yia-banner.jpeg";            // supplied by the client
-const imgUzCombinator = "/figma-make/uzcombinator-banner.jpeg";  // supplied by the client
-const imgMOQ = "/figma-make/moq-banner.jpeg";                    // supplied by the client
-const imgKorzinka   = "/figma-make/korzinka-banner.png";
-const imgMU         = "/figma-make/mu-banner.png";
-const imgFintellect = "/figma-make/fintellect-banner-fit.png";
-const imgAyol       = "/figma-make/ayol-banner.jpeg";
-const imgEYU        = "/figma-make/eyu-banner-fit.png";
-const imgAloqaV     = "/figma-make/aloqaventures-banner-fit.png";  // the fund's own, supplied
-const imgFlex       = "/figma-make/flex-banner.png";
-const imgDomo       = "/figma-make/domo-banner.png";
+const imgMarkaziyBank = "/figma-make/image-10.webp";
+const imgYoshlarVentures = "/figma-make/image-12-fit.webp";
+const imgITPark = "/figma-make/image-14-fit.webp";
+const imgStartupGarage = "/figma-make/image-15.webp";
+const imgUnitedVentures = "/figma-make/image-16.webp";
+const imgICTWeek = "/figma-make/image-17.webp";
+const imgATKRV = "/figma-make/image-18.webp";
+const imgProkuratura = "/figma-make/image-19.webp";
+const imgYIA = "/figma-make/yia-banner.webp";            // supplied by the client
+const imgUzCombinator = "/figma-make/uzcombinator-banner.webp";  // supplied by the client
+const imgMOQ = "/figma-make/moq-banner.webp";                    // supplied by the client
+const imgKorzinka   = "/figma-make/korzinka-banner.webp";
+const imgMU         = "/figma-make/mu-banner.webp";
+const imgFintellect = "/figma-make/fintellect-banner-fit.webp";
+const imgAyol       = "/figma-make/ayol-banner.webp";
+const imgEYU        = "/figma-make/eyu-banner-fit.webp";
+const imgAloqaV     = "/figma-make/aloqaventures-banner-fit.webp";  // the fund's own, supplied
+const imgFlex       = "/figma-make/flex-banner.webp";
+const imgDomo       = "/figma-make/domo-banner.webp";
 
 const BANNER: Record<string, string> = {
   "tashkent-inn": imgStartupGarage,
@@ -186,13 +186,26 @@ function IBtn({ icon, label, bg, color = "white" }: { icon: React.ReactElement; 
 }
 
 // ── Main card ────────────────────────────────────────────────────────────────
-interface Props { profile: Profile; lang: "uz" | "ru"; theme: "dark" | "light" }
+interface Props {
+  profile: Profile;
+  lang: "uz" | "ru";
+  theme: "dark" | "light";
+  /**
+   * Overrides the banner artwork. Pass null to draw the brand gradient with no
+   * image on it — five of the catalogue's organisations still carry a logo
+   * that belongs to a different body, inherited from the Figma mock, and a
+   * borrowed mark on a ministry's own name is worse than no mark at all. The
+   * catalogue keeps them until their real logos arrive; the entry page does
+   * not. Omit the prop and the map decides, as before.
+   */
+  banner?: string | null;
+}
 
-export default function ProfileCard({ profile, lang, theme }: Props) {
+export default function ProfileCard({ profile, lang, theme, banner: bannerProp }: Props) {
   const c    = getCfg(profile);
   const t    = L[lang];
   const pos  = lang === "uz" ? profile.position : profile.positionRu;
-  const banner = BANNER[profile.id];
+  const banner = bannerProp === undefined ? BANNER[profile.id] : (bannerProp ?? undefined);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", background: c.cardBg, fontFamily: "var(--font-sans)" }}>

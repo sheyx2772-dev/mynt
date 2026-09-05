@@ -102,7 +102,7 @@ export const CARD_DESIGNS = [
     name: "Rahbar",
     description:
       "Mutlaq qora, o'rtasidan bitta sayqallangan kumush chiziq. Eng kam narsa ko'rsatadigan, eng ko'p narsa aytadigan variant.",
-    image: "/kartalar/rahbar.jpg",
+    image: "/kartalar/rahbar.webp",
     artworkHasNfc: true,
     accent: "steel",
   },
@@ -112,7 +112,7 @@ export const CARD_DESIGNS = [
     name: "DevOps",
     description:
       "Qora fonda past kontrastli plata chizmasi, bittasi lime bo'lib yonadi. Texnik, ammo shovqinsiz.",
-    image: "/kartalar/devops.jpg",
+    image: "/kartalar/devops.webp",
   },
   {
     id: "suzani",
@@ -120,7 +120,7 @@ export const CARD_DESIGNS = [
     name: "Suzani",
     description:
       "Chuqur indigo fonda suzani medalyoni — kashta tekstura kabi, o'z fonidan bir oz ochiqroq, bitta oltin ip bilan.",
-    image: "/kartalar/suzani.jpg",
+    image: "/kartalar/suzani.webp",
     artworkHasNfc: true,
     accent: "gold",
   },
@@ -130,7 +130,7 @@ export const CARD_DESIGNS = [
     name: "Xarita",
     description:
       "Qora fonda oltin o'ymakori: O'zbekiston xaritasi va yonida Humo medalyoni. Davlat ramzi emas — o'z chizmamiz.",
-    image: "/kartalar/xarita.jpg",
+    image: "/kartalar/xarita.webp",
     artworkHasNfc: true,
     accent: "gold",
   },
