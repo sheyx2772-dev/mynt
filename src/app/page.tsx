@@ -198,15 +198,13 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const carousel = [
     {
       href: "/qurilmalar/card",
-      // The fan draws itself at its own size — 300px tall and up to 36rem
-      // wide, sized for the room it has under the order button. The hero slot
-      // is a 3:2 box and narrower than that, so it is scaled to fit rather
-      // than rebuilt: same drawing, less of it.
+      // Drawn at its own size and left there. Scaling it into the 3:2 slot made
+      // the cards too small to read, which costs more than the price line it
+      // overlaps — the cards are what this turn is for, and the price is on the
+      // device page a tap away.
       node: (
         <div className="flex h-full w-full items-center justify-center">
-          <div className="origin-center scale-[0.58] sm:scale-[0.7] lg:scale-[0.62]">
-            <CardFan handle={DEMO_HANDLE} />
-          </div>
+          <CardFan handle={DEMO_HANDLE} />
         </div>
       ),
       name: c.devices.card.name,
