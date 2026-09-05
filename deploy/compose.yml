@@ -41,7 +41,11 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgres://flex:${POSTGRES_PASSWORD}@db:5432/flex?sslmode=disable
-      APP_ENV: production
+      # Production refuses to start without a mail and an SMS provider, on
+      # purpose: the fallback writes live sign-in links and codes to the log.
+      # Set to development only while bringing the stack up empty, and never
+      # with a real customer in the database.
+      APP_ENV: ${APP_ENV:-production}
       ADDR: ":8090"
       SITE_URL: ${SITE_URL}
       # Behind Caddy, so the forwarded address is the visitor's and can be
