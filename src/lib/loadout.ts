@@ -69,3 +69,15 @@ export function deviceCutout(id: string): string | null {
   const name = CUTOUTS[id];
   return name ? `/mahsulot/kesilgan/${name}.png` : null;
 }
+
+/**
+ * The same object in the other finish.
+ *
+ * Two sets were supplied and both are used. The hero exists to say the number
+ * comes on a range of things; showing one object in two finishes says that
+ * better than showing it once, and costs nothing but a second file.
+ */
+export function deviceCutoutAlt(id: string): string | null {
+  const name = CUTOUTS[id];
+  return name ? `/mahsulot/kesilgan/${name}-2.png` : null;
+}

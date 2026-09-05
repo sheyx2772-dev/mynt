@@ -8,6 +8,7 @@ import {
   VERTICALS,
   deviceShot,
   deviceCutout,
+  deviceCutoutAlt,
   verticalShot,
   devicePriceOrNull,
   UNPRICED_DEVICE,
@@ -71,19 +72,30 @@ export function heroCarousel(lang: Lang): CarouselItem[] {
   const made = LOADOUT_DEVICES.map((id) => {
     const price = devicePriceOrNull(id);
     return {
+      id,
       href: `/qurilmalar/${id}`,
-      src: deviceCutout(id)!,
       name: id === UNPRICED_DEVICE ? p.avtovizitka.name : c.devices[id].name,
       price: price === null ? p.priceUnknown : formatUZS(price, lang),
     };
   });
 
   const petTag = {
+    id: "hayvon-teg",
     href: "/qurilmalar",
-    src: deviceCutout("hayvon-teg")!,
     name: lang === "ru" ? "Жетон для животного" : lang === "en" ? "Pet tag" : "Hayvon jetoni",
     price: p.priceUnknown,
   };
 
-  return [...made, petTag];
+  // Each object appears in both finishes: one full pass through the five, then
+  // the same five again in the other finish. The object changes every turn, so
+  // nothing is shown twice running, and the two passes read as the same range
+  // seen twice rather than ten unrelated things.
+  //
+  // Ten turns is more than anyone will sit through, and that is fine. The spot
+  // is there to say the number comes on a range, not to list the range.
+  const all = [...made, petTag];
+  return [
+    ...all.map((d) => ({ ...d, src: deviceCutout(d.id)! })),
+    ...all.map((d) => ({ ...d, src: deviceCutoutAlt(d.id)! })),
+  ].map(({ id: _id, ...item }) => item);
 }
