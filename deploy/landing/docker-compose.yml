@@ -1,0 +1,26 @@
+# The site. It renders pages and asks the backend; it holds no database key,
+# no merchant secret and no bot token, because it decides nothing that would
+# need one.
+
+name: flex-landing
+
+services:
+  app:
+    image: ghcr.io/zoir-dev/flex-web:${TAG:-latest}
+    restart: always
+    env_file: [.env]
+    environment:
+      # Over the shared network, by container name. The browser never sees it,
+      # so this request never leaves the machine.
+      BACKEND_URL: http://flex-backend-app-1:8090
+    networks: [web]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flex-web.rule=Host(`${DOMAIN_NAME}`) || Host(`www.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.flex-web.entrypoints=websecure"
+      - "traefik.http.routers.flex-web.tls.certresolver=le"
+      - "traefik.http.services.flex-web.loadbalancer.server.port=3000"
+
+networks:
+  web:
+    external: true

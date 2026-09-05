@@ -3,7 +3,7 @@ name: admin
 on:
   push:
     branches: [main]
-    paths: ['admin/**', '.github/workflows/admin.yml']
+    paths: ['admin/**', 'deploy/admin/**', '.github/workflows/admin.yml']
   pull_request:
     paths: ['admin/**']
 
@@ -59,24 +59,35 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      # The compose file is the only thing the server needs from the
+      # repository, so it is copied rather than cloned. No git, no source and
+      # no build toolchain on a machine that faces the internet.
+      - name: send the compose file
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: deploy/admin/docker-compose.yml
+          target: ~/admin
+          strip_components: 2
+
       - name: deploy
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # The registry token is passed in for this one command and is gone
+          # when the shell exits. A password left in the server's docker config
+          # is a password that leaves with the machine.
           envs: GHCR_TOKEN,GH_ACTOR
           script: |
             set -e
-            cd /opt/flex
-            git fetch --depth 1 origin main && git reset --hard origin/main
+            cd ~/admin
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GH_ACTOR" --password-stdin
-            docker compose -f deploy/compose.yml --env-file .env pull panel
-            # This service, plus the two every deploy needs running: the
-            # database and the proxy. Not the whole stack — that would need
-            # all three images to exist, so a first deploy of any one of them
-            # could never succeed.
-            docker compose -f deploy/compose.yml --env-file .env up -d db caddy panel
+            docker compose pull
+            docker compose up -d
             docker logout ghcr.io
             docker image prune -f
         env:

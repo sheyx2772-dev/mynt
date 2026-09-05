@@ -106,13 +106,22 @@ export type PublicHandle = { normalized: string; updatedAt: string | null };
 // Claimed handles, for the sitemap. Capped so the query stays bounded as the
 // namespace fills up; split into a sitemap index if it ever nears the limit.
 export async function listPublicHandles(): Promise<PublicHandle[]> {
-  const { data, error } = await backend.GET("/rezidentlar/royxat", {});
-  if (error || !data) return [];
+  try {
+    const { data, error } = await backend.GET("/rezidentlar/royxat", {});
+    if (error || !data) return [];
 
-  return (data.raqamlar ?? []).map((r) => ({
-    normalized: r.raqam,
-    updatedAt: r.yangilangan ?? null,
-  }));
+    return (data.raqamlar ?? []).map((r) => ({
+      normalized: r.raqam,
+      updatedAt: r.yangilangan ?? null,
+    }));
+  } catch (cause) {
+    // A backend that cannot be reached throws rather than returning `error`,
+    // and this one is called while the site is being built — where there is no
+    // backend at all. An unreachable one costs the sitemap its profiles; it
+    // must not cost us the build.
+    console.error("listPublicHandles: backend unreachable", cause);
+    return [];
+  }
 }
 
 export type OwnedHandle = {

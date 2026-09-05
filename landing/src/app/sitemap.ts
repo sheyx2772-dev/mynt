@@ -9,6 +9,12 @@ import { listPublicHandles } from "@/lib/handles";
 // /tarif is deliberately absent. It still answers, but only with a redirect to
 // /shaxsiy#tarif, and a sitemap that lists a redirect spends a crawler's visit
 // telling it to go somewhere else.
+// Generated on request and cached for an hour, not frozen at build time. A
+// sitemap of who is on the site is only useful if it reflects who is on the
+// site, and prerendering it would freeze it at whatever the list was when the
+// image was built.
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const handles = await listPublicHandles();
 

@@ -27,10 +27,6 @@ FROM scratch
 # mail provider, Telegram, the payment gateways. Without these every TLS
 # handshake fails with an unhelpful "certificate signed by unknown authority".
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-# Zone data, so a timestamp can be rendered in Asia/Tashkent. scratch has none,
-# and Go falls back to UTC silently.
-COPY --from=build /usr/share/zoneinfo /usr/share/zoneinfo
-
 COPY --from=build /flex /flex
 
 # Not root. There is no /etc/passwd here to name a user in, so the id is given

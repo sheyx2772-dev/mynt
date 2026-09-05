@@ -1,0 +1,54 @@
+# The API and the database it owns.
+#
+# They live together because nothing else may touch that database: every rule
+# about the data is written once, in Go, and the website, the phone and the
+# panel all ask across the network rather than reaching past it.
+
+name: flex-backend
+
+services:
+  app:
+    image: ghcr.io/zoir-dev/flex-api:${TAG:-latest}
+    restart: always
+    env_file: [.env]
+    environment:
+      DATABASE_URL: postgres://flex:${POSTGRES_PASSWORD}@db:5432/flex?sslmode=disable
+      ADDR: ":8090"
+      # Behind a proxy, so the forwarded address is the visitor's and can be
+      # believed. Without this every rate limit counts one client: Traefik.
+      TRUST_PROXY: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [web, default]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flex-api.rule=Host(`${DOMAIN_NAME}`)"
+      - "traefik.http.routers.flex-api.entrypoints=websecure"
+      - "traefik.http.routers.flex-api.tls.certresolver=le"
+      - "traefik.http.services.flex-api.loadbalancer.server.port=8090"
+
+  db:
+    image: postgres:17-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: flex
+      POSTGRES_DB: flex
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD kerak}
+    volumes:
+      - db:/var/lib/postgresql/data
+    # No labels and no ports: unreachable from outside this compose network,
+    # which is the whole reason it needs no password policy of its own.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flex -d flex"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [default]
+
+volumes:
+  db:
+
+networks:
+  web:
+    external: true

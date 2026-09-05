@@ -1,0 +1,51 @@
+# The proxy, and the network everything else joins.
+#
+# The same shape as the other servers this operator already runs: Traefik
+# watching Docker, services opting in with labels, one shared `web` network,
+# certificates from Let's Encrypt over the HTTP challenge. Consistency is the
+# argument — whoever debugs this at two in the morning already knows this
+# setup, and a server that is special is a server nobody remembers how to fix.
+#
+# `exposedbydefault=false` means a container without labels is unreachable from
+# outside. That is how the database stays private without anybody having to
+# remember to hide it.
+
+name: traefik
+
+services:
+  traefik:
+    image: traefik:v3
+    container_name: traefik
+    restart: always
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=web
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      # Everything arrives on http and leaves on https. A tapped card opens
+      # whatever was written on it, and that must not be the unencrypted one.
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --certificatesresolvers.le.acme.httpchallenge=true
+      - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.le.acme.email=${ACME_EMAIL:?ACME_EMAIL kerak}
+      - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
+      - --log.level=INFO
+      - --accesslog=true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Read only. Traefik needs to see which containers exist; it has no
+      # business being able to start one.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - letsencrypt:/letsencrypt
+    networks: [web]
+
+volumes:
+  letsencrypt:
+
+networks:
+  web:
+    name: web

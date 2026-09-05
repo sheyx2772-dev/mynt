@@ -1,0 +1,21 @@
+# The panel: a static bundle behind nginx. No Node process, and nothing to
+# configure — who may see what is decided by the backend, on the session.
+
+name: flex-admin
+
+services:
+  app:
+    image: ghcr.io/zoir-dev/flex-panel:${TAG:-latest}
+    restart: always
+    env_file: [.env]
+    networks: [web]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flex-panel.rule=Host(`${DOMAIN_NAME}`)"
+      - "traefik.http.routers.flex-panel.entrypoints=websecure"
+      - "traefik.http.routers.flex-panel.tls.certresolver=le"
+      - "traefik.http.services.flex-panel.loadbalancer.server.port=80"
+
+networks:
+  web:
+    external: true

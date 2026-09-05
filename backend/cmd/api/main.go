@@ -7,6 +7,16 @@
 package main
 
 import (
+	// The zone database, compiled into the binary.
+	//
+	// This ships on scratch, which has no /usr/share/zoneinfo, and without the
+	// data Go falls back to UTC without saying so — every timestamp an owner
+	// reads would be five hours out. Copying the files in from the build stage
+	// is the usual answer and is worse: alpine does not have them either
+	// unless tzdata is installed, which is a build that breaks on a file
+	// nobody declared. Half a megabyte in the binary needs no filesystem.
+	_ "time/tzdata"
+
 	"context"
 	"errors"
 	"log/slog"
