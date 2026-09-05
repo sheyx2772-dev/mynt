@@ -58,11 +58,21 @@ func (s *Store) Order(ctx context.Context, id, userID string) (Order, error) {
 		return Order{}, err
 	}
 
+	// Already asked by the payment side, and one question for all three kinds
+	// of order — so it is that query rather than a second one saying the same
+	// thing in a different way.
+	held, err := s.queries.HandleStillHeld(ctx, orderID)
+	if err != nil {
+		return Order{}, err
+	}
+
 	order := Order{
 		ID:     row.ID.String(),
 		Number: row.Handle,
 		Amount: row.Amount,
 		Status: row.Status,
+		Kind:   row.Kind,
+		Held:   held,
 	}
 	// Somewhere to pay, but only while paying is still what the order needs.
 	if row.Status == "pending" {

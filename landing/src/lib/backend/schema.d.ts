@@ -1065,10 +1065,13 @@ export interface components {
             /** @enum {string} */
             holat: "pending" | "paid" | "cancelled" | "failed";
             id: string;
+            meniki: boolean;
             raqam: string;
             /** Format: int64 */
             summa: number;
             tolov?: components["schemas"]["Checkout"];
+            /** @enum {string} */
+            turi: "handle" | "subscription" | "device" | "transfer" | "venue";
         };
         OrderDetail: {
             /** Format: date-time */

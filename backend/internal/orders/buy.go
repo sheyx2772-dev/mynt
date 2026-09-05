@@ -19,6 +19,14 @@ type Order struct {
 	Number string `json:"raqam"`
 	Amount int64  `json:"summa"`
 	Status string `json:"holat" enum:"pending,paid,cancelled,failed"`
+	// What was bought. A page that has to say "your number" or "your ring"
+	// cannot work it out from the amount.
+	Kind string `json:"turi" enum:"handle,subscription,device,transfer,venue"`
+
+	// Whether the number is still held by this buyer. Not implied by `paid`:
+	// a refund releases it, and money arriving after the hold lapsed leaves a
+	// paid order with nothing attached.
+	Held bool `json:"meniki"`
 
 	// Where to pay. Empty when no provider is configured, in which case the
 	// number is already claimed and there is nothing to pay.

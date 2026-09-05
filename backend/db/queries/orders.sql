@@ -105,3 +105,4 @@ where ip = sqlc.arg(ip)
 -- name: RecordClaimAttempt :exec
 insert into claim_attempts (user_id, ip, handle, succeeded)
 values (sqlc.narg(user_id), sqlc.narg(ip), sqlc.arg(handle), sqlc.arg(succeeded));
+

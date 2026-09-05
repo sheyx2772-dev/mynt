@@ -29,7 +29,7 @@ export default async function OrderPage({ params }: PageProps<"/buyurtma/[id]">)
   const { id } = await params;
   const user = await requireUser(`/buyurtma/${id}`);
 
-  const order = await getPurchase(id, user.id);
+  const order = await getPurchase(id);
   if (!order) notFound();
 
   return (
