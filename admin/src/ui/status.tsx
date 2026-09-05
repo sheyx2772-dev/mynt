@@ -1,3 +1,4 @@
+import { Provider } from "./provider";
 import { Badge } from "@/components/ui/badge";
 
 const LABEL: Record<string, string> = {
@@ -40,9 +41,7 @@ export function Status({
 			>
 				{LABEL[status] ?? status}
 			</Badge>
-			{provider && (
-				<span className="text-muted-foreground text-xs">{provider}</span>
-			)}
+			{provider && <Provider name={provider} />}
 		</span>
 	);
 }

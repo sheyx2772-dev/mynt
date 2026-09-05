@@ -13,6 +13,11 @@
 //
 // The two local payment brands are set as wordmarks in their own colour rather
 // than as invented glyphs: a logo I have not got is a logo I should not draw.
+//
+// The admin panel says which gateway settled an order and answers this the same
+// way, with these two colours copied into admin/src/ui/provider.tsx. The two
+// applications deploy separately, so the values are duplicated rather than
+// shared — if either changes, change both.
 
 export type BrandId =
   | "telegram"

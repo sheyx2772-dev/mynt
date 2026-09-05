@@ -4,6 +4,7 @@ import { api } from "../api/client";
 import { som, when } from "../ui/format";
 import { Panel, Row } from "../ui/panel";
 import { Failed, Waiting } from "../ui/parts";
+import { Provider } from "../ui/provider";
 import { Status } from "../ui/status";
 
 const KIND: Record<string, string> = {
@@ -70,7 +71,7 @@ export default function OrderDetail({
 							<Status status={o.holat} />
 						</Row>
 						<Row label="To'lov">
-							{o.tolov ?? "—"}
+							{o.tolov ? <Provider name={o.tolov} /> : "—"}
 							{o.tolov_id && (
 								<span className="block font-mono text-muted-foreground text-xs">
 									{o.tolov_id}
@@ -103,7 +104,9 @@ export default function OrderDetail({
 									className="rounded-xl bg-muted p-3"
 								>
 									<p className="flex justify-between">
-										<span className="font-medium">{t.tolov}</span>
+										<span className="font-medium">
+											<Provider name={t.tolov} />
+										</span>
 										<span className="text-muted-foreground">
 											holat {t.holat}
 										</span>
