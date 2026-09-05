@@ -33,7 +33,7 @@ export default function ProfileHandleSearch() {
       }}
       className="mb-4"
     >
-      <div className="flex items-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-2.5 shadow-sm">
+      <div className="flex items-center gap-2 rounded-xl border border-line bg-white px-4 py-2.5 shadow-sm">
         <span className="font-tabular text-sm text-flex-black/35">flex.com.uz/</span>
         <input
           value={value}

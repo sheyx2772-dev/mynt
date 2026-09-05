@@ -163,6 +163,52 @@ function render(size, { padding, mark, cornerRadius, invert = false, bare = fals
   return pixels;
 }
 
+// The picture a link shows when somebody pastes it into Telegram.
+//
+// 1200x630 is what every chat client crops to, and the mark is placed left of
+// centre because the right third is where a preview puts the title and the
+// site name over the top. No text of its own: this file cannot render type,
+// and a share card with the brand name in a rasterised font that does not
+// match the site is worse than one with only the mark.
+function renderShareCard(width, height) {
+  const pixels = new Uint8Array(width * height * 4);
+
+  // The mark is drawn into a square the height of the card, then that square is
+  // sampled from a position left of centre.
+  const box = height;
+  const offsetX = Math.round(width * 0.28 - box / 2);
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      let r = 0, g = 0, b = 0;
+      let lit = 0;
+
+      for (let sy = 0; sy < SS; sy++) {
+        for (let sx = 0; sx < SS; sx++) {
+          const px = (x - offsetX) * SS + sx + 0.5;
+          const py = y * SS + sy + 0.5;
+          if (insideMark(px, py, box * SS, 0.52)) lit++;
+        }
+      }
+
+      const n = SS * SS;
+      const t = lit / n;
+      // The ground is the brand ink everywhere; the mark is lime laid over it.
+      r = INK[0] + (LIME[0] - INK[0]) * t;
+      g = INK[1] + (LIME[1] - INK[1]) * t;
+      b = INK[2] + (LIME[2] - INK[2]) * t;
+
+      const i = (y * width + x) * 4;
+      pixels[i] = Math.round(r);
+      pixels[i + 1] = Math.round(g);
+      pixels[i + 2] = Math.round(b);
+      pixels[i + 3] = 255;
+    }
+  }
+
+  return pixels;
+}
+
 function crc32(buf) {
   let c = ~0;
   for (const byte of buf) {
@@ -182,9 +228,13 @@ function chunk(type, data) {
 }
 
 function encodePng(pixels, size) {
+  return encodePngSized(pixels, size, size);
+}
+
+function encodePngSized(pixels, width, height) {
   const ihdr = Buffer.alloc(13);
-  ihdr.writeUInt32BE(size, 0);
-  ihdr.writeUInt32BE(size, 4);
+  ihdr.writeUInt32BE(width, 0);
+  ihdr.writeUInt32BE(height, 4);
   ihdr[8] = 8;   // bit depth
   ihdr[9] = 6;   // colour type: RGBA
   ihdr[10] = 0;  // deflate
@@ -192,9 +242,9 @@ function encodePng(pixels, size) {
   ihdr[12] = 0;  // no interlace
 
   // One filter byte (0 = none) in front of every scanline.
-  const stride = size * 4;
-  const raw = Buffer.alloc((stride + 1) * size);
-  for (let y = 0; y < size; y++) {
+  const stride = width * 4;
+  const raw = Buffer.alloc((stride + 1) * height);
+  for (let y = 0; y < height; y++) {
     raw[y * (stride + 1)] = 0;
     Buffer.from(pixels.buffer, y * stride, stride).copy(raw, y * (stride + 1) + 1);
   }
@@ -205,6 +255,42 @@ function encodePng(pixels, size) {
     chunk("IDAT", deflateSync(raw, { level: 9 })),
     chunk("IEND", Buffer.alloc(0)),
   ]);
+}
+
+// An .ico is a container: a small header, then one directory entry per size,
+// then the images themselves. The images may be PNG, which every browser that
+// has shipped since about 2011 reads, and which keeps this to a few hundred
+// bytes a size rather than an uncompressed bitmap each.
+//
+// Written rather than hand-made because the one that was here was Vercel's
+// starter mark — a black disc with a white triangle — which had been sitting in
+// the tab of the live site since the project was generated. A file nobody
+// generates is a file nobody notices is wrong.
+function encodeIco(images) {
+  const header = Buffer.alloc(6);
+  header.writeUInt16LE(0, 0); // reserved
+  header.writeUInt16LE(1, 2); // 1 = icon
+  header.writeUInt16LE(images.length, 4);
+
+  const entries = [];
+  let offset = 6 + images.length * 16;
+
+  for (const { size, png } of images) {
+    const entry = Buffer.alloc(16);
+    // 0 means 256 here; the field is one byte and 256 does not fit.
+    entry[0] = size === 256 ? 0 : size;
+    entry[1] = size === 256 ? 0 : size;
+    entry[2] = 0; // palette size: none, it is truecolour
+    entry[3] = 0; // reserved
+    entry.writeUInt16LE(1, 4);  // colour planes
+    entry.writeUInt16LE(32, 6); // bits per pixel
+    entry.writeUInt32LE(png.length, 8);
+    entry.writeUInt32LE(offset, 12);
+    entries.push(entry);
+    offset += png.length;
+  }
+
+  return Buffer.concat([header, ...entries, ...images.map((i) => i.png)]);
 }
 
 // A maskable icon is cropped to a circle by some launchers, so it bleeds to
@@ -256,6 +342,31 @@ for (const icon of ICONS) {
   const where = icon.dir === "app" ? "src/app" : "public";
   console.log(`${where}/${icon.file}`.padEnd(34) + `${icon.size}x${icon.size}  ${png.length} bytes`);
 }
+
+// The browser tab, and whatever asks for /favicon.ico without being told to.
+// Small sizes get a fatter glyph: at sixteen pixels the mark has to be legible
+// rather than faithful, and the rounded corners are two pixels of nothing.
+const ICO_SIZES = [
+  { size: 16, mark: 0.92, cornerRadius: 0.16 },
+  { size: 32, mark: 0.86, cornerRadius: 0.2 },
+  { size: 48, mark: 0.82, cornerRadius: 0.22 },
+  { size: 180, mark: 0.74, cornerRadius: 0.22 },
+];
+
+const ico = encodeIco(
+  ICO_SIZES.map(({ size, mark, cornerRadius }) => ({
+    size,
+    png: encodePng(render(size, { size, padding: 0, mark, cornerRadius }), size),
+  })),
+);
+writeFileSync(join(APP_DIR, "favicon.ico"), ico);
+console.log("src/app/favicon.ico".padEnd(34) + `${ICO_SIZES.length} ta o'lcham  ${ico.length} bytes`);
+
+const OG_W = 1200;
+const OG_H = 630;
+const og = encodePngSized(renderShareCard(OG_W, OG_H), OG_W, OG_H);
+writeFileSync(join(PUBLIC_DIR, "og.png"), og);
+console.log("public/og.png".padEnd(34) + `${OG_W}x${OG_H}  ${og.length} bytes`);
 
 mkdirSync(ADMIN_DIR, { recursive: true });
 

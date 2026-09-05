@@ -23,7 +23,7 @@ export default function DeviceTile({
 
   if (shot) {
     return (
-      <div className="relative aspect-square overflow-hidden rounded-2xl border border-black/8 bg-[#f9f9f9]">
+      <div className="relative aspect-square overflow-hidden rounded-2xl border border-line-soft bg-[#f9f9f9]">
         <Image
           src={shot}
           alt={alt}

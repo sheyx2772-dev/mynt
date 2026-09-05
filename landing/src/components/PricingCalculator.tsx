@@ -1,11 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Shuffle, ArrowRight } from "lucide-react";
 import { formatUZS, formatNumber } from "@/lib/format";
 import type { Lang } from "@/lib/i18n";
 import { BASE_PRICE, letterRarity, digitRarity, rarityTier } from "@/lib/pricing";
+import { useSanitisedInput } from "@/lib/use-sanitised-input";
+
+const onlyLetters = (raw: string) => raw.replace(/[^A-Za-z]/g, "").toUpperCase();
+const onlyDigits = (raw: string) => raw.replace(/\D/g, "");
 
 // What each band looks like. Kept here rather than in the dictionary because a
 // colour is not a translation, and the names come from the dictionary anyway.
@@ -40,6 +44,27 @@ export default function PricingCalculator({
   const [letters, setLetters] = useState("MYN");
   const [digits, setDigits] = useState("042");
 
+  // The same editing behaviour as the hero's checker: the caret stays where it
+  // was, and a full set of letters hands over to the digits.
+  const lettersRef = useRef<HTMLInputElement>(null);
+  const digitsRef = useRef<HTMLInputElement>(null);
+
+  const onLetters = useSanitisedInput(lettersRef, (value) => {
+    setLetters(value.slice(0, 3));
+    if (value.length >= 3) digitsRef.current?.focus();
+  }, onlyLetters);
+
+  const onDigits = useSanitisedInput(digitsRef, (value) => setDigits(value.slice(0, 3)), onlyDigits);
+
+  function digitsKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    const el = event.currentTarget;
+    if (event.key !== "Backspace" || el.selectionStart !== 0 || el.selectionEnd !== 0) return;
+    event.preventDefault();
+    const previous = lettersRef.current;
+    previous?.focus();
+    previous?.setSelectionRange(previous.value.length, previous.value.length);
+  }
+
   const cleanLetters = letters.toUpperCase().replace(/[^A-Z]/g, "").padEnd(3, "X").slice(0, 3);
   const cleanDigits = digits.replace(/[^0-9]/g, "").padEnd(3, "0").slice(0, 3);
 
@@ -70,22 +95,28 @@ export default function PricingCalculator({
   return (
     <div className="relative w-full max-w-xl">
       <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-lime/10 blur-3xl" />
-      <div className="rounded-3xl border border-black/10 bg-white p-6 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)] sm:p-8">
+      <div className="rounded-3xl border border-line bg-white p-6 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)] sm:p-8">
         <div className="mb-7 flex flex-wrap items-center gap-3">
           <div className="flex overflow-hidden rounded-2xl border-2 border-flex-black/90 font-display text-2xl font-semibold tracking-tight shadow-[0_6px_16px_-8px_rgba(14,10,27,0.4)]">
             <input
               aria-label="Harflar"
+              ref={lettersRef}
               value={letters}
-              onChange={(e) => setLetters(e.target.value.slice(0, 3))}
-              maxLength={3}
+              onChange={onLetters}
+              autoCapitalize="characters"
+              autoComplete="off"
+              spellCheck={false}
               className="w-24 bg-transparent px-3 py-3 text-center uppercase outline-none"
             />
             <div className="w-px bg-black/10" />
             <input
               aria-label="Raqamlar"
+              inputMode="numeric"
+              ref={digitsRef}
               value={digits}
-              onChange={(e) => setDigits(e.target.value.slice(0, 3))}
-              maxLength={3}
+              onChange={onDigits}
+              onKeyDown={digitsKeyDown}
+              autoComplete="off"
               className="font-tabular w-24 bg-lime/10 px-3 py-3 text-center outline-none"
             />
           </div>
@@ -116,18 +147,18 @@ export default function PricingCalculator({
         </div>
 
         <div className="space-y-1 font-tabular text-sm">
-          <div className="flex items-center justify-between border-b border-black/5 py-3">
+          <div className="flex items-center justify-between border-b border-line-soft py-3">
             <div className="font-medium">{labels.base}</div>
             <div>{formatUZS(BASE_PRICE, lang)}</div>
           </div>
-          <div className="flex items-center justify-between border-b border-black/5 py-3">
+          <div className="flex items-center justify-between border-b border-line-soft py-3">
             <div>
               <div className="font-medium">{labels.letterRarity}</div>
               <div className="font-sans text-xs text-black/40">{letterReason}</div>
             </div>
             <div className="font-semibold">&times;{letterMult}</div>
           </div>
-          <div className="flex items-center justify-between border-b border-black/5 py-3">
+          <div className="flex items-center justify-between border-b border-line-soft py-3">
             <div>
               <div className="font-medium">{labels.digitRarity}</div>
               <div className="font-sans text-xs text-black/40">{digitReason}</div>

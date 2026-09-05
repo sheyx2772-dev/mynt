@@ -171,7 +171,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
               return (
                 <div
                   key={item.title}
-                  className="rounded-3xl border border-black/10 bg-white p-6"
+                  className="rounded-3xl border border-line bg-white p-6"
                 >
                   <Icon className="h-5 w-5 text-flex-black/35" strokeWidth={1.75} />
                   <h3 className="mt-5 font-display font-semibold">{item.title}</h3>
@@ -185,7 +185,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
         </section>
 
         {/* Vertical picker + price */}
-        <section id="soha" className="scroll-mt-20 border-t border-black/5 bg-black/[0.02] py-14 sm:py-20">
+        <section id="soha" className="scroll-mt-20 border-t border-line-soft bg-black/[0.02] py-14 sm:py-20">
           <div className="mx-auto max-w-6xl px-6">
             <p className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
               {t.priceEyebrow}
@@ -228,7 +228,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                   {t.tableHead.map((head) => (
                     <th
                       key={head}
-                      className="border-b border-black/10 px-4 py-3 text-left text-[11px] font-semibold tracking-widest text-flex-black/40 uppercase"
+                      className="border-b border-line px-4 py-3 text-left text-[11px] font-semibold tracking-widest text-flex-black/40 uppercase"
                     >
                       {head}
                     </th>
@@ -238,13 +238,13 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
               <tbody>
                 {t.others.map((row) => (
                   <tr key={row[0]}>
-                    <td className="border-b border-black/8 px-4 py-3.5 font-medium">
+                    <td className="border-b border-line-soft px-4 py-3.5 font-medium">
                       {row[0]}
                     </td>
-                    <td className="border-b border-black/8 px-4 py-3.5 text-flex-black/60">
+                    <td className="border-b border-line-soft px-4 py-3.5 text-flex-black/60">
                       {row[1]}
                     </td>
-                    <td className="border-b border-black/8 px-4 py-3.5 text-flex-black/60">
+                    <td className="border-b border-line-soft px-4 py-3.5 text-flex-black/60">
                       {row[2]}
                     </td>
                   </tr>
@@ -361,7 +361,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
 
       </main>
 
-      <footer className="border-t border-black/8 py-10">
+      <footer className="border-t border-line-soft py-10">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 text-sm text-flex-black/45">
           <Link href="/" className="hover:text-flex-black">
             flex.com.uz

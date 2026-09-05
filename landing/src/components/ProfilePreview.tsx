@@ -61,10 +61,10 @@ export default function ProfilePreview({ labels }: { labels: PreviewLabels }) {
         <div className="rounded-xl bg-lime px-4 py-2.5 text-center text-sm font-medium text-flex-black">
           {labels.saveContact}
         </div>
-        <div className="rounded-xl border border-black/10 bg-white px-4 py-2.5 text-center text-sm font-medium shadow-sm">
+        <div className="rounded-xl border border-line bg-white px-4 py-2.5 text-center text-sm font-medium shadow-sm">
           Telegram
         </div>
-        <div className="rounded-xl border border-black/10 bg-white px-4 py-2.5 text-center text-sm font-medium shadow-sm">
+        <div className="rounded-xl border border-line bg-white px-4 py-2.5 text-center text-sm font-medium shadow-sm">
           Instagram
         </div>
       </div>

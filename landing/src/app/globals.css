@@ -22,8 +22,19 @@
   --color-white: #ffffff;
   --color-ink-2: #4a465a; /* secondary text, 8.1:1 on paper */
   --color-ink-3: #736f82; /* captions, 4.7:1 on paper */
+  /* Four weights of line on paper, and the whole ladder is one hue — the ink
+     thinned, never neutral grey. Half the site was drawing `border-black/10`
+     instead, which is the same lightness in a different colour: side by side
+     on one card the two read as a mistake rather than as a choice.
+
+       soft  a hairline inside a card, between rows of the same thing
+       line  the edge of a card
+       2     an input, and any border that has to be found by eye
+       lead  the one card being pointed at */
+  --color-line-soft: #f0eef5;
   --color-line: #e6e4ec;
   --color-line-2: #cfccd8; /* inputs, and borders that must be seen */
+  --color-line-lead: #b5afc6;
   --color-fill: #f1f0f4; /* disabled, and chips that are not chosen */
 
   /* Ink face — the owner's cabinet, and the wall screen */
@@ -800,8 +811,19 @@ body:has([data-no-app-bar]) {
    `content-visibility` transition needs `allow-discrete` or the content is
    hidden for the whole of the closing animation and the panel collapses empty.
 
+   The curve matters more than the duration here. An ease-out quint covers
+   four fifths of the distance in the first quarter of its time, which reads
+   as a snap with a tail rather than as an opening — measured on the FAQ, the
+   panel was at 82% of its height after 99ms of a 280ms transition. This is a
+   gentler ease-out over a longer beat, and the text fades in behind it so
+   there is something to watch even when the answer is two lines tall.
+
    A browser without `::details-content` ignores all of it and the panel opens
    instantly, which is what it did before — an addition, not a dependency.
+
+   On <details> itself rather than on a class: both accordions on the site want
+   this, the next one will too, and a class is a thing to forget. `.reveal`
+   stays in the markup as a name for what the element is.
 
    Guarded by its own media query rather than left to the blanket
    `prefers-reduced-motion` rule above: that rule names `*`, `*::before` and
@@ -811,15 +833,21 @@ body:has([data-no-app-bar]) {
     interpolate-size: allow-keywords;
   }
 
-  .reveal::details-content {
+  details::details-content {
     block-size: 0;
     overflow: clip;
+    opacity: 0;
     transition:
-      block-size 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-      content-visibility 0.28s allow-discrete;
+      block-size 0.42s cubic-bezier(0.33, 1, 0.68, 1),
+      opacity 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+      content-visibility 0.42s allow-discrete;
   }
 
-  .reveal[open]::details-content {
+  details[open]::details-content {
     block-size: auto;
+    opacity: 1;
+    /* The text is late and the box is early, so the answer arrives inside a
+       space that has already been made for it. */
+    transition-delay: 0s, 0.08s, 0s;
   }
 }

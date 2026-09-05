@@ -44,9 +44,14 @@ import { listPostsForHandle } from "@/lib/posts";
 import { isFollowing } from "@/lib/follows";
 import FollowButton from "@/components/FollowButton";
 import PostList from "@/components/PostList";
+import JsonLd from "@/components/JsonLd";
+import { social } from "@/lib/seo";
+import { profilePage, breadcrumbs } from "@/lib/schema";
 
 export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
+  const { til } = await props.searchParams;
+  const lang = await getLang(til);
   const title = `${handle.toUpperCase()} — flex.com.uz`;
 
   // Only pages with a real person or a real card behind them are worth
@@ -61,8 +66,40 @@ export async function generateMetadata(props: PageProps<"/[handle]">): Promise<M
   const parsed = parseHandle(handle);
   if (!parsed) return { title, robots: { index: false } };
 
-  const profile = await getClaimedProfile(`${parsed.letters}${parsed.digits}`);
-  return { title, robots: profile ? undefined : { index: false } };
+  const number = `${parsed.letters}${parsed.digits}`;
+  const profile = await getClaimedProfile(number);
+  if (!profile) return { title, robots: { index: false } };
+
+  // This is the page the product is actually made of: somebody taps a card and
+  // sends the link on. Until now that link arrived in Telegram as an address
+  // and nothing else — no name, no face, no line of text. The owner's own
+  // profile is the description and the picture, so there is nothing to invent.
+  const who = profile.team?.name || profile.name || number;
+  const role = [profile.position, profile.company ?? profile.team?.name]
+    .filter(Boolean)
+    .join(", ");
+  const description =
+    profile.bio?.trim() ||
+    [role, profile.city].filter(Boolean).join(" · ") ||
+    `${who} — Flex raqami ${number}.`;
+
+  return {
+    // Absolute, so the brand is not appended twice: the layout's template
+    // would otherwise make this "QXD483 — flex.com.uz — Flex".
+    title: { absolute: role ? `${who} — ${role} | ${number}` : `${who} | ${number}` },
+    description,
+    ...social({
+      title: who,
+      description,
+      path: `/${number}`,
+      lang,
+      // The avatar is the person, which is what a reader is looking for in a
+      // chat preview. Falling back to the site card rather than to nothing.
+      image: profile.avatarUrl ?? profile.team?.logoUrl ?? undefined,
+      imageAlt: who,
+      type: "profile",
+    }),
+  };
 }
 
 export default async function HandlePage(props: PageProps<"/[handle]">) {
@@ -291,6 +328,30 @@ async function VanityHandlePage({
       >
         {/* Keeps the app bar off somebody else's card. */}
         <span data-no-app-bar hidden />
+
+        {/* What this page is, said in the vocabulary a search engine reads: a
+            page about somebody, not the somebody itself. Everything in it is
+            already on the screen — a claim about content a reader cannot see
+            is what gets a site's rich results withdrawn. */}
+        <JsonLd
+          data={profilePage({
+            handle: normalized,
+            name: profile.team?.name || profile.name || normalized,
+            bio: profile.bio,
+            avatarUrl: profile.avatarUrl ?? profile.team?.logoUrl ?? null,
+            position: profile.position,
+            company: profile.company,
+            city: profile.city,
+            team: profile.team,
+          })}
+        />
+        <JsonLd
+          data={breadcrumbs([
+            { name: "Flex", path: "/" },
+            { name: "Rezidentlar", path: "/rezidentlar" },
+            { name: normalized, path: `/${normalized}` },
+          ])}
+        />
 
         <NfcCardProfile
           name={profile.name}
@@ -611,7 +672,7 @@ async function VanityHandlePage({
 
   return (
     <PageShell>
-      <div className="relative rounded-[1.75rem] border border-black/10 bg-white p-8 text-center shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <div className="relative rounded-[1.75rem] border border-line bg-white p-8 text-center shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <p className="inline-block rounded-full bg-lime/20 px-3 py-1 text-xs font-semibold tracking-wide text-flex-black/70 uppercase">
           Bo&apos;sh
         </p>
@@ -619,11 +680,11 @@ async function VanityHandlePage({
         <p className="mt-1 text-sm text-flex-black/50">flex.com.uz/{normalized}</p>
 
         <div className="mt-8 space-y-1 text-left font-tabular text-sm">
-          <div className="flex justify-between border-b border-black/5 py-2.5">
+          <div className="flex justify-between border-b border-line-soft py-2.5">
             <span>Harf kamyobligi — {lr.reason}</span>
             <span className="font-semibold">&times;{lr.multiplier}</span>
           </div>
-          <div className="flex justify-between border-b border-black/5 py-2.5">
+          <div className="flex justify-between border-b border-line-soft py-2.5">
             <span>Raqam kamyobligi — {dr.reason}</span>
             <span className="font-semibold">&times;{dr.multiplier}</span>
           </div>

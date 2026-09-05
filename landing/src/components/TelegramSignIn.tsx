@@ -96,7 +96,7 @@ export default function TelegramSignIn({
 
   if (phase.at === "stale") {
     return (
-      <div className="rounded-2xl border border-black/10 bg-black/[0.02] p-5 text-center">
+      <div className="rounded-2xl border border-line bg-black/[0.02] p-5 text-center">
         <p className="text-sm text-flex-black/70">{phase.error}</p>
         <button
           type="button"
@@ -132,7 +132,7 @@ export default function TelegramSignIn({
       </a>
 
       {phase.at === "waiting" ? (
-        <div className="mt-4 rounded-2xl border border-black/10 bg-black/[0.02] p-4 text-center">
+        <div className="mt-4 rounded-2xl border border-line bg-black/[0.02] p-4 text-center">
           <p className="flex items-center justify-center gap-2 text-sm font-medium">
             <Loader2 className="h-4 w-4 animate-spin text-lime-ink" />
             Telegram javobini kutmoqdamiz

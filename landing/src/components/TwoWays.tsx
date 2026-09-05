@@ -27,7 +27,7 @@ export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselIt
           meets it before any of the personal pitch. */}
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-center lg:gap-14">
         <div>
-      <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-black/10 bg-black/[0.03] px-3 py-1.5 text-[11px] font-medium tracking-wide text-flex-black/60 uppercase">
+      <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-black/[0.03] px-3 py-1.5 text-[11px] font-medium tracking-wide text-flex-black/60 uppercase">
         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime-ink" />
         {s.heroBadge}
       </p>

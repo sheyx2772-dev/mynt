@@ -1,9 +1,16 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { parseHandle } from "@/lib/pricing";
+import { useSanitisedInput } from "@/lib/use-sanitised-input";
+
+// The two halves of a handle, cleaned per character so the caret can be put
+// back where it was. Truncation is not here: it depends on what is already in
+// the field, and the hook needs a rule it can apply to a prefix.
+const onlyLetters = (raw: string) => raw.replace(/[^A-Za-z]/g, "").toUpperCase();
+const onlyDigits = (raw: string) => raw.replace(/\D/g, "");
 
 // The competitor puts this in the hero, and it is the right call: the first
 // thing anyone wants to know is whether the handle they have in mind is free.
@@ -20,6 +27,35 @@ export default function HandleChecker({
   const [digits, setDigits] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  const lettersRef = useRef<HTMLInputElement>(null);
+  const digitsRef = useRef<HTMLInputElement>(null);
+
+  const onLetters = useSanitisedInput(lettersRef, (value) => {
+    setLetters(value.slice(0, 3));
+    setError(null);
+    // Three letters is the whole of that field, and the next thing anybody
+    // types is a digit. Moving on saves a tab or a tap on a phone, where the
+    // second box is the harder target.
+    if (value.length >= 3) digitsRef.current?.focus();
+  }, onlyLetters);
+
+  const onDigits = useSanitisedInput(digitsRef, (value) => {
+    setDigits(value.slice(0, 3));
+    setError(null);
+  }, onlyDigits);
+
+  // Backspace at the very start of the digits goes back to the letters, with
+  // the caret at their end — the same thing a card number or an OTP does, and
+  // the reason is the same: the two boxes are one value.
+  function digitsKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    const el = event.currentTarget;
+    if (event.key !== "Backspace" || el.selectionStart !== 0 || el.selectionEnd !== 0) return;
+    event.preventDefault();
+    const previous = lettersRef.current;
+    previous?.focus();
+    previous?.setSelectionRange(previous.value.length, previous.value.length);
+  }
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -38,7 +74,7 @@ export default function HandleChecker({
           className={
             dark
               ? "flex items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.06] p-1.5 backdrop-blur-sm focus-within:border-lime/50"
-              : "flex items-center gap-2 rounded-2xl border border-black/12 bg-white p-1.5 shadow-sm focus-within:border-flex-black/40"
+              : "flex items-center gap-2 rounded-2xl border border-line bg-white p-1.5 shadow-sm focus-within:border-flex-black/40"
           }
         >
           <span
@@ -52,11 +88,12 @@ export default function HandleChecker({
           </span>
           <input
             aria-label={labels.letters}
+            ref={lettersRef}
             value={letters}
-            onChange={(e) => {
-              setLetters(e.target.value.replace(/[^A-Za-z]/g, "").toUpperCase().slice(0, 3));
-              setError(null);
-            }}
+            onChange={onLetters}
+            autoCapitalize="characters"
+            autoComplete="off"
+            spellCheck={false}
             placeholder="AAA"
             className={
               dark
@@ -67,11 +104,11 @@ export default function HandleChecker({
           <input
             aria-label={labels.digits}
             inputMode="numeric"
+            ref={digitsRef}
             value={digits}
-            onChange={(e) => {
-              setDigits(e.target.value.replace(/\D/g, "").slice(0, 3));
-              setError(null);
-            }}
+            onChange={onDigits}
+            onKeyDown={digitsKeyDown}
+            autoComplete="off"
             placeholder="000"
             className={
               dark

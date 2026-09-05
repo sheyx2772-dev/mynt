@@ -85,7 +85,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
               name="q"
               defaultValue={query}
               placeholder={t.searchPlaceholder}
-              className="w-full rounded-full border border-black/10 bg-white py-3 pr-4 pl-11 text-sm outline-none transition-colors focus:border-flex-black/30"
+              className="w-full rounded-full border border-line bg-white py-3 pr-4 pl-11 text-sm outline-none transition-colors focus:border-flex-black/30"
             />
           </div>
           <button
@@ -126,7 +126,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
         <section className="mt-10">
           {residents.length === 0 ? (
-            <div className="rounded-[1.5rem] border border-dashed border-black/15 px-6 py-14 text-center">
+            <div className="rounded-[1.5rem] border border-dashed border-line-2 px-6 py-14 text-center">
               <p className="text-sm text-flex-black/55">
                 {query
                   ? t.nothingFound(query)
@@ -147,7 +147,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
                   <li key={resident.normalized}>
                     <Link
                       href={`/${resident.normalized}`}
-                      className="flex items-center gap-4 rounded-2xl border border-black/10 bg-white px-5 py-4 transition-all hover:-translate-y-0.5 hover:shadow-md"
+                      className="flex items-center gap-4 rounded-2xl border border-line bg-white px-5 py-4 transition-all hover:-translate-y-0.5 hover:shadow-md"
                     >
                       <Avatar name={resident.name} url={resident.avatarUrl} />
 

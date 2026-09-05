@@ -16,7 +16,7 @@ export default function PlanTable({ c, lang }: { c: CatalogueDict; lang: Lang })
             className={
               paid
                 ? "rounded-3xl border border-flex-black bg-flex-black p-7 text-white"
-                : "rounded-3xl border border-black/10 bg-white p-7"
+                : "rounded-3xl border border-line bg-white p-7"
             }
           >
             <h3 className="font-display text-lg font-semibold">{c.plans[p.id].name}</h3>

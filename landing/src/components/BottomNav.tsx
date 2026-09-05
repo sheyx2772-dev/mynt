@@ -61,7 +61,7 @@ export default function BottomNav({
   ];
 
   return (
-    <nav className="app-bar fixed inset-x-0 bottom-0 z-40 border-t border-black/10 bg-white/95 backdrop-blur-md lg:hidden">
+    <nav className="app-bar fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur-md lg:hidden">
       <ul className="mx-auto flex max-w-md">
         {items.map(({ href, icon: Icon, key, ...rest }) => {
           const badge = "badge" in rest ? rest.badge : 0;

@@ -6,12 +6,31 @@ import BottomNav from "@/components/BottomNav";
 import { inter, mono, serif } from "./fonts";
 import "./globals.css";
 import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
+import JsonLd from "@/components/JsonLd";
+import { SITE_NAME, social } from "@/lib/seo";
+import { SITE_URL } from "@/lib/site-url";
+import { organisation, website } from "@/lib/schema";
 
 export const metadata: Metadata = {
+  // Every relative URL in any page's metadata resolves against this. Without
+  // it Next cannot build an absolute og:image and drops the tag, which is the
+  // quiet way a link ends up sharing as a bare address.
+  metadataBase: new URL(SITE_URL),
   // The default for pages that set none. The landing page overrides both in
   // the reader's language; this is the Uzbek fallback.
-  title: `Flex — ${site("uz").tagline}`,
+  title: {
+    default: `Flex — ${site("uz").tagline}`,
+    // A page that sets a title gets the brand appended once, here, rather than
+    // writing "— Flex" at forty call sites and forgetting it at six.
+    template: `%s — ${SITE_NAME}`,
+  },
   description: site("uz").metaDescription,
+  ...social({
+    title: `Flex — ${site("uz").tagline}`,
+    description: site("uz").metaDescription,
+    path: "/",
+    lang: "uz",
+  }),
   // iOS reads these rather than the manifest when added to the home screen.
   appleWebApp: {
     capable: true,
@@ -53,6 +72,12 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           venue={venue}
         />
         <ServiceWorkerRegistrar />
+
+        {/* Who the site is and what it is, once for the whole site. Both carry
+            an @id, so a page that needs to point at either — a profile saying
+            which site it is part of — refers to it instead of repeating it. */}
+        <JsonLd data={organisation()} />
+        <JsonLd data={website()} />
       </body>
     </html>
   );

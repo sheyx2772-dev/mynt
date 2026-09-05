@@ -69,7 +69,7 @@ export default function VenuePicker({
               className={
                 active
                   ? "rounded-full bg-flex-black px-5 py-2.5 text-sm font-medium text-white"
-                  : "rounded-full border border-black/12 px-5 py-2.5 text-sm text-flex-black/60 transition-colors hover:bg-black/[0.03]"
+                  : "rounded-full border border-line px-5 py-2.5 text-sm text-flex-black/60 transition-colors hover:bg-black/[0.03]"
               }
             >
               {t.verticals[id].name}
@@ -145,7 +145,7 @@ export default function VenuePicker({
       </div>
 
       {/* How big, and what that costs */}
-      <div className="mt-10 rounded-3xl border border-black/10 bg-white p-6 shadow-[0_30px_60px_-40px_rgba(14,10,27,0.3)] sm:p-8">
+      <div className="mt-10 rounded-3xl border border-line bg-white p-6 shadow-[0_30px_60px_-40px_rgba(14,10,27,0.3)] sm:p-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <label
@@ -215,7 +215,7 @@ export default function VenuePicker({
               className={
                 i === bandIndex
                   ? "rounded-2xl border-2 border-flex-black/90 px-4 py-3"
-                  : "rounded-2xl border border-black/10 px-4 py-3 opacity-60"
+                  : "rounded-2xl border border-line px-4 py-3 opacity-60"
               }
             >
               <p className="text-[11px] font-semibold tracking-widest text-flex-black/40 uppercase">
@@ -265,7 +265,7 @@ function Panel({
   tone?: "lime" | "gold";
 }) {
   return (
-    <div className="rounded-3xl border border-black/10 bg-white p-6">
+    <div className="rounded-3xl border border-line bg-white p-6">
       <h3 className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
         {title}
       </h3>

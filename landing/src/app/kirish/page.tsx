@@ -34,7 +34,7 @@ export default async function SignInPage(props: PageProps<"/kirish">) {
 
   return (
     <PageShell>
-      <div className="rounded-[1.75rem] border border-black/10 bg-white p-8 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <div className="rounded-[1.75rem] border border-line bg-white p-8 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <h1 className="font-display text-2xl font-semibold tracking-tight">Hisobingizga kiring</h1>
         <p className="mt-2 mb-7 text-sm text-flex-black/60">
           Handle band qilish va profilingizni tahrirlash uchun kirish talab qilinadi.

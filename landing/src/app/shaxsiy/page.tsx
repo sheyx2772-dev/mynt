@@ -227,7 +227,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
         {/* What a profile actually looks like */}
         <section
           id="individual"
-          className="scroll-mt-20 border-t border-black/5 bg-black/[0.02] py-14 sm:py-24"
+          className="scroll-mt-20 border-t border-line-soft bg-black/[0.02] py-14 sm:py-24"
         >
           <div className="mx-auto grid max-w-6xl gap-14 px-6 lg:grid-cols-[1fr_320px] lg:gap-20">
             <div>
@@ -241,7 +241,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
                 {s.tapDesc}
               </p>
 
-              <dl className="mt-10 divide-y divide-black/8 border-y border-black/8">
+              <dl className="mt-10 divide-y divide-black/8 border-y border-line-soft">
                 {copy.consumer.map((f, i) => {
                   const Icon = CONSUMER_ICONS[i]!;
                   return (
@@ -297,7 +297,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
         {/* The objects themselves, between what the profile does and what it
             costs. The page says "a card, a ring or a bracelet" three times
             before this and had nowhere to show them. */}
-        <div className="border-t border-black/5 bg-black/[0.02] py-6">
+        <div className="border-t border-line-soft bg-black/[0.02] py-6">
           <LoadoutStrip
             items={devices}
             label={p.groupDevices}
@@ -353,7 +353,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
 
       </main>
 
-      <footer className="border-t border-black/8 py-10">
+      <footer className="border-t border-line-soft py-10">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 text-sm text-flex-black/45">
           <Link href="/" className="hover:text-flex-black">
             flex.com.uz

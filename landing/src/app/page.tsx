@@ -58,6 +58,9 @@ import { paperButton } from "@/components/ui/paper/Button";
 import { BASE_PRICE } from "@/lib/pricing";
 import { DELIVERY } from "@/lib/company";
 import { PLANS } from "@/lib/plans";
+import JsonLd from "@/components/JsonLd";
+import { social } from "@/lib/seo";
+import { faqPage } from "@/lib/schema";
 import { ArrowUpRight } from "lucide-react";
 import LangSwitch from "@/components/LangSwitch";
 import { COMPANY } from "@/lib/company";
@@ -91,8 +94,16 @@ export async function generateMetadata({
   searchParams,
 }: PageProps<"/">): Promise<Metadata> {
   const { til } = await searchParams;
-  const t = site(await getLang(til));
-  return { title: `Flex — ${t.tagline}`, description: t.metaDescription };
+  const lang = await getLang(til);
+  const t = site(lang);
+  const title = `Flex — ${t.tagline}`;
+  return {
+    // Absolute: the layout's template would otherwise append the brand to a
+    // title that opens with it.
+    title: { absolute: title },
+    description: t.metaDescription,
+    ...social({ title, description: t.metaDescription, path: "/", lang }),
+  };
 }
 
 export default async function Home({ searchParams }: PageProps<"/">) {
@@ -321,7 +332,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <div className="mx-auto max-w-6xl px-6 pt-2">
             <Link
               href="/katalog?bolim=layouts"
-              className="group flex items-center justify-between gap-4 rounded-2xl border border-black/10 px-5 py-4 transition-colors hover:bg-black/[0.03]"
+              className="group flex items-center justify-between gap-4 rounded-2xl border border-line px-5 py-4 transition-colors hover:bg-black/[0.03]"
             >
               <span>
                 <span className="block font-semibold">{p.samplesLabel}</span>
@@ -506,8 +517,14 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               {prices.map((p) => (
                 <div
                   key={p.name}
-                  className={`flex flex-col rounded-card border bg-white p-5 ${
-                    p.lead ? "border-ink" : "border-line"
+                  // The chosen card is lifted rather than outlined. A full-ink
+                  // hairline is the hardest line on the page, and at this size it
+                  // reads as a box drawn around the card instead of as the card
+                  // being pointed at.
+                  className={`flex flex-col rounded-card border bg-white p-5 transition-shadow ${
+                    p.lead
+                      ? "border-line-lead shadow-[0_14px_36px_-22px_rgba(14,10,27,0.4)]"
+                      : "border-line"
                   }`}
                 >
                   <h3 className="text-[17px] leading-6 font-semibold">{p.name}</h3>
@@ -569,11 +586,18 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <h2 className="text-center font-display text-2xl font-semibold tracking-tight sm:text-4xl">
             {s.faq}
           </h2>
+          {/* The same questions and answers the reader is looking at, said
+              again for a search engine. Google will show them under the result
+              — and it withdraws a site's rich results entirely if the answers
+              are not on the page, which is why this reads from `copy.faqs`
+              rather than from a list of its own. */}
+          <JsonLd data={faqPage(copy.faqs)} />
+
           <div className="mt-10 space-y-3">
             {copy.faqs.map((item) => (
               <details
                 key={item.q}
-                className="reveal group rounded-2xl border border-black/10 bg-white p-5 transition-shadow duration-300 open:shadow-[0_12px_30px_-16px_rgba(14,10,27,0.2)]"
+                className="reveal group rounded-2xl border border-line bg-white p-5 transition-shadow duration-300 open:shadow-[0_12px_30px_-16px_rgba(14,10,27,0.2)]"
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between font-medium marker:content-none">
                   {item.q}

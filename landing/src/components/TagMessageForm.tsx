@@ -66,14 +66,14 @@ export default function TagMessageForm({
               className={
                 active
                   ? "flex w-full items-center gap-3 rounded-2xl bg-flex-black px-5 py-4 text-left text-[15px] font-semibold text-white"
-                  : "flex w-full items-center gap-3 rounded-2xl border border-black/10 px-5 py-4 text-left text-[15px] transition-colors hover:border-black/25"
+                  : "flex w-full items-center gap-3 rounded-2xl border border-line px-5 py-4 text-left text-[15px] transition-colors hover:border-line-2"
               }
             >
               <span
                 className={
                   active
                     ? "flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-lime"
-                    : "h-5 w-5 shrink-0 rounded-full border border-black/15"
+                    : "h-5 w-5 shrink-0 rounded-full border border-line-2"
                 }
               >
                 {active && <Check className="h-3 w-3 text-flex-black" />}
@@ -99,7 +99,7 @@ export default function TagMessageForm({
                 name="replyTo"
                 inputMode="tel"
                 placeholder="+998 90 123 45 67"
-                className="w-full rounded-2xl border border-black/12 px-4 py-3.5 text-[15px] outline-none placeholder:text-flex-black/25 focus:border-flex-black/40"
+                className="w-full rounded-2xl border border-line px-4 py-3.5 text-[15px] outline-none placeholder:text-flex-black/25 focus:border-flex-black/40"
               />
               <p className="mt-1.5 text-[12px] text-flex-black/40">{words.replyHint}</p>
             </div>
@@ -109,14 +109,14 @@ export default function TagMessageForm({
             name="place"
             placeholder={words.placePlaceholder}
             aria-label={words.placeLabel}
-            className="w-full rounded-2xl border border-black/12 px-4 py-3.5 text-[15px] outline-none placeholder:text-flex-black/25 focus:border-flex-black/40"
+            className="w-full rounded-2xl border border-line px-4 py-3.5 text-[15px] outline-none placeholder:text-flex-black/25 focus:border-flex-black/40"
           />
 
           <textarea
             name="body"
             rows={2}
             placeholder={words.notePlaceholder}
-            className="w-full resize-none rounded-2xl border border-black/12 px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-flex-black/25 focus:border-flex-black/40"
+            className="w-full resize-none rounded-2xl border border-line px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-flex-black/25 focus:border-flex-black/40"
           />
         </div>
       )}
