@@ -24,6 +24,7 @@ import (
 	"github.com/sheyx2772-dev/flex/backend/internal/config"
 	"github.com/sheyx2772-dev/flex/backend/internal/database"
 	"github.com/sheyx2772-dev/flex/backend/internal/mail"
+	"github.com/sheyx2772-dev/flex/backend/internal/sms"
 )
 
 // How long a shutdown waits for requests already in flight. Longer than any
@@ -63,7 +64,7 @@ func run() error {
 	}
 	defer pool.Close()
 
-	authService := auth.NewService(pool, newMailer(cfg), newDirectory(cfg, pool), cfg.SiteURL)
+	authService := auth.NewService(pool, newMailer(cfg), newTexter(cfg), newDirectory(cfg, pool), cfg.SiteURL)
 
 	// Housekeeping, on the same context as everything else — one signal stops
 	// it with the rest.
@@ -125,6 +126,19 @@ func newMailer(cfg config.Config) mail.Mailer {
 		return mail.LogMailer{}
 	}
 	return mail.NewResend(cfg.ResendAPIKey, cfg.MailFrom)
+}
+
+// newTexter picks how sign-in codes go out.
+//
+// With no provider configured they are written to the log, which development
+// wants and production must never do — `config.Load` refuses to start a
+// production process in that state.
+func newTexter(cfg config.Config) sms.Sender {
+	if cfg.EskizEmail == "" {
+		slog.Warn("SMS xizmati sozlanmagan — kodlar jurnalga yoziladi")
+		return sms.LogSender{}
+	}
+	return sms.NewEskiz(cfg.EskizEmail, cfg.EskizPassword, cfg.SMSFrom)
 }
 
 // newDirectory picks where accounts come from.

@@ -10,6 +10,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/sheyx2772-dev/flex/backend/internal/mail"
+	"github.com/sheyx2772-dev/flex/backend/internal/sms"
 	"github.com/sheyx2772-dev/flex/backend/internal/store"
 )
 
@@ -61,6 +62,10 @@ type Service struct {
 	pool    *pgxpool.Pool
 	queries *store.Queries
 	mailer  mail.Mailer
+	// The SMS channel. Its own interface for the same reason the mailer has
+	// one, and more so: every message costs money, so a provider that is
+	// misconfigured must fail loudly rather than quietly.
+	sms sms.Sender
 	// Where accounts live, which is not here — see directory.go.
 	directory Directory
 	// Where a sign-in link points. Configuration rather than a request header:
@@ -69,11 +74,12 @@ type Service struct {
 	siteURL string
 }
 
-func NewService(pool *pgxpool.Pool, mailer mail.Mailer, directory Directory, siteURL string) *Service {
+func NewService(pool *pgxpool.Pool, mailer mail.Mailer, texter sms.Sender, directory Directory, siteURL string) *Service {
 	return &Service{
 		pool:      pool,
 		queries:   store.New(pool),
 		mailer:    mailer,
+		sms:       texter,
 		directory: directory,
 		siteURL:   strings.TrimSuffix(siteURL, "/"),
 	}

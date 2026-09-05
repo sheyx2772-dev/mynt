@@ -72,6 +72,23 @@ type FlexPasswordAttempt struct {
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
 }
 
+type FlexPhone struct {
+	Phone      string             `json:"phone"`
+	UserID     uuid.UUID          `json:"user_id"`
+	VerifiedAt pgtype.Timestamptz `json:"verified_at"`
+}
+
+type FlexPhoneCode struct {
+	ID         uuid.UUID          `json:"id"`
+	Phone      string             `json:"phone"`
+	CodeHash   []byte             `json:"code_hash"`
+	ExpiresAt  pgtype.Timestamptz `json:"expires_at"`
+	ConsumedAt pgtype.Timestamptz `json:"consumed_at"`
+	Attempts   int16              `json:"attempts"`
+	CreatedAt  pgtype.Timestamptz `json:"created_at"`
+	Ip         *netip.Addr        `json:"ip"`
+}
+
 type FlexSession struct {
 	ID         uuid.UUID          `json:"id"`
 	UserID     uuid.UUID          `json:"user_id"`

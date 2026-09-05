@@ -58,6 +58,13 @@ type Config struct {
 	PaymeSecretKey string
 	ClickSecretKey string
 
+	// Sending the sign-in code. Eskiz.uz, which is what most of this market
+	// sends through. The sender name has to be approved by the operator before
+	// anything but their test text will send.
+	EskizEmail    string
+	EskizPassword string
+	SMSFrom       string
+
 	// Sending account for the sign-in mail. Empty means no provider is
 	// configured, and in development the link is written to the log instead.
 	ResendAPIKey string
@@ -116,6 +123,9 @@ func Load() (Config, error) {
 		ClickMerchantID:        os.Getenv("CLICK_MERCHANT_ID"),
 		PaymeSecretKey:         os.Getenv("PAYME_SECRET_KEY"),
 		ClickSecretKey:         os.Getenv("CLICK_SECRET_KEY"),
+		EskizEmail:             os.Getenv("ESKIZ_EMAIL"),
+		EskizPassword:          os.Getenv("ESKIZ_PASSWORD"),
+		SMSFrom:                withDefault("SMS_FROM", "4546"),
 		ResendAPIKey:           os.Getenv("RESEND_API_KEY"),
 		MailFrom:               withDefault("MAIL_FROM", "Flex <kirish@flex.com.uz>"),
 		AdminEmails:            readList(os.Getenv("ADMIN_EMAILS")),
@@ -145,6 +155,12 @@ func Load() (Config, error) {
 	// start than to run in a state where the only way in is reading a log file.
 	if !cfg.IsDevelopment() && cfg.ResendAPIKey == "" {
 		missing = append(missing, "RESEND_API_KEY")
+	}
+	// Without these, the phone door writes sign-in codes to the log instead of
+	// sending them — which is what development wants and what production must
+	// never do, because nobody can sign in and nobody is told.
+	if !cfg.IsDevelopment() && cfg.EskizEmail == "" {
+		missing = append(missing, "ESKIZ_EMAIL")
 	}
 
 	if len(missing) > 0 {

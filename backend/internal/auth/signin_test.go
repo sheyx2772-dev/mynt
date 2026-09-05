@@ -81,7 +81,7 @@ func newService(t *testing.T) (*Service, *capturedMail, string) {
 		_, _ = pool.Exec(ctx, `delete from auth.users where email = $1`, email)
 	})
 
-	return NewService(pool, mailer, &fakeDirectory{pool: pool}, "http://localhost:3000"), mailer, email
+	return NewService(pool, mailer, &capturedSMS{}, &fakeDirectory{pool: pool}, "http://localhost:3000"), mailer, email
 }
 
 func TestSignInCreatesAnAccountAndASession(t *testing.T) {

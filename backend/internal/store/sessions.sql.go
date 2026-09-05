@@ -13,6 +13,49 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const accountForPhone = `-- name: AccountForPhone :one
+select p.user_id, u.email from flex_phones p
+join auth.users u on u.id = p.user_id
+where p.phone = $1
+`
+
+type AccountForPhoneRow struct {
+	UserID uuid.UUID `json:"user_id"`
+	Email  *string   `json:"email"`
+}
+
+func (q *Queries) AccountForPhone(ctx context.Context, phone string) (AccountForPhoneRow, error) {
+	row := q.db.QueryRow(ctx, accountForPhone, phone)
+	var i AccountForPhoneRow
+	err := row.Scan(&i.UserID, &i.Email)
+	return i, err
+}
+
+const claimPhoneCode = `-- name: ClaimPhoneCode :one
+select id, phone, code_hash, expires_at, consumed_at, attempts, created_at, ip from claim_phone_code($1::text, $2::bytea)
+`
+
+type ClaimPhoneCodeParams struct {
+	Phone    string `json:"phone"`
+	CodeHash []byte `json:"code_hash"`
+}
+
+func (q *Queries) ClaimPhoneCode(ctx context.Context, arg ClaimPhoneCodeParams) (FlexPhoneCode, error) {
+	row := q.db.QueryRow(ctx, claimPhoneCode, arg.Phone, arg.CodeHash)
+	var i FlexPhoneCode
+	err := row.Scan(
+		&i.ID,
+		&i.Phone,
+		&i.CodeHash,
+		&i.ExpiresAt,
+		&i.ConsumedAt,
+		&i.Attempts,
+		&i.CreatedAt,
+		&i.Ip,
+	)
+	return i, err
+}
+
 const consumeLoginToken = `-- name: ConsumeLoginToken :one
 update flex_login_tokens
 set consumed_at = now()
@@ -101,6 +144,45 @@ func (q *Queries) CountRecentPasswordAttempts(ctx context.Context, arg CountRece
 	return count, err
 }
 
+const countRecentPhoneCodes = `-- name: CountRecentPhoneCodes :one
+select count(*) from flex_phone_codes
+where phone = $1
+  and created_at > now() - $2::int * interval '1 second'
+`
+
+type CountRecentPhoneCodesParams struct {
+	Phone         string `json:"phone"`
+	WindowSeconds int32  `json:"window_seconds"`
+}
+
+// Two windows. Per number, because a code sent to a number is a message a
+// person pays for in attention and we pay for in money. Per source, because one
+// script working through a list of numbers is the expensive kind of abuse.
+func (q *Queries) CountRecentPhoneCodes(ctx context.Context, arg CountRecentPhoneCodesParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countRecentPhoneCodes, arg.Phone, arg.WindowSeconds)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const countRecentPhoneCodesByIP = `-- name: CountRecentPhoneCodesByIP :one
+select count(*) from flex_phone_codes
+where ip = $1
+  and created_at > now() - $2::int * interval '1 second'
+`
+
+type CountRecentPhoneCodesByIPParams struct {
+	Ip            *netip.Addr `json:"ip"`
+	WindowSeconds int32       `json:"window_seconds"`
+}
+
+func (q *Queries) CountRecentPhoneCodesByIP(ctx context.Context, arg CountRecentPhoneCodesByIPParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countRecentPhoneCodesByIP, arg.Ip, arg.WindowSeconds)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createLoginToken = `-- name: CreateLoginToken :one
 insert into flex_login_tokens (email, token_hash, expires_at, ip)
 values (lower($1::text), $2, $3, $4)
@@ -128,6 +210,44 @@ func (q *Queries) CreateLoginToken(ctx context.Context, arg CreateLoginTokenPara
 		&i.TokenHash,
 		&i.ExpiresAt,
 		&i.ConsumedAt,
+		&i.CreatedAt,
+		&i.Ip,
+	)
+	return i, err
+}
+
+const createPhoneCode = `-- name: CreatePhoneCode :one
+
+insert into flex_phone_codes (phone, code_hash, expires_at, ip)
+values ($1, $2, $3, $4)
+returning id, phone, code_hash, expires_at, consumed_at, attempts, created_at, ip
+`
+
+type CreatePhoneCodeParams struct {
+	Phone     string             `json:"phone"`
+	CodeHash  []byte             `json:"code_hash"`
+	ExpiresAt pgtype.Timestamptz `json:"expires_at"`
+	Ip        *netip.Addr        `json:"ip"`
+}
+
+// The phone door. Codes are hashed for the same reason links are, and the
+// attempt counter lives in SQL so three wrong guesses spend a code however many
+// requests arrive at once.
+func (q *Queries) CreatePhoneCode(ctx context.Context, arg CreatePhoneCodeParams) (FlexPhoneCode, error) {
+	row := q.db.QueryRow(ctx, createPhoneCode,
+		arg.Phone,
+		arg.CodeHash,
+		arg.ExpiresAt,
+		arg.Ip,
+	)
+	var i FlexPhoneCode
+	err := row.Scan(
+		&i.ID,
+		&i.Phone,
+		&i.CodeHash,
+		&i.ExpiresAt,
+		&i.ConsumedAt,
+		&i.Attempts,
 		&i.CreatedAt,
 		&i.Ip,
 	)
@@ -192,6 +312,18 @@ func (q *Queries) DeleteExpiredLoginTokens(ctx context.Context) (int64, error) {
 	return result.RowsAffected(), nil
 }
 
+const deleteExpiredPhoneCodes = `-- name: DeleteExpiredPhoneCodes :execrows
+delete from flex_phone_codes where expires_at < now() - interval '1 day'
+`
+
+func (q *Queries) DeleteExpiredPhoneCodes(ctx context.Context) (int64, error) {
+	result, err := q.db.Exec(ctx, deleteExpiredPhoneCodes)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
+}
+
 const deleteExpiredSessions = `-- name: DeleteExpiredSessions :execrows
 delete from flex_sessions where expires_at < now()
 `
@@ -220,6 +352,24 @@ delete from flex_sessions where user_id = $1
 // Signing out everywhere. The reason this table exists rather than a JWT.
 func (q *Queries) DeleteUserSessions(ctx context.Context, userID uuid.UUID) error {
 	_, err := q.db.Exec(ctx, deleteUserSessions, userID)
+	return err
+}
+
+const linkPhone = `-- name: LinkPhone :exec
+insert into flex_phones (phone, user_id) values ($1, $2)
+on conflict (phone) do update set user_id = excluded.user_id, verified_at = now()
+`
+
+type LinkPhoneParams struct {
+	Phone  string    `json:"phone"`
+	UserID uuid.UUID `json:"user_id"`
+}
+
+// One number, one account. The unique constraint on `user_id` is what stops an
+// account collecting numbers, and the primary key stops a number collecting
+// accounts.
+func (q *Queries) LinkPhone(ctx context.Context, arg LinkPhoneParams) error {
+	_, err := q.db.Exec(ctx, linkPhone, arg.Phone, arg.UserID)
 	return err
 }
 
@@ -260,6 +410,15 @@ type RecordPasswordAttemptParams struct {
 // stopped trying.
 func (q *Queries) RecordPasswordAttempt(ctx context.Context, arg RecordPasswordAttemptParams) error {
 	_, err := q.db.Exec(ctx, recordPasswordAttempt, arg.Email, arg.Ip, arg.Succeeded)
+	return err
+}
+
+const recordPhoneGuess = `-- name: RecordPhoneGuess :exec
+select record_phone_guess($1::text)
+`
+
+func (q *Queries) RecordPhoneGuess(ctx context.Context, phone string) error {
+	_, err := q.db.Exec(ctx, recordPhoneGuess, phone)
 	return err
 }
 

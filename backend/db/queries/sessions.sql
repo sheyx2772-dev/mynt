@@ -96,3 +96,46 @@ where (email = lower(sqlc.narg(email)::text) or ip = sqlc.narg(ip))
 -- name: RecordPasswordAttempt :exec
 insert into flex_password_attempts (email, ip, succeeded)
 values (lower(sqlc.narg(email)::text), sqlc.narg(ip), sqlc.arg(succeeded));
+
+-- The phone door. Codes are hashed for the same reason links are, and the
+-- attempt counter lives in SQL so three wrong guesses spend a code however many
+-- requests arrive at once.
+
+-- name: CreatePhoneCode :one
+insert into flex_phone_codes (phone, code_hash, expires_at, ip)
+values (sqlc.arg(phone), sqlc.arg(code_hash), sqlc.arg(expires_at), sqlc.narg(ip))
+returning *;
+
+-- name: ClaimPhoneCode :one
+select * from claim_phone_code(sqlc.arg(phone)::text, sqlc.arg(code_hash)::bytea);
+
+-- name: RecordPhoneGuess :exec
+select record_phone_guess(sqlc.arg(phone)::text);
+
+-- Two windows. Per number, because a code sent to a number is a message a
+-- person pays for in attention and we pay for in money. Per source, because one
+-- script working through a list of numbers is the expensive kind of abuse.
+-- name: CountRecentPhoneCodes :one
+select count(*) from flex_phone_codes
+where phone = sqlc.arg(phone)
+  and created_at > now() - sqlc.arg(window_seconds)::int * interval '1 second';
+
+-- name: CountRecentPhoneCodesByIP :one
+select count(*) from flex_phone_codes
+where ip = sqlc.narg(ip)
+  and created_at > now() - sqlc.arg(window_seconds)::int * interval '1 second';
+
+-- name: AccountForPhone :one
+select p.user_id, u.email from flex_phones p
+join auth.users u on u.id = p.user_id
+where p.phone = sqlc.arg(phone);
+
+-- One number, one account. The unique constraint on `user_id` is what stops an
+-- account collecting numbers, and the primary key stops a number collecting
+-- accounts.
+-- name: LinkPhone :exec
+insert into flex_phones (phone, user_id) values (sqlc.arg(phone), sqlc.arg(user_id))
+on conflict (phone) do update set user_id = excluded.user_id, verified_at = now();
+
+-- name: DeleteExpiredPhoneCodes :execrows
+delete from flex_phone_codes where expires_at < now() - interval '1 day';
