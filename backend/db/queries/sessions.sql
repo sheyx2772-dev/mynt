@@ -134,8 +134,13 @@ where p.phone = sqlc.arg(phone);
 -- account collecting numbers, and the primary key stops a number collecting
 -- accounts.
 -- name: LinkPhone :exec
-insert into flex_phones (phone, user_id) values (sqlc.arg(phone), sqlc.arg(user_id))
-on conflict (phone) do update set user_id = excluded.user_id, verified_at = now();
+insert into flex_phones (phone, user_id, country)
+values (sqlc.arg(phone), sqlc.arg(user_id), sqlc.narg(country))
+on conflict (phone) do update
+  set user_id = excluded.user_id,
+      verified_at = now(),
+      -- A country we could not place before must not overwrite one we can now.
+      country = coalesce(excluded.country, flex_phones.country);
 
 -- name: DeleteExpiredPhoneCodes :execrows
 delete from flex_phone_codes where expires_at < now() - interval '1 day';

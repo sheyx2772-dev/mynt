@@ -43,7 +43,7 @@ var (
 // answers the same way it answers success — the same reason the sign-in link
 // does: a different answer is a way of asking whether a number has an account.
 func (s *Service) RequestPhoneCode(ctx context.Context, rawPhone string, ip *netip.Addr) error {
-	phone, ok := NormalisePhone(rawPhone)
+	phone, _, ok := NormalisePhone(rawPhone)
 	if !ok {
 		return ErrBadPhone
 	}
@@ -78,7 +78,7 @@ func (s *Service) RequestPhoneCode(ctx context.Context, rawPhone string, ip *net
 
 // VerifyPhoneCode spends a code and returns a session.
 func (s *Service) VerifyPhoneCode(ctx context.Context, rawPhone, code, userAgent string, ip *netip.Addr) (string, Account, error) {
-	phone, ok := NormalisePhone(rawPhone)
+	phone, country, ok := NormalisePhone(rawPhone)
 	if !ok {
 		return "", Account{}, ErrBadPhone
 	}
@@ -97,7 +97,7 @@ func (s *Service) VerifyPhoneCode(ctx context.Context, rawPhone, code, userAgent
 		return "", Account{}, err
 	}
 
-	account, err := s.accountForPhone(ctx, phone)
+	account, err := s.accountForPhone(ctx, phone, country)
 	if err != nil {
 		return "", Account{}, err
 	}
@@ -115,7 +115,7 @@ func (s *Service) VerifyPhoneCode(ctx context.Context, rawPhone, code, userAgent
 //
 // Proving a number is what creates the account, in the same way following a
 // link does — nothing exists for a number somebody only typed into a form.
-func (s *Service) accountForPhone(ctx context.Context, phone string) (Account, error) {
+func (s *Service) accountForPhone(ctx context.Context, phone, country string) (Account, error) {
 	row, err := s.queries.AccountForPhone(ctx, phone)
 	if err == nil {
 		account := Account{ID: row.UserID.String(), Verified: true}
@@ -131,6 +131,10 @@ func (s *Service) accountForPhone(ctx context.Context, phone string) (Account, e
 	// An account with no address. The directory wants one, so the number stands
 	// in — a placeholder at a domain nobody can receive mail at, which is
 	// honest: this person signed up by phone and has given us no address.
+	//
+	// The country goes on the row rather than being derived later, because this
+	// is the moment we know it: dial codes are variable length, and working it
+	// out from the digits afterwards needs a prefix table all over again.
 	account, err := s.directory.FindOrCreate(ctx, phone+"@telefon.flex.com.uz")
 	if err != nil {
 		return Account{}, err
@@ -140,7 +144,9 @@ func (s *Service) accountForPhone(ctx context.Context, phone string) (Account, e
 	if err != nil {
 		return Account{}, err
 	}
-	if err := s.queries.LinkPhone(ctx, store.LinkPhoneParams{Phone: phone, UserID: owner}); err != nil {
+	if err := s.queries.LinkPhone(ctx, store.LinkPhoneParams{
+		Phone: phone, UserID: owner, Country: optionalText(country),
+	}); err != nil {
 		return Account{}, err
 	}
 
@@ -168,4 +174,13 @@ func (s *Service) withinPhoneLimit(ctx context.Context, phone string, ip *netip.
 		return false, err
 	}
 	return bySource < codesPerIPPerHour, nil
+}
+
+// optionalText stores an unrecognised country as null rather than as "", so a
+// report counting customers by country is not asked to explain an empty string.
+func optionalText(s string) *string {
+	if s == "" {
+		return nil
+	}
+	return &s
 }

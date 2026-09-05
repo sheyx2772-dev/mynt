@@ -356,20 +356,26 @@ func (q *Queries) DeleteUserSessions(ctx context.Context, userID uuid.UUID) erro
 }
 
 const linkPhone = `-- name: LinkPhone :exec
-insert into flex_phones (phone, user_id) values ($1, $2)
-on conflict (phone) do update set user_id = excluded.user_id, verified_at = now()
+insert into flex_phones (phone, user_id, country)
+values ($1, $2, $3)
+on conflict (phone) do update
+  set user_id = excluded.user_id,
+      verified_at = now(),
+      -- A country we could not place before must not overwrite one we can now.
+      country = coalesce(excluded.country, flex_phones.country)
 `
 
 type LinkPhoneParams struct {
-	Phone  string    `json:"phone"`
-	UserID uuid.UUID `json:"user_id"`
+	Phone   string    `json:"phone"`
+	UserID  uuid.UUID `json:"user_id"`
+	Country *string   `json:"country"`
 }
 
 // One number, one account. The unique constraint on `user_id` is what stops an
 // account collecting numbers, and the primary key stops a number collecting
 // accounts.
 func (q *Queries) LinkPhone(ctx context.Context, arg LinkPhoneParams) error {
-	_, err := q.db.Exec(ctx, linkPhone, arg.Phone, arg.UserID)
+	_, err := q.db.Exec(ctx, linkPhone, arg.Phone, arg.UserID, arg.Country)
 	return err
 }
 

@@ -76,6 +76,7 @@ type FlexPhone struct {
 	Phone      string             `json:"phone"`
 	UserID     uuid.UUID          `json:"user_id"`
 	VerifiedAt pgtype.Timestamptz `json:"verified_at"`
+	Country    *string            `json:"country"`
 }
 
 type FlexPhoneCode struct {
