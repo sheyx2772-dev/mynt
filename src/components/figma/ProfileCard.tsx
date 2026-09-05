@@ -10,175 +10,712 @@ const imgUnitedVentures = "/figma-make/image-16.png";
 const imgICTWeek = "/figma-make/image-17.png";
 const imgATKRV = "/figma-make/image-18.png";
 const imgProkuratura = "/figma-make/image-19.png";
-const imgYIA = "/figma-make/yia-banner.jpeg";            // supplied by the client
-const imgUzCombinator = "/figma-make/uzcombinator-banner.jpeg";  // supplied by the client
-const imgMOQ = "/figma-make/moq-banner.jpeg";                    // supplied by the client
-const imgKorzinka   = "/figma-make/korzinka-banner.png";
-const imgMU         = "/figma-make/mu-banner.png";
+const imgYIA = "/figma-make/yia-banner.jpeg"; // supplied by the client
+const imgUzCombinator = "/figma-make/uzcombinator-banner.jpeg"; // supplied by the client
+const imgMOQ = "/figma-make/moq-banner.jpeg"; // supplied by the client
+const imgKorzinka = "/figma-make/korzinka-banner.png";
+const imgMU = "/figma-make/mu-banner.png";
 const imgFintellect = "/figma-make/fintellect-banner-fit.png";
-const imgAyol       = "/figma-make/ayol-banner.jpeg";
-const imgEYU        = "/figma-make/eyu-banner-fit.png";
-const imgAloqaV     = "/figma-make/aloqaventures-banner-fit.png";  // the fund's own, supplied
-const imgFlex       = "/figma-make/flex-banner.png";
-const imgDomo       = "/figma-make/domo-banner.png";
+const imgAyol = "/figma-make/ayol-banner.jpeg";
+const imgEYU = "/figma-make/eyu-banner-fit.png";
+const imgAloqaV = "/figma-make/aloqaventures-banner-fit.png"; // the fund's own, supplied
+const imgFlex = "/figma-make/flex-banner.png";
+const imgDomo = "/figma-make/domo-banner.png";
 
 const BANNER: Record<string, string> = {
   "tashkent-inn": imgStartupGarage,
-  "hokimiyat":    imgProkuratura,
-  "moliya":       imgMarkaziyBank,
-  "iqtisodiyot":  imgATKRV,
-  "raqamli":      imgATKRV,
-  "nbu":          imgMarkaziyBank,
-  "agrobank":     imgMarkaziyBank,
-  "kapitalbank":  imgProkuratura,
-  "uzv-fund":     imgYoshlarVentures,
-  "uzfar":        imgUnitedVentures,
-  "itpark":       imgITPark,
-  "chamber":      imgStartupGarage,
-  "uzreport":     imgICTWeek,
-  "yakubov":           imgYoshlarVentures,
-  "umarov":            imgMOQ,
-  "tojiev":            imgDomo,
-  "tohirova":          imgITPark,
-  "obidjonova":        imgITPark,
-  "yuldasheva":        imgITPark,
-  "matyakubov":        imgITPark,
-  "abrorov":           imgFlex,
-  "ahmadjonov":        imgFlex,
-  "abduvohidov":       imgFlex,
-  "gaybulloev":        imgAloqaV,
-  "sanakulov":         imgAloqaV,
-  "parmonov":          imgAloqaV,
-  "abdullaev":         imgAloqaV,
-  "khashimov":         imgKorzinka,
-  "ishmukhamedov":     imgMU,
-  "kurbanova":         imgFintellect,
-  "ibragimova":        imgAyol,
-  "ismailova":         imgEYU,
-  "sharipov":          imgUnitedVentures,
-  "shukurlaev":        imgUnitedVentures,
-  "nodirov":           imgITPark,
+  hokimiyat: imgProkuratura,
+  moliya: imgMarkaziyBank,
+  iqtisodiyot: imgATKRV,
+  raqamli: imgATKRV,
+  nbu: imgMarkaziyBank,
+  agrobank: imgMarkaziyBank,
+  kapitalbank: imgProkuratura,
+  "uzv-fund": imgYoshlarVentures,
+  uzfar: imgUnitedVentures,
+  itpark: imgITPark,
+  chamber: imgStartupGarage,
+  uzreport: imgICTWeek,
+  yakubov: imgYoshlarVentures,
+  umarov: imgMOQ,
+  tojiev: imgDomo,
+  tohirova: imgITPark,
+  obidjonova: imgITPark,
+  yuldasheva: imgITPark,
+  matyakubov: imgITPark,
+  abrorov: imgFlex,
+  ahmadjonov: imgFlex,
+  abduvohidov: imgFlex,
+  gaybulloev: imgAloqaV,
+  sanakulov: imgAloqaV,
+  parmonov: imgAloqaV,
+  abdullaev: imgAloqaV,
+  khashimov: imgKorzinka,
+  ishmukhamedov: imgMU,
+  kurbanova: imgFintellect,
+  ibragimova: imgAyol,
+  ismailova: imgEYU,
+  sharipov: imgUnitedVentures,
+  shukurlaev: imgUnitedVentures,
+  nodirov: imgITPark,
   // AloqaVentures supplied no artwork and publishes no site we could confirm,
   // so those two cards run on the brand colour alone, as the youth agency's did
   // before its logo arrived.
-  "ismatov":           imgUzCombinator,
-  "xondamirovna":      imgUzCombinator,
-  "ismailov":          imgUzCombinator,
+  ismatov: imgUzCombinator,
+  xondamirovna: imgUzCombinator,
+  ismailov: imgUzCombinator,
   "yoshlar-agentligi": imgYIA,
-  "sadullayev":        imgYIA,
+  sadullayev: imgYIA,
 };
 
 // ── Per-profile color config ─────────────────────────────────────────────────
-interface Cfg { overlay: string; cardBg: string; bodyBg: string; accent: string; accent2: string; iconBg: string }
+interface Cfg {
+  overlay: string;
+  cardBg: string;
+  bodyBg: string;
+  accent: string;
+  accent2: string;
+  iconBg: string;
+}
 const CFG: Record<string, Cfg> = {
-  "tashkent-inn": { overlay:"linear-gradient(180deg,rgba(28,12,80,.5) 0%,rgba(45,18,120,.88) 100%)", cardBg:"#1c0c50", bodyBg:"#0e0630", accent:"#c4b5fd", accent2:"#8b5cf6", iconBg:"#2a1268" },
-  "hokimiyat":    { overlay:"linear-gradient(180deg,rgba(10,30,80,.52) 0%,rgba(15,45,110,.88) 100%)", cardBg:"#0f2d6e", bodyBg:"#071640", accent:"#f0b429", accent2:"#c78e1a", iconBg:"#163580" },
-  "moliya":       { overlay:"linear-gradient(180deg,rgba(0,40,15,.48) 0%,rgba(0,60,20,.88) 100%)",  cardBg:"#00280f", bodyBg:"#001208", accent:"#4cbb77", accent2:"#2d9955", iconBg:"#003d18" },
-  "iqtisodiyot":  { overlay:"linear-gradient(180deg,rgba(20,28,100,.52) 0%,rgba(30,40,140,.88) 100%)",cardBg:"#141c64", bodyBg:"#0a1040", accent:"#818cf8", accent2:"#6366f1", iconBg:"#1e2880" },
-  "raqamli":      { overlay:"linear-gradient(180deg,rgba(15,22,70,.52) 0%,rgba(20,35,100,.88) 100%)", cardBg:"#0f1646", bodyBg:"#080d2a", accent:"#38bdf8", accent2:"#0ea5e9", iconBg:"#162060" },
-  "nbu":          { overlay:"linear-gradient(180deg,rgba(0,50,15,.45) 0%,rgba(0,70,25,.88) 100%)",   cardBg:"#002a0f", bodyBg:"#001408", accent:"#d4a84b", accent2:"#b08a30", iconBg:"#003d18" },
-  "agrobank":     { overlay:"linear-gradient(180deg,rgba(10,60,20,.48) 0%,rgba(15,80,30,.88) 100%)", cardBg:"#0a3c14", bodyBg:"#051e0a", accent:"#6ee7b7", accent2:"#34d399", iconBg:"#0e4e1c" },
-  "kapitalbank":  { overlay:"linear-gradient(180deg,rgba(90,0,0,.52) 0%,rgba(140,5,5,.88) 100%)",    cardBg:"#5a0000", bodyBg:"#2e0000", accent:"#fca5a5", accent2:"#ef4444", iconBg:"#780a0a" },
-  "uzv-fund":     { overlay:"linear-gradient(180deg,rgba(30,14,0,.4) 0%,rgba(60,25,0,.82) 100%)",    cardBg:"#1e0e00", bodyBg:"#0f0700", accent:"#fb923c", accent2:"#ea580c", iconBg:"#2e1600" },
-  "uzfar":        { overlay:"linear-gradient(180deg,rgba(5,38,20,.45) 0%,rgba(8,55,30,.84) 100%)",   cardBg:"#052614", bodyBg:"#021209", accent:"#6ee7b7", accent2:"#10b981", iconBg:"#073520" },
-  "itpark":       { overlay:"linear-gradient(180deg,rgba(14,48,6,.45) 0%,rgba(22,68,8,.82) 100%)",   cardBg:"#0e3006", bodyBg:"#071803", accent:"#a3e635", accent2:"#84cc16", iconBg:"#174008" },
-  "chamber":      { overlay:"linear-gradient(180deg,rgba(28,12,80,.45) 0%,rgba(45,18,120,.84) 100%)",cardBg:"#1c0c50", bodyBg:"#0e0630", accent:"#c4b5fd", accent2:"#8b5cf6", iconBg:"#2a1268" },
-  "yuldasheva":   { overlay:"linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)", cardBg:"#17470c", bodyBg:"#0f3208", accent:"#bef264", accent2:"#84cc16", iconBg:"#1f5c12" },
-  "obidjonova":   { overlay:"linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)", cardBg:"#17470c", bodyBg:"#0f3208", accent:"#bef264", accent2:"#84cc16", iconBg:"#1f5c12" },
-  "matyakubov":   { overlay:"linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)", cardBg:"#17470c", bodyBg:"#0f3208", accent:"#bef264", accent2:"#84cc16", iconBg:"#1f5c12" },
+  "tashkent-inn": {
+    overlay:
+      "linear-gradient(180deg,rgba(28,12,80,.5) 0%,rgba(45,18,120,.88) 100%)",
+    cardBg: "#1c0c50",
+    bodyBg: "#0e0630",
+    accent: "#c4b5fd",
+    accent2: "#8b5cf6",
+    iconBg: "#2a1268",
+  },
+  hokimiyat: {
+    overlay:
+      "linear-gradient(180deg,rgba(10,30,80,.52) 0%,rgba(15,45,110,.88) 100%)",
+    cardBg: "#0f2d6e",
+    bodyBg: "#071640",
+    accent: "#f0b429",
+    accent2: "#c78e1a",
+    iconBg: "#163580",
+  },
+  moliya: {
+    overlay:
+      "linear-gradient(180deg,rgba(0,40,15,.48) 0%,rgba(0,60,20,.88) 100%)",
+    cardBg: "#00280f",
+    bodyBg: "#001208",
+    accent: "#4cbb77",
+    accent2: "#2d9955",
+    iconBg: "#003d18",
+  },
+  iqtisodiyot: {
+    overlay:
+      "linear-gradient(180deg,rgba(20,28,100,.52) 0%,rgba(30,40,140,.88) 100%)",
+    cardBg: "#141c64",
+    bodyBg: "#0a1040",
+    accent: "#818cf8",
+    accent2: "#6366f1",
+    iconBg: "#1e2880",
+  },
+  raqamli: {
+    overlay:
+      "linear-gradient(180deg,rgba(15,22,70,.52) 0%,rgba(20,35,100,.88) 100%)",
+    cardBg: "#0f1646",
+    bodyBg: "#080d2a",
+    accent: "#38bdf8",
+    accent2: "#0ea5e9",
+    iconBg: "#162060",
+  },
+  nbu: {
+    overlay:
+      "linear-gradient(180deg,rgba(0,50,15,.45) 0%,rgba(0,70,25,.88) 100%)",
+    cardBg: "#002a0f",
+    bodyBg: "#001408",
+    accent: "#d4a84b",
+    accent2: "#b08a30",
+    iconBg: "#003d18",
+  },
+  agrobank: {
+    overlay:
+      "linear-gradient(180deg,rgba(10,60,20,.48) 0%,rgba(15,80,30,.88) 100%)",
+    cardBg: "#0a3c14",
+    bodyBg: "#051e0a",
+    accent: "#6ee7b7",
+    accent2: "#34d399",
+    iconBg: "#0e4e1c",
+  },
+  kapitalbank: {
+    overlay:
+      "linear-gradient(180deg,rgba(90,0,0,.52) 0%,rgba(140,5,5,.88) 100%)",
+    cardBg: "#5a0000",
+    bodyBg: "#2e0000",
+    accent: "#fca5a5",
+    accent2: "#ef4444",
+    iconBg: "#780a0a",
+  },
+  "uzv-fund": {
+    overlay:
+      "linear-gradient(180deg,rgba(30,14,0,.4) 0%,rgba(60,25,0,.82) 100%)",
+    cardBg: "#1e0e00",
+    bodyBg: "#0f0700",
+    accent: "#fb923c",
+    accent2: "#ea580c",
+    iconBg: "#2e1600",
+  },
+  uzfar: {
+    overlay:
+      "linear-gradient(180deg,rgba(5,38,20,.45) 0%,rgba(8,55,30,.84) 100%)",
+    cardBg: "#052614",
+    bodyBg: "#021209",
+    accent: "#6ee7b7",
+    accent2: "#10b981",
+    iconBg: "#073520",
+  },
+  itpark: {
+    overlay:
+      "linear-gradient(180deg,rgba(14,48,6,.45) 0%,rgba(22,68,8,.82) 100%)",
+    cardBg: "#0e3006",
+    bodyBg: "#071803",
+    accent: "#a3e635",
+    accent2: "#84cc16",
+    iconBg: "#174008",
+  },
+  chamber: {
+    overlay:
+      "linear-gradient(180deg,rgba(28,12,80,.45) 0%,rgba(45,18,120,.84) 100%)",
+    cardBg: "#1c0c50",
+    bodyBg: "#0e0630",
+    accent: "#c4b5fd",
+    accent2: "#8b5cf6",
+    iconBg: "#2a1268",
+  },
+  yuldasheva: {
+    overlay:
+      "linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)",
+    cardBg: "#17470c",
+    bodyBg: "#0f3208",
+    accent: "#bef264",
+    accent2: "#84cc16",
+    iconBg: "#1f5c12",
+  },
+  obidjonova: {
+    overlay:
+      "linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)",
+    cardBg: "#17470c",
+    bodyBg: "#0f3208",
+    accent: "#bef264",
+    accent2: "#84cc16",
+    iconBg: "#1f5c12",
+  },
+  matyakubov: {
+    overlay:
+      "linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)",
+    cardBg: "#17470c",
+    bodyBg: "#0f3208",
+    accent: "#bef264",
+    accent2: "#84cc16",
+    iconBg: "#1f5c12",
+  },
   // DOMO on its own royal blue, brighter than the foundation's navy so the two
   // do not read alike; Zarina sits in IT Park's existing lime family.
-  "tojiev":       { overlay:"linear-gradient(180deg,rgba(2,40,110,.22) 0%,rgba(12,63,143,.84) 100%)", cardBg:"#0c3f8f", bodyBg:"#082c66", accent:"#a8cdf8", accent2:"#2b7de0", iconBg:"#17509f" },
-  "tohirova":     { overlay:"linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)", cardBg:"#17470c", bodyBg:"#0f3208", accent:"#bef264", accent2:"#84cc16", iconBg:"#1f5c12" },
+  tojiev: {
+    overlay:
+      "linear-gradient(180deg,rgba(2,40,110,.22) 0%,rgba(12,63,143,.84) 100%)",
+    cardBg: "#0c3f8f",
+    bodyBg: "#082c66",
+    accent: "#a8cdf8",
+    accent2: "#2b7de0",
+    iconBg: "#17509f",
+  },
+  tohirova: {
+    overlay:
+      "linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)",
+    cardBg: "#17470c",
+    bodyBg: "#0f3208",
+    accent: "#bef264",
+    accent2: "#84cc16",
+    iconBg: "#1f5c12",
+  },
   // FLEX itself — the app's ink and the lime off its own icon.
-  "abrorov":      { overlay:"linear-gradient(180deg,rgba(13,10,24,.30) 0%,rgba(22,26,46,.86) 100%)", cardBg:"#161a2e", bodyBg:"#0f1220", accent:"#b4f01e", accent2:"#8fc417", iconBg:"#232842" },
-  "ahmadjonov":   { overlay:"linear-gradient(180deg,rgba(13,10,24,.30) 0%,rgba(22,26,46,.86) 100%)", cardBg:"#161a2e", bodyBg:"#0f1220", accent:"#b4f01e", accent2:"#8fc417", iconBg:"#232842" },
-  "abduvohidov":  { overlay:"linear-gradient(180deg,rgba(13,10,24,.30) 0%,rgba(22,26,46,.86) 100%)", cardBg:"#161a2e", bodyBg:"#0f1220", accent:"#b4f01e", accent2:"#8fc417", iconBg:"#232842" },
+  abrorov: {
+    overlay:
+      "linear-gradient(180deg,rgba(13,10,24,.30) 0%,rgba(22,26,46,.86) 100%)",
+    cardBg: "#161a2e",
+    bodyBg: "#0f1220",
+    accent: "#b4f01e",
+    accent2: "#8fc417",
+    iconBg: "#232842",
+  },
+  ahmadjonov: {
+    overlay:
+      "linear-gradient(180deg,rgba(13,10,24,.30) 0%,rgba(22,26,46,.86) 100%)",
+    cardBg: "#161a2e",
+    bodyBg: "#0f1220",
+    accent: "#b4f01e",
+    accent2: "#8fc417",
+    iconBg: "#232842",
+  },
+  abduvohidov: {
+    overlay:
+      "linear-gradient(180deg,rgba(13,10,24,.30) 0%,rgba(22,26,46,.86) 100%)",
+    cardBg: "#161a2e",
+    bodyBg: "#0f1220",
+    accent: "#b4f01e",
+    accent2: "#8fc417",
+    iconBg: "#232842",
+  },
   // Graphite with amber for the reform agency, plum for the entrepreneur —
   // neither hue is in use elsewhere in the catalogue.
-  "umurzakov":    { overlay:"linear-gradient(180deg,rgba(30,30,36,.30) 0%,rgba(43,43,51,.86) 100%)", cardBg:"#2b2b33", bodyBg:"#1e1e24", accent:"#f0c674", accent2:"#d4a02e", iconBg:"#3d3d47" },
-  "baxtiyarovich":{ overlay:"linear-gradient(180deg,rgba(36,22,40,.30) 0%,rgba(51,32,58,.86) 100%)", cardBg:"#33203a", bodyBg:"#241628", accent:"#f0b8e0", accent2:"#d946a6", iconBg:"#452d4d" },
+  umurzakov: {
+    overlay:
+      "linear-gradient(180deg,rgba(30,30,36,.30) 0%,rgba(43,43,51,.86) 100%)",
+    cardBg: "#2b2b33",
+    bodyBg: "#1e1e24",
+    accent: "#f0c674",
+    accent2: "#d4a02e",
+    iconBg: "#3d3d47",
+  },
+  baxtiyarovich: {
+    overlay:
+      "linear-gradient(180deg,rgba(36,22,40,.30) 0%,rgba(51,32,58,.86) 100%)",
+    cardBg: "#33203a",
+    bodyBg: "#241628",
+    accent: "#f0b8e0",
+    accent2: "#d946a6",
+    iconBg: "#452d4d",
+  },
   // Five founders and directors, each on a ground of its own so no two read
   // alike. No banner artwork for any of them yet — the client is sending it.
-  "khashimov":    { overlay:"linear-gradient(180deg,rgba(61,20,24,.34) 0%,rgba(61,20,24,.86) 100%)", cardBg:"#3d1418", bodyBg:"#2a0d10", accent:"#ff9a9a", accent2:"#e40000", iconBg:"#521c21" },
-  "ishmukhamedov":{ overlay:"linear-gradient(180deg,rgba(58,47,36,.34) 0%,rgba(58,47,36,.86) 100%)", cardBg:"#3a2f24", bodyBg:"#29211a", accent:"#e0c8a4", accent2:"#a8906c", iconBg:"#4d3f30" },
-  "kurbanova":    { overlay:"linear-gradient(180deg,rgba(16,53,70,.30) 0%,rgba(16,53,70,.86) 100%)", cardBg:"#103546", bodyBg:"#0b2635", accent:"#7dd3fc", accent2:"#22d3ee", iconBg:"#17475d" },
-  "ibragimova":   { overlay:"linear-gradient(180deg,rgba(18,70,63,.30) 0%,rgba(18,70,63,.86) 100%)", cardBg:"#12463f", bodyBg:"#0c332e", accent:"#e4cca8", accent2:"#d4b384", iconBg:"#1a5b52" },
-  "ismailova":    { overlay:"linear-gradient(180deg,rgba(16,48,94,.18) 0%,rgba(16,48,94,.82) 100%)", cardBg:"#10305e", bodyBg:"#0a2246", accent:"#9dc0f0", accent2:"#4a7fd4", iconBg:"#1a4278" },
+  khashimov: {
+    overlay:
+      "linear-gradient(180deg,rgba(61,20,24,.34) 0%,rgba(61,20,24,.86) 100%)",
+    cardBg: "#3d1418",
+    bodyBg: "#2a0d10",
+    accent: "#ff9a9a",
+    accent2: "#e40000",
+    iconBg: "#521c21",
+  },
+  ishmukhamedov: {
+    overlay:
+      "linear-gradient(180deg,rgba(58,47,36,.34) 0%,rgba(58,47,36,.86) 100%)",
+    cardBg: "#3a2f24",
+    bodyBg: "#29211a",
+    accent: "#e0c8a4",
+    accent2: "#a8906c",
+    iconBg: "#4d3f30",
+  },
+  kurbanova: {
+    overlay:
+      "linear-gradient(180deg,rgba(16,53,70,.30) 0%,rgba(16,53,70,.86) 100%)",
+    cardBg: "#103546",
+    bodyBg: "#0b2635",
+    accent: "#7dd3fc",
+    accent2: "#22d3ee",
+    iconBg: "#17475d",
+  },
+  ibragimova: {
+    overlay:
+      "linear-gradient(180deg,rgba(18,70,63,.30) 0%,rgba(18,70,63,.86) 100%)",
+    cardBg: "#12463f",
+    bodyBg: "#0c332e",
+    accent: "#e4cca8",
+    accent2: "#d4b384",
+    iconBg: "#1a5b52",
+  },
+  ismailova: {
+    overlay:
+      "linear-gradient(180deg,rgba(16,48,94,.18) 0%,rgba(16,48,94,.82) 100%)",
+    cardBg: "#10305e",
+    bodyBg: "#0a2246",
+    accent: "#9dc0f0",
+    accent2: "#4a7fd4",
+    iconBg: "#1a4278",
+  },
   // Olympic committee — gold on a deeper navy than the city administration's,
   // so the two do not read as the same card.
-  "umarov":       { overlay:"linear-gradient(180deg,rgba(26,39,72,.24) 0%,rgba(26,39,72,.84) 100%)", cardBg:"#1a2748", bodyBg:"#121b33", accent:"#f5c451", accent2:"#d4a02e", iconBg:"#263558" },
+  umarov: {
+    overlay:
+      "linear-gradient(180deg,rgba(26,39,72,.24) 0%,rgba(26,39,72,.84) 100%)",
+    cardBg: "#1a2748",
+    bodyBg: "#121b33",
+    accent: "#f5c451",
+    accent2: "#d4a02e",
+    iconBg: "#263558",
+  },
   // United Ventures pair — same family as the fund's own card above.
-  "sharipov":     { overlay:"linear-gradient(180deg,rgba(12,64,35,.28) 0%,rgba(12,64,35,.84) 100%)", cardBg:"#0c4023", bodyBg:"#082d18", accent:"#86efac", accent2:"#22c55e", iconBg:"#135233" },
-  "shukurlaev":   { overlay:"linear-gradient(180deg,rgba(12,64,35,.28) 0%,rgba(12,64,35,.84) 100%)", cardBg:"#0c4023", bodyBg:"#082d18", accent:"#86efac", accent2:"#22c55e", iconBg:"#135233" },
-  "nodirov":      { overlay:"linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)", cardBg:"#17470c", bodyBg:"#0f3208", accent:"#bef264", accent2:"#84cc16", iconBg:"#1f5c12" },
+  sharipov: {
+    overlay:
+      "linear-gradient(180deg,rgba(12,64,35,.28) 0%,rgba(12,64,35,.84) 100%)",
+    cardBg: "#0c4023",
+    bodyBg: "#082d18",
+    accent: "#86efac",
+    accent2: "#22c55e",
+    iconBg: "#135233",
+  },
+  shukurlaev: {
+    overlay:
+      "linear-gradient(180deg,rgba(12,64,35,.28) 0%,rgba(12,64,35,.84) 100%)",
+    cardBg: "#0c4023",
+    bodyBg: "#082d18",
+    accent: "#86efac",
+    accent2: "#22c55e",
+    iconBg: "#135233",
+  },
+  nodirov: {
+    overlay:
+      "linear-gradient(180deg,rgba(23,71,12,.28) 0%,rgba(23,71,12,.84) 100%)",
+    cardBg: "#17470c",
+    bodyBg: "#0f3208",
+    accent: "#bef264",
+    accent2: "#84cc16",
+    iconBg: "#1f5c12",
+  },
   // AloqaVentures — a teal of its own, so it does not read as one of the greens.
-  "parmonov":     { overlay:"linear-gradient(180deg,rgba(0,24,88,.24) 0%,rgba(0,32,102,.84) 100%)", cardBg:"#002066", bodyBg:"#001648", accent:"#7cc8fb", accent2:"#0098f8", iconBg:"#0a3183" },
-  "abdullaev":    { overlay:"linear-gradient(180deg,rgba(0,24,88,.24) 0%,rgba(0,32,102,.84) 100%)", cardBg:"#002066", bodyBg:"#001648", accent:"#7cc8fb", accent2:"#0098f8", iconBg:"#0a3183" },
-  "gaybulloev":   { overlay:"linear-gradient(180deg,rgba(0,24,88,.24) 0%,rgba(0,32,102,.84) 100%)", cardBg:"#002066", bodyBg:"#001648", accent:"#7cc8fb", accent2:"#0098f8", iconBg:"#0a3183" },
-  "sanakulov":    { overlay:"linear-gradient(180deg,rgba(0,24,88,.24) 0%,rgba(0,32,102,.84) 100%)", cardBg:"#002066", bodyBg:"#001648", accent:"#7cc8fb", accent2:"#0098f8", iconBg:"#0a3183" },
+  parmonov: {
+    overlay:
+      "linear-gradient(180deg,rgba(0,24,88,.24) 0%,rgba(0,32,102,.84) 100%)",
+    cardBg: "#002066",
+    bodyBg: "#001648",
+    accent: "#7cc8fb",
+    accent2: "#0098f8",
+    iconBg: "#0a3183",
+  },
+  abdullaev: {
+    overlay:
+      "linear-gradient(180deg,rgba(0,24,88,.24) 0%,rgba(0,32,102,.84) 100%)",
+    cardBg: "#002066",
+    bodyBg: "#001648",
+    accent: "#7cc8fb",
+    accent2: "#0098f8",
+    iconBg: "#0a3183",
+  },
+  gaybulloev: {
+    overlay:
+      "linear-gradient(180deg,rgba(0,24,88,.24) 0%,rgba(0,32,102,.84) 100%)",
+    cardBg: "#002066",
+    bodyBg: "#001648",
+    accent: "#7cc8fb",
+    accent2: "#0098f8",
+    iconBg: "#0a3183",
+  },
+  sanakulov: {
+    overlay:
+      "linear-gradient(180deg,rgba(0,24,88,.24) 0%,rgba(0,32,102,.84) 100%)",
+    cardBg: "#002066",
+    bodyBg: "#001648",
+    accent: "#7cc8fb",
+    accent2: "#0098f8",
+    iconBg: "#0a3183",
+  },
   // Youth agency — its lockup is already on deep blue, so the wash stays light.
-  "sadullayev":   { overlay:"linear-gradient(180deg,rgba(10,32,58,.24) 0%,rgba(18,64,95,.82) 100%)", cardBg:"#12405f", bodyBg:"#0c2c43", accent:"#7dd3fc", accent2:"#38bdf8", iconBg:"#1b5478" },
-  "yoshlar-agentligi": { overlay:"linear-gradient(180deg,rgba(10,32,58,.24) 0%,rgba(18,64,95,.82) 100%)", cardBg:"#12405f", bodyBg:"#0c2c43", accent:"#7dd3fc", accent2:"#38bdf8", iconBg:"#1b5478" },
+  sadullayev: {
+    overlay:
+      "linear-gradient(180deg,rgba(10,32,58,.24) 0%,rgba(18,64,95,.82) 100%)",
+    cardBg: "#12405f",
+    bodyBg: "#0c2c43",
+    accent: "#7dd3fc",
+    accent2: "#38bdf8",
+    iconBg: "#1b5478",
+  },
+  "yoshlar-agentligi": {
+    overlay:
+      "linear-gradient(180deg,rgba(10,32,58,.24) 0%,rgba(18,64,95,.82) 100%)",
+    cardBg: "#12405f",
+    bodyBg: "#0c2c43",
+    accent: "#7dd3fc",
+    accent2: "#38bdf8",
+    iconBg: "#1b5478",
+  },
   // Yoshlar Ventures — its banner is on white and needs a heavier wash to sit
   // on a dark card; matches the fund's own entry above.
-  "yakubov":      { overlay:"linear-gradient(180deg,rgba(58,32,8,.30) 0%,rgba(58,32,8,.84) 100%)", cardBg:"#3a2008", bodyBg:"#281505", accent:"#fdba74", accent2:"#f97316", iconBg:"#4d2c0c" },
+  yakubov: {
+    overlay:
+      "linear-gradient(180deg,rgba(58,32,8,.30) 0%,rgba(58,32,8,.84) 100%)",
+    cardBg: "#3a2008",
+    bodyBg: "#281505",
+    accent: "#fdba74",
+    accent2: "#f97316",
+    iconBg: "#4d2c0c",
+  },
   // UzCombinator — the banner is the brand orange itself, so barely wash it at
   // the top or the mark turns brown.
-  "ismatov":      { overlay:"linear-gradient(180deg,rgba(53,32,15,.10) 0%,rgba(53,32,15,.80) 100%)", cardBg:"#35200f", bodyBg:"#24160a", accent:"#fdba74", accent2:"#f97316", iconBg:"#472c15" },
-  "xondamirovna": { overlay:"linear-gradient(180deg,rgba(53,32,15,.10) 0%,rgba(53,32,15,.80) 100%)", cardBg:"#35200f", bodyBg:"#24160a", accent:"#fdba74", accent2:"#f97316", iconBg:"#472c15" },
-  "ismailov":     { overlay:"linear-gradient(180deg,rgba(53,32,15,.10) 0%,rgba(53,32,15,.80) 100%)", cardBg:"#35200f", bodyBg:"#24160a", accent:"#fdba74", accent2:"#f97316", iconBg:"#472c15" },
-  "uzreport":     { overlay:"linear-gradient(180deg,rgba(5,18,60,.48) 0%,rgba(8,28,90,.88) 100%)",   cardBg:"#05123c", bodyBg:"#020a22", accent:"#38bdf8", accent2:"#0284c7", iconBg:"#0a1e5a" },
+  ismatov: {
+    overlay:
+      "linear-gradient(180deg,rgba(53,32,15,.10) 0%,rgba(53,32,15,.80) 100%)",
+    cardBg: "#35200f",
+    bodyBg: "#24160a",
+    accent: "#fdba74",
+    accent2: "#f97316",
+    iconBg: "#472c15",
+  },
+  xondamirovna: {
+    overlay:
+      "linear-gradient(180deg,rgba(53,32,15,.10) 0%,rgba(53,32,15,.80) 100%)",
+    cardBg: "#35200f",
+    bodyBg: "#24160a",
+    accent: "#fdba74",
+    accent2: "#f97316",
+    iconBg: "#472c15",
+  },
+  ismailov: {
+    overlay:
+      "linear-gradient(180deg,rgba(53,32,15,.10) 0%,rgba(53,32,15,.80) 100%)",
+    cardBg: "#35200f",
+    bodyBg: "#24160a",
+    accent: "#fdba74",
+    accent2: "#f97316",
+    iconBg: "#472c15",
+  },
+  uzreport: {
+    overlay:
+      "linear-gradient(180deg,rgba(5,18,60,.48) 0%,rgba(8,28,90,.88) 100%)",
+    cardBg: "#05123c",
+    bodyBg: "#020a22",
+    accent: "#38bdf8",
+    accent2: "#0284c7",
+    iconBg: "#0a1e5a",
+  },
 };
 const getCfg = (p: Profile): Cfg =>
-  CFG[p.id] ?? { overlay:"linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.85) 100%)", cardBg:p.coverColor, bodyBg:"#000", accent:p.coverAccent, accent2:p.coverAccent, iconBg:"#ffffff18" };
+  CFG[p.id] ?? {
+    overlay: "linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.85) 100%)",
+    cardBg: p.coverColor,
+    bodyBg: "#000",
+    accent: p.coverAccent,
+    accent2: p.coverAccent,
+    iconBg: "#ffffff18",
+  };
 
 // ── Bilingual labels ─────────────────────────────────────────────────────────
 const L = {
   uz: {
-    email: "E-pochta", call: "Qo'ng'iroq", cal: "Uchrashuv", connect: "Havola",
-    li: "LinkedIn", ig: "Instagram", yt: "YouTube", tg: "Telegram",
-    add: "KONTAKTGA QO'SHISH", share: "ULASHISH", website: "Veb-sayt",
-    about: "Tashkilot haqida", verified: "NAMUNA",
+    email: "E-pochta",
+    call: "Qo'ng'iroq",
+    cal: "Uchrashuv",
+    connect: "Havola",
+    li: "LinkedIn",
+    ig: "Instagram",
+    yt: "YouTube",
+    tg: "Telegram",
+    add: "KONTAKTGA QO'SHISH",
+    share: "ULASHISH",
+    website: "Veb-sayt",
+    about: "Tashkilot haqida",
+    verified: "NAMUNA",
   },
   ru: {
-    email: "E-mail", call: "Звонок", cal: "Встреча", connect: "Ссылка",
-    li: "LinkedIn", ig: "Instagram", yt: "YouTube", tg: "Telegram",
-    add: "В КОНТАКТЫ", share: "ПОДЕЛИТЬСЯ", website: "Сайт",
-    about: "Об организации", verified: "ОБРАЗЕЦ",
+    email: "E-mail",
+    call: "Звонок",
+    cal: "Встреча",
+    connect: "Ссылка",
+    li: "LinkedIn",
+    ig: "Instagram",
+    yt: "YouTube",
+    tg: "Telegram",
+    add: "В КОНТАКТЫ",
+    share: "ПОДЕЛИТЬСЯ",
+    website: "Сайт",
+    about: "Об организации",
+    verified: "ОБРАЗЕЦ",
   },
 };
 
 // ── Icon components ──────────────────────────────────────────────────────────
 const I = {
-  email:   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7"/></svg>,
-  call:    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.99 1.13 2 2 0 013 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>,
-  cal:     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>,
-  connect: <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>,
-  li:      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>,
-  ig:      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor" stroke="none"/></svg>,
-  yt:      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white"/></svg>,
-  tg:      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M22.05 1.577c-.393-.016-.784.08-1.117.235L2.242 9.842c-.952.38-1.769 1.048-1.769 1.999 0 1.134 1.07 1.585 1.923 1.837l3.986 1.31c.424 1.461 1.368 5.157 1.62 6.246.088.363.25.74.565.946.316.207.766.248 1.07.045.302-.201.536-.496.718-.804l2.034-3.296 3.927 3.15c.568.456 1.21.7 1.857.7.36 0 .72-.078 1.06-.238.69-.32 1.073-.987 1.247-1.733l2.7-13.005c.205-.951.157-1.93-.384-2.668a2.59 2.59 0 00-1.74-1.03z"/></svg>,
-  pin:     <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>,
-  plus:    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
-  share:   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>,
-  web:     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>,
-  check:   <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
+  email: (
+    <svg
+      className="w-5 h-5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7" />
+    </svg>
+  ),
+  call: (
+    <svg
+      className="w-5 h-5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.99 1.13 2 2 0 013 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+    </svg>
+  ),
+  cal: (
+    <svg
+      className="w-5 h-5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M16 2v4M8 2v4M3 10h18" />
+      <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" />
+    </svg>
+  ),
+  connect: (
+    <svg
+      className="w-5 h-5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+      <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+    </svg>
+  ),
+  li: (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  ),
+  ig: (
+    <svg
+      className="w-5 h-5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r=".5" fill="currentColor" stroke="none" />
+    </svg>
+  ),
+  yt: (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z" />
+      <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white" />
+    </svg>
+  ),
+  tg: (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22.05 1.577c-.393-.016-.784.08-1.117.235L2.242 9.842c-.952.38-1.769 1.048-1.769 1.999 0 1.134 1.07 1.585 1.923 1.837l3.986 1.31c.424 1.461 1.368 5.157 1.62 6.246.088.363.25.74.565.946.316.207.766.248 1.07.045.302-.201.536-.496.718-.804l2.034-3.296 3.927 3.15c.568.456 1.21.7 1.857.7.36 0 .72-.078 1.06-.238.69-.32 1.073-.987 1.247-1.733l2.7-13.005c.205-.951.157-1.93-.384-2.668a2.59 2.59 0 00-1.74-1.03z" />
+    </svg>
+  ),
+  pin: (
+    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+    </svg>
+  ),
+  plus: (
+    <svg
+      className="w-3.5 h-3.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  ),
+  share: (
+    <svg
+      className="w-3.5 h-3.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+    >
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+    </svg>
+  ),
+  web: (
+    <svg
+      className="w-3.5 h-3.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <line x1="2" y1="12" x2="22" y2="12" />
+      <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+    </svg>
+  ),
+  check: (
+    <svg
+      className="w-2.5 h-2.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  ),
 };
 
 // ── Icon button ──────────────────────────────────────────────────────────────
-function IBtn({ icon, label, bg, color = "white" }: { icon: React.ReactElement; label: string; bg: string; color?: string }) {
+function IBtn({
+  icon,
+  label,
+  bg,
+  color = "white",
+}: {
+  icon: React.ReactElement;
+  label: string;
+  bg: string;
+  color?: string;
+}) {
   return (
-    <div className="icon-btn" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-      <div style={{
-        width: "var(--icon-size)", height: "var(--icon-size)",
-        borderRadius: "var(--r-icon)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        background: bg, color, flexShrink: 0,
-      }}>
+    <div
+      className="icon-btn"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 6,
+      }}
+    >
+      <div
+        style={{
+          width: "var(--icon-size)",
+          height: "var(--icon-size)",
+          borderRadius: "var(--r-icon)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: bg,
+          color,
+          flexShrink: 0,
+        }}
+      >
         {icon}
       </div>
-      <span style={{ fontSize: 8, color: "rgba(255,255,255,0.52)", fontWeight: 600, textAlign: "center", lineHeight: "11px", maxWidth: 52 }}>
+      <span
+        style={{
+          fontSize: 8,
+          color: "rgba(255,255,255,0.52)",
+          fontWeight: 600,
+          textAlign: "center",
+          lineHeight: "11px",
+          maxWidth: 52,
+        }}
+      >
         {label}
       </span>
     </div>
@@ -186,35 +723,86 @@ function IBtn({ icon, label, bg, color = "white" }: { icon: React.ReactElement; 
 }
 
 // ── Main card ────────────────────────────────────────────────────────────────
-interface Props { profile: Profile; lang: "uz" | "ru"; theme: "dark" | "light" }
+interface Props {
+  profile: Profile;
+  lang: "uz" | "ru";
+  theme: "dark" | "light";
+  /**
+   * Overrides the banner artwork. Pass null to draw the brand gradient with no
+   * image on it — five of the catalogue's organisations still carry a logo
+   * that belongs to a different body, inherited from the Figma mock, and a
+   * borrowed mark on a ministry's own name is worse than no mark at all. The
+   * catalogue keeps them until their real logos arrive; the entry page does
+   * not. Omit the prop and the map decides, as before.
+   */
+  banner?: string | null;
+}
 
-export default function ProfileCard({ profile, lang, theme }: Props) {
-  const c    = getCfg(profile);
-  const t    = L[lang];
-  const pos  = lang === "uz" ? profile.position : profile.positionRu;
-  const banner = BANNER[profile.id];
+export default function ProfileCard({
+  profile,
+  lang,
+  theme,
+  banner: bannerProp,
+}: Props) {
+  const c = getCfg(profile);
+  const t = L[lang];
+  const pos = lang === "uz" ? profile.position : profile.positionRu;
+  const banner =
+    bannerProp === undefined ? BANNER[profile.id] : (bannerProp ?? undefined);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", background: c.cardBg, fontFamily: "var(--font-sans)" }}>
-
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        background: c.cardBg,
+        fontFamily: "var(--font-sans)",
+      }}
+    >
       {/* ══ BANNER — brand image full-bleed ══════════════════ */}
       {/* overflow was "hidden" here, which clipped the avatar's lower half — it is
           positioned at bottom:-38 precisely so it laps over the edge. The image,
           overlay and fade below are all inset:0 with objectFit cover, so none of
           them needs clipping; the card wrapper already rounds the top corners. */}
-      <div style={{ position: "relative", height: 180, overflow: "visible", flexShrink: 0 }}>
+      <div
+        style={{
+          position: "relative",
+          height: 180,
+          overflow: "visible",
+          flexShrink: 0,
+        }}
+      >
         {/* Full-bleed brand image */}
         {banner && (
           <img
             src={banner}
             alt={profile.orgShort}
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: profile.bannerFit ?? "cover", objectPosition: profile.bannerPosition ?? "center",
-              WebkitMaskImage: "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)", maskImage: "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)" }}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: profile.bannerFit ?? "cover",
+              objectPosition: profile.bannerPosition ?? "center",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)",
+              maskImage:
+                "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)",
+            }}
           />
         )}
         {/* Smooth gradient overlay — NO harsh seam, fades into cardBg */}
-        <div style={{ position: "absolute", inset: 0, background: c.overlay,
-          WebkitMaskImage: "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)", maskImage: "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)" }} />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: c.overlay,
+            WebkitMaskImage:
+              "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)",
+            maskImage:
+              "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)",
+          }}
+        />
         {/* Bottom edge fade into card body (eliminates hard seam) */}
         {/* The banner used to end with a fade layer painted over it, sized to
             reach the card colour exactly at the banner's last row. That row sits
@@ -226,51 +814,121 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
 
         {/* Category chip — top left, 16pt from edge */}
         <div style={{ position: "absolute", top: 12, left: 16, zIndex: 2 }}>
-          <span style={{
-            fontSize: 9, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase",
-            padding: "3px 10px", borderRadius: 100, background: c.accent, color: c.cardBg,
-          }}>
+          <span
+            style={{
+              fontSize: 9,
+              fontWeight: 800,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              padding: "3px 10px",
+              borderRadius: 100,
+              background: c.accent,
+              color: c.cardBg,
+            }}
+          >
             {profile.categoryLabel}
           </span>
         </div>
 
         {/* Location pill — top right, 16pt from edge */}
-        <div style={{ position: "absolute", top: 12, right: 16, zIndex: 2, display: "flex", alignItems: "center", gap: 4, padding: "4px 10px", borderRadius: 100, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(8px)" }}>
+        <div
+          style={{
+            position: "absolute",
+            top: 12,
+            right: 16,
+            zIndex: 2,
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
+            padding: "4px 10px",
+            borderRadius: 100,
+            background: "rgba(0,0,0,0.35)",
+            backdropFilter: "blur(8px)",
+          }}
+        >
           <span style={{ color: "white" }}>{I.pin}</span>
-          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.85)", fontWeight: 600 }}>Toshkent</span>
+          <span
+            style={{
+              fontSize: 9,
+              color: "rgba(255,255,255,0.85)",
+              fontWeight: 600,
+            }}
+          >
+            Toshkent
+          </span>
         </div>
 
         {/* Avatar — bottom center, overlapping */}
-        <div style={{ position: "absolute", bottom: -38, left: "50%", transform: "translateX(-50%)", zIndex: 10 }}>
+        <div
+          style={{
+            position: "absolute",
+            bottom: -38,
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 10,
+          }}
+        >
           <div style={{ position: "relative" }}>
-            <div style={{
-              width: 80, height: 80, borderRadius: "50%", overflow: "hidden",
-              border: `3px solid ${c.accent}`,
-              boxShadow: `0 4px 20px rgba(0,0,0,0.45), 0 0 0 3px ${c.cardBg}`,
-            }}>
+            <div
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: "50%",
+                overflow: "hidden",
+                border: `3px solid ${c.accent}`,
+                boxShadow: `0 4px 20px rgba(0,0,0,0.45), 0 0 0 3px ${c.cardBg}`,
+              }}
+            >
               {/* A photograph only where we hold one for that named person. The
                   organisation cards carry no face at all — the stock strangers
                   that used to stand in for invented officials are gone. */}
               {profile.avatar ? (
-                <img src={profile.avatar} alt={profile.fullName}
-                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+                <img
+                  src={profile.avatar}
+                  alt={profile.fullName}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    objectPosition: "top",
+                  }}
+                />
               ) : (
-              <div style={{
-                width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center",
-                background: c.iconBg, color: c.accent,
-                fontSize: profile.logoText.length > 3 ? 18 : 24, fontWeight: 800, letterSpacing: "0.02em",
-              }}>
-                {profile.logoText}
-              </div>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: c.iconBg,
+                    color: c.accent,
+                    fontSize: profile.logoText.length > 3 ? 18 : 24,
+                    fontWeight: 800,
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  {profile.logoText}
+                </div>
               )}
             </div>
             {profile.verified && (
-              <div style={{
-                position: "absolute", bottom: 0, right: -2,
-                width: 22, height: 22, borderRadius: "50%",
-                background: c.accent, border: `2.5px solid ${c.cardBg}`,
-                display: "flex", alignItems: "center", justifyContent: "center", color: c.cardBg,
-              }}>
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: -2,
+                  width: 22,
+                  height: 22,
+                  borderRadius: "50%",
+                  background: c.accent,
+                  border: `2.5px solid ${c.cardBg}`,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: c.cardBg,
+                }}
+              >
                 {I.check}
               </div>
             )}
@@ -279,42 +937,123 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
       </div>
 
       {/* ══ IDENTITY ═════════════════════════════════════════ */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "50px 20px 16px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
+          padding: "50px 20px 16px",
+        }}
+      >
         {/* Name — 24px / 600 weight / serif for name only */}
-        <h2 style={{ fontSize: 22, fontWeight: 700, lineHeight: "28px", color: "#ffffff", fontFamily: "var(--font-serif)", margin: 0, letterSpacing: "-0.3px" }}>
+        <h2
+          style={{
+            fontSize: 22,
+            fontWeight: 700,
+            lineHeight: "28px",
+            color: "#ffffff",
+            fontFamily: "var(--font-serif)",
+            margin: 0,
+            letterSpacing: "-0.3px",
+          }}
+        >
           {profile.fullName}
         </h2>
         {/* Org — 13px / 600 / accent color (lighter than name — corrected hierarchy) */}
-        <p style={{ fontSize: 11, fontWeight: 600, color: c.accent, margin: "5px 0 0", letterSpacing: "0.02em" }}>
+        <p
+          style={{
+            fontSize: 11,
+            fontWeight: 600,
+            color: c.accent,
+            margin: "5px 0 0",
+            letterSpacing: "0.02em",
+          }}
+        >
           {profile.organization}
         </p>
         {/* Position — 12px / 400 / minimum 4.5:1 contrast (rgba white at 80%) */}
-        <p style={{ fontSize: 12, fontWeight: 400, color: "rgba(255,255,255,0.82)", margin: "4px 0 0", lineHeight: "17px", maxWidth: 280,
-          /* line-clamp: 2 */ overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+        <p
+          style={{
+            fontSize: 12,
+            fontWeight: 400,
+            color: "rgba(255,255,255,0.82)",
+            margin: "4px 0 0",
+            lineHeight: "17px",
+            maxWidth: 280,
+            /* line-clamp: 2 */ overflow: "hidden",
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+          }}
+        >
           {pos}
         </p>
         {/* Verified only — NO gender/age badge */}
         {profile.verified && (
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 8, padding: "3px 10px", borderRadius: 100, background: c.accent + "22", border: `1px solid ${c.accent}50` }}>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 4,
+              marginTop: 8,
+              padding: "3px 10px",
+              borderRadius: 100,
+              background: c.accent + "22",
+              border: `1px solid ${c.accent}50`,
+            }}
+          >
             <span style={{ color: c.accent, display: "flex" }}>{I.check}</span>
-            <span style={{ fontSize: 9, color: c.accent, fontWeight: 700, letterSpacing: "0.05em" }}>{t.verified}</span>
+            <span
+              style={{
+                fontSize: 9,
+                color: c.accent,
+                fontWeight: 700,
+                letterSpacing: "0.05em",
+              }}
+            >
+              {t.verified}
+            </span>
           </div>
         )}
       </div>
 
       {/* ══ 8-ICON GRID — all brand-specific colors ══════════ */}
-      <div style={{ padding: "0 16px 12px", display: "flex", flexDirection: "column", gap: "var(--icon-gap)" }}>
+      <div
+        style={{
+          padding: "0 16px 12px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--icon-gap)",
+        }}
+      >
         {/* Row 1: primary actions — monochrome accent */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "var(--icon-gap)" }}>
-          <IBtn icon={I.email}   label={t.email}   bg={c.iconBg} />
-          <IBtn icon={I.call}    label={t.call}     bg={c.iconBg} />
-          <IBtn icon={I.cal}     label={t.cal}      bg={c.iconBg} />
-          <IBtn icon={I.connect} label={t.connect}  bg={c.iconBg} />
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4,1fr)",
+            gap: "var(--icon-gap)",
+          }}
+        >
+          <IBtn icon={I.email} label={t.email} bg={c.iconBg} />
+          <IBtn icon={I.call} label={t.call} bg={c.iconBg} />
+          <IBtn icon={I.cal} label={t.cal} bg={c.iconBg} />
+          <IBtn icon={I.connect} label={t.connect} bg={c.iconBg} />
         </div>
         {/* Row 2: social apps — brand colors (consistent with app icons) */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "var(--icon-gap)" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4,1fr)",
+            gap: "var(--icon-gap)",
+          }}
+        >
           <IBtn icon={I.li} label={t.li} bg="#0a66c2" />
-          <IBtn icon={I.ig} label={t.ig} bg="linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)" />
+          <IBtn
+            icon={I.ig}
+            label={t.ig}
+            bg="linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)"
+          />
           <IBtn icon={I.yt} label={t.yt} bg="#cc0000" />
           <IBtn icon={I.tg} label={t.tg} bg="#229ed9" />
         </div>
@@ -323,22 +1062,48 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
       {/* ══ CTA BUTTONS ══════════════════════════════════════ */}
       <div style={{ padding: "0 16px", display: "flex", gap: 8 }}>
         {/* ADD TO CONTACTS */}
-        <button className="btn-primary" style={{
-          flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-          padding: "11px 8px", borderRadius: "var(--r-lg)",
-          border: `1.5px solid ${c.accent}`, background: "transparent", color: c.accent,
-          fontSize: 9, fontWeight: 800, fontFamily: "var(--font-sans)", letterSpacing: "0.04em", cursor: "pointer",
-        }}>
+        <button
+          className="btn-primary"
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 6,
+            padding: "11px 8px",
+            borderRadius: "var(--r-lg)",
+            border: `1.5px solid ${c.accent}`,
+            background: "transparent",
+            color: c.accent,
+            fontSize: 9,
+            fontWeight: 800,
+            fontFamily: "var(--font-sans)",
+            letterSpacing: "0.04em",
+            cursor: "pointer",
+          }}
+        >
           {I.plus}
           {t.add}
         </button>
         {/* SHARE */}
-        <button className="btn-primary" style={{
-          display: "flex", alignItems: "center", gap: 6,
-          padding: "11px 14px", borderRadius: "var(--r-lg)",
-          border: "1.5px solid rgba(255,255,255,0.18)", background: "transparent", color: "rgba(255,255,255,0.55)",
-          fontSize: 9, fontWeight: 800, fontFamily: "var(--font-sans)", letterSpacing: "0.04em", cursor: "pointer",
-        }}>
+        <button
+          className="btn-primary"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "11px 14px",
+            borderRadius: "var(--r-lg)",
+            border: "1.5px solid rgba(255,255,255,0.18)",
+            background: "transparent",
+            color: "rgba(255,255,255,0.55)",
+            fontSize: 9,
+            fontWeight: 800,
+            fontFamily: "var(--font-sans)",
+            letterSpacing: "0.04em",
+            cursor: "pointer",
+          }}
+        >
           {I.share}
           {t.share}
         </button>
@@ -346,48 +1111,155 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
 
       {/* Website button — omitted when the organisation publishes no site, rather
           than printing a domain nobody confirmed. */}
-      {profile.website && <div style={{ padding: "8px 16px 0" }}>
-        <button className="btn-primary" style={{
-          width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-          padding: "11px", borderRadius: "var(--r-lg)", background: c.accent2, border: "none",
-          color: "white", fontSize: 10, fontWeight: 800, fontFamily: "var(--font-sans)", letterSpacing: "0.02em", cursor: "pointer",
-        }}>
-          {I.web}
-          {profile.website}
-        </button>
-      </div>}
+      {profile.website && (
+        <div style={{ padding: "8px 16px 0" }}>
+          <button
+            className="btn-primary"
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 6,
+              padding: "11px",
+              borderRadius: "var(--r-lg)",
+              background: c.accent2,
+              border: "none",
+              color: "white",
+              fontSize: 10,
+              fontWeight: 800,
+              fontFamily: "var(--font-sans)",
+              letterSpacing: "0.02em",
+              cursor: "pointer",
+            }}
+          >
+            {I.web}
+            {profile.website}
+          </button>
+        </div>
+      )}
 
       {/* Divider */}
-      <div style={{ margin: "16px 16px 0", display: "flex", alignItems: "center", gap: 10 }}>
-        <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.08)" }} />
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="1.5">
-          <path d="M20 12a8 8 0 01-8 8M12 4a8 8 0 018 8"/>
-          <path d="M16 12a4 4 0 01-4 4M12 8a4 4 0 014 4"/>
-          <circle cx="12" cy="12" r="1.5" fill="rgba(255,255,255,0.18)" stroke="none"/>
+      <div
+        style={{
+          margin: "16px 16px 0",
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+        }}
+      >
+        <div
+          style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.08)" }}
+        />
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="rgba(255,255,255,0.18)"
+          strokeWidth="1.5"
+        >
+          <path d="M20 12a8 8 0 01-8 8M12 4a8 8 0 018 8" />
+          <path d="M16 12a4 4 0 01-4 4M12 8a4 4 0 014 4" />
+          <circle
+            cx="12"
+            cy="12"
+            r="1.5"
+            fill="rgba(255,255,255,0.18)"
+            stroke="none"
+          />
         </svg>
-        <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.08)" }} />
+        <div
+          style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.08)" }}
+        />
       </div>
 
       {/* ══ BIO SECTION ═══════════════════════════════════════ */}
-      <div style={{ margin: "12px 16px 16px", borderRadius: "var(--r-xl)", overflow: "hidden", background: c.bodyBg }}>
+      <div
+        style={{
+          margin: "12px 16px 16px",
+          borderRadius: "var(--r-xl)",
+          overflow: "hidden",
+          background: c.bodyBg,
+        }}
+      >
         {/* Mini banner strip */}
         {banner && (
           <div style={{ position: "relative", height: 56, overflow: "hidden" }}>
-            <img src={banner} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 30%" }} />
-            <div style={{ position: "absolute", inset: 0, background: `linear-gradient(90deg,${c.bodyBg} 0%,transparent 45%,${c.bodyBg} 100%)` }} />
-            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", paddingLeft: 12 }}>
+            <img
+              src={banner}
+              alt=""
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center 30%",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: `linear-gradient(90deg,${c.bodyBg} 0%,transparent 45%,${c.bodyBg} 100%)`,
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                alignItems: "center",
+                paddingLeft: 12,
+              }}
+            >
               <div>
-                <p style={{ fontSize: 10, fontWeight: 800, color: "white", margin: 0, lineHeight: "14px" }}>{profile.orgShort}</p>
-                <p style={{ fontSize: 8, color: c.accent, margin: "2px 0 0", lineHeight: "11px" }}>{profile.website}</p>
+                <p
+                  style={{
+                    fontSize: 10,
+                    fontWeight: 800,
+                    color: "white",
+                    margin: 0,
+                    lineHeight: "14px",
+                  }}
+                >
+                  {profile.orgShort}
+                </p>
+                <p
+                  style={{
+                    fontSize: 8,
+                    color: c.accent,
+                    margin: "2px 0 0",
+                    lineHeight: "11px",
+                  }}
+                >
+                  {profile.website}
+                </p>
               </div>
             </div>
           </div>
         )}
 
         <div style={{ padding: "12px 12px 14px" }}>
-          <p style={{ fontSize: 11, fontWeight: 700, color: "white", margin: "0 0 6px" }}>{t.about}</p>
-          <p style={{ fontSize: 11, lineHeight: "16px", color: "rgba(255,255,255,0.5)", margin: 0 }}>
-            {BIO[profile.id] ?? `${profile.organization} — O'zbekiston Respublikasida faoliyat yurituvchi tashkilot.`}
+          <p
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              color: "white",
+              margin: "0 0 6px",
+            }}
+          >
+            {t.about}
+          </p>
+          <p
+            style={{
+              fontSize: 11,
+              lineHeight: "16px",
+              color: "rgba(255,255,255,0.5)",
+              margin: 0,
+            }}
+          >
+            {BIO[profile.id] ??
+              `${profile.organization} — O'zbekiston Respublikasida faoliyat yurituvchi tashkilot.`}
           </p>
 
           {/* The phone, mail and address rows stood here. They carried invented
@@ -396,31 +1268,61 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
               that is genuinely published by the organisation itself. */}
 
           {profile.education && (
-            <p style={{ fontSize: 10, lineHeight: "15px", color: "rgba(255,255,255,0.42)", margin: "8px 0 0" }}>
-              <span style={{ color: c.accent, fontWeight: 700 }}>Ta&apos;lim · </span>
+            <p
+              style={{
+                fontSize: 10,
+                lineHeight: "15px",
+                color: "rgba(255,255,255,0.42)",
+                margin: "8px 0 0",
+              }}
+            >
+              <span style={{ color: c.accent, fontWeight: 700 }}>
+                Ta&apos;lim ·{" "}
+              </span>
               {profile.education}
             </p>
           )}
 
           {/* Tags */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginTop: 10 }}>
-            {profile.tags.map(tag => (
-              <span key={tag} style={{
-                fontSize: 9, fontWeight: 700, padding: "3px 9px", borderRadius: 100,
-                background: c.accent + "1e", color: c.accent, border: `1px solid ${c.accent}38`,
-              }}>
+          <div
+            style={{ display: "flex", flexWrap: "wrap", gap: 5, marginTop: 10 }}
+          >
+            {profile.tags.map((tag) => (
+              <span
+                key={tag}
+                style={{
+                  fontSize: 9,
+                  fontWeight: 700,
+                  padding: "3px 9px",
+                  borderRadius: 100,
+                  background: c.accent + "1e",
+                  color: c.accent,
+                  border: `1px solid ${c.accent}38`,
+                }}
+              >
                 {tag}
               </span>
             ))}
           </div>
 
           {/* Socials */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginTop: 8 }}>
-            {profile.socials.map(s => (
-              <span key={s.handle} style={{
-                fontSize: 9, fontWeight: 600, padding: "3px 8px", borderRadius: 6, fontFamily: "monospace",
-                background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.1)",
-              }}>
+          <div
+            style={{ display: "flex", flexWrap: "wrap", gap: 5, marginTop: 8 }}
+          >
+            {profile.socials.map((s) => (
+              <span
+                key={s.handle}
+                style={{
+                  fontSize: 9,
+                  fontWeight: 600,
+                  padding: "3px 8px",
+                  borderRadius: 6,
+                  fontFamily: "monospace",
+                  background: "rgba(255,255,255,0.07)",
+                  color: "rgba(255,255,255,0.4)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                }}
+              >
                 {s.handle}
               </span>
             ))}
@@ -430,7 +1332,15 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
 
       {/* Footer */}
       <div style={{ textAlign: "center", paddingBottom: 14 }}>
-        <span style={{ fontSize: 8, fontFamily: "monospace", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.12)" }}>
+        <span
+          style={{
+            fontSize: 8,
+            fontFamily: "monospace",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "rgba(255,255,255,0.12)",
+          }}
+        >
           NFC Digital · flex.com.uz
         </span>
       </div>
@@ -440,18 +1350,31 @@ export default function ProfileCard({ profile, lang, theme }: Props) {
 
 // ── Bio texts ────────────────────────────────────────────────────────────────
 const BIO: Record<string, string> = {
-  "tashkent-inn": "Toshkent Innovatsiya Markazi — shahar miqyosida innovatsion loyihalar, raqamli iqtisodiyot va texnologik startaplarni qo'llab-quvvatlash uchun tashkil etilgan markaz.",
-  "hokimiyat":    "Toshkent shahar hokimiyati — shahar infratuzilmasi, qurilish, kommunal xo'jalik va aholi xizmatlarini boshqaruvchi mahalliy ijroiya organ.",
-  "moliya":       "O'zbekiston Respublikasi Moliya Vazirligi — davlat moliya siyosati, byudjet rejalashtirish va soliq-bojxona tizimini boshqaruvchi asosiy idora.",
-  "iqtisodiyot":  "ATKRV — axborot texnologiyalari, raqamli infratuzilma va komunikatsiya sohasini rivojlantirishga, investitsiyalarni jalb qilishga mas'ul vazirlik.",
-  "raqamli":      "ATKRV — O'zbekistonni raqamlashtirish, e-hukumat xizmatlarini kengaytirish va IT infratuzilmasini modernizatsiya qilishga mas'ul davlat idorasi.",
-  "nbu":          "O'zbekiston Respublikasi Markaziy Banki — milliy valyuta barqarorligi, pul-kredit siyosati va mamlakatning butun bank tizimini nazorat qiluvchi davlat muassasasi.",
-  "agrobank":     "Agro'sanoat Banki — qishloq xo'jaligi va oziq-ovqat sanoatiga ixtisoslashgan, fermerlar va agrobiznesni kredit bilan ta'minlovchi yetakchi bank.",
-  "kapitalbank":  "Kapital Bank — innovatsion raqamli bank xizmatlari, to'lov kartalari va fintech mahsulotlari bilan O'zbekiston bank tizimida zamonaviy yetakchi.",
-  "yakubov":      "Yoshlar Ventures — erta bosqichdagi ta'sischilarni qo'llab-quvvatlovchi venchur fond; Markaziy Osiyo va yoshlar innovatsion ekotizimiga yo'naltirilgan.",
-  "uzv-fund":     "Yoshlar Ventures — yosh tadbirkorlar va texnologiya startaplarini seed va Series A bosqichlarda investitsiya, mentorlik hamda tarmoq bilan qo'llab-quvvatlash.",
-  "uzfar":        "United Ventures — iqtisodiy islohotlar va tezkor rivojlanish strategiyalarini ishlab chiqish hamda amalga oshirishga ixtisoslashgan strategik investitsiya fondi.",
-  "itpark":       "IT Park Uzbekistan — mamlakatimizdagi IT tarmoqni rivojlantirish, startaplarga inkubatsiya, akseleratsiya va soliq imtiyozlarini taqdim etuvchi asosiy ekotizim.",
-  "chamber":      "Startup Garage — yosh tadbirkorlar va startaplarni qo'llab-quvvatlash, biznes akseleratsiya va texnologik loyihalarni rivojlantirishga ixtisoslashgan markaz.",
-  "uzreport":     "ICT Week Uzbekistan — axborot-kommunikatsiya texnologiyalari sohasidagi eng yirik yillik xalqaro forum, innovatsiya va raqamlashtirish markazi.",
+  "tashkent-inn":
+    "Toshkent Innovatsiya Markazi — shahar miqyosida innovatsion loyihalar, raqamli iqtisodiyot va texnologik startaplarni qo'llab-quvvatlash uchun tashkil etilgan markaz.",
+  hokimiyat:
+    "Toshkent shahar hokimiyati — shahar infratuzilmasi, qurilish, kommunal xo'jalik va aholi xizmatlarini boshqaruvchi mahalliy ijroiya organ.",
+  moliya:
+    "O'zbekiston Respublikasi Moliya Vazirligi — davlat moliya siyosati, byudjet rejalashtirish va soliq-bojxona tizimini boshqaruvchi asosiy idora.",
+  iqtisodiyot:
+    "ATKRV — axborot texnologiyalari, raqamli infratuzilma va komunikatsiya sohasini rivojlantirishga, investitsiyalarni jalb qilishga mas'ul vazirlik.",
+  raqamli:
+    "ATKRV — O'zbekistonni raqamlashtirish, e-hukumat xizmatlarini kengaytirish va IT infratuzilmasini modernizatsiya qilishga mas'ul davlat idorasi.",
+  nbu: "O'zbekiston Respublikasi Markaziy Banki — milliy valyuta barqarorligi, pul-kredit siyosati va mamlakatning butun bank tizimini nazorat qiluvchi davlat muassasasi.",
+  agrobank:
+    "Agro'sanoat Banki — qishloq xo'jaligi va oziq-ovqat sanoatiga ixtisoslashgan, fermerlar va agrobiznesni kredit bilan ta'minlovchi yetakchi bank.",
+  kapitalbank:
+    "Kapital Bank — innovatsion raqamli bank xizmatlari, to'lov kartalari va fintech mahsulotlari bilan O'zbekiston bank tizimida zamonaviy yetakchi.",
+  yakubov:
+    "Yoshlar Ventures — erta bosqichdagi ta'sischilarni qo'llab-quvvatlovchi venchur fond; Markaziy Osiyo va yoshlar innovatsion ekotizimiga yo'naltirilgan.",
+  "uzv-fund":
+    "Yoshlar Ventures — yosh tadbirkorlar va texnologiya startaplarini seed va Series A bosqichlarda investitsiya, mentorlik hamda tarmoq bilan qo'llab-quvvatlash.",
+  uzfar:
+    "United Ventures — iqtisodiy islohotlar va tezkor rivojlanish strategiyalarini ishlab chiqish hamda amalga oshirishga ixtisoslashgan strategik investitsiya fondi.",
+  itpark:
+    "IT Park Uzbekistan — mamlakatimizdagi IT tarmoqni rivojlantirish, startaplarga inkubatsiya, akseleratsiya va soliq imtiyozlarini taqdim etuvchi asosiy ekotizim.",
+  chamber:
+    "Startup Garage — yosh tadbirkorlar va startaplarni qo'llab-quvvatlash, biznes akseleratsiya va texnologik loyihalarni rivojlantirishga ixtisoslashgan markaz.",
+  uzreport:
+    "ICT Week Uzbekistan — axborot-kommunikatsiya texnologiyalari sohasidagi eng yirik yillik xalqaro forum, innovatsiya va raqamlashtirish markazi.",
 };

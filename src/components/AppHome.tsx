@@ -51,6 +51,7 @@ export default function AppHome({
   verticals,
   carousel,
   stripLabels,
+  lang,
   owner,
 }: {
   s: Site;
@@ -70,6 +71,7 @@ export default function AppHome({
     samplesCta: string;
     open: string;
   };
+  lang: "uz" | "ru" | "en";
   /** Present only for a signed-in owner who has a handle. */
   owner?: { handle: OwnedHandle; todayViews: number; leads: number } | null;
 }) {
@@ -221,6 +223,7 @@ export default function AppHome({
           label={stripLabels.samples}
           note={stripLabels.samplesNote}
           open={stripLabels.open}
+          lang={lang}
         />
       </div>
 

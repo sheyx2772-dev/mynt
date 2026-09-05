@@ -329,6 +329,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             label={p.samplesLabel}
             note={p.samplesNote}
             open={p.openCta}
+            lang={lang}
           />
 
           {/* The third question a buyer has, after what to hold and which room:
@@ -380,6 +381,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             samplesCta: p.samplesCta,
             open: p.openCta,
           }}
+          lang={lang}
           owner={owner}
         />
 
