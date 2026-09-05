@@ -44,7 +44,7 @@ export default function SignInForm({ next }: { next: string }) {
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01] disabled:opacity-60"
+        className="w-full rounded-full bg-lime px-6 py-3 font-medium text-flex-black transition-transform hover:scale-[1.01] disabled:opacity-60"
       >
         {isPending ? "Yuborilmoqda..." : "Kirish havolasini yuborish"}
       </button>

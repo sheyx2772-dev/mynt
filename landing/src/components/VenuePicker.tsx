@@ -123,8 +123,7 @@ export default function VenuePicker({
             </div>
           )}
 
-          <div className="grain relative overflow-hidden rounded-3xl bg-flex-black p-6 text-white sm:col-span-2">
-            <div className="bg-dot-grid-light absolute inset-0 opacity-30" />
+          <div className="relative overflow-hidden rounded-3xl bg-flex-black p-6 text-white sm:col-span-2">
             <h3 className="relative font-display text-xs font-semibold tracking-widest text-lime uppercase">
               {t.whyPay}
             </h3>
@@ -189,7 +188,7 @@ export default function VenuePicker({
               </>
             ) : (
               <>
-                <p className="rounded-2xl bg-lime px-5 py-3 font-display text-2xl font-semibold text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.7)]">
+                <p className="rounded-2xl bg-lime px-5 py-3 font-display text-2xl font-semibold text-flex-black">
                   {formatUZS(monthly, lang)}
                 </p>
                 <p className="mt-2 font-tabular text-xs text-flex-black/45">

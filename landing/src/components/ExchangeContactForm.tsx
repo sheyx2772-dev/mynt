@@ -32,6 +32,7 @@ export default function ExchangeContactForm({
   handle,
   source,
   t,
+  className,
 }: {
   handle: string;
   source?: string;
@@ -40,6 +41,8 @@ export default function ExchangeContactForm({
   // component. Resolving them on the server is also the only place the owner's
   // name is already known.
   t: Words;
+  /** The shape, supplied by whichever layout is rendering it. */
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [sent, setSent] = useState(false);
@@ -48,8 +51,13 @@ export default function ExchangeContactForm({
 
   if (sent) {
     return (
-      <div className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-white/12 bg-white/[0.04] px-6 py-3.5 text-[11px] font-semibold tracking-[0.16em] text-white/70 uppercase">
-        <Check className="h-4 w-4 text-[color:var(--accent)]" />
+      <div
+        className={
+          className ??
+          "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute"
+        }
+      >
+        <Check className="h-5 w-5" />
         {t.sent}
       </div>
     );
@@ -59,16 +67,22 @@ export default function ExchangeContactForm({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-white/12 bg-white/[0.04] px-6 py-3.5 text-[11px] font-semibold tracking-[0.16em] text-white uppercase transition-colors hover:border-white/30 hover:bg-white/[0.09]"
+        className={
+          className ??
+          "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5"
+        }
       >
-        <UserRoundPlus className="h-4 w-4" />
+        <UserRoundPlus className="h-5 w-5" />
         {t.sendContact}
       </button>
     );
   }
 
   const field =
-    "w-full rounded-lg border border-white/12 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white outline-none placeholder:text-white/25 focus:border-white/30";
+    // 16px and not a pixel less: Android Chrome zooms the page when a field
+    // under that size takes focus, and on a form this tall the send button
+    // then leaves the screen.
+    "h-14 w-full rounded-lg border border-ink/15 bg-sheet px-4 text-[16px] text-ink outline-none placeholder:text-mute focus:border-ink";
 
   return (
     <form
@@ -80,9 +94,9 @@ export default function ExchangeContactForm({
           else setError(result.error ?? "Yuborilmadi.");
         })
       }
-      className="mt-3 rounded-xl border border-white/12 bg-white/[0.03] p-4"
+      className="rounded-xl bg-ink/[0.04] p-4 shadow-deboss"
     >
-      <p className="text-[11px] tracking-[0.14em] text-white/45 uppercase">
+      <p className="text-[17px] leading-6 font-semibold">
         {t.reachYou}
       </p>
 
@@ -107,24 +121,24 @@ export default function ExchangeContactForm({
         />
       </div>
 
-      <p className="mt-2 text-[11px] leading-snug text-white/35">
+      <p className="mt-2 text-[16px] leading-6 text-mute">
         {t.contactHint}
       </p>
 
-      {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
+      {error && <p className="mt-2 text-[16px] leading-6 text-danger">{error}</p>}
 
       <div className="mt-3 flex gap-2">
         <button
           type="submit"
           disabled={pending}
-          className="flex-1 rounded-lg bg-white px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-flex-black uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="flex h-14 flex-1 items-center justify-center rounded-xl bg-slab px-5 text-[16px] font-semibold text-on-slab shadow-slab active:translate-y-px active:shadow-none disabled:bg-ink/20 disabled:shadow-none"
         >
           {pending ? t.sending : t.send}
         </button>
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="rounded-lg border border-white/12 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-white/50 uppercase transition-colors hover:text-white/80"
+          className="h-14 rounded-xl px-5 text-[16px] font-medium text-mute"
         >
           {t.cancel}
         </button>

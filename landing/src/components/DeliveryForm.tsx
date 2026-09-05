@@ -14,9 +14,9 @@ import { saveDelivery, type DeliveryState } from "@/app/kabinet/buyurtma/[id]/ac
 // wrong door.
 
 const field =
-  "w-full rounded-2xl border border-black/12 px-4 py-3 text-sm outline-none placeholder:text-flex-black/30 focus:border-flex-black/40";
-const label = "mb-1.5 block text-xs font-medium tracking-wide text-flex-black/50 uppercase";
-const problem = "mt-1.5 text-xs text-red-700";
+  "w-full rounded-2xl border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-flex-black/40";
+const label = "mb-1.5 block text-xs font-medium tracking-wide text-paper-2 uppercase";
+const problem = "mt-1.5 text-xs text-danger-ink";
 
 export default function DeliveryForm({ orderId }: { orderId: string }) {
   const [state, action, saving] = useActionState<DeliveryState, FormData>(
@@ -28,7 +28,7 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
     return (
       <section className="rounded-3xl border border-lime/50 bg-lime/[0.08] p-6 sm:p-8">
         <h2 className="font-display text-lg font-semibold">Manzil saqlandi</h2>
-        <p className="mt-2 text-sm leading-relaxed text-flex-black/60">
+        <p className="mt-2 text-sm leading-relaxed text-paper-2">
           Buyurtma navbatga qo&apos;yildi. Yasalgach yuboramiz va bu sahifada
           holatini ko&apos;rsatamiz.
         </p>
@@ -37,16 +37,16 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
   }
 
   return (
-    <form action={action} className="rounded-3xl border border-black/8 bg-white p-6 sm:p-8">
+    <form action={action} className="rounded-3xl border border-ink-line bg-ink-s1 p-6 sm:p-8">
       <input type="hidden" name="orderId" value={orderId} />
 
       <div className="flex items-start gap-3">
         <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime">
-          <MapPin className="h-4 w-4 text-flex-black" />
+          <MapPin className="h-4 w-4 text-paper" />
         </span>
         <div>
           <h2 className="font-display text-lg font-semibold">Qayerga yuboraylik</h2>
-          <p className="mt-1 text-sm leading-relaxed text-flex-black/55">
+          <p className="mt-1 text-sm leading-relaxed text-paper-2">
             Boshqa odamga sovg&apos;a bo&apos;lsa, uning ismini yozing.
           </p>
         </div>
@@ -128,12 +128,12 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
         </div>
       </div>
 
-      {state.error && <p className="mt-4 text-sm text-red-700">{state.error}</p>}
+      {state.error && <p className="mt-4 text-sm text-danger-ink">{state.error}</p>}
 
       <button
         type="submit"
         disabled={saving}
-        className="mt-6 w-full rounded-2xl bg-flex-black px-6 py-3.5 text-sm font-medium text-white transition-transform hover:scale-[1.01] disabled:opacity-50 sm:w-auto"
+        className="mt-6 w-full rounded-2xl bg-ink-s2 px-6 py-3.5 text-sm font-medium text-paper transition-transform hover:scale-[1.01] disabled:opacity-50 sm:w-auto"
       >
         {saving ? "Saqlanyapti…" : "Saqlash"}
       </button>

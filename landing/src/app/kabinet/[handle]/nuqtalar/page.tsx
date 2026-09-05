@@ -20,7 +20,7 @@ export default async function PointsPage({ params }: PageProps<"/kabinet/[handle
   const w = venueWords(venue.kind, "uz");
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <SubScreen
         handle={normalized}
         title={w.pointsTitle}

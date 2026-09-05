@@ -26,10 +26,10 @@ const STRIPE: Record<Exclude<Reason, null>, string> = {
 };
 
 const CHIP: Record<Exclude<Reason, null>, string> = {
-  overdue: "bg-red-50 text-red-700",
-  today: "bg-lime text-flex-black",
-  unanswered: "bg-amber-50 text-amber-800",
-  quiet: "bg-black/[0.05] text-flex-black/50",
+  overdue: "bg-danger-ink/10 text-danger-ink",
+  today: "bg-lime text-ink",
+  unanswered: "bg-warn-ink/10 text-warn-ink",
+  quiet: "bg-ink-s2 text-paper-2",
   neglected: "bg-blue-50 text-blue-700",
 };
 
@@ -63,7 +63,7 @@ export default function ContactRow({
 
   return (
     <li
-      className="rise relative overflow-hidden rounded-2xl border border-black/6 bg-white transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
+      className="rise relative overflow-hidden rounded-2xl border border-ink-line bg-ink-s1 transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
       style={{ animationDelay: `${delayMs}ms` }}
     >
       {reason && (
@@ -75,12 +75,12 @@ export default function ContactRow({
         onClick={() => setOpen((was) => !was)}
         className="flex w-full items-center gap-3.5 py-3.5 pl-5 pr-4 text-left"
       >
-        <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-flex-black font-display text-[12px] font-semibold tracking-tight text-white">
+        <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink-s2 font-display text-[12px] font-semibold tracking-tight text-paper">
           {initials(contact.name)}
           {/* The stage, on the corner of the face, so the list can be read
               without opening anything. */}
-          <span className="absolute -right-1 -bottom-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-white ring-2 ring-white">
-            <StageIcon stage={contact.stage} className="h-3 w-3 text-flex-black/55" />
+          <span className="absolute -right-1 -bottom-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-ink-s1 ring-2 ring-white">
+            <StageIcon stage={contact.stage} className="h-3 w-3 text-paper-2" />
           </span>
         </span>
 
@@ -88,7 +88,7 @@ export default function ContactRow({
           <p className="truncate text-[14px] font-semibold tracking-tight">
             {contact.name}
           </p>
-          <p className="mt-0.5 truncate text-[12px] text-flex-black/45">
+          <p className="mt-0.5 truncate text-[12px] text-paper-3">
             {[contact.company, contact.ownerNote ?? contact.note]
               .filter(Boolean)
               .join(" · ")}
@@ -103,19 +103,19 @@ export default function ContactRow({
             {label}
           </span>
         ) : (
-          <span className="shrink-0 text-[11px] text-flex-black/30">
+          <span className="shrink-0 text-[11px] text-paper-3">
             {stageLabel(contact.stage, "uz")}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="rise border-t border-black/6 px-5 pb-5 pt-4">
+        <div className="rise border-t border-ink-line px-5 pb-5 pt-4">
           <div className="flex flex-wrap gap-2">
             {contact.phone && (
               <a
                 href={`tel:${contact.phone.replace(/[^0-9+]/g, "")}`}
-                className="flex items-center gap-1.5 rounded-xl bg-black/[0.04] px-3 py-2 text-[12px] font-medium transition-colors hover:bg-black/[0.07]"
+                className="flex items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
               >
                 <Phone className="h-3.5 w-3.5" />
                 {contact.phone}
@@ -126,7 +126,7 @@ export default function ContactRow({
                 href={telegram}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-1.5 rounded-xl bg-black/[0.04] px-3 py-2 text-[12px] font-medium transition-colors hover:bg-black/[0.07]"
+                className="flex items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
               >
                 <Send className="h-3.5 w-3.5" />
                 Telegram
@@ -135,7 +135,7 @@ export default function ContactRow({
             {contact.email && (
               <a
                 href={`mailto:${contact.email}`}
-                className="flex items-center gap-1.5 rounded-xl bg-black/[0.04] px-3 py-2 text-[12px] font-medium transition-colors hover:bg-black/[0.07]"
+                className="flex items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
               >
                 <Mail className="h-3.5 w-3.5" />
                 {contact.email}
@@ -147,12 +147,12 @@ export default function ContactRow({
               that explains why the meeting happened. Kept apart, and kept
               theirs. */}
           {contact.note && (
-            <p className="mt-4 border-l-2 border-black/8 pl-3 text-[13px] leading-relaxed text-flex-black/55">
+            <p className="mt-4 border-l-2 border-ink-line pl-3 text-[13px] leading-relaxed text-paper-2">
               {contact.note}
             </p>
           )}
 
-          <div className="mt-4 inline-flex rounded-xl bg-black/[0.04] p-1">
+          <div className="mt-4 inline-flex rounded-xl bg-ink-s2 p-1">
             {STAGES.map((stage) => (
               <form action={moveStage} key={stage}>
                 <input type="hidden" name="handle" value={handle} />
@@ -162,8 +162,8 @@ export default function ContactRow({
                   type="submit"
                   className={
                     stage === contact.stage
-                      ? "flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-[12px] font-semibold shadow-[0_1px_3px_rgba(14,10,27,0.12)]"
-                      : "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] text-flex-black/45 transition-colors hover:text-flex-black/70"
+                      ? "flex items-center gap-1.5 rounded-lg bg-ink-s1 px-3 py-1.5 text-[12px] font-semibold shadow-[0_1px_3px_rgba(14,10,27,0.12)]"
+                      : "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] text-paper-3 transition-colors hover:text-paper-2"
                   }
                 >
                   <StageIcon stage={stage} className="h-3 w-3" />
@@ -181,12 +181,12 @@ export default function ContactRow({
               rows={2}
               defaultValue={contact.ownerNote ?? ""}
               placeholder="Nima kelishildi"
-              className="w-full resize-none rounded-xl bg-black/[0.03] px-3.5 py-3 text-[13px] outline-none placeholder:text-flex-black/25 focus:bg-black/[0.05]"
+              className="w-full resize-none rounded-xl bg-ink-s2 px-3.5 py-3 text-[13px] outline-none placeholder:text-paper-3 focus:bg-ink-s2"
             />
             <div className="mt-2 flex items-center gap-2">
               <label
                 htmlFor={`due-${contact.id}`}
-                className="flex items-center gap-1.5 rounded-xl bg-black/[0.03] px-3 py-2 text-[12px] text-flex-black/45"
+                className="flex items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] text-paper-3"
               >
                 <CalendarDays className="h-3.5 w-3.5" />
                 <input
@@ -194,12 +194,12 @@ export default function ContactRow({
                   type="date"
                   name="followUpOn"
                   defaultValue={contact.followUpOn ?? ""}
-                  className="bg-transparent text-[12px] text-flex-black outline-none"
+                  className="bg-transparent text-[12px] text-paper outline-none"
                 />
               </label>
               <button
                 type="submit"
-                className="ml-auto rounded-xl bg-flex-black px-4 py-2 text-[12px] font-semibold text-white transition-transform hover:scale-[1.02]"
+                className="ml-auto rounded-xl bg-ink-s2 px-4 py-2 text-[12px] font-semibold text-paper transition-transform hover:scale-[1.02]"
               >
                 Saqlash
               </button>

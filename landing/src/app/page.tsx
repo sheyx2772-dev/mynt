@@ -1,27 +1,91 @@
-import { ChevronDown } from "lucide-react";
+// The entry page.
+//
+// Its job is to route, not to explain: a visitor arrives not knowing whether
+// this is for a person or for a cafe, and every second spent working that out
+// is a second before they reach the room they came for. So the fork is stated
+// first, then the two shelves — devices and verticals — carry them into it,
+// each tile landing on its own destination rather than a shared page top.
+//
+// Everything under that answers what the router just offered, in the order a
+// first visit asks for it: see it work, how it works, the four usual doubts,
+// what is already true, what it costs, and the questions left over.
+
+import {
+  Link2,
+  Nfc,
+  Sparkles,
+  BarChart3,
+  Users,
+  Target,
+  RefreshCw,
+  TrendingUp,
+  Check,
+  Minus,
+  ChevronDown,
+  Car,
+} from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Mark from "@/components/Mark";
-import { site, landing, picker, dict } from "@/lib/i18n";
+import PricingCalculator from "@/components/PricingCalculator";
+import ProfilePreview from "@/components/ProfilePreview";
+import PhoneFrame from "@/components/PhoneFrame";
+import HandleChecker from "@/components/HandleChecker";
+import HeroStage from "@/components/HeroStage";
+import Image from "next/image";
+import { productShot } from "@/lib/product-shots";
+import DeviceTile from "@/components/DeviceTile";
+import { DEVICE_TYPES } from "@/lib/devices";
+import { formatNumber, formatUZS } from "@/lib/format";
+import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
+import { site, landing, catalogue, picker } from "@/lib/i18n";
 import { listNewestResidents, getDirectoryCounts, listHandlesForUser } from "@/lib/handles";
 import { getUser } from "@/lib/auth";
-import { getVenueByHandle, getMenu } from "@/lib/menu";
 import { getHandleStats } from "@/lib/analytics";
 import { listLeads } from "@/lib/leads";
 import LiveResidents from "@/components/LiveResidents";
 import AppHome from "@/components/AppHome";
+import CardFan from "@/components/CardFan";
 import TwoWays from "@/components/TwoWays";
 import LoadoutStrip from "@/components/LoadoutStrip";
-import PriceTeaser from "@/components/PriceTeaser";
-import SeeItWorking from "@/components/SeeItWorking";
-import { deviceStrip, verticalStrip } from "@/lib/strip-items";
+import { deviceStrip, verticalStrip, heroCarousel } from "@/lib/strip-items";
 import MobileMenu from "@/components/MobileMenu";
 import { getLang } from "@/lib/lang";
+import { home } from "@/lib/i18n-home";
+import Plate from "@/components/ui/Plate";
+import { VENUE_BANDS } from "@/lib/venues";
+import { paperButton } from "@/components/ui/paper/Button";
+import { BASE_PRICE } from "@/lib/pricing";
+import { DELIVERY } from "@/lib/company";
+import { PLANS } from "@/lib/plans";
+import { ArrowUpRight } from "lucide-react";
 import LangSwitch from "@/components/LangSwitch";
 import { COMPANY } from "@/lib/company";
+import PlanTable from "@/components/PlanTable";
+import TeamOrderForm from "@/components/TeamOrderForm";
+
+// The profile the "try it" tile opens.
+const DEMO_HANDLE = "NAV001";
+
+const NAMESPACE_SIZE = 26 * 26 * 26 * 10 * 10 * 10;
 
 // Which icon goes with which entry, in the dictionary's order. Kept out of the
 // dictionary because an icon is not a translation.
+const CONSUMER_ICONS = [Link2, Nfc, Sparkles, BarChart3, Car];
+const BUSINESS_ICONS = [Users, Target, RefreshCw, TrendingUp];
+
+// Who has what, in the same order as the dictionary's row labels. A claim about
+// a competitor is a fact rather than copy, so it does not move with the words —
+// and every row here is one this product actually does.
+const COMPARISON = [
+  { unqx: true, popl: false, flex: true },
+  { unqx: true, popl: false, flex: true },
+  { unqx: true, popl: true, flex: true },
+  { unqx: false, popl: true, flex: true },
+  { unqx: false, popl: true, flex: true },
+  { unqx: true, popl: false, flex: true },
+];
+
 
 export async function generateMetadata({
   searchParams,
@@ -31,16 +95,71 @@ export async function generateMetadata({
   return { title: `Flex — ${t.tagline}`, description: t.metaDescription };
 }
 
-// The object the front page opens to show what a tap does. The same one
-// /biznes invites people into, on purpose: one demo to keep correct.
-const DEMO_VENUE = "NAV001";
-
 export default async function Home({ searchParams }: PageProps<"/">) {
   const { til } = await searchParams;
   const lang = await getLang(til);
   const s = site(lang);
+  const h = home(lang);
+  const premium = PLANS.find((x) => x.id === "premium")!;
+  const prices = [
+    {
+      name: h.audiences[0].name,
+      start: `${formatUZS(BASE_PRICE, lang)}${lang === "uz" ? "dan" : ""}`,
+      startNote: s.pricePersonalNote,
+      sub: `${formatUZS(premium.monthly, lang)} / ${h.perMonth}`,
+      subNote: formatUZS(premium.yearly, lang),
+      after:
+        lang === "ru"
+          ? "Профиль открывается, редактирование закрыто"
+          : lang === "en"
+            ? "The profile still opens; editing closes"
+            : "Profil ochilaveradi, tahrir yopiladi",
+      href: "/shaxsiy#narx",
+      lead: true,
+    },
+    {
+      name: h.audiences[1].name,
+      start: `${formatUZS(TEAM_SEAT_MONTHLY, lang)} / ${h.perSeat}`,
+      startNote:
+        lang === "ru" ? "минимум 5 сотрудников" : lang === "en" ? "five employees minimum" : "kamida 5 xodim",
+      sub: `${formatUZS(TEAM_SEAT_MONTHLY, lang)} / ${h.perMonth}`,
+      subNote:
+        lang === "ru" ? "счёт-фактура" : lang === "en" ? "invoiced" : "hisob-faktura",
+      after:
+        lang === "ru"
+          ? "Номера остаются в компании"
+          : lang === "en"
+            ? "The numbers stay with the company"
+            : "Raqamlar kompaniyada qoladi",
+      href: "/biznes#jamoa",
+      lead: false,
+    },
+    {
+      name: h.audiences[2].name,
+      start:
+        lang === "ru"
+          ? "По числу столов"
+          : lang === "en"
+            ? "By table count"
+            : "Stollar soniga qarab",
+      startNote:
+        lang === "ru" ? "до 15 столов" : lang === "en" ? "up to 15 tables" : "15 tagacha stol",
+      sub: `${formatUZS(VENUE_BANDS[0].monthly, lang)} / ${h.perMonth}`,
+      subNote:
+        lang === "ru" ? "меню, QR и NFC включены" : lang === "en" ? "menu, QR and NFC included" : "menyu, QR va NFC kiradi",
+      after:
+        lang === "ru"
+          ? "Меню открывается, заявки останавливаются"
+          : lang === "en"
+            ? "The menu still opens; requests stop"
+            : "Menyu ochilaveradi, so'rovlar to'xtaydi",
+      href: "/biznes",
+      lead: false,
+    },
+  ];
+
   const copy = landing(lang);
-  const t = dict(lang);
+  const c = catalogue(lang);
   const p = picker(lang);
 
   const [newest, counts, user] = await Promise.all([
@@ -68,14 +187,32 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         };
       })()
     : null;
-  // The venue the page shows working. Real rows from a real object, so the
-  // front page cannot demonstrate a menu that does not exist; if it is ever
-  // deleted the phone simply goes away rather than breaking the page.
-  const demoVenue = await getVenueByHandle(DEMO_VENUE);
-  const demoMenu = demoVenue ? await getMenu(demoVenue.id, lang) : [];
 
+  const tapShot = productShot("tegizish");
+  const carShot = productShot("avtovizitka");
   const devices = deviceStrip(lang);
   const verticals = verticalStrip(lang);
+  // The card range leads, drawn rather than photographed and handed in exactly
+  // as it already stands under the order button — ten designs in one frame,
+  // which is the most varied thing we have and the thing being bought.
+  const carousel = [
+    {
+      href: "/qurilmalar/card",
+      // Drawn at its own size and left there. Scaling it into the 3:2 slot made
+      // the cards too small to read, which costs more than the price line it
+      // overlaps — the cards are what this turn is for, and the price is on the
+      // device page a tap away.
+      node: (
+        <div className="flex h-full w-full items-center justify-center">
+          <CardFan handle={DEMO_HANDLE} />
+        </div>
+      ),
+      name: c.devices.card.name,
+      price: formatUZS(DEVICE_TYPES.find((d) => d.id === "card")!.price, lang),
+    },
+    ...heroCarousel(lang),
+  ];
+  const familyShot = productShot("oila");
 
   return (
     <div className="flex min-h-full flex-col overflow-x-clip">
@@ -145,15 +282,12 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             <div className="hidden lg:block">
               <LangSwitch lang={lang} next="/" tone="dark" />
             </div>
-            {/* The calculator lives on /shaxsiy. This button kept pointing at
-                the anchor it left behind, so the largest control on the site
-                did nothing at all. */}
-            <Link
-              href="/shaxsiy#narx"
+            <a
+              href="#narx"
               className="rounded-full bg-lime px-4 py-2 text-sm font-medium text-flex-black transition-colors hover:bg-lime/85"
             >
               {s.getHandle}
-            </Link>
+            </a>
           </div>
         </div>
       </header>
@@ -164,26 +298,8 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             it sells the personal side, and a visitor who came for the business
             side should not have to scroll past a pitch to find out we have one.
             The phone gets the same pair inside AppHome. */}
-        {/* Before the fork, because the fork asks a question a first-time
-            visitor cannot answer yet: they do not know what this is. A phone
-            with the thing running on it answers faster than any sentence. */}
-        <SeeItWorking
-          s={s}
-          labels={{
-            role: s.demoRole,
-            tagOne: s.demoTagOne,
-            tagTwo: s.demoTagTwo,
-            followers: t.followers,
-            views: s.statViews,
-            saveContact: t.saveContact,
-          }}
-          venue={demoVenue}
-          categories={demoMenu}
-          demoHandle={DEMO_VENUE}
-        />
-
         <div className="hidden lg:block">
-          <TwoWays s={s} />
+          <TwoWays s={s} carousel={carousel} />
         </div>
 
         {/* Third block, straight after the offer. Somebody who has read the
@@ -197,10 +313,28 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             label={p.groupDirections}
             note={p.groupDirectionsNote}
           />
+
+          {/* The third question a buyer has, after what to hold and which room:
+              what their own page will look like. The seven layouts answer it,
+              and until now they sat five clicks deep behind a chip at the far
+              end of a scrolling filter row, which is the same as not existing. */}
+          <div className="mx-auto max-w-6xl px-6 pt-2">
+            <Link
+              href="/katalog?bolim=layouts"
+              className="group flex items-center justify-between gap-4 rounded-2xl border border-black/10 px-5 py-4 transition-colors hover:bg-black/[0.03]"
+            >
+              <span>
+                <span className="block font-semibold">{p.samplesLabel}</span>
+                <span className="block text-sm text-flex-black/50">{p.samplesCta}</span>
+              </span>
+              <ArrowUpRight className="h-5 w-5 shrink-0 text-flex-black/40 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
         </div>
 
-        {/* Who has just joined, and how much of the namespace is gone: the only
-            proof on the page that other people are buying. */}
+        {/* Who has just joined, and how much of the namespace is gone. Directly
+            under the hero, because it is the first thing a scroll reveals and
+            it is the only proof on the page that other people are buying. */}
         <div className="hidden bg-flex-black lg:block">
           <LiveResidents
             residents={newest}
@@ -218,19 +352,214 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           namespace={counts.namespace}
           devices={devices}
           verticals={verticals}
+          carousel={carousel}
           stripLabels={{
             devices: p.groupDevices,
             devicesNote: p.groupDevicesNote,
             directions: p.groupDirections,
             directionsNote: p.groupDirectionsNote,
+            samples: p.samplesLabel,
+            samplesCta: p.samplesCta,
           }}
           owner={owner}
         />
 
-        {/* What it costs, which this page stopped saying when the calculator
-            and the bands moved to their own pages. Two numbers, after the phone
-            has had its home screen and before the questions. */}
-        <PriceTeaser s={s} lang={lang} />
+        {/* 2 — try it before buying ------------------------------------ */}
+        <section
+          id="sinash"
+          className="scroll-mt-20 border-y border-line bg-white py-14 sm:py-16"
+        >
+          <div className="mx-auto grid max-w-[1120px] items-center gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:gap-14">
+            <div>
+              <h2 className="font-display text-[28px] leading-[32px] font-semibold tracking-[-0.01em] text-balance">
+                {h.tryTitle}
+              </h2>
+              <p className="mt-4 max-w-[46ch] text-[16px] leading-6 text-ink-2">
+                {h.tryLead}
+              </p>
+              {/* On a phone the QR is useless — nobody scans a code with the
+                  phone displaying it — so the same demo is a link instead. */}
+              <Link
+                href={`/${DEMO_HANDLE}`}
+                className={`${paperButton.secondary} mt-6 w-full sm:w-auto lg:hidden`}
+              >
+                {h.tryButton}
+                <ArrowUpRight className="h-5 w-5" />
+              </Link>
+            </div>
+
+            <div className="hidden flex-col items-center gap-4 lg:flex">
+              <div className="rounded-card border border-line bg-white p-4">
+                {/* Served by the same route a printed card points at, so what
+                    a visitor scans here is what a buyer gets. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/${DEMO_HANDLE}/qr`}
+                  alt={`${DEMO_HANDLE} QR`}
+                  width={200}
+                  height={200}
+                  className="h-[200px] w-[200px]"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <Plate n={DEMO_HANDLE} size="sm" />
+                <span className="text-[13px] leading-[18px] text-ink-3">
+                  {h.tryCaption}
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 3 — how it works -------------------------------------------- */}
+        <section className="mx-auto max-w-[1120px] px-4 py-16 sm:px-6 sm:py-24">
+          <h2 className="font-display text-[28px] leading-[32px] font-semibold tracking-[-0.01em]">
+            {h.howTitle}
+          </h2>
+          <ol className="mt-8 grid gap-8 sm:grid-cols-3 sm:gap-6">
+            {h.howSteps.map((step, i) => (
+              <li key={step.title}>
+                <div className="relative aspect-[4/3] overflow-hidden rounded-input border border-line bg-white">
+                  <Image
+                    src={step.photo}
+                    alt={step.alt}
+                    fill
+                    sizes="(min-width: 640px) 344px, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <p className="num mt-4 font-display text-[20px] leading-6 font-semibold text-ink-3">
+                  {i + 1}
+                </p>
+                <h3 className="mt-1 text-[20px] leading-6 font-semibold">
+                  {step.title}
+                </h3>
+                <p className="mt-2 text-[16px] leading-6 text-ink-2">{step.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        {/* 7 — the four things people actually ask ---------------------- */}
+        <section className="mx-auto max-w-[1120px] px-4 py-14 sm:px-6 sm:py-16">
+          <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {h.trust.map((item) => (
+              <li key={item.q}>
+                <h3 className="text-[16px] leading-6 font-semibold">{item.q}</h3>
+                <p className="mt-1.5 text-[14px] leading-5 text-ink-2">{item.a}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* 6 — traction, counted rather than claimed -------------------- */}
+        <section className="border-y border-line bg-white py-14 sm:py-16">
+          <div className="mx-auto max-w-[1120px] px-4 sm:px-6">
+            <h2 className="text-[13px] leading-[18px] text-ink-3">
+              {h.tractionTitle}
+            </h2>
+            <div className="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <span className="num font-display text-[48px] leading-none font-bold sm:text-[56px]">
+                {formatNumber(counts.claimed)}
+              </span>
+              <span className="text-[17px] leading-6 text-ink-2">
+                {h.tractionUnit}
+              </span>
+            </div>
+            <p className="mt-2 text-[13px] leading-[18px] text-ink-3">
+              {formatNumber(counts.namespace - counts.claimed)} {h.tractionLeft}
+            </p>
+
+            {/* Real numbers from the real table. A small honest figure is
+                worth more than a wall of logos nobody can check — and any
+                logo we do not have permission for is somebody else's mark. */}
+            {newest.length > 0 && (
+              <div className="mt-7">
+                <p className="text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+                  {h.tractionLatest}
+                </p>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {newest.map((r) => (
+                    <li key={r.normalized}>
+                      <Link href={`/${r.normalized}`}>
+                        <Plate n={r.normalized} size="sm" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* 8 — prices --------------------------------------------------- */}
+        <section
+          id="narxlar"
+          className="scroll-mt-20 border-y border-line bg-white py-16 sm:py-24"
+        >
+          <div className="mx-auto max-w-[1120px] px-4 sm:px-6">
+            <h2 className="font-display text-[28px] leading-[32px] font-semibold tracking-[-0.01em]">
+              {h.pricesTitle}
+            </h2>
+
+            <div className="mt-8 grid gap-4 lg:grid-cols-3">
+              {prices.map((p) => (
+                <div
+                  key={p.name}
+                  className={`flex flex-col rounded-card border bg-white p-5 ${
+                    p.lead ? "border-ink" : "border-line"
+                  }`}
+                >
+                  <h3 className="text-[17px] leading-6 font-semibold">{p.name}</h3>
+
+                  <dl className="mt-4 flex-1 space-y-3.5">
+                    <div>
+                      <dt className="text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+                        {h.pricesStart}
+                      </dt>
+                      <dd className="num mt-1 text-[16px] leading-6 font-semibold">
+                        {p.start}
+                      </dd>
+                      <dd className="text-[13px] leading-[18px] text-ink-3">
+                        {p.startNote}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+                        {h.pricesSub}
+                      </dt>
+                      <dd className="num mt-1 text-[16px] leading-6 font-semibold">
+                        {p.sub}
+                      </dd>
+                      <dd className="text-[13px] leading-[18px] text-ink-3">
+                        {p.subNote}
+                      </dd>
+                    </div>
+                    {/* Everybody asks this one silently. Answer it in the
+                        table, or they assume the answer is a trap. */}
+                    <div>
+                      <dt className="text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+                        {h.pricesAfter}
+                      </dt>
+                      <dd className="mt-1 text-[14px] leading-5 text-ink-2">
+                        {p.after}
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <Link
+                    href={p.href}
+                    className={`${p.lead ? paperButton.primary : paperButton.secondary} mt-5 w-full`}
+                  >
+                    {h.pricesCta}
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+
 
         {/* FAQ */}
         <section id="savollar" className="scroll-mt-20 mx-auto max-w-3xl px-6 py-14 sm:py-24">
@@ -280,28 +609,25 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </p>
               <ul className="mt-3 space-y-0.5 text-sm text-white/60">
                 <li>
-                  <Link
-                    href="/shaxsiy#narx"
+                  <a
+                    href="#narx"
                     className="block py-1.5 transition-colors hover:text-white"
                   >
                     {s.navPricing}
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link
-                    href="/shaxsiy#individual"
+                  <a
+                    href="#individual"
                     className="block py-1.5 transition-colors hover:text-white"
                   >
                     {s.personalProfile}
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link
-                    href="/qurilmalar/card"
-                    className="block py-1.5 transition-colors hover:text-white"
-                  >
+                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
                     FLEX CARD
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -311,28 +637,22 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </p>
               <ul className="mt-3 space-y-0.5 text-sm text-white/60">
                 <li>
-                  <Link
-                    href="/biznes"
-                    className="block py-1.5 transition-colors hover:text-white"
-                  >
-                    {s.venueLine}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/biznes#jamoa"
+                  <a
+                    href="#biznes"
                     className="block py-1.5 transition-colors hover:text-white"
                   >
                     {s.teamCards}
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link
-                    href="/shaxsiy#tarif"
-                    className="block py-1.5 transition-colors hover:text-white"
-                  >
+                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
                     {s.contactCollection}
-                  </Link>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
+                    {lang === "ru" ? "Режим мероприятия" : lang === "en" ? "Event mode" : "Tadbir rejimi"}
+                  </a>
                 </li>
               </ul>
             </div>

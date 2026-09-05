@@ -32,7 +32,7 @@ export default async function EditDishPage({
   const categories = await getMenu(venue.id, "uz");
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <SubScreen handle={normalized} title={item.name} hint={w.itemWord}>
         <EditDishForm
           handle={normalized}

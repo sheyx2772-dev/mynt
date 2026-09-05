@@ -27,30 +27,30 @@ export default function InvoiceRequest({ currentSeats }: { currentSeats: number 
   const total = seats * months * TEAM_SEAT_MONTHLY;
 
   return (
-    <div className="rounded-2xl border border-black/10 bg-black/[0.02] px-5 py-5">
-      <h3 className="text-xs font-medium tracking-[0.14em] text-flex-black/45 uppercase">
+    <div className="rounded-2xl border border-ink-line bg-ink-s2 px-5 py-5">
+      <h3 className="text-xs font-medium tracking-[0.14em] text-paper-3 uppercase">
         Hisob-faktura
       </h3>
 
       <div className="mt-4 flex flex-wrap items-end gap-3">
         <label className="block">
-          <span className="mb-1 block text-xs text-flex-black/45">O&apos;rinlar</span>
+          <span className="mb-1 block text-xs text-paper-3">O&apos;rinlar</span>
           <input
             type="number"
             min={MIN_TEAM_SEATS}
             max={500}
             value={seats}
             onChange={(e) => setSeats(Number(e.target.value))}
-            className="w-24 rounded-xl border border-black/10 bg-white px-3 py-2 font-tabular text-sm outline-none"
+            className="w-24 rounded-xl border border-ink-line bg-ink-s1 px-3 py-2 font-tabular text-sm outline-none"
           />
         </label>
 
         <label className="block">
-          <span className="mb-1 block text-xs text-flex-black/45">Muddat</span>
+          <span className="mb-1 block text-xs text-paper-3">Muddat</span>
           <select
             value={months}
             onChange={(e) => setMonths(Number(e.target.value))}
-            className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none"
+            className="rounded-xl border border-ink-line bg-ink-s1 px-3 py-2 text-sm outline-none"
           >
             {PERIODS.map((p) => (
               <option key={p.months} value={p.months}>
@@ -61,7 +61,7 @@ export default function InvoiceRequest({ currentSeats }: { currentSeats: number 
         </label>
 
         <div className="ml-auto text-right">
-          <p className="text-xs text-flex-black/45">Jami</p>
+          <p className="text-xs text-paper-3">Jami</p>
           <p className="font-display text-lg font-semibold tabular-nums">
             {formatUZS(total)}
           </p>
@@ -78,14 +78,14 @@ export default function InvoiceRequest({ currentSeats }: { currentSeats: number 
           })
         }
         disabled={pending}
-        className="mt-4 rounded-xl bg-flex-black px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-white uppercase disabled:opacity-50"
+        className="mt-4 rounded-xl bg-ink-s2 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-paper uppercase disabled:opacity-50"
       >
         {pending ? "Tayyorlanmoqda" : "Hisob-faktura olish"}
       </button>
 
-      {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-2 text-xs text-danger-ink">{error}</p>}
 
-      <p className="mt-3 text-xs text-flex-black/40">
+      <p className="mt-3 text-xs text-paper-3">
         Hujjat darhol tayyor bo&apos;ladi. Pul kelgach obuna uzaytiriladi.
       </p>
     </div>

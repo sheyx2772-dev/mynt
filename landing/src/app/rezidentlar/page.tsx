@@ -46,7 +46,6 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
   return (
     <div className="relative min-h-full overflow-hidden">
-      <div className="bg-dot-grid absolute inset-0 [mask-image:radial-gradient(ellipse_60%_40%_at_50%_0%,black,transparent)]" />
       <div className="absolute -top-24 right-[-6rem] h-80 w-80 rounded-full bg-lime/20 blur-[100px]" />
 
       <div className="relative mx-auto max-w-3xl px-6 py-16">
@@ -67,6 +66,17 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
             formatNumber(counts.namespace - counts.claimed),
           )}
         </p>
+
+        {/* The showcase is the sibling of this page — this lists the handles
+            people actually hold, that shows what a card can look like. It is
+            noindexed, so this link is the only way anyone arrives at it. */}
+        <Link
+          href="/katalog"
+          className="mt-3 inline-flex items-center gap-1.5 text-sm text-flex-black/60 underline-offset-4 hover:text-flex-black hover:underline"
+        >
+          {lang === "ru" ? "Образцы карточек и макеты" : "Karta namunalari va maketlar"}
+          <span aria-hidden>→</span>
+        </Link>
 
         <form className="mt-7 flex gap-2">
           <div className="relative flex-1">
@@ -97,7 +107,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
                 <Link
                   key={entry.normalized}
                   href={`/${entry.normalized}`}
-                  className="grain card-sheen relative overflow-hidden rounded-2xl bg-flex-black p-5 text-white transition-transform hover:-translate-y-0.5"
+                  className="relative overflow-hidden rounded-2xl bg-flex-black p-5 text-white transition-transform hover:-translate-y-0.5"
                 >
                   <span className="relative font-display text-xs text-lime">#{index + 1}</span>
                   <p className="relative mt-3 font-display font-semibold">{entry.name}</p>
@@ -124,7 +134,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
               </p>
               <Link
                 href={query ? "/rezidentlar" : "/shaxsiy#narx"}
-                className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-flex-black shadow-[0_12px_30px_-10px_rgba(171,255,9,0.65)] transition-transform hover:scale-[1.01]"
+                className="mt-6 inline-block rounded-full bg-lime px-6 py-3 font-medium text-flex-black transition-transform hover:scale-[1.01]"
               >
                 {query ? t.seeAll : t.pickHandleCta}
               </Link>

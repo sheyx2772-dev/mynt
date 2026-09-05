@@ -40,27 +40,27 @@ export default async function RequestsPage({
   const requests = await listVenueRequests(venue.id);
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <AutoRefresh />
 
       <div className="mb-8 flex items-center justify-between gap-4">
         <Link
           href={`/kabinet/${normalized}`}
-          className="flex items-center gap-2 text-sm font-medium text-flex-black/60 hover:text-flex-black"
+          className="flex items-center gap-2 text-sm font-medium text-paper-2 hover:text-paper"
         >
           <ArrowLeft className="h-4 w-4" />
           {normalized}
         </Link>
         <Link
           href={`/kabinet/${normalized}/menyu`}
-          className="text-sm font-medium text-flex-black/60 hover:text-flex-black"
+          className="text-sm font-medium text-paper-2 hover:text-paper"
         >
           {words.listTitle}
         </Link>
       </div>
 
       <h1 className="font-display text-2xl font-semibold tracking-tight">So&apos;rovlar</h1>
-      <p className="mt-1 mb-8 text-sm text-flex-black/50">
+      <p className="mt-1 mb-8 text-sm text-paper-2">
         {venue.name} — sahifa o&apos;zi yangilanadi.
       </p>
 

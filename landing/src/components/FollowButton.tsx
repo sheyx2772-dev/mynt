@@ -9,10 +9,13 @@ export default function FollowButton({
   handle,
   initialFollowing,
   labels,
+  className,
 }: {
   handle: string;
   initialFollowing: boolean;
   labels: { follow: string; following: string };
+  /** The shape, supplied by whichever layout is rendering it. */
+  className?: string;
 }) {
   const [following, setFollowing] = useState(initialFollowing);
   const [error, setError] = useState<string | null>(null);
@@ -43,24 +46,25 @@ export default function FollowButton({
         onClick={onClick}
         disabled={pending}
         className={
-          following
-            ? "flex w-full items-center justify-center gap-1.5 rounded-xl border border-white/15 px-6 py-3 text-[11px] font-semibold tracking-[0.16em] text-white/55 uppercase transition-colors hover:bg-white/5 disabled:opacity-60"
-            : "flex w-full items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/[0.05] px-6 py-3 text-[11px] font-semibold tracking-[0.16em] text-white uppercase transition-colors hover:border-white/30 hover:bg-white/[0.09] disabled:opacity-60"
+          className ??
+          (following
+            ? "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute"
+            : "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5")
         }
       >
         {following ? (
           <>
-            <UserCheck className="h-4 w-4" />
+            <UserCheck className="size-5 shrink-0" />
             {labels.following}
           </>
         ) : (
           <>
-            <UserPlus className="h-4 w-4" />
+            <UserPlus className="size-5 shrink-0" />
             {labels.follow}
           </>
         )}
       </button>
-      {error && <p className="mt-2 text-center text-xs text-red-400">{error}</p>}
+      {error && <p className="mt-2 text-center text-[16px] leading-6 text-danger">{error}</p>}
     </div>
   );
 }

@@ -22,7 +22,7 @@ export default function ReleaseHandleButton({
     return (
       <button
         onClick={() => setConfirming(true)}
-        className="rounded-lg border border-black/12 px-3.5 py-1.5 text-xs font-medium transition-colors hover:bg-black/[0.03]"
+        className="rounded-lg border border-ink-line px-3.5 py-1.5 text-xs font-medium transition-colors hover:bg-ink-s2"
       >
         Bo&apos;shatish
       </button>
@@ -31,11 +31,11 @@ export default function ReleaseHandleButton({
 
   return (
     <div className="text-right">
-      <p className="mb-1.5 max-w-xs text-xs text-flex-black/55">
+      <p className="mb-1.5 max-w-xs text-xs text-paper-2">
         {holderName ? `${holderName}ning` : "Bu profildagi"} ismi, surati, telefoni va
         havolalari o&apos;chadi. {handle} firmada qoladi.
       </p>
-      {error && <p className="mb-1.5 text-xs text-red-600">{error}</p>}
+      {error && <p className="mb-1.5 text-xs text-danger-ink">{error}</p>}
       <div className="flex justify-end gap-2">
         <button
           onClick={() =>
@@ -46,7 +46,7 @@ export default function ReleaseHandleButton({
             })
           }
           disabled={pending}
-          className="rounded-lg bg-flex-black px-3.5 py-1.5 text-xs font-medium text-white disabled:opacity-50"
+          className="rounded-lg bg-ink-s2 px-3.5 py-1.5 text-xs font-medium text-paper disabled:opacity-50"
         >
           {pending ? "..." : "O'chirish"}
         </button>
@@ -55,7 +55,7 @@ export default function ReleaseHandleButton({
             setConfirming(false);
             setError(null);
           }}
-          className="rounded-lg border border-black/12 px-3.5 py-1.5 text-xs font-medium"
+          className="rounded-lg border border-ink-line px-3.5 py-1.5 text-xs font-medium"
         >
           Bekor
         </button>

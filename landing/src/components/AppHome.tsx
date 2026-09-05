@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Calculator, Nfc, Users, CreditCard, ChevronRight, User, Store } from "lucide-react";
+import { ArrowUpRight, Calculator, ChevronRight, CreditCard, Nfc, Store, User, Users } from "lucide-react";
 import HandleChecker from "@/components/HandleChecker";
+import FloatingCarousel, { type CarouselItem } from "@/components/FloatingCarousel";
 import LoadoutStrip, { type StripItem } from "@/components/LoadoutStrip";
 import OwnerHome from "@/components/OwnerHome";
 import type { OwnedHandle } from "@/lib/handles";
@@ -47,6 +48,7 @@ export default function AppHome({
   namespace,
   devices,
   verticals,
+  carousel,
   stripLabels,
   owner,
 }: {
@@ -56,11 +58,14 @@ export default function AppHome({
   namespace: number;
   devices: StripItem[];
   verticals: StripItem[];
+  carousel: CarouselItem[];
   stripLabels: {
     devices: string;
     devicesNote: string;
     directions: string;
     directionsNote: string;
+    samples: string;
+    samplesCta: string;
   };
   /** Present only for a signed-in owner who has a handle. */
   owner?: { handle: OwnedHandle; todayViews: number; leads: number } | null;
@@ -87,7 +92,8 @@ export default function AppHome({
         <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_0%,black,transparent)]" />
         <div className="absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-lime/[0.15] blur-[110px]" />
 
-        <div className="relative">
+        <div className="relative lg:grid lg:grid-cols-[minmax(0,1fr)_26rem] lg:items-center lg:gap-12">
+          <div className="relative">
           <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-[10px] font-medium tracking-wide text-white/70 uppercase">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
             {s.heroBadge}
@@ -136,6 +142,13 @@ export default function AppHome({
               {s.leftWord}
             </p>
           )}
+          </div>
+
+          {/* The card, suspended. It is the object the number is issued on, so
+              it belongs beside the number rather than further down a page. */}
+          <div className="mx-auto mt-9 w-full max-w-[19rem] px-2 sm:max-w-[22rem] lg:mt-0 lg:max-w-none lg:px-0">
+            <FloatingCarousel items={carousel} />
+          </div>
         </div>
       </section>
       )}
@@ -197,6 +210,22 @@ export default function AppHome({
           label={stripLabels.directions}
           note={stripLabels.directionsNote}
         />
+
+        {/* The third question, after what to hold and which room: what their
+            own page will look like. Carried here as well as on the desktop
+            block, or a phone visitor never reaches the layouts at all. */}
+        <div className="px-6 pt-3">
+          <Link
+            href="/katalog?bolim=layouts"
+            className="flex items-center justify-between gap-4 rounded-2xl border border-black/10 px-4 py-3.5 active:bg-black/[0.04]"
+          >
+            <span>
+              <span className="block text-[15px] font-semibold">{stripLabels.samples}</span>
+              <span className="block text-[13px] text-flex-black/50">{stripLabels.samplesCta}</span>
+            </span>
+            <ArrowUpRight className="h-5 w-5 shrink-0 text-flex-black/40" />
+          </Link>
+        </div>
       </div>
 
       {/* Four destinations, thumb-sized. The sections these replace are hidden

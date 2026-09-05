@@ -1,5 +1,6 @@
 import Link from "next/link";
 import HandleChecker from "@/components/HandleChecker";
+import FloatingCarousel, { type CarouselItem } from "@/components/FloatingCarousel";
 import { ArrowRight, User, Store } from "lucide-react";
 import type { site } from "@/lib/i18n";
 
@@ -17,9 +18,15 @@ import type { site } from "@/lib/i18n";
 
 type Site = ReturnType<typeof site>;
 
-export default function TwoWays({ s }: { s: Site }) {
+export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselItem[] }) {
   return (
     <section className="mx-auto max-w-6xl px-6 pt-12 pb-14 sm:pt-16 sm:pb-20">
+      {/* The number and the object it is issued on, side by side: one is what
+          you buy and the other is what carries it, and neither explains itself
+          without the other. The fork stays below, so a business visitor still
+          meets it before any of the personal pitch. */}
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-center lg:gap-14">
+        <div>
       <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-black/10 bg-black/[0.03] px-3 py-1.5 text-[11px] font-medium tracking-wide text-flex-black/60 uppercase">
         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime-ink" />
         {s.heroBadge}
@@ -47,6 +54,12 @@ export default function TwoWays({ s }: { s: Site }) {
             error: s.handleError,
           }}
         />
+      </div>
+        </div>
+
+        <div className="mx-auto mt-10 w-full max-w-[20rem] lg:mt-0 lg:max-w-none">
+          <FloatingCarousel items={carousel} />
+        </div>
       </div>
 
       <p className="mt-10 mb-4 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">

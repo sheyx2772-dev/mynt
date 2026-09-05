@@ -16,7 +16,7 @@ export default async function PostsPage({ params }: PageProps<"/kabinet/[handle]
   const posts = await listPostsForHandle(normalized);
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <SubScreen
         handle={normalized}
         title="Postlar"
@@ -25,11 +25,11 @@ export default async function PostsPage({ params }: PageProps<"/kabinet/[handle]
         {owned.status === "claimed" ? (
           <PostComposer handle={normalized} />
         ) : (
-          <section className="rounded-[1.5rem] border border-black/6 bg-white p-8 text-center">
-            <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-black/[0.04]">
-              <Clock className="h-4 w-4 text-flex-black/35" />
+          <section className="rounded-[1.5rem] border border-ink-line bg-ink-s1 p-8 text-center">
+            <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-ink-s2">
+              <Clock className="h-4 w-4 text-paper-3" />
             </span>
-            <p className="mx-auto mt-4 max-w-xs text-[13px] leading-relaxed text-flex-black/50">
+            <p className="mx-auto mt-4 max-w-xs text-[13px] leading-relaxed text-paper-2">
               To&apos;lov yakunlangach post joylashingiz mumkin bo&apos;ladi.
             </p>
           </section>

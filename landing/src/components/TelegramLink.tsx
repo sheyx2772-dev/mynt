@@ -38,7 +38,7 @@ export default function TelegramLink({
 
   if (state.state === "linked") {
     return (
-      <p className="text-sm text-flex-black/60">
+      <p className="text-sm text-paper-2">
         Telegram ulangan — kontakt kelganda darhol xabar beramiz.
       </p>
     );
@@ -47,7 +47,7 @@ export default function TelegramLink({
   if (state.state === "waiting") {
     return (
       <div>
-        <p className="text-sm text-flex-black/60">
+        <p className="text-sm text-paper-2">
           {botName ? (
             <>
               Telegram&apos;da{" "}
@@ -66,11 +66,11 @@ export default function TelegramLink({
           )}
         </p>
 
-        <p className="mt-3 inline-block rounded-xl border border-black/12 bg-black/[0.02] px-5 py-3 font-tabular text-2xl font-semibold tracking-[0.25em]">
+        <p className="mt-3 inline-block rounded-xl border border-ink-line bg-ink-s2 px-5 py-3 font-tabular text-2xl font-semibold tracking-[0.25em]">
           {state.code}
         </p>
 
-        <p className="mt-2 text-xs text-flex-black/40">
+        <p className="mt-2 text-xs text-paper-3">
           Kod 15 daqiqa amal qiladi. Ulanishi bilan bu yozuv o&apos;zgaradi.
         </p>
       </div>
@@ -79,7 +79,7 @@ export default function TelegramLink({
 
   return (
     <div>
-      <p className="text-sm text-flex-black/60">
+      <p className="text-sm text-paper-2">
         Kontakt kelganda Telegram&apos;ingizga darhol xabar boradi &mdash;
         kabinetga kirib ko&apos;rishni kutmaysiz.
       </p>
@@ -90,7 +90,7 @@ export default function TelegramLink({
           })
         }
         disabled={pending}
-        className="mt-4 rounded-xl bg-flex-black px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-white uppercase disabled:opacity-50"
+        className="mt-4 rounded-xl bg-ink-s2 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-paper uppercase disabled:opacity-50"
       >
         {pending ? "..." : "Telegramni ulash"}
       </button>

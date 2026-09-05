@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+import { Check } from "lucide-react";
+
+
 type Props = {
   fullName: string;
   handle: string;
@@ -9,6 +13,10 @@ type Props = {
   position?: string | null;
   company?: string | null;
   label: string;
+  /** What the button says once the file has been handed over. */
+  savedLabel: string;
+  /** The shape, supplied by whichever layout is rendering it. */
+  className?: string;
 };
 
 // vCard treats a comma, a semicolon and a backslash as structure, and a raw
@@ -32,6 +40,8 @@ export default function SaveContactButton({
   position,
   company,
   label,
+  savedLabel,
+  className,
 }: Props) {
   function handleSave() {
     // Only the fields the owner filled in — an empty TEL line makes a phone
@@ -60,12 +70,43 @@ export default function SaveContactButton({
     URL.revokeObjectURL(url);
   }
 
+  // The confirmation is the button itself, for a second and a half.
+  //
+  // A toast would be a second thing appearing on a screen whose whole design
+  // budget is one action — and on a phone it lands where the thumb already is.
+  // Saying it in place answers the only question the person has, which is
+  // whether the press worked.
+  const [saved, setSaved] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current);
+    },
+    [],
+  );
+
   return (
     <button
-      onClick={handleSave}
-      className="w-full rounded-xl bg-white px-6 py-3.5 text-center text-[11px] font-semibold tracking-[0.16em] text-flex-black uppercase transition-colors hover:bg-white/90"
+      onClick={() => {
+        handleSave();
+        setSaved(true);
+        if (timer.current) clearTimeout(timer.current);
+        timer.current = setTimeout(() => setSaved(false), 1500);
+      }}
+      className={
+        className ??
+        "flex h-14 w-full items-center justify-center gap-2.5 rounded-xl bg-lime text-[16px] font-semibold text-on-accent shadow-slab transition-transform duration-[120ms] active:translate-y-px active:shadow-none"
+      }
     >
-      {label}
+      {saved ? (
+        <>
+          <Check className="h-5 w-5" />
+          {savedLabel}
+        </>
+      ) : (
+        label
+      )}
     </button>
   );
 }

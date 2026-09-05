@@ -115,7 +115,7 @@ export default function MobileMenu({
               <a
                 href={cta.href}
                 onClick={() => setOpen(false)}
-                className="mt-8 block rounded-full bg-lime px-6 py-4 text-center font-medium text-flex-black shadow-[0_14px_36px_-10px_rgba(171,255,9,0.6)]"
+                className="mt-8 block rounded-full bg-lime px-6 py-4 text-center font-medium text-flex-black"
               >
                 {cta.label}
               </a>

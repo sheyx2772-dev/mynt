@@ -156,9 +156,13 @@ export default function CounterHeader({
 
   return (
     <>
-      <header className="mb-4 flex items-baseline justify-between gap-3">
-        <h1 className="font-display text-xl font-semibold tracking-tight">{venueName}</h1>
-        <span className="font-tabular text-sm text-flex-black/45">
+      <header className="mb-5 flex items-baseline justify-between gap-3">
+        <h1 className="truncate text-[24px] leading-7 font-semibold tracking-[-0.01em] text-paper">
+          {venueName}
+        </h1>
+        {/* paper-2, not paper-3: the faint tier is unreadable at two metres,
+            which is the only distance this screen is ever read from. */}
+        <span className="num shrink-0 text-[20px] leading-7 text-paper-2">
           {!trust ? "aloqa yo'q" : waiting > 0 ? `${waiting} ta kutmoqda` : "bo'sh"}
         </span>
       </header>
@@ -168,12 +172,16 @@ export default function CounterHeader({
           role="status"
           aria-live="polite"
           className={
+            // An outage is not a warning, it is a wrong count on the screen —
+            // so it gets the loud treatment and a passing blip gets the quiet
+            // one. Neither is lime: lime says "do this", and there is nothing
+            // here for the person at the counter to do.
             state === "lost"
-              ? "mb-4 flex items-center gap-3 rounded-2xl bg-red-600 px-4 py-3.5 text-sm font-medium text-white"
-              : "mb-4 flex items-center gap-3 rounded-2xl bg-amber-50 px-4 py-3 text-sm text-amber-900"
+              ? "mb-4 flex items-center gap-3 rounded-card bg-danger-ink px-4 py-4 text-[20px] leading-7 font-semibold text-ink"
+              : "mb-4 flex items-center gap-3 rounded-card bg-warn-ink px-4 py-3.5 text-[20px] leading-7 font-medium text-ink"
           }
         >
-          <WifiOff className="h-4 w-4 shrink-0" />
+          <WifiOff className="h-6 w-6 shrink-0" />
           {/* Read from across a counter, so the outage gets the loud treatment
               and a passing blip gets a quiet one. */}
           <span>{words}</span>

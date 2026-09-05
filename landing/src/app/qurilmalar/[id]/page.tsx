@@ -73,7 +73,6 @@ export default async function DevicePage({
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#0a0715] text-white">
-      <div className="bg-dot-grid-light absolute inset-0 opacity-20 [mask-image:radial-gradient(ellipse_60%_40%_at_50%_0%,black,transparent)]" />
       <div className="absolute -top-32 right-0 h-96 w-96 rounded-full bg-lime/[0.12] blur-[130px]" />
 
       <div className="relative mx-auto max-w-4xl px-6 py-14 sm:py-16">
@@ -109,7 +108,7 @@ export default async function DevicePage({
                 className="object-cover"
               />
             ) : (
-              <div className="grain absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,#211a3c_0%,#0b0817_70%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,#211a3c_0%,#0b0817_70%)]" />
             )}
           </div>
 
@@ -152,7 +151,7 @@ export default async function DevicePage({
             {price === null ? (
               <a
                 href={`tel:${COMPANY.phoneHref}`}
-                className="mt-9 flex items-center justify-center gap-2 rounded-2xl bg-lime px-6 py-4 font-medium text-flex-black shadow-[0_16px_40px_-16px_rgba(171,255,9,0.8)] transition-transform hover:scale-[1.01]"
+                className="mt-9 flex items-center justify-center gap-2 rounded-2xl bg-lime px-6 py-4 font-medium text-flex-black transition-transform hover:scale-[1.01]"
               >
                 <Phone className="h-4 w-4" />
                 {p.askPrice}
@@ -160,7 +159,7 @@ export default async function DevicePage({
             ) : (
               <Link
                 href={order.href}
-                className="mt-9 flex items-center justify-center gap-2 rounded-2xl bg-lime px-6 py-4 font-medium text-flex-black shadow-[0_16px_40px_-16px_rgba(171,255,9,0.8)] transition-transform hover:scale-[1.01]"
+                className="mt-9 flex items-center justify-center gap-2 rounded-2xl bg-lime px-6 py-4 font-medium text-flex-black transition-transform hover:scale-[1.01]"
               >
                 {order.label}
                 <ArrowRight className="h-4 w-4" />

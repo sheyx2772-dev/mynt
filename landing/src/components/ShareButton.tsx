@@ -10,7 +10,19 @@ import { Share2, Check } from "lucide-react";
 // button that issues it, the source would be recorded and never produced —
 // which is the state this was in until now.
 
-export default function ShareButton({ handle, name }: { handle: string; name: string }) {
+export default function ShareButton({
+  handle,
+  name,
+  className,
+  label,
+}: {
+  handle: string;
+  name: string;
+  /** The shape, supplied by whichever layout is rendering it. */
+  className?: string;
+  /** Set where the layout wants words rather than a glyph alone. */
+  label?: string;
+}) {
   const [copied, setCopied] = useState(false);
   // Shown when the clipboard refuses. Some browsers deny the write outright,
   // and a button that then does nothing looks broken — so the link is put on
@@ -47,15 +59,15 @@ export default function ShareButton({ handle, name }: { handle: string; name: st
   // it moves.
   if (manual) {
     return (
-      <div className="absolute top-0 right-0 z-10 w-[min(20rem,80vw)] rounded-2xl border border-white/15 bg-flex-black px-4 py-3 shadow-xl">
-        <p className="mb-1.5 text-xs text-white/45">Havolani nusxalab oling:</p>
+      <div className="absolute top-0 right-0 z-10 w-[min(20rem,80vw)] rounded-card border border-line bg-white px-4 py-3">
+        <p className="mb-1.5 text-[13px] leading-[18px] text-ink-3">Havolani nusxalab oling:</p>
         <input
           readOnly
           value={manual}
           onFocus={(e) => e.currentTarget.select()}
           autoFocus
           onBlur={() => setManual(null)}
-          className="w-full bg-transparent font-tabular text-xs text-white outline-none"
+          className="num w-full bg-transparent text-[13px] leading-[18px] text-ink outline-none"
         />
       </div>
     );
@@ -66,9 +78,13 @@ export default function ShareButton({ handle, name }: { handle: string; name: st
       onClick={share}
       aria-label="Profilni ulashish"
       title="Profilni ulashish"
-      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white/70 transition-colors hover:bg-white/[0.12] hover:text-white"
+      className={
+        className ??
+        "flex h-11 w-11 items-center justify-center rounded-full border border-line-2 bg-white text-ink-2 transition-colors active:bg-fill"
+      }
     >
-      {copied ? <Check className="h-4 w-4 text-lime" /> : <Share2 className="h-4 w-4" />}
+      {copied ? <Check className="size-4" /> : <Share2 className="size-4" />}
+      {label}
     </button>
   );
 }

@@ -14,7 +14,7 @@ export default async function DesignPage({ params }: PageProps<"/kabinet/[handle
   const requests = await listDesignRequests(normalized);
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <SubScreen handle={normalized} title="Karta dizayni">
         <DesignRequestForm handle={normalized} requests={requests} />
       </SubScreen>

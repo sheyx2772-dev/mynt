@@ -25,7 +25,7 @@ export default async function StatsPage({ params }: PageProps<"/kabinet/[handle]
   ]);
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <SubScreen handle={normalized} title="Statistika va kontaktlar">
         <LeadsPanel handle={normalized} leads={leads} plan={owned.plan} />
         <StatsPanel stats={stats} plan={owned.plan} />

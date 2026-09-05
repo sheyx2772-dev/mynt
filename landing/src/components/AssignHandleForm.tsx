@@ -16,14 +16,14 @@ export default function AssignHandleForm({ handle }: { handle: string }) {
   const [pending, startTransition] = useTransition();
 
   if (message) {
-    return <p className="text-xs text-flex-black/55">{message}</p>;
+    return <p className="text-xs text-paper-2">{message}</p>;
   }
 
   if (!open) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="rounded-lg border border-black/12 px-3.5 py-1.5 text-xs font-medium transition-colors hover:bg-black/[0.03]"
+        className="rounded-lg border border-ink-line px-3.5 py-1.5 text-xs font-medium transition-colors hover:bg-ink-s2"
       >
         Biriktirish
       </button>
@@ -54,12 +54,12 @@ export default function AssignHandleForm({ handle }: { handle: string }) {
         type="email"
         required
         placeholder="xodim@email.com"
-        className="w-52 rounded-lg border border-black/12 bg-white px-3 py-1.5 text-xs outline-none"
+        className="w-52 rounded-lg border border-ink-line bg-ink-s1 px-3 py-1.5 text-xs outline-none"
       />
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-flex-black px-3.5 py-1.5 text-xs font-medium text-white disabled:opacity-50"
+        className="rounded-lg bg-ink-s2 px-3.5 py-1.5 text-xs font-medium text-paper disabled:opacity-50"
       >
         {pending ? "..." : "Yuborish"}
       </button>
@@ -69,11 +69,11 @@ export default function AssignHandleForm({ handle }: { handle: string }) {
           setOpen(false);
           setError(null);
         }}
-        className="rounded-lg border border-black/12 px-3 py-1.5 text-xs"
+        className="rounded-lg border border-ink-line px-3 py-1.5 text-xs"
       >
         Bekor
       </button>
-      {error && <p className="w-full text-right text-xs text-red-600">{error}</p>}
+      {error && <p className="w-full text-right text-xs text-danger-ink">{error}</p>}
     </form>
   );
 }

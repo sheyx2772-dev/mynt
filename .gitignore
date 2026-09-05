@@ -66,3 +66,6 @@ yarn-error.log*
 
 # PowerPoint leaves these beside a file it has open.
 ~$*
+
+# Raw Figma export — tokens.md and tokens.css are the useful part
+landing/figma/document.json

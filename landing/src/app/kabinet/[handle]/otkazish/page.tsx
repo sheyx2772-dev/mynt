@@ -14,7 +14,7 @@ export default async function TransferPage({ params }: PageProps<"/kabinet/[hand
   const transfers = await listTransfersForHandle(normalized);
 
   return (
-    <PageShell>
+    <PageShell surface="ink">
       <SubScreen handle={normalized} title="Raqamni o'tkazish">
         <TransferPanel handle={normalized} transfers={transfers} />
       </SubScreen>

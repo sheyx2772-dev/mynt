@@ -48,6 +48,20 @@ const PER_POINT_WINDOW_MS = 90 * 1000;
 // whole cafe, not a person.
 const PER_POINT_PER_HOUR = 12;
 
+
+/**
+ * The venue's own name for a point, matched against what the URL claimed.
+ *
+ * Compared without case or surrounding space, because the number is printed on
+ * a sticker and typed back by hand as often as it is tapped: "Stol 3", "stol 3"
+ * and " STOL 3 " are one table. Returns the venue's spelling, so the counter
+ * shows what the owner wrote rather than what the guest typed.
+ */
+export function pointOf(points: string[], asked: string): string | null {
+  const want = asked.trim().toLocaleLowerCase();
+  return points.find((p) => p.trim().toLocaleLowerCase() === want) ?? null;
+}
+
 export type SendResult =
   | { ok: true }
   | { ok: false; error: "tooSoon" | "expired" | "failed" };
@@ -65,6 +79,7 @@ async function target(normalized: string): Promise<{
   venueName: string;
   ownerUserId: string | null;
   planExpiresAt: string;
+  points: string[];
 } | null> {
   if (!supabaseAdmin) return null;
 
@@ -78,7 +93,7 @@ async function target(normalized: string): Promise<{
 
   const { data: venue } = await supabaseAdmin
     .from("venues")
-    .select("id, name, plan_expires_at")
+    .select("id, name, plan_expires_at, points")
     .eq("handle_id", handle.id as string)
     .maybeSingle();
 
@@ -89,6 +104,7 @@ async function target(normalized: string): Promise<{
     venueName: venue.name as string,
     ownerUserId: (handle.user_id as string) ?? null,
     planExpiresAt: venue.plan_expires_at as string,
+    points: (venue.points as string[]) ?? [],
   };
 }
 
@@ -111,7 +127,20 @@ export async function sendVenueRequest(opts: {
     return { ok: false, error: "expired" };
   }
 
-  const point = opts.point?.trim().slice(0, 12) || null;
+  // The table number arrives in the URL, where a guest can edit it. It used to
+  // be stored as given, so ?stol=99 produced a request from a table that does
+  // not exist. It is now kept only if the venue actually has that point.
+  //
+  // An unrecognised number is dropped rather than refused. The case that
+  // matters is not mischief but a rename: the owner changes "Stol 3" to
+  // "3-stol" and the sticker already on the table still says the old one. A
+  // refusal would leave a real guest unable to call anyone at all, where a
+  // request with no table against it still reaches the counter.
+  //
+  // What this cannot catch is a guest at table 7 claiming table 3 — both are
+  // real. That needs a token per table, not a number in a query string.
+  const asked = opts.point?.trim().slice(0, 12) || null;
+  const point = asked === null ? null : pointOf(found.points, asked);
   const ip = await getClientIp();
 
   // A review is a considered thing somebody types once; the two one-tap kinds

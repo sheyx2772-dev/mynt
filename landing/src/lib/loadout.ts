@@ -55,3 +55,32 @@ export function devicePriceOrNull(id: LoadoutDeviceId): number | null {
 
 export { VERTICALS };
 export type { VerticalId };
+
+/**
+ * Every finish an object has been shot in, newest first.
+ *
+ * Not a fixed number per object: the sets arrive as they arrive, and the
+ * bracelet has five where the pet tag has two. Anything that assumes the
+ * counts match breaks the next time one more file turns up.
+ */
+const CUTOUTS: Record<string, string[]> = {
+  card: ["karta", "karta-2", "karta-3", "karta-4", "karta-5", "karta-6"],
+  ring: ["uzuk", "uzuk-2", "uzuk-3", "uzuk-4", "uzuk-5", "uzuk-6"],
+  bracelet: [
+    "braslet", "braslet-2", "braslet-3", "braslet-4",
+    "braslet-5", "braslet-6", "braslet-7", "braslet-8",
+  ],
+  avtovizitka: ["avtovizitka", "avtovizitka-2", "avtovizitka-3"],
+  "hayvon-teg": [
+    "hayvon-teg", "hayvon-teg-2", "hayvon-teg-3",
+    "hayvon-teg-4", "hayvon-teg-5",
+  ],
+};
+
+export function deviceCutouts(id: string): string[] {
+  return (CUTOUTS[id] ?? []).map((n) => `/mahsulot/kesilgan/${n}.png`);
+}
+
+export function deviceCutout(id: string): string | null {
+  return deviceCutouts(id)[0] ?? null;
+}
