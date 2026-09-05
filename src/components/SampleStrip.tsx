@@ -42,48 +42,48 @@ export default function SampleStrip({
           // link is laid over the tile instead, as a sibling of the preview.
           <div
             key={l.name}
-            className="group relative w-[58vw] max-w-[15rem] shrink-0 snap-start overflow-hidden rounded-3xl bg-flex-black ring-1 ring-white/10"
+            className="group relative w-[78vw] max-w-[17.5rem] shrink-0 snap-start"
           >
-            <div className="relative aspect-square w-full overflow-hidden">
-              {/* A phone, because at this size the preview is a crop and reads
-                  as a fragment without one — the frame is what says "screen".
-                  A full-width preview needs no frame: the reader is holding the
-                  phone already. A thumbnail does.
-                  No fake status bar and no fake clock: those are the parts that
-                  make a device mockup look like a stock photograph. */}
-              <div className="pointer-events-none absolute inset-x-0 top-5 flex justify-center">
-                <div className="relative h-[260px] w-[132px] overflow-hidden rounded-[1.35rem] bg-black shadow-[0_18px_40px_-12px_rgba(0,0,0,0.9)] ring-1 ring-white/15">
-                  <div
-                    aria-hidden
-                    className="absolute top-0 left-1/2 w-[380px] origin-top -translate-x-1/2 scale-[0.347]"
-                  >
-                    {l.render()}
-                  </div>
-                  {/* The cutout, drawn small enough to read as one rather than
-                      as a black bar across the top. */}
-                  <div className="absolute top-1.5 left-1/2 h-[7px] w-[38px] -translate-x-1/2 rounded-full bg-black/85" />
-                </div>
+            {/* A phone at something like a phone's size, not a thumbnail of
+                one. Shrunk into a square tile the layout was unreadable, which
+                defeats the point of showing it at all — so the frame takes the
+                width it needs and the shelf scrolls. */}
+            {/* 9:16 rather than a phone's true 9:19.5. Measured: the layouts
+                render between 498 and 738px inside a 280px-wide frame, so a
+                taller box leaves the three shortest with a black band under
+                them. A screen that ends in black reads as broken; a slightly
+                stubby phone does not. The long ones are clipped, which is what
+                a screen does anyway. */}
+            <div className="relative aspect-[9/16] w-full overflow-hidden rounded-[2rem] bg-black shadow-[0_22px_50px_-16px_rgba(0,0,0,0.85)] ring-1 ring-white/15">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute top-0 left-0 w-[380px] origin-top-left"
+                style={{ transform: "scale(var(--sample-scale, 0.71))" }}
+              >
+                {l.render()}
               </div>
 
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-flex-black via-flex-black/90 to-transparent px-4 pt-10 pb-3">
-                <p className="font-display text-base leading-tight font-semibold text-white">
-                  {l.name}
-                </p>
-                <p className="mt-0.5 line-clamp-1 text-[11px] tracking-wide text-white/45 uppercase">
-                  {l.who}
-                </p>
-              </div>
+              {/* The cutout, small enough to read as one rather than as a bar. */}
+              <div className="pointer-events-none absolute top-2 left-1/2 h-[9px] w-[54px] -translate-x-1/2 rounded-full bg-black/85" />
             </div>
 
-            <div className="pointer-events-none flex items-center justify-between gap-3 px-4 py-3">
-              <span className="text-sm font-medium text-lime">{open}</span>
-              <ChevronRight className="h-4 w-4 text-white/35 transition-transform group-hover:translate-x-0.5" />
+            <div className="mt-3 px-1">
+              <p className="font-display text-[15px] leading-tight font-semibold">
+                {l.name}
+              </p>
+              <p className="mt-0.5 line-clamp-2 text-[12px] leading-snug text-flex-black/50">
+                {l.who}
+              </p>
+              <p className="mt-2 flex items-center gap-1 text-sm font-medium text-lime-ink">
+                {open}
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </p>
             </div>
 
             <Link
               href="/katalog?bolim=layouts"
               aria-label={l.name}
-              className="absolute inset-0 rounded-3xl transition-transform active:scale-[0.99]"
+              className="absolute inset-0 rounded-[2rem]"
             />
           </div>
         ))}
