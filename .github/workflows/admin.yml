@@ -72,7 +72,10 @@ jobs:
             git fetch --depth 1 origin main && git reset --hard origin/main
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GH_ACTOR" --password-stdin
             docker compose -f deploy/compose.yml --env-file .env pull panel
-            docker compose -f deploy/compose.yml --env-file .env up -d panel
+            # The whole stack, not just this service. Compose recreates only
+            # what changed, and `up -d panel` alone would never start Caddy —
+            # nothing depends on it, so nothing brings it up.
+            docker compose -f deploy/compose.yml --env-file .env up -d
             docker logout ghcr.io
             docker image prune -f
         env:
