@@ -159,8 +159,8 @@ describe("the word tier", () => {
       "VIP", "CEO", "BEK", "UZB", "NUR", "ZAR", "LUX", "ONE",
       // The trades, which sell to a business rather than to a person.
       "GYM", "LAW", "MED", "WEB",
-      // Uzbek, names and cities.
-      "OSH", "PUL", "OTA", "ALI", "SAM", "BUX",
+      // Uzbek, names, cities, and where somebody is from.
+      "OSH", "PUL", "OTA", "ALI", "SAM", "BUX", "RUS", "QOZ",
     ]) {
       expect(letterRarity(word).multiplier).toBe(20);
     }
@@ -212,10 +212,10 @@ describe("the two copies of each list", () => {
     createHash("sha256").update([...words].sort().join(",")).digest("hex").slice(0, 8);
 
   it("matches the backend's rare words", () => {
-    expect(fingerprint(RARE_WORDS)).toBe("043ff3dc");
+    expect(fingerprint(RARE_WORDS)).toBe("3e1d5999");
   });
 
   it("matches the backend's blocked words", () => {
-    expect(fingerprint(BLOCKED_WORDS)).toBe("834c5b0a");
+    expect(fingerprint(BLOCKED_WORDS)).toBe("542778ed");
   });
 });

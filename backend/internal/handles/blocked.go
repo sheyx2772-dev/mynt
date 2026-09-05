@@ -38,7 +38,7 @@ var blockedWords = map[string]bool{
 	// most likely to be incomplete — it was written by somebody who does not
 	// speak the language natively, and it should be extended by somebody who
 	// does rather than left as if it were finished.
-	"SIK": true, "KOT": true, "AMK": true,
+	"SIK": true, "KOT": true, "AMK": true, "QIN": true, "SKM": true, "AMG": true,
 
 	// Slurs. Blocked for what they are used to do to somebody, not for what
 	// they mean.

@@ -79,8 +79,8 @@ func TestTheWordTierIsWhatBothSidesThinkItIs(t *testing.T) {
 		"VIP", "CEO", "BEK", "UZB", "NUR", "ZAR", "LUX", "ONE",
 		// The trades, which sell to a business rather than to a person.
 		"GYM", "LAW", "MED", "WEB",
-		// Uzbek, names and cities.
-		"OSH", "PUL", "OTA", "ALI", "SAM", "BUX",
+		// Uzbek, names, cities, and where somebody is from.
+		"OSH", "PUL", "OTA", "ALI", "SAM", "BUX", "RUS", "QOZ",
 	} {
 		if LetterRarity(word).Multiplier != 20 {
 			t.Errorf("%s so'z tarifida emas", word)

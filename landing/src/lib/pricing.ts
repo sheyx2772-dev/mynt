@@ -30,6 +30,12 @@ export const RARE_WORDS = [
   // Where they are: the cities, the way an airport writes them.
   "UZB", "NUR", "ZAR", "ASL", "TOY", "GUL",
   "SAM", "BUX", "XIV", "NAV", "AND", "FAR",
+  // And where they are from. These were nearly blocked, on the reasoning that
+  // somebody could put one on a profile written to insult. The argument that
+  // settled it is UZB, which has been in this list from the start and sells for
+  // millions: it is bought as pride, not as an insult, and there is no version
+  // of that argument that holds for one people and not the next.
+  "RUS", "TAJ", "QOZ", "QIR", "AFG", "ARM",
   // What anybody recognises.
   "GOD", "ACE", "WOW", "TOP", "LUX", "MAX", "WIN", "ONE", "KEY", "NEW", "ART", "ZEN",
   "SKY", "SUN", "GEM", "FLY", "FOX", "ICE", "BIG", "BUY",
@@ -68,7 +74,7 @@ export const BLOCKED_WORDS = [
   "EBU", "PID", "MUD", "NAX",
   // Obscene in Uzbek and Turkish. The shortest of the three, and the one most
   // likely to be incomplete.
-  "SIK", "KOT", "AMK",
+  "SIK", "KOT", "AMK", "QIN", "SKM", "AMG",
   // Slurs.
   "GAY", "FAG",
   // Sacred names.

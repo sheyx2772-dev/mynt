@@ -55,12 +55,12 @@ func TestNamespaceExcludesBlocked(t *testing.T) {
 // editing either list without editing the other fails on one side or the
 // other with the name of the file to go and fix.
 func TestListsMatchTheWebsite(t *testing.T) {
-	if got := fingerprint(rareWords); got != "043ff3dc" {
+	if got := fingerprint(rareWords); got != "3e1d5999" {
 		t.Errorf("rareWords o'zgardi: %s\n"+
 			"landing/src/lib/pricing.ts dagi RARE_WORDS ni ham yangilang, "+
 			"so'ng ikkala testdagi barmoq izini almashtiring", got)
 	}
-	if got := fingerprint(blockedWords); got != "834c5b0a" {
+	if got := fingerprint(blockedWords); got != "542778ed" {
 		t.Errorf("blockedWords o'zgardi: %s\n"+
 			"landing/src/lib/pricing.ts dagi BLOCKED_WORDS ni ham yangilang, "+
 			"so'ng ikkala testdagi barmoq izini almashtiring", got)

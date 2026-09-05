@@ -47,6 +47,12 @@ var rareWords = map[string]bool{
 	// Where they are: the cities, the way an airport writes them.
 	"UZB": true, "NUR": true, "ZAR": true, "ASL": true, "TOY": true, "GUL": true,
 	"SAM": true, "BUX": true, "XIV": true, "NAV": true, "AND": true, "FAR": true,
+	// And where they are from. These were nearly blocked, on the reasoning that
+	// somebody could put one on a profile written to insult. The argument that
+	// settled it is UZB, which has been in this list from the start and sells
+	// for millions: it is bought as pride, not as an insult, and there is no
+	// version of that argument that holds for one people and not the next.
+	"RUS": true, "TAJ": true, "QOZ": true, "QIR": true, "AFG": true, "ARM": true,
 	// What anybody recognises.
 	"GOD": true, "ACE": true, "WOW": true, "TOP": true, "LUX": true, "MAX": true,
 	"WIN": true, "ONE": true, "KEY": true, "NEW": true, "ART": true, "ZEN": true,
