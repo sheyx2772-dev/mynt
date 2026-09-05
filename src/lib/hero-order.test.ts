@@ -9,14 +9,15 @@ describe("heroCarousel", () => {
 
   it("shows every finish that exists", () => {
     // Six cards, six rings, eight bracelets, three car cards, five pet tags.
-    expect(items).toHaveLength(28);
-    expect(new Set(items.map((i) => i.src)).size).toBe(28);
+    const shots = items.filter((i) => i.src);
+    expect(shots).toHaveLength(28);
+    expect(new Set(shots.map((i) => i.src)).size).toBe(28);
   });
 
   it("never shows the same object twice running", () => {
     // The bracelet has five and the pet tag two; a pass per set would end
     // with bracelet after bracelet, which reads as the carousel having stalled.
-    const objects = items.map((i) => objectOf(i.src));
+    const objects = items.filter((i) => i.src).map((i) => objectOf(i.src!));
     const stalls = objects.filter((o, i) => i > 0 && o === objects[i - 1]);
     expect(stalls).toEqual([]);
   });

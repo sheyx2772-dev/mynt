@@ -45,6 +45,7 @@ import { getHandleStats } from "@/lib/analytics";
 import { listLeads } from "@/lib/leads";
 import LiveResidents from "@/components/LiveResidents";
 import AppHome from "@/components/AppHome";
+import CardFan from "@/components/CardFan";
 import TwoWays from "@/components/TwoWays";
 import LoadoutStrip from "@/components/LoadoutStrip";
 import { deviceStrip, verticalStrip, heroCarousel } from "@/lib/strip-items";
@@ -191,7 +192,28 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const carShot = productShot("avtovizitka");
   const devices = deviceStrip(lang);
   const verticals = verticalStrip(lang);
-  const carousel = heroCarousel(lang);
+  // The card range leads, drawn rather than photographed and handed in exactly
+  // as it already stands under the order button — ten designs in one frame,
+  // which is the most varied thing we have and the thing being bought.
+  const carousel = [
+    {
+      href: "/qurilmalar/card",
+      // The fan draws itself at its own size — 300px tall and up to 36rem
+      // wide, sized for the room it has under the order button. The hero slot
+      // is a 3:2 box and narrower than that, so it is scaled to fit rather
+      // than rebuilt: same drawing, less of it.
+      node: (
+        <div className="flex h-full w-full items-center justify-center">
+          <div className="origin-center scale-[0.58] sm:scale-[0.7] lg:scale-[0.62]">
+            <CardFan handle={DEMO_HANDLE} />
+          </div>
+        </div>
+      ),
+      name: c.devices.card.name,
+      price: formatUZS(DEVICE_TYPES.find((d) => d.id === "card")!.price, lang),
+    },
+    ...heroCarousel(lang),
+  ];
   const familyShot = productShot("oila");
 
   return (

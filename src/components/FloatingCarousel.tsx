@@ -2,11 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import type React from "react";
 import { useEffect, useState } from "react";
 
 export type CarouselItem = {
   href: string;
-  src: string;
+  /** A photograph of the object, cut out. */
+  src?: string;
+  /** Or the thing drawn rather than photographed — the card range, as it is
+   *  already drawn under the order button, handed in whole. */
+  node?: React.ReactNode;
   name: string;
   price: string;
 };
@@ -65,19 +70,32 @@ export default function FloatingCarousel({
         {/* All of them are mounted and only one is opaque, so the swap is a
             cross-fade with nothing to load at the moment it happens. */}
         <div className="relative aspect-[3/2] w-full">
-          {items.map((it, i) => (
-            <Image
-              key={it.src}
-              src={it.src}
-              alt=""
-              fill
-              priority={i === 0}
-              sizes="(min-width: 1024px) 26rem, 80vw"
-              className={`float-bob object-contain drop-shadow-[0_28px_40px_rgba(0,0,0,0.55)] transition-opacity duration-700 ${
-                i === at ? "opacity-100" : "opacity-0"
-              }`}
-            />
-          ))}
+          {items.map((it, i) => {
+            const shown = i === at;
+            const fade = `transition-opacity duration-700 ${shown ? "opacity-100" : "opacity-0"}`;
+
+            // A drawn slide is handed in whole and gets no drop shadow of its
+            // own — it brings its own, and doubling them reads as a smudge.
+            return it.node ? (
+              <div
+                key={`node-${i}`}
+                aria-hidden={!shown}
+                className={`float-bob absolute inset-0 flex items-center justify-center ${fade}`}
+              >
+                {it.node}
+              </div>
+            ) : (
+              <Image
+                key={it.src}
+                src={it.src!}
+                alt=""
+                fill
+                priority={i === 0}
+                sizes="(min-width: 1024px) 26rem, 80vw"
+                className={`float-bob object-contain drop-shadow-[0_28px_40px_rgba(0,0,0,0.55)] ${fade}`}
+              />
+            );
+          })}
         </div>
 
         <div
@@ -92,21 +110,11 @@ export default function FloatingCarousel({
       </Link>
 
       {items.length > 1 && (
-        <div className="mt-3 flex justify-center gap-1.5">
-          {items.map((it, i) => (
-            <button
-              key={it.src}
-              type="button"
-              onClick={() => setAt(i)}
-              aria-label={it.name}
-              aria-current={i === at}
-              className={`h-1.5 rounded-full transition-all ${
-                i === at ? "w-5 bg-current opacity-70" : "w-1.5 bg-current opacity-25"
-              }`}
-            />
-          ))}
-        </div>
+        <p className="mt-3 text-center font-tabular text-[11px] opacity-40">
+          {at + 1} / {items.length}
+        </p>
       )}
+
     </div>
   );
 }
