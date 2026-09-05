@@ -231,6 +231,11 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 { href: "/biznes", label: s.navBusiness },
                 { href: "#savollar", label: s.navFaq },
                 { href: "/qurilmalar", label: s.navDevices },
+                // The layouts were reachable only by scrolling past the hero,
+                // the fork and both shelves — two and a half screens down, on
+                // a page nothing else links to. They are a destination, so
+                // they belong in the menu with the other destinations.
+                { href: "/katalog?bolim=layouts", label: s.navSamples },
                 { href: "/shaxsiy#tarif", label: s.navPlans },
                 { href: "/rezidentlar", label: s.navResidents },
                 { href: "/kabinet", label: s.navCabinet },
@@ -264,6 +269,12 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               className="transition-colors hover:text-white"
             >
               {s.navDevices}
+            </Link>
+            <Link
+              href="/katalog?bolim=layouts"
+              className="transition-colors hover:text-white"
+            >
+              {s.navSamples}
             </Link>
             <Link
               href="/rezidentlar"
