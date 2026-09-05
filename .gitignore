@@ -41,6 +41,11 @@ build/
 # Testing
 coverage/
 
+# The rows exported out of Supabase while moving the database. Real customer
+# data — names, addresses, phone numbers. It belongs in a backup off this
+# machine, never in a repository.
+/backend/db/kochirish/sbdata/
+
 # Secrets. Every application reads its own .env; none of them is committed.
 .env
 .env.*

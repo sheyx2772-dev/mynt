@@ -22,7 +22,7 @@ import (
 // deletes the reason.
 
 type promoListInput struct {
-	Limit int `query:"soni" minimum:"1" maximum:"200" default:"50"`
+	Limit int `query:"soni" minimum:"1" maximum:"200" default:"25"`
 	Skip  int `query:"otkazish" minimum:"0" default:"0"`
 }
 

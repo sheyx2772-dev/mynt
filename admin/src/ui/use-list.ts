@@ -13,7 +13,10 @@ import type { Sort } from "./data-table";
  */
 export function useList<K extends string>(
 	defaultSort: Sort<K>,
-	defaultSize = 50,
+	// The first rung of the size selector, and a screenful on a laptop without
+	// scrolling. A list that opens taller than the window makes the pager —
+	// the thing that says how much there is — the part nobody sees.
+	defaultSize = 25,
 ) {
 	const [search, setSearch] = useState("");
 	const [sort, setSortState] = useState<Sort<K>>(defaultSort);

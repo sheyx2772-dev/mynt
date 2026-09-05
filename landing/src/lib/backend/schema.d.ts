@@ -2943,7 +2943,7 @@ export interface components {
             dizayn?: string;
             /** @enum {string} */
             qurilma: "card" | "ring" | "bracelet";
-            /** @example aaa777 */
+            /** @example AAA777 */
             raqam: string;
         };
         PointsInputBody: {

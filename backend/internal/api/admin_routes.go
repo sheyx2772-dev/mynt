@@ -34,7 +34,7 @@ type adminOrdersInput struct {
 	// a list and falls back to the default, so nothing from here reaches SQL.
 	Sort       string `query:"tartib" enum:"raqam,xaridor,summa,holat,ochilgan" default:"ochilgan"`
 	Descending bool   `query:"teskari" default:"true"`
-	Limit      int    `query:"soni" minimum:"1" maximum:"200" default:"50"`
+	Limit      int    `query:"soni" minimum:"1" maximum:"200" default:"25"`
 	Skip       int    `query:"otkazish" minimum:"0" default:"0"`
 }
 
@@ -60,7 +60,7 @@ type adminHandlesInput struct {
 	Gifts      string `query:"sovga" enum:"hammasi,sovga,sotilgan" default:"hammasi"`
 	Sort       string `query:"tartib" enum:"raqam,egasi,tarif,tolangan,olingan" default:"olingan"`
 	Descending bool   `query:"teskari" default:"true"`
-	Limit      int    `query:"soni" minimum:"1" maximum:"200" default:"50"`
+	Limit      int    `query:"soni" minimum:"1" maximum:"200" default:"25"`
 	Skip       int    `query:"otkazish" minimum:"0" default:"0"`
 }
 
@@ -72,7 +72,7 @@ type adminAccountsInput struct {
 	Term       string `query:"qidiruv" maxLength:"80" required:"false" doc:"Email yoki telefon"`
 	Sort       string `query:"tartib" enum:"kim,raqamlar,tolagan,oxirgi_tolov,qoshilgan" default:"tolagan"`
 	Descending bool   `query:"teskari" default:"true"`
-	Limit      int    `query:"soni" minimum:"1" maximum:"200" default:"50"`
+	Limit      int    `query:"soni" minimum:"1" maximum:"200" default:"25"`
 	Skip       int    `query:"otkazish" minimum:"0" default:"0"`
 }
 
