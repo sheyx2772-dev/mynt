@@ -86,7 +86,7 @@ export default async function MenuAdminPage({
   // Not theirs, or the number is not a venue. Either way there is nothing here.
   if (!venue) notFound();
 
-  const categories = await getMenu(venue.id, "uz");
+  const categories = await getMenu(normalized, "uz");
   const w = venueWords(venue.kind, "uz");
 
   return (

@@ -118,10 +118,19 @@ export async function getVenueByHandle(handle: string): Promise<Venue | null> {
 
 /** The menu, in one language, grouped as it is drawn. */
 export async function getMenu(handle: string, lang: Lang = "uz"): Promise<MenuCategory[]> {
-  const { data, error } = await backend.GET("/profil/{raqam}/menyu", {
+  const { data, error, response } = await backend.GET("/profil/{raqam}/menyu", {
     params: { path: { raqam: handle }, query: { til: lang } },
   });
-  if (error || !data) return [];
+
+  if (error || !data) {
+    // A menu nobody has written yet and a menu we asked for wrongly both used
+    // to come back as an empty list, and the screen says "not filled in yet"
+    // for either. That is how three call sites passed a venue id where this
+    // wants a number and went unnoticed: every cafe menu on the site read as
+    // empty, and nothing anywhere said so. A refusal is not an empty menu.
+    console.error("getMenu refused", { handle, status: response?.status });
+    return [];
+  }
 
   return (data.bolimlar ?? []).map(toCategory);
 }

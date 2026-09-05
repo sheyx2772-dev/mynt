@@ -25,11 +25,11 @@ export default async function EditDishPage({
   const venue = await getOwnedVenue(normalized);
   if (!venue) notFound();
 
-  const item = await getMenuItem(venue.id);
+  const item = await getMenuItem(id);
   if (!item) notFound();
 
   const w = venueWords(venue.kind, "uz");
-  const categories = await getMenu(venue.id, "uz");
+  const categories = await getMenu(normalized, "uz");
 
   return (
     <PageShell surface="ink">

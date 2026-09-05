@@ -170,7 +170,7 @@ async function VanityHandlePage({
     const venue = await getVenueByHandle(normalized);
 
     if (venue) {
-      const categories = await getMenu(venue.id, lang);
+      const categories = await getMenu(normalized, lang);
       const w = venueWords(venue.kind, lang);
 
       // The tag on a hotel door says xona, the one on a table says stol, and
