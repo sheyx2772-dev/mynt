@@ -1,4 +1,11 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+/* Inter, because the landing site is Inter. The panel is the same brand
+   seen from the inside. */
+@import "@fontsource-variable/inter";
+
+@custom-variant dark (&:is(.dark *));
 
 /* The same tokens the landing site defines, because they are the same brand.
    Kept as CSS variables rather than imported from the other workspace: the two
@@ -13,9 +20,140 @@
   --color-flex-black: #0e0a1b;
 }
 
-body {
-  background: #ffffff;
-  color: var(--color-flex-black);
-  margin: 0;
-  font-family: ui-sans-serif, system-ui, sans-serif;
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: 'Inter Variable', system-ui, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* shadcn names a role — primary, muted, ring — and every component asks for the
+   role, never a colour. So the brand is set once, here, and the whole panel
+   follows. Changing --primary changes every button, tab and active page. */
+:root {
+  --background: #ffffff;
+  --foreground: var(--color-flex-black);
+
+  --card: #ffffff;
+  --card-foreground: var(--color-flex-black);
+  --popover: #ffffff;
+  --popover-foreground: var(--color-flex-black);
+
+  /* Lime carries dark text, not white: #abff09 is far too bright to put white
+     on, and the landing site's buttons already read this way. */
+  --primary: var(--color-lime);
+  --primary-foreground: var(--color-flex-black);
+
+  --secondary: oklch(from var(--color-flex-black) l c h / 5%);
+  --secondary-foreground: var(--color-flex-black);
+  --muted: oklch(from var(--color-flex-black) l c h / 4%);
+  --muted-foreground: oklch(from var(--color-flex-black) 0.55 0.02 h);
+  --accent: oklch(from var(--color-flex-black) l c h / 5%);
+  --accent-foreground: var(--color-flex-black);
+
+  --destructive: oklch(0.55 0.2 27);
+  --border: oklch(from var(--color-flex-black) l c h / 10%);
+  --input: oklch(from var(--color-flex-black) l c h / 12%);
+  /* The focus ring is the darkened lime: the brand lime on white is 1.2:1 and
+     a focus ring nobody can see is not a focus ring. */
+  --ring: var(--color-lime-ink);
+
+  --chart-1: var(--color-lime-ink);
+  --chart-2: oklch(0.55 0.02 300);
+  --chart-3: oklch(0.44 0.02 300);
+  --chart-4: oklch(0.37 0.02 300);
+  --chart-5: oklch(0.27 0.02 300);
+
+  --radius: 0.75rem;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: var(--color-flex-black);
+  --sidebar-primary: var(--color-lime);
+  --sidebar-primary-foreground: var(--color-flex-black);
+  --sidebar-accent: oklch(from var(--color-flex-black) l c h / 5%);
+  --sidebar-accent-foreground: var(--color-flex-black);
+  --sidebar-border: oklch(from var(--color-flex-black) l c h / 10%);
+  --sidebar-ring: var(--color-lime-ink);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }

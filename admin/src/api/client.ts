@@ -18,10 +18,10 @@ import type { paths } from "./schema";
 // production both are served from one domain: the browser never makes a
 // cross-origin request and the backend never needs a CORS policy to get wrong.
 export const api = createClient<paths>({
-  baseUrl: "/v1",
+	baseUrl: "/v1",
 
-  // The session cookie is sent, and only to this origin. `include` would send
-  // it cross-origin too, which is not wanted and would require the backend to
-  // name an allowed origin — one more thing to get wrong for no gain.
-  credentials: "same-origin",
+	// The session cookie is sent, and only to this origin. `include` would send
+	// it cross-origin too, which is not wanted and would require the backend to
+	// name an allowed origin — one more thing to get wrong for no gain.
+	credentials: "same-origin",
 });

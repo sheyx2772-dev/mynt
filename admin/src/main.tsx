@@ -13,22 +13,23 @@ import "./index.css";
 // monitor should not poll the backend all afternoon either, which is what
 // refetching on every window focus amounts to.
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 30_000,
-      refetchOnWindowFocus: false,
-      // A 401 is an answer, not a fault. Retrying it delays the sign-in screen
-      // by three round trips and cannot succeed.
-      retry: (failureCount, error) =>
-        !(error instanceof Response && error.status === 401) && failureCount < 2,
-    },
-  },
+	defaultOptions: {
+		queries: {
+			staleTime: 30_000,
+			refetchOnWindowFocus: false,
+			// A 401 is an answer, not a fault. Retrying it delays the sign-in screen
+			// by three round trips and cannot succeed.
+			retry: (failureCount, error) =>
+				!(error instanceof Response && error.status === 401) &&
+				failureCount < 2,
+		},
+	},
 });
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-  </StrictMode>,
+	<StrictMode>
+		<QueryClientProvider client={queryClient}>
+			<App />
+		</QueryClientProvider>
+	</StrictMode>,
 );

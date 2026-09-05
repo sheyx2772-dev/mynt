@@ -4,1808 +4,2198 @@
  */
 
 export interface paths {
-    "/boshqaruv/buyurtmalar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Buyurtmalar */
-        get: operations["boshqaruv-buyurtmalar"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/boshqaruv/promokodlar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Promokodlar */
-        get: operations["promokodlar"];
-        put?: never;
-        /** Yangi promokod */
-        post: operations["promokod-yaratish"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/boshqaruv/promokodlar/{kod}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * Kodni yoqish yoki o'chirish
-         * @description O'chirilgan kod ishlamaydi, lekin qolgan — nima uchun chegirma berilganini u aytadi.
-         */
-        put: operations["promokodni-yoqish"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/boshqaruv/raqamlar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Raqamlarni qidirish */
-        get: operations["boshqaruv-raqamlar"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/boshqaruv/sovga": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Raqamni sotmasdan berish
-         * @description Sabab yoziladi va hisobotda qoladi. Sovg'a sotuvdek ko'rinsa, birinchi oy raqamlari yolg'on bo'ladi.
-         */
-        post: operations["boshqaruv-sovga"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/boshqaruv/umumiy": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Panelning bosh sahifasi */
-        get: operations["boshqaruv-umumiy"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/buyurtmalar/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Buyurtma holati
-         * @description To'lovdan keyin shu yerdan tekshiriladi.
-         */
-        get: operations["buyurtma"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/chiqish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Shu qurilmadan chiqish
-         * @description Boshqa qurilmalardagi sessiyalarga tegmaydi.
-         */
-        post: operations["chiqish"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/kirish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Kirish havolasini so'rash
-         * @description Manzilga bir martalik havola yuboradi. Javob har doim bir xil.
-         */
-        post: operations["kirish-sorash"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/kirish/parol": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Email va parol bilan kirish
-         * @description Parolni o'rnatish uchun avval havola bilan kirib, keyin uni belgilang.
-         */
-        post: operations["kirish-parol"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/kirish/tasdiq": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Havolani sarflab, sessiya olish
-         * @description Havola bir marta ishlaydi va 15 daqiqadan keyin kuchini yo'qotadi.
-         */
-        post: operations["kirish-tasdiqlash"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/men": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Hozir kim kirgan */
-        get: operations["men"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/men/parol": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * O'z parolini belgilash yoki almashtirish
-         * @description Kirgan holda. Parolni unutgan bo'lsangiz — havola bilan kiring va shu yerdan yangisini qo'ying.
-         */
-        put: operations["parolni-belgilash"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/profil/{raqam}/vizitka": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Profilga kontakt qoldirish
-         * @description Hisob talab qilinmaydi — bu kartani tegizgan odam to'ldiradigan forma.
-         */
-        post: operations["vizitka-qoldirish"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/qidirish/{raqam}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Raqam boshmi va qancha turadi
-         * @description Hisob talab qilinmaydi — bu qidiruv.
-         */
-        get: operations["raqamni-tekshirish"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/qidirish/{raqam}/olish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Raqamni band qilib, buyurtma ochish
-         * @description Raqam 30 daqiqaga band qilinadi va to'lov tasdiqlangach egangizga o'tadi.
-         */
-        post: operations["raqamni-band-qilish"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/raqamlar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Hisobingizdagi raqamlar */
-        get: operations["raqamlarim"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/raqamlar/{raqam}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Bitta raqam */
-        get: operations["raqam"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/raqamlar/{raqam}/profil": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * Profilni tahrirlash
-         * @description Tarif, holat va egalik bu yerdan o'zgarmaydi — ular profilning qismi emas.
-         */
-        put: operations["profilni-saqlash"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/raqamlar/{raqam}/statistika": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Tashriflar, bosishlar va ular qayerdan kelgani
-         * @description Tashrifchi haqidagi hech narsa saqlanmaydi va qaytarilmaydi — faqat yig'ma sonlar.
-         */
-        get: operations["statistika"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/raqamlar/{raqam}/vizitkalar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Raqamga qoldirilgan kontaktlar */
-        get: operations["vizitkalar"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/raqamlar/{raqam}/vizitkalar/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Bitta kontaktni o'chirish
-         * @description Odam o'z ma'lumotini olib tashlashni so'rashi mumkin, va egasi buni qila olishi kerak.
-         */
-        delete: operations["vizitkani-ochirish"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/sogliq": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Baza bilan birga tekshiruv */
-        get: operations["sogliq"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/tirik": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Jarayon ishlayaptimi */
-        get: operations["tirik"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+	"/boshqaruv/buyurtmalar": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Buyurtmalar */
+		get: operations["boshqaruv-buyurtmalar"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/boshqaruv/buyurtmalar/{id}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Bitta buyurtma — to'liq
+		 * @description Kim, qachon, qancha, qaysi to'lov, qaysi promokod, va provayder nima yozgani.
+		 */
+		get: operations["boshqaruv-buyurtma"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/boshqaruv/hisoblar": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Mijozlar
+		 * @description Kim, nechta raqam, jami qancha to'lagan, oxirgi to'lov qachon.
+		 */
+		get: operations["boshqaruv-hisoblar"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/boshqaruv/hisoblar/{id}/buyurtmalar": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Bitta mijozning hamma buyurtmalari */
+		get: operations["boshqaruv-hisob-buyurtmalari"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/boshqaruv/promokodlar": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Promokodlar */
+		get: operations["promokodlar"];
+		put?: never;
+		/** Yangi promokod */
+		post: operations["promokod-yaratish"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/boshqaruv/promokodlar/{kod}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		/**
+		 * Kodni yoqish yoki o'chirish
+		 * @description O'chirilgan kod ishlamaydi, lekin qolgan — nima uchun chegirma berilganini u aytadi.
+		 */
+		put: operations["promokodni-yoqish"];
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/boshqaruv/raqamlar": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Raqamlarni qidirish */
+		get: operations["boshqaruv-raqamlar"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/boshqaruv/sovga": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Raqamni sotmasdan berish
+		 * @description Sabab yoziladi va hisobotda qoladi. Sovg'a sotuvdek ko'rinsa, birinchi oy raqamlari yolg'on bo'ladi.
+		 */
+		post: operations["boshqaruv-sovga"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/boshqaruv/umumiy": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Panelning bosh sahifasi */
+		get: operations["boshqaruv-umumiy"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/buyurtmalar/{id}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Buyurtma holati
+		 * @description To'lovdan keyin shu yerdan tekshiriladi.
+		 */
+		get: operations["buyurtma"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/chiqish": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Shu qurilmadan chiqish
+		 * @description Boshqa qurilmalardagi sessiyalarga tegmaydi.
+		 */
+		post: operations["chiqish"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/kirish": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Kirish havolasini so'rash
+		 * @description Manzilga bir martalik havola yuboradi. Javob har doim bir xil.
+		 */
+		post: operations["kirish-sorash"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/kirish/parol": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Email va parol bilan kirish
+		 * @description Parolni o'rnatish uchun avval havola bilan kirib, keyin uni belgilang.
+		 */
+		post: operations["kirish-parol"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/kirish/tasdiq": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Havolani sarflab, sessiya olish
+		 * @description Havola bir marta ishlaydi va 15 daqiqadan keyin kuchini yo'qotadi.
+		 */
+		post: operations["kirish-tasdiqlash"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/kirish/telefon": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Raqamga kod yuborish
+		 * @description Kod 5 daqiqa amal qiladi va uch marta xato kiritilsa kuchini yo'qotadi.
+		 */
+		post: operations["telefon-kod"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/kirish/telefon/tasdiq": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Kodni kiritib, sessiya olish */
+		post: operations["telefon-tasdiq"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/men": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Hozir kim kirgan */
+		get: operations["men"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/men/parol": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		/**
+		 * O'z parolini belgilash yoki almashtirish
+		 * @description Kirgan holda. Parolni unutgan bo'lsangiz — havola bilan kiring va shu yerdan yangisini qo'ying.
+		 */
+		put: operations["parolni-belgilash"];
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/profil/{raqam}/vizitka": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Profilga kontakt qoldirish
+		 * @description Hisob talab qilinmaydi — bu kartani tegizgan odam to'ldiradigan forma.
+		 */
+		post: operations["vizitka-qoldirish"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/qidirish/{raqam}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Raqam boshmi va qancha turadi
+		 * @description Hisob talab qilinmaydi — bu qidiruv.
+		 */
+		get: operations["raqamni-tekshirish"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/qidirish/{raqam}/olish": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/**
+		 * Raqamni band qilib, buyurtma ochish
+		 * @description Raqam 30 daqiqaga band qilinadi va to'lov tasdiqlangach egangizga o'tadi.
+		 */
+		post: operations["raqamni-band-qilish"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/raqamlar": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Hisobingizdagi raqamlar */
+		get: operations["raqamlarim"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/raqamlar/{raqam}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Bitta raqam */
+		get: operations["raqam"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/raqamlar/{raqam}/profil": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		/**
+		 * Profilni tahrirlash
+		 * @description Tarif, holat va egalik bu yerdan o'zgarmaydi — ular profilning qismi emas.
+		 */
+		put: operations["profilni-saqlash"];
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/raqamlar/{raqam}/statistika": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * Tashriflar, bosishlar va ular qayerdan kelgani
+		 * @description Tashrifchi haqidagi hech narsa saqlanmaydi va qaytarilmaydi — faqat yig'ma sonlar.
+		 */
+		get: operations["statistika"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/raqamlar/{raqam}/vizitkalar": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Raqamga qoldirilgan kontaktlar */
+		get: operations["vizitkalar"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/raqamlar/{raqam}/vizitkalar/{id}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		/**
+		 * Bitta kontaktni o'chirish
+		 * @description Odam o'z ma'lumotini olib tashlashni so'rashi mumkin, va egasi buni qila olishi kerak.
+		 */
+		delete: operations["vizitkani-ochirish"];
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/sogliq": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Baza bilan birga tekshiruv */
+		get: operations["sogliq"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/tirik": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Jarayon ishlayaptimi */
+		get: operations["tirik"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        AccountBody: {
-            email: string;
-            id: string;
-        };
-        AdminHandle: {
-            egasi?: string;
-            holat: string;
-            ism?: string;
-            /** Format: int64 */
-            korishlar: number;
-            /** Format: date-time */
-            olingan?: string;
-            raqam: string;
-            sovga_sababi?: string;
-            tarif: string;
-            /** Format: int64 */
-            tolangan?: number;
-        };
-        AdminHandlesOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/AdminHandlesOutputBody.json
-             */
-            readonly $schema?: string;
-            raqamlar: components["schemas"]["AdminHandle"][] | null;
-        };
-        AdminOrder: {
-            holat: string;
-            id: string;
-            /** Format: date-time */
-            ochilgan?: string;
-            raqam: string;
-            /** Format: int64 */
-            summa: number;
-            /** Format: date-time */
-            tolangan?: string;
-            tolov?: string;
-            turi: string;
-            xaridor: string;
-        };
-        AdminOrdersOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/AdminOrdersOutputBody.json
-             */
-            readonly $schema?: string;
-            buyurtmalar: components["schemas"]["AdminOrder"][] | null;
-        };
-        AliveOutputHeader: {
-            CacheControl: string;
-        };
-        BuyInputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/BuyInputBody.json
-             */
-            readonly $schema?: string;
-            ism: string;
-            kod?: string;
-        };
-        Checkout: {
-            click?: string;
-            payme?: string;
-        };
-        ConfirmLinkInputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/ConfirmLinkInputBody.json
-             */
-            readonly $schema?: string;
-            /** @description Xatdagi havoladan olingan token */
-            token: string;
-        };
-        Day: {
-            /** Format: int64 */
-            bosishlar: number;
-            /** Format: int64 */
-            korishlar: number;
-            /** @example 2026-09-04 */
-            kun: string;
-            /** Format: int64 */
-            tashrifchilar: number;
-        };
-        Discount: {
-            /** Format: int64 */
-            chegirma: number;
-            kod: string;
-            /** Format: int32 */
-            oylar: number;
-        };
-        ErrorDetail: {
-            /** @description Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id' */
-            location?: string;
-            /** @description Error message text */
-            message?: string;
-            /** @description The value at the given location */
-            value?: unknown;
-        };
-        ErrorModel: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/ErrorModel.json
-             */
-            readonly $schema?: string;
-            /**
-             * @description A human-readable explanation specific to this occurrence of the problem.
-             * @example Property foo is required but is missing.
-             */
-            detail?: string;
-            /** @description Optional list of individual error details */
-            errors?: components["schemas"]["ErrorDetail"][] | null;
-            /**
-             * Format: uri
-             * @description A URI reference that identifies the specific occurrence of the problem.
-             * @example https://example.com/error-log/abc123
-             */
-            instance?: string;
-            /**
-             * Format: int64
-             * @description HTTP status code
-             * @example 400
-             */
-            status?: number;
-            /**
-             * @description A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
-             * @example Bad Request
-             */
-            title?: string;
-            /**
-             * Format: uri
-             * @description A URI reference to human-readable documentation for the error.
-             * @default about:blank
-             * @example https://example.com/errors/example
-             */
-            type: string;
-        };
-        GiveInputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/GiveInputBody.json
-             */
-            readonly $schema?: string;
-            /** @description Qabul qiluvchining mavjud hisobi */
-            email: string;
-            ism?: string;
-            /** @example MYN042 */
-            raqam: string;
-            /** @description Nima uchun berildi — hisobotda qoladi */
-            sababi: string;
-        };
-        GiveOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/GiveOutputBody.json
-             */
-            readonly $schema?: string;
-            raqam: string;
-        };
-        Handle: {
-            bio: string;
-            dizayn: string;
-            email?: string;
-            havolalar: components["schemas"]["Link"][] | null;
-            /** @enum {string} */
-            holat: "available" | "reserved" | "claimed";
-            ism: string;
-            kompaniya?: string;
-            /** Format: int64 */
-            korishlar: number;
-            lavozim?: string;
-            /** Format: date-time */
-            olingan?: string;
-            /** @enum {string} */
-            qurilma: "card" | "ring" | "bracelet";
-            /** @example MYN042 */
-            raqam: string;
-            rasm?: string;
-            shahar?: string;
-            /** @enum {string} */
-            tarif: "free" | "premium";
-            teglar: string[] | null;
-            telefon?: string;
-            xizmatlar: components["schemas"]["Service"][] | null;
-        };
-        HandleListOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/HandleListOutputBody.json
-             */
-            readonly $schema?: string;
-            raqamlar: components["schemas"]["Handle"][] | null;
-        };
-        HandleOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/HandleOutputBody.json
-             */
-            readonly $schema?: string;
-            raqam: components["schemas"]["Handle"];
-        };
-        HealthOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/HealthOutputBody.json
-             */
-            readonly $schema?: string;
-            /**
-             * @description Bazaning holati
-             * @example ok
-             */
-            database: string;
-            /** @description Baza javob berdimi */
-            ok: boolean;
-        };
-        Input: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/Input.json
-             */
-            readonly $schema?: string;
-            email?: string;
-            /** @description Majburiy */
-            ism: string;
-            izoh?: string;
-            kompaniya?: string;
-            /** @enum {string} */
-            manba?: "nfc" | "qr" | "share";
-            telefon?: string;
-        };
-        Lead: {
-            email?: string;
-            /** Format: int64 */
-            id: number;
-            ism: string;
-            izoh?: string;
-            kompaniya?: string;
-            /** @enum {string} */
-            manba?: "nfc" | "qr" | "share";
-            telefon?: string;
-            /** Format: date-time */
-            vaqt: string;
-        };
-        LeadListOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/LeadListOutputBody.json
-             */
-            readonly $schema?: string;
-            vizitkalar: components["schemas"]["Lead"][] | null;
-        };
-        LeaveLeadOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/LeaveLeadOutputBody.json
-             */
-            readonly $schema?: string;
-            message: string;
-        };
-        Link: {
-            href: string;
-            label: string;
-        };
-        LinkInput: {
-            booking?: string;
-            facebook?: string;
-            instagram?: string;
-            linkedin?: string;
-            telegram?: string;
-            website?: string;
-            whatsapp?: string;
-            youtube?: string;
-        };
-        LinkStat: {
-            /** Format: int64 */
-            bosishlar: number;
-            havola: string;
-        };
-        MeOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/MeOutputBody.json
-             */
-            readonly $schema?: string;
-            account: components["schemas"]["AccountBody"];
-        };
-        NewPromoCode: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/NewPromoCode.json
-             */
-            readonly $schema?: string;
-            bir_hisob_bir_marta?: boolean;
-            /** @description YYYY-MM-DD */
-            boshlanishi?: string;
-            /** Format: int64 */
-            eng_kam_summa?: number;
-            /**
-             * Format: int64
-             * @description Foizli kod uchun yuqori chegara, so'mda
-             */
-            eng_kop_chegirma?: number;
-            izoh?: string;
-            /** @example YOZ2026 */
-            kod: string;
-            /**
-             * Format: int32
-             * @description 0 — cheksiz
-             */
-            necha_marta?: number;
-            /** @description handle, subscription, device, venue — bo'sh bo'lsa hammasi */
-            nimaga?: string[] | null;
-            /** Format: int32 */
-            qiymati: number;
-            /** @description YYYY-MM-DD */
-            tugashi?: string;
-            /** @enum {string} */
-            turi: "percent" | "amount" | "months";
-        };
-        Order: {
-            /** Format: date-time */
-            band_muddati?: string;
-            chegirma?: components["schemas"]["Discount"];
-            /** @enum {string} */
-            holat: "pending" | "paid" | "cancelled" | "failed";
-            id: string;
-            raqam: string;
-            /** Format: int64 */
-            summa: number;
-            tolov?: components["schemas"]["Checkout"];
-        };
-        OrderOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/OrderOutputBody.json
-             */
-            readonly $schema?: string;
-            buyurtma: components["schemas"]["Order"];
-        };
-        Overview: {
-            /** Format: int64 */
-            band: number;
-            /** Format: int64 */
-            kutilayotgan_buyurtmalar: number;
-            /** Format: int64 */
-            olingan: number;
-            /** Format: int64 */
-            tolangan_buyurtmalar: number;
-            /** Format: int64 */
-            tushum: number;
-            /** Format: int64 */
-            vizitkalar: number;
-        };
-        OverviewOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/OverviewOutputBody.json
-             */
-            readonly $schema?: string;
-            umumiy: components["schemas"]["Overview"];
-        };
-        PasswordInputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/PasswordInputBody.json
-             */
-            readonly $schema?: string;
-            email: string;
-            parol: string;
-        };
-        ProfileInput: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/ProfileInput.json
-             */
-            readonly $schema?: string;
-            bio?: string;
-            cardDesign?: string;
-            city?: string;
-            company?: string;
-            contactEmail?: string;
-            deviceType?: string;
-            links?: components["schemas"]["LinkInput"];
-            /** @description Yagona majburiy maydon */
-            name: string;
-            phone?: string;
-            position?: string;
-            services?: components["schemas"]["Service"][] | null;
-            /** @description Vergul yoki bo'sh joy bilan ajratilgan */
-            tags?: string;
-        };
-        PromoActiveInputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/PromoActiveInputBody.json
-             */
-            readonly $schema?: string;
-            faol: boolean;
-        };
-        PromoCode: {
-            bir_hisob_bir_marta: boolean;
-            /** Format: date-time */
-            boshlanishi?: string;
-            /** Format: int64 */
-            eng_kam_summa?: number;
-            /** Format: int64 */
-            eng_kop_chegirma?: number;
-            faol: boolean;
-            /** Format: int32 */
-            ishlatilgan: number;
-            izoh?: string;
-            /** Format: int64 */
-            kimlar_ishlatgan: number;
-            kod: string;
-            /** Format: int32 */
-            necha_marta?: number;
-            nimaga: string[] | null;
-            /** Format: int32 */
-            qiymati: number;
-            /** Format: date-time */
-            tugashi?: string;
-            /** @enum {string} */
-            turi: "percent" | "amount" | "months";
-        };
-        PromoListOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/PromoListOutputBody.json
-             */
-            readonly $schema?: string;
-            kodlar: components["schemas"]["PromoCode"][] | null;
-        };
-        PromoOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/PromoOutputBody.json
-             */
-            readonly $schema?: string;
-            kod: components["schemas"]["PromoCode"];
-        };
-        Report: {
-            havolalar: components["schemas"]["LinkStat"][] | null;
-            /** Format: int64 */
-            jami_bosishlar: number;
-            /** Format: int64 */
-            jami_korishlar: number;
-            /** Format: int64 */
-            jami_tashrifchilar_kunlik: number;
-            kunlar: components["schemas"]["Day"][] | null;
-            manbalar: components["schemas"]["SourceStat"][] | null;
-        };
-        RequestLinkInputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/RequestLinkInputBody.json
-             */
-            readonly $schema?: string;
-            /** @description Kirish havolasi yuboriladigan manzil */
-            email: string;
-        };
-        RequestLinkOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/RequestLinkOutputBody.json
-             */
-            readonly $schema?: string;
-            message: string;
-        };
-        Service: {
-            name: string;
-            price: string;
-        };
-        SessionOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/SessionOutputBody.json
-             */
-            readonly $schema?: string;
-            account: components["schemas"]["AccountBody"];
-            /** @description Sessiya kaliti — faqat mobil ilova uchun */
-            token: string;
-        };
-        SetPasswordInputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/SetPasswordInputBody.json
-             */
-            readonly $schema?: string;
-            /** @description Kamida 10 ta belgi */
-            parol: string;
-        };
-        SourceStat: {
-            /** Format: int64 */
-            korishlar: number;
-            /** @example nfc */
-            manba: string;
-        };
-        State: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/State.json
-             */
-            readonly $schema?: string;
-            bosh: boolean;
-            harflar: string;
-            /** Format: int64 */
-            narx: number;
-            raqam: string;
-            raqamlar: string;
-        };
-        StatsOutputBody: {
-            /**
-             * Format: uri
-             * @description A URL to the JSON Schema for this object.
-             * @example /v1/schemas/StatsOutputBody.json
-             */
-            readonly $schema?: string;
-            hisobot: components["schemas"]["Report"];
-            /** Format: int64 */
-            kun: number;
-        };
-    };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+	schemas: {
+		Account: {
+			davlat?: string;
+			email?: string;
+			id: string;
+			/** Format: date-time */
+			oxirgi_tolov?: string;
+			/** Format: date-time */
+			qoshilgan?: string;
+			/** Format: int64 */
+			raqamlar: number;
+			telefon?: string;
+			/** Format: int64 */
+			tolagan: number;
+		};
+		AccountBody: {
+			email: string;
+			id: string;
+		};
+		AdminAccountOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/AdminAccountOutputBody.json
+			 */
+			readonly $schema?: string;
+			buyurtmalar: components["schemas"]["AdminOrder"][] | null;
+		};
+		AdminHandle: {
+			egasi?: string;
+			holat: string;
+			ism?: string;
+			/** Format: int64 */
+			korishlar: number;
+			/** Format: date-time */
+			olingan?: string;
+			raqam: string;
+			sovga_sababi?: string;
+			tarif: string;
+			/** Format: int64 */
+			tolangan?: number;
+		};
+		AdminOrder: {
+			holat: string;
+			id: string;
+			/** Format: date-time */
+			ochilgan?: string;
+			raqam: string;
+			/** Format: int64 */
+			summa: number;
+			/** Format: date-time */
+			tolangan?: string;
+			tolov?: string;
+			turi: string;
+			xaridor: string;
+		};
+		AdminOrderOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/AdminOrderOutputBody.json
+			 */
+			readonly $schema?: string;
+			buyurtma: components["schemas"]["OrderDetail"];
+		};
+		AliveOutputHeader: {
+			CacheControl: string;
+		};
+		BuyInputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/BuyInputBody.json
+			 */
+			readonly $schema?: string;
+			ism: string;
+			kod?: string;
+		};
+		Checkout: {
+			click?: string;
+			payme?: string;
+		};
+		ConfirmLinkInputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/ConfirmLinkInputBody.json
+			 */
+			readonly $schema?: string;
+			/** @description Xatdagi havoladan olingan token */
+			token: string;
+		};
+		Day: {
+			/** Format: int64 */
+			bosishlar: number;
+			/** Format: int64 */
+			korishlar: number;
+			/** @example 2026-09-04 */
+			kun: string;
+			/** Format: int64 */
+			tashrifchilar: number;
+		};
+		Discount: {
+			/** Format: int64 */
+			chegirma: number;
+			kod: string;
+			/** Format: int32 */
+			oylar: number;
+		};
+		ErrorDetail: {
+			/** @description Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id' */
+			location?: string;
+			/** @description Error message text */
+			message?: string;
+			/** @description The value at the given location */
+			value?: unknown;
+		};
+		ErrorModel: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/ErrorModel.json
+			 */
+			readonly $schema?: string;
+			/**
+			 * @description A human-readable explanation specific to this occurrence of the problem.
+			 * @example Property foo is required but is missing.
+			 */
+			detail?: string;
+			/** @description Optional list of individual error details */
+			errors?: components["schemas"]["ErrorDetail"][] | null;
+			/**
+			 * Format: uri
+			 * @description A URI reference that identifies the specific occurrence of the problem.
+			 * @example https://example.com/error-log/abc123
+			 */
+			instance?: string;
+			/**
+			 * Format: int64
+			 * @description HTTP status code
+			 * @example 400
+			 */
+			status?: number;
+			/**
+			 * @description A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+			 * @example Bad Request
+			 */
+			title?: string;
+			/**
+			 * Format: uri
+			 * @description A URI reference to human-readable documentation for the error.
+			 * @default about:blank
+			 * @example https://example.com/errors/example
+			 */
+			type: string;
+		};
+		GiveInputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/GiveInputBody.json
+			 */
+			readonly $schema?: string;
+			/** @description Qabul qiluvchining mavjud hisobi */
+			email: string;
+			ism?: string;
+			/** @example MYN042 */
+			raqam: string;
+			/** @description Nima uchun berildi — hisobotda qoladi */
+			sababi: string;
+		};
+		GiveOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/GiveOutputBody.json
+			 */
+			readonly $schema?: string;
+			raqam: string;
+		};
+		Handle: {
+			bio: string;
+			dizayn: string;
+			email?: string;
+			havolalar: components["schemas"]["Link"][] | null;
+			/** @enum {string} */
+			holat: "available" | "reserved" | "claimed";
+			ism: string;
+			kompaniya?: string;
+			/** Format: int64 */
+			korishlar: number;
+			lavozim?: string;
+			/** Format: date-time */
+			olingan?: string;
+			/** @enum {string} */
+			qurilma: "card" | "ring" | "bracelet";
+			/** @example MYN042 */
+			raqam: string;
+			rasm?: string;
+			shahar?: string;
+			/** @enum {string} */
+			tarif: "free" | "premium";
+			teglar: string[] | null;
+			telefon?: string;
+			xizmatlar: components["schemas"]["Service"][] | null;
+		};
+		HandleListOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/HandleListOutputBody.json
+			 */
+			readonly $schema?: string;
+			raqamlar: components["schemas"]["Handle"][] | null;
+		};
+		HandleOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/HandleOutputBody.json
+			 */
+			readonly $schema?: string;
+			raqam: components["schemas"]["Handle"];
+		};
+		HealthOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/HealthOutputBody.json
+			 */
+			readonly $schema?: string;
+			/**
+			 * @description Bazaning holati
+			 * @example ok
+			 */
+			database: string;
+			/** @description Baza javob berdimi */
+			ok: boolean;
+		};
+		Input: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/Input.json
+			 */
+			readonly $schema?: string;
+			email?: string;
+			/** @description Majburiy */
+			ism: string;
+			izoh?: string;
+			kompaniya?: string;
+			/** @enum {string} */
+			manba?: "nfc" | "qr" | "share";
+			telefon?: string;
+		};
+		Lead: {
+			email?: string;
+			/** Format: int64 */
+			id: number;
+			ism: string;
+			izoh?: string;
+			kompaniya?: string;
+			/** @enum {string} */
+			manba?: "nfc" | "qr" | "share";
+			telefon?: string;
+			/** Format: date-time */
+			vaqt: string;
+		};
+		LeadListOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/LeadListOutputBody.json
+			 */
+			readonly $schema?: string;
+			vizitkalar: components["schemas"]["Lead"][] | null;
+		};
+		LeaveLeadOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/LeaveLeadOutputBody.json
+			 */
+			readonly $schema?: string;
+			message: string;
+		};
+		Link: {
+			href: string;
+			label: string;
+		};
+		LinkInput: {
+			booking?: string;
+			facebook?: string;
+			instagram?: string;
+			linkedin?: string;
+			telegram?: string;
+			website?: string;
+			whatsapp?: string;
+			youtube?: string;
+		};
+		LinkStat: {
+			/** Format: int64 */
+			bosishlar: number;
+			havola: string;
+		};
+		MeOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/MeOutputBody.json
+			 */
+			readonly $schema?: string;
+			account: components["schemas"]["AccountBody"];
+		};
+		NewPromoCode: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/NewPromoCode.json
+			 */
+			readonly $schema?: string;
+			bir_hisob_bir_marta?: boolean;
+			/** @description YYYY-MM-DD */
+			boshlanishi?: string;
+			/** Format: int64 */
+			eng_kam_summa?: number;
+			/**
+			 * Format: int64
+			 * @description Foizli kod uchun yuqori chegara, so'mda
+			 */
+			eng_kop_chegirma?: number;
+			izoh?: string;
+			/** @example YOZ2026 */
+			kod: string;
+			/**
+			 * Format: int32
+			 * @description 0 — cheksiz
+			 */
+			necha_marta?: number;
+			/** @description handle, subscription, device, venue — bo'sh bo'lsa hammasi */
+			nimaga?: string[] | null;
+			/** Format: int32 */
+			qiymati: number;
+			/** @description YYYY-MM-DD */
+			tugashi?: string;
+			/** @enum {string} */
+			turi: "percent" | "amount" | "months";
+		};
+		Order: {
+			/** Format: date-time */
+			band_muddati?: string;
+			chegirma?: components["schemas"]["Discount"];
+			/** @enum {string} */
+			holat: "pending" | "paid" | "cancelled" | "failed";
+			id: string;
+			raqam: string;
+			/** Format: int64 */
+			summa: number;
+			tolov?: components["schemas"]["Checkout"];
+		};
+		OrderDetail: {
+			/** Format: date-time */
+			bekor_qilingan?: string;
+			/** Format: int64 */
+			chegirma?: number;
+			holat: string;
+			id: string;
+			/** Format: date-time */
+			ochilgan?: string;
+			/** Format: int32 */
+			oylar?: number;
+			promokod?: string;
+			raqam: string;
+			/** Format: int64 */
+			summa: number;
+			/** Format: date-time */
+			tolangan?: string;
+			tolov?: string;
+			tolov_id?: string;
+			tranzaksiyalar: components["schemas"]["Transaction"][] | null;
+			turi: string;
+			xaridor: string;
+			xaridor_id?: string;
+		};
+		OrderOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/OrderOutputBody.json
+			 */
+			readonly $schema?: string;
+			buyurtma: components["schemas"]["Order"];
+		};
+		Overview: {
+			/** Format: int64 */
+			band: number;
+			/** Format: int64 */
+			kutilayotgan_buyurtmalar: number;
+			/** Format: int64 */
+			olingan: number;
+			/** Format: int64 */
+			tolangan_buyurtmalar: number;
+			/** Format: int64 */
+			tushum: number;
+			/** Format: int64 */
+			vizitkalar: number;
+		};
+		OverviewOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/OverviewOutputBody.json
+			 */
+			readonly $schema?: string;
+			umumiy: components["schemas"]["Overview"];
+		};
+		PageAccount: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/PageAccount.json
+			 */
+			readonly $schema?: string;
+			/** Format: int64 */
+			jami: number;
+			/** Format: int32 */
+			otkazilgan: number;
+			royxat: components["schemas"]["Account"][] | null;
+			/** Format: int32 */
+			soni: number;
+		};
+		PageAdminHandle: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/PageAdminHandle.json
+			 */
+			readonly $schema?: string;
+			/** Format: int64 */
+			jami: number;
+			/** Format: int32 */
+			otkazilgan: number;
+			royxat: components["schemas"]["AdminHandle"][] | null;
+			/** Format: int32 */
+			soni: number;
+		};
+		PageAdminOrder: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/PageAdminOrder.json
+			 */
+			readonly $schema?: string;
+			/** Format: int64 */
+			jami: number;
+			/** Format: int32 */
+			otkazilgan: number;
+			royxat: components["schemas"]["AdminOrder"][] | null;
+			/** Format: int32 */
+			soni: number;
+		};
+		PagePromoCode: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/PagePromoCode.json
+			 */
+			readonly $schema?: string;
+			/** Format: int64 */
+			jami: number;
+			/** Format: int32 */
+			otkazilgan: number;
+			royxat: components["schemas"]["PromoCode"][] | null;
+			/** Format: int32 */
+			soni: number;
+		};
+		PasswordInputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/PasswordInputBody.json
+			 */
+			readonly $schema?: string;
+			email: string;
+			parol: string;
+		};
+		PhoneCodeInputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/PhoneCodeInputBody.json
+			 */
+			readonly $schema?: string;
+			kod: string;
+			telefon: string;
+		};
+		PhoneInputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/PhoneInputBody.json
+			 */
+			readonly $schema?: string;
+			/** @example +998 90 123 45 67 */
+			telefon: string;
+		};
+		PhoneSentOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/PhoneSentOutputBody.json
+			 */
+			readonly $schema?: string;
+			message: string;
+		};
+		ProfileInput: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/ProfileInput.json
+			 */
+			readonly $schema?: string;
+			bio?: string;
+			cardDesign?: string;
+			city?: string;
+			company?: string;
+			contactEmail?: string;
+			deviceType?: string;
+			links?: components["schemas"]["LinkInput"];
+			/** @description Yagona majburiy maydon */
+			name: string;
+			phone?: string;
+			position?: string;
+			services?: components["schemas"]["Service"][] | null;
+			/** @description Vergul yoki bo'sh joy bilan ajratilgan */
+			tags?: string;
+		};
+		PromoActiveInputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/PromoActiveInputBody.json
+			 */
+			readonly $schema?: string;
+			faol: boolean;
+		};
+		PromoCode: {
+			bir_hisob_bir_marta: boolean;
+			/** Format: date-time */
+			boshlanishi?: string;
+			/** Format: int64 */
+			eng_kam_summa?: number;
+			/** Format: int64 */
+			eng_kop_chegirma?: number;
+			faol: boolean;
+			/** Format: int32 */
+			ishlatilgan: number;
+			izoh?: string;
+			/** Format: int64 */
+			kimlar_ishlatgan: number;
+			kod: string;
+			/** Format: int32 */
+			necha_marta?: number;
+			nimaga: string[] | null;
+			/** Format: int32 */
+			qiymati: number;
+			/** Format: date-time */
+			tugashi?: string;
+			/** @enum {string} */
+			turi: "percent" | "amount" | "months";
+		};
+		PromoOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/PromoOutputBody.json
+			 */
+			readonly $schema?: string;
+			kod: components["schemas"]["PromoCode"];
+		};
+		Report: {
+			havolalar: components["schemas"]["LinkStat"][] | null;
+			/** Format: int64 */
+			jami_bosishlar: number;
+			/** Format: int64 */
+			jami_korishlar: number;
+			/** Format: int64 */
+			jami_tashrifchilar_kunlik: number;
+			kunlar: components["schemas"]["Day"][] | null;
+			manbalar: components["schemas"]["SourceStat"][] | null;
+		};
+		RequestLinkInputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/RequestLinkInputBody.json
+			 */
+			readonly $schema?: string;
+			/** @description Kirish havolasi yuboriladigan manzil */
+			email: string;
+		};
+		RequestLinkOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/RequestLinkOutputBody.json
+			 */
+			readonly $schema?: string;
+			message: string;
+		};
+		Service: {
+			name: string;
+			price: string;
+		};
+		SessionOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/SessionOutputBody.json
+			 */
+			readonly $schema?: string;
+			account: components["schemas"]["AccountBody"];
+			/** @description Sessiya kaliti — faqat mobil ilova uchun */
+			token: string;
+		};
+		SetPasswordInputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/SetPasswordInputBody.json
+			 */
+			readonly $schema?: string;
+			/** @description Kamida 10 ta belgi */
+			parol: string;
+		};
+		SourceStat: {
+			/** Format: int64 */
+			korishlar: number;
+			/** @example nfc */
+			manba: string;
+		};
+		State: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/State.json
+			 */
+			readonly $schema?: string;
+			bosh: boolean;
+			harflar: string;
+			/** Format: int64 */
+			narx: number;
+			raqam: string;
+			raqamlar: string;
+		};
+		StatsOutputBody: {
+			/**
+			 * Format: uri
+			 * @description A URL to the JSON Schema for this object.
+			 * @example /v1/schemas/StatsOutputBody.json
+			 */
+			readonly $schema?: string;
+			hisobot: components["schemas"]["Report"];
+			/** Format: int64 */
+			kun: number;
+		};
+		Transaction: {
+			/** Format: date-time */
+			bekor?: string;
+			/** Format: date-time */
+			boshlangan?: string;
+			holat: string;
+			id: string;
+			/** Format: date-time */
+			tolangan?: string;
+			tolov: string;
+		};
+	};
+	responses: never;
+	parameters: never;
+	requestBodies: never;
+	headers: never;
+	pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    "boshqaruv-buyurtmalar": {
-        parameters: {
-            query?: {
-                holat?: "pending" | "paid" | "cancelled" | "failed";
-                soni?: number;
-                otkazish?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminOrdersOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    promokodlar: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PromoListOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "promokod-yaratish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["NewPromoCode"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PromoOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "promokodni-yoqish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                kod: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PromoActiveInputBody"];
-            };
-        };
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "boshqaruv-raqamlar": {
-        parameters: {
-            query?: {
-                /** @description Raqam, ism yoki egasining manzili */
-                qidiruv?: string;
-                soni?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminHandlesOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "boshqaruv-sovga": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["GiveInputBody"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GiveOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "boshqaruv-umumiy": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OverviewOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    buyurtma: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OrderOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    chiqish: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    "Set-Cookie"?: string;
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "kirish-sorash": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RequestLinkInputBody"];
-            };
-        };
-        responses: {
-            /** @description Accepted */
-            202: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RequestLinkOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "kirish-parol": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PasswordInputBody"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    "Set-Cookie"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SessionOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "kirish-tasdiqlash": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ConfirmLinkInputBody"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    "Set-Cookie"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SessionOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    men: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MeOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "parolni-belgilash": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SetPasswordInputBody"];
-            };
-        };
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "vizitka-qoldirish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                raqam: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Input"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LeaveLeadOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "raqamni-tekshirish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                raqam: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["State"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "raqamni-band-qilish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                raqam: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["BuyInputBody"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OrderOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    raqamlarim: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HandleListOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    raqam: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Uch harf va uch raqam */
-                raqam: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HandleOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "profilni-saqlash": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                raqam: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ProfileInput"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HandleOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    statistika: {
-        parameters: {
-            query?: {
-                /** @description Necha kunlik */
-                kun?: number;
-            };
-            header?: never;
-            path: {
-                raqam: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StatsOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    vizitkalar: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Uch harf va uch raqam */
-                raqam: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LeadListOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    "vizitkani-ochirish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                raqam: string;
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    sogliq: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HealthOutputBody"];
-                };
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
-    tirik: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    Header?: components["schemas"]["AliveOutputHeader"];
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Error */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
-                };
-            };
-        };
-    };
+	"boshqaruv-buyurtmalar": {
+		parameters: {
+			query?: {
+				holat?: "pending" | "paid" | "cancelled" | "failed";
+				soni?: number;
+				otkazish?: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["PageAdminOrder"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"boshqaruv-buyurtma": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["AdminOrderOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"boshqaruv-hisoblar": {
+		parameters: {
+			query?: {
+				/** @description Email yoki telefon */
+				qidiruv?: string;
+				soni?: number;
+				otkazish?: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["PageAccount"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"boshqaruv-hisob-buyurtmalari": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["AdminAccountOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	promokodlar: {
+		parameters: {
+			query?: {
+				soni?: number;
+				otkazish?: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["PagePromoCode"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"promokod-yaratish": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["NewPromoCode"];
+			};
+		};
+		responses: {
+			/** @description Created */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["PromoOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"promokodni-yoqish": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				kod: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["PromoActiveInputBody"];
+			};
+		};
+		responses: {
+			/** @description No Content */
+			204: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content?: never;
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"boshqaruv-raqamlar": {
+		parameters: {
+			query?: {
+				/** @description Raqam, ism yoki egasining manzili */
+				qidiruv?: string;
+				soni?: number;
+				otkazish?: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["PageAdminHandle"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"boshqaruv-sovga": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["GiveInputBody"];
+			};
+		};
+		responses: {
+			/** @description Created */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["GiveOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"boshqaruv-umumiy": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["OverviewOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	buyurtma: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["OrderOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	chiqish: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description No Content */
+			204: {
+				headers: {
+					"Set-Cookie"?: string;
+					[name: string]: unknown;
+				};
+				content?: never;
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"kirish-sorash": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["RequestLinkInputBody"];
+			};
+		};
+		responses: {
+			/** @description Accepted */
+			202: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["RequestLinkOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"kirish-parol": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["PasswordInputBody"];
+			};
+		};
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					"Set-Cookie"?: string;
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["SessionOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"kirish-tasdiqlash": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["ConfirmLinkInputBody"];
+			};
+		};
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					"Set-Cookie"?: string;
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["SessionOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"telefon-kod": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["PhoneInputBody"];
+			};
+		};
+		responses: {
+			/** @description Accepted */
+			202: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["PhoneSentOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"telefon-tasdiq": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["PhoneCodeInputBody"];
+			};
+		};
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					"Set-Cookie"?: string;
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["SessionOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	men: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["MeOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"parolni-belgilash": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["SetPasswordInputBody"];
+			};
+		};
+		responses: {
+			/** @description No Content */
+			204: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content?: never;
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"vizitka-qoldirish": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				raqam: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["Input"];
+			};
+		};
+		responses: {
+			/** @description Created */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["LeaveLeadOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"raqamni-tekshirish": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				raqam: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["State"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"raqamni-band-qilish": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				raqam: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["BuyInputBody"];
+			};
+		};
+		responses: {
+			/** @description Created */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["OrderOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	raqamlarim: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HandleListOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	raqam: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				/** @description Uch harf va uch raqam */
+				raqam: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HandleOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"profilni-saqlash": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				raqam: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["ProfileInput"];
+			};
+		};
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HandleOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	statistika: {
+		parameters: {
+			query?: {
+				/** @description Necha kunlik */
+				kun?: number;
+			};
+			header?: never;
+			path: {
+				raqam: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["StatsOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	vizitkalar: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				/** @description Uch harf va uch raqam */
+				raqam: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["LeadListOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	"vizitkani-ochirish": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				raqam: string;
+				id: number;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description No Content */
+			204: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content?: never;
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	sogliq: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["HealthOutputBody"];
+				};
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
+	tirik: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description No Content */
+			204: {
+				headers: {
+					Header?: components["schemas"]["AliveOutputHeader"];
+					[name: string]: unknown;
+				};
+				content?: never;
+			};
+			/** @description Error */
+			default: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"application/problem+json": components["schemas"]["ErrorModel"];
+				};
+			};
+		};
+	};
 }

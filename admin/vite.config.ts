@@ -1,3 +1,5 @@
+import path from "node:path";
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -11,6 +13,13 @@ import tailwindcss from "@tailwindcss/vite";
 // neither requirement and gets a faster development loop for giving them up.
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+
+  // shadcn/ui components import each other as "@/components/ui/…". The alias is
+  // theirs, not ours; our own files keep using relative paths.
+  resolve: {
+    alias: { "@": path.resolve(import.meta.dirname, "src") },
+  },
+
   server: {
     // A preference, not a requirement. The proxy below makes every request
     // same-origin, so the backend never sees this port and has no allow-list to
