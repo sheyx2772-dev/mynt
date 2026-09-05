@@ -73,7 +73,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
     ? await (async () => {
         const [today, leads, venue] = await Promise.all([
           getHandleStats(open.normalized, 1),
-          listLeads(open.normalized, user.id),
+          listLeads(open.normalized),
           getOwnedVenue(open.normalized, user.id),
         ]);
         return {

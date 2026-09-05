@@ -74,6 +74,18 @@ func (s *Store) Leave(ctx context.Context, normalized string, in Input, ip *neti
 	return "", nil
 }
 
+// Owner is who a number belongs to, for telling them a contact arrived.
+//
+// Returns an empty string rather than an error when nobody holds it: a notice
+// with no recipient is not a failure of the thing that caused it.
+func (s *Store) Owner(ctx context.Context, normalized string) string {
+	owner, err := s.queries.HandleOwner(ctx, &normalized)
+	if err != nil || owner == nil {
+		return ""
+	}
+	return owner.String()
+}
+
 // ForOwner lists what one number has been sent. The ownership filter is inside
 // the query, joined through `handles`, so a number somebody else owns returns
 // nothing rather than being checked for afterwards.

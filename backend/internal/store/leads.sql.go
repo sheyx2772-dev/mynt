@@ -121,6 +121,21 @@ func (q *Queries) DeleteLead(ctx context.Context, arg DeleteLeadParams) (int64, 
 	return result.RowsAffected(), nil
 }
 
+const handleOwner = `-- name: HandleOwner :one
+select user_id from handles
+where normalized = $1 and status = 'claimed'
+`
+
+// Who to tell. Read after the insert rather than joined into it: the insert
+// returns the lead, and a second small read is clearer than a returning clause
+// that mixes two tables.
+func (q *Queries) HandleOwner(ctx context.Context, normalized *string) (*uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, handleOwner, normalized)
+	var user_id *uuid.UUID
+	err := row.Scan(&user_id)
+	return user_id, err
+}
+
 const leadsForHandle = `-- name: LeadsForHandle :many
 
 select l.id, l.handle_id, l.name, l.phone, l.email, l.company, l.note, l.source, l.created_at, l.status, l.owner_note, l.follow_up_on, l.last_touch_at, l.tags from leads l

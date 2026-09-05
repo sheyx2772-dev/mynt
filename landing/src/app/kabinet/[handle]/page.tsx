@@ -27,7 +27,7 @@ export default async function HandlePage(props: PageProps<"/kabinet/[handle]">) 
 
   const [today, leads, venue] = await Promise.all([
     getHandleStats(normalized, 1),
-    listLeads(normalized, userId),
+    listLeads(normalized),
     getOwnedVenue(normalized, userId),
   ]);
 

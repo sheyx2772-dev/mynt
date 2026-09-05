@@ -25,9 +25,11 @@ import (
 	"github.com/sheyx2772-dev/flex/backend/internal/config"
 	"github.com/sheyx2772-dev/flex/backend/internal/handles"
 	"github.com/sheyx2772-dev/flex/backend/internal/leads"
+	"github.com/sheyx2772-dev/flex/backend/internal/notify"
 	"github.com/sheyx2772-dev/flex/backend/internal/orders"
 	"github.com/sheyx2772-dev/flex/backend/internal/payments"
 	"github.com/sheyx2772-dev/flex/backend/internal/stats"
+	"github.com/sheyx2772-dev/flex/backend/internal/store"
 )
 
 // Server holds what the handlers need. Passed in rather than reached for:
@@ -41,6 +43,7 @@ type Server struct {
 	stats   *stats.Store
 	orders  *orders.Store
 	admin   *admin.Store
+	notify  *notify.Service
 	// nil unless this deployment holds the provider secret keys.
 	payments payments.Store
 }
@@ -61,6 +64,14 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 		}, cfg.IsDevelopment()),
 		admin: admin.NewStore(pool),
 	}
+
+	// A nil channel is dropped rather than registered, so the service does not
+	// carry an interface value that is never usable.
+	var channels []notify.Channel
+	if telegram := notify.NewTelegram(cfg.TelegramBotToken); telegram != nil {
+		channels = append(channels, telegram)
+	}
+	s.notify = notify.New(store.New(pool), channels...)
 
 	if cfg.TakesCallbacks() {
 		s.payments = payments.NewPostgres(pool)

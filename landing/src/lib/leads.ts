@@ -1,11 +1,8 @@
 import "server-only";
 
-import { after } from "next/server";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
-import { notify } from "@/lib/notify";
-import { getClientIp } from "@/lib/rate-limit";
 import type { VisitSource } from "@/lib/analytics";
+import { asReader, backend } from "@/lib/backend/client";
 
 // Contacts sent back to a profile by the people who opened it.
 //
@@ -32,13 +29,6 @@ export type LeadInput = {
   company: string | null;
   note: string | null;
 };
-
-// A public form on a page anyone can open. Two windows, both an hour: one per
-// address so a script cannot fill a profile with noise, one per profile so it
-// cannot be buried even from many addresses.
-const PER_IP_PER_HOUR = 10;
-const PER_HANDLE_PER_HOUR = 40;
-const WINDOW_MS = 60 * 60 * 1000;
 
 const PHONE = /^[0-9+()\- ]{7,30}$/;
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -79,105 +69,48 @@ export async function saveLead(
   lead: LeadInput,
   source: VisitSource | null,
 ): Promise<{ ok: true } | { ok: false; error: string }> {
-  if (!supabaseAdmin) return { ok: false, error: "Hozir yuborib bo'lmadi." };
-
-  const ip = await getClientIp();
-  const since = new Date(Date.now() - WINDOW_MS).toISOString();
-
-  const [{ count: ipCount }, { count: handleCount }] = await Promise.all([
-    supabaseAdmin
-      .from("lead_attempts")
-      .select("id", { count: "exact", head: true })
-      .eq("ip", ip ?? "")
-      .gte("created_at", since),
-    supabaseAdmin
-      .from("lead_attempts")
-      .select("id", { count: "exact", head: true })
-      .eq("handle", normalized)
-      .gte("created_at", since),
-  ]);
-
-  if ((ipCount ?? 0) >= PER_IP_PER_HOUR || (handleCount ?? 0) >= PER_HANDLE_PER_HOUR) {
-    // Counted as well, so hammering the limit does not reset it.
-    await supabaseAdmin.from("lead_attempts").insert({ ip, handle: normalized });
-    return { ok: false, error: "Juda ko'p urinish. Biroz kutib, qayta yuboring." };
-  }
-
-  const { data: handle } = await supabaseAdmin
-    .from("handles")
-    .select("id, user_id")
-    .eq("normalized", normalized)
-    .eq("status", "claimed")
-    .maybeSingle();
-
-  if (!handle) return { ok: false, error: "Bu profil topilmadi." };
-
-  const { error } = await supabaseAdmin.from("leads").insert({
-    handle_id: handle.id,
-    name: lead.name,
-    phone: lead.phone,
-    email: lead.email,
-    company: lead.company,
-    note: lead.note,
-    source,
+  const { response, error } = await backend.POST("/profil/{raqam}/vizitka", {
+    params: { path: { raqam: normalized } },
+    body: {
+      ism: lead.name,
+      telefon: lead.phone ?? undefined,
+      email: lead.email ?? undefined,
+      kompaniya: lead.company ?? undefined,
+      izoh: lead.note ?? undefined,
+      manba: source ?? undefined,
+    },
   });
 
-  await supabaseAdmin
-    .from("lead_attempts")
-    .insert({ ip, handle: normalized, succeeded: !error });
+  if (!error) return { ok: true };
 
-  if (error) return { ok: false, error: "Hozir yuborib bo'lmadi. Keyinroq urinib ko'ring." };
-
-  // The owner hears about it now, not the next time they open the cabinet. A
-  // lead is worth money for about as long as the meeting is still fresh, and
-  // `after()` keeps the notice off the visitor's own wait — they have done
-  // their part and should see the confirmation immediately.
-  if (handle.user_id) {
-    after(
-      notify({
-        userId: handle.user_id as string,
-        kind: "lead",
-        handle: normalized,
-        title: `${lead.name} kontaktini qoldirdi`,
-        body: [lead.phone, lead.email, lead.company, lead.note]
-          .filter(Boolean)
-          .join(" · "),
-        href: `/kabinet/${normalized}`,
-      }),
-    );
+  // The two the visitor can act on. Everything else is the same apology,
+  // because there is nothing they could do differently.
+  if (response.status === 429) {
+    return { ok: false, error: "Juda ko'p urinish. Biroz kutib, qayta yuboring." };
   }
-
-  return { ok: true };
+  if (response.status === 404) {
+    return { ok: false, error: "Bu profil topilmadi." };
+  }
+  return { ok: false, error: "Hozir yuborib bo'lmadi. Keyinroq urinib ko'ring." };
 }
 
 /** What one owner has been sent. The ownership filter is the authorization. */
-export async function listLeads(normalized: string, userId: string): Promise<Lead[]> {
-  if (!supabaseAdmin) return [];
+export async function listLeads(normalized: string): Promise<Lead[]> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/raqamlar/{raqam}/vizitkalar", {
+    params: { path: { raqam: normalized } },
+  });
+  if (error || !data) return [];
 
-  const { data: handle } = await supabaseAdmin
-    .from("handles")
-    .select("id")
-    .eq("normalized", normalized)
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  if (!handle) return [];
-
-  const { data } = await supabaseAdmin
-    .from("leads")
-    .select("id, name, phone, email, company, note, source, created_at")
-    .eq("handle_id", handle.id)
-    .order("created_at", { ascending: false })
-    .limit(500);
-
-  return (data ?? []).map((row) => ({
-    id: row.id as number,
-    name: row.name as string,
-    phone: (row.phone as string) ?? null,
-    email: (row.email as string) ?? null,
-    company: (row.company as string) ?? null,
-    note: (row.note as string) ?? null,
-    source: (row.source as VisitSource) ?? null,
-    createdAt: row.created_at as string,
+  return (data.vizitkalar ?? []).map((l) => ({
+    id: l.id,
+    name: l.ism,
+    phone: l.telefon ?? null,
+    email: l.email ?? null,
+    company: l.kompaniya ?? null,
+    note: l.izoh ?? null,
+    source: (l.manba as VisitSource) ?? null,
+    createdAt: l.vaqt,
   }));
 }
+

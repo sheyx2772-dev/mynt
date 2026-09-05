@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   const check = await requireOwner(request, url.searchParams.get("raqam"));
   if (!check.ok) return check.response;
 
-  const leads = await listLeads(check.context.normalized, check.context.user.id);
+  const leads = await listLeads(check.context.normalized);
 
   return Response.json({ leads });
 }

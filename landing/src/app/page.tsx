@@ -189,7 +189,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     ? await (async () => {
         const [stats, leads] = await Promise.all([
           getHandleStats(primary.normalized, 1),
-          listLeads(primary.normalized, user!.id),
+          listLeads(primary.normalized),
         ]);
         return {
           handle: primary,

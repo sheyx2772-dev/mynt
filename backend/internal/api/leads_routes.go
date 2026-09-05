@@ -4,11 +4,13 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"strings"
 
 	"github.com/danielgtaylor/huma/v2"
 
 	"github.com/sheyx2772-dev/flex/backend/internal/handles"
 	"github.com/sheyx2772-dev/flex/backend/internal/leads"
+	"github.com/sheyx2772-dev/flex/backend/internal/notify"
 )
 
 // Contacts left on a profile.
@@ -71,6 +73,22 @@ func (s *Server) registerLeads(api huma.API) {
 			return nil, internalError(err, "vizitka yozilmadi")
 		}
 
+		// The owner hears about it now rather than the next time they open the
+		// cabinet — a contact is worth money for about as long as the meeting
+		// is still fresh. Off the visitor's own wait: they have done their part
+		// and should see the confirmation immediately, and whether somebody
+		// else's Telegram answered in time is not their problem.
+		if owner := s.leads.Owner(ctx, parsed.Normalized()); owner != "" {
+			go s.notify.Send(context.WithoutCancel(ctx), notify.Notice{
+				UserID: owner,
+				Kind:   notify.KindLead,
+				Handle: parsed.Normalized(),
+				Title:  in.Body.Name + " kontaktini qoldirdi",
+				Body:   details(in.Body),
+				Href:   "/kabinet/" + parsed.Normalized(),
+			})
+		}
+
 		out := &leaveLeadOutput{Status: http.StatusCreated}
 		out.Body.Message = "Yuborildi. Rahmat."
 		return out, nil
@@ -121,4 +139,16 @@ func (s *Server) registerLeads(api huma.API) {
 
 		return nil, nil
 	})
+}
+
+// details is the one line under the name: whatever they left, in the order
+// somebody would read it.
+func details(in leads.Input) string {
+	parts := make([]string, 0, 4)
+	for _, field := range []string{in.Phone, in.Email, in.Company, in.Note} {
+		if field != "" {
+			parts = append(parts, field)
+		}
+	}
+	return strings.Join(parts, " · ")
 }

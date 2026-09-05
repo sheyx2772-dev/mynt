@@ -31,7 +31,7 @@ export async function GET(
   if (!parsed) return new Response("Topilmadi", { status: 404 });
 
   const normalized = `${parsed.letters}${parsed.digits}`;
-  const leads = await listLeads(normalized, user.id);
+  const leads = await listLeads(normalized);
 
   const header = ["Ism", "Telefon", "Email", "Kompaniya", "Izoh", "Manba", "Sana"];
   const rows = leads.map((lead) =>

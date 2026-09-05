@@ -40,3 +40,10 @@ where handle = sqlc.arg(handle)
 -- name: RecordLeadAttempt :exec
 insert into lead_attempts (ip, handle, succeeded)
 values (sqlc.narg(ip), sqlc.arg(handle), sqlc.arg(succeeded));
+
+-- Who to tell. Read after the insert rather than joined into it: the insert
+-- returns the lead, and a second small read is clearer than a returning clause
+-- that mixes two tables.
+-- name: HandleOwner :one
+select user_id from handles
+where normalized = sqlc.arg(normalized) and status = 'claimed';

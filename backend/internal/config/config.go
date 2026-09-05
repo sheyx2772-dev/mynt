@@ -65,6 +65,11 @@ type Config struct {
 	EskizPassword string
 	SMSFrom       string
 
+	// The bot that carries notifications. Empty means the Telegram channel is
+	// not built at all, so a deployment without one has no channel rather than
+	// a channel that fails on every notice.
+	TelegramBotToken string
+
 	// Sending account for the sign-in mail. Empty means no provider is
 	// configured, and in development the link is written to the log instead.
 	ResendAPIKey string
@@ -132,6 +137,7 @@ func Load() (Config, error) {
 		EskizEmail:             os.Getenv("ESKIZ_EMAIL"),
 		EskizPassword:          os.Getenv("ESKIZ_PASSWORD"),
 		SMSFrom:                withDefault("SMS_FROM", "4546"),
+		TelegramBotToken:       os.Getenv("TELEGRAM_BOT_TOKEN"),
 		ResendAPIKey:           os.Getenv("RESEND_API_KEY"),
 		MailFrom:               withDefault("MAIL_FROM", "Flex <kirish@flex.com.uz>"),
 		AdminEmails:            readList(os.Getenv("ADMIN_EMAILS")),
