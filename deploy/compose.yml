@@ -33,8 +33,14 @@ services:
       retries: 5
 
   api:
-    build:
-      context: ../backend
+    # Built by GitHub Actions, never here. This machine has two cores and runs
+    # the database next to the site; a `next build` on it makes the live site
+    # slow for three minutes on every deploy. Pulling a finished image takes
+    # seconds and costs nothing.
+    #
+    # TAG is normally `latest`. Rolling back is setting it to a commit sha and
+    # bringing the stack up again — no rebuild, no waiting.
+    image: ghcr.io/zoir-dev/flex-api:${TAG:-latest}
     restart: unless-stopped
     depends_on:
       db:
@@ -67,8 +73,7 @@ services:
       CLICK_SECRET_KEY: ${CLICK_SECRET_KEY}
 
   web:
-    build:
-      context: ../landing
+    image: ghcr.io/zoir-dev/flex-web:${TAG:-latest}
     restart: unless-stopped
     depends_on: [api]
     environment:
@@ -84,8 +89,7 @@ services:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
 
   panel:
-    build:
-      context: ../admin
+    image: ghcr.io/zoir-dev/flex-panel:${TAG:-latest}
     restart: unless-stopped
 
   caddy:

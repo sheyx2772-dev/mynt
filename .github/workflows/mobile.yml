@@ -1,0 +1,30 @@
+# The phone app is checked but not shipped from here.
+#
+# Publishing goes through an app store review that takes days and needs signing
+# keys that belong on somebody's machine rather than in a workflow. What CI can
+# usefully do is refuse a change that does not compile or does not pass.
+
+name: mobile
+
+on:
+  push:
+    branches: [main]
+    paths: ['mobile/**', '.github/workflows/mobile.yml']
+  pull_request:
+    paths: ['mobile/**']
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
