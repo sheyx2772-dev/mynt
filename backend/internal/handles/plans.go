@@ -1,5 +1,7 @@
 package handles
 
+import "time"
+
 // What a subscription buys, and what the site is able to draw.
 
 // What a plan buys.
@@ -53,4 +55,26 @@ func DeviceType(raw string) string {
 		return raw
 	}
 	return DefaultDeviceType
+}
+
+// EffectivePlan is the plan as it stands today rather than the column.
+//
+// The column says what was bought; the date says whether it still holds. A
+// lapsed premium falls back to free rather than going dark — the number was
+// paid for and stays reachable, it just stops carrying the premium features.
+// The rule lives here so nothing downstream has to remember it.
+func EffectivePlan(plan string, expires *time.Time) string {
+	if plan != PlanPremium {
+		return PlanFree
+	}
+	// No date on a premium row means it does not lapse — a gift, or a plan
+	// settled some other way. Treated as still holding, because the alternative
+	// silently downgrades somebody who paid.
+	if expires == nil {
+		return PlanPremium
+	}
+	if expires.Before(time.Now()) {
+		return PlanFree
+	}
+	return PlanPremium
 }
