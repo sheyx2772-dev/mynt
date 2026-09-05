@@ -1,105 +1,93 @@
 "use server";
 
-import { createServerSupabase } from "@/lib/supabase/server";
-import { getSiteOrigin } from "@/lib/site";
+import { backend } from "@/lib/backend/client";
+import { startSession } from "@/lib/backend/session";
 import { safePath } from "@/lib/safe-path";
-import {
-  startTelegramLogin,
-  drainTelegramLogins,
-  claimTelegramLogin,
-  signInWithTelegram,
-} from "@/lib/auth/telegram-login";
+
+// The two doors, both answered by our own backend.
+//
+// This used to call Supabase, and there used to be a third door through
+// Telegram. The phone replaces it: SMS is what the app signs in with, it is
+// what every payment app here signs in with, and one person arriving twice
+// through two doors is one person with two accounts.
 
 export type SignInResult = { sent: false; error: string } | { sent: true; email: string };
 
-// Sends a one-time sign-in link. Supabase creates the user on first use, so
-// there's no separate registration step — one form covers both.
+/**
+ * Sends a one-time sign-in link.
+ *
+ * The backend creates the account when the link is followed rather than when
+ * the address is typed, so there is no separate registration step — and an
+ * address nobody can read mail at never becomes an account.
+ */
 export async function sendSignInLink(
   _prevState: SignInResult,
-  formData: FormData
+  formData: FormData,
 ): Promise<SignInResult> {
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  const next = String(formData.get("keyin") ?? "").trim();
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { sent: false, error: "To'g'ri email manzil kiriting." };
   }
 
-  const supabase = await createServerSupabase();
-  if (!supabase) {
-    return { sent: false, error: "Baza ulanmagan. Keyinroq urinib ko'ring." };
-  }
-
-  const origin = await getSiteOrigin();
-  const safeNext = safePath(next);
-
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      emailRedirectTo: `${origin}/auth/confirm?keyin=${encodeURIComponent(safeNext)}`,
-    },
-  });
-
+  const { error } = await backend.POST("/kirish", { body: { email } });
   if (error) {
-    if (error.status === 429) {
-      return { sent: false, error: "Juda ko'p urinish. Bir necha daqiqadan so'ng qayta urining." };
-    }
     return { sent: false, error: "Xat yuborib bo'lmadi. Qaytadan urinib ko'ring." };
   }
 
+  // Said the same way whether the address has an account or not: the backend
+  // answers identically, and this must not claim more than it said.
   return { sent: true, email };
 }
 
-// --- Telegram ------------------------------------------------------------
-//
-// The second door, and for this market the main one. Click, Uzum and Payme all
-// sign people in by phone; ordinary buyers here do not read email. SMS costs
-// money per message and Telegram does not.
+// --- Telefon -------------------------------------------------------------
 
-export type TelegramStart =
-  | { ok: true; code: string; deepLink: string; expiresAt: string }
-  | { ok: false; error: string };
+export type CodeResult =
+  | { sent: false; error: string }
+  // Only a development backend with no SMS provider fills `kod`, so the page
+  // can be used before an Eskiz account exists. Production never sets it.
+  | { sent: true; phone: string; kod?: string };
 
-export async function beginTelegramSignIn(): Promise<TelegramStart> {
-  const result = await startTelegramLogin();
-  if (result.ok) return result;
+export async function sendSignInCode(
+  _prevState: CodeResult,
+  formData: FormData,
+): Promise<CodeResult> {
+  const phone = String(formData.get("telefon") ?? "").replace(/[^0-9]/g, "");
 
-  return {
-    ok: false,
-    error:
-      result.error === "rateLimited"
-        ? "Juda ko'p urinish. Bir soatdan so'ng qayta urining."
-        : "Telegram orqali kirish hozir ishlamayapti.",
-  };
-}
-
-export type TelegramPoll =
-  | { state: "waiting" }
-  | { state: "expired" }
-  | { state: "done"; next: string }
-  | { state: "error"; error: string };
-
-/**
- * Called every couple of seconds while the person is away in Telegram.
- *
- * Each call drains the bot's queue before looking, so the answer arrives on
- * the same trip that noticed it — the tab is the only thing polling Telegram,
- * and it is polling precisely while it matters.
- */
-export async function pollTelegramSignIn(
-  code: string,
-  next: string,
-): Promise<TelegramPoll> {
-  await drainTelegramLogins();
-
-  const claim = await claimTelegramLogin(code);
-  if (claim.state === "waiting") return { state: "waiting" };
-  if (claim.state === "expired") return { state: "expired" };
-
-  const signedIn = await signInWithTelegram(claim.chatId, claim.name);
-  if (!signedIn.ok) {
-    return { state: "error", error: "Kirib bo'lmadi. Qaytadan urinib ko'ring." };
+  if (phone.length < 9) {
+    return { sent: false, error: "Raqamni to'liq kiriting." };
   }
 
-  return { state: "done", next: safePath(next) };
+  const { data, error } = await backend.POST("/kirish/telefon", {
+    body: { telefon: phone },
+  });
+  if (error) {
+    return { sent: false, error: "Kod yuborilmadi. Qaytadan urinib ko'ring." };
+  }
+
+  return { sent: true, phone, kod: data?.kod || undefined };
+}
+
+export type ConfirmResult = { ok: false; error: string } | { ok: true; next: string };
+
+export async function confirmSignInCode(
+  _prevState: ConfirmResult,
+  formData: FormData,
+): Promise<ConfirmResult> {
+  const phone = String(formData.get("telefon") ?? "").replace(/[^0-9]/g, "");
+  const kod = String(formData.get("kod") ?? "").replace(/[^0-9]/g, "");
+  const next = safePath(String(formData.get("keyin") ?? ""));
+
+  if (kod.length !== 6) return { ok: false, error: "Kod 6 xonali bo'lishi kerak." };
+
+  const { data, error } = await backend.POST("/kirish/telefon/tasdiq", {
+    body: { telefon: phone, kod },
+  });
+
+  if (error || !data?.token) {
+    return { ok: false, error: "Kod noto'g'ri yoki eskirgan." };
+  }
+
+  await startSession(data.token);
+  return { ok: true, next };
 }

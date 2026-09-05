@@ -2,8 +2,7 @@ import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import SignInForm from "@/components/SignInForm";
-import TelegramSignIn from "@/components/TelegramSignIn";
-import { isTelegramLoginConfigured, startTelegramLogin } from "@/lib/auth/telegram-login";
+import PhoneSignIn from "@/components/PhoneSignIn";
 import { getUser } from "@/lib/auth";
 import { safePath } from "@/lib/safe-path";
 
@@ -28,10 +27,6 @@ export default async function SignInPage(props: PageProps<"/kirish">) {
 
   const errorKey = typeof xato === "string" ? xato : null;
 
-  // Minted here rather than on the click, so the button can be a plain link
-  // and never meets a popup blocker. A reload reuses the outstanding one.
-  const telegram = isTelegramLoginConfigured ? await startTelegramLogin() : null;
-
   return (
     <PageShell>
       <div className="rounded-[1.75rem] border border-line bg-white p-8 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
@@ -46,27 +41,18 @@ export default async function SignInPage(props: PageProps<"/kirish">) {
           </p>
         )}
 
-        {/* Telegram first: it is one tap, it costs nothing, and it is what
-            this market actually has on its phone. Email stays underneath for
-            the people Telegram does not reach — foreign buyers, and companies
+        {/* The phone first: it is what everybody here has, what every payment
+            app signs in with, and the same door the app uses — so one person
+            is one account whichever they opened. Email stays underneath for
+            the people a number does not reach: foreign buyers, and companies
             whose accounting wants a mailbox. */}
-        {telegram?.ok && (
-          <>
-            <TelegramSignIn
-              next={next}
-              code={telegram.code}
-              deepLink={telegram.deepLink}
-            />
+        <PhoneSignIn next={next} />
 
-            <div className="my-6 flex items-center gap-3">
-              <span className="h-px flex-1 bg-black/10" />
-              <span className="text-xs tracking-wide text-flex-black/35 uppercase">
-                yoki
-              </span>
-              <span className="h-px flex-1 bg-black/10" />
-            </div>
-          </>
-        )}
+        <div className="my-6 flex items-center gap-3">
+          <span className="h-px flex-1 bg-line" />
+          <span className="text-xs tracking-wide text-flex-black/35 uppercase">yoki</span>
+          <span className="h-px flex-1 bg-line" />
+        </div>
 
         <SignInForm next={next} />
       </div>
