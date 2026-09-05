@@ -244,13 +244,13 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             {copy.faqs.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-2xl border border-black/10 bg-white p-5 open:shadow-[0_12px_30px_-16px_rgba(14,10,27,0.2)]"
+                className="reveal group rounded-2xl border border-black/10 bg-white p-5 transition-shadow duration-300 open:shadow-[0_12px_30px_-16px_rgba(14,10,27,0.2)]"
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between font-medium marker:content-none">
                   {item.q}
                   <ChevronDown className="h-4 w-4 text-flex-black/40 transition-transform duration-300 group-open:rotate-180" />
                 </summary>
-                <p className="mt-3 text-sm leading-relaxed text-flex-black/65">
+                <p className="pt-3 text-sm leading-relaxed text-flex-black/65">
                   {item.a}
                 </p>
               </details>

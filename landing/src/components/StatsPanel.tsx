@@ -164,7 +164,7 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
       )}
 
       {peak > 0 && (
-        <details className="mt-6">
+        <details className="reveal mt-6">
           <summary className="cursor-pointer text-xs text-flex-black/45">
             Kunlik raqamlar jadvali
           </summary>

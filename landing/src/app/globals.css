@@ -153,6 +153,38 @@ body {
   animation: halo 2.4s ease-out infinite;
 }
 
+/* An answer that opens rather than appears.
+   A <details> snapping to its full height moves everything under it in one
+   frame, and the eye reads that as the page having jumped rather than as an
+   answer having arrived — which is why somebody scrolls back up to check what
+   happened.
+   Done in CSS with no JavaScript, and no measuring: `interpolate-size` is what
+   makes `height: auto` a value a transition can reach, and `::details-content`
+   is the box the browser makes for everything after the <summary>. The
+   `content-visibility` transition needs `allow-discrete`, or the content is
+   hidden for the whole of the closing animation and the panel collapses empty.
+   A browser without `::details-content` ignores all of this and the panel
+   opens instantly, which is exactly what it did before. */
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  .reveal::details-content {
+    block-size: 0;
+    overflow: clip;
+    /* The same curve as `rise`, for the same reason: it leaves quickly and
+       settles slowly, which is how a thing that was already there behaves. */
+    transition:
+      block-size 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      content-visibility 0.28s allow-discrete;
+  }
+
+  .reveal[open]::details-content {
+    block-size: auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marker-reveal,
   .rise,
@@ -162,6 +194,12 @@ body {
 
   .sweep::after {
     animation: none;
+  }
+
+  /* The chevron turns instantly too. Its rotation is set in a utility class on
+     the element, so it is unset here rather than there. */
+  .reveal [class*="group-open:rotate"] {
+    transition: none;
   }
 }
 
