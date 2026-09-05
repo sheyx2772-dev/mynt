@@ -19,13 +19,13 @@ export default async function SubscriptionPage({
   const { handle } = await params;
   const { normalized, userId } = await requireOwnHandle(handle, "/kabinet/[handle]/obuna");
 
-  const venue = await getOwnedVenue(normalized, userId);
+  const venue = await getOwnedVenue(normalized);
   if (!venue) notFound();
 
   const w = venueWords(venue.kind, "uz");
   const plan = planState(venue.planExpiresAt);
   const points = Math.max(1, venue.points.length);
-  const invoices = await listVenueInvoices(venue.id);
+  const invoices = await listVenueInvoices(handle);
 
   return (
     <PageShell surface="ink">
@@ -42,7 +42,7 @@ export default async function SubscriptionPage({
           {plan.active ? (
             <>
               <p className="font-display text-lg font-semibold">
-                {formatDate(venue.planExpiresAt)} gacha
+                {venue.planExpiresAt ? `${formatDate(venue.planExpiresAt)} gacha` : "Muddatsiz"}
               </p>
               <p className="mt-1 text-sm text-paper">
                 {plan.endingSoon

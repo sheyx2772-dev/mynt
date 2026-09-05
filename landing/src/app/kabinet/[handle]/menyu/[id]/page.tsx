@@ -22,10 +22,10 @@ export default async function EditDishPage({
   const { handle, id } = await params;
   const { normalized, userId } = await requireOwnHandle(handle, "/kabinet/[handle]/menyu/[id]");
 
-  const venue = await getOwnedVenue(normalized, userId);
+  const venue = await getOwnedVenue(normalized);
   if (!venue) notFound();
 
-  const item = await getMenuItem(venue.id, id);
+  const item = await getMenuItem(venue.id);
   if (!item) notFound();
 
   const w = venueWords(venue.kind, "uz");

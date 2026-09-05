@@ -27,7 +27,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
   const { handle } = await params;
   const { normalized, userId } = await requireOwnHandle(handle, "/kabinet/[handle]/hisobot");
 
-  const venue = await getOwnedVenue(normalized, userId);
+  const venue = await getOwnedVenue(normalized);
   if (!venue) notFound();
 
   const w = venueWords(venue.kind, "uz");
@@ -58,7 +58,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
     );
   }
 
-  const { rows, capped } = await listRequestsSince(venue.id, DAYS);
+  const { rows, capped } = await listRequestsSince(handle, DAYS);
   const report = summariseRequests(rows);
 
   const peakHour = Math.max(...report.byHour);

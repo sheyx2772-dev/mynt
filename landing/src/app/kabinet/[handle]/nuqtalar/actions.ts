@@ -13,10 +13,10 @@ export async function savePointsAction(
   const user = await requireUser();
   const handle = String(form.get("handle") ?? "").toUpperCase();
 
-  const venue = await getOwnedVenue(handle, user.id);
+  const venue = await getOwnedVenue(handle);
   if (!venue) return { ok: false, error: "Bu obyekt sizniki emas." };
 
-  const result = await savePoints(venue.id, form);
+  const result = await savePoints(handle, form);
   if (result.ok) {
     revalidatePath(`/kabinet/${handle}/nuqtalar`);
     revalidatePath(`/kabinet/${handle}/nuqtalar/chop`);

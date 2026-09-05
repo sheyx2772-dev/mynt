@@ -1,16 +1,14 @@
 import "server-only";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
-import { createServerSupabase } from "@/lib/supabase/server";
 import type { Lang } from "@/lib/i18n";
+import { asReader, backend } from "@/lib/backend/client";
 
-// A venue's menu.
+// A venue and its menu.
 //
-// The venue hangs off a claimed handle: a cafe buys one number, the number is
-// on the table stand, and the menu lives at that address. Reads go through the
-// public client because a menu printed on a stand is public by construction;
-// writes go through the service role behind an ownership check, the same shape
-// as every other edit in this codebase.
+// The translation fallback moved into Go with the query. A cafe types its menu
+// once, in the language it thinks in; asking for three versions of every dish
+// before anything can be published would mean no menus at all. So the backend
+// picks the translation that exists and this file receives one language.
 
 export type MenuItem = {
   id: string;
@@ -32,264 +30,181 @@ export type MenuCategory = {
 
 export type Venue = {
   id: string;
-  handleId: string;
   name: string;
   kind: "cafe" | "hotel" | "shop" | "other";
   hours: string | null;
   address: string | null;
   wifiName: string | null;
-  /** Only ever read for the owner, or for a guest standing at a point. */
+  /** Only ever sent to the owner, or to a guest standing at a point. */
   wifiPassword: string | null;
   /** The tags: tables in a cafe, rooms in a hotel. Empty until printed. */
   points: string[];
-  /** The secret in the counter link, once the owner has made one. */
+  /** The secret in the counter link. Owner only, and never on a menu. */
   staffToken: string | null;
-  /** When this venue stops being paid for. A new one gets thirty days. */
-  planExpiresAt: string;
+  planExpiresAt: string | null;
 };
 
-/**
- * Picks the translation that exists.
- *
- * A cafe types its menu once, in the language it thinks in. Asking for three
- * versions of every dish before anything can be published would mean no menus
- * at all, so the other two are optional and this falls back rather than
- * showing an empty line.
- */
-function pick(
-  row: Record<string, unknown>,
-  base: string,
-  lang: Lang,
-): string | null {
-  const suffix = lang === "ru" ? "_ru" : lang === "en" ? "_en" : "";
-  const translated = suffix ? (row[`${base}${suffix}`] as string | null) : null;
-  return translated?.trim() || ((row[base] as string | null) ?? null);
-}
+type BackendVenue = {
+  id: string;
+  nom: string;
+  turi: "cafe" | "hotel" | "shop" | "other";
+  ish_vaqti?: string;
+  manzil?: string;
+  wifi?: string;
+  wifi_paroli?: string;
+  nuqtalar?: string[] | null;
+  xodim_kaliti?: string;
+  tarif_tugashi?: string;
+};
 
-/**
- * Looked up by the handle's text rather than its id.
- *
- * ClaimedProfile deliberately does not carry the row id — nothing public needs
- * it — and widening that type so this one call can skip a join would spread a
- * private key through every profile render.
- */
-export async function getVenueByHandle(normalized: string): Promise<Venue | null> {
-  if (!supabaseAdmin) return null;
-
-  const { data: handle } = await supabaseAdmin
-    .from("handles")
-    .select("id")
-    .eq("normalized", normalized)
-    .maybeSingle();
-
-  if (!handle) return null;
-
-  const { data } = await supabaseAdmin
-    .from("venues")
-    .select(
-      "id, handle_id, name, kind, hours, address, wifi_name, wifi_password, points, staff_token, plan_expires_at",
-    )
-    .eq("handle_id", handle.id as string)
-    .maybeSingle();
-
-  if (!data) return null;
-
+function toVenue(v: BackendVenue): Venue {
   return {
-    id: data.id as string,
-    handleId: data.handle_id as string,
-    name: data.name as string,
-    kind: data.kind as Venue["kind"],
-    hours: (data.hours as string) ?? null,
-    address: (data.address as string) ?? null,
-    wifiName: (data.wifi_name as string) ?? null,
-    wifiPassword: (data.wifi_password as string) ?? null,
-    points: (data.points as string[]) ?? [],
-    staffToken: (data.staff_token as string) ?? null,
-    planExpiresAt: data.plan_expires_at as string,
+    id: v.id,
+    name: v.nom,
+    kind: v.turi,
+    hours: v.ish_vaqti ?? null,
+    address: v.manzil ?? null,
+    wifiName: v.wifi ?? null,
+    wifiPassword: v.wifi_paroli ?? null,
+    points: v.nuqtalar ?? [],
+    staffToken: v.xodim_kaliti ?? null,
+    planExpiresAt: v.tarif_tugashi ?? null,
   };
 }
 
-/**
- * The menu as a guest reads it.
- *
- * Sold-out dishes come back rather than being filtered out: seeing that the
- * lagman is off today is information, and a dish that silently vanishes reads
- * as a menu that never had it.
- */
-export async function getMenu(venueId: string, lang: Lang): Promise<MenuCategory[]> {
-  const supabase = await createServerSupabase();
-  if (!supabase) return [];
+type BackendCategory = {
+  id: string;
+  nom: string;
+  tartib: number;
+  taomlar?:
+    | {
+        id: string;
+        bolim?: string;
+        nom: string;
+        izoh?: string;
+        narx: number;
+        bor: boolean;
+        rasm?: string;
+        tartib: number;
+      }[]
+    | null;
+};
 
-  const [{ data: categories }, { data: items }] = await Promise.all([
-    supabase
-      .from("menu_categories")
-      .select("id, name, name_ru, name_en, position")
-      .eq("venue_id", venueId)
-      .order("position")
-      .order("created_at"),
-    supabase
-      .from("menu_items")
-      .select(
-        "id, category_id, name, name_ru, name_en, note, note_ru, note_en, price, available, photo_url, position",
-      )
-      .eq("venue_id", venueId)
-      .order("position")
-      .order("created_at"),
-  ]);
-
-  const mapped: MenuItem[] = (items ?? []).map((row) => ({
-    id: row.id as string,
-    categoryId: (row.category_id as string) ?? null,
-    name: pick(row, "name", lang) ?? "",
-    note: pick(row, "note", lang),
-    price: Number(row.price),
-    available: Boolean(row.available),
-    photoUrl: (row.photo_url as string) ?? null,
-    position: Number(row.position),
-  }));
-
-  const groups: MenuCategory[] = (categories ?? []).map((row) => ({
-    id: row.id as string,
-    name: pick(row, "name", lang) ?? "",
-    position: Number(row.position),
-    items: mapped.filter((item) => item.categoryId === row.id),
-  }));
-
-  // Dishes with no category, or whose category was deleted, would otherwise
-  // disappear from the page while still being on the menu.
-  const loose = mapped.filter(
-    (item) => !item.categoryId || !groups.some((g) => g.id === item.categoryId),
-  );
-  if (loose.length > 0) {
-    groups.push({ id: "boshqa", name: "", position: 9999, items: loose });
-  }
-
-  return groups.filter((g) => g.items.length > 0);
+function toCategory(c: BackendCategory): MenuCategory {
+  return {
+    id: c.id,
+    name: c.nom,
+    position: c.tartib,
+    items: (c.taomlar ?? []).map((i) => ({
+      id: i.id,
+      categoryId: i.bolim ?? null,
+      name: i.nom,
+      note: i.izoh ?? null,
+      price: i.narx,
+      available: i.bor,
+      photoUrl: i.rasm ?? null,
+      position: i.tartib,
+    })),
+  };
 }
 
-/** The venue this user may edit, or null. Ownership is the query, as elsewhere. */
-export async function getOwnedVenue(
-  normalized: string,
-  userId: string,
-): Promise<Venue | null> {
-  if (!supabaseAdmin) return null;
-
-  const { data: handle } = await supabaseAdmin
-    .from("handles")
-    .select("id")
-    .eq("normalized", normalized)
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  if (!handle) return null;
-  return getVenueByHandle(normalized);
+/** The venue on a public profile. No secrets: this is what a guest sees. */
+export async function getVenueByHandle(handle: string): Promise<Venue | null> {
+  const { data, error } = await backend.GET("/profil/{raqam}/menyu", {
+    params: { path: { raqam: handle }, query: { til: "uz" } },
+  });
+  return error || !data ? null : toVenue(data.obyekt);
 }
+
+/** The menu, in one language, grouped as it is drawn. */
+export async function getMenu(handle: string, lang: Lang = "uz"): Promise<MenuCategory[]> {
+  const { data, error } = await backend.GET("/profil/{raqam}/menyu", {
+    params: { path: { raqam: handle }, query: { til: lang } },
+  });
+  if (error || !data) return [];
+
+  return (data.bolimlar ?? []).map(toCategory);
+}
+
+/** The venue as its owner, secrets and all. */
+export async function getOwnedVenue(handle: string): Promise<Venue | null> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/raqamlar/{raqam}/obyekt", {
+    params: { path: { raqam: handle } },
+  });
+  return error || !data ? null : toVenue(data.obyekt);
+}
+
+export type StaffScreen = { venue: Venue; handle: string };
 
 /**
  * The venue behind a counter link.
  *
- * The token is the whole credential, so the lookup is by it alone and a miss is
- * a 404 — the same answer a made-up token gets, which tells whoever is guessing
- * nothing about whether any venue exists. Nothing about the owner comes back:
- * the counter screen shows a name and a list of requests, and that is all it is
- * allowed to know.
+ * The token is the whole credential, so a miss is the same 404 a made-up token
+ * gets. Nothing about the owner comes back — the counter screen shows a name
+ * and a list of requests, and that is all it is allowed to know.
  */
-export async function getVenueByStaffToken(token: string): Promise<Venue | null> {
-  if (!supabaseAdmin) return null;
+export async function getVenueByStaffToken(token: string): Promise<StaffScreen | null> {
+  const { data, error } = await backend.GET("/xodim/{kalit}", {
+    params: { path: { kalit: token } },
+  });
+  if (error || !data) return null;
 
-  // Short or empty tokens cannot be real, and the constraint says so; checking
-  // here keeps a stray "/z/" from becoming a query at all.
-  if (token.length < 24 || token.length > 64) return null;
+  return { venue: toVenue(data.obyekt), handle: data.obyekt.raqam ?? "" };
+}
 
-  const { data } = await supabaseAdmin
-    .from("venues")
-    .select(
-      "id, handle_id, name, kind, hours, address, wifi_name, wifi_password, points, staff_token, plan_expires_at",
-    )
-    .eq("staff_token", token)
-    .maybeSingle();
+export async function countMenuItems(handle: string): Promise<number> {
+  const categories = await getMenu(handle);
+  return categories.reduce((total, c) => total + c.items.length, 0);
+}
 
-  if (!data) return null;
+export type EditableItem = MenuItem & {
+  nameRu: string;
+  nameEn: string;
+  noteRu: string;
+  noteEn: string;
+};
 
+/**
+ * One row, for the screen that edits it.
+ *
+ * Every translation comes back rather than one: an editor shown a single
+ * language would overwrite the other two with blanks the first time somebody
+ * saved.
+ */
+export async function getMenuItem(id: string): Promise<EditableItem | null> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/menyu/taomlar/{id}", {
+    params: { path: { id } },
+  });
+  if (error || !data) return null;
+
+  const i = data.taom;
   return {
-    id: data.id as string,
-    handleId: data.handle_id as string,
-    name: data.name as string,
-    kind: data.kind as Venue["kind"],
-    hours: (data.hours as string) ?? null,
-    address: (data.address as string) ?? null,
-    wifiName: (data.wifi_name as string) ?? null,
-    wifiPassword: (data.wifi_password as string) ?? null,
-    points: (data.points as string[]) ?? [],
-    staffToken: (data.staff_token as string) ?? null,
-    planExpiresAt: data.plan_expires_at as string,
+    id: i.id,
+    categoryId: i.bolim ?? null,
+    name: i.nom,
+    note: i.izoh ?? null,
+    price: i.narx,
+    available: i.bor,
+    photoUrl: i.rasm ?? null,
+    position: i.tartib,
+    nameRu: i.nom_ru ?? "",
+    nameEn: i.nom_en ?? "",
+    noteRu: i.izoh_ru ?? "",
+    noteEn: i.izoh_en ?? "",
   };
 }
 
-/** How much of a menu exists. Cheap, and the setup panel is the only caller. */
-export async function countMenuItems(venueId: string): Promise<number> {
-  if (!supabaseAdmin) return 0;
+export type EditableCategory = { id: string; name: string; nameRu: string; nameEn: string };
 
-  const { count } = await supabaseAdmin
-    .from("menu_items")
-    .select("id", { count: "exact", head: true })
-    .eq("venue_id", venueId);
+export async function getMenuCategory(id: string): Promise<EditableCategory | null> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/menyu/bolimlar/{id}", {
+    params: { path: { id } },
+  });
+  if (error || !data) return null;
 
-  return count ?? 0;
-}
-
-/** One row of a menu, for the screen that corrects it. */
-export async function getMenuItem(
-  venueId: string,
-  itemId: string,
-): Promise<(MenuItem & { nameRu: string | null; nameEn: string | null }) | null> {
-  if (!supabaseAdmin) return null;
-
-  // Scoped to the venue, so a guessed id belonging to another cafe is a 404
-  // rather than an edit form over their menu.
-  const { data } = await supabaseAdmin
-    .from("menu_items")
-    .select("id, category_id, name, name_ru, name_en, note, price, available, photo_url, position")
-    .eq("venue_id", venueId)
-    .eq("id", itemId)
-    .maybeSingle();
-
-  if (!data) return null;
-
-  return {
-    id: data.id as string,
-    categoryId: (data.category_id as string) ?? null,
-    name: data.name as string,
-    nameRu: (data.name_ru as string) ?? null,
-    nameEn: (data.name_en as string) ?? null,
-    note: (data.note as string) ?? null,
-    price: Number(data.price),
-    available: Boolean(data.available),
-    photoUrl: (data.photo_url as string) ?? null,
-    position: Number(data.position),
-  };
-}
-
-/** One section, for the screen that renames it. */
-export async function getMenuCategory(
-  venueId: string,
-  categoryId: string,
-): Promise<{ id: string; name: string; nameRu: string | null; nameEn: string | null } | null> {
-  if (!supabaseAdmin) return null;
-
-  const { data } = await supabaseAdmin
-    .from("menu_categories")
-    .select("id, name, name_ru, name_en")
-    .eq("venue_id", venueId)
-    .eq("id", categoryId)
-    .maybeSingle();
-
-  if (!data) return null;
-
-  return {
-    id: data.id as string,
-    name: data.name as string,
-    nameRu: (data.name_ru as string) ?? null,
-    nameEn: (data.name_en as string) ?? null,
-  };
+  const c = data.bolim;
+  return { id: c.id, name: c.nom, nameRu: c.nom_ru ?? "", nameEn: c.nom_en ?? "" };
 }

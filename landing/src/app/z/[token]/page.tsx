@@ -28,7 +28,7 @@ export default async function CounterPage({ params }: PageProps<"/z/[token]">) {
   // A wrong token and a rotated one get the same answer as a made-up one.
   if (!venue) notFound();
 
-  const requests = await listVenueRequests(venue.id);
+  const requests = await listVenueRequests(venue.venue.id);
   const waiting = requests.filter((r) => r.status === "new");
 
   return (
@@ -43,7 +43,7 @@ export default async function CounterPage({ params }: PageProps<"/z/[token]">) {
       {/* The name, the count and the connection together: the count is only
           true while the phone is connected, and the header is where that has
           to be said. */}
-      <CounterHeader venueName={venue.name} waiting={waiting.length} seconds={10} />
+      <CounterHeader venueName={venue.venue.name} waiting={waiting.length} seconds={10} />
 
       {/* The ids rather than the count: two closed and two arrived is not a
           quiet minute, and a count would call it one. */}

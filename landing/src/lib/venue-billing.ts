@@ -1,6 +1,7 @@
 import "server-only";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { asReader } from "@/lib/backend/client";
+
 import { VAT } from "@/lib/company";
 import { venueMonthly, bandFor } from "@/lib/venues";
 import { venueInvoiceTotal, type MonthOption, type VenueInvoice } from "@/lib/venue-plan";
@@ -23,48 +24,73 @@ export {
 // is how every other supplier in the country is paid, and the reason a card
 // gateway being uncertified does not stop us selling this today.
 
-export async function listVenueInvoices(venueId: string): Promise<VenueInvoice[]> {
-  if (!supabaseAdmin) return [];
+export async function listVenueInvoices(handle: string): Promise<VenueInvoice[]> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/raqamlar/{raqam}/hisoblar", {
+    params: { path: { raqam: handle } },
+  });
+  if (error || !data) return [];
 
-  const { data } = await supabaseAdmin
-    .from("venue_invoices")
-    .select("id, number, points, months, monthly, vat_percent, total, status, issued_at, paid_at")
-    .eq("venue_id", venueId)
-    .order("issued_at", { ascending: false });
-
-  return (data ?? []).map(rowToInvoice);
+  return (data.hisoblar ?? []).map(toInvoice);
 }
 
-export async function getVenueInvoice(
-  venueId: string,
-  id: string,
-): Promise<VenueInvoice | null> {
-  if (!supabaseAdmin) return null;
+/**
+ * One invoice.
+ *
+ * Looked up by id and by the reader's account together, so a guessed id
+ * belonging to somebody else's cafe is a 404 rather than their prices.
+ */
+export async function getVenueInvoice(id: string): Promise<VenueInvoice | null> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/hisoblar/{id}", { params: { path: { id } } });
+  return error || !data ? null : toInvoice(data.hisob);
+}
 
-  // Scoped to the venue rather than looked up by id alone, so a guessed id
-  // belonging to somebody else's cafe is a 404 rather than their prices.
-  const { data } = await supabaseAdmin
-    .from("venue_invoices")
-    .select("id, number, points, months, monthly, vat_percent, total, status, issued_at, paid_at")
-    .eq("venue_id", venueId)
-    .eq("id", id)
-    .maybeSingle();
+type BackendInvoice = {
+  id: string;
+  raqam: number;
+  nuqtalar: number;
+  oylar: number;
+  oylik: number;
+  qqs_foizi: number;
+  jami: number;
+  holat: string;
+  berilgan: string;
+  tolangan?: string;
+};
 
-  return data ? rowToInvoice(data) : null;
+function toInvoice(i: BackendInvoice): VenueInvoice {
+  return {
+    id: i.id,
+    number: i.raqam,
+    points: i.nuqtalar,
+    months: i.oylar as MonthOption,
+    monthly: i.oylik,
+    vatPercent: i.qqs_foizi,
+    total: i.jami,
+    status: i.holat as VenueInvoice["status"],
+    issuedAt: i.berilgan,
+    paidAt: i.tolangan ?? null,
+  };
 }
 
 export type IssueResult =
   | { ok: true; invoice: VenueInvoice }
   | { ok: false; error: "negotiated" | "failed" };
 
+/**
+ * Issuing one.
+ *
+ * The figures are worked out here, beside the price list, and copied onto the
+ * row by the backend — the list will change and a document has to keep saying
+ * what it said when it was issued.
+ */
 export async function issueVenueInvoice(
-  venueId: string,
+  handle: string,
   points: number,
   months: MonthOption,
   vatPercent = VAT.percent,
 ): Promise<IssueResult> {
-  if (!supabaseAdmin) return { ok: false, error: "failed" };
-
   const monthly = venueMonthly(points);
   // The largest band has no price on purpose: a chain wants a conversation
   // about hardware, branding and terms, and an invoice generated behind its
@@ -73,22 +99,20 @@ export async function issueVenueInvoice(
 
   const { total } = venueInvoiceTotal(points, months, monthly, vatPercent);
 
-  const { data } = await supabaseAdmin
-    .from("venue_invoices")
-    .insert({
-      venue_id: venueId,
-      points: Math.max(1, points),
-      months,
-      // Copied, not referenced: the price list will change and this document
-      // has to keep saying what it said.
-      monthly,
-      vat_percent: vatPercent,
-      total,
-    })
-    .select("id, number, points, months, monthly, vat_percent, total, status, issued_at, paid_at")
-    .single();
+  const client = await asReader();
+  const { data, error } = await client.POST("/raqamlar/{raqam}/hisoblar", {
+    params: { path: { raqam: handle } },
+    body: {
+      nuqtalar: Math.max(1, points),
+      oylar: months,
+      oylik: monthly,
+      qqs_foizi: vatPercent,
+      jami: total,
+    },
+  });
+  if (error || !data) return { ok: false, error: "failed" };
 
-  return data ? { ok: true, invoice: rowToInvoice(data) } : { ok: false, error: "failed" };
+  return { ok: true, invoice: toInvoice(data.hisob) };
 }
 
 /** Which band a venue of this size falls into, for the panel. */

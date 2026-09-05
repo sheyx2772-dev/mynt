@@ -81,7 +81,7 @@ export default async function MenuAdminPage({
 
   const normalized = `${parsed.letters}${parsed.digits}`;
   const user = await requireUser(`/kabinet/${normalized}/menyu`);
-  const venue = await getOwnedVenue(normalized, user.id);
+  const venue = await getOwnedVenue(normalized);
 
   // Not theirs, or the number is not a venue. Either way there is nothing here.
   if (!venue) notFound();

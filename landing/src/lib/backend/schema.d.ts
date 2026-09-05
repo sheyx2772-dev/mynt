@@ -210,6 +210,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/hisoblar/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bitta hisob-faktura */
+        get: operations["obyekt-hisobi"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/karta/{seriya}": {
         parameters: {
             query?: never;
@@ -398,6 +415,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/men/obyekt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Kabinetdagi obyekt yorlig'i
+         * @description Obyekti yo'q hisob uchun null — bu odatiy holat.
+         */
+        get: operations["obyekt-yorligi"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/men/parol": {
         parameters: {
             query?: never;
@@ -411,6 +448,115 @@ export interface paths {
          * @description Kirgan holda. Parolni unutgan bo'lsangiz — havola bilan kiring va shu yerdan yangisini qo'ying.
          */
         put: operations["parolni-belgilash"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/menyu/bolimlar/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bitta bo'lim — egasi uchun */
+        get: operations["bolim"];
+        /** Bo'lim nomini o'zgartirish */
+        put: operations["bolim-tahrirlash"];
+        post?: never;
+        /** Bo'limni o'chirish */
+        delete: operations["bolim-ochirish"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/menyu/bolimlar/{id}/tartib": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Bo'lim tartibini o'zgartirish */
+        put: operations["bolim-kochirish"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/menyu/taomlar/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bitta taom — egasi uchun */
+        get: operations["taom"];
+        /** Taomni tahrirlash */
+        put: operations["taom-tahrirlash"];
+        post?: never;
+        /** Taomni o'chirish */
+        delete: operations["taom-ochirish"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/menyu/taomlar/{id}/bor": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Taom bor yoki tugagan
+         * @description Kunlik ish: oshxona tugagan taomni bir tegish bilan o'chiradi.
+         */
+        put: operations["taom-bormi"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/menyu/taomlar/{id}/rasm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Taom rasmini belgilash */
+        put: operations["taom-rasmi"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/menyu/taomlar/{id}/tartib": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Taom tartibini o'zgartirish */
+        put: operations["taom-kochirish"];
         post?: never;
         delete?: never;
         options?: never;
@@ -479,6 +625,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/profil/{raqam}/menyu": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obyekt va uning menyusi
+         * @description Sessiya kerak emas — stoldagi tegni tegizgan mehmon ochadi.
+         */
+        get: operations["menyu"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/profil/{raqam}/obuna": {
         parameters: {
             query?: never;
@@ -507,6 +673,26 @@ export interface paths {
         get: operations["postlar"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/profil/{raqam}/sorov": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Stoldan so'rov yuborish
+         * @description Sessiya kerak emas: so'rayotgan odam — telefonli mehmon.
+         */
+        post: operations["sorov-yuborish"];
         delete?: never;
         options?: never;
         head?: never;
@@ -664,6 +850,123 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/raqamlar/{raqam}/hisoblar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obyektning hisob-fakturalari */
+        get: operations["obyekt-hisoblari"];
+        put?: never;
+        /**
+         * Hisob-faktura chiqarish
+         * @description Summalar chaqiruvchidan keladi va qatorga ko'chiriladi — narxlar ro'yxati o'zgaradi, hujjat esa aytganini aytib turishi kerak.
+         */
+        post: operations["hisob-berish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/menyu/bolimlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Menyuga bo'lim qo'shish */
+        post: operations["bolim-qoshish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/menyu/taomlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Menyuga taom qo'shish */
+        post: operations["taom-qoshish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/obyekt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obyekt — egasi uchun
+         * @description Wi-Fi paroli va xodim kaliti faqat shu javobda.
+         */
+        get: operations["obyektim"];
+        /** Obyekt ma'lumotlarini saqlash */
+        put: operations["obyekt-saqlash"];
+        /**
+         * Obyekt ochish
+         * @description Yangi obyekt 30 kunlik muddat bilan ochiladi.
+         */
+        post: operations["obyekt-yaratish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/obyekt/kalit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Xodim havolasini yangilash
+         * @description Eski havola shu zahoti ishlamay qoladi.
+         */
+        post: operations["xodim-kaliti"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/obyekt/nuqtalar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Stollar yoki xonalar ro'yxati */
+        put: operations["nuqtalar"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/raqamlar/{raqam}/profil": {
         parameters: {
             query?: never;
@@ -678,6 +981,40 @@ export interface paths {
          */
         put: operations["profilni-saqlash"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/sorovlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Stollardan kelgan so'rovlar */
+        get: operations["sorovlar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/sorovlar/{id}/bajarildi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** So'rovni bajarilgan deb belgilash */
+        post: operations["sorov-yopish"];
         delete?: never;
         options?: never;
         head?: never;
@@ -832,6 +1169,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/xodim/{kalit}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Kassa ekrani
+         * @description Sessiya emas, kalit. Xodim telefonida hisob bo'lmaydi.
+         */
+        get: operations["xodim-ekrani"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/xodim/{kalit}/sorovlar/{id}/bajarildi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Xodim so'rovni yopadi */
+        post: operations["xodim-bajardi"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -922,6 +1296,24 @@ export interface components {
             ism: string;
             kod?: string;
         };
+        Category: {
+            id: string;
+            nom: string;
+            nom_en?: string;
+            nom_ru?: string;
+            taomlar: components["schemas"]["Item"][] | null;
+            /** Format: int32 */
+            tartib: number;
+        };
+        CategoryBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/CategoryBody.json
+             */
+            readonly $schema?: string;
+            nom: components["schemas"]["Text"];
+        };
         Checkout: {
             click?: string;
             payme?: string;
@@ -954,6 +1346,26 @@ export interface components {
             readonly $schema?: string;
             /** @description Xatdagi havoladan olingan token */
             token: string;
+        };
+        CreateVenueInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/CreateVenueInputBody.json
+             */
+            readonly $schema?: string;
+            nom: string;
+            /** @enum {string} */
+            turi: "cafe" | "hotel" | "shop" | "other";
+        };
+        CreatedOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/CreatedOutputBody.json
+             */
+            readonly $schema?: string;
+            id: string;
         };
         Day: {
             /** Format: int64 */
@@ -1173,6 +1585,110 @@ export interface components {
             manba?: "nfc" | "qr" | "share";
             telefon?: string;
         };
+        Invoice: {
+            /** Format: date-time */
+            berilgan: string;
+            holat: string;
+            id: string;
+            /** Format: int64 */
+            jami: number;
+            /** Format: int32 */
+            nuqtalar: number;
+            /** Format: int32 */
+            oylar: number;
+            /** Format: int64 */
+            oylik: number;
+            /** Format: int32 */
+            qqs_foizi: number;
+            /** Format: int64 */
+            raqam: number;
+            /** Format: date-time */
+            tolangan?: string;
+        };
+        InvoiceOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/InvoiceOutputBody.json
+             */
+            readonly $schema?: string;
+            hisob: components["schemas"]["Invoice"];
+        };
+        InvoicesOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/InvoicesOutputBody.json
+             */
+            readonly $schema?: string;
+            hisoblar: components["schemas"]["Invoice"][] | null;
+        };
+        IssueInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/IssueInputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            jami: number;
+            /** Format: int32 */
+            nuqtalar: number;
+            /** Format: int32 */
+            oylar: number;
+            /** Format: int64 */
+            oylik: number;
+            /** Format: int32 */
+            qqs_foizi: number;
+        };
+        Item: {
+            bolim?: string;
+            bor: boolean;
+            id: string;
+            izoh?: string;
+            izoh_en?: string;
+            izoh_ru?: string;
+            /** Format: int64 */
+            narx: number;
+            nom: string;
+            nom_en?: string;
+            nom_ru?: string;
+            rasm?: string;
+            /** Format: int32 */
+            tartib: number;
+        };
+        ItemFlagInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/ItemFlagInputBody.json
+             */
+            readonly $schema?: string;
+            bor: boolean;
+        };
+        ItemInput: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/ItemInput.json
+             */
+            readonly $schema?: string;
+            /** Format: uuid */
+            bolim?: string;
+            izoh?: components["schemas"]["Text"];
+            /** Format: int64 */
+            narx: number;
+            nom: components["schemas"]["Text"];
+        };
+        ItemPhotoInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/ItemPhotoInputBody.json
+             */
+            readonly $schema?: string;
+            rasm: string;
+        };
         Lead: {
             email?: string;
             /** Format: int64 */
@@ -1246,6 +1762,26 @@ export interface components {
             readonly $schema?: string;
             account: components["schemas"]["AccountBody"];
         };
+        MenuOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/MenuOutputBody.json
+             */
+            readonly $schema?: string;
+            bolimlar: components["schemas"]["Category"][] | null;
+            obyekt: components["schemas"]["Venue"];
+        };
+        MoveInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/MoveInputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int32 */
+            tartib: number;
+        };
         NewPromoCode: {
             /**
              * Format: uri
@@ -1279,6 +1815,24 @@ export interface components {
             tugashi?: string;
             /** @enum {string} */
             turi: "percent" | "amount" | "months";
+        };
+        OneCategoryOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/OneCategoryOutputBody.json
+             */
+            readonly $schema?: string;
+            bolim: components["schemas"]["Category"];
+        };
+        OneItemOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/OneItemOutputBody.json
+             */
+            readonly $schema?: string;
+            taom: components["schemas"]["Item"];
         };
         Order: {
             /** Format: date-time */
@@ -1452,6 +2006,15 @@ export interface components {
             kod?: string;
             message: string;
         };
+        PointsInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/PointsInputBody.json
+             */
+            readonly $schema?: string;
+            nuqtalar: string[] | null;
+        };
         Post: {
             id: string;
             ism?: string;
@@ -1613,6 +2176,33 @@ export interface components {
             kunlar: components["schemas"]["Day"][] | null;
             manbalar: components["schemas"]["SourceStat"][] | null;
         };
+        Request: {
+            /** Format: int32 */
+            baho?: number;
+            /** Format: date-time */
+            bajarilgan?: string;
+            holat: string;
+            id: string;
+            izoh?: string;
+            nuqta: string;
+            turi: string;
+            /** Format: date-time */
+            vaqt: string;
+        };
+        RequestInput: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/RequestInput.json
+             */
+            readonly $schema?: string;
+            /** Format: int32 */
+            baho?: number;
+            izoh?: string;
+            nuqta: string;
+            /** @enum {string} */
+            turi: "waiter" | "bill" | "review" | "clean" | "other";
+        };
         RequestLinkInputBody: {
             /**
              * Format: uri
@@ -1631,6 +2221,17 @@ export interface components {
              */
             readonly $schema?: string;
             message: string;
+        };
+        RequestsOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/RequestsOutputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            kutilmoqda: number;
+            sorovlar: components["schemas"]["Request"][] | null;
         };
         Resident: {
             ism: string;
@@ -1688,6 +2289,25 @@ export interface components {
             /** @example nfc */
             manba: string;
         };
+        StaffOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/StaffOutputBody.json
+             */
+            readonly $schema?: string;
+            obyekt: components["schemas"]["Venue"];
+            sorovlar: components["schemas"]["Request"][] | null;
+        };
+        StaffTokenOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/StaffTokenOutputBody.json
+             */
+            readonly $schema?: string;
+            kalit: string;
+        };
         State: {
             /**
              * Format: uri
@@ -1712,6 +2332,25 @@ export interface components {
             hisobot: components["schemas"]["Report"];
             /** Format: int64 */
             kun: number;
+        };
+        Tab: {
+            /** Format: int64 */
+            kutilmoqda: number;
+            raqam: string;
+        };
+        TabOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/TabOutputBody.json
+             */
+            readonly $schema?: string;
+            obyekt: components["schemas"]["Tab"];
+        };
+        Text: {
+            en?: string;
+            ru?: string;
+            uz: string;
         };
         TopHandle: {
             ism: string;
@@ -1739,6 +2378,45 @@ export interface components {
             /** Format: date-time */
             tolangan?: string;
             tolov: string;
+        };
+        Venue: {
+            id: string;
+            ish_vaqti?: string;
+            manzil?: string;
+            nom: string;
+            nuqtalar: string[] | null;
+            raqam?: string;
+            /** Format: date-time */
+            tarif_tugashi?: string;
+            /** @enum {string} */
+            turi: "cafe" | "hotel" | "shop" | "other";
+            wifi?: string;
+            wifi_paroli?: string;
+            xodim_kaliti?: string;
+        };
+        VenueInput: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/VenueInput.json
+             */
+            readonly $schema?: string;
+            ish_vaqti?: string;
+            manzil?: string;
+            nom: string;
+            /** @enum {string} */
+            turi: "cafe" | "hotel" | "shop" | "other";
+            wifi?: string;
+            wifi_paroli?: string;
+        };
+        VenueOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/VenueOutputBody.json
+             */
+            readonly $schema?: string;
+            obyekt: components["schemas"]["Venue"];
         };
         ViewInputBody: {
             /**
@@ -2150,6 +2828,37 @@ export interface operations {
             };
         };
     };
+    "obyekt-hisobi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvoiceOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "genesis-karta": {
         parameters: {
             query?: never;
@@ -2465,6 +3174,35 @@ export interface operations {
             };
         };
     };
+    "obyekt-yorligi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TabOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "parolni-belgilash": {
         parameters: {
             query?: never;
@@ -2475,6 +3213,324 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["SetPasswordInputBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    bolim: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OneCategoryOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "bolim-tahrirlash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CategoryBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "bolim-ochirish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "bolim-kochirish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MoveInputBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    taom: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OneItemOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "taom-tahrirlash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ItemInput"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "taom-ochirish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "taom-bormi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ItemFlagInputBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "taom-rasmi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ItemPhotoInputBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "taom-kochirish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MoveInputBody"];
             };
         };
         responses: {
@@ -2621,6 +3677,39 @@ export interface operations {
             };
         };
     };
+    menyu: {
+        parameters: {
+            query?: {
+                til?: "uz" | "ru" | "en";
+            };
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MenuOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     obuna: {
         parameters: {
             query?: never;
@@ -2675,6 +3764,39 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["PostsOutputBody"];
                 };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "sorov-yuborish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RequestInput"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error */
             default: {
@@ -2948,6 +4070,309 @@ export interface operations {
             };
         };
     };
+    "obyekt-hisoblari": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvoicesOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "hisob-berish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IssueInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvoiceOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "bolim-qoshish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CategoryBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreatedOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "taom-qoshish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ItemInput"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreatedOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    obyektim: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VenueOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "obyekt-saqlash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VenueInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VenueOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "obyekt-yaratish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateVenueInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VenueOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "xodim-kaliti": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffTokenOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    nuqtalar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PointsInputBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VenueOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "profilni-saqlash": {
         parameters: {
             query?: never;
@@ -2971,6 +4396,70 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HandleOutputBody"];
                 };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    sorovlar: {
+        parameters: {
+            query?: {
+                holat?: "new" | "done";
+                soni?: number;
+            };
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RequestsOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "sorov-yopish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error */
             default: {
@@ -3217,6 +4706,67 @@ export interface operations {
             204: {
                 headers: {
                     Header?: components["schemas"]["AliveOutputHeader"];
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "xodim-ekrani": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kalit: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "xodim-bajardi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kalit: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
                     [name: string]: unknown;
                 };
                 content?: never;

@@ -1,8 +1,9 @@
 import "server-only";
 
+import { asReader, backend } from "@/lib/backend/client";
+
 import { after } from "next/server";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
 import { getClientIp } from "@/lib/rate-limit";
 import { notify } from "@/lib/notify";
 import type { ReportRow } from "@/lib/venue-report";
@@ -36,6 +37,8 @@ export type VenueRequest = {
   note: string | null;
   status: "new" | "done";
   createdAt: string;
+  /** When the counter closed it. The report measures the gap. */
+  doneAt: string | null;
 };
 
 // One press is a request; eleven presses is the same request eleven times, and
@@ -74,40 +77,6 @@ export type SendResult =
  * the venue's row id, the owner's account — is resolved here rather than being
  * put in the page for a stranger to post back.
  */
-async function target(normalized: string): Promise<{
-  venueId: string;
-  venueName: string;
-  ownerUserId: string | null;
-  planExpiresAt: string;
-  points: string[];
-} | null> {
-  if (!supabaseAdmin) return null;
-
-  const { data: handle } = await supabaseAdmin
-    .from("handles")
-    .select("id, user_id, status")
-    .eq("normalized", normalized)
-    .maybeSingle();
-
-  if (!handle || handle.status !== "claimed") return null;
-
-  const { data: venue } = await supabaseAdmin
-    .from("venues")
-    .select("id, name, plan_expires_at, points")
-    .eq("handle_id", handle.id as string)
-    .maybeSingle();
-
-  if (!venue) return null;
-
-  return {
-    venueId: venue.id as string,
-    venueName: venue.name as string,
-    ownerUserId: (handle.user_id as string) ?? null,
-    planExpiresAt: venue.plan_expires_at as string,
-    points: (venue.points as string[]) ?? [],
-  };
-}
-
 export async function sendVenueRequest(opts: {
   handle: string;
   point: string | null;
@@ -115,226 +84,121 @@ export async function sendVenueRequest(opts: {
   rating?: number | null;
   note?: string | null;
 }): Promise<SendResult> {
-  if (!supabaseAdmin) return { ok: false, error: "failed" };
-
-  const found = await target(opts.handle);
-  if (!found) return { ok: false, error: "failed" };
-
-  // Checked here and not only by hiding the button: a page left open when the
-  // month ran out would otherwise keep writing rows nobody is allowed to read,
-  // and a form can be posted by anyone in any case.
-  if (new Date(found.planExpiresAt).getTime() <= Date.now()) {
-    return { ok: false, error: "expired" };
-  }
-
-  // The table number arrives in the URL, where a guest can edit it. It used to
-  // be stored as given, so ?stol=99 produced a request from a table that does
-  // not exist. It is now kept only if the venue actually has that point.
-  //
-  // An unrecognised number is dropped rather than refused. The case that
-  // matters is not mischief but a rename: the owner changes "Stol 3" to
-  // "3-stol" and the sticker already on the table still says the old one. A
-  // refusal would leave a real guest unable to call anyone at all, where a
-  // request with no table against it still reaches the counter.
-  //
-  // What this cannot catch is a guest at table 7 claiming table 3 — both are
-  // real. That needs a token per table, not a number in a query string.
-  const asked = opts.point?.trim().slice(0, 12) || null;
-  const point = asked === null ? null : pointOf(found.points, asked);
-  const ip = await getClientIp();
-
-  // A review is a considered thing somebody types once; the two one-tap kinds
-  // are what a bored table presses repeatedly. Pressing "waiter" again while
-  // the first one is still unanswered is the same request, not a second one.
-  // Both limits are per point, never per venue: table 3 asking for the bill
-  // must not be refused because table 7 is still waiting for a waiter.
-  const atThisPoint = () => {
-    const query = supabaseAdmin!
-      .from("venue_requests")
-      .select("id", { count: "exact", head: true })
-      .eq("venue_id", found.venueId);
-
-    return point ? query.eq("point", point) : query.is("point", null);
-  };
-
-  if (opts.kind !== "review") {
-    const since = new Date(Date.now() - PER_POINT_WINDOW_MS).toISOString();
-    const { count } = await atThisPoint()
-      .eq("kind", opts.kind)
-      .eq("status", "new")
-      .gte("created_at", since);
-
-    if ((count ?? 0) > 0) return { ok: false, error: "tooSoon" };
-  }
-
-  const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-  const { count: recent } = await atThisPoint().gte("created_at", hourAgo);
-  if ((recent ?? 0) >= PER_POINT_PER_HOUR) return { ok: false, error: "tooSoon" };
-
-  const rating =
-    opts.kind === "review" && opts.rating && opts.rating >= 1 && opts.rating <= 5
-      ? opts.rating
-      : null;
-
-  const { error } = await supabaseAdmin.from("venue_requests").insert({
-    venue_id: found.venueId,
-    point,
-    kind: opts.kind,
-    rating,
-    note: opts.note?.trim().slice(0, 500) || null,
-    ip,
+  const { error, response } = await backend.POST("/profil/{raqam}/sorov", {
+    params: { path: { raqam: opts.handle } },
+    body: {
+      // A request with no point still reaches the counter. The case that
+      // matters is a rename — the owner changes "Stol 3" to "3-stol" and the
+      // sticker already on the table says the old one — and a refusal would
+      // leave a real guest unable to call anybody at all.
+      nuqta: opts.point ?? "—",
+      turi: opts.kind,
+      baho: opts.rating ?? undefined,
+      izoh: opts.note ?? undefined,
+    },
   });
 
-  if (error) return { ok: false, error: "failed" };
+  if (!error) return { ok: true };
+  if (response.status === 403) return { ok: false, error: "expired" };
+  if (response.status === 429) return { ok: false, error: "tooSoon" };
+  return { ok: false, error: "failed" };
+}
 
-  // A request is worth something for about as long as the guest is still
-  // sitting there, so it goes out now rather than the next time somebody opens
-  // the cabinet — through after(), so the guest gets their confirmation without
-  // waiting on Telegram.
-  if (found.ownerUserId) {
-    // Written out here rather than imported from the vocabulary, which imports
-    // this file for its types — one message in one language is a smaller cost
-    // than a cycle between the two modules.
-    const WHAT: Record<RequestKind, string> = {
-      waiter: "chaqirdi",
-      bill: "hisob so'radi",
-      clean: "tozalash so'radi",
-      review: "izoh qoldirdi",
-      other: "so'rov yubordi",
-    };
-    const what = WHAT[opts.kind];
+/** What the counter sees, for the owner. */
+export async function listVenueRequests(handle: string): Promise<VenueRequest[]> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/raqamlar/{raqam}/sorovlar", {
+    params: { path: { raqam: handle } },
+  });
+  if (error || !data) return [];
 
-    const who = point ?? found.venueName;
-    const ownerUserId = found.ownerUserId;
+  return (data.sorovlar ?? []).map(toRequest);
+}
 
-    after(
-      notify({
-        userId: ownerUserId,
-        kind: "venue_request",
-        handle: opts.handle,
-        title: `${who} — ${what}`,
-        body: opts.note?.slice(0, 200) ?? null,
-        href: `/kabinet/${opts.handle}/sorovlar`,
-      }),
-    );
-  }
+/** The counter screen, reached by its own link rather than by a session. */
+export async function listRequestsByToken(token: string): Promise<VenueRequest[]> {
+  const { data, error } = await backend.GET("/xodim/{kalit}", {
+    params: { path: { kalit: token } },
+  });
+  if (error || !data) return [];
 
-  return { ok: true };
+  return (data.sorovlar ?? []).map(toRequest);
+}
+
+type BackendRequest = {
+  id: string;
+  nuqta: string;
+  turi: string;
+  baho?: number;
+  izoh?: string;
+  holat: string;
+  vaqt: string;
+  bajarilgan?: string;
+};
+
+function toRequest(r: BackendRequest): VenueRequest {
+  return {
+    id: r.id,
+    point: r.nuqta === "—" ? null : r.nuqta,
+    kind: r.turi as RequestKind,
+    rating: r.baho ?? null,
+    note: r.izoh ?? null,
+    status: r.holat as "new" | "done",
+    createdAt: r.vaqt,
+    doneAt: r.bajarilgan ?? null,
+  };
+}
+
+export async function closeVenueRequest(handle: string, id: string): Promise<boolean> {
+  const client = await asReader();
+  const { error } = await client.POST("/raqamlar/{raqam}/sorovlar/{id}/bajarildi", {
+    params: { path: { raqam: handle, id } },
+  });
+  return !error;
+}
+
+export async function closeRequestByToken(token: string, id: string): Promise<boolean> {
+  const { error } = await backend.POST("/xodim/{kalit}/sorovlar/{id}/bajarildi", {
+    params: { path: { kalit: token, id } },
+  });
+  return !error;
+}
+
+/** How many tables are waiting, and how many have ever asked. */
+export async function countWaiting(handle: string): Promise<number> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/raqamlar/{raqam}/sorovlar", {
+    params: { path: { raqam: handle }, query: { soni: 1 } },
+  });
+  return error || !data ? 0 : data.kutilmoqda;
+}
+
+export async function countAllRequests(handle: string): Promise<number> {
+  return (await listVenueRequests(handle)).length;
 }
 
 /**
- * What the counter sees, in the order it should be dealt with.
+ * The month's requests, for the report.
  *
- * Waiting requests come oldest first, which is the opposite of a feed and the
- * right way round for this: the table that has been waiting six minutes is the
- * one somebody needs to walk to, not the one that just pressed. Everything
- * already answered is history, so that half is newest first.
- *
- * Ownership is checked by the caller.
- */
-export async function listVenueRequests(
-  venueId: string,
-  limit = 100,
-): Promise<VenueRequest[]> {
-  if (!supabaseAdmin) return [];
-
-  const { data } = await supabaseAdmin
-    .from("venue_requests")
-    .select("id, point, kind, rating, note, status, created_at")
-    .eq("venue_id", venueId)
-    .order("created_at", { ascending: false })
-    .limit(limit);
-
-  const rows = (data ?? []).map((row) => ({
-    id: row.id as string,
-    point: (row.point as string) ?? null,
-    kind: row.kind as RequestKind,
-    rating: (row.rating as number) ?? null,
-    note: (row.note as string) ?? null,
-    status: row.status as "new" | "done",
-    createdAt: row.created_at as string,
-  }));
-
-  const waiting = rows.filter((r) => r.status === "new").reverse();
-  const answered = rows.filter((r) => r.status !== "new");
-  return [...waiting, ...answered];
-}
-
-export async function markRequestDone(venueId: string, id: string): Promise<void> {
-  if (!supabaseAdmin) return;
-
-  await supabaseAdmin
-    .from("venue_requests")
-    .update({ status: "done" })
-    .eq("id", id)
-    .eq("venue_id", venueId);
-}
-
-/** How many tables are still waiting. Shown as a badge on the cabinet. */
-export async function countWaiting(venueId: string): Promise<number> {
-  if (!supabaseAdmin) return 0;
-
-  const { count } = await supabaseAdmin
-    .from("venue_requests")
-    .select("id", { count: "exact", head: true })
-    .eq("venue_id", venueId)
-    .eq("status", "new");
-
-  return count ?? 0;
-}
-
-/**
- * The rows behind the report.
- *
- * A window rather than everything: a venue that has been open two years should
- * not pay for two years of rows to answer a question about this month. The cap
- * is generous — a busy cafe on twelve tables writes a few hundred a week — and
- * the page says when it has been hit rather than quietly reporting a slice as
- * if it were the whole month.
+ * Capped rather than paged: a report is read whole, and a cafe that has taken
+ * two hundred requests in a month has a report worth reading rather than a
+ * scroll worth abandoning.
  */
 export async function listRequestsSince(
-  venueId: string,
+  handle: string,
   days: number,
-  limit = 4000,
-): Promise<{ rows: ReportRow[]; capped: boolean }> {
-  if (!supabaseAdmin) return { rows: [], capped: false };
-
-  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
-
-  const { data } = await supabaseAdmin
-    .from("venue_requests")
-    .select("point, kind, rating, status, created_at, done_at")
-    .eq("venue_id", venueId)
-    .gte("created_at", since)
-    .order("created_at", { ascending: false })
-    .limit(limit);
-
-  const rows: ReportRow[] = (data ?? []).map((row) => ({
-    point: (row.point as string) ?? null,
-    kind: row.kind as RequestKind,
-    rating: (row.rating as number) ?? null,
-    status: row.status as "new" | "done",
-    createdAt: row.created_at as string,
-    doneAt: (row.done_at as string) ?? null,
-  }));
-
-  return { rows, capped: rows.length >= limit };
+): Promise<{ rows: VenueRequest[]; capped: boolean }> {
+  const all = await listVenueRequests(handle);
+  const since = Date.now() - days * 24 * 60 * 60 * 1000;
+  const rows = all.filter((r) => new Date(r.createdAt).getTime() >= since);
+  return { rows, capped: all.length >= 200 };
 }
 
-/**
- * Every request this venue has ever had, answered or not.
- *
- * Distinct from countWaiting: what the setup panel asks is whether the loop has
- * ever closed, and a venue whose first call was answered within the minute has
- * proved exactly as much as one still waiting.
- */
-export async function countAllRequests(venueId: string): Promise<number> {
-  if (!supabaseAdmin) return 0;
-
-  const { count } = await supabaseAdmin
-    .from("venue_requests")
-    .select("id", { count: "exact", head: true })
-    .eq("venue_id", venueId);
-
-  return count ?? 0;
+/** Closing one, from the cabinet or from the counter link. */
+export async function markRequestDone(handleOrToken: string, id: string): Promise<boolean> {
+  // A number is six characters and a token is twenty or more, which is the
+  // difference between the two doors.
+  return /^[A-Z]{3}[0-9]{3}$/.test(handleOrToken)
+    ? closeVenueRequest(handleOrToken, id)
+    : closeRequestByToken(handleOrToken, id);
 }

@@ -1,512 +1,322 @@
-import "server-only";
+"use server";
 
-import { randomBytes } from "node:crypto";
+import { revalidatePath } from "next/cache";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { asReader } from "@/lib/backend/client";
+import { getMenu } from "@/lib/menu";
 import { uploadImage, isStorageConfigured } from "@/lib/storage";
-import { checkDishPhoto } from "@/lib/uploads";
 
-// Writing a menu.
+// Changing a venue and its menu.
 //
-// Ownership is the query, as everywhere else here: every statement carries the
-// venue id that was resolved from the signed-in user's own handle, so a forged
-// id in a form field matches no rows rather than editing somebody else's cafe.
+// Every one of these is a form post from the cabinet. The checks that used to
+// be here — does this section belong to this venue, does this venue belong to
+// this person — are in the statements behind the backend now, joined through
+// `handles`. What is left is reading a form and saying what went wrong.
 
 export type EditResult = { ok: true } | { ok: false; error: string };
 
-const NAME_MAX = 120;
-const NOTE_MAX = 200;
-const PRICE_MAX = 100_000_000;
+const FAILED: EditResult = { ok: false, error: "Saqlab bo'lmadi." };
 
-function text(value: FormDataEntryValue | null, max: number): string {
-  return String(value ?? "").trim().slice(0, max);
+function text(value: FormDataEntryValue | null, limit: number): string {
+  return String(value ?? "").trim().slice(0, limit);
 }
 
-/** Empty means "not translated", which the reader falls back for. */
-function optional(value: FormDataEntryValue | null, max: number): string | null {
-  return text(value, max) || null;
-}
-
-export async function addCategory(venueId: string, form: FormData): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
-
-  const name = text(form.get("name"), 60);
-  if (!name) return { ok: false, error: "Bo'lim nomini kiriting." };
-
-  const { count } = await supabaseAdmin
-    .from("menu_categories")
-    .select("id", { count: "exact", head: true })
-    .eq("venue_id", venueId);
-
-  const { error } = await supabaseAdmin.from("menu_categories").insert({
-    venue_id: venueId,
-    name,
-    name_ru: optional(form.get("name_ru"), 60),
-    name_en: optional(form.get("name_en"), 60),
-    position: count ?? 0,
-  });
-
-  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
-  return { ok: true };
-}
-
-/**
- * Renaming a section.
- *
- * The last corner of the menu that could only be deleted and retyped — and the
- * worst one, because deleting a section does not take one row with it: every
- * dish under it drops out into "uncategorised" and has to be reassigned one by
- * one. A typo in a heading was costing an afternoon.
- */
-export async function editCategory(
-  venueId: string,
-  categoryId: string,
-  form: FormData,
-): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
-
-  const name = text(form.get("name"), 60);
-  if (!name) return { ok: false, error: "Bo'lim nomini kiriting." };
-
-  const { error } = await supabaseAdmin
-    .from("menu_categories")
-    .update({
-      name,
-      name_ru: optional(form.get("name_ru"), 60),
-      name_en: optional(form.get("name_en"), 60),
-    })
-    .eq("id", categoryId)
-    .eq("venue_id", venueId);
-
-  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
-  return { ok: true };
-}
-
-export async function removeCategory(venueId: string, categoryId: string): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "O'chirib bo'lmadi." };
-
-  // The dishes survive it — the foreign key sets their category to null and
-  // the reader shows them ungrouped. Deleting a heading should not delete a
-  // morning's typing.
-  const { error } = await supabaseAdmin
-    .from("menu_categories")
-    .delete()
-    .eq("id", categoryId)
-    .eq("venue_id", venueId);
-
-  if (error) return { ok: false, error: "O'chirib bo'lmadi." };
-  return { ok: true };
-}
-
-/**
- * The photograph on one row of the menu.
- *
- * Optional everywhere, because a cafe types its menu on the day it gets the
- * tags and photographs it over the following week — a form that will not save
- * without a picture is a menu that never gets published.
- *
- * Returns undefined when there is nothing to do, which is different from null:
- * null is "take the picture off", undefined is "leave whatever is there".
- */
-async function readPhoto(
-  venueId: string,
-  file: FormDataEntryValue | null,
-): Promise<{ url: string | null } | { error: string } | undefined> {
-  if (!(file instanceof File) || file.size === 0) return undefined;
-  if (!isStorageConfigured) return { error: "Rasm saqlash hozircha ulanmagan." };
-
-  const check = checkDishPhoto(file);
-  if (!check.ok) return { error: check.error };
-
-  const key = `menyu/${venueId}/${crypto.randomUUID()}.${check.extension}`;
-  const url = await uploadImage(
-    key,
-    Buffer.from(await file.arrayBuffer()),
-    check.contentType,
-  );
-
-  return url ? { url } : { error: "Rasmni yuklab bo'lmadi." };
-}
-
-type ItemFields = {
-  name: string;
-  name_ru: string | null;
-  name_en: string | null;
-  note: string | null;
-  price: number;
-  category_id: string | null;
-};
-
-/**
- * The fields of one row, read the same way whether it is being added or
- * corrected.
- *
- * Shared because a price typed on the edit screen has to be accepted exactly as
- * it is on the add screen — the alternative is two validators that agree until
- * one of them is changed.
- */
-function readItemFields(form: FormData): ItemFields | { error: string } {
-  const name = text(form.get("name"), NAME_MAX);
-  if (!name) return { error: "Taom nomini kiriting." };
-
-  // Typed by somebody who thinks in "38 000", not in digits.
-  const price = Number.parseInt(text(form.get("price"), 20).replace(/\D/g, ""), 10);
-  if (!Number.isFinite(price) || price < 0) return { error: "Narxni kiriting." };
-  if (price > PRICE_MAX) return { error: "Narx juda katta." };
-
+/** The three languages a field may be typed in. Only the first is required. */
+function names(form: FormData, base: string, limit = 60) {
   return {
-    name,
-    name_ru: optional(form.get("name_ru"), NAME_MAX),
-    name_en: optional(form.get("name_en"), NAME_MAX),
-    note: optional(form.get("note"), NOTE_MAX),
-    price,
-    category_id: text(form.get("category_id"), 40) || null,
+    uz: text(form.get(base), limit),
+    ru: text(form.get(`${base}_ru`), limit),
+    en: text(form.get(`${base}_en`), limit),
   };
 }
 
-export async function addItem(venueId: string, form: FormData): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+function refresh(handle: string) {
+  revalidatePath(`/kabinet/${handle}/menyu`);
+  revalidatePath(`/${handle}`);
+}
 
-  const fields = readItemFields(form);
-  if ("error" in fields) return { ok: false, error: fields.error };
+export async function addCategory(handle: string, form: FormData): Promise<EditResult> {
+  const nom = names(form, "name");
+  if (!nom.uz) return { ok: false, error: "Bo'lim nomini kiriting." };
 
-  const photo = await readPhoto(venueId, form.get("photo"));
-  if (photo && "error" in photo) return { ok: false, error: photo.error };
-
-  const { count } = await supabaseAdmin
-    .from("menu_items")
-    .select("id", { count: "exact", head: true })
-    .eq("venue_id", venueId)
-    .eq("category_id", fields.category_id ?? "");
-
-  const { error } = await supabaseAdmin.from("menu_items").insert({
-    venue_id: venueId,
-    ...fields,
-    photo_url: photo?.url ?? null,
-    position: count ?? 0,
+  const client = await asReader();
+  const { error } = await client.POST("/raqamlar/{raqam}/menyu/bolimlar", {
+    params: { path: { raqam: handle } },
+    body: { nom },
   });
+  if (error) return FAILED;
 
-  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
+  refresh(handle);
   return { ok: true };
 }
 
-/**
- * Correcting a row that is already on the menu.
- *
- * Until this existed, changing a price meant deleting the dish and typing it
- * again — which threw away its photograph, its translations and its place in
- * the list, for the single most ordinary edit a menu ever gets.
- *
- * The photograph is left alone unless a new file came with the form: the edit
- * screen is where a price is corrected, and losing the picture because the file
- * field was empty would be its own small disaster.
- */
-export async function editItem(
-  venueId: string,
-  itemId: string,
+export async function editCategory(
+  handle: string,
+  id: string,
   form: FormData,
 ): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+  const nom = names(form, "name");
+  if (!nom.uz) return { ok: false, error: "Bo'lim nomini kiriting." };
 
-  const fields = readItemFields(form);
-  if ("error" in fields) return { ok: false, error: fields.error };
-
-  const photo = await readPhoto(venueId, form.get("photo"));
-  if (photo && "error" in photo) return { ok: false, error: photo.error };
-
-  const { error } = await supabaseAdmin
-    .from("menu_items")
-    .update(photo ? { ...fields, photo_url: photo.url } : fields)
-    .eq("id", itemId)
-    .eq("venue_id", venueId);
-
-  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
-  return { ok: true };
-}
-
-export async function setItemAvailable(
-  venueId: string,
-  itemId: string,
-  available: boolean,
-): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
-
-  const { error } = await supabaseAdmin
-    .from("menu_items")
-    .update({ available })
-    .eq("id", itemId)
-    .eq("venue_id", venueId);
-
-  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
-  return { ok: true };
-}
-
-export async function removeItem(venueId: string, itemId: string): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "O'chirib bo'lmadi." };
-
-  const { error } = await supabaseAdmin
-    .from("menu_items")
-    .delete()
-    .eq("id", itemId)
-    .eq("venue_id", venueId);
-
-  if (error) return { ok: false, error: "O'chirib bo'lmadi." };
-  return { ok: true };
-}
-
-export async function saveVenue(venueId: string, form: FormData): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
-
-  const name = text(form.get("name"), 120);
-  if (name.length < 2) return { ok: false, error: "Obyekt nomini kiriting." };
-
-  const { error } = await supabaseAdmin
-    .from("venues")
-    .update({
-      name,
-      hours: optional(form.get("hours"), 120),
-      address: optional(form.get("address"), 200),
-      wifi_name: optional(form.get("wifi_name"), 60),
-      wifi_password: optional(form.get("wifi_password"), 60),
-    })
-    .eq("id", venueId);
-
-  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
-  return { ok: true };
-}
-
-/**
- * Turning a number into a place.
- *
- * Until now a venue row could only be written by hand, which meant the whole
- * business product — the menu, the service list, the requests — was reachable
- * only for a cafe somebody set up from a terminal. A hotel that buys a number
- * on Monday has to be able to open it on Monday.
- *
- * The handle is resolved with the ownership filter in the same statement, so a
- * forged handle creates nothing rather than attaching a venue to somebody
- * else's number.
- */
-export async function createVenue(
-  normalized: string,
-  userId: string,
-  form: FormData,
-): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
-
-  const name = text(form.get("name"), 120);
-  if (name.length < 2) return { ok: false, error: "Obyekt nomini kiriting." };
-
-  const kind = text(form.get("kind"), 10);
-  if (!["cafe", "hotel", "shop", "other"].includes(kind)) {
-    return { ok: false, error: "Obyekt turini tanlang." };
-  }
-
-  const { data: handle } = await supabaseAdmin
-    .from("handles")
-    .select("id")
-    .eq("normalized", normalized)
-    .eq("user_id", userId)
-    .eq("status", "claimed")
-    .maybeSingle();
-
-  if (!handle) return { ok: false, error: "Bu raqam sizniki emas." };
-
-  // One venue per number, enforced by a unique constraint on handle_id. A
-  // second attempt is somebody double-tapping, not a new building.
-  const { error } = await supabaseAdmin.from("venues").insert({
-    handle_id: handle.id as string,
-    name,
-    kind,
+  const client = await asReader();
+  const { error } = await client.PUT("/menyu/bolimlar/{id}", {
+    params: { path: { id } },
+    body: { nom },
   });
+  if (error) return FAILED;
 
-  if (error) return { ok: false, error: "Obyekt allaqachon ochilgan." };
+  refresh(handle);
   return { ok: true };
 }
 
 /**
- * The list of tags this venue prints.
+ * Deleting a section.
  *
- * Typed as one block of text — a line or a comma per tag — because that is how
- * somebody holds the list in their head ("1 dan 12 gacha, terrasa 1, terrasa
- * 2") and because saving is then one replacement rather than a screen of rows
- * with their own add, rename and reorder controls.
- *
- * Renaming here never touches requests: those keep the label they were made
- * with, since it is the label printed on a sticker that may still be on a
- * table.
+ * Every dish under it drops out into "uncategorised" rather than going with
+ * it, which is why renaming exists at all: a typo in a heading used to cost an
+ * afternoon of reassigning dishes one by one.
  */
-export async function savePoints(venueId: string, form: FormData): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+export async function removeCategory(handle: string, id: string): Promise<EditResult> {
+  const client = await asReader();
+  const { error } = await client.DELETE("/menyu/bolimlar/{id}", { params: { path: { id } } });
+  if (error) return FAILED;
 
-  const seen = new Set<string>();
-  const points: string[] = [];
-
-  for (const part of String(form.get("points") ?? "").split(/[\n,;]+/)) {
-    // The same characters the QR route allows, so what is printed and what is
-    // scanned cannot disagree.
-    const label = part.replace(/[^\p{L}\p{N} .\-]/gu, "").trim().slice(0, 12);
-    if (!label || seen.has(label)) continue;
-    seen.add(label);
-    points.push(label);
-  }
-
-  if (points.length > 500) return { ok: false, error: "500 tadan ko'p bo'lmasin." };
-
-  const { error } = await supabaseAdmin
-    .from("venues")
-    .update({ points })
-    .eq("id", venueId);
-
-  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
+  refresh(handle);
   return { ok: true };
 }
 
 /**
- * Makes, or replaces, the counter link.
+ * Moving a section up or down.
  *
- * Replacing is the revoke: there is one token, so writing a new one ends every
- * phone that had the old one, which is what an owner wants the moment a waiter
- * leaves or a link is forwarded somewhere it should not have gone. There is no
- * separate "revoke" for the same reason there is no list of issued links — one
- * venue, one address, and pressing the button is the whole story.
- *
- * 128 bits from the system generator. It is the entire credential, so it has to
- * be worth as much as a password nobody will ever type.
+ * A direction rather than a position, because that is what the button says.
+ * The two rows swap positions, which is two writes — done here rather than in
+ * SQL because the list is already on screen and the alternative is a stored
+ * procedure for reordering a menu.
  */
-export async function rotateStaffToken(venueId: string): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
-
-  const token = randomBytes(16).toString("hex");
-
-  const { error } = await supabaseAdmin
-    .from("venues")
-    .update({ staff_token: token })
-    .eq("id", venueId);
-
-  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
-  return { ok: true };
-}
-
-/**
- * Putting a photograph on a dish that is already on the menu, or taking it off.
- *
- * Separate from addItem because that is the shape of the work: the menu is
- * typed in one sitting and photographed over the following week, one dish at a
- * time, by somebody walking around with a phone.
- */
-export async function setItemPhoto(
-  venueId: string,
-  itemId: string,
-  form: FormData,
-): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
-
-  const remove = form.get("remove") === "1";
-  const photo = remove ? { url: null } : await readPhoto(venueId, form.get("photo"));
-
-  if (photo && "error" in photo) return { ok: false, error: photo.error };
-  if (!photo) return { ok: false, error: "Rasm tanlanmadi." };
-
-  // The old file is left in the bucket rather than deleted. A dish photo is
-  // small, deleting is the one operation that cannot be undone by re-uploading,
-  // and a menu page cached on a guest's phone would otherwise show a hole.
-  const { error } = await supabaseAdmin
-    .from("menu_items")
-    .update({ photo_url: photo.url })
-    .eq("id", itemId)
-    .eq("venue_id", venueId);
-
-  if (error) return { ok: false, error: "Saqlab bo'lmadi." };
-  return { ok: true };
-}
-
-/**
- * Moving one row up or down its list.
- *
- * The whole list is renumbered rather than two positions being swapped.
- * Positions were handed out as "how many were here when I was added", so a menu
- * that has had anything deleted carries gaps and duplicates — swapping two of
- * those does nothing visible about half the time, which is the kind of bug an
- * owner retries five times before giving up on the product.
- *
- * A category holds a few dozen rows at most, so rewriting it is a handful of
- * statements and always leaves the list in a state that behaves.
- */
-async function reorder(
-  table: "menu_items" | "menu_categories",
-  scope: { column: string; value: string | null; venueId: string },
+export async function moveCategory(
+  handle: string,
   id: string,
   direction: "up" | "down",
 ): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
+  const menu = await getMenu(handle);
+  const at = menu.findIndex((c) => c.id === id);
+  const to = direction === "up" ? at - 1 : at + 1;
+  if (at < 0 || to < 0 || to >= menu.length) return { ok: true };
 
-  const query = supabaseAdmin
-    .from(table)
-    .select("id")
-    .eq("venue_id", scope.venueId)
-    .order("position")
-    .order("created_at");
+  const client = await asReader();
+  const move = (target: string, tartib: number) =>
+    client.PUT("/menyu/bolimlar/{id}/tartib", {
+      params: { path: { id: target } },
+      body: { tartib },
+    });
 
-  const { data } = await (scope.value === null && scope.column !== ""
-    ? query.is(scope.column, null)
-    : scope.column === ""
-      ? query
-      : query.eq(scope.column, scope.value));
+  const [a, b] = await Promise.all([
+    move(menu[at].id, menu[to].position),
+    move(menu[to].id, menu[at].position),
+  ]);
+  if (a.error || b.error) return FAILED;
 
-  const ids = (data ?? []).map((row) => row.id as string);
-  const from = ids.indexOf(id);
-  if (from === -1) return { ok: false, error: "Topilmadi." };
-
-  const to = direction === "up" ? from - 1 : from + 1;
-  // Already at the end. Not an error — the button simply had nothing to do.
-  if (to < 0 || to >= ids.length) return { ok: true };
-
-  [ids[from], ids[to]] = [ids[to]!, ids[from]!];
-
-  await Promise.all(
-    ids.map((rowId, position) =>
-      supabaseAdmin!
-        .from(table)
-        .update({ position })
-        .eq("id", rowId)
-        .eq("venue_id", scope.venueId),
-    ),
-  );
-
+  refresh(handle);
   return { ok: true };
 }
 
-export async function moveItem(
-  venueId: string,
-  itemId: string,
-  direction: "up" | "down",
-): Promise<EditResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi." };
-
-  // Moved within its own section, since that is the list the owner is looking
-  // at. Changing sections is what the edit screen's category field is for.
-  const { data } = await supabaseAdmin
-    .from("menu_items")
-    .select("category_id")
-    .eq("id", itemId)
-    .eq("venue_id", venueId)
-    .maybeSingle();
-
-  if (!data) return { ok: false, error: "Topilmadi." };
-
-  return reorder(
-    "menu_items",
-    { column: "category_id", value: (data.category_id as string) ?? null, venueId },
-    itemId,
-    direction,
-  );
+function itemBody(form: FormData) {
+  return {
+    bolim: text(form.get("category_id"), 40) || undefined,
+    nom: names(form, "name"),
+    izoh: names(form, "note", 200),
+    // A price typed with spaces is how it is written here.
+    narx: Number(text(form.get("price"), 12).replace(/\D/g, "")) || 0,
+  };
 }
 
-export async function moveCategory(
-  venueId: string,
-  categoryId: string,
+export async function addItem(handle: string, form: FormData): Promise<EditResult> {
+  const body = itemBody(form);
+  if (!body.nom.uz) return { ok: false, error: "Taom nomini kiriting." };
+
+  const client = await asReader();
+  const { error } = await client.POST("/raqamlar/{raqam}/menyu/taomlar", {
+    params: { path: { raqam: handle } },
+    body,
+  });
+  if (error) return FAILED;
+
+  refresh(handle);
+  return { ok: true };
+}
+
+export async function editItem(handle: string, id: string, form: FormData): Promise<EditResult> {
+  const body = itemBody(form);
+  if (!body.nom.uz) return { ok: false, error: "Taom nomini kiriting." };
+
+  const client = await asReader();
+  const { error } = await client.PUT("/menyu/taomlar/{id}", {
+    params: { path: { id } },
+    body,
+  });
+  if (error) return FAILED;
+
+  refresh(handle);
+  return { ok: true };
+}
+
+/** The daily one: the kitchen has run out, and it goes off the menu in a tap. */
+export async function setItemAvailable(
+  handle: string,
+  id: string,
+  available: boolean,
+): Promise<EditResult> {
+  const client = await asReader();
+  const { error } = await client.PUT("/menyu/taomlar/{id}/bor", {
+    params: { path: { id } },
+    body: { bor: available },
+  });
+  if (error) return FAILED;
+
+  refresh(handle);
+  return { ok: true };
+}
+
+/** The same, for one dish, and only within its own section. */
+export async function moveItem(
+  handle: string,
+  id: string,
   direction: "up" | "down",
 ): Promise<EditResult> {
-  return reorder("menu_categories", { column: "", value: null, venueId }, categoryId, direction);
+  const menu = await getMenu(handle);
+  const items = menu.flatMap((c) => c.items);
+  const at = items.findIndex((i) => i.id === id);
+  const to = direction === "up" ? at - 1 : at + 1;
+  if (at < 0 || to < 0 || to >= items.length) return { ok: true };
+
+  const client = await asReader();
+  const move = (target: string, tartib: number) =>
+    client.PUT("/menyu/taomlar/{id}/tartib", {
+      params: { path: { id: target } },
+      body: { tartib },
+    });
+
+  const [a, b] = await Promise.all([
+    move(items[at].id, items[to].position),
+    move(items[to].id, items[at].position),
+  ]);
+  if (a.error || b.error) return FAILED;
+
+  refresh(handle);
+  return { ok: true };
+}
+
+export async function removeItem(handle: string, id: string): Promise<EditResult> {
+  const client = await asReader();
+  const { error } = await client.DELETE("/menyu/taomlar/{id}", { params: { path: { id } } });
+  if (error) return FAILED;
+
+  refresh(handle);
+  return { ok: true };
+}
+
+/**
+ * A photograph for one dish.
+ *
+ * The upload happens here rather than in Go because the image store is
+ * reached from this side; the backend is told the address afterwards. An
+ * upload that does not happen is a message, not a failure — the dish keeps
+ * whatever picture it had.
+ */
+export async function setItemPhoto(
+  handle: string,
+  id: string,
+  form: FormData,
+): Promise<EditResult> {
+  if (!isStorageConfigured) return { ok: false, error: "Rasm yuklash sozlanmagan." };
+
+  const file = form.get("photo");
+  if (!(file instanceof File) || !file.size) {
+    return { ok: false, error: "Rasm tanlanmadi." };
+  }
+
+  const url = await uploadImage(
+    `menyu/${handle}/${id}`,
+    Buffer.from(await file.arrayBuffer()),
+    file.type || "image/jpeg",
+  );
+  if (!url) return { ok: false, error: "Rasm yuklanmadi." };
+
+  const client = await asReader();
+  const { error } = await client.PUT("/menyu/taomlar/{id}/rasm", {
+    params: { path: { id } },
+    body: { rasm: url },
+  });
+  if (error) return FAILED;
+
+  refresh(handle);
+  return { ok: true };
+}
+
+// Obyektning o'zi -------------------------------------------------------------
+
+export async function createVenue(handle: string, form: FormData): Promise<EditResult> {
+  const nom = text(form.get("name"), 80);
+  if (!nom) return { ok: false, error: "Obyekt nomini kiriting." };
+
+  const client = await asReader();
+  const { error } = await client.POST("/raqamlar/{raqam}/obyekt", {
+    params: { path: { raqam: handle } },
+    body: { nom, turi: (text(form.get("kind"), 10) || "cafe") as "cafe" },
+  });
+  if (error) return FAILED;
+
+  refresh(handle);
+  return { ok: true };
+}
+
+export async function saveVenue(handle: string, form: FormData): Promise<EditResult> {
+  const client = await asReader();
+  const { error } = await client.PUT("/raqamlar/{raqam}/obyekt", {
+    params: { path: { raqam: handle } },
+    body: {
+      nom: text(form.get("name"), 80),
+      turi: (text(form.get("kind"), 10) || "cafe") as "cafe",
+      ish_vaqti: text(form.get("hours"), 120),
+      manzil: text(form.get("address"), 200),
+      wifi: text(form.get("wifi_name"), 60),
+      wifi_paroli: text(form.get("wifi_password"), 60),
+    },
+  });
+  if (error) return FAILED;
+
+  refresh(handle);
+  return { ok: true };
+}
+
+export async function savePoints(handle: string, form: FormData): Promise<EditResult> {
+  // One per line, as they are typed. Blank lines are how somebody separates
+  // groups while typing, not points with no name.
+  const points = String(form.get("points") ?? "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, 200);
+
+  const client = await asReader();
+  const { error } = await client.PUT("/raqamlar/{raqam}/obyekt/nuqtalar", {
+    params: { path: { raqam: handle } },
+    body: { nuqtalar: points },
+  });
+  if (error) return FAILED;
+
+  revalidatePath(`/kabinet/${handle}/nuqtalar`);
+  return { ok: true };
+}
+
+/** A new counter link. The old one stops working the moment this returns. */
+export async function rotateStaffToken(handle: string): Promise<EditResult> {
+  const client = await asReader();
+  const { error } = await client.POST("/raqamlar/{raqam}/obyekt/kalit", {
+    params: { path: { raqam: handle } },
+  });
+  if (error) return FAILED;
+
+  revalidatePath(`/kabinet/${handle}/nuqtalar`);
+  return { ok: true };
 }

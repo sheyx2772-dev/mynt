@@ -15,7 +15,7 @@ export default async function NewVenuePage({ params }: PageProps<"/kabinet/[hand
 
   // Already a place. This screen only exists to become one, so the list is
   // where they meant to go.
-  const existing = await getOwnedVenue(normalized, userId);
+  const existing = await getOwnedVenue(normalized);
   if (existing) redirect(`/kabinet/${normalized}/menyu`);
 
   return (

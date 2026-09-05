@@ -28,7 +28,7 @@ export default async function HandlePage(props: PageProps<"/kabinet/[handle]">) 
   const [today, leads, venue] = await Promise.all([
     getHandleStats(normalized, 1),
     listLeads(normalized),
-    getOwnedVenue(normalized, userId),
+    getOwnedVenue(normalized),
   ]);
 
   const waiting = venue ? await countWaiting(venue.id) : 0;

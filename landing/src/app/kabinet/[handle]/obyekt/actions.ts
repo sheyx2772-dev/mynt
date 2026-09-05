@@ -17,7 +17,7 @@ export async function createVenueAction(
   if (!parsed) return { ok: false, error: "Raqam noto'g'ri." };
   const normalized = `${parsed.letters}${parsed.digits}`;
 
-  const result = await createVenue(normalized, user.id, form);
+  const result = await createVenue(normalized, form);
   if (!result.ok) return result;
 
   revalidatePath(`/kabinet/${normalized}`);

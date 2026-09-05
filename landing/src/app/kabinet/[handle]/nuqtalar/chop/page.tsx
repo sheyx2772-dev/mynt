@@ -30,7 +30,7 @@ export default async function PrintPointsPage({
     "/kabinet/[handle]/nuqtalar/chop",
   );
 
-  const venue = await getOwnedVenue(normalized, userId);
+  const venue = await getOwnedVenue(normalized);
   if (!venue) notFound();
 
   const w = venueWords(venue.kind, "uz");

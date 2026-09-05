@@ -17,7 +17,7 @@ export async function issueInvoiceAction(
   const user = await requireUser();
   const handle = String(form.get("handle") ?? "").toUpperCase();
 
-  const venue = await getOwnedVenue(handle, user.id);
+  const venue = await getOwnedVenue(handle);
   if (!venue) return { ok: false, error: "Bu obyekt sizniki emas." };
 
   const months = Number(form.get("months"));
@@ -28,7 +28,7 @@ export async function issueInvoiceAction(
   // form. A venue with no tags yet is charged as the smallest band.
   const points = Math.max(1, venue.points.length);
 
-  const result = await issueVenueInvoice(venue.id, points, months);
+  const result = await issueVenueInvoice(handle, points, months);
   if (!result.ok) {
     return {
       ok: false,

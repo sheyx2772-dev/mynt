@@ -31,6 +31,7 @@ import (
 	"github.com/sheyx2772-dev/flex/backend/internal/social"
 	"github.com/sheyx2772-dev/flex/backend/internal/stats"
 	"github.com/sheyx2772-dev/flex/backend/internal/store"
+	"github.com/sheyx2772-dev/flex/backend/internal/venues"
 )
 
 // Server holds what the handlers need. Passed in rather than reached for:
@@ -45,6 +46,7 @@ type Server struct {
 	orders  *orders.Store
 	admin   *admin.Store
 	social  *social.Store
+	venues  *venues.Store
 	notify  *notify.Service
 	// nil unless this deployment holds the provider secret keys.
 	payments payments.Store
@@ -66,6 +68,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 		}, cfg.IsDevelopment()),
 		admin:  admin.NewStore(pool),
 		social: social.NewStore(pool),
+		venues: venues.NewStore(pool),
 	}
 
 	// A nil channel is dropped rather than registered, so the service does not
@@ -105,6 +108,12 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 	s.registerPublic(api)
 	s.registerDirectory(api)
 	s.registerSocial(api)
+	s.registerVenues(api)
+	s.registerMenu(api)
+	s.registerMenuReads(api)
+	s.registerStaff(api)
+	s.registerVenueTab(api)
+	s.registerVenueInvoices(api)
 	s.registerLeads(api)
 	s.registerStats(api)
 	s.registerOrders(api)

@@ -28,7 +28,7 @@ import {
 async function venueFor(form: FormData) {
   const user = await requireUser();
   const handle = String(form.get("handle") ?? "").toUpperCase();
-  return { venue: await getOwnedVenue(handle, user.id), handle };
+  return { venue: await getOwnedVenue(handle), handle };
 }
 
 const DENIED: EditResult = { ok: false, error: "Bu obyekt sizniki emas." };
@@ -37,7 +37,7 @@ export async function addCategoryAction(_prev: EditResult, form: FormData) {
   const { venue, handle } = await venueFor(form);
   if (!venue) return DENIED;
 
-  const result = await addCategory(venue.id, form);
+  const result = await addCategory(handle, form);
   if (result.ok) revalidatePath(`/kabinet/${handle}/menyu`);
   return result;
 }
@@ -46,7 +46,7 @@ export async function removeCategoryAction(form: FormData) {
   const { venue, handle } = await venueFor(form);
   if (!venue) return;
 
-  await removeCategory(venue.id, String(form.get("id") ?? ""));
+  await removeCategory(handle, String(form.get("id") ?? ""));
   revalidatePath(`/kabinet/${handle}/menyu`);
 }
 
@@ -54,7 +54,7 @@ export async function addItemAction(_prev: EditResult, form: FormData) {
   const { venue, handle } = await venueFor(form);
   if (!venue) return DENIED;
 
-  const result = await addItem(venue.id, form);
+  const result = await addItem(handle, form);
   if (result.ok) revalidatePath(`/kabinet/${handle}/menyu`);
   return result;
 }
@@ -76,7 +76,7 @@ export async function removeItemAction(form: FormData) {
   const { venue, handle } = await venueFor(form);
   if (!venue) return;
 
-  await removeItem(venue.id, String(form.get("id") ?? ""));
+  await removeItem(handle, String(form.get("id") ?? ""));
   revalidatePath(`/kabinet/${handle}/menyu`);
 }
 
@@ -99,7 +99,7 @@ export async function setItemPhotoAction(_prev: EditResult, form: FormData) {
   const { venue, handle } = await venueFor(form);
   if (!venue) return DENIED;
 
-  const result = await setItemPhoto(venue.id, String(form.get("id") ?? ""), form);
+  const result = await setItemPhoto(handle, String(form.get("id") ?? ""), form);
   if (result.ok) {
     revalidatePath(`/kabinet/${handle}/menyu`);
     revalidatePath(`/${handle}`);
@@ -111,7 +111,7 @@ export async function editItemAction(_prev: EditResult, form: FormData) {
   const { venue, handle } = await venueFor(form);
   if (!venue) return DENIED;
 
-  const result = await editItem(venue.id, String(form.get("id") ?? ""), form);
+  const result = await editItem(handle, String(form.get("id") ?? ""), form);
   if (!result.ok) return result;
 
   revalidatePath(`/kabinet/${handle}/menyu`);
@@ -127,7 +127,7 @@ export async function moveItemAction(form: FormData) {
   if (!venue) return;
 
   const direction = form.get("direction") === "up" ? "up" : "down";
-  await moveItem(venue.id, String(form.get("id") ?? ""), direction);
+  await moveItem(handle, String(form.get("id") ?? ""), direction);
   revalidatePath(`/kabinet/${handle}/menyu`);
   revalidatePath(`/${handle}`);
 }
@@ -137,7 +137,7 @@ export async function moveCategoryAction(form: FormData) {
   if (!venue) return;
 
   const direction = form.get("direction") === "up" ? "up" : "down";
-  await moveCategory(venue.id, String(form.get("id") ?? ""), direction);
+  await moveCategory(handle, String(form.get("id") ?? ""), direction);
   revalidatePath(`/kabinet/${handle}/menyu`);
   revalidatePath(`/${handle}`);
 }
@@ -146,7 +146,7 @@ export async function editCategoryAction(_prev: EditResult, form: FormData) {
   const { venue, handle } = await venueFor(form);
   if (!venue) return DENIED;
 
-  const result = await editCategory(venue.id, String(form.get("id") ?? ""), form);
+  const result = await editCategory(handle, String(form.get("id") ?? ""), form);
   if (!result.ok) return result;
 
   revalidatePath(`/kabinet/${handle}/menyu`);

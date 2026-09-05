@@ -19,10 +19,10 @@ export default async function EditCategoryPage({
     "/kabinet/[handle]/menyu/bolim/[id]",
   );
 
-  const venue = await getOwnedVenue(normalized, userId);
+  const venue = await getOwnedVenue(normalized);
   if (!venue) notFound();
 
-  const category = await getMenuCategory(venue.id, id);
+  const category = await getMenuCategory(venue.id);
   if (!category) notFound();
 
   return (

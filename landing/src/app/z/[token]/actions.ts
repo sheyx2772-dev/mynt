@@ -17,6 +17,6 @@ export async function markDoneFromCounter(form: FormData) {
   const venue = await getVenueByStaffToken(token);
   if (!venue) return;
 
-  await markRequestDone(venue.id, String(form.get("id") ?? ""));
+  await markRequestDone(token, String(form.get("id") ?? ""));
   revalidatePath(`/z/${token}`);
 }

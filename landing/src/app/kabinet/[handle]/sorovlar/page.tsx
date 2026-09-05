@@ -33,7 +33,7 @@ export default async function RequestsPage({
 
   const normalized = `${parsed.letters}${parsed.digits}`;
   const user = await requireUser(`/kabinet/${normalized}/sorovlar`);
-  const venue = await getOwnedVenue(normalized, user.id);
+  const venue = await getOwnedVenue(normalized);
   if (!venue) notFound();
 
   const words = venueWords(venue.kind, "uz");

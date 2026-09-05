@@ -42,7 +42,16 @@ export type PlanState = {
   endingSoon: boolean;
 };
 
-export function planState(expiresAt: string, now = Date.now()): PlanState {
+/**
+ * A venue with no expiry has not been billed yet, which is not the same as
+ * lapsed. Treated as running: a cafe whose row predates billing should keep
+ * serving its guests rather than going dark because of a null.
+ */
+export function planState(expiresAt: string | null, now = Date.now()): PlanState {
+  if (!expiresAt) {
+    return { expiresAt: "", daysLeft: Number.POSITIVE_INFINITY, active: true, endingSoon: false };
+  }
+
   const end = new Date(expiresAt).getTime();
   const daysLeft = Math.ceil((end - now) / (24 * 60 * 60 * 1000));
 

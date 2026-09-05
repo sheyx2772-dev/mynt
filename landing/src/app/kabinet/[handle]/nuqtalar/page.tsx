@@ -14,7 +14,7 @@ export default async function PointsPage({ params }: PageProps<"/kabinet/[handle
   const { handle } = await params;
   const { normalized, userId } = await requireOwnHandle(handle, "/kabinet/[handle]/nuqtalar");
 
-  const venue = await getOwnedVenue(normalized, userId);
+  const venue = await getOwnedVenue(normalized);
   if (!venue) notFound();
 
   const w = venueWords(venue.kind, "uz");

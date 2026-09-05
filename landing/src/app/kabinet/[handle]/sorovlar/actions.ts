@@ -13,7 +13,7 @@ export async function markDoneAction(form: FormData) {
 
   // Ownership is the query here too: a forged handle resolves to no venue, and
   // the update then matches no rows rather than closing somebody else's table.
-  const venue = await getOwnedVenue(handle, user.id);
+  const venue = await getOwnedVenue(handle);
   if (!venue) return;
 
   await markRequestDone(venue.id, String(form.get("id") ?? ""));
@@ -24,7 +24,7 @@ export async function rotateStaffTokenAction(form: FormData) {
   const user = await requireUser();
   const handle = String(form.get("handle") ?? "").toUpperCase();
 
-  const venue = await getOwnedVenue(handle, user.id);
+  const venue = await getOwnedVenue(handle);
   if (!venue) return;
 
   await rotateStaffToken(venue.id);

@@ -74,19 +74,19 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
         const [today, leads, venue] = await Promise.all([
           getHandleStats(open.normalized, 1),
           listLeads(open.normalized),
-          getOwnedVenue(open.normalized, user.id),
+          getOwnedVenue(open.normalized),
         ]);
         return {
           todayViews: today.totalViews,
           leads: leads.length,
           venue,
-          waiting: venue ? await countWaiting(venue.id) : 0,
+          waiting: venue ? await countWaiting(open.normalized) : 0,
           setup: venue
             ? {
                 menuItems: await countMenuItems(venue.id),
                 points: venue.points.length,
                 hasStaffLink: Boolean(venue.staffToken),
-                requests: await countAllRequests(venue.id),
+                requests: await countAllRequests(open.normalized),
               }
             : null,
         };

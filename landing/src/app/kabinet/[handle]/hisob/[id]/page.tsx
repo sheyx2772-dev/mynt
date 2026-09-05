@@ -44,10 +44,10 @@ export default async function VenueInvoicePage(
     "/kabinet/[handle]/hisob/[id]",
   );
 
-  const venue = await getOwnedVenue(normalized, userId);
+  const venue = await getOwnedVenue(normalized);
   if (!venue) notFound();
 
-  const invoice = await getVenueInvoice(venue.id, id);
+  const invoice = await getVenueInvoice(id);
   if (!invoice) notFound();
 
   const w = venueWords(venue.kind, "uz");
