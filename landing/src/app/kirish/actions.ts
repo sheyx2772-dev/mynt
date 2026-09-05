@@ -11,7 +11,14 @@ import { safePath } from "@/lib/safe-path";
 // with, and one person arriving twice through two doors is one person with two
 // accounts.
 
-export type SignInResult = { sent: false; error: string } | { sent: true; email: string };
+export type SignInResult =
+  /**
+   * `email` is echoed back on failure: React 19 empties an uncontrolled form
+   * once its action returns, and an error is a return, so without it a
+   * mistyped address had to be typed again from nothing.
+   */
+  | { sent: false; error: string; email?: string }
+  | { sent: true; email: string };
 
 /**
  * Sends a one-time sign-in link.
@@ -27,12 +34,12 @@ export async function sendSignInLink(
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { sent: false, error: "To'g'ri email manzil kiriting." };
+    return { sent: false, error: "To'g'ri email manzil kiriting.", email };
   }
 
   const { error } = await backend.POST("/kirish", { body: { email } });
   if (error) {
-    return { sent: false, error: "Xat yuborib bo'lmadi. Qaytadan urinib ko'ring." };
+    return { sent: false, error: "Xat yuborib bo'lmadi. Qaytadan urinib ko'ring.", email };
   }
 
   // Said the same way whether the address has an account or not: the backend

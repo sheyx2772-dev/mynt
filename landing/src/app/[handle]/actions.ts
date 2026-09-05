@@ -28,7 +28,36 @@ export type ClaimResult =
    * act as an owner is wondering whether it worked.
    */
   | { ok: true; checkout?: Checkout; imageFailed?: true }
-  | { ok: false; error: string; needsAuth?: true };
+  | { ok: false; error: string; needsAuth?: true; values?: ClaimValues };
+
+/**
+ * What the buyer typed, handed back with the error.
+ *
+ * React 19 empties an uncontrolled form when its action returns, and an error
+ * is a return. Without this, "Rasm hajmi 2 MB dan oshmasligi kerak" — the
+ * likeliest failure, since people attach a photo straight from the camera —
+ * also erased the name, the bio and three usernames.
+ */
+export type ClaimValues = {
+  name: string;
+  bio: string;
+  telegram: string;
+  instagram: string;
+  linkedin: string;
+  website: string;
+};
+
+function typedIn(form: FormData): ClaimValues {
+  const read = (k: string) => String(form.get(k) ?? "").slice(0, 600);
+  return {
+    name: read("name"),
+    bio: read("bio"),
+    telegram: read("telegram"),
+    instagram: read("instagram"),
+    linkedin: read("linkedin"),
+    website: read("website"),
+  };
+}
 
 export async function claimHandle(
   rawHandle: string,
@@ -54,7 +83,7 @@ export async function claimHandle(
   }
 
   const read = await readProfileForm(formData, normalized);
-  if (!read.ok) return { ok: false, error: read.error };
+  if (!read.ok) return { ok: false, error: read.error, values: typedIn(formData) };
 
   // Everything that follows is the backend's: it recomputes the price from the
   // number itself, sweeps a reservation that was never paid for, holds the
@@ -70,12 +99,12 @@ export async function claimHandle(
 
   if (error || !data?.buyurtma) {
     if (response.status === 429) {
-      return { ok: false, error: "Juda ko'p urinish. Birozdan so'ng qayta urining." };
+      return { ok: false, error: "Juda ko'p urinish. Birozdan so'ng qayta urining.", values: typedIn(formData) };
     }
     if (response.status === 409) {
-      return { ok: false, error: "Bu raqam allaqachon band." };
+      return { ok: false, error: "Bu raqam allaqachon band.", values: typedIn(formData) };
     }
-    return { ok: false, error: "Hozir band qilib bo'lmadi. Qaytadan urinib ko'ring." };
+    return { ok: false, error: "Hozir band qilib bo'lmadi. Qaytadan urinib ko'ring.", values: typedIn(formData) };
   }
 
   const checkout: Checkout = {

@@ -19,6 +19,8 @@ export default function ClaimForm({
 }) {
   const boundAction = claimHandle.bind(null, handle);
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
+  // Redraw what was typed after a failed submit; see ClaimValues.
+  const typed = state.ok ? undefined : state.values;
 
   const inputClass =
     "w-full rounded-xl border border-line bg-black/[0.02] px-4 py-2.5 text-sm outline-none transition-colors focus:border-line-lead focus:bg-white";
@@ -88,20 +90,20 @@ export default function ClaimForm({
           className="max-w-[45%] text-xs"
         />
       </label>
-      <input name="name" placeholder="Ismingiz *" required maxLength={80} className={inputClass} />
+      <input name="name" defaultValue={typed?.name ?? ""} placeholder="Ismingiz *" required maxLength={80} className={inputClass} />
       <textarea
-        name="bio"
+        name="bio" defaultValue={typed?.bio ?? ""}
         placeholder="Qisqa bio (ixtiyoriy)"
         rows={2}
         maxLength={280}
         className={inputClass}
       />
       <div className="grid grid-cols-2 gap-3">
-        <input name="telegram" placeholder="Telegram @username" className={inputClass} />
-        <input name="instagram" placeholder="Instagram @username" className={inputClass} />
-        <input name="linkedin" placeholder="LinkedIn — aziz-karimov" className={inputClass} />
+        <input name="telegram" defaultValue={typed?.telegram ?? ""} placeholder="Telegram @username" className={inputClass} />
+        <input name="instagram" defaultValue={typed?.instagram ?? ""} placeholder="Instagram @username" className={inputClass} />
+        <input name="linkedin" defaultValue={typed?.linkedin ?? ""} placeholder="LinkedIn — aziz-karimov" className={inputClass} />
       </div>
-      <input name="website" placeholder="Veb-sayt (ixtiyoriy)" className={inputClass} />
+      <input name="website" defaultValue={typed?.website ?? ""} placeholder="Veb-sayt (ixtiyoriy)" className={inputClass} />
 
       {!state.ok && state.error && <p className="text-sm text-red-600">{state.error}</p>}
 

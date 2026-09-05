@@ -31,7 +31,7 @@ export default function SignInForm({ next }: { next: string }) {
     <form action={formAction} className="space-y-3 text-left">
       <input type="hidden" name="keyin" value={next} />
       <input
-        name="email"
+        name="email" defaultValue={state.sent ? "" : (state.email ?? "")}
         type="email"
         autoComplete="email"
         required

@@ -60,6 +60,7 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
           <input
             id="recipient"
             name="recipient"
+            defaultValue={state.values?.recipient ?? ""}
             className={field}
             placeholder="Ism Familiya"
             autoComplete="name"
@@ -75,6 +76,7 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
           <input
             id="phone"
             name="phone"
+            defaultValue={state.values?.phone ?? ""}
             type="tel"
             inputMode="tel"
             className={field}
@@ -92,6 +94,7 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
           <input
             id="region"
             name="region"
+            defaultValue={state.values?.region ?? ""}
             className={field}
             placeholder="Toshkent"
             autoComplete="address-level1"
@@ -107,6 +110,7 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
           <input
             id="address"
             name="address"
+            defaultValue={state.values?.address ?? ""}
             className={field}
             placeholder="Chilonzor tumani, 12-kvartal, 4-uy, 17-xonadon"
             autoComplete="street-address"
