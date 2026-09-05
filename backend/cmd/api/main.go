@@ -73,6 +73,14 @@ func run() error {
 	}
 	defer pool.Close()
 
+	// Before anything serves. Applying these by hand is a step somebody
+	// forgets, and the way that is discovered is a customer hitting a table
+	// that does not exist — which is how it was found the first time: every
+	// container healthy, and not one table in the database.
+	if err := database.Migrate(ctx, pool); err != nil {
+		return err
+	}
+
 	authService := auth.NewService(pool, newMailer(cfg), newTexter(cfg), auth.NewLocalDirectory(pool), cfg.SiteURL)
 
 	// Housekeeping, on the same context as everything else — one signal stops

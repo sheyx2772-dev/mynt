@@ -18,7 +18,11 @@ sql:
     # Supabase used to provide, and what this backend added afterwards — in the
     # order Postgres applies them. `make migrate` against an empty database
     # produces the shape these queries are checked against.
-    schema: "db/migrations"
+    # Beside the code that embeds them. A container has no repository to read
+    # migrations from, so they ship inside the binary — and one copy, in one
+    # place, is what keeps the schema sqlc checks against and the schema the
+    # server applies from being two different things.
+    schema: "internal/database/migrations"
     queries: "db/queries"
     gen:
       go:

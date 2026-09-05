@@ -32,7 +32,7 @@ All four applications read the same Postgres, so a number bought on the site
 exists in the app. The backend is the only thing that connects to it; the
 website, the panel and the phone ask the backend.
 
-The whole schema is `backend/db/migrations` — fifty-five files applied in
+The whole schema is `backend/internal/database/migrations` — fifty-five files applied in
 order by goose. Forty-seven of them built the product on Supabase and were
 moved here when it went; the first stands in for what Supabase provided, an
 `auth` schema and three API roles the grants still name; the last seven are

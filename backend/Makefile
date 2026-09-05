@@ -38,7 +38,7 @@ schema-test: db ## Replay every migration into a scratch database and check it h
 	@docker compose exec -T db psql -U flex -d postgres -q \
 		-c 'drop database if exists flex_schema_test' \
 		-c 'create database flex_schema_test'
-	@go tool goose -dir db/migrations postgres \
+	@go tool goose -dir internal/database/migrations postgres \
 		"postgres://flex:flex@127.0.0.1:5432/flex_schema_test?sslmode=disable" up >/dev/null
 	@# The output is captured before it is filtered rather than piped into
 	@# grep: grep exits 1 when it filters everything away, which is the normal
@@ -58,15 +58,15 @@ dev: ## Run the API from source against the local database
 
 .PHONY: migrate
 migrate: ## Apply pending migrations
-	go tool goose -dir db/migrations postgres "$(DATABASE_URL)" up
+	go tool goose -dir internal/database/migrations postgres "$(DATABASE_URL)" up
 
 .PHONY: migrate-status
 migrate-status: ## Show which migrations have run
-	go tool goose -dir db/migrations postgres "$(DATABASE_URL)" status
+	go tool goose -dir internal/database/migrations postgres "$(DATABASE_URL)" status
 
 .PHONY: migrate-down
 migrate-down: ## Undo the last migration
-	go tool goose -dir db/migrations postgres "$(DATABASE_URL)" down
+	go tool goose -dir internal/database/migrations postgres "$(DATABASE_URL)" down
 
 .PHONY: sqlc
 sqlc: ## Regenerate internal/store from db/queries

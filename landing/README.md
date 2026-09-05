@@ -52,7 +52,7 @@ R2 keys avatar uploads are skipped; everything else needs the backend.
 ### Database
 
 There is none here. The schema and its migrations live in
-`../backend/db/migrations` — `make migrate` applies them, `make schema-test`
+`../backend/internal/database/migrations` — `make migrate` applies them, `make schema-test`
 replays them into a scratch database and asserts the schema rejects bad data on
 its own. See `../AGENTS.md`.
 
@@ -186,7 +186,7 @@ The project was called Mynt until 31 August 2026. It was renamed to Flex
 because "Mynt" was heard as a coarse word by Russian speakers, and the site's
 whole distribution runs on people saying the name out loud.
 
-Migrations under `../backend/db/migrations` still say Mynt in their comments.
+Migrations under `../backend/internal/database/migrations` still say Mynt in their comments.
 They are the record of what was applied to the database, so they are left as
 written rather than rewritten after the fact.
 
@@ -217,7 +217,7 @@ build's file traces — with standalone set, the deploy fails looking for
 
 ### Migrations
 
-They live in `../backend/db/migrations` and goose applies them:
+They live in `../backend/internal/database/migrations` and goose applies them:
 
     cd ../backend && make migrate
 
