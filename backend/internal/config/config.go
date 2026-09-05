@@ -96,6 +96,12 @@ type Config struct {
 
 func (c Config) IsDevelopment() bool { return c.Env == "development" }
 
+// SMSConfigured says whether a real message can leave the building. Read by the
+// one route that will show a sign-in code on screen: it does that only when
+// nothing can send, so the moment an Eskiz account is configured the code stops
+// being echoed without anybody remembering to turn it off.
+func (c Config) SMSConfigured() bool { return c.EskizEmail != "" && c.EskizPassword != "" }
+
 // TakesCallbacks reports whether this deployment is the one the merchant
 // cabinets point at. Without a secret key a callback cannot be verified, so it
 // would have to be refused — and a route that refuses everything is better not

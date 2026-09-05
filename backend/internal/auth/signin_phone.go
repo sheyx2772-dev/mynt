@@ -42,23 +42,30 @@ var (
 // Returns nil when the number is refused for rate limiting, and the caller
 // answers the same way it answers success — the same reason the sign-in link
 // does: a different answer is a way of asking whether a number has an account.
-func (s *Service) RequestPhoneCode(ctx context.Context, rawPhone string, ip *netip.Addr) error {
+// RequestPhoneCode sends a code and returns it.
+//
+// Returning it is for one caller: a development build with no SMS provider,
+// which shows the code on screen so the app can be used before an Eskiz
+// account exists. Every other caller throws it away, and the route that could
+// print it refuses to unless the server is in development AND no SMS provider
+// is configured — a code on a screen is a code anyone standing behind you has.
+func (s *Service) RequestPhoneCode(ctx context.Context, rawPhone string, ip *netip.Addr) (string, error) {
 	phone, _, ok := NormalisePhone(rawPhone)
 	if !ok {
-		return ErrBadPhone
+		return "", ErrBadPhone
 	}
 
 	allowed, err := s.withinPhoneLimit(ctx, phone, ip)
 	if err != nil {
-		return err
+		return "", err
 	}
 	if !allowed {
-		return nil
+		return "", nil
 	}
 
 	code, hash, err := NewPhoneCode()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if _, err := s.queries.CreatePhoneCode(ctx, store.CreatePhoneCodeParams{
@@ -67,13 +74,16 @@ func (s *Service) RequestPhoneCode(ctx context.Context, rawPhone string, ip *net
 		ExpiresAt: timestamp(time.Now().Add(PhoneCodeLifetime)),
 		Ip:        ip,
 	}); err != nil {
-		return err
+		return "", err
 	}
 
 	// No brand name and no link. A sign-in message that reads like an
 	// advertisement is a sign-in message an operator filters, and a link in one
 	// is what every phishing SMS in this country looks like.
-	return s.sms.Send(ctx, phone, fmt.Sprintf("Flex: %s. Kod 5 daqiqa amal qiladi. Hech kimga aytmang.", code))
+	if err := s.sms.Send(ctx, phone, fmt.Sprintf("Flex: %s. Kod 5 daqiqa amal qiladi. Hech kimga aytmang.", code)); err != nil {
+		return "", err
+	}
+	return code, nil
 }
 
 // VerifyPhoneCode spends a code and returns a session.

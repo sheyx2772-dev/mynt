@@ -22,8 +22,13 @@ class FlexApi {
   /// The answer is the same whether the number has an account or not — an
   /// endpoint that says "no such account" is an endpoint that tells a stranger
   /// which numbers are worth attacking. A number with no account gets one.
-  Future<void> requestCode(String phone) =>
-      _client.post('/kirish/telefon', body: {'telefon': phone});
+  /// Returns the code itself when the backend is a development one with no SMS
+  /// provider, and an empty string every other time. A production server never
+  /// puts it in the body, so there is nothing here to switch off later.
+  Future<String> requestCode(String phone) async {
+    final body = await _client.post('/kirish/telefon', body: {'telefon': phone});
+    return body['kod'] as String? ?? '';
+  }
 
   /// Trades the code for a session, and says who it belongs to.
   ///

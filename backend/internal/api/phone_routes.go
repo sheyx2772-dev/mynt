@@ -34,6 +34,11 @@ type phoneSentOutput struct {
 	Status int
 	Body   struct {
 		Message string `json:"message"`
+		// Only ever set by a development server with no SMS provider, so the
+		// app can be signed into before an Eskiz account exists. Absent
+		// everywhere else, including a development server that can really
+		// send — the moment SMS works, this stops.
+		Kod string `json:"kod,omitempty" doc:"Faqat ishlab chiqish rejimida"`
 	}
 }
 
@@ -47,7 +52,7 @@ func (s *Server) registerPhone(api huma.API) {
 		Tags:          []string{"kirish"},
 		DefaultStatus: http.StatusAccepted,
 	}, func(ctx context.Context, in *phoneInput) (*phoneSentOutput, error) {
-		err := s.auth.RequestPhoneCode(ctx, in.Body.Telefon, requestFrom(ctx).IP)
+		code, err := s.auth.RequestPhoneCode(ctx, in.Body.Telefon, requestFrom(ctx).IP)
 		if errors.Is(err, auth.ErrBadPhone) {
 			return nil, huma.Error422UnprocessableEntity("Telefon raqam noto'g'ri.")
 		}
@@ -60,6 +65,14 @@ func (s *Server) registerPhone(api huma.API) {
 		// an account here.
 		out := &phoneSentOutput{Status: http.StatusAccepted}
 		out.Body.Message = "Kod yuborildi."
+
+		// Two conditions, both required. A production build cannot reach this
+		// line whatever it is configured with, and a development build that
+		// can actually send an SMS does not either — there is no reason to put
+		// a live code on a screen.
+		if s.cfg.IsDevelopment() && !s.cfg.SMSConfigured() {
+			out.Body.Kod = code
+		}
 		return out, nil
 	})
 

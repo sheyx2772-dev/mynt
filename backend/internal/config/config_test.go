@@ -72,3 +72,24 @@ func TestLoadReadsTheEnvironment(t *testing.T) {
 		t.Error("APP_ENV o'qilmadi")
 	}
 }
+
+// The one route that will print a sign-in code checks this, so a wrong answer
+// here is a code on a screen in production.
+func TestSMSConfiguredNeedsBothHalves(t *testing.T) {
+	cases := []struct {
+		email, password string
+		want            bool
+	}{
+		{"", "", false},
+		{"a@b.uz", "", false},
+		{"", "hunter2", false},
+		{"a@b.uz", "hunter2", true},
+	}
+	for _, c := range cases {
+		got := Config{EskizEmail: c.email, EskizPassword: c.password}.SMSConfigured()
+		if got != c.want {
+			t.Errorf("SMSConfigured(email=%q, password set=%t) = %t, want %t",
+				c.email, c.password != "", got, c.want)
+		}
+	}
+}

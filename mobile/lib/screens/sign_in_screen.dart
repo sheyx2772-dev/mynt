@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../brand/palette.dart';
 import '../core/api/errors.dart';
+import '../core/phone_format.dart';
 import '../state/providers.dart';
 import '../state/session_controller.dart';
 import '../widgets/buttons.dart';
@@ -40,6 +41,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   bool _busy = false;
   String? _problem;
 
+  /// The code, when a development backend hands it over because it cannot send
+  /// an SMS. Never set against a server that can.
+  String? _testCode;
+
   /// The number a code was sent to. Non-null means the second step.
   String? _sentTo;
 
@@ -69,9 +74,15 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     });
 
     try {
-      await ref.read(apiProvider).requestCode(phone);
+      final code = await ref.read(apiProvider).requestCode(phone);
       if (!mounted) return;
-      setState(() => _sentTo = phone);
+      setState(() {
+        _sentTo = phone;
+        _testCode = code.isEmpty ? null : code;
+      });
+      // Typed in rather than submitted for the person: seeing it land in the
+      // field is what shows the screen works.
+      if (code.isNotEmpty) _code.text = code;
       _codeFocus.requestFocus();
     } on ApiException catch (error) {
       if (mounted) setState(() => _problem = error.message);
@@ -137,6 +148,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           controller: _phone,
           keyboardType: TextInputType.phone,
           autofillHints: const [AutofillHints.telephoneNumber],
+          inputFormatters: const [PhoneFormatter()],
           onSubmitted: (_) => _send(),
           style: const TextStyle(fontSize: 18, letterSpacing: 0.5),
           decoration: _field('+998 90 123 45 67'),
@@ -151,7 +163,12 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         const SizedBox(height: 28),
         const _Title('Kodni kiriting'),
         const SizedBox(height: 8),
-        _Lead('+$_sentTo raqamiga yuborildi. Kod 5 daqiqa amal qiladi.'),
+        _Lead('${PhoneFormatter.format(_sentTo!)} raqamiga yuborildi. '
+            'Kod 5 daqiqa amal qiladi.'),
+        if (_testCode != null) ...[
+          const SizedBox(height: 16),
+          _TestCodeNotice(code: _testCode!),
+        ],
         const SizedBox(height: 28),
         TextField(
           controller: _code,
@@ -209,6 +226,40 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           borderSide: BorderSide.none,
         ),
       );
+}
+
+/// Says out loud that this is not how it will work.
+///
+/// A code printed on the screen is a code anyone behind you can read, so it
+/// says why it is there — somebody who sees this on a real phone should know
+/// immediately that the server is wrong, rather than assuming it is a feature.
+class _TestCodeNotice extends StatelessWidget {
+  const _TestCodeNotice({required this.code});
+  final String code;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF4D6),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE8C86A)),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.science_outlined, size: 18, color: Color(0xFF8A6D1F)),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              'Sinov rejimi: SMS yuborilmadi. Kod — $code',
+              style: const TextStyle(fontSize: 13, height: 1.4, color: Color(0xFF6B5514)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _Title extends StatelessWidget {

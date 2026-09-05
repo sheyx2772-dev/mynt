@@ -51,7 +51,7 @@ func TestAPhoneCodeSignsSomebodyIn(t *testing.T) {
 	service, texter, phone := newPhoneService(t)
 	ctx := context.Background()
 
-	if err := service.RequestPhoneCode(ctx, phone, nil); err != nil {
+	if _, err := service.RequestPhoneCode(ctx, phone, nil); err != nil {
 		t.Fatalf("kod yuborilmadi: %v", err)
 	}
 
@@ -73,7 +73,7 @@ func TestTheSameNumberIsTheSameAccountHoweverItIsTyped(t *testing.T) {
 	service, texter, phone := newPhoneService(t)
 	ctx := context.Background()
 
-	_ = service.RequestPhoneCode(ctx, phone, nil)
+	_, _ = service.RequestPhoneCode(ctx, phone, nil)
 	_, first, err := service.VerifyPhoneCode(ctx, phone, codeFrom(t, texter), "test", nil)
 	if err != nil {
 		t.Fatalf("birinchi kirish: %v", err)
@@ -81,7 +81,7 @@ func TestTheSameNumberIsTheSameAccountHoweverItIsTyped(t *testing.T) {
 
 	// Typed the way somebody actually writes it on a card.
 	local := "+" + phone[:3] + " " + phone[3:5] + " " + phone[5:8] + " " + phone[8:10] + " " + phone[10:]
-	_ = service.RequestPhoneCode(ctx, local, nil)
+	_, _ = service.RequestPhoneCode(ctx, local, nil)
 	_, second, err := service.VerifyPhoneCode(ctx, local, codeFrom(t, texter), "test", nil)
 	if err != nil {
 		t.Fatalf("ikkinchi kirish: %v", err)
@@ -96,7 +96,7 @@ func TestACodeIsSpentOnce(t *testing.T) {
 	service, texter, phone := newPhoneService(t)
 	ctx := context.Background()
 
-	_ = service.RequestPhoneCode(ctx, phone, nil)
+	_, _ = service.RequestPhoneCode(ctx, phone, nil)
 	code := codeFrom(t, texter)
 
 	if _, _, err := service.VerifyPhoneCode(ctx, phone, code, "test", nil); err != nil {
@@ -112,7 +112,7 @@ func TestThreeWrongGuessesSpendTheCode(t *testing.T) {
 	service, texter, phone := newPhoneService(t)
 	ctx := context.Background()
 
-	_ = service.RequestPhoneCode(ctx, phone, nil)
+	_, _ = service.RequestPhoneCode(ctx, phone, nil)
 	code := codeFrom(t, texter)
 
 	// Six digits is a million possibilities, which is not many. Three attempts
@@ -136,7 +136,7 @@ func TestTooManyCodesStopSendingWithoutSayingSo(t *testing.T) {
 		// Silent, for the same reason the link is: a different answer is a way
 		// of asking whether a number has an account. And every message past the
 		// limit is one we would have paid for.
-		if err := service.RequestPhoneCode(ctx, phone, nil); err != nil {
+		if _, err := service.RequestPhoneCode(ctx, phone, nil); err != nil {
 			t.Fatalf("%d-urinish xato qaytardi: %v", i+1, err)
 		}
 	}
@@ -149,7 +149,7 @@ func TestTooManyCodesStopSendingWithoutSayingSo(t *testing.T) {
 func TestTheMessageCarriesNoLink(t *testing.T) {
 	service, texter, phone := newPhoneService(t)
 
-	if err := service.RequestPhoneCode(context.Background(), phone, nil); err != nil {
+	if _, err := service.RequestPhoneCode(context.Background(), phone, nil); err != nil {
 		t.Fatalf("kod yuborilmadi: %v", err)
 	}
 
