@@ -1,6 +1,6 @@
 "use server";
 
-import { sendTagMessage } from "@/lib/object-tags";
+import { type MessageKind, sendTagMessage } from "@/lib/object-tags";
 
 export type TagFormState = { error?: string; sent?: true };
 
@@ -18,12 +18,7 @@ export async function sendFromTag(
 ): Promise<TagFormState> {
   const token = String(form.get("token") ?? "");
 
-  const result = await sendTagMessage(token, {
-    kind: String(form.get("kind") ?? ""),
-    body: String(form.get("body") ?? ""),
-    replyTo: String(form.get("replyTo") ?? ""),
-    place: String(form.get("place") ?? ""),
-  });
+  const result = await sendTagMessage(token, String(form.get("kind") ?? "") as MessageKind, String(form.get("body") ?? ""), String(form.get("replyTo") ?? ""), String(form.get("place") ?? ""));
 
   if (result.ok) return { sent: true };
 

@@ -1,6 +1,6 @@
 import "server-only";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { backend } from "@/lib/backend/client";
 import { isVertical, MAX_POINTS } from "@/lib/venues";
 
 // A company asking for a team order. Nothing is automated: somebody reads the
@@ -48,15 +48,16 @@ export async function submitTeamRequest(input: TeamRequestInput): Promise<TeamRe
   // A lead form must never dead-end. If the row cannot be written the visitor
   // is given the phone number rather than an apology, because a company that
   // wanted twenty cards and got an error will not come back.
-  if (!supabaseAdmin) return { ok: false, error: "Saqlab bo'lmadi.", fallback: true };
 
-  const { error } = await supabaseAdmin.from("team_requests").insert({
-    company,
-    contact_name: contactName,
-    phone,
-    email: email || null,
-    team_size: teamSize,
-    note: note || null,
+  const { error } = await backend.POST("/jamoa/sorov", {
+    body: {
+      kompaniya: company,
+      ism: contactName,
+      telefon: phone,
+      email: email || undefined,
+      hajmi: teamSize,
+      izoh: note || undefined,
+    },
   });
 
   if (error) return { ok: false, error: "Saqlab bo'lmadi.", fallback: true };
@@ -119,19 +120,17 @@ export async function submitVenueRequest(
   if (points > MAX_POINTS) return { ok: false, code: "pointsBig" };
   if (note.length > 1000) return { ok: false, code: "note" };
 
-  if (!supabaseAdmin) return { ok: false, code: "save", fallback: true };
 
-  const { error } = await supabaseAdmin.from("team_requests").insert({
-    company,
-    contact_name: contactName,
-    phone,
-    email: email || null,
-    // A venue counts points, not staff. The column stays null and the check
-    // constraint added in 0032 is what keeps the row meaningful.
-    team_size: null,
-    points,
-    vertical,
-    note: note || null,
+  const { error } = await backend.POST("/jamoa/sorov", {
+    body: {
+      kompaniya: company,
+      ism: contactName,
+      telefon: phone,
+      email: email || undefined,
+      izoh: note || undefined,
+      yonalish: vertical,
+      nuqtalar: points,
+    },
   });
 
   if (error) return { ok: false, code: "save", fallback: true };

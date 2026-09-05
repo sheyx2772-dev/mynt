@@ -1,7 +1,7 @@
 import "server-only";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
-import { createServerSupabase } from "@/lib/supabase/server";
+import { asReader } from "@/lib/backend/client";
+
 
 // Handing a handle to someone else.
 //
@@ -20,140 +20,82 @@ export type Transfer = {
 
 export type TransferResult = { ok: true } | { ok: false; error: string };
 
-const COLUMNS = "id, handle, to_email, status, created_at, expires_at";
+type BackendTransfer = {
+  id: string;
+  raqam: string;
+  kimga: string;
+  holat: string;
+  boshlangan: string;
+  tugashi?: string;
+};
 
-function rowToTransfer(row: Record<string, unknown>): Transfer {
+function toTransfer(t: BackendTransfer): Transfer {
   return {
-    id: row.id as string,
-    handle: row.handle as string,
-    toEmail: row.to_email as string,
-    status: row.status as Transfer["status"],
-    createdAt: row.created_at as string,
-    expiresAt: row.expires_at as string,
+    id: t.id,
+    handle: t.raqam,
+    toEmail: t.kimga,
+    status: t.holat as Transfer["status"],
+    createdAt: t.boshlangan,
+    expiresAt: t.tugashi ?? "",
   };
 }
 
-/** Offers made on this handle, newest first. Owners see their own history. */
 export async function listTransfersForHandle(handle: string): Promise<Transfer[]> {
-  const supabase = await createServerSupabase();
-  if (!supabase) return [];
-
-  const { data } = await supabase
-    .from("handle_transfers")
-    .select(COLUMNS)
-    .eq("handle", handle)
-    .order("created_at", { ascending: false })
-    .limit(10);
-
-  return (data ?? []).map(rowToTransfer);
-}
-
-/** Offers waiting for this person to accept. */
-export async function listIncomingTransfers(email: string): Promise<Transfer[]> {
-  const supabase = await createServerSupabase();
-  if (!supabase) return [];
-
-  const { data } = await supabase
-    .from("handle_transfers")
-    .select(COLUMNS)
-    .eq("to_email", email.toLowerCase())
-    .eq("status", "pending")
-    .gt("expires_at", new Date().toISOString())
-    .order("created_at", { ascending: false });
-
-  return (data ?? []).map(rowToTransfer);
-}
-
-export async function offerTransfer(
-  userId: string,
-  userEmail: string,
-  handle: string,
-  rawEmail: string
-): Promise<TransferResult> {
-  const toEmail = rawEmail.trim().toLowerCase();
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(toEmail)) {
-    return { ok: false, error: "Elektron pochta manzili noto'g'ri." };
-  }
-  if (toEmail === userEmail.trim().toLowerCase()) {
-    return { ok: false, error: "Handle allaqachon sizniki." };
-  }
-
-  if (!supabaseAdmin) return { ok: false, error: "Baza bilan aloqa yo'q." };
-
-  // Ownership is a filter on the write, as everywhere else: a handle that is
-  // not theirs matches no row rather than being trusted and checked after.
-  const { data: owned } = await supabaseAdmin
-    .from("handles")
-    .select("normalized")
-    .eq("normalized", handle)
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  if (!owned) return { ok: false, error: "Bu handle sizniki emas." };
-
-  const { error } = await supabaseAdmin
-    .from("handle_transfers")
-    .insert({ handle, from_user_id: userId, to_email: toEmail });
-
-  if (error) {
-    if (error.code === "23505") {
-      return { ok: false, error: "Bu handle uchun taklif allaqachon yuborilgan." };
-    }
-    return { ok: false, error: "Taklif saqlanmadi. Birozdan keyin urinib ko'ring." };
-  }
-
-  return { ok: true };
-}
-
-export async function cancelTransfer(userId: string, id: string): Promise<TransferResult> {
-  if (!supabaseAdmin) return { ok: false, error: "Baza bilan aloqa yo'q." };
-
-  const { data } = await supabaseAdmin
-    .from("handle_transfers")
-    .update({ status: "cancelled", settled_at: new Date().toISOString() })
-    .eq("id", id)
-    .eq("from_user_id", userId)
-    .eq("status", "pending")
-    .select("handle")
-    .maybeSingle();
-
-  if (!data) return { ok: false, error: "Taklif topilmadi." };
-  return { ok: true };
-}
-
-export async function acceptTransfer(
-  userId: string,
-  userEmail: string,
-  id: string
-): Promise<{ ok: true; handle: string } | { ok: false; error: string }> {
-  if (!supabaseAdmin) return { ok: false, error: "Baza bilan aloqa yo'q." };
-
-  // The address on the offer has to be this person's, checked here rather than
-  // trusted from the form: the id alone is not proof the offer was for them.
-  const { data: offer } = await supabaseAdmin
-    .from("handle_transfers")
-    .select("id, to_email, status")
-    .eq("id", id)
-    .maybeSingle();
-
-  if (!offer || offer.to_email !== userEmail.trim().toLowerCase()) {
-    return { ok: false, error: "Taklif topilmadi." };
-  }
-  if (offer.status !== "pending") {
-    return { ok: false, error: "Bu taklif allaqachon yopilgan." };
-  }
-
-  // The handle changing owner, the profile emptying and the previous owner's
-  // posts going with them are one transaction inside the database.
-  const { data: handle, error } = await supabaseAdmin.rpc("accept_handle_transfer", {
-    transfer_id: id,
-    new_owner: userId,
+  const client = await asReader();
+  const { data, error } = await client.GET("/raqamlar/{raqam}/otkazishlar", {
+    params: { path: { raqam: handle } },
   });
+  if (error || !data) return [];
 
-  if (error || !handle) {
-    return { ok: false, error: "Taklif muddati o'tgan yoki allaqachon yopilgan." };
-  }
+  return (data.otkazishlar ?? []).map(toTransfer);
+}
 
-  return { ok: true, handle: handle as string };
+/** What has been offered to this account's address. */
+export async function listIncomingTransfers(): Promise<Transfer[]> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/men/otkazishlar", {});
+  if (error || !data) return [];
+
+  return (data.otkazishlar ?? []).map(toTransfer);
+}
+
+/**
+ * Offering a number to somebody.
+ *
+ * By address rather than to an account, because the person receiving it may
+ * not have one yet. The offer lapses after a week: an open transfer is a claim
+ * on a number, and one left forever is a number in limbo.
+ */
+export async function offerTransfer(handle: string, toEmail: string): Promise<TransferResult> {
+  const client = await asReader();
+  const { error } = await client.POST("/raqamlar/{raqam}/otkazishlar", {
+    params: { path: { raqam: handle } },
+    body: { kimga: toEmail },
+  });
+  return error
+    ? { ok: false, error: "Bu raqam sizniki emas yoki hali egallanmagan." }
+    : { ok: true };
+}
+
+export async function cancelTransfer(id: string): Promise<TransferResult> {
+  const client = await asReader();
+  const { error } = await client.DELETE("/otkazishlar/{id}", { params: { path: { id } } });
+  return error ? { ok: false, error: "Bekor qilinmadi." } : { ok: true };
+}
+
+/**
+ * Accepting one.
+ *
+ * The number moves and the offer settles in one transaction on the backend:
+ * an offer marked accepted without the number moving is a number nobody owns,
+ * and a number moved without the offer settling can be accepted again.
+ */
+export async function acceptTransfer(id: string): Promise<TransferResult> {
+  const client = await asReader();
+  const { error } = await client.POST("/otkazishlar/{id}/qabul", {
+    params: { path: { id } },
+  });
+  return error
+    ? { ok: false, error: "Taklif topilmadi yoki muddati o'tgan." }
+    : { ok: true };
 }

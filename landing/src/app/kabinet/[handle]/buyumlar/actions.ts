@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { requireOwnHandle } from "@/lib/kabinet";
-import { createTag, setTagActive } from "@/lib/object-tags";
+import { createTag, setTagActive , type TagKind } from "@/lib/object-tags";
 
 const PATH = "/kabinet/[handle]/buyumlar";
 
@@ -19,17 +19,16 @@ export async function addTag(
     PATH,
   );
 
-  const result = await createTag(
+  const tag = await createTag(
     normalized,
-    userId,
-    String(form.get("kind") ?? ""),
+    String(form.get("kind") ?? "") as TagKind,
     String(form.get("label") ?? ""),
   );
 
-  if (!result.ok) return { error: "Qo'shilmadi. Yana urinib ko'ring." };
+  if (!tag) return { error: "Qo'shilmadi. Yana urinib ko'ring." };
 
   revalidatePath(`/kabinet/${normalized}/buyumlar`);
-  return { token: result.token };
+  return { token: tag.token };
 }
 
 /**
@@ -45,8 +44,6 @@ export async function toggleTag(form: FormData): Promise<void> {
   );
 
   await setTagActive(
-    normalized,
-    userId,
     String(form.get("tagId") ?? ""),
     String(form.get("active") ?? "") === "1",
   );

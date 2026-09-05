@@ -32,19 +32,18 @@ export default async function TagsPage({
     "/kabinet/[handle]/buyumlar",
   );
 
-  const [tags, messages] = await Promise.all([
-    listTags(normalized, userId),
-    listTagMessages(normalized, userId),
+  const [{ tags, unread }, messages] = await Promise.all([
+    listTags(normalized),
+    listTagMessages(normalized),
   ]);
 
   const kindOf = new Map(tags.map((t) => [t.id, t.kind]));
   const labelOf = new Map(tags.map((t) => [t.id, t.label]));
-  const unread = tags.reduce((sum, t) => sum + t.unread, 0);
 
   // Marked read after the page has been sent, not before it is built: the
   // count above is what was unread when they opened it.
   after(async () => {
-    if (unread > 0) await markMessagesRead(normalized, userId);
+    if (unread > 0) await markMessagesRead(normalized);
   });
 
   return (

@@ -227,6 +227,63 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/jamoa/hisoblar/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bitta hisob-faktura */
+        get: operations["jamoa-hisobi"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/jamoa/raqamlar/{raqam}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Raqamni xodimga berish yoki qaytarib olish
+         * @description Faqat jamoa egasi. Raqam kompaniyada qoladi — faqat kimdaligi o'zgaradi.
+         */
+        put: operations["jamoa-raqami"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/jamoa/sorov": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Kompaniya bog'lanishni so'raydi
+         * @description Sessiya kerak emas — hali ro'yxatdan o'tmagan kompaniya to'ldiradi.
+         */
+        post: operations["jamoa-sorovi"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/karta/{seriya}": {
         parameters: {
             query?: never;
@@ -398,6 +455,64 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/men/jamoa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Jamoam, raqamlari va hisobi
+         * @description Jamoasi yo'q hisob uchun null — bu odatiy holat.
+         */
+        get: operations["jamoam"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/men/jamoa/hisoblar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Jamoaning hisob-fakturalari */
+        get: operations["jamoa-hisoblari"];
+        put?: never;
+        /** Hisob-faktura chiqarish */
+        post: operations["jamoa-hisob-berish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/men/jamoa/rekvizitlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Hisob-fakturaga chiqadigan ma'lumotlar
+         * @description Faqat jamoa egasi: birovning bank hisobi yozilgan hisob-faktura — bizning nomimiz bilan qilingan firibgarlik.
+         */
+        put: operations["jamoa-rekvizitlari"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/men/obunalar": {
         parameters: {
             query?: never;
@@ -427,6 +542,23 @@ export interface paths {
          * @description Obyekti yo'q hisob uchun null — bu odatiy holat.
          */
         get: operations["obyekt-yorligi"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/men/otkazishlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Menga taklif qilingan raqamlar */
+        get: operations["kelgan-otkazishlar"];
         put?: never;
         post?: never;
         delete?: never;
@@ -558,6 +690,43 @@ export interface paths {
         /** Taom tartibini o'zgartirish */
         put: operations["taom-kochirish"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/otkazishlar/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Taklifni bekor qilish */
+        delete: operations["otkazish-bekor"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/otkazishlar/{id}/qabul": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Raqamni qabul qilish
+         * @description Raqam ko'chishi va taklifning yopilishi bitta tranzaksiyada.
+         */
+        post: operations["otkazish-qabul"];
         delete?: never;
         options?: never;
         head?: never;
@@ -967,6 +1136,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/raqamlar/{raqam}/otkazishlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Shu raqam bo'yicha o'tkazishlar */
+        get: operations["otkazishlar"];
+        put?: never;
+        /**
+         * Raqamni birovga taklif qilish
+         * @description Manzilga taklif qilinadi — qabul qiluvchining hali hisobi bo'lmasligi mumkin. Taklif bir hafta amal qiladi.
+         */
+        post: operations["otkazish-taklif"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/raqamlar/{raqam}/profil": {
         parameters: {
             query?: never;
@@ -1041,6 +1231,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/raqamlar/{raqam}/teglar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Raqamning teglari */
+        get: operations["teglarim"];
+        put?: never;
+        /** Yangi teg */
+        post: operations["teg-yaratish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/raqamlar/{raqam}/vizitkalar": {
         parameters: {
             query?: never;
@@ -1073,6 +1281,40 @@ export interface paths {
          * @description Odam o'z ma'lumotini olib tashlashni so'rashi mumkin, va egasi buni qila olishi kerak.
          */
         delete: operations["vizitkani-ochirish"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/xabarlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Teglardan kelgan xabarlar */
+        get: operations["teg-xabarlari"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/xabarlar/oqildi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Barchasini o'qilgan deb belgilash */
+        post: operations["xabarlar-oqildi"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -1145,6 +1387,60 @@ export interface paths {
         /** Baza bilan birga tekshiruv */
         get: operations["sogliq"];
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/teg/{kalit}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Teg sahifasi
+         * @description O'chirilgan teg topilmaydi — stikerni yechib olgan odam uni ishlamay qolishini kutadi.
+         */
+        get: operations["teg"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/teg/{kalit}/xabar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tegdan xabar yuborish */
+        post: operations["teg-xabar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/teglar/{id}/faol": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Tegni yoqish yoki o'chirish */
+        put: operations["teg-faol"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1346,6 +1642,34 @@ export interface components {
             readonly $schema?: string;
             /** @description Xatdagi havoladan olingan token */
             token: string;
+        };
+        ContactRequest: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/ContactRequest.json
+             */
+            readonly $schema?: string;
+            email?: string;
+            /** Format: int32 */
+            hajmi?: number;
+            ism: string;
+            izoh?: string;
+            kompaniya: string;
+            /** Format: int32 */
+            nuqtalar?: number;
+            telefon: string;
+            yonalish?: string;
+        };
+        CreateTagInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/CreateTagInputBody.json
+             */
+            readonly $schema?: string;
+            nom: string;
+            turi: string;
         };
         CreateVenueInputBody: {
             /**
@@ -1641,6 +1965,24 @@ export interface components {
             /** Format: int32 */
             qqs_foizi: number;
         };
+        IssueTeamInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/IssueTeamInputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            jami: number;
+            /** Format: int64 */
+            orin_oylik: number;
+            /** Format: int32 */
+            orinlar: number;
+            /** Format: int32 */
+            oylar: number;
+            /** Format: int32 */
+            qqs_foizi: number;
+        };
         Item: {
             bolim?: string;
             bor: boolean;
@@ -1772,6 +2114,27 @@ export interface components {
             bolimlar: components["schemas"]["Category"][] | null;
             obyekt: components["schemas"]["Venue"];
         };
+        Message: {
+            id: string;
+            javob_uchun?: string;
+            joy?: string;
+            matn: string;
+            oqilgan: boolean;
+            teg?: string;
+            teg_id?: string;
+            turi: string;
+            /** Format: date-time */
+            vaqt: string;
+        };
+        MessagesOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/MessagesOutputBody.json
+             */
+            readonly $schema?: string;
+            xabarlar: components["schemas"]["Message"][] | null;
+        };
         MoveInputBody: {
             /**
              * Format: uri
@@ -1815,6 +2178,16 @@ export interface components {
             tugashi?: string;
             /** @enum {string} */
             turi: "percent" | "amount" | "months";
+        };
+        OfferInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/OfferInputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: email */
+            kimga: string;
         };
         OneCategoryOutputBody: {
             /**
@@ -2233,6 +2606,21 @@ export interface components {
             kutilmoqda: number;
             sorovlar: components["schemas"]["Request"][] | null;
         };
+        Requisites: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/Requisites.json
+             */
+            readonly $schema?: string;
+            bank?: string;
+            hisob?: string;
+            inn?: string;
+            manzil?: string;
+            mfo?: string;
+            rahbar?: string;
+            yuridik_nom?: string;
+        };
         Resident: {
             ism: string;
             /** Format: int64 */
@@ -2257,6 +2645,30 @@ export interface components {
             /** Format: int64 */
             jami: number;
             rezidentlar: components["schemas"]["Resident"][] | null;
+        };
+        SayInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/SayInputBody.json
+             */
+            readonly $schema?: string;
+            javob_uchun?: string;
+            joy?: string;
+            matn: string;
+            turi: string;
+        };
+        Seat: {
+            berilgan: boolean;
+            holat: string;
+            ism?: string;
+            kimda?: string;
+            /** Format: int64 */
+            korishlar: number;
+            lavozim?: string;
+            /** Format: date-time */
+            olingan?: string;
+            raqam: string;
         };
         Service: {
             name: string;
@@ -2322,6 +2734,14 @@ export interface components {
             raqam: string;
             raqamlar: string;
         };
+        Stats: {
+            /** Format: int64 */
+            berilgan: number;
+            /** Format: int64 */
+            korishlar: number;
+            /** Format: int64 */
+            olingan: number;
+        };
         StatsOutputBody: {
             /**
              * Format: uri
@@ -2346,6 +2766,126 @@ export interface components {
              */
             readonly $schema?: string;
             obyekt: components["schemas"]["Tab"];
+        };
+        Tag: {
+            faol: boolean;
+            id: string;
+            kalit?: string;
+            nom: string;
+            /** Format: int64 */
+            oqilmagan: number;
+            raqam?: string;
+            turi: string;
+            /** Format: date-time */
+            yaratilgan: string;
+        };
+        TagActiveInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/TagActiveInputBody.json
+             */
+            readonly $schema?: string;
+            faol: boolean;
+        };
+        TagOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/TagOutputBody.json
+             */
+            readonly $schema?: string;
+            teg: components["schemas"]["Tag"];
+        };
+        TagsOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/TagsOutputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            oqilmagan: number;
+            teglar: components["schemas"]["Tag"][] | null;
+        };
+        Team: {
+            bank?: string;
+            hisob?: string;
+            id: string;
+            inn?: string;
+            manzil?: string;
+            mfo?: string;
+            nom: string;
+            /** Format: int32 */
+            orinlar: number;
+            rahbar?: string;
+            /** @enum {string} */
+            rol: "owner" | "member";
+            /** Format: date-time */
+            tarif_tugashi?: string;
+            yuridik_nom?: string;
+        };
+        TeamHandleInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/TeamHandleInputBody.json
+             */
+            readonly $schema?: string;
+            /**
+             * Format: email
+             * @description Bo'sh bo'lsa — raqam qaytarib olinadi
+             */
+            kimga?: string;
+        };
+        TeamInvoice: {
+            /** Format: date-time */
+            berilgan: string;
+            holat: string;
+            id: string;
+            /** Format: int64 */
+            jami: number;
+            /** Format: int64 */
+            orin_oylik: number;
+            /** Format: int32 */
+            orinlar: number;
+            /** Format: int32 */
+            oylar: number;
+            /** Format: int32 */
+            qqs_foizi: number;
+            /** Format: int64 */
+            raqam: number;
+            /** Format: date-time */
+            tolangan?: string;
+        };
+        TeamInvoiceOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/TeamInvoiceOutputBody.json
+             */
+            readonly $schema?: string;
+            hisob: components["schemas"]["TeamInvoice"];
+        };
+        TeamInvoicesOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/TeamInvoicesOutputBody.json
+             */
+            readonly $schema?: string;
+            hisoblar: components["schemas"]["TeamInvoice"][] | null;
+        };
+        TeamOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/TeamOutputBody.json
+             */
+            readonly $schema?: string;
+            hisob: components["schemas"]["Stats"];
+            jamoa: components["schemas"]["Team"];
+            raqamlar: components["schemas"]["Seat"][] | null;
         };
         Text: {
             en?: string;
@@ -2378,6 +2918,25 @@ export interface components {
             /** Format: date-time */
             tolangan?: string;
             tolov: string;
+        };
+        Transfer: {
+            /** Format: date-time */
+            boshlangan: string;
+            holat: string;
+            id: string;
+            kimga: string;
+            raqam: string;
+            /** Format: date-time */
+            tugashi?: string;
+        };
+        TransfersOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/TransfersOutputBody.json
+             */
+            readonly $schema?: string;
+            otkazishlar: components["schemas"]["Transfer"][] | null;
         };
         Venue: {
             id: string;
@@ -2859,6 +3418,101 @@ export interface operations {
             };
         };
     };
+    "jamoa-hisobi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvoiceOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "jamoa-raqami": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TeamHandleInputBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "jamoa-sorovi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ContactRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "genesis-karta": {
         parameters: {
             query?: never;
@@ -3145,6 +3799,128 @@ export interface operations {
             };
         };
     };
+    jamoam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "jamoa-hisoblari": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvoicesOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "jamoa-hisob-berish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IssueTeamInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamInvoiceOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "jamoa-rekvizitlari": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Requisites"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     obunalarim: {
         parameters: {
             query?: never;
@@ -3190,6 +3966,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TabOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "kelgan-otkazishlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TransfersOutputBody"];
                 };
             };
             /** @description Error */
@@ -3533,6 +4338,64 @@ export interface operations {
                 "application/json": components["schemas"]["MoveInputBody"];
             };
         };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "otkazish-bekor": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "otkazish-qabul": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description No Content */
             204: {
@@ -4373,6 +5236,70 @@ export interface operations {
             };
         };
     };
+    otkazishlar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TransfersOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "otkazish-taklif": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OfferInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "profilni-saqlash": {
         parameters: {
             query?: never;
@@ -4506,6 +5433,72 @@ export interface operations {
             };
         };
     };
+    teglarim: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagsOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "teg-yaratish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTagInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     vizitkalar: {
         parameters: {
             query?: never;
@@ -4545,6 +5538,66 @@ export interface operations {
             path: {
                 raqam: string;
                 id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "teg-xabarlari": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessagesOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "xabarlar-oqildi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
             };
             cookie?: never;
         };
@@ -4681,6 +5734,103 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HealthOutputBody"];
                 };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    teg: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kalit: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "teg-xabar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kalit: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SayInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "teg-faol": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TagActiveInputBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error */
             default: {

@@ -32,13 +32,13 @@ export default async function InvoicePage(props: PageProps<"/kabinet/jamoa/hisob
   const { id } = await props.params;
   const user = await requireUser("/kabinet/jamoa");
 
-  const team = await getTeamForUser(user.id);
+  const team = await getTeamForUser();
   if (!team) notFound();
 
-  const invoice = await getInvoice(id, team.id);
+  const invoice = await getInvoice(id);
   if (!invoice) notFound();
 
-  const buyer = await getBuyerRequisites(team.id);
+  const buyer = await getBuyerRequisites();
   const { net, vat } = invoiceTotal(
     invoice.seats,
     invoice.months,

@@ -155,10 +155,8 @@ export async function offerHandleTransfer(
   if (!user?.email) return { ok: false, error: "Avval hisobingizga kiring." };
 
   const result = await offerTransfer(
-    user.id,
-    user.email,
     normalized,
-    String(formData.get("email") ?? "")
+    String(formData.get("email") ?? "").trim().toLowerCase(),
   );
   if (!result.ok) return { ok: false, error: result.error };
 
@@ -170,7 +168,7 @@ export async function cancelHandleTransfer(id: string): Promise<TransferActionRe
   const user = await getUser();
   if (!user) return { ok: false, error: "Avval hisobingizga kiring." };
 
-  const result = await cancelTransfer(user.id, id);
+  const result = await cancelTransfer(id);
   if (!result.ok) return { ok: false, error: result.error };
 
   revalidatePath("/kabinet");
@@ -181,10 +179,12 @@ export async function acceptHandleTransfer(id: string): Promise<TransferActionRe
   const user = await getUser();
   if (!user?.email) return { ok: false, error: "Avval hisobingizga kiring." };
 
-  const result = await acceptTransfer(user.id, user.email, id);
+  const result = await acceptTransfer(id);
   if (!result.ok) return { ok: false, error: result.error };
 
+  // The number changed hands, so both cabinets and the profile itself are
+  // stale. The profile path is not known here — the backend moved it — so the
+  // cabinet is refreshed and the profile revalidates on its own next request.
   revalidatePath("/kabinet");
-  revalidatePath(`/${result.handle}`);
   return { ok: true };
 }

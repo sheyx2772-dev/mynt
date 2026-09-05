@@ -1,6 +1,7 @@
 import "server-only";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { asReader } from "@/lib/backend/client";
+
 import { TEAM_SEAT_MONTHLY } from "@/lib/plans";
 import { VAT } from "@/lib/company";
 
@@ -53,99 +54,108 @@ export function invoiceTotal(
   return { net, vat, total: net + vat };
 }
 
-export async function listInvoices(teamId: string): Promise<Invoice[]> {
-  if (!supabaseAdmin) return [];
+type BackendInvoice = {
+  id: string;
+  raqam: number;
+  orinlar: number;
+  oylar: number;
+  orin_oylik: number;
+  qqs_foizi: number;
+  jami: number;
+  holat: string;
+  berilgan: string;
+  tolangan?: string;
+};
 
-  const { data } = await supabaseAdmin
-    .from("team_invoices")
-    .select("id, number, seats, months, seat_monthly, vat_percent, total, status, issued_at, paid_at")
-    .eq("team_id", teamId)
-    .order("issued_at", { ascending: false });
-
-  return (data ?? []).map(rowToInvoice);
+function toInvoice(i: BackendInvoice): Invoice {
+  return {
+    id: i.id,
+    number: i.raqam,
+    seats: i.orinlar,
+    months: i.oylar,
+    seatMonthly: i.orin_oylik,
+    vatPercent: i.qqs_foizi,
+    total: i.jami,
+    status: i.holat as Invoice["status"],
+    issuedAt: i.berilgan,
+    paidAt: i.tolangan ?? null,
+  };
 }
 
-export async function getInvoice(
-  invoiceId: string,
-  teamId: string,
-): Promise<Invoice | null> {
-  if (!supabaseAdmin) return null;
+export async function listInvoices(): Promise<Invoice[]> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/men/jamoa/hisoblar", {});
+  if (error || !data) return [];
 
-  // The team filter is the authorization: an invoice belonging to another
-  // company is simply not found.
-  const { data } = await supabaseAdmin
-    .from("team_invoices")
-    .select("id, number, seats, months, seat_monthly, vat_percent, total, status, issued_at, paid_at")
-    .eq("id", invoiceId)
-    .eq("team_id", teamId)
-    .maybeSingle();
-
-  return data ? rowToInvoice(data) : null;
+  return (data.hisoblar ?? []).map(toInvoice);
 }
 
+/**
+ * One invoice, by id and by membership together — a guessed id belonging to
+ * another company is a 404 rather than their figures.
+ */
+export async function getInvoice(id: string): Promise<Invoice | null> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/jamoa/hisoblar/{id}", { params: { path: { id } } });
+  return error || !data ? null : toInvoice(data.hisob);
+}
+
+/**
+ * Issuing one. Owner only — the backend's statement says so.
+ *
+ * The figures are worked out beside the price list and copied onto the row:
+ * the list will change and a document has to keep saying what it said.
+ */
 export async function issueInvoice(
-  teamId: string,
   seats: number,
   months: number,
-  // Defaults to whatever the seller has settled on, so an invoice cannot be
-  // issued at a rate nobody chose.
-  vatPercent = VAT.percent,
+  seatMonthly: number,
+  vatPercent: number,
+  total: number,
 ): Promise<Invoice | null> {
-  if (!supabaseAdmin) return null;
-
-  const { total } = invoiceTotal(seats, months, TEAM_SEAT_MONTHLY, vatPercent);
-
-  const { data } = await supabaseAdmin
-    .from("team_invoices")
-    .insert({
-      team_id: teamId,
-      seats,
-      months,
-      // Copied, not referenced: an invoice is a document, and what it says has
-      // to stay what it said when the price list changes.
-      seat_monthly: TEAM_SEAT_MONTHLY,
-      vat_percent: vatPercent,
-      total,
-    })
-    .select("id, number, seats, months, seat_monthly, vat_percent, total, status, issued_at, paid_at")
-    .single();
-
-  return data ? rowToInvoice(data) : null;
+  const client = await asReader();
+  const { data, error } = await client.POST("/men/jamoa/hisoblar", {
+    body: {
+      orinlar: seats,
+      oylar: months,
+      orin_oylik: seatMonthly,
+      qqs_foizi: vatPercent,
+      jami: total,
+    },
+  });
+  return error || !data ? null : toInvoice(data.hisob);
 }
 
-export async function getBuyerRequisites(teamId: string): Promise<BuyerRequisites | null> {
-  if (!supabaseAdmin) return null;
+export async function getBuyerRequisites(): Promise<BuyerRequisites | null> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/men/jamoa", {});
+  if (error || !data?.jamoa) return null;
 
-  const { data } = await supabaseAdmin
-    .from("teams")
-    .select("legal_name, inn, address, bank_name, bank_account, bank_mfo, director")
-    .eq("id", teamId)
-    .maybeSingle();
-
-  if (!data) return null;
-
+  const t = data.jamoa;
   return {
-    legalName: (data.legal_name as string) ?? null,
-    inn: (data.inn as string) ?? null,
-    address: (data.address as string) ?? null,
-    bankName: (data.bank_name as string) ?? null,
-    bankAccount: (data.bank_account as string) ?? null,
-    bankMfo: (data.bank_mfo as string) ?? null,
-    director: (data.director as string) ?? null,
+    legalName: t.yuridik_nom ?? null,
+    inn: t.inn ?? null,
+    address: t.manzil ?? null,
+    bankName: t.bank ?? null,
+    bankAccount: t.hisob ?? null,
+    bankMfo: t.mfo ?? null,
+    director: t.rahbar ?? null,
   };
 }
 
-function rowToInvoice(row: Record<string, unknown>): Invoice {
-  return {
-    id: row.id as string,
-    number: row.number as number,
-    seats: row.seats as number,
-    months: row.months as number,
-    seatMonthly: Number(row.seat_monthly),
-    vatPercent: Number(row.vat_percent),
-    total: Number(row.total),
-    status: row.status as Invoice["status"],
-    issuedAt: row.issued_at as string,
-    paidAt: (row.paid_at as string) ?? null,
-  };
+/** Owner only: an invoice with somebody else's bank details is a fraud with our name on it. */
+export async function saveBuyerRequisites(r: BuyerRequisites): Promise<boolean> {
+  const client = await asReader();
+  const { error } = await client.PUT("/men/jamoa/rekvizitlar", {
+    body: {
+      yuridik_nom: r.legalName ?? undefined,
+      inn: r.inn ?? undefined,
+      manzil: r.address ?? undefined,
+      bank: r.bankName ?? undefined,
+      hisob: r.bankAccount ?? undefined,
+      mfo: r.bankMfo ?? undefined,
+      rahbar: r.director ?? undefined,
+    },
+  });
+  return !error;
 }

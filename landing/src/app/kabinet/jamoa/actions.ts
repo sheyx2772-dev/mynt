@@ -4,7 +4,9 @@ import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/auth";
 import { getTeamForUser, releaseTeamHandle, assignTeamHandle } from "@/lib/teams";
 import { parseHandle } from "@/lib/pricing";
-import { issueInvoice } from "@/lib/invoices";
+import { VAT } from "@/lib/company";
+import { TEAM_SEAT_MONTHLY } from "@/lib/plans";
+import { invoiceTotal, issueInvoice } from "@/lib/invoices";
 import { MIN_TEAM_SEATS } from "@/lib/plans";
 
 export type ReleaseResult = { ok: boolean; error?: string };
@@ -22,10 +24,10 @@ export async function releaseHandle(rawHandle: string): Promise<ReleaseResult> {
   const parsed = parseHandle(rawHandle);
   if (!parsed) return { ok: false, error: "Raqam noto'g'ri." };
 
-  const team = await getTeamForUser(user.id);
+  const team = await getTeamForUser();
   if (!team) return { ok: false, error: "Sizda firma hisobi yo'q." };
 
-  const released = await releaseTeamHandle(`${parsed.letters}${parsed.digits}`, user.id);
+  const released = await releaseTeamHandle(`${parsed.letters}${parsed.digits}`);
   if (!released) return { ok: false, error: "Bu raqam firmangizga tegishli emas." };
 
   revalidatePath("/kabinet/jamoa");
@@ -48,7 +50,7 @@ export async function requestInvoice(
 ): Promise<InvoiceResult> {
   const user = await requireUser("/kabinet/jamoa");
 
-  const team = await getTeamForUser(user.id);
+  const team = await getTeamForUser();
   if (!team) return { ok: false, error: "Sizda firma hisobi yo'q." };
 
   if (!Number.isInteger(seats) || seats < MIN_TEAM_SEATS || seats > 500) {
@@ -58,7 +60,11 @@ export async function requestInvoice(
     return { ok: false, error: "Muddat 1, 3, 6 yoki 12 oy bo'lishi mumkin." };
   }
 
-  const invoice = await issueInvoice(team.id, seats, months);
+    // Worked out here, beside the price list, and copied onto the row by the
+  // backend: the list will change and a document has to keep saying what it
+  // said when it was issued.
+  const { total } = invoiceTotal(seats, months, TEAM_SEAT_MONTHLY, VAT.percent);
+  const invoice = await issueInvoice(seats, months, TEAM_SEAT_MONTHLY, VAT.percent, total);
   if (!invoice) return { ok: false, error: "Hisob-faktura yaratilmadi." };
 
   revalidatePath("/kabinet/jamoa");
@@ -82,14 +88,10 @@ export async function assignHandle(
     return { ok: false, error: "Emailni tekshiring." };
   }
 
-  const result = await assignTeamHandle(
-    `${parsed.letters}${parsed.digits}`,
-    email,
-    user.id,
-  );
+  const result = await assignTeamHandle(`${parsed.letters}${parsed.digits}`, email);
 
   if (!result.ok) return { ok: false, error: result.error };
 
   revalidatePath("/kabinet/jamoa");
-  return { ok: true, invited: result.invited };
+  return { ok: true };
 }

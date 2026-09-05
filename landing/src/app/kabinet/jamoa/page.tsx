@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default async function JamoaPage() {
   const user = await requireUser("/kabinet/jamoa");
-  const team = await getTeamForUser(user.id);
+  const team = await getTeamForUser();
 
   // Nothing is self-serve yet: a company account is opened by us, because the
   // seats, the numbers and the physical cards are ordered together and one of
@@ -74,11 +74,11 @@ export default async function JamoaPage() {
   }
 
   const [handles, invoices, stats] = await Promise.all([
-    listTeamHandles(team.id),
-    listInvoices(team.id),
-    getTeamStats(team.id),
+    listTeamHandles(),
+    listInvoices(),
+    getTeamStats(),
   ]);
-  const taken = handles.filter((h) => h.userId).length;
+  const taken = handles.filter((h) => h.assigned).length;
 
   return (
     <PageShell surface="ink">
@@ -117,7 +117,7 @@ export default async function JamoaPage() {
             <p className="mt-0.5 text-xs text-paper-3">Profil ochilgan</p>
           </div>
           <div className="rounded-2xl border border-ink-line bg-ink-s2 px-4 py-3">
-            <p className="font-display text-2xl font-semibold tabular-nums">{stats.leads}</p>
+            <p className="font-display text-2xl font-semibold tabular-nums">{stats.taken}</p>
             <p className="mt-0.5 text-xs text-paper-3">Kelgan kontakt</p>
           </div>
         </div>
@@ -145,16 +145,16 @@ export default async function JamoaPage() {
                       has not filled it in yet, and somebody has it. The middle
                       one read as "nobody has it" beside a Release button. */}
                   <p className="mt-0.5 text-sm text-paper-2">
-                    {h.userId
+                    {h.assigned
                       ? (h.holderName ?? "Biriktirilgan — profil hali to'ldirilmagan")
                       : "Bo'sh — hech kimda emas"}
-                    {h.userId && h.position && ` · ${h.position}`}
+                    {h.assigned && h.position && ` · ${h.position}`}
                   </p>
                 </div>
 
                 <p className="font-tabular text-xs text-paper-3">{h.viewCount}</p>
 
-                {h.userId ? (
+                {h.assigned ? (
                   <ReleaseHandleButton handle={h.normalized} holderName={h.holderName} />
                 ) : (
                   <AssignHandleForm handle={h.normalized} />

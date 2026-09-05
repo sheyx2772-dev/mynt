@@ -45,9 +45,9 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
   // shown.
   const [handles, incoming, notifications, team, queue] = await Promise.all([
     listHandlesForUser(),
-    listIncomingTransfers(user.email ?? ""),
+    listIncomingTransfers(),
     listNotifications(user.id),
-    getTeamForUser(user.id),
+    getTeamForUser(),
     isOperator(user.id) ? countQueue() : Promise.resolve(0),
   ]);
 
