@@ -662,6 +662,61 @@ body:has(> [data-surface="wall"]) {
 
 /* A carousel with a visible scrollbar reads as a bug on a phone and as a
    second control on a desktop. The rail still scrolls, and still by keyboard. */
+/* Two textures for the near-black sections, and both were being asked for by
+   name long before either existed: `grain` and `bg-dot-grid-light` appear on
+   the footer, the phone hero, the fork cards and the device tiles, where the
+   markup already positions a masked layer over the ground and sets its
+   opacity. Without the rules those layers painted nothing and every dark
+   panel was flat.
+
+   The grain is a fixed-size SVG noise tile rather than a gradient, because a
+   gradient at this scale bands on an OLED phone. It sits above the ground and
+   below the content, and it is deliberately weak — at 0.035 it reads as
+   material rather than as an effect. */
+/* Keyboard focus, which this stylesheet had no rule for at all — every
+   interactive element in the product was reachable by Tab and invisible once
+   reached. The inputs made it worse: they set `outline-none` and then drew a
+   focus border darker than their resting one, so focusing a field in the
+   cabinet made its edge disappear.
+
+   The ring is the accent on the paper face and on the ink face alike: it is
+   the one colour that survives both grounds, and focus is exactly the moment
+   to spend it. `:focus-visible` rather than `:focus`, so a mouse click on a
+   button does not draw it. */
+:where(a, button, summary, [role="button"], [tabindex]):focus-visible,
+:where(input, textarea, select):focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 2px;
+  border-radius: var(--radius-plate, 8px);
+}
+
+/* On the paper face the lime is too pale against white to be seen as a ring,
+   so the ink is used instead — the same decision the chart colours make. */
+[data-surface="paper"] :where(a, button, summary, [role="button"], [tabindex]):focus-visible,
+[data-surface="paper"] :where(input, textarea, select):focus-visible {
+  outline-color: var(--color-ink);
+}
+
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The dot grid the same panels lay over the grain. The caller sets its own
+   opacity and mask, so this only has to draw the dots. */
+.bg-dot-grid-light {
+  background-image: radial-gradient(
+    circle at center,
+    rgb(255 255 255 / 0.22) 0 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
 .no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;

@@ -21,7 +21,7 @@ export default function ClaimForm({
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
 
   const inputClass =
-    "w-full rounded-xl border border-line bg-black/[0.02] px-4 py-2.5 text-sm outline-none transition-colors focus:border-flex-black/30 focus:bg-white";
+    "w-full rounded-xl border border-line bg-black/[0.02] px-4 py-2.5 text-sm outline-none transition-colors focus:border-line-lead focus:bg-white";
 
   if (!isSignedIn) {
     return (

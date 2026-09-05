@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { listPublicHandles } from "@/lib/handles";
+import { LOADOUT_DEVICES } from "@/lib/loadout";
 
 // Claimed profiles are public pages people share, so they belong in the index.
 // Unclaimed handles are excluded: there are 17.5M of them and each is a
@@ -47,6 +48,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
+    },
+    // One page per object. These are what a search for "NFC uzuk" or
+    // "avtovizitka" should reach, and they carry the price, so they are worth
+    // more to a buyer than the index above them.
+    ...LOADOUT_DEVICES.map((id) => ({
+      url: `${SITE_URL}/qurilmalar/${id}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+    // What a subscription costs. Somebody comparing us to a competitor looks
+    // for this page by name.
+    {
+      url: `${SITE_URL}/tarif`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
     },
     // The directory. Every row is a public profile that is in this sitemap
     // anyway, and the page itself is the one place they are all linked from.

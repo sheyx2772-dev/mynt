@@ -58,7 +58,7 @@ export default function DesignRequestForm({
           required
           disabled={inQueue || pending}
           placeholder="Masalan: qora fonda oltin naqsh, jiddiy va sodda"
-          className="w-full resize-none rounded-2xl border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-flex-black/40 disabled:bg-ink-s2 disabled:text-paper-3"
+          className="w-full resize-none rounded-2xl border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-paper-3 disabled:bg-ink-s2 disabled:text-paper-3"
         />
 
         <div className="mt-3 flex flex-wrap items-center gap-3">

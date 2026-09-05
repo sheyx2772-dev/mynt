@@ -66,7 +66,7 @@ export default function PointsEditor({
               onChange={(e) => setFrom(e.target.value)}
               inputMode="numeric"
               aria-label="Boshlanishi"
-              className="w-20 rounded-xl border border-ink-line px-3 py-2.5 text-center font-tabular text-sm outline-none focus:border-flex-black/30"
+              className="w-20 rounded-xl border border-ink-line px-3 py-2.5 text-center font-tabular text-sm outline-none focus:border-paper-3"
             />
             <span className="text-paper-3">—</span>
             <input
@@ -74,7 +74,7 @@ export default function PointsEditor({
               onChange={(e) => setTo(e.target.value)}
               inputMode="numeric"
               aria-label="Tugashi"
-              className="w-20 rounded-xl border border-ink-line px-3 py-2.5 text-center font-tabular text-sm outline-none focus:border-flex-black/30"
+              className="w-20 rounded-xl border border-ink-line px-3 py-2.5 text-center font-tabular text-sm outline-none focus:border-paper-3"
             />
             <button
               type="button"
@@ -98,7 +98,7 @@ export default function PointsEditor({
             onChange={(e) => setText(e.target.value)}
             rows={8}
             placeholder={`1\n2\n3\nTerrasa 1`}
-            className="w-full resize-y rounded-xl border border-ink-line bg-ink-s1 px-3 py-2.5 font-tabular text-sm outline-none focus:border-flex-black/30"
+            className="w-full resize-y rounded-xl border border-ink-line bg-ink-s1 px-3 py-2.5 font-tabular text-sm outline-none focus:border-paper-3"
           />
 
           {!state.ok && <p className="mt-3 text-sm text-danger-ink">{state.error}</p>}

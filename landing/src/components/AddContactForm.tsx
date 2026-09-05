@@ -16,7 +16,7 @@ import {
 // gets kept alongside a notebook rather than replacing it.
 
 const field =
-  "w-full rounded-2xl border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-flex-black/40";
+  "w-full rounded-2xl border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-paper-3";
 
 export default function AddContactForm({ handle }: { handle: string }) {
   const [open, setOpen] = useState(false);

@@ -188,9 +188,9 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
             <p className="font-display font-semibold tracking-tight">
               {queue} ta buyurtma
             </p>
-            <p className="mt-0.5 text-xs text-paper-2">Yasash va yuborish</p>
+            <p className="mt-0.5 text-xs text-ink/70">Yasash va yuborish</p>
           </div>
-          <ChevronRight className="h-4 w-4 shrink-0 text-paper-3" />
+          <ChevronRight className="h-4 w-4 shrink-0 text-ink/60" />
         </Link>
       )}
 

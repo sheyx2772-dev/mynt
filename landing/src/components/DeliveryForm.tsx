@@ -14,7 +14,7 @@ import { saveDelivery, type DeliveryState } from "@/app/kabinet/buyurtma/[id]/ac
 // wrong door.
 
 const field =
-  "w-full rounded-2xl border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-flex-black/40";
+  "w-full rounded-2xl border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-paper-3";
 const label = "mb-1.5 block text-xs font-medium tracking-wide text-paper-2 uppercase";
 const problem = "mt-1.5 text-xs text-danger-ink";
 

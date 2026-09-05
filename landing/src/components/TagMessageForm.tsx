@@ -99,7 +99,7 @@ export default function TagMessageForm({
                 name="replyTo"
                 inputMode="tel"
                 placeholder="+998 90 123 45 67"
-                className="w-full rounded-2xl border border-line px-4 py-3.5 text-[15px] outline-none placeholder:text-flex-black/25 focus:border-flex-black/40"
+                className="w-full rounded-2xl border border-line px-4 py-3.5 text-[15px] outline-none placeholder:text-flex-black/25 focus:border-line-lead"
               />
               <p className="mt-1.5 text-[12px] text-flex-black/40">{words.replyHint}</p>
             </div>
@@ -109,14 +109,14 @@ export default function TagMessageForm({
             name="place"
             placeholder={words.placePlaceholder}
             aria-label={words.placeLabel}
-            className="w-full rounded-2xl border border-line px-4 py-3.5 text-[15px] outline-none placeholder:text-flex-black/25 focus:border-flex-black/40"
+            className="w-full rounded-2xl border border-line px-4 py-3.5 text-[15px] outline-none placeholder:text-flex-black/25 focus:border-line-lead"
           />
 
           <textarea
             name="body"
             rows={2}
             placeholder={words.notePlaceholder}
-            className="w-full resize-none rounded-2xl border border-line px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-flex-black/25 focus:border-flex-black/40"
+            className="w-full resize-none rounded-2xl border border-line px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-flex-black/25 focus:border-line-lead"
           />
         </div>
       )}

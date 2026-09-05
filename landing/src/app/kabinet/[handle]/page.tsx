@@ -31,7 +31,10 @@ export default async function HandlePage(props: PageProps<"/kabinet/[handle]">) 
     getOwnedVenue(normalized),
   ]);
 
-  const waiting = venue ? await countWaiting(venue.id) : 0;
+  // Both of these are asked for by number, not by venue id: the API route is
+  // /raqamlar/{raqam}/sorovlar. Passing venue.id returned nothing, so this
+  // screen showed no waiting requests while /kabinet showed the real count.
+  const waiting = venue ? await countWaiting(normalized) : 0;
 
   // Only for a venue, and only the four counts the checklist reads.
   const setup = venue
@@ -39,7 +42,7 @@ export default async function HandlePage(props: PageProps<"/kabinet/[handle]">) 
         menuItems: await countMenuItems(venue.id),
         points: venue.points.length,
         hasStaffLink: Boolean(venue.staffToken),
-        requests: await countAllRequests(venue.id),
+        requests: await countAllRequests(normalized),
       }
     : null;
 

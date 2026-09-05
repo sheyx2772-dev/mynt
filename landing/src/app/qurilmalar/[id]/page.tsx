@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import JsonLd from "@/components/JsonLd";
+import { product, breadcrumbs } from "@/lib/schema";
 import type { Metadata } from "next";
 import { ArrowLeft, Check, Phone, ArrowRight } from "lucide-react";
 
@@ -73,6 +75,21 @@ export default async function DevicePage({
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#0a0715] text-white">
+      <JsonLd
+        data={product({
+          name,
+          description,
+          path: `/qurilmalar/${id}`,
+          image: shot ?? undefined,
+          price,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbs([
+          { name: p.groupDevices, path: "/qurilmalar" },
+          { name, path: `/qurilmalar/${id}` },
+        ])}
+      />
       <div className="absolute -top-32 right-0 h-96 w-96 rounded-full bg-lime/[0.12] blur-[130px]" />
 
       <div className="relative mx-auto max-w-4xl px-6 py-14 sm:py-16">

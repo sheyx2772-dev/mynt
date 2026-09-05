@@ -68,6 +68,15 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
           </Link>
           <div className="flex items-center gap-3">
             <LangSwitch lang={lang} next="/biznes" tone="dark" />
+            {/* Customers manage their own profile from here, so the way in
+                has to be visible rather than hidden behind the cabinet link.
+                Quiet against the lime, which stays the one loud thing. */}
+            <Link
+              href="/kirish"
+              className="hidden rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:border-white/45 hover:text-white sm:inline-flex"
+            >
+              {s.signIn}
+            </Link>
             <a
               href="#sorov"
               className="rounded-full bg-lime px-4 py-2 text-sm font-medium text-flex-black transition-colors hover:bg-lime/85"

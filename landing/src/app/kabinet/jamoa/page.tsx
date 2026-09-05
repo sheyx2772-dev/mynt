@@ -57,7 +57,7 @@ export default async function JamoaPage() {
           <div className="mt-4 flex flex-wrap gap-3">
             <a
               href={`tel:${COMPANY.phoneHref}`}
-              className="rounded-xl bg-ink-s2 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-paper uppercase"
+              className="rounded-xl bg-lime px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-ink uppercase"
             >
               {COMPANY.phone}
             </a>

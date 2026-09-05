@@ -80,7 +80,7 @@ export default function HandleHub({
           </div>
 
           {handle.status === "reserved" ? (
-            <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-warn-ink px-3 py-1 text-xs font-medium text-warn-ink">
+            <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-warn-ink/15 px-3 py-1 text-xs font-medium text-warn-ink">
               <Clock className="h-3 w-3" />
               To&apos;lov kutilmoqda
             </span>

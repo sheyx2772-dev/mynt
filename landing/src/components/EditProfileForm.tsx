@@ -48,7 +48,7 @@ export default function EditProfileForm({
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
 
   const inputClass =
-    "w-full rounded-xl border border-ink-line bg-ink-s2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-flex-black/30 focus:bg-ink-s1";
+    "w-full rounded-xl border border-ink-line bg-ink-s2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-paper-3 focus:bg-ink-s1";
   const labelClass = "mb-1.5 block text-xs font-medium tracking-wide text-paper-2 uppercase";
 
   return (

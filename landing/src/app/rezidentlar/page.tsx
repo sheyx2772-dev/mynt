@@ -85,7 +85,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
               name="q"
               defaultValue={query}
               placeholder={t.searchPlaceholder}
-              className="w-full rounded-full border border-line bg-white py-3 pr-4 pl-11 text-sm outline-none transition-colors focus:border-flex-black/30"
+              className="w-full rounded-full border border-line bg-white py-3 pr-4 pl-11 text-sm outline-none transition-colors focus:border-line-lead"
             />
           </div>
           <button

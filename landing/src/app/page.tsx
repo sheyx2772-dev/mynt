@@ -245,6 +245,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 { href: "/shaxsiy#tarif", label: s.navPlans },
                 { href: "/rezidentlar", label: s.navResidents },
                 { href: "/kabinet", label: s.navCabinet },
+                { href: "/kirish", label: s.signIn },
               ]}
             >
               <LangSwitch lang={lang} next="/" tone="dark" />
@@ -293,9 +294,18 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             <div className="hidden lg:block">
               <LangSwitch lang={lang} next="/" tone="dark" />
             </div>
+            {/* Customers manage their own profile from here, so the way in
+                has to be visible rather than hidden behind the cabinet link.
+                Quiet against the lime, which stays the one loud thing. */}
+            <Link
+              href="/kirish"
+              className="hidden rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:border-white/45 hover:text-white sm:inline-flex"
+            >
+              {s.signIn}
+            </Link>
             <a
-              href="#narx"
-              className="rounded-full bg-lime px-4 py-2 text-sm font-medium text-flex-black transition-colors hover:bg-lime/85"
+              href="#narxlar"
+              className="rounded-full bg-lime px-4 py-2.5 text-sm font-medium text-flex-black transition-colors hover:bg-lime/85"
             >
               {s.getHandle}
             </a>
@@ -593,8 +603,8 @@ export default async function Home({ searchParams }: PageProps<"/">) {
 
         {/* FAQ */}
         <section id="savollar" className="scroll-mt-20 mx-auto max-w-3xl px-6 py-14 sm:py-24">
-          <p className="mb-3 text-center text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
-            Savollar
+          <p className="mb-3 text-center text-xs font-semibold tracking-widest text-ink-3 uppercase">
+            {h.faqTitle}
           </p>
           <h2 className="text-center font-display text-2xl font-semibold tracking-tight sm:text-4xl">
             {s.faq}
@@ -647,22 +657,22 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               <ul className="mt-3 space-y-0.5 text-sm text-white/60">
                 <li>
                   <a
-                    href="#narx"
-                    className="block py-1.5 transition-colors hover:text-white"
+                    href="#narxlar"
+                    className="block py-2 transition-colors hover:text-white"
                   >
                     {s.navPricing}
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#individual"
-                    className="block py-1.5 transition-colors hover:text-white"
+                    href="/shaxsiy#individual"
+                    className="block py-2 transition-colors hover:text-white"
                   >
                     {s.personalProfile}
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
+                  <a href="/qurilmalar/card" className="block py-2 transition-colors hover:text-white">
                     FLEX CARD
                   </a>
                 </li>
@@ -675,19 +685,19 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               <ul className="mt-3 space-y-0.5 text-sm text-white/60">
                 <li>
                   <a
-                    href="#biznes"
-                    className="block py-1.5 transition-colors hover:text-white"
+                    href="/biznes#jamoa"
+                    className="block py-2 transition-colors hover:text-white"
                   >
                     {s.teamCards}
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
+                  <a href="/biznes#soha" className="block py-2 transition-colors hover:text-white">
                     {s.contactCollection}
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="block py-1.5 transition-colors hover:text-white">
+                  <a href="/biznes#sorov" className="block py-2 transition-colors hover:text-white">
                     {lang === "ru" ? "Режим мероприятия" : lang === "en" ? "Event mode" : "Tadbir rejimi"}
                   </a>
                 </li>

@@ -77,7 +77,7 @@ export default function TransferPanel({
             type="email"
             required
             placeholder="xaridor@example.com"
-            className="min-w-0 flex-1 rounded-full border border-ink-line px-5 py-2.5 text-sm outline-none placeholder:text-paper-3 focus:border-flex-black/40"
+            className="min-w-0 flex-1 rounded-full border border-ink-line px-5 py-2.5 text-sm outline-none placeholder:text-paper-3 focus:border-paper-3"
           />
           <button
             type="submit"

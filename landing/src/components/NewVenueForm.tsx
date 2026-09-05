@@ -63,7 +63,7 @@ export default function NewVenueForm({ handle }: { handle: string }) {
         name="name"
         required
         placeholder="Choyxona Navro'z"
-        className="w-full rounded-xl border border-ink-line bg-ink-s1 px-3 py-2.5 text-sm outline-none focus:border-flex-black/30"
+        className="w-full rounded-xl border border-ink-line bg-ink-s1 px-3 py-2.5 text-sm outline-none focus:border-paper-3"
       />
 
       <p className="mt-6 mb-2 text-[11px] font-medium tracking-wide text-paper-3 uppercase">

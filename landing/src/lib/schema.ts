@@ -143,3 +143,50 @@ export function breadcrumbs(trail: { name: string; path: string }[]) {
     })),
   };
 }
+
+/**
+ * One object for sale, with its price.
+ *
+ * Google shows the price and the availability under the result rather than
+ * only the title, which for a page whose whole job is "this costs 200 000
+ * so'm" is most of what the page says. Priced in so'm because that is what the
+ * buyer pays; a device with no fixed price — the car plate is quoted per
+ * order — omits `offers` rather than inventing one, since a wrong price in a
+ * rich result is worse than none.
+ */
+export function product({
+  name,
+  description,
+  path,
+  image,
+  price,
+}: {
+  name: string;
+  description: string;
+  path: string;
+  image?: string;
+  price: number | null;
+}) {
+  const url = absolute(path);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": `${url}#product`,
+    name,
+    description,
+    ...(image ? { image: absolute(image) } : {}),
+    brand: { "@type": "Brand", name: "FLEX" },
+    ...(price !== null
+      ? {
+          offers: {
+            "@type": "Offer",
+            url,
+            price: String(price),
+            priceCurrency: "UZS",
+            availability: "https://schema.org/InStock",
+            seller: { "@id": `${SITE_URL}/#organisation` },
+          },
+        }
+      : {}),
+  };
+}

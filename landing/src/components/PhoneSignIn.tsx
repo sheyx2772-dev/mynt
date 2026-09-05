@@ -50,7 +50,7 @@ function AskForNumber({
         value={phone}
         onChange={(e) => setPhone(group(e.target.value))}
         placeholder="+998 90 123 45 67"
-        className="w-full rounded-xl border border-line bg-black/[0.02] px-4 py-3 text-sm outline-none transition-colors focus:border-flex-black/30 focus:bg-white"
+        className="w-full rounded-xl border border-line bg-black/[0.02] px-4 py-3 text-sm outline-none transition-colors focus:border-line-lead focus:bg-white"
       />
       {error && <p className="text-sm text-red-700">{error}</p>}
       <button
@@ -105,7 +105,7 @@ function AskForCode({
         required
         defaultValue={testCode ?? ""}
         placeholder="000000"
-        className="w-full rounded-xl border border-line bg-black/[0.02] px-4 py-3 text-center text-lg font-semibold tracking-[0.4em] outline-none transition-colors focus:border-flex-black/30 focus:bg-white"
+        className="w-full rounded-xl border border-line bg-black/[0.02] px-4 py-3 text-center text-lg font-semibold tracking-[0.4em] outline-none transition-colors focus:border-line-lead focus:bg-white"
       />
 
       {!state.ok && state.error && <p className="text-sm text-red-700">{state.error}</p>}
