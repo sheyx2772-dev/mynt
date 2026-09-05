@@ -14,7 +14,7 @@
 //
 // Usage: npm run icons
 
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { deflateSync } from "node:zlib";
@@ -25,6 +25,15 @@ const PUBLIC_DIR = join(root, "public");
 // app-directory file convention; one sitting in public/ is never linked, and
 // iOS then screenshots the page instead of using the mark.
 const APP_DIR = join(root, "src", "app");
+
+// The phone's launcher icons, which this script also writes.
+//
+// It reaches into another application, which nothing else here does. The
+// alternative is drawing the mark a third time in Dart, and the mark is the one
+// thing in this repository that already has to be kept identical in two places
+// — HANDOFF.md says so, because it was five before. A third copy is a third
+// thing to forget.
+const MOBILE_DIR = join(root, "..", "mobile");
 
 const INK = [0x0e, 0x0a, 0x1b];
 const LIME = [0xab, 0xff, 0x09];
@@ -202,6 +211,17 @@ const ICONS = [
   { file: "telegram-avatar.png", size: 512, padding: 0, mark: 0.72, cornerRadius: 0 },
 ];
 
+// Android's launcher densities, and the one iOS asks for. Square in both cases:
+// Android masks with the launcher's own shape and iOS rounds its own corners,
+// so a corner rounded here is a corner rounded twice.
+const ANDROID_ICONS = [
+  { density: "mdpi", size: 48 },
+  { density: "hdpi", size: 72 },
+  { density: "xhdpi", size: 96 },
+  { density: "xxhdpi", size: 144 },
+  { density: "xxxhdpi", size: 192 },
+];
+
 mkdirSync(PUBLIC_DIR, { recursive: true });
 
 for (const icon of ICONS) {
@@ -212,3 +232,33 @@ for (const icon of ICONS) {
   const where = icon.dir === "app" ? "src/app" : "public";
   console.log(`${where}/${icon.file}`.padEnd(34) + `${icon.size}x${icon.size}  ${png.length} bytes`);
 }
+
+for (const { density, size } of ANDROID_ICONS) {
+  const dir = join(MOBILE_DIR, "android/app/src/main/res", `mipmap-${density}`);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, "ic_launcher.png"), encodePng(render(size, { size, mark: 0.7, cornerRadius: 0 }), size));
+  console.log(`mobile/…/mipmap-${density}/ic_launcher.png`.padEnd(46) + `${size}x${size}`);
+}
+
+// Every size the asset catalogue lists, read from the catalogue itself rather
+// than repeated here — a list of sizes in two places is a list that drifts, and
+// a missing file is a build error in Xcode rather than a fallback.
+//
+// iOS refuses an icon with an alpha channel. This has none, because the
+// background is painted rather than left transparent.
+const iosDir = join(MOBILE_DIR, "ios/Runner/Assets.xcassets/AppIcon.appiconset");
+mkdirSync(iosDir, { recursive: true });
+
+const catalogue = JSON.parse(readFileSync(join(iosDir, "Contents.json"), "utf8"));
+const iosSizes = new Map();
+for (const image of catalogue.images) {
+  if (!image.filename) continue;
+  const points = Number.parseFloat(image.size);
+  const scale = Number.parseInt(image.scale, 10);
+  iosSizes.set(image.filename, Math.round(points * scale));
+}
+
+for (const [file, size] of iosSizes) {
+  writeFileSync(join(iosDir, file), encodePng(render(size, { size, mark: 0.7, cornerRadius: 0 }), size));
+}
+console.log(`mobile/…/AppIcon.appiconset/`.padEnd(46) + `${iosSizes.size} ta o'lcham`);

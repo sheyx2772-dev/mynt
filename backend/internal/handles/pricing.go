@@ -15,11 +15,27 @@ import (
 // not a discounted thing.
 const BasePrice = 100_000
 
-// Combinations that are worth something because they are words rather than
-// because of their shape.
+// The tier is a multiplier of twenty, so every word added here takes a
+// combination out of the hundred-thousand pool and puts it in a two-million
+// one. It is a pricing decision, not a dictionary — a word belongs here when
+// somebody would pay for it, not when it exists.
+//
+// Three groups. What a person is: the titles somebody puts on a card. Where
+// they are: the ones that read as Uzbek rather than as English. And what
+// anybody recognises anywhere.
+//
+// Uzbek words with an apostrophe — o‘, g‘ — cannot be here at all: a handle
+// is three letters of A–Z, and "O‘ZB" is four characters of which one is not
+// a letter.
 var rareWords = map[string]bool{
-	"VIP": true, "CEO": true, "GOD": true, "SIR": true,
-	"ACE": true, "WOW": true, "TOP": true, "BOS": true,
+	// What a person is.
+	"VIP": true, "CEO": true, "CTO": true, "CFO": true, "MBA": true, "DEV": true,
+	"DOC": true, "PRO": true, "BOS": true, "SIR": true, "BEK": true, "XON": true,
+	// Where they are.
+	"UZB": true, "NUR": true, "ZAR": true, "ASL": true, "TOY": true, "GUL": true,
+	// What anybody recognises.
+	"GOD": true, "ACE": true, "WOW": true, "TOP": true, "LUX": true, "MAX": true,
+	"WIN": true, "ONE": true, "KEY": true, "NEW": true, "ART": true, "ZEN": true,
 }
 
 var handlePattern = regexp.MustCompile(`^([A-Z]{3})([0-9]{3})$`)

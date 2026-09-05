@@ -2,7 +2,26 @@
 // from there. Round, because a price with a 9 on the end reads as a discount
 // and this is not a discounted thing.
 export const BASE_PRICE = 100_000;
-const RARE_WORDS = ["VIP", "CEO", "GOD", "SIR", "ACE", "WOW", "TOP", "BOS"];
+  // The tier is a multiplier of twenty, so every word added here takes a
+  // combination out of the hundred-thousand pool and puts it in a two-million
+  // one. It is a pricing decision, not a dictionary — a word belongs here when
+  // somebody would pay for it, not when it exists.
+  //
+  // Three groups. What a person is: the titles somebody puts on a card. Where
+  // they are: the ones that read as Uzbek rather than as English. And what
+  // anybody recognises anywhere.
+  //
+  // Uzbek words with an apostrophe — o‘, g‘ — cannot be here at all: a handle
+  // is three letters of A–Z, and "O‘ZB" is four characters of which one is not
+  // a letter.
+export const RARE_WORDS = [
+  // What a person is.
+  "VIP", "CEO", "CTO", "CFO", "MBA", "DEV", "DOC", "PRO", "BOS", "SIR", "BEK", "XON",
+  // Where they are.
+  "UZB", "NUR", "ZAR", "ASL", "TOY", "GUL",
+  // What anybody recognises.
+  "GOD", "ACE", "WOW", "TOP", "LUX", "MAX", "WIN", "ONE", "KEY", "NEW", "ART", "ZEN",
+];
 
 export function letterRarity(letters: string): { multiplier: number; reason: string } {
   const l = letters.toUpperCase().split("");

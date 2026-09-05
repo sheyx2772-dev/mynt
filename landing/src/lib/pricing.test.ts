@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { BASE_PRICE, parseHandle, parseGenesisSerial, letterRarity, digitRarity, priceForHandle, rarityTier } from "./pricing";
+import { BASE_PRICE, parseHandle, parseGenesisSerial, letterRarity, digitRarity, priceForHandle, rarityTier, RARE_WORDS } from "./pricing";
 
 describe("parseHandle", () => {
   it("accepts the AAA000 shape and normalizes case", () => {
@@ -145,5 +145,30 @@ describe("rarityTier", () => {
     for (let i = 1; i < ranked.length; i++) {
       expect(ranked[i]!.band).toBeGreaterThanOrEqual(ranked[i - 1]!.band);
     }
+  });
+});
+
+describe("the word tier", () => {
+  // The same list lives in `backend/internal/handles/pricing.go`. A word in one
+  // and not the other is this site quoting a hundred thousand and the server
+  // charging two million, so both are pinned by count.
+  it("holds exactly the words both sides agree on", () => {
+    expect(RARE_WORDS).toHaveLength(30);
+  });
+
+  it("prices a word at twenty times the base", () => {
+    for (const word of ["VIP", "CEO", "BEK", "UZB", "NUR", "ZAR", "LUX", "ONE"]) {
+      expect(letterRarity(word).multiplier).toBe(20);
+    }
+  });
+
+  it("leaves a run of letters nobody would pay for alone", () => {
+    for (const plain of ["QXZ", "SDF", "MYN", "KLM"]) {
+      expect(letterRarity(plain).multiplier).toBe(1);
+    }
+  });
+
+  it("ranks three identical letters above a word", () => {
+    expect(letterRarity("WWW").multiplier).toBe(30);
   });
 });

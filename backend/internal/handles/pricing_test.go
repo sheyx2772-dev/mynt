@@ -67,3 +67,34 @@ func TestParseSerialIsADifferentNamespace(t *testing.T) {
 		}
 	}
 }
+
+// The words are a pricing tier, and they exist in two files: this one and
+// `landing/src/lib/pricing.ts`. A word in one and not the other is the site
+// quoting a hundred thousand and the server charging two million.
+//
+// Pinned by count and by a sample from each of the three groups, so adding a
+// word is a deliberate edit here as well as there.
+func TestTheWordTierIsWhatBothSidesThinkItIs(t *testing.T) {
+	if len(rareWords) != 30 {
+		t.Errorf("%d ta so'z — landing/src/lib/pricing.ts bilan bir xilmi?", len(rareWords))
+	}
+
+	for _, word := range []string{"VIP", "CEO", "BEK", "UZB", "NUR", "ZAR", "LUX", "ONE"} {
+		if LetterRarity(word).Multiplier != 20 {
+			t.Errorf("%s so'z tarifida emas", word)
+		}
+	}
+
+	// Not words. A three-letter run that nobody would pay extra for must stay
+	// in the hundred-thousand pool.
+	for _, plain := range []string{"QXZ", "SDF", "MYN", "KLM"} {
+		if LetterRarity(plain).Multiplier != 1 {
+			t.Errorf("%s so'z tarifiga tushib qoldi", plain)
+		}
+	}
+
+	// Three identical letters outrank a word, even when the word is one.
+	if LetterRarity("WWW").Multiplier != 30 {
+		t.Error("WWW uch bir xil harf sifatida baholanmadi")
+	}
+}
