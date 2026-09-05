@@ -16,6 +16,13 @@ import (
 type Link struct {
 	Label string `json:"label"`
 	Href  string `json:"href"`
+	// What kind of thing it is, when that changes how it is drawn. Empty for
+	// an ordinary link; "payment" for the one that ends in money, which the
+	// profile shows as a button rather than as another row in a list.
+	//
+	// Absent from every link written before this field existed, which is why
+	// it is omitempty and why nothing reads it as required.
+	Kind string `json:"kind,omitempty"`
 }
 
 // The characters the platforms allow. The hyphen is in the set because
@@ -109,6 +116,8 @@ type LinkInput struct {
 	Facebook  string `json:"facebook,omitempty"`
 	YouTube   string `json:"youtube,omitempty"`
 	Website   string `json:"website,omitempty"`
+	// Where somebody pays this profile's owner. See paymentLink.
+	Payment string `json:"payment,omitempty"`
 }
 
 // BuildLinks returns the ordered list a profile shows, dropping anything that
@@ -118,8 +127,12 @@ type LinkInput struct {
 // then the places to look them up, then their own site. Booking leads because
 // it is the one that ends in an appointment.
 func BuildLinks(in LinkInput) []Link {
-	links := make([]Link, 0, 8)
+	links := make([]Link, 0, 9)
 
+	// First, because it is the only one that ends in the owner being paid.
+	if link, ok := paymentLink(in.Payment); ok {
+		links = append(links, link)
+	}
 	if link, ok := WebsiteLink(in.Booking); ok {
 		// Whatever the owner uses — Calendly, a Telegram bot — so it is a plain
 		// address under a name that says what it does.
@@ -148,4 +161,37 @@ func BuildLinks(in LinkInput) []Link {
 	}
 
 	return links
+}
+
+// The hosts a payment link may point at.
+//
+// An allowlist rather than a check that it is a URL, and this is the whole
+// security argument for the feature: the profile renders this as "pay here" on
+// a page anybody can open, so an address the owner chooses freely is a
+// phishing page we would be hosting under somebody else's name and our domain.
+// Restricting it to the two providers that actually operate here means the
+// worst a hostile owner can do is take their own money.
+//
+// It also cannot be a merchant checkout of ours — those are built from an
+// order id on the server. This is the owner's personal transfer link, the kind
+// Payme and Click give an individual who has no merchant account, which is
+// what almost every barber, tutor and driver has.
+var paymentHosts = map[string]bool{
+	"payme.uz": true, "www.payme.uz": true, "p.payme.uz": true,
+	"click.uz": true, "www.click.uz": true, "my.click.uz": true, "m.click.uz": true,
+}
+
+// paymentLink accepts an address at one of those hosts and nothing else.
+func paymentLink(raw string) (Link, bool) {
+	link, ok := WebsiteLink(raw)
+	if !ok {
+		return Link{}, false
+	}
+
+	parsed, err := url.Parse(link.Href)
+	if err != nil || !paymentHosts[strings.ToLower(parsed.Hostname())] {
+		return Link{}, false
+	}
+
+	return Link{Label: "To'lash", Href: link.Href, Kind: "payment"}, true
 }

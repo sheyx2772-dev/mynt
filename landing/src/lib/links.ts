@@ -2,7 +2,16 @@
 // public page, so they are rebuilt from validated parts rather than passed
 // through. Kept free of server-only imports so it can be unit tested.
 
-export type Link = { label: string; href: string };
+export type Link = {
+  label: string;
+  href: string;
+  /**
+   * What kind of thing it is, when that changes how it is drawn. Absent for an
+   * ordinary link; "payment" for the one that ends in money, which the profile
+   * shows as a button rather than as another row in a list.
+   */
+  kind?: "payment";
+};
 
 // Usernames go straight into a URL path, so they're restricted to the
 // characters the platforms actually allow. The hyphen is in the set because
@@ -66,12 +75,50 @@ export function bookingLink(raw: string): Link | null {
   return link ? { label: "Uchrashuv", href: link.href } : null;
 }
 
+// The hosts a payment link may point at.
+//
+// An allowlist rather than a check that it is a URL, and this is the whole
+// security argument for the feature: the profile renders this as "pay here" on
+// a page anybody can open, so an address the owner chooses freely is a phishing
+// page hosted under somebody else's name and our domain. Restricting it to the
+// two providers that operate here means the worst a hostile owner can do is
+// take their own money.
+//
+// The same list is enforced in backend/internal/handles/links.go, which is what
+// actually decides — this copy is so the form can say no before it is sent.
+const PAYMENT_HOSTS = new Set([
+  "payme.uz", "www.payme.uz", "p.payme.uz",
+  "click.uz", "www.click.uz", "my.click.uz", "m.click.uz",
+]);
+
+/**
+ * Where somebody pays this profile's owner.
+ *
+ * Not a merchant checkout of ours — those are built from an order id on the
+ * server. This is the owner's own transfer link, the kind Payme and Click give
+ * an individual who has no merchant account, which is what almost every barber,
+ * tutor and driver has. The money never touches us.
+ */
+export function paymentLink(raw: string): Link | null {
+  const link = websiteLink(raw);
+  if (!link) return null;
+
+  try {
+    if (!PAYMENT_HOSTS.has(new URL(link.href).hostname.toLowerCase())) return null;
+  } catch {
+    return null;
+  }
+
+  return { label: "To'lash", href: link.href, kind: "payment" };
+}
+
 // Builds the ordered link list shown on a profile, dropping anything invalid.
 //
 // The order is the order they are read in: the ways to talk to a person first,
 // then the places to look them up, then their own site. Booking leads because
 // it is the one that ends in an appointment.
 export function buildProfileLinks(input: {
+  payment?: string;
   booking?: string;
   telegram: string;
   whatsapp?: string;
@@ -82,6 +129,8 @@ export function buildProfileLinks(input: {
   website: string;
 }): Link[] {
   return [
+    // First, because it is the only one that ends in the owner being paid.
+    paymentLink(input.payment ?? ""),
     bookingLink(input.booking ?? ""),
     socialLink("Telegram", input.telegram, "https://t.me/"),
     whatsappLink(input.whatsapp ?? ""),
@@ -103,7 +152,7 @@ export function linkValue(link: Link): string {
 
     // A booking address is a whole address, not a name on a known platform:
     // "@aziz" tells nobody whether it opens Calendly or a bot.
-    if (link.label === "Veb-sayt" || link.label === "Uchrashuv") {
+    if (link.label === "Veb-sayt" || link.label === "Uchrashuv" || link.kind === "payment") {
       return url.hostname.replace(/^www\./, "") + (path ? `/${path}` : "");
     }
 

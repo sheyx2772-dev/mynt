@@ -19,6 +19,7 @@ export default function EditProfileForm({
   defaults: {
     name: string;
     bio: string;
+    payment: string;
     booking: string;
     telegram: string;
     whatsapp: string;
@@ -206,6 +207,24 @@ export default function EditProfileForm({
             className={inputClass}
           />
         </div>
+      </div>
+
+      <div>
+        <label className={labelClass} htmlFor="payment">
+          To&apos;lov havolasi
+        </label>
+        <input
+          id="payment"
+          name="payment"
+          placeholder="payme.uz/@ismingiz"
+          defaultValue={defaults.payment}
+          className={inputClass}
+        />
+        <p className="mt-1 text-xs text-paper-3">
+          Payme yoki Click&rsquo;dagi shaxsiy o&apos;tkazma havolangiz. Profilingizda
+          alohida tugma bo&apos;lib chiqadi va pul to&apos;g&apos;ridan-to&apos;g&apos;ri
+          sizga tushadi &mdash; biz orada turmaymiz. Boshqa saytlar qabul qilinmaydi.
+        </p>
       </div>
 
       <div>

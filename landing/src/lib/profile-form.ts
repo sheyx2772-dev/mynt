@@ -81,6 +81,7 @@ export async function readProfileForm(
   if (!name) return { ok: false, error: "Ism kiritish shart." };
 
   const links = buildProfileLinks({
+    payment: String(formData.get("payment") ?? ""),
     booking: String(formData.get("booking") ?? ""),
     telegram: String(formData.get("telegram") ?? ""),
     whatsapp: String(formData.get("whatsapp") ?? ""),
@@ -184,8 +185,8 @@ export function linkFieldValue(
 ): string {
   const link = links.find((l) => l.label === label);
   if (!link) return "";
-  // These two are whole addresses, not names appended to a known base.
-  if (label === "Veb-sayt" || label === "Uchrashuv") return link.href;
+  // These are whole addresses, not names appended to a known base.
+  if (label === "Veb-sayt" || label === "Uchrashuv" || label === "To'lash") return link.href;
   // wa.me carries the number itself, and the field asks for a number.
   if (label === "WhatsApp") return link.href.replace("https://wa.me/", "+");
   return link.href.split("/").filter(Boolean).pop() ?? "";

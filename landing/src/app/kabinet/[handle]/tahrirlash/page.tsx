@@ -26,6 +26,7 @@ export default async function EditProfilePage({
           defaults={{
             name: owned.name,
             bio: owned.bio,
+            payment: linkFieldValue(owned.links, "To'lash"),
             booking: linkFieldValue(owned.links, "Uchrashuv"),
             telegram: linkFieldValue(owned.links, "Telegram"),
             whatsapp: linkFieldValue(owned.links, "WhatsApp"),

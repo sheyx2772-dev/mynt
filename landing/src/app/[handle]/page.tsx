@@ -310,7 +310,14 @@ async function VanityHandlePage({
       }
     }
 
+    // The pay button is drawn on its own, full width, above everything else a
+    // stranger can press. It is the only thing on a profile that ends in the
+    // owner being paid, and the eight-icon grid is where things go to be equal.
+    const payAt = profile.links.findIndex((l) => l.kind === "payment");
+    const payHref = payAt >= 0 ? `/${normalized}/go?to=${payAt}` : null;
+
     const inGrid = new Set(gridActions.map((a) => a.href));
+    if (payHref) inGrid.add(payHref);
     const restLinks = profile.links
       .map((link, index) => ({ link, index }))
       .slice(0, profile.plan === "premium" ? undefined : FREE_LINK_LIMIT)
@@ -405,6 +412,15 @@ async function VanityHandlePage({
           <div className="mt-8 flex justify-center">
             <Plate n={normalized} size="md" />
           </div>
+
+          {payHref && !isOwner && (
+            <a
+              href={payHref}
+              className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-lime text-[11px] font-bold tracking-[0.04em] text-on-accent uppercase"
+            >
+              {t.payOwner}
+            </a>
+          )}
 
           {!isOwner && (
             <div className="mt-6 grid grid-cols-2 gap-2">

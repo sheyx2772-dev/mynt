@@ -2584,6 +2584,7 @@ export interface components {
         };
         Link: {
             href: string;
+            kind?: string;
             label: string;
         };
         LinkInput: {
@@ -2591,6 +2592,7 @@ export interface components {
             facebook?: string;
             instagram?: string;
             linkedin?: string;
+            payment?: string;
             telegram?: string;
             website?: string;
             whatsapp?: string;

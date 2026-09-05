@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { socialLink, websiteLink, buildProfileLinks, linkValue, whatsappLink, bookingLink } from "./links";
+import { socialLink, websiteLink, buildProfileLinks, linkValue, whatsappLink, bookingLink, paymentLink } from "./links";
 
 describe("socialLink", () => {
   it("builds a profile URL and strips a leading @", () => {
@@ -206,5 +206,47 @@ describe("a username that is only punctuation", () => {
       label: "LinkedIn",
       href: "https://linkedin.com/in/aziz-karimov-1a2b",
     });
+  });
+});
+
+describe("paymentLink", () => {
+  it("takes the two providers that operate here", () => {
+    for (const raw of [
+      "https://payme.uz/a1b2c3",
+      "payme.uz/@aziz",
+      "https://p.payme.uz/xyz",
+      "https://my.click.uz/pay/12345",
+      "CLICK.UZ/pay/abc",
+    ]) {
+      expect(paymentLink(raw), raw).not.toBeNull();
+      expect(paymentLink(raw)?.kind).toBe("payment");
+    }
+  });
+
+  it("refuses everything else, because the profile calls it 'pay here'", () => {
+    for (const raw of [
+      // A lookalike host is the whole reason this is an allowlist: any of
+      // these would render on a public profile as a place to send money.
+      "https://payme.uz.evil.com/a1b2c3",
+      "https://evil.com/payme.uz",
+      "https://paymeuz.com/x",
+      "https://t.me/aziz",
+      "javascript:alert(1)",
+      "https://payme.uz@evil.com/x",
+      "",
+    ]) {
+      expect(paymentLink(raw), raw).toBeNull();
+    }
+  });
+
+  it("leads the list, because it is the only link that ends in money", () => {
+    const links = buildProfileLinks({
+      payment: "https://payme.uz/a1b2c3",
+      telegram: "aziz",
+      instagram: "",
+      linkedin: "",
+      website: "example.uz",
+    });
+    expect(links[0].kind).toBe("payment");
   });
 });

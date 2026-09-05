@@ -15,7 +15,7 @@ export type ClaimedProfile = {
   name: string;
   bio: string;
   avatarUrl: string | null;
-  links: { label: string; href: string }[];
+  links: { label: string; href: string; kind?: "payment" }[];
   city: string | null;
   contactEmail: string | null;
   phone: string | null;
@@ -121,7 +121,7 @@ export type OwnedHandle = {
   name: string;
   bio: string;
   avatarUrl: string | null;
-  links: { label: string; href: string }[];
+  links: { label: string; href: string; kind?: "payment" }[];
   pricePaid: number | null;
   claimedAt: string | null;
   reservedUntil: string | null;
