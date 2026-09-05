@@ -3,7 +3,7 @@ import { readServices, type Service } from "@/lib/services";
 import { cache } from "react";
 import { DEFAULT_CARD_DESIGN, isCardDesign, type CardDesignId } from "@/lib/card-designs";
 import { DEFAULT_DEVICE_TYPE, isDeviceType, type DeviceTypeId } from "@/lib/devices";
-import { asReader, backend } from "@/lib/backend/client";
+import { asReader, backend, type Reader } from "@/lib/backend/client";
 import type { paths } from "@/lib/backend/schema";
 
 export type ClaimedProfile = {
@@ -337,7 +337,6 @@ export async function getDirectoryCounts(): Promise<DirectoryCounts> {
 
 // Stamps the owner's numbers as recently active, which a profile shows.
 // Called from the cabinet, the one page only an owner loads.
-export async function touchLastSeen(): Promise<void> {
-  const client = await asReader();
-  await client.POST("/men/faollik", {});
+export async function touchLastSeen(client: Reader): Promise<void> {
+  await client.POST("/men/faollik", {}).catch(() => {});
 }

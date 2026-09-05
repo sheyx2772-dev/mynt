@@ -19,6 +19,7 @@ import { getHandleStats } from "@/lib/analytics";
 import { listLeads } from "@/lib/leads";
 import { getOwnedVenue, countMenuItems } from "@/lib/menu";
 import { countWaiting, countAllRequests } from "@/lib/venue-requests";
+import { asReader } from "@/lib/backend/client";
 
 export const metadata: Metadata = {
   title: "Kabinet — flex.com.uz",
@@ -111,7 +112,10 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
 
   // The cabinet is the one page only an owner loads, which makes it the
   // natural place to stamp activity. Deferred so it never delays the render.
-  after(() => touchLastSeen());
+  // Built here rather than inside the callback: `after()` runs once the
+  // response has gone, where reading a cookie throws.
+  const reader = await asReader();
+  after(() => touchLastSeen(reader));
 
   return (
     <PageShell surface="ink">

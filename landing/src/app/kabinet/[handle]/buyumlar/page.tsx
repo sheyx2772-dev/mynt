@@ -9,6 +9,7 @@ import { requireOwnHandle } from "@/lib/kabinet";
 import { listTagMessages, listTags, markMessagesRead } from "@/lib/object-tags";
 import { tagWords, type TagKind } from "@/lib/tags";
 import { timeAgo } from "@/lib/relative-time";
+import { asReader } from "@/lib/backend/client";
 
 export const metadata: Metadata = {
   title: "Buyumlar — flex.com.uz",
@@ -42,8 +43,9 @@ export default async function TagsPage({
 
   // Marked read after the page has been sent, not before it is built: the
   // count above is what was unread when they opened it.
+  const reader = await asReader();
   after(async () => {
-    if (unread > 0) await markMessagesRead(normalized);
+    if (unread > 0) await markMessagesRead(reader, normalized);
   });
 
   return (

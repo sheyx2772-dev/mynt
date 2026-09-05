@@ -8,6 +8,7 @@ import PostList from "@/components/PostList";
 import { requireUser } from "@/lib/auth";
 import { listFeed } from "@/lib/posts";
 import { getTopHandles, listNewestResidents, touchLastSeen } from "@/lib/handles";
+import { asReader } from "@/lib/backend/client";
 
 export const metadata: Metadata = {
   title: "Postlar — flex.com.uz",
@@ -30,7 +31,8 @@ export default async function FeedPage() {
     listNewestResidents(4),
   ]);
 
-  after(() => touchLastSeen());
+  const reader = await asReader();
+  after(() => touchLastSeen(reader));
 
   return (
     <PageShell wide>

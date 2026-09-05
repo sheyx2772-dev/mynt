@@ -1,6 +1,6 @@
 import "server-only";
 
-import { asReader, backend } from "@/lib/backend/client";
+import { asReader, backend, type Reader } from "@/lib/backend/client";
 
 import { randomBytes } from "node:crypto";
 import { after } from "next/server";
@@ -197,9 +197,10 @@ export async function setTagActive(id: string, active: boolean): Promise<boolean
   return !error;
 }
 
-export async function markMessagesRead(handle: string): Promise<void> {
-  const client = await asReader();
-  await client.POST("/raqamlar/{raqam}/xabarlar/oqildi", {
-    params: { path: { raqam: handle } },
-  });
+export async function markMessagesRead(client: Reader, handle: string): Promise<void> {
+  await client
+    .POST("/raqamlar/{raqam}/xabarlar/oqildi", {
+      params: { path: { raqam: handle } },
+    })
+    .catch(() => {});
 }

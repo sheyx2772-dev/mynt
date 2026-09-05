@@ -34,7 +34,7 @@ export const backend = createClient<paths>({ baseUrl: `${BACKEND_URL}/v1` });
  * forbids reading cookies outside a request scope, which is the compiler
  * telling us this cannot accidentally become a shared, signed-in client.
  */
-export async function asReader() {
+export async function asReader(): Promise<Reader> {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
 
   return createClient<paths>({
@@ -42,3 +42,14 @@ export async function asReader() {
     headers: token ? { cookie: `${SESSION_COOKIE}=${token}` } : undefined,
   });
 }
+
+/**
+ * A client that already holds the reader's session.
+ *
+ * Worth naming because of `after()`. Work deferred until the response has been
+ * sent runs outside the request, where `cookies()` throws — so anything that
+ * happens there has to be handed a client built while the request was still
+ * open, rather than building its own. Taking one as an argument is what makes
+ * that a type error instead of a line in a log nobody reads.
+ */
+export type Reader = ReturnType<typeof createClient<paths>>;
