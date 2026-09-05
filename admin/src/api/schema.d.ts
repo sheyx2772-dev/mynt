@@ -21,6 +21,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/boshqaruv/promokodlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Promokodlar */
+        get: operations["promokodlar"];
+        put?: never;
+        /** Yangi promokod */
+        post: operations["promokod-yaratish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/boshqaruv/promokodlar/{kod}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Kodni yoqish yoki o'chirish
+         * @description O'chirilgan kod ishlamaydi, lekin qolgan — nima uchun chegirma berilganini u aytadi.
+         */
+        put: operations["promokodni-yoqish"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/boshqaruv/raqamlar": {
         parameters: {
             query?: never;
@@ -482,6 +520,7 @@ export interface components {
              */
             readonly $schema?: string;
             ism: string;
+            kod?: string;
         };
         Checkout: {
             click?: string;
@@ -506,6 +545,13 @@ export interface components {
             kun: string;
             /** Format: int64 */
             tashrifchilar: number;
+        };
+        Discount: {
+            /** Format: int64 */
+            chegirma: number;
+            kod: string;
+            /** Format: int32 */
+            oylar: number;
         };
         ErrorDetail: {
             /** @description Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id' */
@@ -712,9 +758,44 @@ export interface components {
             readonly $schema?: string;
             account: components["schemas"]["AccountBody"];
         };
+        NewPromoCode: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/NewPromoCode.json
+             */
+            readonly $schema?: string;
+            bir_hisob_bir_marta?: boolean;
+            /** @description YYYY-MM-DD */
+            boshlanishi?: string;
+            /** Format: int64 */
+            eng_kam_summa?: number;
+            /**
+             * Format: int64
+             * @description Foizli kod uchun yuqori chegara, so'mda
+             */
+            eng_kop_chegirma?: number;
+            izoh?: string;
+            /** @example YOZ2026 */
+            kod: string;
+            /**
+             * Format: int32
+             * @description 0 — cheksiz
+             */
+            necha_marta?: number;
+            /** @description handle, subscription, device, venue — bo'sh bo'lsa hammasi */
+            nimaga?: string[] | null;
+            /** Format: int32 */
+            qiymati: number;
+            /** @description YYYY-MM-DD */
+            tugashi?: string;
+            /** @enum {string} */
+            turi: "percent" | "amount" | "months";
+        };
         Order: {
             /** Format: date-time */
             band_muddati?: string;
+            chegirma?: components["schemas"]["Discount"];
             /** @enum {string} */
             holat: "pending" | "paid" | "cancelled" | "failed";
             id: string;
@@ -786,6 +867,58 @@ export interface components {
             services?: components["schemas"]["Service"][] | null;
             /** @description Vergul yoki bo'sh joy bilan ajratilgan */
             tags?: string;
+        };
+        PromoActiveInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/PromoActiveInputBody.json
+             */
+            readonly $schema?: string;
+            faol: boolean;
+        };
+        PromoCode: {
+            bir_hisob_bir_marta: boolean;
+            /** Format: date-time */
+            boshlanishi?: string;
+            /** Format: int64 */
+            eng_kam_summa?: number;
+            /** Format: int64 */
+            eng_kop_chegirma?: number;
+            faol: boolean;
+            /** Format: int32 */
+            ishlatilgan: number;
+            izoh?: string;
+            /** Format: int64 */
+            kimlar_ishlatgan: number;
+            kod: string;
+            /** Format: int32 */
+            necha_marta?: number;
+            nimaga: string[] | null;
+            /** Format: int32 */
+            qiymati: number;
+            /** Format: date-time */
+            tugashi?: string;
+            /** @enum {string} */
+            turi: "percent" | "amount" | "months";
+        };
+        PromoListOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/PromoListOutputBody.json
+             */
+            readonly $schema?: string;
+            kodlar: components["schemas"]["PromoCode"][] | null;
+        };
+        PromoOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/PromoOutputBody.json
+             */
+            readonly $schema?: string;
+            kod: components["schemas"]["PromoCode"];
         };
         Report: {
             havolalar: components["schemas"]["LinkStat"][] | null;
@@ -903,6 +1036,101 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["AdminOrdersOutputBody"];
                 };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    promokodlar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoListOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "promokod-yaratish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NewPromoCode"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "promokodni-yoqish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kod: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PromoActiveInputBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error */
             default: {

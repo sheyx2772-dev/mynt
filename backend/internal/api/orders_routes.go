@@ -38,6 +38,10 @@ type buyInput struct {
 		// afterwards; asking for fourteen fields before somebody has paid is
 		// how a purchase gets abandoned.
 		Name string `json:"ism" maxLength:"80"`
+		// A promo code, if they have one. Checked and applied on this side —
+		// what comes back is the price after it, and the discount itself so the
+		// buyer sees why the number changed.
+		Kod string `json:"kod,omitempty" maxLength:"32"`
 	}
 }
 
@@ -92,7 +96,7 @@ func (s *Server) registerOrders(api huma.API) {
 			return nil, huma.Error404NotFound("Bunday raqam yo'q.")
 		}
 
-		order, err := s.orders.Buy(ctx, parsed, account.ID, in.Body.Name, requestFrom(ctx).IP)
+		order, err := s.orders.Buy(ctx, parsed, account.ID, in.Body.Name, in.Body.Kod, requestFrom(ctx).IP)
 		switch {
 		case errors.Is(err, orders.ErrTaken):
 			// The race being lost and a number sold last week are one message,
@@ -103,6 +107,12 @@ func (s *Server) registerOrders(api huma.API) {
 			// the safe direction: the alternative was handing over a number
 			// worth millions because a variable was missing.
 			return nil, huma.Error503ServiceUnavailable("To'lov tizimi hozir ishlamayapti. Keyinroq urinib ko'ring.")
+		case errors.Is(err, orders.ErrPromoUsed):
+			return nil, huma.Error409Conflict("Bu promokodni allaqachon ishlatgansiz.")
+		case errors.Is(err, orders.ErrPromoBad):
+			// One message for every reason. Enumerating them would let somebody
+			// map a campaign by trying codes.
+			return nil, huma.Error422UnprocessableEntity("Promokod ishlamadi.")
 		case errors.Is(err, orders.ErrRateLimited):
 			return nil, huma.Error429TooManyRequests("Bir soatda juda ko'p urinish. Birozdan so'ng qayta urining.")
 		case err != nil:

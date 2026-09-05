@@ -335,13 +335,14 @@ type PromoCode struct {
 }
 
 type PromoRedemption struct {
-	ID        int64              `json:"id"`
-	Code      string             `json:"code"`
-	UserID    uuid.UUID          `json:"user_id"`
-	OrderID   *uuid.UUID         `json:"order_id"`
-	Discount  int64              `json:"discount"`
-	Months    int32              `json:"months"`
-	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	ID             int64              `json:"id"`
+	Code           string             `json:"code"`
+	UserID         uuid.UUID          `json:"user_id"`
+	OrderID        *uuid.UUID         `json:"order_id"`
+	Discount       int64              `json:"discount"`
+	Months         int32              `json:"months"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+	OncePerAccount bool               `json:"once_per_account"`
 }
 
 type Recommendation struct {

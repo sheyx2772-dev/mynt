@@ -91,6 +91,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 	s.registerStats(api)
 	s.registerOrders(api)
 	s.registerAdmin(api)
+	s.registerPromo(api)
 
 	return mux
 }

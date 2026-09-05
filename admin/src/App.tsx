@@ -5,6 +5,7 @@ import Give from "./pages/Give";
 import Handles from "./pages/Handles";
 import Orders from "./pages/Orders";
 import Overview from "./pages/Overview";
+import Promo from "./pages/Promo";
 import SignIn from "./pages/SignIn";
 import { Waiting } from "./ui/parts";
 
@@ -13,6 +14,7 @@ const TABS = [
   { id: "buyurtmalar", label: "Buyurtmalar", view: <Orders /> },
   { id: "raqamlar", label: "Raqamlar", view: <Handles /> },
   { id: "sovga", label: "Sovg'a", view: <Give /> },
+  { id: "promokod", label: "Promokod", view: <Promo /> },
 ] as const;
 
 // The panel, which is four screens and a sign-in.

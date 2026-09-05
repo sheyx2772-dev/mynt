@@ -13,6 +13,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/sheyx2772-dev/flex/backend/internal/handles"
+	"github.com/sheyx2772-dev/flex/backend/internal/promo"
 	"github.com/sheyx2772-dev/flex/backend/internal/store"
 )
 
@@ -41,6 +42,13 @@ var (
 	// ErrCannotSell is a production deployment with no payment provider
 	// configured. It refuses to sell rather than giving the number away.
 	ErrCannotSell = errors.New("to'lov tizimi sozlanmagan")
+	// ErrPromoBad covers every reason a code will not work — it does not exist,
+	// is switched off, is spent, is out of date, does not apply to this kind of
+	// order, or the order is under its minimum. One error, because the buyer
+	// does the same thing for all of them.
+	ErrPromoBad = errors.New("promokod ishlamadi")
+	// ErrPromoUsed is separate, because no other code changes it.
+	ErrPromoUsed = errors.New("promokod allaqachon ishlatilgan")
 )
 
 type Store struct {
@@ -53,6 +61,7 @@ type Store struct {
 	// Whether this process is a development one. Only development gives a
 	// number away free — see Providers.GiveAway.
 	development bool
+	promo       *promo.Store
 }
 
 func NewStore(pool *pgxpool.Pool, providers Providers, development bool) *Store {
@@ -61,6 +70,7 @@ func NewStore(pool *pgxpool.Pool, providers Providers, development bool) *Store 
 		queries:     store.New(pool),
 		paid:        providers,
 		development: development,
+		promo:       promo.NewStore(pool),
 	}
 }
 

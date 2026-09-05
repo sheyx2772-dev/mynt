@@ -10,6 +10,7 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"github.com/sheyx2772-dev/flex/backend/internal/handles"
+	"github.com/sheyx2772-dev/flex/backend/internal/promo"
 	"github.com/sheyx2772-dev/flex/backend/internal/store"
 )
 
@@ -24,6 +25,10 @@ type Order struct {
 	// number is already claimed and there is nothing to pay.
 	Checkout Checkout `json:"tolov,omitzero"`
 
+	// What a promo code took off, if one was used. Returned so the buyer can
+	// see it rather than only a smaller number than the one they were quoted.
+	Discount *promo.Discount `json:"chegirma,omitempty"`
+
 	// When the reservation lapses, if it has not been paid for by then.
 	ReservedUntil *time.Time `json:"band_muddati,omitempty"`
 }
@@ -33,7 +38,7 @@ type Order struct {
 // The price is computed here from the number itself and written onto both the
 // handle and the order. It is never read from the request: a price that arrives
 // with an order is a price the buyer chose.
-func (s *Store) Buy(ctx context.Context, parsed handles.Parsed, userID, name string, ip *netip.Addr) (Order, error) {
+func (s *Store) Buy(ctx context.Context, parsed handles.Parsed, userID, name, code string, ip *netip.Addr) (Order, error) {
 	owner, err := uuid.Parse(userID)
 	if err != nil {
 		return Order{}, ErrNotFound
@@ -58,6 +63,8 @@ func (s *Store) Buy(ctx context.Context, parsed handles.Parsed, userID, name str
 		return Order{}, err
 	}
 
+	// Recomputed here from the number itself. A price that arrives with an
+	// order is a price the buyer chose.
 	price := int64(parsed.Price())
 	owned := optional(name)
 
@@ -69,8 +76,8 @@ func (s *Store) Buy(ctx context.Context, parsed handles.Parsed, userID, name str
 	}
 
 	// One transaction. A reservation without an order is a number held for
-	// thirty minutes that nobody can pay for, and the website's own claim path
-	// cleans that case up while this one did not.
+	// thirty minutes that nobody can pay for, and a promo code claimed against
+	// an order that was never created is a use taken for nothing.
 	tx, err := s.pool.Begin(ctx)
 	if err != nil {
 		return Order{}, err
@@ -78,6 +85,25 @@ func (s *Store) Buy(ctx context.Context, parsed handles.Parsed, userID, name str
 	defer func() { _ = tx.Rollback(ctx) }()
 
 	q := s.queries.WithTx(tx)
+	promos := s.promo.WithTx(tx)
+
+	// Claimed before the number is reserved, so a spent code refuses the
+	// purchase rather than holding a number for an order that cannot be made
+	// at the price the buyer was shown.
+	var discount *promo.Discount
+	if code != "" {
+		applied, err := promos.Claim(ctx, code, promo.ForHandle, userID, price)
+		switch {
+		case errors.Is(err, promo.ErrAlreadyUsed):
+			return Order{}, ErrPromoUsed
+		case errors.Is(err, promo.ErrUnusable):
+			return Order{}, ErrPromoBad
+		case err != nil:
+			return Order{}, err
+		}
+		discount = &applied
+		price -= applied.Amount
+	}
 
 	row, err := q.ReserveHandle(ctx, store.ReserveHandleParams{
 		Letters:       parsed.Letters,
@@ -104,6 +130,12 @@ func (s *Store) Buy(ctx context.Context, parsed handles.Parsed, userID, name str
 		return Order{}, err
 	}
 
+	if discount != nil {
+		if err := promos.Record(ctx, *discount, userID, &order.ID); err != nil {
+			return Order{}, err
+		}
+	}
+
 	if err := tx.Commit(ctx); err != nil {
 		return Order{}, err
 	}
@@ -117,6 +149,7 @@ func (s *Store) Buy(ctx context.Context, parsed handles.Parsed, userID, name str
 		Status:        order.Status,
 		Checkout:      s.paid.checkoutFor(order.ID.String(), price, ReservationFor),
 		ReservedUntil: optionalTime(row.ReservedUntil),
+		Discount:      discount,
 	}, nil
 }
 
