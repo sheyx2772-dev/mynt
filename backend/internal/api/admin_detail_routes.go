@@ -55,7 +55,7 @@ func (s *Server) registerAdminDetail(api huma.API) {
 			return nil, err
 		}
 
-		page, err := s.admin.AccountsPage(ctx, in.Term, int32(in.Limit), int32(in.Skip))
+		page, err := s.admin.AccountsPage(ctx, in.Term, admin.AccountSort(in.Sort, in.Descending), int32(in.Limit), int32(in.Skip))
 		if err != nil {
 			return nil, internalError(err, "hisoblar o'qilmadi")
 		}

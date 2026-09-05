@@ -24,7 +24,22 @@ select o.id, o.handle, o.amount, o.kind, o.status, o.provider, o.created_at, o.p
 from orders o
 left join auth.users u on u.id = o.user_id
 where (sqlc.narg(status)::text is null or o.status = sqlc.narg(status)::text)
-order by o.created_at desc
+order by
+  -- One sortable column at a time, chosen by name from a list the Go side
+  -- whitelists — never by pasting a column into the string. Rows that do not
+  -- match the chosen key are all NULL here, so those terms tie and the
+  -- created_at fallback decides.
+  case when sqlc.arg(sort)::text = 'raqam'   and     sqlc.arg(descending)::bool then o.handle end desc nulls last,
+  case when sqlc.arg(sort)::text = 'raqam'   and not sqlc.arg(descending)::bool then o.handle end asc  nulls last,
+  case when sqlc.arg(sort)::text = 'xaridor' and     sqlc.arg(descending)::bool then u.email  end desc nulls last,
+  case when sqlc.arg(sort)::text = 'xaridor' and not sqlc.arg(descending)::bool then u.email  end asc  nulls last,
+  case when sqlc.arg(sort)::text = 'summa'   and     sqlc.arg(descending)::bool then o.amount end desc nulls last,
+  case when sqlc.arg(sort)::text = 'summa'   and not sqlc.arg(descending)::bool then o.amount end asc  nulls last,
+  case when sqlc.arg(sort)::text = 'holat'   and     sqlc.arg(descending)::bool then o.status end desc nulls last,
+  case when sqlc.arg(sort)::text = 'holat'   and not sqlc.arg(descending)::bool then o.status end asc  nulls last,
+  case when sqlc.arg(sort)::text = 'ochilgan' and    sqlc.arg(descending)::bool then o.created_at end desc nulls last,
+  case when sqlc.arg(sort)::text = 'ochilgan' and not sqlc.arg(descending)::bool then o.created_at end asc  nulls last,
+  o.created_at desc
 limit sqlc.arg(page_size)::int offset sqlc.arg(skip)::int;
 
 -- Searching for a number, by the number itself or by who has it.

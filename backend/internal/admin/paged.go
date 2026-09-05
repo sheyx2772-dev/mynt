@@ -25,13 +25,13 @@ type Page[T any] struct {
 	Size int32 `json:"soni"`
 }
 
-func (s *Store) OrdersPage(ctx context.Context, status string, size, skip int32) (Page[AdminOrder], error) {
+func (s *Store) OrdersPage(ctx context.Context, status string, sort Sort, size, skip int32) (Page[AdminOrder], error) {
 	total, err := s.queries.CountOrders(ctx, optional(status))
 	if err != nil {
 		return Page[AdminOrder]{}, err
 	}
 
-	items, err := s.Orders(ctx, status, size, skip)
+	items, err := s.Orders(ctx, status, sort, size, skip)
 	if err != nil {
 		return Page[AdminOrder]{}, err
 	}
@@ -39,14 +39,20 @@ func (s *Store) OrdersPage(ctx context.Context, status string, size, skip int32)
 	return Page[AdminOrder]{Items: items, Total: total, Skip: skip, Size: size}, nil
 }
 
-func (s *Store) HandlesPage(ctx context.Context, term string, size, skip int32) (Page[AdminHandle], error) {
-	total, err := s.queries.CountHandles(ctx, optional(term))
+// HandlesPage lists numbers. `gifts` is three-valued: nil for every number,
+// true for only the ones given away, false for only the ones sold.
+func (s *Store) HandlesPage(ctx context.Context, term string, gifts *bool, sort Sort, size, skip int32) (Page[AdminHandle], error) {
+	total, err := s.queries.CountHandles(ctx, store.CountHandlesParams{
+		Term: optional(term), Gifts: gifts,
+	})
 	if err != nil {
 		return Page[AdminHandle]{}, err
 	}
 
 	rows, err := s.queries.AdminHandlesPaged(ctx, store.AdminHandlesPagedParams{
-		Term: optional(term), PageSize: size, Skip: skip,
+		Term: optional(term), Gifts: gifts,
+		Sort: sort.Key, Descending: sort.Descending,
+		PageSize: size, Skip: skip,
 	})
 	if err != nil {
 		return Page[AdminHandle]{}, err
@@ -81,14 +87,15 @@ type Account struct {
 	Joined   *time.Time `json:"qoshilgan,omitempty"`
 }
 
-func (s *Store) AccountsPage(ctx context.Context, term string, size, skip int32) (Page[Account], error) {
+func (s *Store) AccountsPage(ctx context.Context, term string, sort Sort, size, skip int32) (Page[Account], error) {
 	total, err := s.queries.CountAccounts(ctx, optional(term))
 	if err != nil {
 		return Page[Account]{}, err
 	}
 
 	rows, err := s.queries.AdminAccounts(ctx, store.AdminAccountsParams{
-		Term: optional(term), PageSize: size, Skip: skip,
+		Term: optional(term), Sort: sort.Key, Descending: sort.Descending,
+		PageSize: size, Skip: skip,
 	})
 	if err != nil {
 		return Page[Account]{}, err

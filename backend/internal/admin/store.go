@@ -82,11 +82,13 @@ type AdminOrder struct {
 	PaidAt    *time.Time `json:"tolangan,omitempty"`
 }
 
-func (s *Store) Orders(ctx context.Context, status string, limit, skip int32) ([]AdminOrder, error) {
+func (s *Store) Orders(ctx context.Context, status string, sort Sort, limit, skip int32) ([]AdminOrder, error) {
 	rows, err := s.queries.AdminOrders(ctx, store.AdminOrdersParams{
-		Status:   optional(status),
-		PageSize: limit,
-		Skip:     skip,
+		Status:     optional(status),
+		Sort:       sort.Key,
+		Descending: sort.Descending,
+		PageSize:   limit,
+		Skip:       skip,
 	})
 	if err != nil {
 		return nil, err

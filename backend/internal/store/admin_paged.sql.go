@@ -61,24 +61,39 @@ func (q *Queries) AdminAccountOrders(ctx context.Context, userID uuid.UUID) ([]A
 }
 
 const adminAccounts = `-- name: AdminAccounts :many
-select u.id, u.email, u.created_at as joined,
-       p.phone, p.country,
-       (select count(*) from handles h where h.user_id = u.id and h.status = 'claimed')::bigint as handles,
-       (select coalesce(sum(o.amount), 0) from orders o where o.user_id = u.id and o.status = 'paid')::bigint as paid,
-       (select max(o.paid_at) from orders o where o.user_id = u.id and o.status = 'paid')::timestamptz as last_paid
-from auth.users u
-left join flex_phones p on p.user_id = u.id
-where $1::text is null
-   or u.email ilike '%' || $1::text || '%'
-   or p.phone ilike '%' || $1::text || '%'
-order by paid desc, joined desc
-limit $3::int offset $2::int
+select id, email, joined, phone, country, handles, paid, last_paid from (
+  select u.id, u.email, u.created_at as joined,
+         p.phone, p.country,
+         (select count(*) from handles h where h.user_id = u.id and h.status = 'claimed')::bigint as handles,
+         (select coalesce(sum(o.amount), 0) from orders o where o.user_id = u.id and o.status = 'paid')::bigint as paid,
+         (select max(o.paid_at) from orders o where o.user_id = u.id and o.status = 'paid')::timestamptz as last_paid
+  from auth.users u
+  left join flex_phones p on p.user_id = u.id
+  where ($1::text is null
+      or u.email ilike '%' || $1::text || '%'
+      or p.phone ilike '%' || $1::text || '%')
+) a
+order by
+  case when $2::text = 'kim'          and     $3::bool then coalesce(a.phone, a.email) end desc nulls last,
+  case when $2::text = 'kim'          and not $3::bool then coalesce(a.phone, a.email) end asc  nulls last,
+  case when $2::text = 'raqamlar'     and     $3::bool then a.handles   end desc nulls last,
+  case when $2::text = 'raqamlar'     and not $3::bool then a.handles   end asc  nulls last,
+  case when $2::text = 'tolagan'      and     $3::bool then a.paid      end desc nulls last,
+  case when $2::text = 'tolagan'      and not $3::bool then a.paid      end asc  nulls last,
+  case when $2::text = 'oxirgi_tolov' and     $3::bool then a.last_paid end desc nulls last,
+  case when $2::text = 'oxirgi_tolov' and not $3::bool then a.last_paid end asc  nulls last,
+  case when $2::text = 'qoshilgan'    and     $3::bool then a.joined    end desc nulls last,
+  case when $2::text = 'qoshilgan'    and not $3::bool then a.joined    end asc  nulls last,
+  a.paid desc, a.joined desc
+limit $5::int offset $4::int
 `
 
 type AdminAccountsParams struct {
-	Term     *string `json:"term"`
-	Skip     int32   `json:"skip"`
-	PageSize int32   `json:"page_size"`
+	Term       *string `json:"term"`
+	Sort       string  `json:"sort"`
+	Descending bool    `json:"descending"`
+	Skip       int32   `json:"skip"`
+	PageSize   int32   `json:"page_size"`
 }
 
 type AdminAccountsRow struct {
@@ -93,8 +108,17 @@ type AdminAccountsRow struct {
 }
 
 // Customers: who they are, what they hold, and what they have actually paid.
+// The ordering is done outside the select rather than inside it: a `case` in
+// an ORDER BY cannot see an output alias, so `handles` and `paid` have to be
+// columns of something before they can be sorted by. Hence the wrapper.
 func (q *Queries) AdminAccounts(ctx context.Context, arg AdminAccountsParams) ([]AdminAccountsRow, error) {
-	rows, err := q.db.Query(ctx, adminAccounts, arg.Term, arg.Skip, arg.PageSize)
+	rows, err := q.db.Query(ctx, adminAccounts,
+		arg.Term,
+		arg.Sort,
+		arg.Descending,
+		arg.Skip,
+		arg.PageSize,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -127,18 +151,34 @@ select h.normalized, h.status, h.owner_name, h.plan, h.price_paid, h.gift_reason
        h.claimed_at, h.view_count, u.email as owner
 from handles h
 left join auth.users u on u.id = h.user_id
-where $1::text is null
-   or h.normalized ilike '%' || $1::text || '%'
-   or h.owner_name ilike '%' || $1::text || '%'
-   or u.email ilike '%' || $1::text || '%'
-order by h.claimed_at desc nulls last
-limit $3::int offset $2::int
+where ($1::text is null
+    or h.normalized ilike '%' || $1::text || '%'
+    or h.owner_name ilike '%' || $1::text || '%'
+    or u.email     ilike '%' || $1::text || '%')
+  -- Gifts are handles with a reason written on them. Null asks for both.
+  and ($2::bool is null or (h.gift_reason is not null) = $2::bool)
+order by
+  case when $3::text = 'raqam'    and     $4::bool then h.normalized end desc nulls last,
+  case when $3::text = 'raqam'    and not $4::bool then h.normalized end asc  nulls last,
+  case when $3::text = 'egasi'    and     $4::bool then u.email      end desc nulls last,
+  case when $3::text = 'egasi'    and not $4::bool then u.email      end asc  nulls last,
+  case when $3::text = 'tarif'    and     $4::bool then h.plan       end desc nulls last,
+  case when $3::text = 'tarif'    and not $4::bool then h.plan       end asc  nulls last,
+  case when $3::text = 'tolangan' and     $4::bool then h.price_paid end desc nulls last,
+  case when $3::text = 'tolangan' and not $4::bool then h.price_paid end asc  nulls last,
+  case when $3::text = 'olingan'  and     $4::bool then h.claimed_at end desc nulls last,
+  case when $3::text = 'olingan'  and not $4::bool then h.claimed_at end asc  nulls last,
+  h.claimed_at desc nulls last
+limit $6::int offset $5::int
 `
 
 type AdminHandlesPagedParams struct {
-	Term     *string `json:"term"`
-	Skip     int32   `json:"skip"`
-	PageSize int32   `json:"page_size"`
+	Term       *string `json:"term"`
+	Gifts      *bool   `json:"gifts"`
+	Sort       string  `json:"sort"`
+	Descending bool    `json:"descending"`
+	Skip       int32   `json:"skip"`
+	PageSize   int32   `json:"page_size"`
 }
 
 type AdminHandlesPagedRow struct {
@@ -154,7 +194,14 @@ type AdminHandlesPagedRow struct {
 }
 
 func (q *Queries) AdminHandlesPaged(ctx context.Context, arg AdminHandlesPagedParams) ([]AdminHandlesPagedRow, error) {
-	rows, err := q.db.Query(ctx, adminHandlesPaged, arg.Term, arg.Skip, arg.PageSize)
+	rows, err := q.db.Query(ctx, adminHandlesPaged,
+		arg.Term,
+		arg.Gifts,
+		arg.Sort,
+		arg.Descending,
+		arg.Skip,
+		arg.PageSize,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -303,9 +350,9 @@ func (q *Queries) AdminOrderTransactions(ctx context.Context, orderID uuid.UUID)
 const countAccounts = `-- name: CountAccounts :one
 select count(*) from auth.users u
 left join flex_phones p on p.user_id = u.id
-where $1::text is null
-   or u.email ilike '%' || $1::text || '%'
-   or p.phone ilike '%' || $1::text || '%'
+where ($1::text is null
+    or u.email ilike '%' || $1::text || '%'
+    or p.phone ilike '%' || $1::text || '%')
 `
 
 func (q *Queries) CountAccounts(ctx context.Context, term *string) (int64, error) {
@@ -318,14 +365,21 @@ func (q *Queries) CountAccounts(ctx context.Context, term *string) (int64, error
 const countHandles = `-- name: CountHandles :one
 select count(*) from handles h
 left join auth.users u on u.id = h.user_id
-where $1::text is null
-   or h.normalized ilike '%' || $1::text || '%'
-   or h.owner_name ilike '%' || $1::text || '%'
-   or u.email ilike '%' || $1::text || '%'
+where ($1::text is null
+    or h.normalized ilike '%' || $1::text || '%'
+    or h.owner_name ilike '%' || $1::text || '%'
+    or u.email     ilike '%' || $1::text || '%')
+  -- Gifts are handles with a reason written on them. Null asks for both.
+  and ($2::bool is null or (h.gift_reason is not null) = $2::bool)
 `
 
-func (q *Queries) CountHandles(ctx context.Context, term *string) (int64, error) {
-	row := q.db.QueryRow(ctx, countHandles, term)
+type CountHandlesParams struct {
+	Term  *string `json:"term"`
+	Gifts *bool   `json:"gifts"`
+}
+
+func (q *Queries) CountHandles(ctx context.Context, arg CountHandlesParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countHandles, arg.Term, arg.Gifts)
 	var count int64
 	err := row.Scan(&count)
 	return count, err

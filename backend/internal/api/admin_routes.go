@@ -30,8 +30,12 @@ type overviewOutput struct {
 
 type adminOrdersInput struct {
 	Status string `query:"holat" enum:"pending,paid,cancelled,failed" required:"false"`
-	Limit  int    `query:"soni" minimum:"1" maximum:"200" default:"50"`
-	Skip   int    `query:"otkazish" minimum:"0" default:"0"`
+	// The column is named, not written: `admin.OrderSort` looks the name up in
+	// a list and falls back to the default, so nothing from here reaches SQL.
+	Sort       string `query:"tartib" enum:"raqam,xaridor,summa,holat,ochilgan" default:"ochilgan"`
+	Descending bool   `query:"teskari" default:"true"`
+	Limit      int    `query:"soni" minimum:"1" maximum:"200" default:"50"`
+	Skip       int    `query:"otkazish" minimum:"0" default:"0"`
 }
 
 type adminOrdersOutput struct {
@@ -49,9 +53,15 @@ type adminOrderOutput struct {
 }
 
 type adminHandlesInput struct {
-	Term  string `query:"qidiruv" maxLength:"80" required:"false" doc:"Raqam, ism yoki egasining manzili"`
-	Limit int    `query:"soni" minimum:"1" maximum:"200" default:"50"`
-	Skip  int    `query:"otkazish" minimum:"0" default:"0"`
+	Term string `query:"qidiruv" maxLength:"80" required:"false" doc:"Raqam, ism yoki egasining manzili"`
+	// Three-valued, as a word rather than a nullable bool: Huma will not take a
+	// pointer for a query parameter, and "hammasi" reads better in a URL than
+	// an absent flag anyway.
+	Gifts      string `query:"sovga" enum:"hammasi,sovga,sotilgan" default:"hammasi"`
+	Sort       string `query:"tartib" enum:"raqam,egasi,tarif,tolangan,olingan" default:"olingan"`
+	Descending bool   `query:"teskari" default:"true"`
+	Limit      int    `query:"soni" minimum:"1" maximum:"200" default:"50"`
+	Skip       int    `query:"otkazish" minimum:"0" default:"0"`
 }
 
 type adminHandlesOutput struct {
@@ -59,9 +69,11 @@ type adminHandlesOutput struct {
 }
 
 type adminAccountsInput struct {
-	Term  string `query:"qidiruv" maxLength:"80" required:"false" doc:"Email yoki telefon"`
-	Limit int    `query:"soni" minimum:"1" maximum:"200" default:"50"`
-	Skip  int    `query:"otkazish" minimum:"0" default:"0"`
+	Term       string `query:"qidiruv" maxLength:"80" required:"false" doc:"Email yoki telefon"`
+	Sort       string `query:"tartib" enum:"kim,raqamlar,tolagan,oxirgi_tolov,qoshilgan" default:"tolagan"`
+	Descending bool   `query:"teskari" default:"true"`
+	Limit      int    `query:"soni" minimum:"1" maximum:"200" default:"50"`
+	Skip       int    `query:"otkazish" minimum:"0" default:"0"`
 }
 
 type adminAccountsOutput struct {
@@ -127,7 +139,7 @@ func (s *Server) registerAdmin(api huma.API) {
 			return nil, err
 		}
 
-		page, err := s.admin.OrdersPage(ctx, in.Status, int32(in.Limit), int32(in.Skip))
+		page, err := s.admin.OrdersPage(ctx, in.Status, admin.OrderSort(in.Sort, in.Descending), int32(in.Limit), int32(in.Skip))
 		if err != nil {
 			return nil, internalError(err, "buyurtmalar o'qilmadi")
 		}
@@ -146,7 +158,7 @@ func (s *Server) registerAdmin(api huma.API) {
 			return nil, err
 		}
 
-		page, err := s.admin.HandlesPage(ctx, in.Term, int32(in.Limit), int32(in.Skip))
+		page, err := s.admin.HandlesPage(ctx, in.Term, giftFilter(in.Gifts), admin.HandleSort(in.Sort, in.Descending), int32(in.Limit), int32(in.Skip))
 		if err != nil {
 			return nil, internalError(err, "raqamlar o'qilmadi")
 		}
@@ -204,4 +216,19 @@ func (s *Server) requireAdmin(ctx context.Context) (auth.Account, error) {
 	}
 
 	return account, nil
+}
+
+// giftFilter turns the word the panel sends into the three states the query
+// takes: nil for every number, true for the ones given away, false for the
+// ones sold.
+func giftFilter(choice string) *bool {
+	yes, no := true, false
+	switch choice {
+	case "sovga":
+		return &yes
+	case "sotilgan":
+		return &no
+	default:
+		return nil
+	}
 }

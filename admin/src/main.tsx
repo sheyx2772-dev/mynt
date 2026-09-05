@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import App from "./App";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./index.css";
 
 // One query client for the application.
@@ -29,7 +30,11 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
 		<QueryClientProvider client={queryClient}>
-			<App />
+			{/* One provider for every tooltip in the panel — the sidebar's labels
+			    when it is collapsed, and the icon buttons that replaced words. */}
+			<TooltipProvider delayDuration={300}>
+				<App />
+			</TooltipProvider>
 		</QueryClientProvider>
 	</StrictMode>,
 );

@@ -1242,6 +1242,8 @@ export interface operations {
 		parameters: {
 			query?: {
 				holat?: "pending" | "paid" | "cancelled" | "failed";
+				tartib?: "raqam" | "xaridor" | "summa" | "holat" | "ochilgan";
+				teskari?: boolean;
 				soni?: number;
 				otkazish?: number;
 			};
@@ -1307,6 +1309,8 @@ export interface operations {
 			query?: {
 				/** @description Email yoki telefon */
 				qidiruv?: string;
+				tartib?: "kim" | "raqamlar" | "tolagan" | "oxirgi_tolov" | "qoshilgan";
+				teskari?: boolean;
 				soni?: number;
 				otkazish?: number;
 			};
@@ -1470,6 +1474,9 @@ export interface operations {
 			query?: {
 				/** @description Raqam, ism yoki egasining manzili */
 				qidiruv?: string;
+				sovga?: "hammasi" | "sovga" | "sotilgan";
+				tartib?: "raqam" | "egasi" | "tarif" | "tolangan" | "olingan";
+				teskari?: boolean;
 				soni?: number;
 				otkazish?: number;
 			};

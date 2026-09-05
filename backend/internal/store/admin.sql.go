@@ -119,14 +119,31 @@ select o.id, o.handle, o.amount, o.kind, o.status, o.provider, o.created_at, o.p
 from orders o
 left join auth.users u on u.id = o.user_id
 where ($1::text is null or o.status = $1::text)
-order by o.created_at desc
-limit $3::int offset $2::int
+order by
+  -- One sortable column at a time, chosen by name from a list the Go side
+  -- whitelists — never by pasting a column into the string. Rows that do not
+  -- match the chosen key are all NULL here, so those terms tie and the
+  -- created_at fallback decides.
+  case when $2::text = 'raqam'   and     $3::bool then o.handle end desc nulls last,
+  case when $2::text = 'raqam'   and not $3::bool then o.handle end asc  nulls last,
+  case when $2::text = 'xaridor' and     $3::bool then u.email  end desc nulls last,
+  case when $2::text = 'xaridor' and not $3::bool then u.email  end asc  nulls last,
+  case when $2::text = 'summa'   and     $3::bool then o.amount end desc nulls last,
+  case when $2::text = 'summa'   and not $3::bool then o.amount end asc  nulls last,
+  case when $2::text = 'holat'   and     $3::bool then o.status end desc nulls last,
+  case when $2::text = 'holat'   and not $3::bool then o.status end asc  nulls last,
+  case when $2::text = 'ochilgan' and    $3::bool then o.created_at end desc nulls last,
+  case when $2::text = 'ochilgan' and not $3::bool then o.created_at end asc  nulls last,
+  o.created_at desc
+limit $5::int offset $4::int
 `
 
 type AdminOrdersParams struct {
-	Status   *string `json:"status"`
-	Skip     int32   `json:"skip"`
-	PageSize int32   `json:"page_size"`
+	Status     *string `json:"status"`
+	Sort       string  `json:"sort"`
+	Descending bool    `json:"descending"`
+	Skip       int32   `json:"skip"`
+	PageSize   int32   `json:"page_size"`
 }
 
 type AdminOrdersRow struct {
@@ -142,7 +159,13 @@ type AdminOrdersRow struct {
 }
 
 func (q *Queries) AdminOrders(ctx context.Context, arg AdminOrdersParams) ([]AdminOrdersRow, error) {
-	rows, err := q.db.Query(ctx, adminOrders, arg.Status, arg.Skip, arg.PageSize)
+	rows, err := q.db.Query(ctx, adminOrders,
+		arg.Status,
+		arg.Sort,
+		arg.Descending,
+		arg.Skip,
+		arg.PageSize,
+	)
 	if err != nil {
 		return nil, err
 	}

@@ -21,7 +21,7 @@ export function Search({
 
 	return (
 		<form
-			className="mb-4 flex gap-2"
+			className="flex flex-1 gap-2"
 			onSubmit={(e) => {
 				e.preventDefault();
 				onSearch(term.trim());

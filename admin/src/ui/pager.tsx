@@ -1,25 +1,36 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+
+export const SIZES = [25, 50, 100, 200];
 
 // Moving between pages of a list.
 //
-// Numbers rather than "load more": this is a table somebody works through, and
-// the question is often "was it near the start" rather than "what is next".
+// Always drawn, even when everything fits on one page: the count is the answer
+// to "how many are there", which is asked far more often than "show me page
+// four", and a control that appears only once the data grows is a control
+// nobody learns is there.
 export function Pager({
 	total,
 	skip,
 	size,
 	onSkip,
+	onSize,
 }: {
 	total: number;
 	skip: number;
 	size: number;
 	onSkip: (skip: number) => void;
+	onSize: (size: number) => void;
 }) {
-	const pages = Math.ceil(total / size);
-	if (pages <= 1) return null;
-
+	const pages = Math.max(1, Math.ceil(total / size));
 	const current = Math.floor(skip / size);
 
 	// The pager sits under fifty rows, so changing page from here would otherwise
@@ -30,10 +41,33 @@ export function Pager({
 	};
 
 	return (
-		<div className="mt-5 flex items-center justify-between gap-4 text-sm">
-			<p className="text-muted-foreground tabular-nums">
-				{skip + 1}–{Math.min(skip + size, total)} / {total}
-			</p>
+		<div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+			<div className="flex items-center gap-2 text-muted-foreground">
+				<span className="tabular-nums">
+					{total === 0 ? 0 : skip + 1}–{Math.min(skip + size, total)} / {total}
+				</span>
+
+				<Select
+					value={String(size)}
+					onValueChange={(value) => {
+						// Showing more rows can leave the reader past the end of the list,
+						// so a change of size starts again from the top.
+						onSize(Number(value));
+						onSkip(0);
+					}}
+				>
+					<SelectTrigger size="sm" className="w-[4.5rem]">
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent>
+						{SIZES.map((n) => (
+							<SelectItem key={n} value={String(n)}>
+								{n}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+			</div>
 
 			<div className="flex items-center gap-1">
 				<Button
