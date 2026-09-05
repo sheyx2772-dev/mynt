@@ -344,6 +344,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/profil/{raqam}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Ochiq profil
+         * @description Kartani tegizgan odam ko'radigan sahifa. Sessiya kerak emas.
+         */
+        get: operations["profil"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/profil/{raqam}/vizitka": {
         parameters: {
             query?: never;
@@ -510,6 +530,63 @@ export interface paths {
          * @description Odam o'z ma'lumotini olib tashlashni so'rashi mumkin, va egasi buni qila olishi kerak.
          */
         delete: operations["vizitkani-ochirish"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/rezidentlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Ochiq katalog
+         * @description Egallangan raqamlar. Band qilinganlar bu yerda yo'q — band qilish tugallanmagan xarid.
+         */
+        get: operations["rezidentlar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/rezidentlar/royxat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Sitemap uchun barcha egallangan raqamlar
+         * @description Sahifalanmagan: bu bitta fayl, butunligicha yasaladi va kraulerlar kamdan-kam so'raydi.
+         */
+        get: operations["raqamlar-royxati"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/rezidentlar/top": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Oxirgi kunlarda eng ko'p ko'rilgan */
+        get: operations["eng-korilgan"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -857,6 +934,20 @@ export interface components {
             bosishlar: number;
             havola: string;
         };
+        Listed: {
+            raqam: string;
+            /** Format: date-time */
+            yangilangan?: string;
+        };
+        ListedOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/ListedOutputBody.json
+             */
+            readonly $schema?: string;
+            raqamlar: components["schemas"]["Listed"][] | null;
+        };
         MeOutputBody: {
             /**
              * Format: uri
@@ -1134,6 +1225,37 @@ export interface components {
             readonly $schema?: string;
             kod: components["schemas"]["PromoCode"];
         };
+        PublicProfile: {
+            banner?: string;
+            dizayn: string;
+            email?: string;
+            havolalar: components["schemas"]["Link"][] | null;
+            ism: string;
+            kompaniya?: string;
+            /** Format: int64 */
+            korishlar: number;
+            lavozim?: string;
+            /** Format: date-time */
+            oxirgi_faollik?: string;
+            qurilma?: string;
+            raqam: string;
+            rasm?: string;
+            shahar?: string;
+            tarif: string;
+            tavsif?: string;
+            teglar: string[] | null;
+            telefon?: string;
+            xizmatlar: components["schemas"]["Service"][] | null;
+        };
+        PublicProfileOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/PublicProfileOutputBody.json
+             */
+            readonly $schema?: string;
+            profil: components["schemas"]["PublicProfile"];
+        };
         Report: {
             havolalar: components["schemas"]["LinkStat"][] | null;
             /** Format: int64 */
@@ -1163,6 +1285,31 @@ export interface components {
              */
             readonly $schema?: string;
             message: string;
+        };
+        Resident: {
+            ism: string;
+            /** Format: int64 */
+            korishlar: number;
+            /** Format: date-time */
+            oxirgi_faollik?: string;
+            raqam: string;
+            rasm?: string;
+            shahar?: string;
+            tavsif?: string;
+            teglar: string[] | null;
+        };
+        ResidentsOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/ResidentsOutputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            egallangan: number;
+            /** Format: int64 */
+            jami: number;
+            rezidentlar: components["schemas"]["Resident"][] | null;
         };
         Service: {
             name: string;
@@ -1219,6 +1366,22 @@ export interface components {
             hisobot: components["schemas"]["Report"];
             /** Format: int64 */
             kun: number;
+        };
+        TopHandle: {
+            ism: string;
+            /** Format: int64 */
+            korishlar: number;
+            raqam: string;
+            rasm?: string;
+        };
+        TopOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/TopOutputBody.json
+             */
+            readonly $schema?: string;
+            raqamlar: components["schemas"]["TopHandle"][] | null;
         };
         Transaction: {
             /** Format: date-time */
@@ -1857,6 +2020,37 @@ export interface operations {
             };
         };
     };
+    profil: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicProfileOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "vizitka-qoldirish": {
         parameters: {
             query?: never;
@@ -2138,6 +2332,102 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    rezidentlar: {
+        parameters: {
+            query?: {
+                /** @description Raqam, ism yoki shahar */
+                qidiruv?: string;
+                soni?: number;
+                /** @description Eng yangi qo'shilganlar */
+                yangi?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResidentsOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "raqamlar-royxati": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListedOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "eng-korilgan": {
+        parameters: {
+            query?: {
+                kun?: number;
+                soni?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TopOutputBody"];
+                };
             };
             /** @description Error */
             default: {

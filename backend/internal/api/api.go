@@ -89,6 +89,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 	s.registerPhone(api)
 	s.registerHandles(api)
 	s.registerPublic(api)
+	s.registerDirectory(api)
 	s.registerLeads(api)
 	s.registerStats(api)
 	s.registerOrders(api)

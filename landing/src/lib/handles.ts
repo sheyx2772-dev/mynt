@@ -4,6 +4,7 @@ import { cache } from "react";
 import { DEFAULT_CARD_DESIGN, isCardDesign, type CardDesignId } from "@/lib/card-designs";
 import { DEFAULT_DEVICE_TYPE, isDeviceType, type DeviceTypeId } from "@/lib/devices";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { backend } from "@/lib/backend/client";
 
 export type ClaimedProfile = {
   userId: string | null;
@@ -159,21 +160,12 @@ export type PublicHandle = { normalized: string; updatedAt: string | null };
 // Claimed handles, for the sitemap. Capped so the query stays bounded as the
 // namespace fills up; split into a sitemap index if it ever nears the limit.
 export async function listPublicHandles(): Promise<PublicHandle[]> {
-  const supabase = await createServerSupabase();
-  if (!supabase) return [];
+  const { data, error } = await backend.GET("/rezidentlar/royxat", {});
+  if (error || !data) return [];
 
-  const { data } = await supabase
-    .from("handles")
-    .select("normalized, updated_at")
-    .eq("status", "claimed")
-    .order("claimed_at", { ascending: false })
-    .limit(10_000);
-
-  if (!data) return [];
-
-  return data.map((row) => ({
-    normalized: row.normalized,
-    updatedAt: row.updated_at ?? null,
+  return (data.raqamlar ?? []).map((r) => ({
+    normalized: r.raqam,
+    updatedAt: r.yangilangan ?? null,
   }));
 }
 
@@ -326,41 +318,40 @@ function rowToResident(row: Record<string, unknown>): Resident {
  * and one that changes says people are buying.
  */
 export async function listNewestResidents(limit = 8): Promise<Resident[]> {
-  const supabase = await createServerSupabase();
-  if (!supabase) return [];
-
-  const { data } = await supabase
-    .from("handles")
-    .select(RESIDENT_COLUMNS)
-    .eq("status", "claimed")
-    .not("owner_name", "is", null)
-    .order("claimed_at", { ascending: false })
-    .limit(limit);
-
-  return (data ?? []).map(rowToResident);
+  return residents({ yangi: true, soni: limit });
 }
 
 export async function listResidents(query = "", limit = 60): Promise<Resident[]> {
-  const supabase = await createServerSupabase();
-  if (!supabase) return [];
+  return residents({ qidiruv: query.trim() || undefined, soni: limit });
+}
 
-  let request = supabase
-    .from("handles")
-    .select(RESIDENT_COLUMNS)
-    .eq("status", "claimed")
-    .order("view_count", { ascending: false })
-    .limit(limit);
+/**
+ * One read behind both of the above.
+ *
+ * The search term is no longer escaped here, and does not need to be: it goes
+ * into a query parameter and reaches the database as a bound argument. The
+ * version this replaces had to strip commas and parentheses out of what
+ * somebody typed, because PostgREST parses the filter as an expression and a
+ * comma in a name would have changed its meaning.
+ */
+async function residents(query: {
+  qidiruv?: string;
+  soni: number;
+  yangi?: boolean;
+}): Promise<Resident[]> {
+  const { data, error } = await backend.GET("/rezidentlar", { params: { query } });
+  if (error || !data) return [];
 
-  const term = query.trim();
-  if (term) {
-    // Escaped so a comma or parenthesis in the term cannot alter the filter
-    // expression PostgREST parses.
-    const safe = term.replace(/[,()\\]/g, " ").slice(0, 40);
-    request = request.or(`normalized.ilike.%${safe}%,owner_name.ilike.%${safe}%,city.ilike.%${safe}%`);
-  }
-
-  const { data } = await request;
-  return (data ?? []).map(rowToResident);
+  return (data.rezidentlar ?? []).map((r) => ({
+    normalized: r.raqam,
+    name: r.ism,
+    bio: r.tavsif ?? "",
+    avatarUrl: r.rasm ?? null,
+    city: r.shahar ?? null,
+    tags: r.teglar ?? [],
+    viewCount: r.korishlar,
+    lastSeenAt: r.oxirgi_faollik ?? null,
+  }));
 }
 
 export type TopHandle = {
@@ -372,33 +363,31 @@ export type TopHandle = {
 
 // Most-viewed claimed handles over the last few days.
 export async function getTopHandles(days = 3, limit = 3): Promise<TopHandle[]> {
-  const supabase = await createServerSupabase();
-  if (!supabase) return [];
+  const { data, error } = await backend.GET("/rezidentlar/top", {
+    params: { query: { kun: days, soni: limit } },
+  });
+  if (error || !data) return [];
 
-  const { data } = await supabase.rpc("top_handles", { p_days: days, p_limit: limit });
-
-  return (data ?? []).map((row: Record<string, unknown>) => ({
-    normalized: String(row.normalized),
-    name: (row.owner_name as string) ?? String(row.normalized),
-    avatarUrl: (row.avatar_url as string) ?? null,
-    views: Number(row.views),
+  return (data.raqamlar ?? []).map((r) => ({
+    normalized: r.raqam,
+    name: r.ism,
+    avatarUrl: r.rasm ?? null,
+    views: r.korishlar,
   }));
 }
 
 export type DirectoryCounts = { claimed: number; namespace: number };
 
-// Headline counts for the directory. 26^3 * 10^3 is the whole AAA000 space.
+// Headline counts for the directory. 26^3 * 10^3 is the whole AAA000 space,
+// and the backend knows it — it is a property of the format, so it is stated
+// once rather than multiplied out in every client.
 export async function getDirectoryCounts(): Promise<DirectoryCounts> {
-  const supabase = await createServerSupabase();
-  const namespace = 26 * 26 * 26 * 10 * 10 * 10;
-  if (!supabase) return { claimed: 0, namespace };
+  const { data, error } = await backend.GET("/rezidentlar", {
+    params: { query: { soni: 1 } },
+  });
+  if (error || !data) return { claimed: 0, namespace: 26 * 26 * 26 * 10 * 10 * 10 };
 
-  const { count } = await supabase
-    .from("handles")
-    .select("normalized", { count: "exact", head: true })
-    .eq("status", "claimed");
-
-  return { claimed: count ?? 0, namespace };
+  return { claimed: data.egallangan, namespace: data.jami };
 }
 
 // Stamps the owner's handles as recently active. Called from the cabinet,
