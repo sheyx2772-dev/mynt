@@ -46,6 +46,7 @@ import { listLeads } from "@/lib/leads";
 import LiveResidents from "@/components/LiveResidents";
 import AppHome from "@/components/AppHome";
 import CardFan from "@/components/CardFan";
+import SampleStrip from "@/components/SampleStrip";
 import TwoWays from "@/components/TwoWays";
 import LoadoutStrip from "@/components/LoadoutStrip";
 import { deviceStrip, verticalStrip, heroCarousel } from "@/lib/strip-items";
@@ -324,6 +325,11 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             label={p.groupDirections}
             note={p.groupDirectionsNote}
           />
+          <SampleStrip
+            label={p.samplesLabel}
+            note={p.samplesNote}
+            open={p.openCta}
+          />
 
           {/* The third question a buyer has, after what to hold and which room:
               what their own page will look like. The seven layouts answer it,
@@ -370,7 +376,9 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             directions: p.groupDirections,
             directionsNote: p.groupDirectionsNote,
             samples: p.samplesLabel,
+            samplesNote: p.samplesNote,
             samplesCta: p.samplesCta,
+            open: p.openCta,
           }}
           owner={owner}
         />
