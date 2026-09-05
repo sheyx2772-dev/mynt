@@ -31,8 +31,8 @@ if (!/^figd_[A-Za-z0-9_-]{20,}$/.test(TOKEN)) {
   console.error(`
 Bu token haqiqiy emas: "${TOKEN}"
 
-Haqiqiy token "figd_" bilan boshlanadi va uzun tasodifiy harflardan iborat,
-masalan: figd_XXXXXXXX
+Haqiqiy token "figd_" bilan boshlanadi va undan keyin 40 ga yaqin
+tasodifiy harf va raqam keladi.
 
 Olish: figma.com -> Settings -> Security -> Personal access tokens
        -> Generate new token -> "File content: Read-only"
