@@ -186,13 +186,26 @@ function IBtn({ icon, label, bg, color = "white" }: { icon: React.ReactElement; 
 }
 
 // ── Main card ────────────────────────────────────────────────────────────────
-interface Props { profile: Profile; lang: "uz" | "ru"; theme: "dark" | "light" }
+interface Props {
+  profile: Profile;
+  lang: "uz" | "ru";
+  theme: "dark" | "light";
+  /**
+   * Overrides the banner artwork. Pass null to draw the brand gradient with no
+   * image on it — five of the catalogue's organisations still carry a logo
+   * that belongs to a different body, inherited from the Figma mock, and a
+   * borrowed mark on a ministry's own name is worse than no mark at all. The
+   * catalogue keeps them until their real logos arrive; the entry page does
+   * not. Omit the prop and the map decides, as before.
+   */
+  banner?: string | null;
+}
 
-export default function ProfileCard({ profile, lang, theme }: Props) {
+export default function ProfileCard({ profile, lang, theme, banner: bannerProp }: Props) {
   const c    = getCfg(profile);
   const t    = L[lang];
   const pos  = lang === "uz" ? profile.position : profile.positionRu;
-  const banner = BANNER[profile.id];
+  const banner = bannerProp === undefined ? BANNER[profile.id] : (bannerProp ?? undefined);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", background: c.cardBg, fontFamily: "var(--font-sans)" }}>

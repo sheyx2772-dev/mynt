@@ -47,6 +47,7 @@ import AppHome from "@/components/AppHome";
 import CardFan from "@/components/CardFan";
 import TwoWays from "@/components/TwoWays";
 import LoadoutStrip from "@/components/LoadoutStrip";
+import SampleStrip from "@/components/SampleStrip";
 import { deviceStrip, verticalStrip, heroCarousel } from "@/lib/strip-items";
 import MobileMenu from "@/components/MobileMenu";
 import { getLang } from "@/lib/lang";
@@ -325,7 +326,18 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           />
 
           {/* The third question a buyer has, after what to hold and which room:
-              what their own page will look like. The seven layouts answer it,
+              what their own page will look like. A shelf of the layouts and of
+              the organisations, at a phone's size, because that question is
+              answered by looking rather than by reading. */}
+          <SampleStrip
+            label={p.samplesLabel}
+            note={p.samplesNote}
+            open={p.openCta}
+            lang={lang}
+          />
+
+          {/* The same question in one line, for anyone who wants the whole
+              catalogue rather than the shelf. The seven layouts answer it,
               and until now they sat five clicks deep behind a chip at the far
               end of a scrolling filter row, which is the same as not existing. */}
           <div className="mx-auto max-w-6xl px-6 pt-2">
@@ -370,7 +382,9 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             directionsNote: p.groupDirectionsNote,
             samples: p.samplesLabel,
             samplesCta: p.samplesCta,
+            samplesNote: p.samplesNote,
           }}
+          lang={lang}
           owner={owner}
         />
 
