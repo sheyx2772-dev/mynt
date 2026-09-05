@@ -33,7 +33,7 @@ export async function requireOwner(request: Request, raw: string | null): Promis
   }
 
   const normalized = `${parsed.letters}${parsed.digits}`;
-  const owned = await getOwnedHandle(normalized, user.id);
+  const owned = await getOwnedHandle(normalized);
   if (!owned) {
     return { ok: false, response: Response.json({ error: "Topilmadi." }, { status: 404 }) };
   }

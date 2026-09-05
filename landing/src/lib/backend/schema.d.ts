@@ -810,6 +810,9 @@ export interface components {
             raqam: string;
         };
         Handle: {
+            /** Format: date-time */
+            band_muddati?: string;
+            banner?: string;
             bio: string;
             dizayn: string;
             email?: string;
@@ -817,10 +820,13 @@ export interface components {
             /** @enum {string} */
             holat: "available" | "reserved" | "claimed";
             ism: string;
+            izohlar_ochiq: boolean;
+            jamoa?: string;
             kompaniya?: string;
             /** Format: int64 */
             korishlar: number;
             lavozim?: string;
+            maxsus_dizayn?: string;
             /** Format: date-time */
             olingan?: string;
             /** @enum {string} */
@@ -831,8 +837,12 @@ export interface components {
             shahar?: string;
             /** @enum {string} */
             tarif: "free" | "premium";
+            /** Format: date-time */
+            tarif_tugashi?: string;
             teglar: string[] | null;
             telefon?: string;
+            /** Format: int64 */
+            tolangan?: number;
             xizmatlar: components["schemas"]["Service"][] | null;
         };
         HandleListOutputBody: {

@@ -25,6 +25,16 @@ func deref(s *string) string {
 	return *s
 }
 
+// A price nobody paid — a gift, or an unclaimed row — reads as zero rather
+// than being left out, because "0 so'm" and "no answer" are different things
+// and only one of them is true here.
+func derefInt(n *int64) int64 {
+	if n == nil {
+		return 0
+	}
+	return *n
+}
+
 func optionalTime(t pgtype.Timestamptz) *time.Time {
 	if !t.Valid {
 		return nil

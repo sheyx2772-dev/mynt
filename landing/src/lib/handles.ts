@@ -4,7 +4,8 @@ import { cache } from "react";
 import { DEFAULT_CARD_DESIGN, isCardDesign, type CardDesignId } from "@/lib/card-designs";
 import { DEFAULT_DEVICE_TYPE, isDeviceType, type DeviceTypeId } from "@/lib/devices";
 import { createServerSupabase } from "@/lib/supabase/server";
-import { backend } from "@/lib/backend/client";
+import { asReader, backend } from "@/lib/backend/client";
+import type { paths } from "@/lib/backend/schema";
 
 export type ClaimedProfile = {
   userId: string | null;
@@ -212,72 +213,71 @@ function teamOf(value: unknown): TeamBrand | null {
   return (value as TeamBrand) ?? null;
 }
 
-function rowToOwned(row: Record<string, unknown>): OwnedHandle {
-  const ownedTeam = teamOf(row.teams);
+/** The backend's owner-side number, as this site names its fields. */
+type BackendHandle = NonNullable<
+  paths["/raqamlar"]["get"]["responses"][200]["content"]["application/json"]["raqamlar"]
+>[number];
+
+function toOwned(h: BackendHandle): OwnedHandle {
   return {
-    normalized: row.normalized as string,
-    status: row.status as OwnedHandle["status"],
-    name: (row.owner_name as string) ?? "",
-    bio: (row.bio as string) ?? "",
-    avatarUrl: (row.avatar_url as string) ?? null,
-    links: Array.isArray(row.links) ? (row.links as OwnedHandle["links"]) : [],
-    pricePaid: row.price_paid === null || row.price_paid === undefined ? null : Number(row.price_paid),
-    claimedAt: (row.claimed_at as string) ?? null,
-    reservedUntil: (row.reserved_until as string) ?? null,
-    city: (row.city as string) ?? null,
-    contactEmail: (row.contact_email as string) ?? null,
-    phone: (row.phone as string) ?? null,
-    position: (row.position as string) ?? null,
-    company: (row.company as string) ?? null,
-    services: readServices(row.services),
-    plan: effectivePlan(row.plan as string, row.plan_expires_at as string, ownedTeam?.plan_expires_at),
-    bannerUrl: (row.banner_url as string) ?? null,
-    teamName: ownedTeam?.name ?? null,
-    commentsOpen: Boolean(row.comments_open),
-    tags: Array.isArray(row.tags) ? (row.tags as string[]) : [],
-    viewCount: Number(row.view_count ?? 0),
-    cardDesign: isCardDesign(row.card_design) ? row.card_design : DEFAULT_CARD_DESIGN,
-    deviceType: isDeviceType(row.device_type) ? row.device_type : DEFAULT_DEVICE_TYPE,
-    customDesignUrl: (row.custom_design_url as string) ?? null,
+    normalized: h.raqam,
+    status: h.holat,
+    name: h.ism ?? "",
+    bio: h.bio ?? "",
+    avatarUrl: h.rasm ?? null,
+    links: (h.havolalar ?? []) as OwnedHandle["links"],
+    // Zero is a gift and null was "never asked". The backend answers zero for
+    // both, and a gift is the honest reading of the two here — nothing was
+    // paid either way, and the reason lives on the admin side.
+    pricePaid: h.tolangan ?? 0,
+    claimedAt: h.olingan ?? null,
+    reservedUntil: h.band_muddati ?? null,
+    city: h.shahar ?? null,
+    contactEmail: h.email ?? null,
+    phone: h.telefon ?? null,
+    position: h.lavozim ?? null,
+    company: h.kompaniya ?? null,
+    services: (h.xizmatlar ?? []) as Service[],
+    // Already resolved: the backend applies the lapse rule, so this site no
+    // longer has to compare two dates and a team's expiry to know what a plan
+    // is worth today.
+    plan: h.tarif,
+    bannerUrl: h.banner ?? null,
+    teamName: h.jamoa ?? null,
+    commentsOpen: h.izohlar_ochiq,
+    tags: h.teglar ?? [],
+    viewCount: h.korishlar,
+    cardDesign: isCardDesign(h.dizayn) ? h.dizayn : DEFAULT_CARD_DESIGN,
+    deviceType: isDeviceType(h.qurilma) ? h.qurilma : DEFAULT_DEVICE_TYPE,
+    customDesignUrl: h.maxsus_dizayn ?? null,
   };
 }
 
-// One string literal, not a concatenation: Supabase infers the row type from
-// this text, and a joined expression makes it give up and return an error type.
-const OWNED_COLUMNS =
-  "normalized, status, owner_name, bio, avatar_url, links, price_paid, claimed_at, reserved_until, city, contact_email, phone, position, company, tags, view_count, card_design, device_type, custom_design_url, services, plan, plan_expires_at, banner_url, comments_open, team_id, teams (name, logo_url, website, city, plan_expires_at)";
-
 // Everything the signed-in user owns or is currently holding.
-export async function listHandlesForUser(userId: string): Promise<OwnedHandle[]> {
-  const supabase = await createServerSupabase();
-  if (!supabase) return [];
+export async function listHandlesForUser(): Promise<OwnedHandle[]> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/raqamlar", {});
+  if (error || !data) return [];
 
-  const { data } = await supabase
-    .from("handles")
-    .select(OWNED_COLUMNS)
-    .eq("user_id", userId)
-    .order("claimed_at", { ascending: false, nullsFirst: false });
-
-  return (data ?? []).map(rowToOwned);
+  return (data.raqamlar ?? []).map(toOwned);
 }
 
-// Ownership is re-checked in the query itself, so a guessed handle in the URL
-// cannot open someone else's profile for editing.
-export async function getOwnedHandle(
-  normalized: string,
-  userId: string
-): Promise<OwnedHandle | null> {
-  const supabase = await createServerSupabase();
-  if (!supabase) return null;
+/**
+ * One number, read as its owner.
+ *
+ * Ownership is not checked here and never was: the backend filters on the
+ * session's account, so a guessed number in the URL is a 404 rather than
+ * somebody else's profile. The difference now is that the filter is on a
+ * server the browser cannot talk to directly.
+ */
+export async function getOwnedHandle(normalized: string): Promise<OwnedHandle | null> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/raqamlar/{raqam}", {
+    params: { path: { raqam: normalized } },
+  });
+  if (error || !data?.raqam) return null;
 
-  const { data } = await supabase
-    .from("handles")
-    .select(OWNED_COLUMNS)
-    .eq("normalized", normalized)
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  return data ? rowToOwned(data) : null;
+  return toOwned(data.raqam);
 }
 
 export type Resident = {

@@ -17,7 +17,7 @@ export async function GET(request: Request) {
   // The id is the verified one. A handle list is not sensitive — profiles are
   // public — but reading it for whoever the request said it was would make an
   // ownership check somewhere else pointless.
-  const handles = await listHandlesForUser(user.id);
+  const handles = await listHandlesForUser();
 
   return Response.json({ handles });
 }

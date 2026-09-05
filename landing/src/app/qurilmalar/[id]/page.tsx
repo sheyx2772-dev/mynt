@@ -196,7 +196,7 @@ async function orderDestination(
   const user = await getUser();
   if (!user) return { href: "/shaxsiy#narx", label: p.orderCta };
 
-  const owned = (await listHandlesForUser(user.id)).filter(
+  const owned = (await listHandlesForUser()).filter(
     (handle) => handle.status === "claimed",
   );
 

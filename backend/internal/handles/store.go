@@ -65,6 +65,22 @@ type Handle struct {
 	ViewCount int64  `json:"korishlar"`
 
 	ClaimedAt *time.Time `json:"olingan,omitempty"`
+
+	// The rest is the owner's own business and is on this type rather than on
+	// PublicProfile for exactly that reason: what they paid, how long a hold
+	// has left, when the plan runs out, and which company owns the number.
+	PricePaid     int64      `json:"tolangan,omitempty"`
+	ReservedUntil *time.Time `json:"band_muddati,omitempty"`
+	PlanExpiresAt *time.Time `json:"tarif_tugashi,omitempty"`
+	BannerURL     string     `json:"banner,omitempty"`
+	CommentsOpen  bool       `json:"izohlar_ochiq"`
+	// A design somebody had made for them, rather than one of ours. Only the
+	// owner's screens show it, which is why it is here and not on the public
+	// profile — the card is theirs, the artwork file need not be public.
+	CustomDesignURL string `json:"maxsus_dizayn,omitempty"`
+	// Set when a company holds the number. Its fields are theirs to edit, not
+	// the holder's, which is why the name is carried rather than the id.
+	TeamName string `json:"jamoa,omitempty"`
 }
 
 // ActivePlan is the rule about a lapsed subscription, in one place.
@@ -78,7 +94,7 @@ func ActivePlan(stored string, expires pgtype.Timestamptz, now time.Time) string
 	return PlanFree
 }
 
-func toHandle(row store.Handle) Handle {
+func toHandle(row store.Handle, teamName *string) Handle {
 	return Handle{
 		Normalized:   deref(row.Normalized),
 		Status:       row.Status,
@@ -98,6 +114,14 @@ func toHandle(row store.Handle) Handle {
 		Plan:         ActivePlan(row.Plan, row.PlanExpiresAt, time.Now()),
 		ViewCount:    row.ViewCount,
 		ClaimedAt:    optionalTime(row.ClaimedAt),
+
+		PricePaid:       derefInt(row.PricePaid),
+		ReservedUntil:   optionalTime(row.ReservedUntil),
+		PlanExpiresAt:   optionalTime(row.PlanExpiresAt),
+		BannerURL:       deref(row.BannerUrl),
+		CommentsOpen:    row.CommentsOpen,
+		CustomDesignURL: deref(row.CustomDesignUrl),
+		TeamName:        deref(teamName),
 	}
 }
 
@@ -117,7 +141,10 @@ func (s *Store) ForUser(ctx context.Context, userID string) ([]Handle, error) {
 	// response, and a client that has to handle both handles one of them badly.
 	out := make([]Handle, 0, len(rows))
 	for _, row := range rows {
-		out = append(out, toHandle(row))
+		out = append(out, toHandle(row, nil))
+	}
+	if err := s.withTeamNames(ctx, rows, out); err != nil {
+		return nil, err
 	}
 	return out, nil
 }
@@ -128,7 +155,11 @@ func (s *Store) Owned(ctx context.Context, normalized, userID string) (Handle, e
 	if err != nil {
 		return Handle{}, err
 	}
-	return toHandle(row), nil
+	out := []Handle{toHandle(row, nil)}
+	if err := s.withTeamNames(ctx, []store.Handle{row}, out); err != nil {
+		return Handle{}, err
+	}
+	return out[0], nil
 }
 
 func (s *Store) ownedRow(ctx context.Context, normalized, userID string) (store.Handle, error) {
@@ -145,4 +176,40 @@ func (s *Store) ownedRow(ctx context.Context, normalized, userID string) (store.
 		return store.Handle{}, ErrNotFound
 	}
 	return row, err
+}
+
+// withTeamNames fills in the company name on every number that has one.
+//
+// One query for the whole page rather than one per number: a person owning
+// five numbers for one company would otherwise ask for the same name five
+// times, and a loop with a query in it is how a cabinet page gets slow without
+// anybody noticing which change did it.
+func (s *Store) withTeamNames(ctx context.Context, rows []store.Handle, out []Handle) error {
+	ids := make([]uuid.UUID, 0, len(rows))
+	seen := map[uuid.UUID]bool{}
+	for _, row := range rows {
+		if row.TeamID != nil && !seen[*row.TeamID] {
+			seen[*row.TeamID] = true
+			ids = append(ids, *row.TeamID)
+		}
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+
+	teams, err := s.queries.TeamNames(ctx, ids)
+	if err != nil {
+		return err
+	}
+
+	names := make(map[uuid.UUID]string, len(teams))
+	for _, t := range teams {
+		names[t.ID] = t.Name
+	}
+	for i, row := range rows {
+		if row.TeamID != nil {
+			out[i].TeamName = names[*row.TeamID]
+		}
+	}
+	return nil
 }

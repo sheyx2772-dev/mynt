@@ -61,5 +61,5 @@ func (s *Store) SaveProfile(ctx context.Context, normalized, userID string, in P
 		return Handle{}, "", err
 	}
 
-	return toHandle(row), "", nil
+	return toHandle(row, nil), "", nil
 }

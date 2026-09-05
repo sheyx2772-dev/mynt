@@ -182,7 +182,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   // What an owner opens the app for. Only the newest claimed handle: somebody
   // with several has a cabinet, and a home screen that lists everything is a
   // cabinet with extra steps.
-  const owned = user ? await listHandlesForUser(user.id) : [];
+  const owned = user ? await listHandlesForUser() : [];
   const primary = owned.find((h) => h.status === "claimed") ?? null;
 
   const owner = primary

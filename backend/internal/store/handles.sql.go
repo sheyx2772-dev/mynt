@@ -238,6 +238,40 @@ func (q *Queries) SetAvatar(ctx context.Context, arg SetAvatarParams) error {
 	return err
 }
 
+const teamNames = `-- name: TeamNames :many
+select id, name from teams where id = any($1::uuid[])
+`
+
+type TeamNamesRow struct {
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+}
+
+// The company holding a number, when one does.
+//
+// Read separately rather than joined into the two above: sqlc flattens a join
+// into a new row type, and the two would then need their own copy of a
+// thirty-field mapping. Most numbers belong to a person and never ask.
+func (q *Queries) TeamNames(ctx context.Context, ids []uuid.UUID) ([]TeamNamesRow, error) {
+	rows, err := q.db.Query(ctx, teamNames, ids)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []TeamNamesRow{}
+	for rows.Next() {
+		var i TeamNamesRow
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const touchLastSeen = `-- name: TouchLastSeen :exec
 update handles set last_seen_at = now() where user_id = $1
 `

@@ -26,7 +26,7 @@ export async function requireOwnHandle(
 
   const normalized = `${parsed.letters}${parsed.digits}`;
   const user = await requireUser(path.replace("[handle]", normalized));
-  const owned = await getOwnedHandle(normalized, user.id);
+  const owned = await getOwnedHandle(normalized);
   if (!owned) notFound();
 
   return { normalized, owned, userId: user.id };

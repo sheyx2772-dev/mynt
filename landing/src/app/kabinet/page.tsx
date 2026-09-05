@@ -44,7 +44,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
   // see it: a customer's cabinet must not run a query whose answer it is never
   // shown.
   const [handles, incoming, notifications, team, queue] = await Promise.all([
-    listHandlesForUser(user.id),
+    listHandlesForUser(),
     listIncomingTransfers(user.email ?? ""),
     listNotifications(user.id),
     getTeamForUser(user.id),

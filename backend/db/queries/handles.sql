@@ -14,6 +14,14 @@ select * from handles
 where normalized = sqlc.arg(normalized)
   and user_id = sqlc.arg(user_id);
 
+-- The company holding a number, when one does.
+--
+-- Read separately rather than joined into the two above: sqlc flattens a join
+-- into a new row type, and the two would then need their own copy of a
+-- thirty-field mapping. Most numbers belong to a person and never ask.
+-- name: TeamNames :many
+select id, name from teams where id = any(sqlc.arg(ids)::uuid[]);
+
 -- What a visitor sees. Only claimed numbers: a reservation is an unfinished
 -- purchase, not a profile.
 -- name: PublicProfile :one
