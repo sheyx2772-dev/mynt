@@ -56,28 +56,25 @@ export function devicePriceOrNull(id: LoadoutDeviceId): number | null {
 export { VERTICALS };
 export type { VerticalId };
 
-/** The same objects with their background removed, for the suspended hero. */
-const CUTOUTS: Record<string, string> = {
-  card: "karta",
-  ring: "uzuk",
-  bracelet: "braslet",
-  avtovizitka: "avtovizitka",
-  "hayvon-teg": "hayvon-teg",
+/**
+ * Every finish an object has been shot in, newest first.
+ *
+ * Not a fixed number per object: the sets arrive as they arrive, and the
+ * bracelet has five where the pet tag has two. Anything that assumes the
+ * counts match breaks the next time one more file turns up.
+ */
+const CUTOUTS: Record<string, string[]> = {
+  card: ["karta", "karta-2", "karta-3"],
+  ring: ["uzuk", "uzuk-2", "uzuk-3"],
+  bracelet: ["braslet", "braslet-2", "braslet-3", "braslet-4", "braslet-5"],
+  avtovizitka: ["avtovizitka", "avtovizitka-2"],
+  "hayvon-teg": ["hayvon-teg", "hayvon-teg-2"],
 };
 
-export function deviceCutout(id: string): string | null {
-  const name = CUTOUTS[id];
-  return name ? `/mahsulot/kesilgan/${name}.png` : null;
+export function deviceCutouts(id: string): string[] {
+  return (CUTOUTS[id] ?? []).map((n) => `/mahsulot/kesilgan/${n}.png`);
 }
 
-/**
- * The same object in the other finish.
- *
- * Two sets were supplied and both are used. The hero exists to say the number
- * comes on a range of things; showing one object in two finishes says that
- * better than showing it once, and costs nothing but a second file.
- */
-export function deviceCutoutAlt(id: string): string | null {
-  const name = CUTOUTS[id];
-  return name ? `/mahsulot/kesilgan/${name}-2.png` : null;
+export function deviceCutout(id: string): string | null {
+  return deviceCutouts(id)[0] ?? null;
 }

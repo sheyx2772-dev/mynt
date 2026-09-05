@@ -8,7 +8,7 @@ import {
   VERTICALS,
   deviceShot,
   deviceCutout,
-  deviceCutoutAlt,
+  deviceCutouts,
   verticalShot,
   devicePriceOrNull,
   UNPRICED_DEVICE,
@@ -86,16 +86,30 @@ export function heroCarousel(lang: Lang): CarouselItem[] {
     price: p.priceUnknown,
   };
 
-  // Each object appears in both finishes: one full pass through the five, then
-  // the same five again in the other finish. The object changes every turn, so
-  // nothing is shown twice running, and the two passes read as the same range
-  // seen twice rather than ten unrelated things.
+  // Every finish of every object, ordered so no object appears twice running.
   //
-  // Ten turns is more than anyone will sit through, and that is fine. The spot
-  // is there to say the number comes on a range, not to list the range.
+  // The counts are uneven — five bracelets, two pet tags — so a pass-per-set
+  // does not work: the last passes would be bracelet after bracelet. Instead
+  // the object with the most left to show goes next, unless it just went, in
+  // which case the runner-up does. That spreads the bracelets through the
+  // others rather than stacking them at the end.
   const all = [...made, petTag];
-  return [
-    ...all.map((d) => ({ ...d, src: deviceCutout(d.id)! })),
-    ...all.map((d) => ({ ...d, src: deviceCutoutAlt(d.id)! })),
-  ].map(({ id: _id, ...item }) => item);
+  const left = new Map(all.map((d) => [d.id, deviceCutouts(d.id)]));
+  const order: CarouselItem[] = [];
+  let previous: string | null = null;
+
+  for (;;) {
+    const ready = all
+      .filter((d) => (left.get(d.id)?.length ?? 0) > 0)
+      .sort((a, b) => (left.get(b.id)!.length - left.get(a.id)!.length));
+    if (ready.length === 0) break;
+
+    const pick = ready.find((d) => d.id !== previous) ?? ready[0];
+    const src = left.get(pick.id)!.shift()!;
+    const { id: _id, ...rest } = pick;
+    order.push({ ...rest, src });
+    previous = pick.id;
+  }
+
+  return order;
 }
