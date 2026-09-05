@@ -58,14 +58,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
-    // What a subscription costs. Somebody comparing us to a competitor looks
-    // for this page by name.
-    {
-      url: `${SITE_URL}/tarif`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
     // The directory. Every row is a public profile that is in this sitemap
     // anyway, and the page itself is the one place they are all linked from.
     {
