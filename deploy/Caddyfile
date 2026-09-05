@@ -1,0 +1,33 @@
+# Three names, one machine, and certificates nobody has to remember.
+#
+# Caddy asks Let's Encrypt for a certificate the first time each name is
+# requested and renews them on its own. That is the whole reason it is here
+# rather than nginx: a renewal cron that quietly stops is a site that goes down
+# ninety days later, on a morning when nobody is looking — and for us it would
+# take the payment callbacks with it, because Payme and Click only speak HTTPS.
+
+{
+	# Where the expiry notices go. Without an address Let's Encrypt has no way
+	# to warn about a renewal that has been failing.
+	email {$ACME_EMAIL}
+}
+
+# The site.
+{$SITE_HOST} {
+	encode zstd gzip
+	reverse_proxy web:3000
+}
+
+# The backend. Its own name so the merchant cabinets have one address to hold
+# that does not move when the site does.
+{$API_HOST} {
+	encode zstd gzip
+	reverse_proxy api:8090
+}
+
+# The panel. Behind a session like everything else — this is not a second door,
+# it is the same door on a different name.
+{$PANEL_HOST} {
+	encode zstd gzip
+	reverse_proxy panel:80
+}

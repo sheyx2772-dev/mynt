@@ -1,0 +1,106 @@
+# Everything Flex runs, on one machine.
+#
+# Four processes and a database. Caddy is the only one with a port open to the
+# world; the rest talk to each other on the compose network and are unreachable
+# from outside, which is why none of them carries its own TLS or its own idea
+# of who is allowed in.
+#
+# The site and the panel are here rather than on somebody else's platform
+# because the backend, the database and the payment callbacks are here, and a
+# request that crosses an ocean to render a page about a number stored in
+# Tashkent is a request that did not need to.
+
+name: flex
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: flex
+      POSTGRES_DB: flex
+      # From .env — never a default. A database that starts with a password
+      # somebody could guess from this file is a database with no password.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD kerak}
+    volumes:
+      - db:/var/lib/postgresql/data
+    # No ports. Nothing outside this machine talks to Postgres, and the day
+    # somebody needs to, they can tunnel over SSH.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flex -d flex"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ../backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://flex:${POSTGRES_PASSWORD}@db:5432/flex?sslmode=disable
+      APP_ENV: production
+      ADDR: ":8090"
+      SITE_URL: ${SITE_URL}
+      # Behind Caddy, so the forwarded address is the visitor's and can be
+      # believed. Without this every rate limit counts one client: the proxy.
+      TRUST_PROXY: "true"
+      ADMIN_EMAILS: ${ADMIN_EMAILS}
+      OPERATOR_USER_ID: ${OPERATOR_USER_ID}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      MAIL_FROM: ${MAIL_FROM}
+      ESKIZ_EMAIL: ${ESKIZ_EMAIL}
+      ESKIZ_PASSWORD: ${ESKIZ_PASSWORD}
+      SMS_FROM: ${SMS_FROM}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      CRON_SECRET: ${CRON_SECRET}
+      PAYME_MERCHANT_ID: ${PAYME_MERCHANT_ID}
+      PAYME_SECRET_KEY: ${PAYME_SECRET_KEY}
+      CLICK_SERVICE_ID: ${CLICK_SERVICE_ID}
+      CLICK_MERCHANT_ID: ${CLICK_MERCHANT_ID}
+      CLICK_SECRET_KEY: ${CLICK_SECRET_KEY}
+
+  web:
+    build:
+      context: ../landing
+    restart: unless-stopped
+    depends_on: [api]
+    environment:
+      # Inside the network, by service name. The browser never sees this.
+      BACKEND_URL: http://api:8090
+      NEXT_PUBLIC_SITE_URL: ${SITE_URL}
+      NEXT_PUBLIC_TELEGRAM_BOT_NAME: ${TELEGRAM_BOT_NAME}
+      R2_PUBLIC_URL: ${R2_PUBLIC_URL}
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
+      R2_BUCKET_NAME: ${R2_BUCKET_NAME}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+
+  panel:
+    build:
+      context: ../admin
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on: [web, api, panel]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    environment:
+      SITE_HOST: ${SITE_HOST}
+      API_HOST: ${API_HOST}
+      PANEL_HOST: ${PANEL_HOST}
+
+volumes:
+  db:
+  caddy-data:
+  caddy-config:

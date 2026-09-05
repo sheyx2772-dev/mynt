@@ -1,11 +1,15 @@
 import type { NextConfig } from "next";
 
-// `output: "standalone"` used to be set here, which bundles a self-contained
-// server for running in a container. Vercel supplies its own runtime and reads
-// the default build's file traces instead, so standalone output made the deploy
-// fail: its onBuildComplete step opens .next/next-server.js.nft.json, which
-// standalone mode never writes. Put it back only alongside a host that actually
-// runs the standalone server.
+// `output: "standalone"` is back, and the note it replaces is worth keeping:
+// it was removed because Vercel supplies its own runtime and reads the default
+// build's file traces, so standalone output broke that deploy — its
+// onBuildComplete step opens .next/next-server.js.nft.json, which standalone
+// mode never writes.
+//
+// We now run the standalone server ourselves, in a container on our own
+// machine, which is the host that condition asked for. It bundles only the
+// files the server actually reaches, so the image is a couple of hundred
+// megabytes instead of the better part of a gigabyte.
 
 // The host already sends HSTS. These are the rest of the headers a public site
 // should not be missing — deliberately the ones that cannot break a page:
@@ -29,6 +33,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  output: "standalone",
+
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
