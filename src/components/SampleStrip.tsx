@@ -2,6 +2,7 @@ import { LAYOUTS } from "@/components/ui/LayoutSamples";
 import { SampleShelf, SampleTile } from "@/components/SampleShelf";
 import ProfileCard from "@/components/figma/ProfileCard";
 import { orgSamples, hasOwnLogo } from "@/lib/org-samples";
+import { LAYOUT_ORDER, ORG_ORDER, bySampleOrder } from "@/lib/sample-order";
 import "@/components/figma/katalog.css";
 
 /**
@@ -17,6 +18,10 @@ import "@/components/figma/katalog.css";
  * components the bench and the catalogue draw, clipped to the tile's height. A
  * screenshot would be lighter and would go stale the first time one of them
  * changed; this cannot.
+ *
+ * Both are ordered strongest first — see sample-order.ts. The file order was
+ * the order they happened to be written in, which put the quietest layout of
+ * the seven in the second slot.
  *
  * The organisation card is the catalogue's own component, so it needs the
  * catalogue's tokens: they are scoped to `.figma-katalog`, which is why each
@@ -37,7 +42,7 @@ export default function SampleStrip({
 }) {
   return (
     <SampleShelf label={label} note={note}>
-      {LAYOUTS.map((l) => (
+      {bySampleOrder(LAYOUTS, (l) => l.name, LAYOUT_ORDER).map((l) => (
         <SampleTile
           key={l.name}
           href="/katalog?bolim=layouts"
@@ -49,7 +54,7 @@ export default function SampleStrip({
         </SampleTile>
       ))}
 
-      {orgSamples().map((p) => (
+      {bySampleOrder(orgSamples(), (p) => p.id, ORG_ORDER).map((p) => (
         <SampleTile
           key={p.id}
           href="/katalog?bolim=org"
