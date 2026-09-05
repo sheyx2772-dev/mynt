@@ -42,23 +42,24 @@ export default function SampleStrip({
           // link is laid over the tile instead, as a sibling of the preview.
           <div
             key={l.name}
-            className="group relative w-[78vw] max-w-[17.5rem] shrink-0 snap-start"
+            className="group relative w-[86vw] max-w-[21.5rem] shrink-0 snap-start"
           >
-            {/* A phone at something like a phone's size, not a thumbnail of
-                one. Shrunk into a square tile the layout was unreadable, which
-                defeats the point of showing it at all — so the frame takes the
-                width it needs and the shelf scrolls. */}
-            {/* 9:16 rather than a phone's true 9:19.5. Measured: the layouts
-                render between 498 and 738px inside a 280px-wide frame, so a
-                taller box leaves the three shortest with a black band under
-                them. A screen that ends in black reads as broken; a slightly
-                stubby phone does not. The long ones are clipped, which is what
-                a screen does anyway. */}
-            <div className="relative aspect-[9/16] w-full overflow-hidden rounded-[2rem] bg-black shadow-[0_22px_50px_-16px_rgba(0,0,0,0.85)] ring-1 ring-white/15">
+            {/* The tile is nearly the whole screen wide and the layout draws
+                at that width unscaled — every one of them is fluid, so this is
+                the same rendering a phone gets, at the same type size, not a
+                shrunken copy of it. Scaled to 0.71 in a narrower tile it was
+                legible but small, which is not what a sample is for.
+
+                1:2 rather than a phone's true 9:19.5. Measured at 338px wide:
+                the seven layouts run 686 to 1064px tall, so a frame cut to
+                19.5 leaves the shortest sitting above a black band, and a
+                screen that ends in black reads as broken. 1:2 is 676px —
+                under all seven — so each fills its frame and the long ones are
+                clipped, which is what a screen does to a page anyway. */}
+            <div className="relative aspect-[1/2] w-full overflow-hidden rounded-[2rem] bg-black shadow-[0_22px_50px_-16px_rgba(0,0,0,0.85)] ring-1 ring-white/15">
               <div
                 aria-hidden
-                className="pointer-events-none absolute top-0 left-0 w-[380px] origin-top-left"
-                style={{ transform: "scale(var(--sample-scale, 0.71))" }}
+                className="pointer-events-none absolute inset-x-0 top-0"
               >
                 {l.render()}
               </div>
