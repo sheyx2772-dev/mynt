@@ -49,21 +49,21 @@ const HOME = {
         title: "Raqam tanlaysiz",
         body:
           "Tasodifiy yoki o'zingiz yoqtirgan. Raqam umrbod sizniki — karta yo'qolsa, yangisiga o'sha raqam yoziladi.",
-        photo: "/mahsulot/karta.jpg",
+        photo: "/mahsulot/karta.webp",
         alt: "FLEX kartasi, raqami bilan",
       },
       {
         title: "Buyum tanlaysiz",
         body:
           "Karta, uzuk, braslet, avtovizitka, hayvon tegi. Bittasini yoki bir nechtasini — hammasi bitta raqam.",
-        photo: "/mahsulot/qurilmalar.jpg",
+        photo: "/mahsulot/qurilmalar.webp",
         alt: "FLEX qurilmalari bir qatorda",
       },
       {
         title: "Tegizasiz",
         body:
           "Odam telefonini tegizadi, profilingiz ochiladi. Kontaktni bir bosishda saqlaydi. Siz esa u haqida yozuv olasiz — kim, qachon, qayerda.",
-        photo: "/mahsulot/skan.jpg",
+        photo: "/mahsulot/skan.webp",
         alt: "Telefon FLEX qurilmasini o'qiyapti",
       },
     ],
@@ -223,21 +223,21 @@ const HOME = {
         title: "Выбираете номер",
         body:
           "Случайный или тот, что понравился. Номер ваш навсегда — потеряется карта, тот же номер будет на новой.",
-        photo: "/mahsulot/karta.jpg",
+        photo: "/mahsulot/karta.webp",
         alt: "Карта FLEX с номером",
       },
       {
         title: "Выбираете вещь",
         body:
           "Карта, кольцо, браслет, автовизитка, жетон для животного. Одну или несколько — номер один на всё.",
-        photo: "/mahsulot/qurilmalar.jpg",
+        photo: "/mahsulot/qurilmalar.webp",
         alt: "Устройства FLEX в ряд",
       },
       {
         title: "Касаетесь",
         body:
           "Человек прикладывает телефон, открывается ваш профиль. Контакт сохраняется одним нажатием. А у вас остаётся запись — кто, когда, где.",
-        photo: "/mahsulot/skan.jpg",
+        photo: "/mahsulot/skan.webp",
         alt: "Телефон считывает устройство FLEX",
       },
     ],
@@ -389,21 +389,21 @@ const HOME = {
         title: "Pick a number",
         body:
           "Random, or the one you want. The number is yours for life — lose the card and the replacement carries the same number.",
-        photo: "/mahsulot/karta.jpg",
+        photo: "/mahsulot/karta.webp",
         alt: "A FLEX card showing its number",
       },
       {
         title: "Pick a thing to carry it",
         body:
           "Card, ring, band, windscreen tag, pet tag. One or several — all of them answer to the same number.",
-        photo: "/mahsulot/qurilmalar.jpg",
+        photo: "/mahsulot/qurilmalar.webp",
         alt: "FLEX devices in a row",
       },
       {
         title: "Touch",
         body:
           "They hold their phone to it and your profile opens. One press saves your contact. You get a record of it — who, when, where.",
-        photo: "/mahsulot/skan.jpg",
+        photo: "/mahsulot/skan.webp",
         alt: "A phone reading a FLEX device",
       },
     ],

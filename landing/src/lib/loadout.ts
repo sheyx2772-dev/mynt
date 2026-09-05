@@ -78,7 +78,7 @@ const CUTOUTS: Record<string, string[]> = {
 };
 
 export function deviceCutouts(id: string): string[] {
-  return (CUTOUTS[id] ?? []).map((n) => `/mahsulot/kesilgan/${n}.png`);
+  return (CUTOUTS[id] ?? []).map((n) => `/mahsulot/kesilgan/${n}.webp`);
 }
 
 export function deviceCutout(id: string): string | null {
