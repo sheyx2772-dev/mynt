@@ -8,8 +8,16 @@ describe("pickLang", () => {
   });
 
   it("reads the browser's preference when nothing was chosen", () => {
-    expect(pickLang(undefined, "ru-RU,ru;q=0.9,en;q=0.8")).toBe("ru");
     expect(pickLang(undefined, "uz-UZ,uz;q=0.9")).toBe("uz");
+    expect(pickLang(undefined, "en-US,en;q=0.9")).toBe("en");
+  });
+
+  it("does not let a Russian browser decide", () => {
+    // Phones are very often sold here set up in Russian and never changed, so
+    // this header says little about which language somebody would rather read.
+    // They are one tap from Russian and the choice is remembered.
+    expect(pickLang(undefined, "ru-RU,ru;q=0.9,en;q=0.8")).toBe("uz");
+    expect(pickLang(undefined, "ru")).toBe("uz");
   });
 
   it("reads English too", () => {
@@ -19,7 +27,7 @@ describe("pickLang", () => {
 
   // The first tag the browser sends that we actually have, not the first tag.
   it("skips languages the profile does not speak", () => {
-    expect(pickLang(undefined, "de-DE,de;q=0.9,ru;q=0.8")).toBe("ru");
+    expect(pickLang(undefined, "de-DE,de;q=0.9,en;q=0.8")).toBe("en");
     expect(pickLang(undefined, "tr-TR,tr;q=0.9,en;q=0.7")).toBe("en");
   });
 

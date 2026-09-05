@@ -182,11 +182,20 @@ export function isLang(value: unknown): value is Lang {
 export function pickLang(param: unknown, acceptLanguage: string | null): Lang {
   if (isLang(param)) return param;
 
+  // The browser is asked, but not about Russian.
+  //
+  // Phones here are very often set up in Russian by whoever sold them, and the
+  // owner never changes it — so Accept-Language is a poor witness to whether
+  // somebody would rather read Uzbek. It is a good witness to whether they can
+  // read either: a browser asking for English belongs to a visitor who cannot.
+  //
+  // So English is honoured and Russian is not. Anybody who does want Russian is
+  // one tap from it, and that choice is remembered — see getLang.
   for (const part of (acceptLanguage ?? "").split(",")) {
     const tag = part.split(";")[0]!.trim().toLowerCase();
     if (tag.startsWith("uz")) return "uz";
-    if (tag.startsWith("ru")) return "ru";
     if (tag.startsWith("en")) return "en";
+    if (tag.startsWith("ru")) break;
   }
 
   return DEFAULT_LANG;
