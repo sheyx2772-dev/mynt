@@ -2,7 +2,7 @@
 
 import { readLeadForm, saveLead } from "@/lib/leads";
 import { addComment, deleteComment } from "@/lib/comments";
-import { toggleRecommendation } from "@/lib/recommendations";
+import { isRecommended, toggleRecommendation } from "@/lib/recommendations";
 import { readSource } from "@/lib/analytics";
 
 import { revalidatePath } from "next/cache";
@@ -274,7 +274,7 @@ export async function submitComment(
   if (!parsed) return { ok: false, error: "Bu profil topilmadi." };
 
   const normalized = `${parsed.letters}${parsed.digits}`;
-  const result = await addComment(normalized, user.id, body);
+  const result = await addComment(normalized, body);
   if (result.ok) revalidatePath(`/${normalized}`);
   return result;
 }
@@ -290,8 +290,8 @@ export async function removeComment(
   const parsed = parseHandle(rawHandle);
   if (!parsed) return { ok: false, error: "Bu profil topilmadi." };
 
-  const removed = await deleteComment(id, user.id);
-  if (!removed) return { ok: false, error: "O'chirilmadi." };
+  const removed = await deleteComment(`${parsed.letters}${parsed.digits}`, id);
+  if (!removed.ok) return { ok: false, error: "O'chirilmadi." };
 
   revalidatePath(`/${parsed.letters}${parsed.digits}`);
   return { ok: true };
@@ -310,7 +310,13 @@ export async function toggleRecommend(rawHandle: string): Promise<RecommendResul
   if (!parsed) return { ok: false, error: "Bu profil topilmadi." };
 
   const normalized = `${parsed.letters}${parsed.digits}`;
-  const result = await toggleRecommendation(normalized, user.id);
-  if (result.ok) revalidatePath(`/${normalized}`);
-  return result;
+
+  // The backend answers with the state it reached, so pressing twice quickly
+  // does not leave the button showing the opposite of the truth.
+  const current = await isRecommended(normalized);
+  const result = await toggleRecommendation(normalized, !current);
+  if (!result.ok) return { ok: false, error: "Hozir bo'lmadi. Qaytadan urinib ko'ring." };
+
+  revalidatePath(`/${normalized}`);
+  return { ok: true, recommended: result.on };
 }

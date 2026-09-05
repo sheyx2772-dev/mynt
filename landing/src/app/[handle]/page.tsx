@@ -34,7 +34,6 @@ import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
 import { isAnyProviderConfigured } from "@/lib/payments/config";
 import {
-  readVisitorContext,
   readSource,
   recordProfileView,
   type VisitSource,
@@ -184,8 +183,7 @@ async function VanityHandlePage({
       const viewer = await getUser();
       const isOwner = profile.isOwner;
       if (!isOwner) {
-        const visitor = await readVisitorContext(source);
-        after(() => recordProfileView(normalized, visitor));
+        after(() => recordProfileView(normalized, source));
       }
 
       return (
@@ -245,19 +243,21 @@ async function VanityHandlePage({
     // Owners looking at their own page would otherwise inflate their numbers.
     // Recorded after the response so it never delays the profile.
     if (!isOwner) {
-      const visitor = await readVisitorContext(source);
-      after(() => recordProfileView(normalized, visitor));
+      after(() => recordProfileView(normalized, source));
     }
 
     const lastSeen = timeAgo(profile.lastSeenAt, lang);
 
-    const [following, posts, comments, recommenders, viewerRecommends] =
-      await Promise.all([
-      viewer ? isFollowing(viewer.id, normalized) : Promise.resolve(false),
+    // Following and recommending come back on the profile itself: the page
+    // already fetched it, and asking twice more for two booleans is two round
+    // trips for a screen that is already drawn.
+    const following = profile.isFollowing;
+    const viewerRecommends = profile.isRecommended;
+
+    const [posts, comments, recommenders] = await Promise.all([
       tab === "postlar" ? listPostsForHandle(normalized) : Promise.resolve([]),
       listComments(normalized),
       listRecommenders(normalized),
-      viewer ? isRecommended(normalized, viewer.id) : Promise.resolve(false),
     ]);
 
     // The owner's own cover wins over the catalogue artwork, which wins over

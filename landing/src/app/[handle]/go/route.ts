@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { after } from "next/server";
 import { parseHandle } from "@/lib/pricing";
 import { getClaimedProfile } from "@/lib/handles";
-import { readVisitorContext, recordLinkClick } from "@/lib/analytics";
+import {  recordLinkClick } from "@/lib/analytics";
 import { SITE_URL } from "@/lib/site";
 
 // Counts a link click, then forwards the visitor.
@@ -28,9 +28,7 @@ export async function GET(
   const link = Number.isInteger(index) ? profile.links[index] : undefined;
 
   if (!link) return NextResponse.redirect(new URL(`/${normalized}`, request.url));
-
-  const visitor = await readVisitorContext();
-  after(() => recordLinkClick(normalized, link.label, visitor));
+  after(() => recordLinkClick(normalized, link.label));
 
   // 307 rather than 301: the mapping is not permanent and must not be cached
   // by the browser, or later clicks would never reach us to be counted.

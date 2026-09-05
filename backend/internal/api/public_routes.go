@@ -72,6 +72,13 @@ func (s *Server) registerPublic(api huma.API) {
 			return nil, internalError(err, "profil o'qilmadi")
 		}
 
+		// Only for a reader who has a session; a stranger has done neither and
+		// asking would be two queries for two falses.
+		if viewer.ID != "" {
+			profile.Following = s.social.IsFollowing(ctx, viewer.ID, parsed.Normalized())
+			profile.Recommended = s.social.IsRecommended(ctx, viewer.ID, parsed.Normalized())
+		}
+
 		out := &publicProfileOutput{}
 		out.Body.Profile = profile
 		return out, nil

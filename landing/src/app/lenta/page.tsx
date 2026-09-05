@@ -25,7 +25,7 @@ export default async function FeedPage() {
   const user = await requireUser("/lenta");
 
   const [posts, top, newest] = await Promise.all([
-    listFeed(user.id),
+    listFeed(),
     getTopHandles(3, 3),
     listNewestResidents(4),
   ]);

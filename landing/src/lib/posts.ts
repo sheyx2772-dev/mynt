@@ -1,7 +1,6 @@
 import "server-only";
 
-import { createServerSupabase } from "@/lib/supabase/server";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { asReader, backend } from "@/lib/backend/client";
 
 export { MAX_POST_LENGTH } from "@/lib/post-limits";
 
@@ -13,76 +12,44 @@ export type Post = {
   author: { name: string; avatarUrl: string | null } | null;
 };
 
-type PostRow = { id: string; handle: string; body: string; created_at: string };
+type BackendPost = {
+  id: string;
+  raqam: string;
+  matn: string;
+  vaqt: string;
+  ism?: string;
+  rasm?: string;
+};
 
-// Posts store the handle, not the author's name, so the display details are
-// fetched once for the whole page rather than joined per row.
-async function attachAuthors(rows: PostRow[]): Promise<Post[]> {
-  if (rows.length === 0) return [];
-
-  const supabase = await createServerSupabase();
-  const handles = [...new Set(rows.map((r) => r.handle))];
-
-  const { data: authors } = supabase
-    ? await supabase
-        .from("handles")
-        .select("normalized, owner_name, avatar_url")
-        .in("normalized", handles)
-    : { data: null };
-
-  const byHandle = new Map(
-    (authors ?? []).map((a) => [
-      a.normalized,
-      { name: a.owner_name ?? a.normalized, avatarUrl: a.avatar_url },
-    ])
-  );
-
-  return rows.map((row) => ({
-    id: row.id,
-    handle: row.handle,
-    body: row.body,
-    createdAt: row.created_at,
-    author: byHandle.get(row.handle) ?? null,
-  }));
+// The author travels with the post rather than being fetched afterwards: the
+// join is one statement in SQL, where it used to be a second round trip that
+// collected every handle on the page and looked them up together.
+function toPost(p: BackendPost): Post {
+  return {
+    id: p.id,
+    handle: p.raqam,
+    body: p.matn,
+    createdAt: p.vaqt,
+    author: p.ism ? { name: p.ism, avatarUrl: p.rasm ?? null } : null,
+  };
 }
 
-export async function listPostsForHandle(handle: string, limit = 50): Promise<Post[]> {
-  const supabase = await createServerSupabase();
-  if (!supabase) return [];
+export async function listPostsForHandle(handle: string): Promise<Post[]> {
+  const { data, error } = await backend.GET("/profil/{raqam}/postlar", {
+    params: { path: { raqam: handle } },
+  });
+  if (error || !data) return [];
 
-  const { data } = await supabase
-    .from("posts")
-    .select("id, handle, body, created_at")
-    .eq("handle", handle)
-    .order("created_at", { ascending: false })
-    .limit(limit);
-
-  return attachAuthors(data ?? []);
+  return (data.postlar ?? []).map(toPost);
 }
 
-// The feed: posts from the handles this user follows, newest first. Reading
-// the follow list needs the admin client because `follows` is readable only
-// by its owner, and this runs after the caller has been identified.
-export async function listFeed(userId: string, limit = 50): Promise<Post[]> {
-  if (!supabaseAdmin) return [];
+/** What the numbers somebody follows have posted. */
+export async function listFeed(limit = 50): Promise<Post[]> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/lenta", {
+    params: { query: { soni: limit } },
+  });
+  if (error || !data) return [];
 
-  const { data: follows } = await supabaseAdmin
-    .from("follows")
-    .select("followed_handle")
-    .eq("follower_user_id", userId);
-
-  const handles = (follows ?? []).map((f) => f.followed_handle);
-  if (handles.length === 0) return [];
-
-  const supabase = await createServerSupabase();
-  if (!supabase) return [];
-
-  const { data } = await supabase
-    .from("posts")
-    .select("id, handle, body, created_at")
-    .in("handle", handles)
-    .order("created_at", { ascending: false })
-    .limit(limit);
-
-  return attachAuthors(data ?? []);
+  return (data.postlar ?? []).map(toPost);
 }

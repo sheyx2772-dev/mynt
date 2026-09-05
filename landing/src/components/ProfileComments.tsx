@@ -40,7 +40,7 @@ export default function ProfileComments({
   const router = useRouter();
 
 
-  const alreadyWrote = comments.some((c) => c.authorId === viewerId);
+  const alreadyWrote = comments.some((c) => c.mine);
 
   return (
     <div className="mt-6">
@@ -114,7 +114,7 @@ export default function ProfileComments({
                 </div>
 
                 {/* The author may take theirs back; the owner may take any. */}
-                {(c.authorId === viewerId || isOwner) && (
+                {(c.mine || isOwner) && (
                   <button
                     onClick={() =>
                       startTransition(async () => {

@@ -50,6 +50,12 @@ type PublicProfile struct {
 	// customer that a stranger tapping a card has no business learning. The
 	// question every caller actually asked was this one.
 	Mine bool `json:"meniki"`
+
+	// What the reader has already done here. On the profile rather than behind
+	// two more requests, because the page that draws the buttons is this one
+	// and it would otherwise ask three times for one screen.
+	Following   bool `json:"obunaman"`
+	Recommended bool `json:"tavsiya_qilganman"`
 }
 
 // Public reads one claimed profile. A number that is unclaimed, reserved or

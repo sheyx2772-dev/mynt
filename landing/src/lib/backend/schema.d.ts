@@ -327,6 +327,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/lenta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Obuna bo'lgan raqamlaringiz postlari */
+        get: operations["lenta"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/men": {
         parameters: {
             query?: never;
@@ -358,6 +375,23 @@ export interface paths {
          * @description Kabinet ochilganda chaqiriladi. Profilda "oxirgi faollik" shundan.
          */
         post: operations["faollik"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/men/obunalar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Nechta raqamga obunaman */
+        get: operations["obunalarim"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -396,6 +430,138 @@ export interface paths {
          * @description Kartani tegizgan odam ko'radigan sahifa. Sessiya kerak emas.
          */
         get: operations["profil"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/profil/{raqam}/izohlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Profildagi izohlar
+         * @description Izohlar yopiq bo'lsa bo'sh ro'yxat — sahifa yashiradigan qatorlar emas.
+         */
+        get: operations["izohlar"];
+        put?: never;
+        /** Izoh qoldirish */
+        post: operations["izoh-qoshish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/profil/{raqam}/izohlar/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Izohni o'chirish
+         * @description Izoh muallifi yoki profil egasi o'chira oladi.
+         */
+        delete: operations["izoh-ochirish"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/profil/{raqam}/obuna": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Obuna bo'lish yoki bekor qilish */
+        put: operations["obuna"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/profil/{raqam}/postlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Profil postlari */
+        get: operations["postlar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/profil/{raqam}/tashrif": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Tashrif yoki havola bosilishini yozish
+         * @description Sessiya kerak emas. Tashrifchi manzili emas, xeshi saqlanadi.
+         */
+        post: operations["tashrif"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/profil/{raqam}/tavsiya": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Tavsiya qilish yoki qaytarib olish */
+        put: operations["tavsiya"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/profil/{raqam}/tavsiyachilar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Kim tavsiya qilgan
+         * @description Faqat o'z raqami bor odamlar. Tekshirib bo'lmaydigan tavsiya — tavsiya emas.
+         */
+        get: operations["tavsiyachilar"];
         put?: never;
         post?: never;
         delete?: never;
@@ -688,6 +854,15 @@ export interface components {
             email: string;
             id: string;
         };
+        AddCommentInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/AddCommentInputBody.json
+             */
+            readonly $schema?: string;
+            matn: string;
+        };
         AdminAccountOutputBody: {
             /**
              * Format: uri
@@ -750,6 +925,25 @@ export interface components {
         Checkout: {
             click?: string;
             payme?: string;
+        };
+        Comment: {
+            /** Format: int64 */
+            id: number;
+            matn: string;
+            meniki: boolean;
+            muallif: string;
+            muallif_raqami?: string;
+            /** Format: date-time */
+            vaqt: string;
+        };
+        CommentsOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/CommentsOutputBody.json
+             */
+            readonly $schema?: string;
+            izohlar: components["schemas"]["Comment"][] | null;
         };
         ConfirmLinkInputBody: {
             /**
@@ -824,6 +1018,34 @@ export interface components {
              * @example https://example.com/errors/example
              */
             type: string;
+        };
+        FollowCountOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/FollowCountOutputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            soni: number;
+        };
+        FollowInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/FollowInputBody.json
+             */
+            readonly $schema?: string;
+            obuna: boolean;
+        };
+        FollowOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/FollowOutputBody.json
+             */
+            readonly $schema?: string;
+            obuna: boolean;
         };
         GenesisCard: {
             /** Format: date-time */
@@ -1230,6 +1452,24 @@ export interface components {
             kod?: string;
             message: string;
         };
+        Post: {
+            id: string;
+            ism?: string;
+            matn: string;
+            raqam: string;
+            rasm?: string;
+            /** Format: date-time */
+            vaqt: string;
+        };
+        PostsOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/PostsOutputBody.json
+             */
+            readonly $schema?: string;
+            postlar: components["schemas"]["Post"][] | null;
+        };
         ProfileInput: {
             /**
              * Format: uri
@@ -1306,6 +1546,7 @@ export interface components {
             korishlar: number;
             lavozim?: string;
             meniki: boolean;
+            obunaman: boolean;
             /** Format: date-time */
             oxirgi_faollik?: string;
             qurilma?: string;
@@ -1314,6 +1555,7 @@ export interface components {
             shahar?: string;
             tarif: string;
             tavsif?: string;
+            tavsiya_qilganman: boolean;
             teglar: string[] | null;
             telefon?: string;
             xizmatlar: components["schemas"]["Service"][] | null;
@@ -1326,6 +1568,39 @@ export interface components {
              */
             readonly $schema?: string;
             profil: components["schemas"]["PublicProfile"];
+        };
+        RecommendInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/RecommendInputBody.json
+             */
+            readonly $schema?: string;
+            tavsiya: boolean;
+        };
+        RecommendOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/RecommendOutputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            soni: number;
+            tavsiya: boolean;
+        };
+        Recommender: {
+            ism: string;
+            raqam: string;
+        };
+        RecommendersOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/RecommendersOutputBody.json
+             */
+            readonly $schema?: string;
+            tavsiyachilar: components["schemas"]["Recommender"][] | null;
         };
         Report: {
             havolalar: components["schemas"]["LinkStat"][] | null;
@@ -1464,6 +1739,18 @@ export interface components {
             /** Format: date-time */
             tolangan?: string;
             tolov: string;
+        };
+        ViewInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/ViewInputBody.json
+             */
+            readonly $schema?: string;
+            /** @description Bosilgan havola nomi — bo'sh bo'lsa oddiy tashrif */
+            havola?: string;
+            /** @enum {string} */
+            manba?: "nfc" | "qr" | "share";
         };
     };
     responses: never;
@@ -2062,6 +2349,37 @@ export interface operations {
             };
         };
     };
+    lenta: {
+        parameters: {
+            query?: {
+                soni?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PostsOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     men: {
         parameters: {
             query?: never;
@@ -2106,6 +2424,35 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    obunalarim: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FollowCountOutputBody"];
+                };
             };
             /** @description Error */
             default: {
@@ -2167,6 +2514,265 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PublicProfileOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    izohlar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommentsOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "izoh-qoshish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddCommentInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "izoh-ochirish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    obuna: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FollowInputBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FollowOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    postlar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PostsOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    tashrif: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ViewInputBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    tavsiya: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecommendInputBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecommendOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    tavsiyachilar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecommendersOutputBody"];
                 };
             };
             /** @description Error */

@@ -1,32 +1,27 @@
 import "server-only";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { asReader } from "@/lib/backend/client";
 
-// Whether this account follows this handle. The follows table is readable
-// only by its owner, so this goes through the admin client with the user id
-// the caller has already been authenticated as.
-export async function isFollowing(userId: string, handle: string): Promise<boolean> {
-  if (!supabaseAdmin) return false;
-
-  const { data } = await supabaseAdmin
-    .from("follows")
-    .select("followed_handle")
-    .eq("follower_user_id", userId)
-    .eq("followed_handle", handle)
-    .maybeSingle();
-
-  return Boolean(data);
+export async function isFollowing(handle: string): Promise<boolean> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/profil/{raqam}", {
+    params: { path: { raqam: handle } },
+  });
+  return !error && Boolean(data?.profil.obunaman);
 }
 
-// How many handles this account follows. Shown on a profile as the owner's
-// "following" number.
-export async function countFollowing(userId: string): Promise<number> {
-  if (!supabaseAdmin) return 0;
+export async function countFollowing(): Promise<number> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/men/obunalar", {});
+  return error || !data ? 0 : data.soni;
+}
 
-  const { count } = await supabaseAdmin
-    .from("follows")
-    .select("followed_handle", { count: "exact", head: true })
-    .eq("follower_user_id", userId);
-
-  return count ?? 0;
+/** Turns following on or off and answers with the state it reached. */
+export async function setFollowing(handle: string, on: boolean): Promise<boolean> {
+  const client = await asReader();
+  const { data, error } = await client.PUT("/profil/{raqam}/obuna", {
+    params: { path: { raqam: handle } },
+    body: { obuna: on },
+  });
+  return error || !data ? !on : data.obuna;
 }

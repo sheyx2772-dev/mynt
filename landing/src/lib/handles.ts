@@ -9,6 +9,9 @@ import type { paths } from "@/lib/backend/schema";
 export type ClaimedProfile = {
   /** Whether the reader owns this number. */
   isOwner: boolean;
+  /** What the reader has already done here. */
+  isFollowing: boolean;
+  isRecommended: boolean;
   name: string;
   bio: string;
   avatarUrl: string | null;
@@ -46,6 +49,8 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
     // does. The page only ever asked the first question, and the second is a
     // fact about a customer that a stranger tapping a card should not learn.
     isOwner: p.meniki,
+    isFollowing: p.obunaman,
+    isRecommended: p.tavsiya_qilganman,
     name: p.ism,
     bio: p.tavsif ?? "",
     avatarUrl: p.rasm ?? null,

@@ -28,6 +28,7 @@ import (
 	"github.com/sheyx2772-dev/flex/backend/internal/notify"
 	"github.com/sheyx2772-dev/flex/backend/internal/orders"
 	"github.com/sheyx2772-dev/flex/backend/internal/payments"
+	"github.com/sheyx2772-dev/flex/backend/internal/social"
 	"github.com/sheyx2772-dev/flex/backend/internal/stats"
 	"github.com/sheyx2772-dev/flex/backend/internal/store"
 )
@@ -43,6 +44,7 @@ type Server struct {
 	stats   *stats.Store
 	orders  *orders.Store
 	admin   *admin.Store
+	social  *social.Store
 	notify  *notify.Service
 	// nil unless this deployment holds the provider secret keys.
 	payments payments.Store
@@ -62,7 +64,8 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 			ClickMerchantID: cfg.ClickMerchantID,
 			SiteURL:         cfg.SiteURL,
 		}, cfg.IsDevelopment()),
-		admin: admin.NewStore(pool),
+		admin:  admin.NewStore(pool),
+		social: social.NewStore(pool),
 	}
 
 	// A nil channel is dropped rather than registered, so the service does not
@@ -101,6 +104,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 	s.registerHandles(api)
 	s.registerPublic(api)
 	s.registerDirectory(api)
+	s.registerSocial(api)
 	s.registerLeads(api)
 	s.registerStats(api)
 	s.registerOrders(api)
