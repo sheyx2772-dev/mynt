@@ -33,7 +33,7 @@ type deviceOutput struct {
 
 type placeDeviceInput struct {
 	Body struct {
-		Handle string `json:"raqam" pattern:"^[a-z]{3}[0-9]{3}$" example:"aaa777"`
+		Handle string `json:"raqam" example:"AAA777"`
 		// What to make. The price of each is on this side; nothing about money
 		// arrives in this body.
 		Type string `json:"qurilma" enum:"card,ring,bracelet"`
@@ -138,7 +138,12 @@ func (s *Server) registerDevices(api huma.API) {
 			return nil, err
 		}
 
-		order, err := s.orders.PlaceDevice(ctx, account.ID, in.Body.Handle, in.Body.Type, in.Body.Design)
+		raqam, ok := number(in.Body.Handle)
+		if !ok {
+			return nil, huma.Error422UnprocessableEntity("Raqam formati noto'g'ri.")
+		}
+
+		order, err := s.orders.PlaceDevice(ctx, account.ID, raqam, in.Body.Type, in.Body.Design)
 		switch {
 		case errors.Is(err, orders.ErrUnknownDevice):
 			return nil, huma.Error422UnprocessableEntity("Bunday qurilma yo'q.")

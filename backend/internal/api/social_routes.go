@@ -12,7 +12,6 @@ import (
 
 	"github.com/danielgtaylor/huma/v2"
 
-	"github.com/sheyx2772-dev/flex/backend/internal/handles"
 	"github.com/sheyx2772-dev/flex/backend/internal/social"
 )
 
@@ -120,14 +119,6 @@ type deletedPostOutput struct {
 }
 
 func (s *Server) registerSocial(api huma.API) {
-	number := func(raw string) (string, bool) {
-		parsed, ok := handles.Parse(raw)
-		if !ok {
-			return "", false
-		}
-		return parsed.Normalized(), true
-	}
-
 	huma.Register(api, huma.Operation{
 		OperationID:   "tashrif",
 		Method:        http.MethodPost,

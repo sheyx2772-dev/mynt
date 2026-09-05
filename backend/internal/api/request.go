@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/danielgtaylor/huma/v2"
+
+	"github.com/sheyx2772-dev/flex/backend/internal/handles"
 )
 
 // Reading a request: the credential it presents, and where it came from.
@@ -50,4 +52,18 @@ func (s *Server) clientIP(ctx huma.Context) *netip.Addr {
 		return nil
 	}
 	return &addr
+}
+
+// number turns whatever case a client sent into the one stored.
+//
+// Handles are written `AAA777` in the database and typed every other way by
+// people: on a card, in a URL somebody retyped, in a form. Parsing rather than
+// pattern-matching in the request struct is what makes `aaa777` and `AAA777`
+// the same number instead of one of them being a 422 nobody can explain.
+func number(raw string) (string, bool) {
+	parsed, ok := handles.Parse(raw)
+	if !ok {
+		return "", false
+	}
+	return parsed.Normalized(), true
 }
