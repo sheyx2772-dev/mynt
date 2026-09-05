@@ -183,3 +183,85 @@ func (s *Server) owned(ctx context.Context, raw string) (handles.Handle, error) 
 
 	return handle, nil
 }
+
+// Asking for a card design to be drawn.
+//
+// Screened before anything is stored, so the buyer is told why immediately
+// rather than waiting in a queue for a refusal.
+
+type designRequest struct {
+	ID      string `json:"id"`
+	Handle  string `json:"raqam"`
+	Wish    string `json:"tilak"`
+	Status  string `json:"holat"`
+	Image   string `json:"rasm,omitempty"`
+	Note    string `json:"izoh,omitempty"`
+	Created string `json:"vaqt"`
+}
+
+type designListOutput struct {
+	Body struct {
+		Requests []designRequest `json:"sorovlar"`
+	}
+}
+
+type designAskInput struct {
+	Raqam string `path:"raqam" pattern:"^[A-Za-z]{3}[0-9]{3}$"`
+	Body  struct {
+		Tilak string `json:"tilak" minLength:"3" maxLength:"500"`
+	}
+}
+
+func (s *Server) registerDesignRequests(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "dizayn-sorovlari", Method: http.MethodGet,
+		Path: "/raqamlar/{raqam}/dizayn", Summary: "Dizayn so'rovlari",
+		Tags: []string{"raqamlar"},
+	}, func(ctx context.Context, in *handlePathInput) (*designListOutput, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+		parsed, ok := handles.Parse(in.Raqam)
+		if !ok {
+			return nil, huma.Error404NotFound("Topilmadi.")
+		}
+
+		rows, err := s.handles.DesignRequests(ctx, parsed.Normalized(), account.ID)
+		if err != nil {
+			return nil, internalError(err, "so'rovlar o'qilmadi")
+		}
+
+		out := &designListOutput{}
+		for _, r := range rows {
+			out.Body.Requests = append(out.Body.Requests, designRequest{
+				ID: r.ID, Handle: r.Handle, Wish: r.Wish, Status: r.Status,
+				Image: r.Image, Note: r.Note, Created: r.Created,
+			})
+		}
+		return out, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID: "dizayn-sorash", Method: http.MethodPost,
+		Path: "/raqamlar/{raqam}/dizayn", Summary: "Dizayn so'rash",
+		Tags: []string{"raqamlar"}, DefaultStatus: http.StatusCreated,
+	}, func(ctx context.Context, in *designAskInput) (*struct{}, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+		parsed, ok := handles.Parse(in.Raqam)
+		if !ok {
+			return nil, huma.Error404NotFound("Topilmadi.")
+		}
+
+		if err := s.handles.AskForDesign(ctx, parsed.Normalized(), account.ID, in.Body.Tilak); err != nil {
+			if errors.Is(err, handles.ErrNotFound) {
+				return nil, huma.Error404NotFound("Bu raqam sizniki emas.")
+			}
+			return nil, internalError(err, "so'rov yozilmadi")
+		}
+		return nil, nil
+	})
+}

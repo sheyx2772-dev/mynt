@@ -50,7 +50,12 @@ update handles set
   company = sqlc.narg(company),
   tags = sqlc.arg(tags),
   card_design = sqlc.arg(card_design),
-  device_type = sqlc.arg(device_type)
+  device_type = sqlc.arg(device_type),
+  -- Pictures and the comments switch. The two images are addresses the caller
+  -- uploaded before asking; nothing here fetches or trusts what is at them.
+  avatar_url = sqlc.narg(avatar_url),
+  banner_url = sqlc.narg(banner_url),
+  comments_open = sqlc.arg(comments_open)
 where normalized = sqlc.arg(normalized)
   and user_id = sqlc.arg(user_id)
 returning *;

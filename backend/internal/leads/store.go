@@ -1,8 +1,11 @@
 package leads
 
 import (
+	"time"
+
 	"context"
 	"errors"
+	"github.com/jackc/pgx/v5/pgtype"
 	"net/netip"
 
 	"github.com/google/uuid"
@@ -20,6 +23,8 @@ var (
 	// sign-in link there is nothing here to disclose: the profile is public,
 	// and somebody typing their number into a form knows they typed it.
 	ErrTooMany = errors.New("juda ko'p urinish")
+	// A contact the owner typed in themselves, with nothing usable in it.
+	ErrBadLead = errors.New("noto'g'ri ma'lumot")
 )
 
 type Store struct {
@@ -114,6 +119,12 @@ func (s *Store) ForOwner(ctx context.Context, normalized, userID string) ([]Lead
 			Note:      deref(row.Note),
 			Source:    deref(row.Source),
 			CreatedAt: row.CreatedAt.Time,
+
+			Stage:       row.Status,
+			OwnerNote:   deref(row.OwnerNote),
+			FollowUpOn:  dateOnly(row.FollowUpOn),
+			LastTouchAt: rfc3339(row.LastTouchAt),
+			Tags:        row.Tags,
 		})
 	}
 	return out, nil
@@ -153,4 +164,135 @@ func deref(s *string) string {
 		return ""
 	}
 	return *s
+}
+
+// Patch is the owner's own side of a contact: where it has got to, what they
+// noted, when to chase it. The lead itself — the name and number somebody
+// left — is not editable, because it is a record of what was said rather than
+// a field.
+type Patch struct {
+	Stage      string   `json:"holat,omitempty" enum:"new,talking,client,cold"`
+	OwnerNote  string   `json:"izoh,omitempty" maxLength:"1000"`
+	FollowUpOn string   `json:"eslatma,omitempty" format:"date"`
+	Tags       []string `json:"teglar,omitempty" maxItems:"10"`
+}
+
+// Update changes the owner's side of one contact.
+//
+// `last_touch_at` is deliberately not set here: a trigger stamps it from the
+// same statement, so the clock cannot disagree with the change that moved it.
+func (s *Store) Update(ctx context.Context, id int64, userID string, in Patch) error {
+	owner, err := uuid.Parse(userID)
+	if err != nil {
+		return ErrNoHandle
+	}
+
+	var followUp pgtype.Date
+	if in.FollowUpOn != "" {
+		if at, err := time.Parse(time.DateOnly, in.FollowUpOn); err == nil {
+			followUp = pgtype.Date{Time: at, Valid: true}
+		}
+	}
+
+	rows, err := s.queries.UpdateLead(ctx, store.UpdateLeadParams{
+		ID: id, UserID: &owner,
+		Status: optional(in.Stage), OwnerNote: optional(in.OwnerNote),
+		FollowUpOn: followUp, Tags: in.Tags,
+	})
+	if err != nil {
+		return err
+	}
+	if rows == 0 {
+		return ErrNoHandle
+	}
+	return nil
+}
+
+// Add is somebody the owner met and typed in themselves, rather than one who
+// filled in the form. The same table: a contact is a contact.
+func (s *Store) Add(ctx context.Context, handle, userID string, in Input) (int64, error) {
+	owner, err := uuid.Parse(userID)
+	if err != nil {
+		return 0, ErrNoHandle
+	}
+
+	checked, problem := Read(in)
+	if problem != "" {
+		return 0, ErrBadLead
+	}
+
+	id, err := s.queries.AddLeadByOwner(ctx, store.AddLeadByOwnerParams{
+		Handle: &handle, UserID: &owner,
+		Name: checked.Name, Phone: optional(checked.Phone), Email: optional(checked.Email),
+		Company: optional(checked.Company), Note: optional(checked.Note),
+	})
+	if errors.Is(err, pgx.ErrNoRows) {
+		return 0, ErrNoHandle
+	}
+	return id, err
+}
+
+// Brief is a summary the owner has had built over their contacts, kept so the
+// page does not rebuild it on every visit.
+type Brief struct {
+	Summary     string `json:"xulosa" maxLength:"4000"`
+	Suggestions string `json:"takliflar" maxLength:"20000" doc:"JSON"`
+	Seen        int32  `json:"korilgan"`
+	BuiltAt     string `json:"tuzilgan,omitempty"`
+}
+
+func (s *Store) Brief(ctx context.Context, handle, userID string) (Brief, bool) {
+	owner, err := uuid.Parse(userID)
+	if err != nil {
+		return Brief{}, false
+	}
+
+	row, err := s.queries.Brief(ctx, store.BriefParams{Handle: &handle, UserID: &owner})
+	if err != nil {
+		return Brief{}, false
+	}
+
+	brief := Brief{
+		Summary:     row.Summary,
+		Suggestions: string(row.Suggestions),
+		Seen:        row.ContactsSeen,
+	}
+	if row.BuiltAt.Valid {
+		brief.BuiltAt = row.BuiltAt.Time.Format(time.RFC3339)
+	}
+	return brief, true
+}
+
+func (s *Store) SaveBrief(ctx context.Context, handle, userID string, in Brief) error {
+	owner, err := uuid.Parse(userID)
+	if err != nil {
+		return ErrNoHandle
+	}
+	return s.queries.SaveBrief(ctx, store.SaveBriefParams{
+		Handle: &handle, UserID: &owner,
+		Summary: in.Summary, Suggestions: []byte(in.Suggestions), ContactsSeen: in.Seen,
+	})
+}
+
+func (s *Store) DeleteBrief(ctx context.Context, handle, userID string) error {
+	owner, err := uuid.Parse(userID)
+	if err != nil {
+		return ErrNoHandle
+	}
+	return s.queries.DeleteBrief(ctx, store.DeleteBriefParams{Handle: &handle, UserID: &owner})
+}
+
+// A date the owner set, written the way a date input reads it.
+func dateOnly(d pgtype.Date) string {
+	if !d.Valid {
+		return ""
+	}
+	return d.Time.Format(time.DateOnly)
+}
+
+func rfc3339(t pgtype.Timestamptz) string {
+	if !t.Valid {
+		return ""
+	}
+	return t.Time.Format(time.RFC3339)
 }

@@ -1,5 +1,7 @@
 "use server";
 
+import { asReader } from "@/lib/backend/client";
+
 import { readLeadForm, saveLead } from "@/lib/leads";
 import { addComment, deleteComment } from "@/lib/comments";
 import { isRecommended, toggleRecommendation } from "@/lib/recommendations";
@@ -11,7 +13,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { parseHandle, priceForHandle } from "@/lib/pricing";
 import { getUser } from "@/lib/auth";
 import { getSiteOrigin } from "@/lib/site";
-import { checkClaimRateLimit, recordClaimAttempt, getClientIp } from "@/lib/rate-limit";
+import {   getClientIp } from "@/lib/client-ip";
 import { readProfileForm } from "@/lib/profile-form";
 import { clickCheckoutUrl } from "@/lib/payments/click";
 import { paymeCheckoutUrl } from "@/lib/payments/payme";
@@ -61,113 +63,35 @@ export async function claimHandle(
     };
   }
 
-  if (!isSupabaseConfigured || !supabaseAdmin) {
-    return { ok: false, error: "Baza ulanmagan. Keyinroq urinib ko'ring." };
-  }
-
-  const ip = await getClientIp();
-  const verdict = await checkClaimRateLimit(user.id, ip);
-  if (!verdict.allowed) {
-    await recordClaimAttempt(user.id, ip, normalized, false);
-    return { ok: false, error: verdict.reason };
-  }
-
   const read = await readProfileForm(formData, normalized);
-  if (!read.ok) {
-    await recordClaimAttempt(user.id, ip, normalized, false);
-    return { ok: false, error: read.error };
-  }
-  const { profile } = read;
+  if (!read.ok) return { ok: false, error: read.error };
 
-  // Price is always recomputed from the handle — never read from the form.
-  const price = priceForHandle(letters, digits);
-
-  // A reservation that was never paid for must not hold the handle forever.
-  await supabaseAdmin
-    .from("handles")
-    .delete()
-    .eq("normalized", normalized)
-    .eq("status", "reserved")
-    .lt("reserved_until", new Date().toISOString());
-
-  // Without a payment provider the handle is claimed outright, which keeps the
-  // site usable in development and before the merchant keys are connected.
-  const settleNow = !isAnyProviderConfigured;
-
-  const { error } = await supabaseAdmin.from("handles").insert({
-    letters,
-    digits,
-    status: settleNow ? "claimed" : "reserved",
-    user_id: user.id,
-    owner_name: profile.name,
-    bio: profile.bio,
-    avatar_url: profile.avatarUrl,
-    links: profile.links,
-    city: profile.city,
-    contact_email: profile.contactEmail,
-    tags: profile.tags,
-    price_paid: price,
-    claimed_at: settleNow ? new Date().toISOString() : null,
-    reserved_until: settleNow
-      ? null
-      : new Date(Date.now() + RESERVATION_MINUTES * 60_000).toISOString(),
+  // Everything that follows is the backend's: it recomputes the price from the
+  // number itself, sweeps a reservation that was never paid for, holds the
+  // number, opens the order and builds the payment links. The rate limit is
+  // there too — claims are cheap to attempt and expensive to undo, and a cap
+  // enforced in the browser's server is a cap enforced where the attempts are
+  // not counted.
+  const client = await asReader();
+  const { data, error, response } = await client.POST("/qidirish/{raqam}/olish", {
+    params: { path: { raqam: normalized } },
+    body: { ism: read.profile.name },
   });
 
-  if (error) {
-    await recordClaimAttempt(user.id, ip, normalized, false);
-    if (error.code === "23505") {
-      return { ok: false, error: "Bu handle allaqachon band qilingan." };
+  if (error || !data?.buyurtma) {
+    if (response.status === 429) {
+      return { ok: false, error: "Juda ko'p urinish. Birozdan so'ng qayta urining." };
     }
-    return { ok: false, error: "Xatolik yuz berdi. Qaytadan urinib ko'ring." };
+    if (response.status === 409) {
+      return { ok: false, error: "Bu raqam allaqachon band." };
+    }
+    return { ok: false, error: "Hozir band qilib bo'lmadi. Qaytadan urinib ko'ring." };
   }
 
-  if (settleNow) {
-    await recordClaimAttempt(user.id, ip, normalized, true);
-    revalidatePath(`/${normalized}`);
-    return { ok: true };
-  }
-
-  const { data: order, error: orderError } = await supabaseAdmin
-    .from("orders")
-    .insert({ user_id: user.id, handle: normalized, amount: price })
-    .select("id")
-    .single();
-
-  if (orderError || !order) {
-    // Do not sit on a reservation that has no order behind it.
-    await supabaseAdmin
-      .from("handles")
-      .delete()
-      .eq("normalized", normalized)
-      .eq("status", "reserved");
-    await recordClaimAttempt(user.id, ip, normalized, false);
-    return { ok: false, error: "Buyurtma yaratilmadi. Qaytadan urinib ko'ring." };
-  }
-
-  await recordClaimAttempt(user.id, ip, normalized, true);
-
-  const origin = await getSiteOrigin();
-  const returnUrl = `${origin}/${normalized}`;
-  const checkout: Checkout = {};
-
-  if (isClickConfigured) {
-    checkout.click = clickCheckoutUrl({
-      serviceId: clickConfig.serviceId,
-      merchantId: clickConfig.merchantId,
-      amount: price,
-      orderId: order.id,
-      returnUrl,
-    });
-  }
-
-  if (isPaymeConfigured) {
-    checkout.payme = paymeCheckoutUrl({
-      merchantId: paymeConfig.merchantId,
-      orderId: order.id,
-      amountSum: price,
-      returnUrl,
-    });
-  }
+  const checkout: Checkout = {
+    click: data.buyurtma.tolov?.click,
+    payme: data.buyurtma.tolov?.payme,
+  };
 
   return {
     ok: true,

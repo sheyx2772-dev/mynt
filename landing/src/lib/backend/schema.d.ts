@@ -1019,6 +1019,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/raqamlar/{raqam}/dizayn": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dizayn so'rovlari */
+        get: operations["dizayn-sorovlari"];
+        put?: never;
+        /** Dizayn so'rash */
+        post: operations["dizayn-sorash"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/raqamlar/{raqam}/hisoblar": {
         parameters: {
             query?: never;
@@ -1259,7 +1277,8 @@ export interface paths {
         /** Raqamga qoldirilgan kontaktlar */
         get: operations["vizitkalar"];
         put?: never;
-        post?: never;
+        /** Kontaktni o'zim kiritish */
+        post: operations["vizitka-qoshish-ozim"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1283,7 +1302,11 @@ export interface paths {
         delete: operations["vizitkani-ochirish"];
         options?: never;
         head?: never;
-        patch?: never;
+        /**
+         * Kontakt haqidagi o'z yozuvlaringiz
+         * @description Kontaktning o'zi — ism, telefon — tahrirlanmaydi: u nima aytilganining yozuvi, maydon emas.
+         */
+        patch: operations["vizitka-tahrirlash"];
         trace?: never;
     };
     "/raqamlar/{raqam}/xabarlar": {
@@ -1315,6 +1338,25 @@ export interface paths {
         /** Barchasini o'qilgan deb belgilash */
         post: operations["xabarlar-oqildi"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/xulosa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kontaktlar bo'yicha saqlangan xulosa */
+        get: operations["xulosa"];
+        /** Xulosani saqlash */
+        put: operations["xulosa-saqlash"];
+        post?: never;
+        /** Xulosani o'chirish */
+        delete: operations["xulosa-ochirish"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1582,6 +1624,29 @@ export interface components {
         AliveOutputHeader: {
             CacheControl: string;
         };
+        Brief: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/Brief.json
+             */
+            readonly $schema?: string;
+            /** Format: int32 */
+            korilgan: number;
+            /** @description JSON */
+            takliflar: string;
+            tuzilgan?: string;
+            xulosa: string;
+        };
+        BriefOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/BriefOutputBody.json
+             */
+            readonly $schema?: string;
+            xulosa: components["schemas"]["Brief"];
+        };
         BuyInputBody: {
             /**
              * Format: uri
@@ -1700,6 +1765,33 @@ export interface components {
             kun: string;
             /** Format: int64 */
             tashrifchilar: number;
+        };
+        DesignAskInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/DesignAskInputBody.json
+             */
+            readonly $schema?: string;
+            tilak: string;
+        };
+        DesignListOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/DesignListOutputBody.json
+             */
+            readonly $schema?: string;
+            sorovlar: components["schemas"]["DesignRequest"][] | null;
+        };
+        DesignRequest: {
+            holat: string;
+            id: string;
+            izoh?: string;
+            raqam: string;
+            rasm?: string;
+            tilak: string;
+            vaqt: string;
         };
         Discount: {
             /** Format: int64 */
@@ -2033,6 +2125,8 @@ export interface components {
         };
         Lead: {
             email?: string;
+            eslatma?: string;
+            holat?: string;
             /** Format: int64 */
             id: number;
             ism: string;
@@ -2040,6 +2134,9 @@ export interface components {
             kompaniya?: string;
             /** @enum {string} */
             manba?: "nfc" | "qr" | "share";
+            oxirgi_teginish?: string;
+            oz_izoh?: string;
+            teglar: string[] | null;
             telefon?: string;
             /** Format: date-time */
             vaqt: string;
@@ -2348,6 +2445,20 @@ export interface components {
             email: string;
             parol: string;
         };
+        Patch: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/Patch.json
+             */
+            readonly $schema?: string;
+            /** Format: date */
+            eslatma?: string;
+            /** @enum {string} */
+            holat?: "new" | "talking" | "client" | "cold";
+            izoh?: string;
+            teglar?: string[] | null;
+        };
         PhoneCodeInputBody: {
             /**
              * Format: uri
@@ -2413,9 +2524,12 @@ export interface components {
              * @example /v1/schemas/ProfileInput.json
              */
             readonly $schema?: string;
+            avatarUrl?: string;
+            bannerUrl?: string;
             bio?: string;
             cardDesign?: string;
             city?: string;
+            commentsOpen: boolean;
             company?: string;
             contactEmail?: string;
             deviceType?: string;
@@ -4933,6 +5047,71 @@ export interface operations {
             };
         };
     };
+    "dizayn-sorovlari": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Uch harf va uch raqam */
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DesignListOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "dizayn-sorash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DesignAskInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "obyekt-hisoblari": {
         parameters: {
             query?: never;
@@ -5531,6 +5710,39 @@ export interface operations {
             };
         };
     };
+    "vizitka-qoshish-ozim": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Input"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "vizitkani-ochirish": {
         parameters: {
             query?: never;
@@ -5542,6 +5754,40 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "vizitka-tahrirlash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Patch"];
+            };
+        };
         responses: {
             /** @description No Content */
             204: {
@@ -5597,6 +5843,101 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    xulosa: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Uch harf va uch raqam */
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BriefOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "xulosa-saqlash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Brief"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "xulosa-ochirish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Uch harf va uch raqam */
                 raqam: string;
             };
             cookie?: never;

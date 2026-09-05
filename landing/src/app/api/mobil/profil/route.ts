@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     return Response.json({ error: "So'rov o'qilmadi." }, { status: 400 });
   }
 
-  const result = await saveProfile(check.context.normalized, check.context.user.id, form);
+  const result = await saveProfile(check.context.normalized, form);
   if (!result.ok) return Response.json({ error: result.error }, { status: 400 });
 
   // Saved, but the picture did not reach the store. The rest of the edit is in

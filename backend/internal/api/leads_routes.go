@@ -152,3 +152,135 @@ func details(in leads.Input) string {
 	}
 	return strings.Join(parts, " · ")
 }
+
+// The owner's own side of a contact, and the notes they keep on it.
+
+type patchLeadInput struct {
+	Raqam string `path:"raqam" pattern:"^[A-Za-z]{3}[0-9]{3}$"`
+	ID    int64  `path:"id" minimum:"1"`
+	Body  leads.Patch
+}
+
+type addLeadInput struct {
+	Raqam string `path:"raqam" pattern:"^[A-Za-z]{3}[0-9]{3}$"`
+	Body  leads.Input
+}
+
+type briefOutput struct {
+	Body struct {
+		Brief *leads.Brief `json:"xulosa"`
+	}
+}
+
+type saveBriefInput struct {
+	Raqam string `path:"raqam" pattern:"^[A-Za-z]{3}[0-9]{3}$"`
+	Body  leads.Brief
+}
+
+func (s *Server) registerContacts(api huma.API) {
+	huma.Register(api, huma.Operation{
+		OperationID: "vizitka-tahrirlash", Method: http.MethodPatch,
+		Path: "/raqamlar/{raqam}/vizitkalar/{id}", Summary: "Kontakt haqidagi o'z yozuvlaringiz",
+		Description: "Kontaktning o'zi — ism, telefon — tahrirlanmaydi: u nima aytilganining yozuvi, maydon emas.",
+		Tags:        []string{"vizitkalar"}, DefaultStatus: http.StatusNoContent,
+	}, func(ctx context.Context, in *patchLeadInput) (*struct{}, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+		if err := s.leads.Update(ctx, in.ID, account.ID, in.Body); err != nil {
+			if errors.Is(err, leads.ErrNoHandle) {
+				return nil, huma.Error404NotFound("Topilmadi.")
+			}
+			return nil, internalError(err, "saqlanmadi")
+		}
+		return nil, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID: "vizitka-qoshish-ozim", Method: http.MethodPost,
+		Path: "/raqamlar/{raqam}/vizitkalar", Summary: "Kontaktni o'zim kiritish",
+		Tags: []string{"vizitkalar"}, DefaultStatus: http.StatusCreated,
+	}, func(ctx context.Context, in *addLeadInput) (*struct{}, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+		parsed, ok := handles.Parse(in.Raqam)
+		if !ok {
+			return nil, huma.Error404NotFound("Topilmadi.")
+		}
+
+		_, err = s.leads.Add(ctx, parsed.Normalized(), account.ID, in.Body)
+		switch {
+		case errors.Is(err, leads.ErrBadLead):
+			return nil, huma.Error422UnprocessableEntity("Ism kiriting.")
+		case errors.Is(err, leads.ErrNoHandle):
+			return nil, huma.Error404NotFound("Topilmadi.")
+		case err != nil:
+			return nil, internalError(err, "kontakt qo'shilmadi")
+		}
+		return nil, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID: "xulosa", Method: http.MethodGet,
+		Path: "/raqamlar/{raqam}/xulosa", Summary: "Kontaktlar bo'yicha saqlangan xulosa",
+		Tags: []string{"vizitkalar"},
+	}, func(ctx context.Context, in *handlePathInput) (*briefOutput, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+		parsed, ok := handles.Parse(in.Raqam)
+		if !ok {
+			return nil, huma.Error404NotFound("Topilmadi.")
+		}
+
+		out := &briefOutput{}
+		if brief, ok := s.leads.Brief(ctx, parsed.Normalized(), account.ID); ok {
+			out.Body.Brief = &brief
+		}
+		return out, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID: "xulosa-saqlash", Method: http.MethodPut,
+		Path: "/raqamlar/{raqam}/xulosa", Summary: "Xulosani saqlash",
+		Tags: []string{"vizitkalar"}, DefaultStatus: http.StatusNoContent,
+	}, func(ctx context.Context, in *saveBriefInput) (*struct{}, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+		parsed, ok := handles.Parse(in.Raqam)
+		if !ok {
+			return nil, huma.Error404NotFound("Topilmadi.")
+		}
+
+		if err := s.leads.SaveBrief(ctx, parsed.Normalized(), account.ID, in.Body); err != nil {
+			return nil, internalError(err, "saqlanmadi")
+		}
+		return nil, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID: "xulosa-ochirish", Method: http.MethodDelete,
+		Path: "/raqamlar/{raqam}/xulosa", Summary: "Xulosani o'chirish",
+		Tags: []string{"vizitkalar"}, DefaultStatus: http.StatusNoContent,
+	}, func(ctx context.Context, in *handlePathInput) (*struct{}, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+		parsed, ok := handles.Parse(in.Raqam)
+		if !ok {
+			return nil, huma.Error404NotFound("Topilmadi.")
+		}
+
+		if err := s.leads.DeleteBrief(ctx, parsed.Normalized(), account.ID); err != nil {
+			return nil, internalError(err, "o'chirilmadi")
+		}
+		return nil, nil
+	})
+}

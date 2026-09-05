@@ -1,6 +1,7 @@
 import "server-only";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { asReader } from "@/lib/backend/client";
+
 import { isStage, type Contact, type Stage } from "@/lib/crm";
 import type { ResolvedBrief } from "@/lib/ai/network-brief";
 
@@ -51,45 +52,34 @@ function toContact(raw: unknown): Contact {
 }
 
 /** The handle's row id, but only if this user owns it. */
-async function ownedHandleId(
-  normalized: string,
-  userId: string,
-): Promise<string | null> {
-  if (!supabaseAdmin) return null;
-
-  const { data } = await supabaseAdmin
-    .from("handles")
-    .select("id")
-    .eq("normalized", normalized)
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  return data?.id ?? null;
-}
-
 /**
  * Everyone this number has collected.
  *
  * Unordered on purpose: the order is crm.ts's opinion and belongs where it can
  * be tested, not in a query somebody would have to read SQL to understand.
  */
-export async function listContacts(
-  normalized: string,
-  userId: string,
-): Promise<Contact[]> {
-  if (!supabaseAdmin) return [];
+export async function listContacts(handle: string): Promise<Contact[]> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/raqamlar/{raqam}/vizitkalar", {
+    params: { path: { raqam: handle } },
+  });
+  if (error || !data) return [];
 
-  const handleId = await ownedHandleId(normalized, userId);
-  if (!handleId) return [];
-
-  const { data } = await supabaseAdmin
-    .from("leads")
-    .select(COLUMNS)
-    .eq("handle_id", handleId)
-    .order("created_at", { ascending: false })
-    .limit(1000);
-
-  return (data ?? []).map(toContact);
+  return (data.vizitkalar ?? []).map((l) => ({
+    id: l.id,
+    name: l.ism,
+    phone: l.telefon ?? null,
+    email: l.email ?? null,
+    company: l.kompaniya ?? null,
+    note: l.izoh ?? null,
+    source: l.manba ?? null,
+    createdAt: l.vaqt,
+    stage: (l.holat ?? "new") as Stage,
+    ownerNote: l.oz_izoh ?? null,
+    followUpOn: l.eslatma ?? null,
+    lastTouchAt: l.oxirgi_teginish ?? null,
+    tags: l.teglar ?? [],
+  }));
 }
 
 export type ContactPatch = {
@@ -100,144 +90,133 @@ export type ContactPatch = {
 };
 
 /**
- * Change the owner's side of one contact.
+ * Change the owner's own side of one contact.
  *
- * `last_touch_at` is deliberately not set here. A database trigger stamps it
- * from the same statement, so the clock cannot disagree with the change that
- * moved it — see migration 0044.
+ * The contact itself — the name and number somebody left — is not editable.
+ * It is a record of what was said rather than a field.
+ *
+ * `last_touch_at` is not sent: a trigger stamps it from the same statement, so
+ * the clock cannot disagree with the change that moved it.
  */
 export async function updateContact(
-  normalized: string,
-  userId: string,
-  contactId: number,
+  handle: string,
+  id: number,
   patch: ContactPatch,
 ): Promise<boolean> {
-  if (!supabaseAdmin) return false;
-
-  const handleId = await ownedHandleId(normalized, userId);
-  if (!handleId) return false;
-
-  const fields: Record<string, unknown> = {};
-  if (patch.stage) fields.status = patch.stage;
-  if (patch.ownerNote !== undefined) fields.owner_note = patch.ownerNote;
-  if (patch.followUpOn !== undefined) fields.follow_up_on = patch.followUpOn;
-  if (patch.tags) fields.tags = patch.tags.slice(0, 5);
-  if (Object.keys(fields).length === 0) return false;
-
-  const { data } = await supabaseAdmin
-    .from("leads")
-    .update(fields)
-    .eq("id", contactId)
-    .eq("handle_id", handleId)
-    .select("id")
-    .maybeSingle();
-
-  return Boolean(data);
+  const client = await asReader();
+  const { error } = await client.PATCH("/raqamlar/{raqam}/vizitkalar/{id}", {
+    params: { path: { raqam: handle, id } },
+    body: {
+      holat: patch.stage,
+      izoh: patch.ownerNote ?? undefined,
+      eslatma: patch.followUpOn ?? undefined,
+      teglar: patch.tags,
+    },
+  });
+  return !error;
 }
 
-/** A number taken on paper, entered by the owner. */
-export async function addContact(
-  normalized: string,
-  userId: string,
-  input: { name: string; phone: string | null; email: string | null; company: string | null },
-): Promise<boolean> {
-  if (!supabaseAdmin) return false;
+/** Somebody the owner met and typed in, rather than one who filled in the form. */
+export type NewContact = {
+  name: string;
+  phone: string | null;
+  email: string | null;
+  company: string | null;
+  note?: string | null;
+};
 
-  const handleId = await ownedHandleId(normalized, userId);
-  if (!handleId) return false;
-
-  const { data } = await supabaseAdmin
-    .from("leads")
-    .insert({
-      handle_id: handleId,
-      name: input.name,
-      phone: input.phone,
-      email: input.email,
-      company: input.company,
-      source: "manual",
-    })
-    .select("id")
-    .maybeSingle();
-
-  return Boolean(data);
+export async function addContact(handle: string, contact: NewContact): Promise<boolean> {
+  const client = await asReader();
+  const { error } = await client.POST("/raqamlar/{raqam}/vizitkalar", {
+    params: { path: { raqam: handle } },
+    body: {
+      ism: contact.name,
+      telefon: contact.phone ?? undefined,
+      email: contact.email ?? undefined,
+      kompaniya: contact.company ?? undefined,
+      izoh: contact.note ?? undefined,
+    },
+  });
+  return !error;
 }
+
+export type StoredSuggestion = { ref: string; why: string; draft: string; contactId: number };
 
 export type StoredBrief = {
   summary: string;
-  suggestions: { ref: string; why: string; draft: string; contactId: number }[];
+  /**
+   * What the brief suggested, by contact id.
+   *
+   * Stored as text and parsed here: the shape belongs to the page that builds
+   * it, and a column that has to be migrated every time that page changes is
+   * a column in the wrong place. Anything extra the builder puts on a
+   * suggestion travels with it.
+   */
+  suggestions: StoredSuggestion[];
   contactsSeen: number;
   builtAt: string;
 };
 
-export async function getBrief(
-  normalized: string,
-  userId: string,
-): Promise<StoredBrief | null> {
-  if (!supabaseAdmin) return null;
+export async function getBrief(handle: string): Promise<StoredBrief | null> {
+  const client = await asReader();
+  const { data, error } = await client.GET("/raqamlar/{raqam}/xulosa", {
+    params: { path: { raqam: handle } },
+  });
+  if (error || !data?.xulosa) return null;
 
-  const handleId = await ownedHandleId(normalized, userId);
-  if (!handleId) return null;
-
-  const { data } = await supabaseAdmin
-    .from("network_briefs")
-    .select("summary, suggestions, contacts_seen, built_at")
-    .eq("handle_id", handleId)
-    .maybeSingle();
-
-  if (!data) return null;
-
+  const b = data.xulosa;
   return {
-    summary: data.summary as string,
-    suggestions: (data.suggestions ?? []) as StoredBrief["suggestions"],
-    contactsSeen: (data.contacts_seen ?? 0) as number,
-    builtAt: data.built_at as string,
+    summary: b.xulosa,
+    // Stored as text and parsed here: the shape is this page's business, and
+    // a column that has to be migrated every time the page changes shape is a
+    // column in the wrong place.
+    suggestions: safeParse(b.takliflar),
+    contactsSeen: b.korilgan,
+    builtAt: b.tuzilgan ?? "",
   };
 }
 
-/** Replaces whatever was there. Nobody wants last Tuesday's briefing. */
-export async function saveBrief(
-  normalized: string,
-  userId: string,
-  brief: ResolvedBrief,
-  contactsSeen: number,
-): Promise<boolean> {
-  if (!supabaseAdmin) return false;
-
-  const handleId = await ownedHandleId(normalized, userId);
-  if (!handleId) return false;
-
-  const { error } = await supabaseAdmin.from("network_briefs").upsert(
-    {
-      handle_id: handleId,
-      summary: brief.summary.slice(0, 4000),
-      suggestions: brief.suggestions.map((s) => ({
-        ref: s.ref,
-        why: s.why,
-        draft: s.draft,
-        contactId: s.contact.id,
-      })),
-      contacts_seen: contactsSeen,
-      built_at: new Date().toISOString(),
-    },
-    { onConflict: "handle_id" },
-  );
-
-  return !error;
+function safeParse(raw: string): StoredBrief["suggestions"] {
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
 }
 
-export async function deleteBrief(
-  normalized: string,
-  userId: string,
-): Promise<boolean> {
-  if (!supabaseAdmin) return false;
+/**
+ * Keeping a brief so the page does not rebuild it on every visit.
+ *
+ * A suggestion is stored by contact id rather than with the contact in it: the
+ * contact may change between builds, and a stale copy of somebody's phone
+ * number inside a saved summary is worse than a lookup.
+ */
+export async function saveBrief(
+  handle: string,
+  brief: { summary: string; suggestions: ResolvedBrief["suggestions"]; contactsSeen: number },
+): Promise<void> {
+  const client = await asReader();
+  await client.PUT("/raqamlar/{raqam}/xulosa", {
+    params: { path: { raqam: handle } },
+    body: {
+      xulosa: brief.summary.slice(0, 4000),
+      takliflar: JSON.stringify(
+        brief.suggestions.map((s) => ({
+          ref: s.ref,
+          why: s.why,
+          draft: s.draft,
+          contactId: s.contact.id,
+        })),
+      ),
+      korilgan: brief.contactsSeen,
+    },
+  });
+}
 
-  const handleId = await ownedHandleId(normalized, userId);
-  if (!handleId) return false;
-
-  const { error } = await supabaseAdmin
-    .from("network_briefs")
-    .delete()
-    .eq("handle_id", handleId);
-
-  return !error;
+export async function deleteBrief(handle: string): Promise<void> {
+  const client = await asReader();
+  await client.DELETE("/raqamlar/{raqam}/xulosa", {
+    params: { path: { raqam: handle } },
+  });
 }

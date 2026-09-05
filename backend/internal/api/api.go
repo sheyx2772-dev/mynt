@@ -122,6 +122,8 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 	s.registerVenueInvoices(api)
 	s.registerTeams(api)
 	s.registerTags(api)
+	s.registerContacts(api)
+	s.registerDesignRequests(api)
 	s.registerLeads(api)
 	s.registerStats(api)
 	s.registerOrders(api)

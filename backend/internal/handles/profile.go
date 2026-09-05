@@ -34,6 +34,9 @@ type Profile struct {
 	Tags         []string
 	CardDesign   string
 	DeviceType   string
+	AvatarURL    string
+	BannerURL    string
+	CommentsOpen bool
 }
 
 // ProfileInput is what arrives from a form or an app.
@@ -55,6 +58,14 @@ type ProfileInput struct {
 	Tags         string    `json:"tags,omitempty" maxLength:"200" doc:"Vergul yoki bo'sh joy bilan ajratilgan"`
 	CardDesign   string    `json:"cardDesign,omitempty"`
 	DeviceType   string    `json:"deviceType,omitempty"`
+
+	// Already-uploaded addresses. The caller puts the file in the image store
+	// and sends where it went; nothing here fetches what is at them.
+	AvatarURL string `json:"avatarUrl,omitempty" maxLength:"500"`
+	BannerURL string `json:"bannerUrl,omitempty" maxLength:"500"`
+	// Whether strangers may write on the profile. Sent every time, because it
+	// is a switch: absent would be indistinguishable from off.
+	CommentsOpen bool `json:"commentsOpen"`
 }
 
 // ReadProfile turns an edit into something storable, or says what is wrong.
@@ -92,6 +103,9 @@ func ReadProfile(in ProfileInput, plan string) (Profile, string) {
 		Tags:         ParseTags(in.Tags),
 		CardDesign:   CardDesign(in.CardDesign),
 		DeviceType:   DeviceType(in.DeviceType),
+		AvatarURL:    trim(in.AvatarURL, 500),
+		BannerURL:    trim(in.BannerURL, 500),
+		CommentsOpen: in.CommentsOpen,
 	}, ""
 }
 

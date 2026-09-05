@@ -297,9 +297,14 @@ update handles set
   company = $9,
   tags = $10,
   card_design = $11,
-  device_type = $12
-where normalized = $13
-  and user_id = $14
+  device_type = $12,
+  -- Pictures and the comments switch. The two images are addresses the caller
+  -- uploaded before asking; nothing here fetches or trusts what is at them.
+  avatar_url = $13,
+  banner_url = $14,
+  comments_open = $15
+where normalized = $16
+  and user_id = $17
 returning id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count
 `
 
@@ -316,6 +321,9 @@ type UpdateProfileParams struct {
 	Tags         []string   `json:"tags"`
 	CardDesign   string     `json:"card_design"`
 	DeviceType   string     `json:"device_type"`
+	AvatarUrl    *string    `json:"avatar_url"`
+	BannerUrl    *string    `json:"banner_url"`
+	CommentsOpen bool       `json:"comments_open"`
 	Normalized   *string    `json:"normalized"`
 	UserID       *uuid.UUID `json:"user_id"`
 }
@@ -339,6 +347,9 @@ func (q *Queries) UpdateProfile(ctx context.Context, arg UpdateProfileParams) (H
 		arg.Tags,
 		arg.CardDesign,
 		arg.DeviceType,
+		arg.AvatarUrl,
+		arg.BannerUrl,
+		arg.CommentsOpen,
 		arg.Normalized,
 		arg.UserID,
 	)

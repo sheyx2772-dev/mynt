@@ -31,7 +31,7 @@ export async function updateProfile(
   // also calls. What is left here is the half that is particular to a form
   // posted from this page: who the cookie says is asking, and the shape
   // `useActionState` expects back.
-  const result = await saveProfile(`${parsed.letters}${parsed.digits}`, user.id, formData);
+  const result = await saveProfile(`${parsed.letters}${parsed.digits}`, formData);
   if (!result.ok) return { ok: false, error: result.error };
 
   return { ok: true, saved: true, ...(result.imageFailed ? { imageFailed: true as const } : {}) };
@@ -133,7 +133,7 @@ export async function submitDesignRequest(
   if (!user) return { ok: false, error: "Avval hisobingizga kiring." };
 
   const wish = String(formData.get("wish") ?? "");
-  const result = await requestDesign(user.id, normalized, wish);
+  const result = await requestDesign(normalized, wish);
   if (!result.ok) return { ok: false, error: result.error };
 
   revalidatePath(`/kabinet/${normalized}/dizayn`);

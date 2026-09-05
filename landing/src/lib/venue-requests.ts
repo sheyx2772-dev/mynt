@@ -4,7 +4,7 @@ import { asReader, backend } from "@/lib/backend/client";
 
 import { after } from "next/server";
 
-import { getClientIp } from "@/lib/rate-limit";
+import { getClientIp } from "@/lib/client-ip";
 import { notify } from "@/lib/notify";
 import type { ReportRow } from "@/lib/venue-report";
 

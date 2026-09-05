@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/google/uuid"
+	"github.com/sheyx2772-dev/flex/backend/internal/store"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -150,4 +151,54 @@ func (s *Store) TouchLastSeen(ctx context.Context, userID string) error {
 		return ErrNotFound
 	}
 	return s.queries.TouchLastSeen(ctx, &id)
+}
+
+// DesignRequest is a buyer asking for a card to be drawn for them.
+type DesignRequest struct {
+	ID      string
+	Handle  string
+	Wish    string
+	Status  string
+	Image   string
+	Note    string
+	Created string
+}
+
+func (s *Store) DesignRequests(ctx context.Context, handle, userID string) ([]DesignRequest, error) {
+	owner, err := uuid.Parse(userID)
+	if err != nil {
+		return nil, ErrNotFound
+	}
+
+	rows, err := s.queries.DesignRequests(ctx, store.DesignRequestsParams{
+		Handle: handle, UserID: owner,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	out := make([]DesignRequest, 0, len(rows))
+	for _, row := range rows {
+		out = append(out, DesignRequest{
+			ID: row.ID.String(), Handle: row.Handle, Wish: row.Wish,
+			Status: row.Status, Image: deref(row.ImageUrl), Note: deref(row.Note),
+			Created: row.CreatedAt.Time.Format(time.RFC3339),
+		})
+	}
+	return out, nil
+}
+
+func (s *Store) AskForDesign(ctx context.Context, handle, userID, wish string) error {
+	owner, err := uuid.Parse(userID)
+	if err != nil {
+		return ErrNotFound
+	}
+
+	_, err = s.queries.CreateDesignRequest(ctx, store.CreateDesignRequestParams{
+		Handle: &handle, UserID: owner, Wish: wish,
+	})
+	if errors.Is(err, pgx.ErrNoRows) {
+		return ErrNotFound
+	}
+	return err
 }

@@ -51,6 +51,9 @@ func (s *Store) SaveProfile(ctx context.Context, normalized, userID string, in P
 		Tags:         profile.Tags,
 		CardDesign:   profile.CardDesign,
 		DeviceType:   profile.DeviceType,
+		AvatarUrl:    optional(profile.AvatarURL),
+		BannerUrl:    optional(profile.BannerURL),
+		CommentsOpen: profile.CommentsOpen,
 		Normalized:   &normalized,
 		UserID:       &id,
 	})

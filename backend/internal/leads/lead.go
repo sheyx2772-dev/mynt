@@ -40,6 +40,15 @@ type Lead struct {
 	Source  string `json:"manba,omitempty" enum:"nfc,qr,share"`
 
 	CreatedAt time.Time `json:"vaqt"`
+
+	// The owner's own side of the row: where it has got to, what they wrote
+	// against it, when to chase it. Separate from the fields above, which are
+	// a record of what somebody said and are not editable.
+	Stage       string   `json:"holat,omitempty"`
+	OwnerNote   string   `json:"oz_izoh,omitempty"`
+	FollowUpOn  string   `json:"eslatma,omitempty"`
+	LastTouchAt string   `json:"oxirgi_teginish,omitempty"`
+	Tags        []string `json:"teglar"`
 }
 
 // Input is what a visitor fills in.

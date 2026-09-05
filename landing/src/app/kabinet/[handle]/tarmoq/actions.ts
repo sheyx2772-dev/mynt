@@ -33,7 +33,7 @@ export async function buildBrief(
     PATH,
   );
 
-  const contacts = await listContacts(normalized, userId);
+  const contacts = await listContacts(normalized);
   if (contacts.length < 4) {
     return { error: "Tahlil uchun kamida to'rtta kontakt kerak." };
   }
@@ -45,7 +45,7 @@ export async function buildBrief(
     return { error: "Hozir tahlil qilib bo'lmadi. Birozdan keyin urinib ko'ring." };
   }
 
-  await saveBrief(normalized, userId, brief, contacts.length);
+  await saveBrief(normalized, { ...brief, contactsSeen: contacts.length });
   revalidatePath(`/kabinet/${normalized}/tarmoq`);
   return { done: true };
 }
@@ -57,7 +57,7 @@ export async function dropBrief(form: FormData): Promise<void> {
     PATH,
   );
 
-  await deleteBrief(normalized, userId);
+  await deleteBrief(normalized);
   revalidatePath(`/kabinet/${normalized}/tarmoq`);
 }
 
@@ -71,7 +71,7 @@ export async function moveStage(form: FormData): Promise<void> {
   const stage = String(form.get("stage") ?? "");
   if (!Number.isInteger(id) || !isStage(stage)) return;
 
-  await updateContact(normalized, userId, id, { stage });
+  await updateContact(normalized, id, { stage });
   revalidatePath(`/kabinet/${normalized}/tarmoq`);
 }
 
@@ -87,7 +87,7 @@ export async function saveContactNote(form: FormData): Promise<void> {
   const note = String(form.get("ownerNote") ?? "").trim();
   const followUp = String(form.get("followUpOn") ?? "").trim();
 
-  await updateContact(normalized, userId, id, {
+  await updateContact(normalized, id, {
     ownerNote: note ? note.slice(0, 2000) : null,
     // An empty date box is the owner taking them out of the diary, which is a
     // decision and not a no-op.
@@ -115,7 +115,7 @@ export async function addManualContact(
   // answer it is not a contact.
   if (!phone && !email) return { error: "Telefon yoki email kerak." };
 
-  const ok = await addContact(normalized, userId, {
+  const ok = await addContact(normalized, {
     name: name.slice(0, 80),
     phone: phone || null,
     email: email || null,

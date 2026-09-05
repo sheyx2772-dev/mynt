@@ -53,8 +53,8 @@ export default async function NetworkPage({
     "/kabinet/[handle]/tarmoq",
   );
 
-  const contacts = await listContacts(normalized, userId);
-  const stored = await getBrief(normalized, userId);
+  const contacts = await listContacts(normalized);
+  const stored = await getBrief(normalized);
   const today = new Date();
 
   const filter = typeof holat === "string" && (FILTERS as readonly string[]).includes(holat)
