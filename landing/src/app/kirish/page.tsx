@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 const ERRORS: Record<string, string> = {
   havola: "Havola eskirgan yoki allaqachon ishlatilgan. Yangisini so'rang.",
-  baza: "Baza bilan bog'lanib bo'lmadi. Keyinroq urinib ko'ring.",
+  baza: "Server bilan bog'lanib bo'lmadi. Keyinroq urinib ko'ring.",
 };
 
 export default async function SignInPage(props: PageProps<"/kirish">) {
@@ -32,7 +32,7 @@ export default async function SignInPage(props: PageProps<"/kirish">) {
       <div className="rounded-[1.75rem] border border-line bg-white p-8 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <h1 className="font-display text-2xl font-semibold tracking-tight">Hisobingizga kiring</h1>
         <p className="mt-2 mb-7 text-sm text-flex-black/60">
-          Handle band qilish va profilingizni tahrirlash uchun kirish talab qilinadi.
+          Raqam band qilish va profilni tahrirlash uchun avval kiring.
         </p>
 
         {errorKey && ERRORS[errorKey] && (

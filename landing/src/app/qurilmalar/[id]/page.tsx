@@ -188,7 +188,7 @@ export default async function DevicePage({
         {/* The designs, for the things a design goes on. */}
         {!isCar && (
           <div className="mt-16">
-            <CardFan handle="MYN042" />
+            <CardFan handle="FLX007" />
           </div>
         )}
       </div>

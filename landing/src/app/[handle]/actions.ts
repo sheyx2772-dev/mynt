@@ -39,7 +39,7 @@ export async function claimHandle(
   // attacker-controlled. Re-parse it here instead of trusting the shape the
   // page rendered with — this is the boundary, not the URL.
   const parsed = parseHandle(rawHandle);
-  if (!parsed) return { ok: false, error: "Handle formati noto'g'ri." };
+  if (!parsed) return { ok: false, error: "Raqam 3 harf va 3 raqamdan iborat bo'lishi kerak." };
 
   const { letters, digits } = parsed;
   const normalized = `${letters}${digits}`;
@@ -49,7 +49,7 @@ export async function claimHandle(
     return {
       ok: false,
       needsAuth: true,
-      error: "Handle band qilish uchun avval hisobingizga kiring.",
+      error: "Raqam band qilish uchun avval hisobingizga kiring.",
     };
   }
 
@@ -96,7 +96,7 @@ export type FollowResult = { following: boolean; error?: string; needsAuth?: tru
 // the client claims the current state is.
 export async function toggleFollow(rawHandle: string): Promise<FollowResult> {
   const parsed = parseHandle(rawHandle);
-  if (!parsed) return { following: false, error: "Handle formati noto'g'ri." };
+  if (!parsed) return { following: false, error: "Raqam 3 harf va 3 raqamdan iborat bo'lishi kerak." };
 
   const normalized = `${parsed.letters}${parsed.digits}`;
 

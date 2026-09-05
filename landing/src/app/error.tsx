@@ -18,12 +18,12 @@ export default function Error({
   return (
     <div className="relative flex min-h-full flex-col items-center justify-center px-6 text-center">
       <div className="relative">
-        <h1 className="font-display text-2xl font-semibold tracking-tight">Nimadir noto&apos;g&apos;ri ketdi</h1>
-        <p className="mt-2 text-sm text-flex-black/60">
+        <h1 className="font-display text-2xl font-semibold tracking-tight">Xatolik yuz berdi</h1>
+        <p className="mt-2 text-sm text-ink-2">
           Sahifani yuklab bo&apos;lmadi. Qaytadan urinib ko&apos;ring.
         </p>
         {error.digest && (
-          <p className="mt-3 font-tabular text-xs text-flex-black/35">Kod: {error.digest}</p>
+          <p className="mt-3 font-tabular text-xs text-ink-3">Kod: {error.digest}</p>
         )}
         <button
           onClick={reset}

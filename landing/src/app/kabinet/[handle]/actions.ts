@@ -22,7 +22,7 @@ export async function updateProfile(
   formData: FormData
 ): Promise<UpdateResult> {
   const parsed = parseHandle(rawHandle);
-  if (!parsed) return { ok: false, error: "Handle formati noto'g'ri." };
+  if (!parsed) return { ok: false, error: "Raqam 3 harf va 3 raqamdan iborat bo'lishi kerak." };
 
   const user = await getUser();
   if (!user) return { ok: false, error: "Avval hisobingizga kiring." };
@@ -52,7 +52,7 @@ export async function createPost(
   formData: FormData
 ): Promise<PostResult> {
   const parsed = parseHandle(rawHandle);
-  if (!parsed) return { ok: false, error: "Handle formati noto'g'ri." };
+  if (!parsed) return { ok: false, error: "Raqam 3 harf va 3 raqamdan iborat bo'lishi kerak." };
 
   const normalized = `${parsed.letters}${parsed.digits}`;
 
@@ -95,7 +95,7 @@ export async function submitDesignRequest(
   formData: FormData
 ): Promise<DesignRequestResult> {
   const parsed = parseHandle(rawHandle);
-  if (!parsed) return { ok: false, error: "Handle formati noto'g'ri." };
+  if (!parsed) return { ok: false, error: "Raqam 3 harf va 3 raqamdan iborat bo'lishi kerak." };
   const normalized = `${parsed.letters}${parsed.digits}`;
 
   const user = await getUser();
@@ -117,7 +117,7 @@ export async function offerHandleTransfer(
   formData: FormData
 ): Promise<TransferActionResult> {
   const parsed = parseHandle(rawHandle);
-  if (!parsed) return { ok: false, error: "Handle formati noto'g'ri." };
+  if (!parsed) return { ok: false, error: "Raqam 3 harf va 3 raqamdan iborat bo'lishi kerak." };
   const normalized = `${parsed.letters}${parsed.digits}`;
 
   const user = await getUser();

@@ -22,7 +22,7 @@ const HOME = {
 
     // -- 1. hero ----------------------------------------------------------
     heroEyebrow: "Toshkent · 2025 yildan",
-    heroTitle: "Telefonni tegizing. Tanishuv tugadi.",
+    heroTitle: "Telefonni tegizing. Tanishib bo'ldingiz.",
     heroLead:
       "FLEX — umrbod raqamingiz. Karta, uzuk yoki braslet. Tegilgan telefon profilingizni ochadi. Ilova o'rnatilmaydi — na sizda, na unda.",
     heroPlateNote: "shunday raqam sizniki bo'ladi",
@@ -38,7 +38,7 @@ const HOME = {
     // -- 2. try it --------------------------------------------------------
     tryTitle: "Sotib olishdan oldin sinab ko'ring",
     tryLead:
-      "Kameraingizni shu kodga tuting — hozir, shu yerda, hech narsa o'rnatmasdan. Ochilgan sahifa — haqiqiy FLEX profili, namuna rasm emas.",
+      "Kamerangizni shu kodga tuting — hozir, shu yerda, hech narsa o'rnatmasdan. Ochilgan sahifa — haqiqiy FLEX profili, namuna rasm emas.",
     tryButton: "Namuna profilni ochish",
     tryCaption: "namuna raqam",
 
@@ -71,7 +71,7 @@ const HOME = {
     // -- 4. devices -------------------------------------------------------
     devicesTitle: "Bitta raqam, bir necha shakl",
     devicesAll: "Hammasini ko'rish",
-    priceOnRequest: "narx so'rov bo'yicha",
+    priceOnRequest: "narxi kelishiladi",
 
     // -- 5. three audiences ----------------------------------------------
     audienceTitle: "Kim uchun",
@@ -128,7 +128,7 @@ const HOME = {
       },
       {
         q: "Ma'lumotlar qayerda?",
-        a: "Profilni istalgan vaqt o'chirasiz. Telefon raqamingizni yopiq qo'ysangiz — hech kim ko'rmaydi.",
+        a: "Profilni istalgan vaqtda o'chirasiz. Telefon raqamingizni yopiq qo'ysangiz — hech kim ko'rmaydi.",
       },
     ],
 

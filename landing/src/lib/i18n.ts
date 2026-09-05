@@ -205,7 +205,7 @@ export function pickLang(param: unknown, acceptLanguage: string | null): Lang {
 
 const SITE = {
   uz: {
-    navPricing: "Narxlash",
+    navPricing: "Narxlar",
     navPersonal: "Shaxsiy",
     navBusiness: "Biznes",
     navFaq: "Savollar",
@@ -224,13 +224,13 @@ const SITE = {
     nfcOn: "NFC ulandi",
     howItWorks: "Qanday ishlaydi",
     threeSteps: "Uch qadam, o'n daqiqa",
-    pickHandle: "Handle tanlang",
+    pickHandle: "Raqam tanlang",
     pickDevice: "Qurilmani tanlang",
     pickDeviceDesc: "Karta, uzuk yoki braslet. Dizaynni ham o'zingiz tanlaysiz.",
     limited: "Cheklangan miqdor",
     priceOpen: "Narx — to'liq shaffof",
     priceThree: "Narx uch qismdan iborat",
-    oneTap: "Bir tegish — va sizni to'liq ko'radi",
+    oneTap: "Bir tegish — va butun profilingiz ochiladi",
     devices: "Qurilmalar",
     oneNumberThree: "Bitta raqam, uchta shakl",
     seeAll: "Hammasini ko'rish",
@@ -263,18 +263,18 @@ const SITE = {
     demoTagTwo: "UX",
     company: "Kompaniya",
     delivery: "Yetkazib berish va qaytarish shartlari",
-    heroTitleA: "Flex — Sizning",
+    heroTitleA: "Flex — sizning",
     heroTitleMark: "raqamli",
     heroTitleB: "shaxsingiz",
     heroLead: "Siz noyob raqam sotib olasiz — u umrbod sizniki. Uni karta, uzuk yoki braslet ko'rinishida olib yurasiz, tanlov sizniki. Har biri bitta profilni ochadi.",
     stepTap: "Tegizing",
     stepTapDesc: "Telefonga tegizasiz, profilingiz ochiladi. Hech kim ilova o'rnatmaydi.",
     stepHandleDesc: "3 harf + 3 raqam. Narx darhol ko'rinadi — yashirin to'lov yo'q.",
-    namespaceDesc: "Mumkin bo'lgan handle'lar soni — boshqa yo'q. Har biri bittagina odamga tegishli bo'ladi. Kombinatsiya qanchalik kamyob bo'lsa, u shunchalik qadrli.",
-    pricingDesc: "Har bir handle narxi ochiq formula bilan hisoblanadi: bazaviy narx × harf kamyobligi × raqam kamyobligi. Pastda o'zingiz sinab ko'ring.",
+    namespaceDesc: "Mumkin bo'lgan raqamlar shuncha — ortiq chiqmaydi. Har biri bittagina odamniki bo'ladi. Kombinatsiya qanchalik kamyob bo'lsa, u shunchalik qadrli.",
+    pricingDesc: "Har bir raqam narxi ochiq formula bilan hisoblanadi: boshlang'ich narx × harf kamyobligi × raqam kamyobligi. Pastda o'zingiz sinab ko'ring.",
     subscriptionDesc: "Raqamni bir marta sotib olasiz va u sizniki. Qurilma — karta, uzuk yoki braslet — alohida mahsulot. Profil esa har oy ishlab turadi, shuning uchun platformaga obuna alohida.",
     tapDesc: "Kartani tegizasiz, brauzer o'zi ochiladi. Hech kim hech narsa o'rnatmaydi.",
-    businessDesc: "Xodimlaringizga bir xil brend bilan handle va NFC karta chiqaring, tadbirlarda yig'ilgan kontaktlarni bitta panelda ko'ring.",
+    businessDesc: "Xodimlaringizga bir xil brend bilan raqam va NFC karta chiqaring, tadbirlarda yig'ilgan kontaktlarni bitta panelda ko'ring.",
     seatBought: "O'rin sotib olinadi, odam emas.",
     seatFrees: "Xodim ketsa o'rin bo'shaydi, keyingisiga beriladi.",
     handleIsCompany: "Raqam firmaniki.",
@@ -282,7 +282,7 @@ const SITE = {
     perSeat: "bir o'ringa, oyiga.",
     minSeats: "Eng kami",
     seatsWord: "o'rin, to'lov firmadan.",
-    checkFree: "Bo'shligini tekshirish",
+    checkFree: "Bandligini tekshirish",
     letters: "Harflar",
     digits: "Raqamlar",
     basePrice: "Bazaviy narx",
@@ -299,10 +299,10 @@ const SITE = {
     visitsWord: "tashrif",
     thisWeek: "BU HAFTA",
     deviceNote: (from: string) => `Bu raqamning narxi. Qurilma — karta, uzuk yoki braslet — alohida tanlanadi va alohida to'lanadi, ${from}dan boshlab.`,
-    topThree: "So'nggi 3 kun eng ko'p ko'rilganlar",
-    noResidents: "Hali rezidentlar yo'q. Birinchi bo'lib handle oling.",
-    pickHandleCta: "Handle tanlash",
-    searchPlaceholder: "Ism, handle yoki shahar",
+    topThree: "So'nggi 3 kunda eng ko'p ko'rilganlar",
+    noResidents: "Hali rezidentlar yo'q. Birinchi bo'lib raqam oling.",
+    pickHandleCta: "Raqam tanlash",
+    searchPlaceholder: "Ism, raqam yoki shahar",
     searchWord: "Qidirish",
     nothingFound: (q: string) => `"${q}" bo'yicha hech kim topilmadi.`,
     handleCounts: (taken: string, free: string) => `${taken} ta handle band · ${free} ta bo'sh`,
@@ -703,8 +703,8 @@ const LANDING = {
         desc: "Karta, uzuk yoki braslet — uchalasi ham bir tegishda o'sha profilni ochadi. NFC yo'q telefonlar uchun QR-kod zaxira variant.",
       },
       {
-        title: "Kamyob handle",
-        desc: "3 harf + 3 raqam — cheklangan miqdor. Kamdan-kam kombinatsiyalar qimmatroq, shaffof narx bilan.",
+        title: "Kamyob raqam",
+        desc: "3 harf + 3 raqam — cheklangan miqdor. Kamyob kombinatsiyalar qimmatroq, shaffof narx bilan.",
       },
       {
         title: "Analitika",
@@ -725,7 +725,7 @@ const LANDING = {
         desc: "Profilni ochgan odam o'z ismi va telefonini qoldiradi. Tadbirdan keyin tayyor ro'yxat — Excel'ga chiqariladi.",
       },
       {
-        title: "O'rin bo'shaydi, yonmaydi",
+        title: "O'rin yo'qolmaydi, bo'shaydi",
         desc: "Xodim ketsa raqam firmada qoladi, uning ma'lumoti o'chadi va o'rin keyingi xodimga beriladi.",
       },
       {
@@ -744,11 +744,11 @@ const LANDING = {
     faqs: [
       {
         q: "Raqam nima va u qanday narxlanadi?",
-        a: "Raqam — 3 harf + 3 raqamdan iborat noyob kod (masalan MYN042), sizning profilingiz manzili bo'ladi. Narx bazaviy summadan, harflar va raqamlarning kamyobligiga qarab ko'payadigan koeffitsientlardan hisoblanadi. Narxlash sahifasida istalgan kombinatsiyani yozib, narxini darhol ko'rasiz.",
+        a: "Raqam — 3 harf + 3 raqamdan iborat noyob kod (masalan FLX007), sizning profilingiz manzili bo'ladi. Narx bazaviy summadan, harflar va raqamlarning kamyobligiga qarab ko'payadigan koeffitsientlardan hisoblanadi. Narxlash sahifasida istalgan kombinatsiyani yozib, narxini darhol ko'rasiz.",
       },
       {
         q: "NFC qurilma qanday ishlaydi?",
-        a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, sizning flex.com.uz profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC qo'llamaydigan telefonlar uchun QR-kod zaxira variant sifatida ishlaydi.",
+        a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, sizning flex.com.uz profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC ishlamaydigan telefonlar uchun QR-kod zaxira variant sifatida ishlaydi.",
       },
       {
         q: "Kafe yoki mehmonxonaga nima beradi?",
@@ -759,7 +759,7 @@ const LANDING = {
         a: "Jamoa tarifi o'rinlar bo'yicha sotiladi, eng kami 5 ta. O'rin odamga emas, firmaga tegishli: xodim ketsa o'rin bo'shaydi va keyingisiga beriladi.",
       },
       {
-        q: "To'lovni qanday amalga oshiraman?",
+        q: "Qanday to'layman?",
         a: "Raqam va shaxsiy obuna uchun — Payme. Kafe, mehmonxona va firmalar uchun — hisob-faktura va bank o'tkazmasi: hujjatni kabinetdan o'zingiz olasiz, pul kelgach obuna uzayadi.",
       },
     ],
@@ -935,7 +935,7 @@ const CATALOGUE = {
       ring: {
         name: "Uzuk",
         tagline: "Qo'lda, doim o'zingiz bilan",
-        description: "Hech narsa olib yurish shart emas. Qo'l siltashning o'zi profilingizni ochadi.",
+        description: "Hech narsa olib yurish shart emas. Qo'lingizni tegizsangiz bas — profil ochiladi.",
       },
       bracelet: {
         name: "Braslet",
@@ -1117,7 +1117,7 @@ const B2B = {
     guestSide: "Mehmon ko'radi",
     ownerSide: "Egasi ko'radi",
     staffSide: "Xodim ishlatadi",
-    whyPay: "Nega to'laydi",
+    whyPay: "Nega arziydi",
 
     verticals: {
       cafe: {
@@ -1155,7 +1155,7 @@ const B2B = {
         guest: [
           "Wi-Fi paroli — NFC bilan o'zi ulanadi",
           "Chiqish vaqti, nonushta vaqti",
-          "Room service menyusi",
+          "Xonaga xizmat menyusi",
           "Xona tozalash so'rovi",
           "Kir yuvish, taksi, uyg'otish",
           "Shahar bo'yicha yo'riqnoma — uch tilda",
@@ -1176,7 +1176,7 @@ const B2B = {
         ],
       },
       shop: {
-        name: "Savdo do'koni",
+        name: "Do'kon",
         pointWord: "nuqta",
         pointsWord: "nuqta",
         tagline: "Eshik oldida yoki kassada — o'zingiz tanlaysiz",
@@ -1195,7 +1195,7 @@ const B2B = {
         ],
         staff: [],
         why: [
-          "Kassada karta raqamini qo'lda aytish yoki qog'ozga yozib qo'yish — xato va vaqt. Bu yerda xaridor tegizadi va to'lov ochiladi.",
+          "Kassada karta raqamini og'zaki aytish yoki qog'ozga yozib qo'yish — xato va vaqt. Bu yerda xaridor tegizadi va to'lov ochiladi.",
           "Rekvizitni so'ragan firmaga har safar qayta yozib bermaysiz: nusxa olish tugmasi bor, xato ketmaydi.",
         ],
       },
@@ -1245,7 +1245,7 @@ const B2B = {
     monthlyWord: "oyiga",
     perPointWord: "bitta nuqtaga",
     negotiated: "Kelishuv bo'yicha",
-    negotiatedNote: "Tarmoq yoki katta obyekt — narxni suhbatda aniqlaymiz.",
+    negotiatedNote: "Tarmoq yoki katta obyekt — narxni gaplashib kelishamiz.",
     bandNames: ["15 nuqtagacha", "40 nuqtagacha", "40 dan ortiq"],
     askForThis: "Shu bo'yicha so'rov qoldirish",
 
@@ -1743,7 +1743,7 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "shop" | "other", Screen>>
       point: "Stol 7",
       chips: ["Salatlar", "Issiq taomlar", "Ichimlik"],
       rows: [
-        ["Lag'mon", "Qo'l uzilgan, o'tkir", "38 000"],
+        ["Lag'mon", "Cho'zma, achchiq", "38 000"],
         ["Achichuk salat", "Pomidor, piyoz, rayhon", "18 000"],
         ["Choy — ko'k", "Choynak, 1 litr", "9 000"],
       ],

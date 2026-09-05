@@ -10,7 +10,7 @@ export default function NotFound() {
           Bunday sahifa yo&apos;q
         </h1>
         <p className="mt-2 text-sm text-flex-black/60">
-          Havolani tekshiring — shaxsiy handle 3 harf va 3 raqamdan (MYN042), FLEX CARD seriyasi
+          Havolani tekshiring — shaxsiy handle 3 harf va 3 raqamdan (FLX007), FLEX CARD seriyasi
           esa 6 ta raqamdan (000001) iborat bo&apos;ladi.
         </p>
         <Link

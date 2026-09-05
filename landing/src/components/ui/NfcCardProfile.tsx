@@ -141,7 +141,7 @@ export default function NfcCardProfile({
               <span className="flex size-8 items-center justify-center rounded-full bg-lime text-on-accent">
                 <MapPin className="size-4" strokeWidth={2.2} />
               </span>
-              <span className="text-[10px] leading-none text-page-mute">Location</span>
+              <span className="text-[13px] leading-none text-page-mute">Manzil</span>
             </a>
           )}
         </div>
@@ -150,7 +150,7 @@ export default function NfcCardProfile({
           {name}
         </h1>
         {org && (
-          <p className="mt-1 text-center text-[11px] leading-4 font-medium text-lime">
+          <p className="mt-1 text-center text-[13px] leading-5 font-medium text-page-mute">
             {org}
           </p>
         )}
@@ -173,20 +173,20 @@ export default function NfcCardProfile({
               >
                 <ActionGlyph kind={a.kind} />
               </a>
-              <span className="text-[10px] leading-none text-page-mute">{a.label}</span>
+              <span className="text-[13px] leading-none text-page-mute">{a.label}</span>
             </li>
           ))}
         </ul>
 
         <div className="mt-6 grid grid-cols-2 gap-2">
           {addToContacts ?? (
-            <span className="flex h-10 items-center justify-center gap-1.5 rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase">
+            <span className="flex h-12 items-center justify-center gap-1.5 rounded-input bg-slab text-[14px] font-bold tracking-[0.04em] text-on-slab uppercase">
               <UserPlus className="size-3.5" strokeWidth={2.4} />
               {labels.addToContacts}
             </span>
           )}
           {share ?? (
-            <span className="flex h-10 items-center justify-center gap-1.5 rounded-md bg-lime text-[11px] font-bold tracking-[0.04em] text-on-accent uppercase">
+            <span className="flex h-12 items-center justify-center gap-1.5 rounded-input bg-lime text-[14px] font-bold tracking-[0.04em] text-on-accent uppercase">
               <Share2 className="size-3.5" strokeWidth={2.4} />
               {labels.share}
             </span>
@@ -198,7 +198,7 @@ export default function NfcCardProfile({
             href={websiteHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 flex h-10 items-center justify-center rounded-md bg-lime text-[11px] font-bold tracking-[0.04em] text-on-accent uppercase"
+            className="mt-2 flex h-12 items-center justify-center rounded-input bg-lime text-[14px] font-bold tracking-[0.04em] text-on-accent uppercase"
           >
             {websiteLabel}
           </a>

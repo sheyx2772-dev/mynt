@@ -21,7 +21,7 @@ export default function IncomingTransfers({ transfers }: { transfers: Transfer[]
         </span>
         <div>
           <h2 className="font-display text-lg font-semibold">
-            Sizga handle taklif qilingan
+            Sizga raqam taklif qilingan
           </h2>
           <p className="mt-1 text-sm text-paper-2">
             Qabul qilsangiz, u sizniki bo&apos;ladi va kabinetingizda paydo bo&apos;ladi.
