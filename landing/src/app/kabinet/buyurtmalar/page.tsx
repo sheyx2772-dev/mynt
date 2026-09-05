@@ -53,7 +53,7 @@ const STRIPE: Record<Fulfilment, string> = {
 };
 
 export default async function QueuePage() {
-  await requireOperator("/kabinet/buyurtmalar");
+  await requireOperator();
   const orders = await listQueue();
   const names = catalogue(LANG).devices;
 

@@ -38,7 +38,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
 
   // Ownership is a filter on the read, so somebody else's order is a 404 rather
   // than a refusal — a refusal has confirmed the order exists.
-  const order = await getOwnOrder(user.id, id);
+  const order = await getOwnOrder(id);
   if (!order) notFound();
 
   const device = catalogue("uz").devices[order.deviceType];

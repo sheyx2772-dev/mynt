@@ -101,3 +101,10 @@ func optional(s string) *string {
 	}
 	return &s
 }
+
+func deref(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
+}

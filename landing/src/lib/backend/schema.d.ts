@@ -210,6 +210,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/eslatmalar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Kunlik eslatma yugurishi
+         * @description Rejalashtiruvchi uchun. CRON_SECRET talab qilinadi.
+         */
+        post: operations["eslatmalar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/hisoblar/{id}": {
         parameters: {
             query?: never;
@@ -696,6 +716,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/navbat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Yasash navbati
+         * @description Faqat operator uchun.
+         */
+        get: operations["qurilma-navbati"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/navbat/{id}/bosqich": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Buyurtmani keyingi bosqichga o'tkazish
+         * @description Faqat operator uchun. Ruxsat etilgan qadamlar shu yerda tekshiriladi.
+         */
+        post: operations["qurilma-bosqich"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/otkazishlar/{id}": {
         parameters: {
             query?: never;
@@ -979,6 +1039,84 @@ export interface paths {
          * @description Raqam 30 daqiqaga band qilinadi va to'lov tasdiqlangach egangizga o'tadi.
          */
         post: operations["raqamni-band-qilish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/qurilmalar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** O'z qurilma buyurtmalarim */
+        get: operations["qurilma-buyurtmalarim"];
+        put?: never;
+        /**
+         * Qurilmaga buyurtma ochish
+         * @description Raqam allaqachon sizniki bo'lishi kerak. Narx shu yerda hisoblanadi.
+         */
+        post: operations["qurilma-buyurtma-ochish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/qurilmalar/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bitta buyurtma */
+        get: operations["qurilma-buyurtma"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/qurilmalar/{id}/manzil": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Yetkazish manzilini yozish
+         * @description To'langan buyurtmaga manzil yozilgach, u navbatga tushadi.
+         */
+        put: operations["qurilma-manzil"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/qurilmalar/{id}/tolash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * To'lov tizimisiz to'lash
+         * @description Faqat provayder ulanmagan muhitda ishlaydi.
+         */
+        post: operations["qurilma-tolash"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1507,6 +1645,82 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/xabarlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kelgan xabarlar */
+        get: operations["xabarlar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/xabarlar/oqildi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Hammasini o'qilgan deb belgilash */
+        post: operations["xabarlarni-oqish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/xabarlar/telegram": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Telegram ulanishi qay holatda */
+        get: operations["telegram-ulanish"];
+        put?: never;
+        /**
+         * Ulash uchun yangi kod olish
+         * @description Kod 15 daqiqa yashaydi va bir marta ishlaydi.
+         */
+        post: operations["telegram-kod"];
+        /** Telegramni uzish */
+        delete: operations["telegramni-uzish"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/xabarlar/telegram/tekshirish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Botga yuborilgan kodni tekshirish
+         * @description Ulanish oynasi ochiq turganda chaqiriladi.
+         */
+        post: operations["telegram-tekshirish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/xodim/{kalit}": {
         parameters: {
             query?: never;
@@ -1620,6 +1834,16 @@ export interface components {
              */
             readonly $schema?: string;
             buyurtma: components["schemas"]["OrderDetail"];
+        };
+        AdvanceInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/AdvanceInputBody.json
+             */
+            readonly $schema?: string;
+            /** @enum {string} */
+            bosqich: "queued" | "making" | "shipped" | "delivered" | "returned";
         };
         AliveOutputHeader: {
             CacheControl: string;
@@ -1766,6 +1990,19 @@ export interface components {
             /** Format: int64 */
             tashrifchilar: number;
         };
+        Delivery: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/Delivery.json
+             */
+            readonly $schema?: string;
+            izoh?: string;
+            kimga: string;
+            manzil: string;
+            telefon: string;
+            viloyat: string;
+        };
         DesignAskInputBody: {
             /**
              * Format: uri
@@ -1793,12 +2030,62 @@ export interface components {
             tilak: string;
             vaqt: string;
         };
+        Device: {
+            bosqich: string;
+            dizayn?: string;
+            holat: string;
+            id: string;
+            izoh?: string;
+            /** Format: date-time */
+            jonatilgan?: string;
+            kimga?: string;
+            manzil?: string;
+            qurilma: string;
+            raqam: string;
+            /** Format: int64 */
+            summa: number;
+            telefon?: string;
+            /** Format: date-time */
+            tolangan?: string;
+            /** Format: date-time */
+            vaqt: string;
+            viloyat?: string;
+        };
+        DeviceOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/DeviceOutputBody.json
+             */
+            readonly $schema?: string;
+            buyurtma: components["schemas"]["Device"];
+        };
+        DevicesOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/DevicesOutputBody.json
+             */
+            readonly $schema?: string;
+            buyurtmalar: components["schemas"]["Device"][] | null;
+        };
         Discount: {
             /** Format: int64 */
             chegirma: number;
             kod: string;
             /** Format: int32 */
             oylar: number;
+        };
+        DrainOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/DrainOutputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            ulandi: number;
+            ulanish: components["schemas"]["TelegramLink"];
         };
         ErrorDetail: {
             /** @description Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id' */
@@ -2173,6 +2460,15 @@ export interface components {
             whatsapp?: string;
             youtube?: string;
         };
+        LinkOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/LinkOutputBody.json
+             */
+            readonly $schema?: string;
+            ulanish: components["schemas"]["TelegramLink"];
+        };
         LinkStat: {
             /** Format: int64 */
             bosishlar: number;
@@ -2275,6 +2571,17 @@ export interface components {
             tugashi?: string;
             /** @enum {string} */
             turi: "percent" | "amount" | "months";
+        };
+        NoticesOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/NoticesOutputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            oqilmagan: number;
+            xabarlar: components["schemas"]["Stored"][] | null;
         };
         OfferInputBody: {
             /**
@@ -2490,6 +2797,19 @@ export interface components {
             kod?: string;
             message: string;
         };
+        PlaceDeviceInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/PlaceDeviceInputBody.json
+             */
+            readonly $schema?: string;
+            dizayn?: string;
+            /** @enum {string} */
+            qurilma: "card" | "ring" | "bracelet";
+            /** @example aaa777 */
+            raqam: string;
+        };
         PointsInputBody: {
             /**
              * Format: uri
@@ -2618,6 +2938,17 @@ export interface components {
              */
             readonly $schema?: string;
             profil: components["schemas"]["PublicProfile"];
+        };
+        QueueOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/QueueOutputBody.json
+             */
+            readonly $schema?: string;
+            buyurtmalar: components["schemas"]["Device"][] | null;
+            /** Format: int64 */
+            jami: number;
         };
         RecommendInputBody: {
             /**
@@ -2760,6 +3091,18 @@ export interface components {
             jami: number;
             rezidentlar: components["schemas"]["Resident"][] | null;
         };
+        Run: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/Run.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            korildi: number;
+            /** Format: int64 */
+            yuborildi: number;
+        };
         SayInputBody: {
             /**
              * Format: uri
@@ -2866,6 +3209,19 @@ export interface components {
             hisobot: components["schemas"]["Report"];
             /** Format: int64 */
             kun: number;
+        };
+        Stored: {
+            havola?: string;
+            /** Format: int64 */
+            id: number;
+            matn?: string;
+            /** Format: date-time */
+            oqilgan?: string;
+            raqam?: string;
+            sarlavha: string;
+            tur: string;
+            /** Format: date-time */
+            vaqt: string;
         };
         Tab: {
             /** Format: int64 */
@@ -3000,6 +3356,14 @@ export interface components {
             hisob: components["schemas"]["Stats"];
             jamoa: components["schemas"]["Team"];
             raqamlar: components["schemas"]["Seat"][] | null;
+        };
+        TelegramLink: {
+            /** @enum {string} */
+            holat: "unavailable" | "waiting" | "linked";
+            kod?: string;
+            mavjud: boolean;
+            /** Format: date-time */
+            tugaydi?: string;
         };
         Text: {
             en?: string;
@@ -3489,6 +3853,37 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    eslatmalar: {
+        parameters: {
+            query?: never;
+            header: {
+                Authorization: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Run"];
+                };
             };
             /** @description Error */
             default: {
@@ -4471,6 +4866,70 @@ export interface operations {
             };
         };
     };
+    "qurilma-navbati": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QueueOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "qurilma-bosqich": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdvanceInputBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeviceOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "otkazish-bekor": {
         parameters: {
             query?: never;
@@ -4973,6 +5432,165 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OrderOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "qurilma-buyurtmalarim": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DevicesOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "qurilma-buyurtma-ochish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaceDeviceInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeviceOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "qurilma-buyurtma": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeviceOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "qurilma-manzil": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Delivery"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeviceOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "qurilma-tolash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeviceOutputBody"];
                 };
             };
             /** @description Error */
@@ -6200,6 +6818,180 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    xabarlar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoticesOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "xabarlarni-oqish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoticesOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "telegram-ulanish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LinkOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "telegram-kod": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LinkOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "telegramni-uzish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LinkOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "telegram-tekshirish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DrainOutputBody"];
+                };
             };
             /** @description Error */
             default: {

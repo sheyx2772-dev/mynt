@@ -10,7 +10,6 @@ import SignOutButton from "@/components/SignOutButton";
 import InstallHint from "@/components/InstallHint";
 import IncomingTransfers from "@/components/IncomingTransfers";
 import { requireUser } from "@/lib/auth";
-import { isOperator } from "@/lib/operator";
 import { countQueue } from "@/lib/device-orders";
 import { listHandlesForUser, touchLastSeen } from "@/lib/handles";
 import { listNotifications } from "@/lib/notify";
@@ -40,15 +39,15 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
   const { ish } = await props.searchParams;
   const user = await requireUser("/kabinet");
 
-  // The queue count is only asked for on behalf of the one account allowed to
-  // see it: a customer's cabinet must not run a query whose answer it is never
-  // shown.
+  // The queue count comes back as zero for anybody but the operator: the
+  // backend refuses the read rather than this deciding whether to make it, so a
+  // customer's cabinet cannot ask for an answer it is never shown.
   const [handles, incoming, notifications, team, queue] = await Promise.all([
     listHandlesForUser(),
     listIncomingTransfers(),
-    listNotifications(user.id),
+    listNotifications(),
     getTeamForUser(),
-    isOperator(user.id) ? countQueue() : Promise.resolve(0),
+    countQueue(),
   ]);
 
   const unread = notifications.filter((n) => !n.readAt).length;

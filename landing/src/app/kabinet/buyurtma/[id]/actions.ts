@@ -30,7 +30,7 @@ export async function saveDelivery(
   const parsed = parseDelivery(form);
   if (!parsed.ok) return { errors: parsed.errors };
 
-  const result = await setDeliveryAddress(user.id, orderId, parsed.delivery);
+  const result = await setDeliveryAddress(orderId, parsed.delivery);
 
   if (!result.ok) {
     return {

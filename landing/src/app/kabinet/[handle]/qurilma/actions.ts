@@ -53,7 +53,7 @@ export async function orderDevice(
   // right answer either way.
   const design = isCardDesign(designRaw) ? designRaw : null;
 
-  const placed = await placeDeviceOrder(userId, normalized, deviceType, design);
+  const placed = await placeDeviceOrder(normalized, deviceType, design);
 
   if (!placed.ok) {
     return {
@@ -67,7 +67,7 @@ export async function orderDevice(
   const addressPath = `/kabinet/buyurtma/${placed.orderId}`;
 
   if (!isAnyProviderConfigured) {
-    await settleWithoutProvider(userId, placed.orderId);
+    await settleWithoutProvider(placed.orderId);
     revalidatePath(`/kabinet/${normalized}/qurilma`);
     return { next: addressPath };
   }

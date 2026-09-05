@@ -2,7 +2,7 @@ import "server-only";
 
 import { notFound } from "next/navigation";
 
-import { requireUser } from "@/lib/auth";
+import { asReader } from "@/lib/backend/client";
 
 // Who runs the shop.
 //
@@ -12,32 +12,26 @@ import { requireUser } from "@/lib/auth";
 // manufacture and the addresses to post it to, which is other people's personal
 // data and none of a customer's business.
 //
-// So it is one account, named by its Supabase user id in the environment rather
-// than by a flag on a row. A boolean column called `is_admin` is a column that
-// can be set; an id that only exists in the deployment's own configuration
-// cannot be granted by anything the application does.
+// Who that is, is the backend's answer. It holds one account id in its own
+// configuration — a boolean column called `is_admin` is a column that can be
+// set; an id that only exists in a deployment's environment cannot be granted
+// by anything the application does. Asking rather than keeping a second copy of
+// the setting here means the two can never disagree.
 
-/** The id in the environment, or null when nobody has been named. */
-export function operatorUserId(): string | null {
-  const id = process.env.FLEX_OPERATOR_USER_ID?.trim();
-  return id ? id : null;
-}
-
-export function isOperator(userId: string | null | undefined): boolean {
-  const operator = operatorUserId();
-  return Boolean(operator && userId && userId === operator);
+/** Is the reader the operator? Used to decide whether to draw a link. */
+export async function isOperator(): Promise<boolean> {
+  const client = await asReader();
+  const { response } = await client.GET("/navbat", {});
+  return response?.ok === true;
 }
 
 /**
  * The door to the queue.
  *
  * A 404 rather than a 403, for the same reason ownership checks 404: a page
- * that says "forbidden" has confirmed it exists. And an unset
- * FLEX_OPERATOR_USER_ID closes the door rather than opening it — a deployment
- * that has not been told who the operator is must not decide that everybody is.
+ * that says "forbidden" has confirmed it exists. The backend answers the same
+ * way, so a customer who guesses the address gets the same nothing from both.
  */
-export async function requireOperator(path: string): Promise<{ userId: string }> {
-  const user = await requireUser(path);
-  if (!isOperator(user.id)) notFound();
-  return { userId: user.id };
+export async function requireOperator(): Promise<void> {
+  if (!(await isOperator())) notFound();
 }

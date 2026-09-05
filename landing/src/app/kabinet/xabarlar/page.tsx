@@ -5,7 +5,6 @@ import TelegramLink from "@/components/TelegramLink";
 import { requireUser } from "@/lib/auth";
 import { listNotifications } from "@/lib/notify";
 import { getLinkState } from "@/lib/notify/link";
-import { isTelegramConfigured } from "@/lib/notify/telegram";
 import { timeAgo } from "@/lib/relative-time";
 import { dismissAll } from "./actions";
 
@@ -15,11 +14,11 @@ export const metadata: Metadata = {
 };
 
 export default async function XabarlarPage() {
-  const user = await requireUser("/kabinet/xabarlar");
+  await requireUser("/kabinet/xabarlar");
 
   const [notifications, linkState] = await Promise.all([
-    listNotifications(user.id),
-    getLinkState(user.id),
+    listNotifications(),
+    getLinkState(),
   ]);
 
   const unread = notifications.filter((n) => !n.readAt).length;
@@ -40,7 +39,7 @@ export default async function XabarlarPage() {
       <section className="mt-8 rounded-[1.75rem] border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <h2 className="font-display text-lg font-semibold tracking-tight">Telegram</h2>
         <div className="mt-3">
-          {isTelegramConfigured ? (
+          {linkState.available ? (
             <TelegramLink
               initial={linkState}
               botName={process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME ?? null}

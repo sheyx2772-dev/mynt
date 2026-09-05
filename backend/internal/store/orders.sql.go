@@ -12,6 +12,52 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const advanceDeviceOrder = `-- name: AdvanceDeviceOrder :one
+update orders set fulfilment = $1, updated_at = now()
+where id = $2 and kind = 'device'
+  and fulfilment = $3
+returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at
+`
+
+type AdvanceDeviceOrderParams struct {
+	Fulfilment *string   `json:"fulfilment"`
+	ID         uuid.UUID `json:"id"`
+	FromState  *string   `json:"from_state"`
+}
+
+// Conditional on the state that was read, so two people clicking at once move
+// it one step rather than two. shipped_at is stamped by a trigger, not here.
+func (q *Queries) AdvanceDeviceOrder(ctx context.Context, arg AdvanceDeviceOrderParams) (Order, error) {
+	row := q.db.QueryRow(ctx, advanceDeviceOrder, arg.Fulfilment, arg.ID, arg.FromState)
+	var i Order
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Handle,
+		&i.Amount,
+		&i.Status,
+		&i.Provider,
+		&i.ProviderTxID,
+		&i.PaidAt,
+		&i.CancelledAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Kind,
+		&i.Months,
+		&i.DeviceType,
+		&i.Design,
+		&i.Recipient,
+		&i.Phone,
+		&i.Region,
+		&i.Address,
+		&i.DeliveryNote,
+		&i.Fulfilment,
+		&i.ShippedAt,
+		&i.DeliveredAt,
+	)
+	return i, err
+}
+
 const claimHandleOutright = `-- name: ClaimHandleOutright :one
 insert into handles (letters, digits, status, user_id, owner_name, price_paid, claimed_at)
 values ($1, $2, 'claimed', $3,
@@ -128,6 +174,18 @@ func (q *Queries) ClearExpiredReservation(ctx context.Context, normalized *strin
 	return result.RowsAffected(), nil
 }
 
+const countDeviceQueue = `-- name: CountDeviceQueue :one
+select count(*) from orders
+where kind = 'device' and status = 'paid' and fulfilment <> 'delivered'
+`
+
+func (q *Queries) CountDeviceQueue(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, countDeviceQueue)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const countRecentClaimsByIP = `-- name: CountRecentClaimsByIP :one
 select count(*) from claim_attempts
 where ip = $1
@@ -208,6 +266,152 @@ func (q *Queries) CreateOrder(ctx context.Context, arg CreateOrderParams) (Order
 		&i.DeliveredAt,
 	)
 	return i, err
+}
+
+const deviceOrder = `-- name: DeviceOrder :one
+select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at from orders where id = $1 and kind = 'device'
+`
+
+// One order without an owner, for the operator's queue.
+func (q *Queries) DeviceOrder(ctx context.Context, id uuid.UUID) (Order, error) {
+	row := q.db.QueryRow(ctx, deviceOrder, id)
+	var i Order
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Handle,
+		&i.Amount,
+		&i.Status,
+		&i.Provider,
+		&i.ProviderTxID,
+		&i.PaidAt,
+		&i.CancelledAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Kind,
+		&i.Months,
+		&i.DeviceType,
+		&i.Design,
+		&i.Recipient,
+		&i.Phone,
+		&i.Region,
+		&i.Address,
+		&i.DeliveryNote,
+		&i.Fulfilment,
+		&i.ShippedAt,
+		&i.DeliveredAt,
+	)
+	return i, err
+}
+
+const deviceOrders = `-- name: DeviceOrders :many
+
+select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at from orders
+where user_id = $1 and kind = 'device'
+  and status in ('pending', 'paid')
+order by created_at desc
+limit 50
+`
+
+// Qurilma buyurtmalari -------------------------------------------------------
+// What one buyer is waiting for. Cancelled and failed are left out: they are
+// not things anybody is waiting for, and listing them reads as a bill.
+func (q *Queries) DeviceOrders(ctx context.Context, userID uuid.UUID) ([]Order, error) {
+	rows, err := q.db.Query(ctx, deviceOrders, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Order{}
+	for rows.Next() {
+		var i Order
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Handle,
+			&i.Amount,
+			&i.Status,
+			&i.Provider,
+			&i.ProviderTxID,
+			&i.PaidAt,
+			&i.CancelledAt,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Kind,
+			&i.Months,
+			&i.DeviceType,
+			&i.Design,
+			&i.Recipient,
+			&i.Phone,
+			&i.Region,
+			&i.Address,
+			&i.DeliveryNote,
+			&i.Fulfilment,
+			&i.ShippedAt,
+			&i.DeliveredAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const deviceQueue = `-- name: DeviceQueue :many
+select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at from orders
+where kind = 'device' and status = 'paid' and fulfilment <> 'delivered'
+order by paid_at
+limit 200
+`
+
+// What is waiting to be made and posted. Paid only: an unpaid order is not a
+// thing to put in a queue somebody works through. Oldest first, because that is
+// the order they were promised in.
+func (q *Queries) DeviceQueue(ctx context.Context) ([]Order, error) {
+	rows, err := q.db.Query(ctx, deviceQueue)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Order{}
+	for rows.Next() {
+		var i Order
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Handle,
+			&i.Amount,
+			&i.Status,
+			&i.Provider,
+			&i.ProviderTxID,
+			&i.PaidAt,
+			&i.CancelledAt,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Kind,
+			&i.Months,
+			&i.DeviceType,
+			&i.Design,
+			&i.Recipient,
+			&i.Phone,
+			&i.Region,
+			&i.Address,
+			&i.DeliveryNote,
+			&i.Fulfilment,
+			&i.ShippedAt,
+			&i.DeliveredAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const handleState = `-- name: HandleState :one
@@ -333,6 +537,104 @@ func (q *Queries) OrdersForUser(ctx context.Context, userID uuid.UUID) ([]Order,
 	return items, nil
 }
 
+const ownDeviceOrder = `-- name: OwnDeviceOrder :one
+select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at from orders
+where id = $1 and user_id = $2 and kind = 'device'
+`
+
+type OwnDeviceOrderParams struct {
+	ID     uuid.UUID `json:"id"`
+	UserID uuid.UUID `json:"user_id"`
+}
+
+func (q *Queries) OwnDeviceOrder(ctx context.Context, arg OwnDeviceOrderParams) (Order, error) {
+	row := q.db.QueryRow(ctx, ownDeviceOrder, arg.ID, arg.UserID)
+	var i Order
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Handle,
+		&i.Amount,
+		&i.Status,
+		&i.Provider,
+		&i.ProviderTxID,
+		&i.PaidAt,
+		&i.CancelledAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Kind,
+		&i.Months,
+		&i.DeviceType,
+		&i.Design,
+		&i.Recipient,
+		&i.Phone,
+		&i.Region,
+		&i.Address,
+		&i.DeliveryNote,
+		&i.Fulfilment,
+		&i.ShippedAt,
+		&i.DeliveredAt,
+	)
+	return i, err
+}
+
+const placeDeviceOrder = `-- name: PlaceDeviceOrder :one
+insert into orders (user_id, handle, amount, kind, device_type, design, fulfilment)
+select $1, h.normalized, $2, 'device',
+       $3, $4, 'address_needed'
+from handles h
+where h.normalized = $5
+  and h.user_id = $1 and h.status = 'claimed'
+returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at
+`
+
+type PlaceDeviceOrderParams struct {
+	UserID     uuid.UUID `json:"user_id"`
+	Amount     int64     `json:"amount"`
+	DeviceType *string   `json:"device_type"`
+	Design     *string   `json:"design"`
+	Handle     *string   `json:"handle"`
+}
+
+// Ownership is a condition of the insert rather than a check before it, so a
+// guessed handle writes nothing instead of being told it exists.
+func (q *Queries) PlaceDeviceOrder(ctx context.Context, arg PlaceDeviceOrderParams) (Order, error) {
+	row := q.db.QueryRow(ctx, placeDeviceOrder,
+		arg.UserID,
+		arg.Amount,
+		arg.DeviceType,
+		arg.Design,
+		arg.Handle,
+	)
+	var i Order
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Handle,
+		&i.Amount,
+		&i.Status,
+		&i.Provider,
+		&i.ProviderTxID,
+		&i.PaidAt,
+		&i.CancelledAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Kind,
+		&i.Months,
+		&i.DeviceType,
+		&i.Design,
+		&i.Recipient,
+		&i.Phone,
+		&i.Region,
+		&i.Address,
+		&i.DeliveryNote,
+		&i.Fulfilment,
+		&i.ShippedAt,
+		&i.DeliveredAt,
+	)
+	return i, err
+}
+
 const recordClaimAttempt = `-- name: RecordClaimAttempt :exec
 insert into claim_attempts (user_id, ip, handle, succeeded)
 values ($1, $2, $3, $4)
@@ -427,6 +729,116 @@ func (q *Queries) ReserveHandle(ctx context.Context, arg ReserveHandleParams) (H
 		&i.PlanRemindedFor,
 		&i.CommentsOpen,
 		&i.RecommendCount,
+	)
+	return i, err
+}
+
+const setDeliveryAddress = `-- name: SetDeliveryAddress :one
+update orders set
+  recipient = $1, phone = $2,
+  region = $3, address = $4,
+  delivery_note = $5,
+  fulfilment = 'queued', updated_at = now()
+where id = $6 and user_id = $7
+  and kind = 'device' and status = 'paid' and fulfilment = 'address_needed'
+returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at
+`
+
+type SetDeliveryAddressParams struct {
+	Recipient    *string   `json:"recipient"`
+	Phone        *string   `json:"phone"`
+	Region       *string   `json:"region"`
+	Address      *string   `json:"address"`
+	DeliveryNote *string   `json:"delivery_note"`
+	ID           uuid.UUID `json:"id"`
+	UserID       uuid.UUID `json:"user_id"`
+}
+
+// The address and the move into the queue are one write. An order that has an
+// address but is still marked as needing one sits in the wrong list forever.
+//
+// Only out of address_needed, and only once paid: a buyer who submits the form
+// twice, or edits an address after the parcel is posted, must not pull it back.
+func (q *Queries) SetDeliveryAddress(ctx context.Context, arg SetDeliveryAddressParams) (Order, error) {
+	row := q.db.QueryRow(ctx, setDeliveryAddress,
+		arg.Recipient,
+		arg.Phone,
+		arg.Region,
+		arg.Address,
+		arg.DeliveryNote,
+		arg.ID,
+		arg.UserID,
+	)
+	var i Order
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Handle,
+		&i.Amount,
+		&i.Status,
+		&i.Provider,
+		&i.ProviderTxID,
+		&i.PaidAt,
+		&i.CancelledAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Kind,
+		&i.Months,
+		&i.DeviceType,
+		&i.Design,
+		&i.Recipient,
+		&i.Phone,
+		&i.Region,
+		&i.Address,
+		&i.DeliveryNote,
+		&i.Fulfilment,
+		&i.ShippedAt,
+		&i.DeliveredAt,
+	)
+	return i, err
+}
+
+const settleDeviceOrder = `-- name: SettleDeviceOrder :one
+update orders set status = 'paid', paid_at = now(), updated_at = now()
+where id = $1 and user_id = $2
+  and kind = 'device' and status = 'pending'
+returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at
+`
+
+type SettleDeviceOrderParams struct {
+	ID     uuid.UUID `json:"id"`
+	UserID uuid.UUID `json:"user_id"`
+}
+
+// Paying for a device where no provider is configured. Conditional on pending,
+// so this is a no-op the second time exactly as a provider retry is.
+func (q *Queries) SettleDeviceOrder(ctx context.Context, arg SettleDeviceOrderParams) (Order, error) {
+	row := q.db.QueryRow(ctx, settleDeviceOrder, arg.ID, arg.UserID)
+	var i Order
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Handle,
+		&i.Amount,
+		&i.Status,
+		&i.Provider,
+		&i.ProviderTxID,
+		&i.PaidAt,
+		&i.CancelledAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Kind,
+		&i.Months,
+		&i.DeviceType,
+		&i.Design,
+		&i.Recipient,
+		&i.Phone,
+		&i.Region,
+		&i.Address,
+		&i.DeliveryNote,
+		&i.Fulfilment,
+		&i.ShippedAt,
+		&i.DeliveredAt,
 	)
 	return i, err
 }

@@ -81,3 +81,73 @@ func (t *Telegram) Send(ctx context.Context, notice Notice, chatID int64) bool {
 func escapeHTML(text string) string {
 	return strings.NewReplacer("&", "&amp;", "<", "&lt;", ">", "&gt;").Replace(text)
 }
+
+// Update is one message somebody sent the bot.
+type Update struct {
+	UpdateID int64
+	ChatID   int64
+	Text     string
+}
+
+// Updates reads what the bot has been sent, and acknowledges everything below
+// `offset` when one is given.
+//
+// A short timeout and no long polling: this runs while somebody is looking at
+// the linking screen and waiting on a request that holds open for a minute
+// would be a request that looks broken.
+func (t *Telegram) Updates(ctx context.Context, offset int64) ([]Update, error) {
+	if t == nil {
+		return nil, nil
+	}
+
+	body, err := json.Marshal(map[string]any{
+		"offset":          offset,
+		"timeout":         0,
+		"allowed_updates": []string{"message"},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/getUpdates", t.token)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(body))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := t.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var payload struct {
+		OK     bool `json:"ok"`
+		Result []struct {
+			UpdateID int64 `json:"update_id"`
+			Message  struct {
+				Chat struct {
+					ID int64 `json:"id"`
+				} `json:"chat"`
+				Text string `json:"text"`
+			} `json:"message"`
+		} `json:"result"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&payload); err != nil || !payload.OK {
+		return nil, err
+	}
+
+	out := make([]Update, 0, len(payload.Result))
+	for _, update := range payload.Result {
+		if update.Message.Chat.ID == 0 {
+			continue
+		}
+		out = append(out, Update{
+			UpdateID: update.UpdateID,
+			ChatID:   update.Message.Chat.ID,
+			Text:     update.Message.Text,
+		})
+	}
+	return out, nil
+}

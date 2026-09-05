@@ -32,3 +32,45 @@ where user_id = sqlc.arg(user_id) and read_at is null;
 -- read all of.
 update notifications set read_at = now()
 where user_id = sqlc.arg(user_id) and read_at is null;
+
+-- Linking an account to a Telegram chat.
+--
+-- The person asks the site for a code and sends it to the bot. That direction
+-- is the only one that works without asking for their phone number: Telegram
+-- will not tell us who they are, so they tell Telegram who they are on our
+-- behalf. The code is a bearer secret while it lives — short, random,
+-- single-use and quick to expire.
+
+-- name: LinkState :one
+select telegram_chat_id, telegram_link_code, telegram_link_expires_at
+from notification_settings where user_id = sqlc.arg(user_id);
+
+-- name: StartLink :one
+-- Replaces any code still outstanding: two live codes for one account is two
+-- ways in where there should be one.
+insert into notification_settings (user_id, telegram_link_code, telegram_link_expires_at, updated_at)
+values (sqlc.arg(user_id), sqlc.arg(code), sqlc.arg(expires_at), now())
+on conflict (user_id) do update set
+  telegram_link_code = excluded.telegram_link_code,
+  telegram_link_expires_at = excluded.telegram_link_expires_at,
+  updated_at = now()
+returning telegram_link_code, telegram_link_expires_at;
+
+-- name: CompleteLink :one
+-- The code is spent by the same statement that accepts it, and only while it is
+-- live. A code that has expired matches nothing rather than being checked
+-- afterwards in Go, where the gap between the two would be a second window.
+update notification_settings set
+  telegram_chat_id = sqlc.arg(chat_id),
+  telegram_link_code = null,
+  telegram_link_expires_at = null,
+  updated_at = now()
+where telegram_link_code = sqlc.arg(code)
+  and telegram_link_expires_at > now()
+returning user_id;
+
+-- name: UnlinkTelegram :execrows
+update notification_settings set
+  telegram_chat_id = null, telegram_link_code = null,
+  telegram_link_expires_at = null, updated_at = now()
+where user_id = sqlc.arg(user_id);

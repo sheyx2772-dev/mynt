@@ -30,7 +30,7 @@ export default async function DeviceOrderPage({
 
   // The form opens on what the profile already shows, so ordering the object
   // that matches the card on screen takes no clicks at all.
-  const orders = await listOwnOrders(userId);
+  const orders = await listOwnOrders();
   const mine = orders.filter((order) => order.handle === normalized);
   const names = catalogue("uz").devices;
 

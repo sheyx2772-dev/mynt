@@ -6,7 +6,6 @@ import { randomBytes } from "node:crypto";
 import { after } from "next/server";
 
 import { getClientIp } from "@/lib/client-ip";
-import { notify } from "@/lib/notify";
 import {
   isMessageKind,
   isTagKind,

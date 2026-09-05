@@ -65,6 +65,28 @@ type Config struct {
 	EskizPassword string
 	SMSFrom       string
 
+	// The secret the daily reminder run is called with.
+	//
+	// The scheduler calls a URL, which makes the URL the security problem:
+	// anyone can request it, and a reminder sent by a stranger at three in the
+	// morning is a reminder wasted for the month. Empty refuses everybody
+	// rather than defaulting open — an endpoint that is only safe because
+	// nobody has guessed the path is not safe.
+	CronSecret string
+
+	// Who runs the shop, by account id.
+	//
+	// The fulfilment queue is the one screen that belongs to us rather than to
+	// a customer: it lists what to manufacture and the addresses to post it to,
+	// which is other people's personal data. So it is one account named in the
+	// deployment's own configuration rather than a flag on a row — a boolean
+	// column called `is_admin` is a column that can be set; an id that only
+	// exists here cannot be granted by anything the application does.
+	//
+	// Empty closes the door rather than opening it: a deployment that has not
+	// been told who the operator is must not decide that everybody is.
+	OperatorUserID string
+
 	// The bot that carries notifications. Empty means the Telegram channel is
 	// not built at all, so a deployment without one has no channel rather than
 	// a channel that fails on every notice.
@@ -137,6 +159,8 @@ func Load() (Config, error) {
 		EskizEmail:             os.Getenv("ESKIZ_EMAIL"),
 		EskizPassword:          os.Getenv("ESKIZ_PASSWORD"),
 		SMSFrom:                withDefault("SMS_FROM", "4546"),
+		CronSecret:             strings.TrimSpace(os.Getenv("CRON_SECRET")),
+		OperatorUserID:         strings.TrimSpace(os.Getenv("OPERATOR_USER_ID")),
 		TelegramBotToken:       os.Getenv("TELEGRAM_BOT_TOKEN"),
 		ResendAPIKey:           os.Getenv("RESEND_API_KEY"),
 		MailFrom:               withDefault("MAIL_FROM", "Flex <kirish@flex.com.uz>"),

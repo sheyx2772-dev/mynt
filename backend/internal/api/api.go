@@ -127,6 +127,8 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 	s.registerLeads(api)
 	s.registerStats(api)
 	s.registerOrders(api)
+	s.registerDevices(api)
+	s.registerNotify(api)
 	s.registerAdmin(api)
 	s.registerAdminDetail(api)
 	s.registerPromo(api)

@@ -12,7 +12,7 @@ import { advanceOrder } from "@/lib/device-orders";
  * a page, and an action is reachable without ever rendering one.
  */
 export async function moveOrder(form: FormData): Promise<void> {
-  await requireOperator("/kabinet/buyurtmalar");
+  await requireOperator();
 
   const orderId = String(form.get("orderId") ?? "");
   const to = String(form.get("to") ?? "");
