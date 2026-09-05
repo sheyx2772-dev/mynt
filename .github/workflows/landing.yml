@@ -25,6 +25,11 @@ jobs:
           cache: npm
           cache-dependency-path: landing/package-lock.json
       - run: npm ci
+      # Next generates the route types — PageProps and friends — during a
+      # build, and they are not committed. Without this, tsc on a clean
+      # checkout fails on every page in the app for a reason that looks
+      # nothing like the cause.
+      - run: npx next typegen
       - run: npx tsc --noEmit
       - run: npx eslint src --quiet
       - run: npx vitest run
@@ -76,10 +81,11 @@ jobs:
             git fetch --depth 1 origin main && git reset --hard origin/main
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GH_ACTOR" --password-stdin
             docker compose -f deploy/compose.yml --env-file .env pull web
-            # The whole stack, not just this service. Compose recreates only
-            # what changed, and `up -d web` alone would never start Caddy —
-            # nothing depends on it, so nothing brings it up.
-            docker compose -f deploy/compose.yml --env-file .env up -d
+            # This service, plus the two every deploy needs running: the
+            # database and the proxy. Not the whole stack — that would need
+            # all three images to exist, so a first deploy of any one of them
+            # could never succeed.
+            docker compose -f deploy/compose.yml --env-file .env up -d db caddy web
             docker logout ghcr.io
             docker image prune -f
         env:

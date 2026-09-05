@@ -95,7 +95,11 @@ services:
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
-    depends_on: [web, api, panel]
+    # No depends_on, deliberately. A proxy that refuses to start because one
+    # of its upstreams is down is worse than one that answers 502 for that
+    # name and serves the rest — and it also meant a deploy of any one service
+    # could not run until all three images existed, which on a first deploy is
+    # never.
     ports:
       - "80:80"
       - "443:443"
