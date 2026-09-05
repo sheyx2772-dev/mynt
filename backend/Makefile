@@ -19,6 +19,11 @@ db: ## Start Postgres on its own, which is what development needs
 	docker compose up -d db
 	@until docker compose exec -T db psql -U flex -d flex -c 'select 1' >/dev/null 2>&1; do sleep 1; done
 
+.PHONY: minio
+minio: ## Start the local S3 bucket, for image uploads while working
+	docker compose up -d minio minio-setup
+	@echo "MinIO: http://127.0.0.1:9000  konsol: http://127.0.0.1:9001  (flexflex / flexflex)"
+
 .PHONY: schema
 schema: db ## Build a local copy of the real schema, then apply our own migrations
 	@# The product's schema is not this backend's to create. It lives in

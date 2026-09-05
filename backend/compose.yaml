@@ -46,5 +46,46 @@ services:
     ports:
       - "127.0.0.1:8090:8090"
 
+  # An S3 bucket on the laptop.
+  #
+  # The images live in Cloudflare R2 in production. This is the same API, so
+  # the code that talks to one talks to the other and nobody needs a cloud
+  # credential to change an avatar while working. `make minio` starts it
+  # alongside Postgres; the console is on :9001, user and password `flexflex`.
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: flexflex
+      MINIO_ROOT_PASSWORD: flexflex
+    ports:
+      # Localhost only, like Postgres. An object store on 0.0.0.0 with a
+      # password this guessable is a public folder.
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Makes the bucket once and exits. Without it the first upload fails against
+  # a store that is running and empty, which reads like a permission problem.
+  minio-setup:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      sh -c "
+      mc alias set local http://minio:9000 flexflex flexflex &&
+      mc mb --ignore-existing local/flex-images &&
+      mc anonymous set download local/flex-images
+      "
+
 volumes:
   db-data:
+  minio-data:
