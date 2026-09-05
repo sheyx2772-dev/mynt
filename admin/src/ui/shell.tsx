@@ -103,7 +103,11 @@ function Item({
 
 	return (
 		<SidebarMenuItem>
-			<SidebarMenuButton asChild isActive={active} tooltip={label}>
+			{/* 36px rather than shadcn's 32. Six rows sit in a column with nothing
+			    under them, and at 32 they read as a dense list of options rather
+			    than as the six places the panel has. The collapsed rail keeps its
+			    32px square — that one is an icon target, not a row. */}
+			<SidebarMenuButton asChild isActive={active} tooltip={label} className="h-9">
 				<Link to={path}>
 					{icon}
 					<span>{label}</span>
