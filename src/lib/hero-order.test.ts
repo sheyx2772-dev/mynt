@@ -8,9 +8,9 @@ describe("heroCarousel", () => {
     src.replace(/^.*\/|-\d+\.png$|\.png$/g, "");
 
   it("shows every finish that exists", () => {
-    // Three cards, three rings, five bracelets, two car cards, two pet tags.
-    expect(items).toHaveLength(15);
-    expect(new Set(items.map((i) => i.src)).size).toBe(15);
+    // Six cards, six rings, eight bracelets, three car cards, five pet tags.
+    expect(items).toHaveLength(28);
+    expect(new Set(items.map((i) => i.src)).size).toBe(28);
   });
 
   it("never shows the same object twice running", () => {

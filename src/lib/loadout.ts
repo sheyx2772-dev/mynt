@@ -64,11 +64,17 @@ export type { VerticalId };
  * counts match breaks the next time one more file turns up.
  */
 const CUTOUTS: Record<string, string[]> = {
-  card: ["karta", "karta-2", "karta-3"],
-  ring: ["uzuk", "uzuk-2", "uzuk-3"],
-  bracelet: ["braslet", "braslet-2", "braslet-3", "braslet-4", "braslet-5"],
-  avtovizitka: ["avtovizitka", "avtovizitka-2"],
-  "hayvon-teg": ["hayvon-teg", "hayvon-teg-2"],
+  card: ["karta", "karta-2", "karta-3", "karta-4", "karta-5", "karta-6"],
+  ring: ["uzuk", "uzuk-2", "uzuk-3", "uzuk-4", "uzuk-5", "uzuk-6"],
+  bracelet: [
+    "braslet", "braslet-2", "braslet-3", "braslet-4",
+    "braslet-5", "braslet-6", "braslet-7", "braslet-8",
+  ],
+  avtovizitka: ["avtovizitka", "avtovizitka-2", "avtovizitka-3"],
+  "hayvon-teg": [
+    "hayvon-teg", "hayvon-teg-2", "hayvon-teg-3",
+    "hayvon-teg-4", "hayvon-teg-5",
+  ],
 };
 
 export function deviceCutouts(id: string): string[] {
