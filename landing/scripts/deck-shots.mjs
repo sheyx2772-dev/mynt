@@ -12,7 +12,6 @@ import { readFile, mkdir } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
-import { createClient } from "@supabase/supabase-js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(root, "deck", "shots");
@@ -34,14 +33,16 @@ async function main() {
   const env = await loadEnv();
   await mkdir(OUT, { recursive: true });
 
-  const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
-
-  // The counter screen is behind a secret link, and the cabinet behind a
-  // session. Both are the point of the product, so both are fetched properly
-  // rather than skipped.
-  const { data: venue } = await admin.from("venues").select("staff_token").limit(1).single();
+  // The counter screen is behind a secret link — the one printed on the card a
+  // waiter keeps. It used to be looked up with a key that could read every
+  // table in the database, for one column; it is given to this script instead,
+  // which is all it ever needed:
+  //
+  //   STAFF_TOKEN=... node scripts/deck-shots.mjs
+  //
+  // Without one the counter shot is skipped rather than the run failing. A deck
+  // missing one screenshot is fixable; a script that will not run is not.
+  const staffToken = env.STAFF_TOKEN ?? null;
 
   const browser = await chromium.launch();
   const context = await browser.newContext({ viewport: PHONE, deviceScaleFactor: 3 });
@@ -49,7 +50,7 @@ async function main() {
 
   const shots = [
     ["menu", `${base}/NAV001?stol=7`],
-    ["counter", `${base}/z/${venue.staff_token}`],
+    ...(staffToken ? [["counter", `${base}/z/${staffToken}`]] : []),
     ["profile", `${base}/MYN042`],
     ["home", `${base}/`],
   ];

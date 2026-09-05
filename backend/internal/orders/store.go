@@ -84,6 +84,11 @@ type State struct {
 	// somebody made up.
 	LetterReason string `json:"harflar"`
 	DigitReason  string `json:"raqamlar"`
+
+	// Whether anything is configured to take money. False is a deployment
+	// before certification, and the page says the number cannot be bought yet
+	// rather than showing a button that opens an empty checkout.
+	Payable bool `json:"tolash_mumkin"`
 }
 
 // Check reports whether a number can be bought, and for how much.
@@ -99,6 +104,10 @@ func (s *Store) Check(ctx context.Context, parsed handles.Parsed) (State, error)
 		Price:        int64(parsed.Price()),
 		LetterReason: handles.LetterRarity(parsed.Letters).Reason,
 		DigitReason:  handles.DigitRarity(parsed.Digits).Reason,
+		// Either a provider is configured, or this is a development deployment
+		// that hands the number over free. Both are payable in the sense the
+		// page cares about: pressing the button finishes.
+		Payable: s.paid.Any() || s.paid.GiveAway(s.development),
 	}
 
 	row, err := s.queries.HandleState(ctx, &normalized)

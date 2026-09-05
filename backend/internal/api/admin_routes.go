@@ -200,6 +200,106 @@ func (s *Server) registerAdmin(api huma.API) {
 		out.Body.Number = number
 		return out, nil
 	})
+
+	huma.Register(api, huma.Operation{
+		OperationID: "boshqaruv-dizaynlar",
+		Method:      http.MethodGet,
+		Path:        "/boshqaruv/dizaynlar",
+		Summary:     "Chizilishi kutilayotgan dizaynlar",
+		Tags:        []string{"boshqaruv"},
+	}, func(ctx context.Context, _ *struct{}) (*designQueueOutput, error) {
+		if _, err := s.requireAdmin(ctx); err != nil {
+			return nil, err
+		}
+
+		list, err := s.admin.WaitingDesigns(ctx)
+		if err != nil {
+			return nil, internalError(err, "dizayn navbati o'qilmadi")
+		}
+
+		out := &designQueueOutput{}
+		out.Body.Requests = list
+		return out, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID: "boshqaruv-dizayn-tayyor",
+		Method:      http.MethodPost,
+		Path:        "/boshqaruv/dizaynlar/{id}/tayyor",
+		Summary:     "Chizilgan dizaynni raqamga qo'yish",
+		Description: "Rasm sayt bilan birga joylanadi; bu yerga uning manzili yoziladi.",
+		Tags:        []string{"boshqaruv"},
+	}, func(ctx context.Context, in *fillDesignInput) (*designOutput, error) {
+		if _, err := s.requireAdmin(ctx); err != nil {
+			return nil, err
+		}
+
+		request, err := s.admin.FillDesign(ctx, in.ID, in.Body.Image)
+		if errors.Is(err, admin.ErrNotWaiting) {
+			return nil, huma.Error409Conflict("Bu so'rov navbatda emas.")
+		}
+		if err != nil {
+			return nil, internalError(err, "dizayn saqlanmadi")
+		}
+
+		out := &designOutput{}
+		out.Body.Request = request
+		return out, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID: "boshqaruv-dizayn-rad",
+		Method:      http.MethodPost,
+		Path:        "/boshqaruv/dizaynlar/{id}/rad",
+		Summary:     "Dizayn so'rovini rad etish",
+		Description: "Sabab so'ragan odamga ko'rinadi.",
+		Tags:        []string{"boshqaruv"},
+	}, func(ctx context.Context, in *refuseDesignInput) (*designOutput, error) {
+		if _, err := s.requireAdmin(ctx); err != nil {
+			return nil, err
+		}
+
+		request, err := s.admin.RefuseDesign(ctx, in.ID, in.Body.Note)
+		if errors.Is(err, admin.ErrNotWaiting) {
+			return nil, huma.Error409Conflict("Bu so'rov navbatda emas.")
+		}
+		if err != nil {
+			return nil, internalError(err, "rad etilmadi")
+		}
+
+		out := &designOutput{}
+		out.Body.Request = request
+		return out, nil
+	})
+}
+
+type designQueueOutput struct {
+	Body struct {
+		Requests []admin.QueuedDesign `json:"sorovlar"`
+	}
+}
+
+type designOutput struct {
+	Body struct {
+		Request admin.QueuedDesign `json:"sorov"`
+	}
+}
+
+type fillDesignInput struct {
+	ID   string `path:"id" format:"uuid"`
+	Body struct {
+		// Where the finished card lives on the site. A path, never an address:
+		// a field that can carry a full URL is a card that can be served from
+		// somebody else's server.
+		Image string `json:"rasm" pattern:"^/[A-Za-z0-9/_.-]+\\.(jpg|jpeg|png|webp)$" example:"/kartalar/shaxsiy/AAA777.jpg"`
+	}
+}
+
+type refuseDesignInput struct {
+	ID   string `path:"id" format:"uuid"`
+	Body struct {
+		Note string `json:"izoh" minLength:"3" maxLength:"300"`
+	}
 }
 
 // requireAdmin is the door to the panel, and the only place it is decided.

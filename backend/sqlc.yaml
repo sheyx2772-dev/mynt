@@ -13,17 +13,12 @@
 version: "2"
 sql:
   - engine: "postgresql"
-    # Three sources, in the order Postgres would see them.
-    #
-    # The shim stands in for what Supabase provides — the `auth` schema and the
-    # API roles — which the migrations under it reference but do not create.
-    # Then the product's own schema, which is where `handles`, `leads` and the
-    # analytics tables come from; this backend adds none of them and reads all
-    # of them. Then what it does add: the two session tables.
-    schema:
-      - "../landing/supabase/test/local-shim.sql"
-      - "../landing/supabase/migrations"
-      - "db/migrations"
+    # One source now. The product's whole schema is here — the forty-seven
+    # migrations that built it on Supabase, the identity table and roles that
+    # Supabase used to provide, and what this backend added afterwards — in the
+    # order Postgres applies them. `make migrate` against an empty database
+    # produces the shape these queries are checked against.
+    schema: "db/migrations"
     queries: "db/queries"
     gen:
       go:

@@ -180,3 +180,13 @@ returning *;
 -- name: DeviceOrder :one
 -- One order without an owner, for the operator's queue.
 select * from orders where id = sqlc.arg(id) and kind = 'device';
+
+-- name: PlaceSubscriptionOrder :one
+-- Premium for a fixed period, against a number the buyer already owns.
+-- Ownership is a condition of the insert, so a guessed handle writes nothing.
+insert into orders (user_id, handle, amount, kind, months)
+select sqlc.arg(user_id), h.normalized, sqlc.arg(amount), 'subscription', sqlc.arg(months)
+from handles h
+where h.normalized = sqlc.arg(handle)
+  and h.user_id = sqlc.arg(user_id) and h.status = 'claimed'
+returning *;

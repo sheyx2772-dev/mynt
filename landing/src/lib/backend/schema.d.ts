@@ -41,6 +41,63 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/boshqaruv/dizaynlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Chizilishi kutilayotgan dizaynlar */
+        get: operations["boshqaruv-dizaynlar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/boshqaruv/dizaynlar/{id}/rad": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Dizayn so'rovini rad etish
+         * @description Sabab so'ragan odamga ko'rinadi.
+         */
+        post: operations["boshqaruv-dizayn-rad"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/boshqaruv/dizaynlar/{id}/tayyor": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Chizilgan dizaynni raqamga qo'yish
+         * @description Rasm sayt bilan birga joylanadi; bu yerga uning manzili yoziladi.
+         */
+        post: operations["boshqaruv-dizayn-tayyor"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/boshqaruv/hisoblar": {
         parameters: {
             query?: never;
@@ -793,6 +850,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/postlar/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Postni o'chirish */
+        delete: operations["postni-ochirish"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/profil/{raqam}": {
         parameters: {
             query?: never;
@@ -901,7 +975,11 @@ export interface paths {
         /** Profil postlari */
         get: operations["postlar"];
         put?: never;
-        post?: never;
+        /**
+         * Post yozish
+         * @description Faqat o'z raqamingizga. Soatiga cheklov bor.
+         */
+        post: operations["post-yozish"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1019,6 +1097,26 @@ export interface paths {
         get: operations["raqamni-tekshirish"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/qidirish/{raqam}/obuna": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Premiumga obuna bo'lish
+         * @description Raqam sizniki bo'lishi kerak. Narx shu yerda hisoblanadi va reja to'lov kelgandan keyin uzayadi.
+         */
+        post: operations["obuna-ochish"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1990,6 +2088,15 @@ export interface components {
             /** Format: int64 */
             tashrifchilar: number;
         };
+        DeletedPostOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/DeletedPostOutputBody.json
+             */
+            readonly $schema?: string;
+            raqam: string;
+        };
         Delivery: {
             /**
              * Format: uri
@@ -2021,6 +2128,24 @@ export interface components {
             readonly $schema?: string;
             sorovlar: components["schemas"]["DesignRequest"][] | null;
         };
+        DesignOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/DesignOutputBody.json
+             */
+            readonly $schema?: string;
+            sorov: components["schemas"]["QueuedDesign"];
+        };
+        DesignQueueOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/DesignQueueOutputBody.json
+             */
+            readonly $schema?: string;
+            sorovlar: components["schemas"]["QueuedDesign"][] | null;
+        };
         DesignRequest: {
             holat: string;
             id: string;
@@ -2047,6 +2172,7 @@ export interface components {
             telefon?: string;
             /** Format: date-time */
             tolangan?: string;
+            tolov?: components["schemas"]["Checkout"];
             /** Format: date-time */
             vaqt: string;
             viloyat?: string;
@@ -2133,6 +2259,16 @@ export interface components {
              * @example https://example.com/errors/example
              */
             type: string;
+        };
+        FillDesignInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/FillDesignInputBody.json
+             */
+            readonly $schema?: string;
+            /** @example /kartalar/shaxsiy/AAA777.jpg */
+            rasm: string;
         };
         FollowCountOutputBody: {
             /**
@@ -2828,6 +2964,15 @@ export interface components {
             /** Format: date-time */
             vaqt: string;
         };
+        PostInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/PostInputBody.json
+             */
+            readonly $schema?: string;
+            matn: string;
+        };
         PostsOutputBody: {
             /**
              * Format: uri
@@ -2950,6 +3095,17 @@ export interface components {
             /** Format: int64 */
             jami: number;
         };
+        QueuedDesign: {
+            buyruq?: string;
+            holat: string;
+            id: string;
+            izoh?: string;
+            raqam: string;
+            rasm?: string;
+            tilagi: string;
+            /** Format: date-time */
+            vaqt: string;
+        };
         RecommendInputBody: {
             /**
              * Format: uri
@@ -2982,6 +3138,15 @@ export interface components {
              */
             readonly $schema?: string;
             tavsiyachilar: components["schemas"]["Recommender"][] | null;
+        };
+        RefuseDesignInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/RefuseDesignInputBody.json
+             */
+            readonly $schema?: string;
+            izoh: string;
         };
         Report: {
             havolalar: components["schemas"]["LinkStat"][] | null;
@@ -3190,6 +3355,7 @@ export interface components {
             narx: number;
             raqam: string;
             raqamlar: string;
+            tolash_mumkin: boolean;
         };
         Stats: {
             /** Format: int64 */
@@ -3222,6 +3388,16 @@ export interface components {
             tur: string;
             /** Format: date-time */
             vaqt: string;
+        };
+        SubscribeInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/SubscribeInputBody.json
+             */
+            readonly $schema?: string;
+            /** @enum {string} */
+            muddat: "monthly" | "yearly";
         };
         Tab: {
             /** Format: int64 */
@@ -3529,6 +3705,105 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminOrderOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "boshqaruv-dizaynlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DesignQueueOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "boshqaruv-dizayn-rad": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RefuseDesignInputBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DesignOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "boshqaruv-dizayn-tayyor": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FillDesignInputBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DesignOutputBody"];
                 };
             };
             /** @description Error */
@@ -4988,6 +5263,37 @@ export interface operations {
             };
         };
     };
+    "postni-ochirish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeletedPostOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     profil: {
         parameters: {
             query?: never;
@@ -5212,6 +5518,39 @@ export interface operations {
             };
         };
     };
+    "post-yozish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PostInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "sorov-yuborish": {
         parameters: {
             query?: never;
@@ -5397,6 +5736,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["State"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "obuna-ochish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubscribeInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrderOutputBody"];
                 };
             };
             /** @description Error */

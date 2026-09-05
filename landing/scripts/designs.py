@@ -30,23 +30,39 @@ CARD_RATIO = 1.586
 
 
 def env(name):
+    """A setting, from the environment or from .env.local.
+
+    The environment wins, so a password can be given for one run without being
+    written to a file: ADMIN_PASSWORD=... python3 scripts/designs.py list
+    """
+    value = os.environ.get(name)
+    if value:
+        return value
+
     path = os.path.join(ROOT, ".env.local")
-    for line in open(path):
-        if line.startswith(f"{name}="):
-            return line.split("=", 1)[1].strip()
-    raise SystemExit(f"{name} .env.local da topilmadi")
+    try:
+        for line in open(path):
+            if line.startswith(f"{name}="):
+                return line.split("=", 1)[1].strip()
+    except FileNotFoundError:
+        pass
+    raise SystemExit(f"{name} topilmadi — muhitda yoki .env.local da bo'lsin")
 
 
-def api(path, method="GET", body=None, prefer=None):
-    key = env("SUPABASE_SERVICE_ROLE_KEY")
-    url = env("NEXT_PUBLIC_SUPABASE_URL").rstrip("/") + "/rest/v1/" + path
-    headers = {
-        "apikey": key,
-        "Authorization": f"Bearer {key}",
-        "Content-Type": "application/json",
-    }
-    if prefer:
-        headers["Prefer"] = prefer
+BACKEND = os.environ.get("BACKEND_URL", "http://127.0.0.1:8090")
+
+
+def api(path, method="GET", body=None):
+    """One call to our own backend, signed in as an administrator.
+
+    It used to go to Supabase's REST endpoint with the service role key — a key
+    that reads and writes every table, sitting in a file on a laptop. What
+    replaces it is an ordinary admin session: the same door the panel uses, the
+    same check on the same email list, and nothing here can do anything the
+    panel could not.
+    """
+    url = BACKEND.rstrip("/") + "/v1" + path
+    headers = {"Content-Type": "application/json", "Cookie": f"flex_session={session()}"}
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(url, data=data, headers=headers, method=method)
     try:
@@ -54,21 +70,53 @@ def api(path, method="GET", body=None, prefer=None):
             text = res.read().decode()
             return json.loads(text) if text else None
     except urllib.error.HTTPError as e:
-        raise SystemExit(f"baza xatosi {e.code}: {e.read().decode()[:300]}")
+        raise SystemExit(f"backend xatosi {e.code}: {e.read().decode()[:300]}")
+
+
+_token = None
+
+
+def session():
+    """Sign in once per run and keep the cookie.
+
+    The password is read from the environment rather than stored here, and the
+    token it buys lives only for as long as this process does.
+    """
+    global _token
+    if _token:
+        return _token
+
+    body = json.dumps({"email": env("ADMIN_EMAIL"), "parol": env("ADMIN_PASSWORD")}).encode()
+    req = urllib.request.Request(
+        BACKEND.rstrip("/") + "/v1/kirish/parol",
+        data=body,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as res:
+            for header in res.headers.get_all("Set-Cookie") or []:
+                if header.startswith("flex_session="):
+                    _token = header.split(";", 1)[0].split("=", 1)[1]
+                    return _token
+    except urllib.error.HTTPError as e:
+        raise SystemExit(f"kirib bo'lmadi {e.code}: {e.read().decode()[:200]}")
+
+    raise SystemExit("backend sessiya bermadi")
 
 
 def cmd_list():
-    rows = api("design_requests?status=eq.pending&select=id,handle,wish,prompt,created_at&order=created_at")
+    rows = (api("/boshqaruv/dizaynlar") or {}).get("sorovlar", [])
     if not rows:
         print("navbat bo'sh")
         return
     for r in rows:
         print("=" * 72)
-        print(f"{r['handle']}   {r['created_at'][:16].replace('T', ' ')}")
-        print(f"so'ragani: {r['wish']}")
+        print(f"{r['raqam']}   {r['vaqt'][:16].replace('T', ' ')}")
+        print(f"so'ragani: {r['tilagi']}")
         print(f"id: {r['id']}")
         print("-" * 72)
-        print(r["prompt"])
+        print(r.get("buyruq", ""))
         print()
     print(f"{len(rows)} ta so'rov kutyapti")
 
@@ -111,42 +159,28 @@ def cmd_fill(request_id, image_path):
     if not os.path.exists(image_path):
         raise SystemExit(f"fayl yo'q: {image_path}")
 
-    rows = api(f"design_requests?id=eq.{request_id}&select=id,handle,status")
-    if not rows:
-        raise SystemExit("bunday so'rov yo'q")
-    req = rows[0]
-    if req["status"] != "pending":
-        raise SystemExit(f"bu so'rov allaqachon '{req['status']}'")
+    rows = (api("/boshqaruv/dizaynlar") or {}).get("sorovlar", [])
+    req = next((r for r in rows if r["id"] == request_id), None)
+    if not req:
+        raise SystemExit("bunday so'rov navbatda yo'q")
 
-    handle = req["handle"]
+    handle = req["raqam"]
     name = re.sub(r"[^A-Z0-9]", "", handle.upper())
     dest = os.path.join(OUT_DIR, f"{name}.jpg")
     size = limeify_and_crop(image_path, dest)
     url = f"/kartalar/shaxsiy/{name}.jpg"
 
-    api(
-        f"design_requests?id=eq.{request_id}",
-        method="PATCH",
-        body={"status": "filled", "image_url": url, "filled_at": "now()"},
-        prefer="return=minimal",
-    )
-    api(
-        f"handles?normalized=eq.{handle}",
-        method="PATCH",
-        body={"custom_design_url": url},
-        prefer="return=minimal",
-    )
+    # One call, because the backend writes both the request and the number in
+    # one transaction: a request marked filled whose number still shows the
+    # catalogue design is a buyer told their card is ready who cannot see it.
+    api(f"/boshqaruv/dizaynlar/{request_id}/tayyor", method="POST", body={"rasm": url})
+
     print(f"{handle}: {dest} ({size[0]}x{size[1]})")
     print("git add public/kartalar/shaxsiy && git commit && git push — shundan keyin ko'rinadi")
 
 
 def cmd_refuse(request_id, note):
-    api(
-        f"design_requests?id=eq.{request_id}",
-        method="PATCH",
-        body={"status": "refused", "note": note},
-        prefer="return=minimal",
-    )
+    api(f"/boshqaruv/dizaynlar/{request_id}/rad", method="POST", body={"izoh": note})
     print("rad etildi, sabab foydalanuvchiga ko'rinadi")
 
 

@@ -8,22 +8,12 @@ import { isRecommended, toggleRecommendation } from "@/lib/recommendations";
 import { readSource } from "@/lib/analytics";
 
 import { revalidatePath } from "next/cache";
-import { supabaseAdmin } from "@/lib/supabase/admin";
-import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { parseHandle, priceForHandle } from "@/lib/pricing";
+import { isFollowing, setFollowing } from "@/lib/follows";
 import { getUser } from "@/lib/auth";
 import { getSiteOrigin } from "@/lib/site";
 import {   getClientIp } from "@/lib/client-ip";
 import { readProfileForm } from "@/lib/profile-form";
-import { clickCheckoutUrl } from "@/lib/payments/click";
-import { paymeCheckoutUrl } from "@/lib/payments/payme";
-import {
-  clickConfig,
-  paymeConfig,
-  isClickConfigured,
-  isPaymeConfigured,
-  isAnyProviderConfigured,
-} from "@/lib/payments/config";
 
 // How long a handle is held while the buyer completes payment.
 const RESERVATION_MINUTES = 30;
@@ -114,49 +104,15 @@ export async function toggleFollow(rawHandle: string): Promise<FollowResult> {
   if (!user) {
     return { following: false, needsAuth: true, error: "Obuna uchun hisobingizga kiring." };
   }
-  if (!supabaseAdmin) return { following: false, error: "Baza ulanmagan." };
 
-  // Only a claimed handle can be followed, and nobody follows themselves.
-  const { data: target } = await supabaseAdmin
-    .from("handles")
-    .select("user_id")
-    .eq("normalized", normalized)
-    .eq("status", "claimed")
-    .maybeSingle();
-
-  if (!target) return { following: false, error: "Bunday profil yo'q." };
-  if (target.user_id === user.id) {
-    return { following: false, error: "O'zingizga obuna bo'lolmaysiz." };
-  }
-
-  const { data: existing } = await supabaseAdmin
-    .from("follows")
-    .select("followed_handle")
-    .eq("follower_user_id", user.id)
-    .eq("followed_handle", normalized)
-    .maybeSingle();
-
-  if (existing) {
-    await supabaseAdmin
-      .from("follows")
-      .delete()
-      .eq("follower_user_id", user.id)
-      .eq("followed_handle", normalized);
-    revalidatePath(`/${normalized}`);
-    return { following: false };
-  }
-
-  const { error } = await supabaseAdmin
-    .from("follows")
-    .insert({ follower_user_id: user.id, followed_handle: normalized });
-
-  // A duplicate means a double click landed twice; the end state is the same.
-  if (error && error.code !== "23505") {
-    return { following: false, error: "Xatolik yuz berdi." };
-  }
+  // The backend answers with the state it reached, so a double click leaves the
+  // button showing the truth rather than the opposite of it. Following yourself
+  // and following a number nobody has claimed are both refused there.
+  const current = await isFollowing(normalized);
+  const following = await setFollowing(normalized, !current);
 
   revalidatePath(`/${normalized}`);
-  return { following: true };
+  return { following };
 }
 
 export type LeadResult = { ok: boolean; error?: string };

@@ -53,3 +53,44 @@ export async function listFeed(limit = 50): Promise<Post[]> {
 
   return (data.postlar ?? []).map(toPost);
 }
+
+export type WriteResult =
+  | { ok: true; handle: string }
+  | { ok: false; error: "empty" | "tooMany" | "notOwned" | "failed" };
+
+/**
+ * Writing a post on a number the writer owns.
+ *
+ * Ownership, the hourly ceiling and the length are all checked in the backend.
+ * The form checks the same things so somebody is told before they type a
+ * thousand characters — but a form is not a limit.
+ */
+export async function writePost(handle: string, body: string): Promise<WriteResult> {
+  const client = await asReader();
+  const { error, response } = await client.POST("/profil/{raqam}/postlar", {
+    params: { path: { raqam: handle } },
+    body: { matn: body },
+  });
+
+  if (!error) return { ok: true, handle };
+
+  switch (response?.status) {
+    case 422:
+      return { ok: false, error: "empty" };
+    case 429:
+      return { ok: false, error: "tooMany" };
+    case 404:
+      return { ok: false, error: "notOwned" };
+    default:
+      return { ok: false, error: "failed" };
+  }
+}
+
+/** Taking one down. Answers with the number it was on, so the pages refresh. */
+export async function removePost(postId: string): Promise<string | null> {
+  const client = await asReader();
+  const { data, error } = await client.DELETE("/postlar/{id}", {
+    params: { path: { id: postId } },
+  });
+  return error || !data ? null : data.raqam;
+}

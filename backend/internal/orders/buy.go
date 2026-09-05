@@ -154,7 +154,7 @@ func (s *Store) Buy(ctx context.Context, parsed handles.Parsed, userID, name, co
 		Number:        normalized,
 		Amount:        price,
 		Status:        order.Status,
-		Checkout:      s.paid.checkoutFor(order.ID.String(), price, ReservationFor),
+		Checkout:      s.paid.checkoutFor(order.ID.String(), returnPathFor("handle", order.ID.String()), price, ReservationFor),
 		ReservedUntil: optionalTime(row.ReservedUntil),
 		Discount:      discount,
 	}, nil

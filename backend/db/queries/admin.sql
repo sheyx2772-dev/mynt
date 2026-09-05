@@ -69,3 +69,30 @@ insert into handles (letters, digits, status, user_id, owner_name, gift_reason, 
 values (sqlc.arg(letters), sqlc.arg(digits), 'claimed', sqlc.arg(user_id),
         sqlc.narg(owner_name), sqlc.arg(reason), now())
 returning normalized, status, claimed_at;
+
+-- Dizayn navbati -------------------------------------------------------------
+
+-- name: WaitingDesignRequests :many
+-- What is waiting to be drawn, oldest first — the order they were asked in.
+select * from design_requests
+where status = 'pending'
+order by created_at;
+
+-- name: FillDesignRequest :one
+-- Conditional on still being pending, so two people filling the same request
+-- at once produce one filled design rather than two overwriting each other.
+update design_requests set
+  status = 'filled', image_url = sqlc.arg(image_url), filled_at = now()
+where id = sqlc.arg(id) and status = 'pending'
+returning *;
+
+-- name: RefuseDesignRequest :one
+update design_requests set status = 'refused', note = sqlc.arg(note)
+where id = sqlc.arg(id) and status = 'pending'
+returning *;
+
+-- name: SetCustomDesign :execrows
+-- The design made for one buyer, which outranks whatever catalogue design they
+-- had chosen.
+update handles set custom_design_url = sqlc.arg(image_url)
+where normalized = sqlc.arg(handle);

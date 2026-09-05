@@ -253,3 +253,124 @@ func (q *Queries) AdminUserByEmail(ctx context.Context, email string) (AdminUser
 	err := row.Scan(&i.ID, &i.Email)
 	return i, err
 }
+
+const fillDesignRequest = `-- name: FillDesignRequest :one
+update design_requests set
+  status = 'filled', image_url = $1, filled_at = now()
+where id = $2 and status = 'pending'
+returning id, handle, user_id, wish, prompt, status, image_url, note, created_at, filled_at
+`
+
+type FillDesignRequestParams struct {
+	ImageUrl *string   `json:"image_url"`
+	ID       uuid.UUID `json:"id"`
+}
+
+// Conditional on still being pending, so two people filling the same request
+// at once produce one filled design rather than two overwriting each other.
+func (q *Queries) FillDesignRequest(ctx context.Context, arg FillDesignRequestParams) (DesignRequest, error) {
+	row := q.db.QueryRow(ctx, fillDesignRequest, arg.ImageUrl, arg.ID)
+	var i DesignRequest
+	err := row.Scan(
+		&i.ID,
+		&i.Handle,
+		&i.UserID,
+		&i.Wish,
+		&i.Prompt,
+		&i.Status,
+		&i.ImageUrl,
+		&i.Note,
+		&i.CreatedAt,
+		&i.FilledAt,
+	)
+	return i, err
+}
+
+const refuseDesignRequest = `-- name: RefuseDesignRequest :one
+update design_requests set status = 'refused', note = $1
+where id = $2 and status = 'pending'
+returning id, handle, user_id, wish, prompt, status, image_url, note, created_at, filled_at
+`
+
+type RefuseDesignRequestParams struct {
+	Note *string   `json:"note"`
+	ID   uuid.UUID `json:"id"`
+}
+
+func (q *Queries) RefuseDesignRequest(ctx context.Context, arg RefuseDesignRequestParams) (DesignRequest, error) {
+	row := q.db.QueryRow(ctx, refuseDesignRequest, arg.Note, arg.ID)
+	var i DesignRequest
+	err := row.Scan(
+		&i.ID,
+		&i.Handle,
+		&i.UserID,
+		&i.Wish,
+		&i.Prompt,
+		&i.Status,
+		&i.ImageUrl,
+		&i.Note,
+		&i.CreatedAt,
+		&i.FilledAt,
+	)
+	return i, err
+}
+
+const setCustomDesign = `-- name: SetCustomDesign :execrows
+update handles set custom_design_url = $1
+where normalized = $2
+`
+
+type SetCustomDesignParams struct {
+	ImageUrl *string `json:"image_url"`
+	Handle   *string `json:"handle"`
+}
+
+// The design made for one buyer, which outranks whatever catalogue design they
+// had chosen.
+func (q *Queries) SetCustomDesign(ctx context.Context, arg SetCustomDesignParams) (int64, error) {
+	result, err := q.db.Exec(ctx, setCustomDesign, arg.ImageUrl, arg.Handle)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
+}
+
+const waitingDesignRequests = `-- name: WaitingDesignRequests :many
+
+select id, handle, user_id, wish, prompt, status, image_url, note, created_at, filled_at from design_requests
+where status = 'pending'
+order by created_at
+`
+
+// Dizayn navbati -------------------------------------------------------------
+// What is waiting to be drawn, oldest first — the order they were asked in.
+func (q *Queries) WaitingDesignRequests(ctx context.Context) ([]DesignRequest, error) {
+	rows, err := q.db.Query(ctx, waitingDesignRequests)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []DesignRequest{}
+	for rows.Next() {
+		var i DesignRequest
+		if err := rows.Scan(
+			&i.ID,
+			&i.Handle,
+			&i.UserID,
+			&i.Wish,
+			&i.Prompt,
+			&i.Status,
+			&i.ImageUrl,
+			&i.Note,
+			&i.CreatedAt,
+			&i.FilledAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

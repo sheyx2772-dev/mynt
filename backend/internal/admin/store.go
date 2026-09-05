@@ -28,11 +28,12 @@ var (
 )
 
 type Store struct {
+	pool    *pgxpool.Pool
 	queries *store.Queries
 }
 
 func NewStore(pool *pgxpool.Pool) *Store {
-	return &Store{queries: store.New(pool)}
+	return &Store{pool: pool, queries: store.New(pool)}
 }
 
 // The types below are named for the panel rather than for the thing, because

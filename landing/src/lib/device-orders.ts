@@ -75,8 +75,17 @@ function toOrder(row: Wire): DeviceOrder {
 }
 
 export type PlaceResult =
-  | { ok: true; orderId: string; amount: number }
+  | { ok: true; orderId: string; amount: number; checkout: Checkout }
   | { ok: false; error: "notOwned" | "unknownDevice" | "failed" };
+
+/**
+ * Where to pay, when there is a provider to pay at.
+ *
+ * Empty means nothing is configured to take money — in development, and in the
+ * window before certification finishes. The caller settles the order instead of
+ * showing a button that opens an empty page.
+ */
+export type Checkout = { click?: string; payme?: string };
 
 /**
  * Order a device against a number the buyer already owns.
@@ -105,7 +114,12 @@ export async function placeDeviceOrder(
     return { ok: false, error: "failed" };
   }
 
-  return { ok: true, orderId: data.buyurtma.id, amount: data.buyurtma.summa };
+  return {
+    ok: true,
+    orderId: data.buyurtma.id,
+    amount: data.buyurtma.summa,
+    checkout: { click: data.buyurtma.tolov?.click, payme: data.buyurtma.tolov?.payme },
+  };
 }
 
 export type AddressResult = { ok: true } | { ok: false; error: "notFound" | "failed" };

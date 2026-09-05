@@ -53,13 +53,18 @@ type Checkout struct {
 	Click string `json:"click,omitempty"`
 }
 
-func (p Providers) checkoutFor(orderID string, amountSum int64, validFor time.Duration) Checkout {
-	// Per order, not a constant: a buyer coming back from a payment page should
-	// land on the thing they just paid for, and on a phone that address opens
-	// the app rather than a website they are not signed into.
+// checkoutFor builds the payment addresses for one order.
+//
+// `path` is where the buyer lands afterwards, given per order rather than as a
+// constant: somebody coming back from a payment page should see the thing they
+// just paid for, and on a phone that address opens the app rather than a
+// website they are not signed into. A device sends them on to the address form,
+// because the money is only half of what is needed from them and a buyer who
+// lands anywhere else has to be chased for the other half.
+func (p Providers) checkoutFor(orderID, path string, amountSum int64, validFor time.Duration) Checkout {
 	returnURL := ""
 	if p.SiteURL != "" {
-		returnURL = p.SiteURL + "/buyurtma/" + orderID
+		returnURL = p.SiteURL + path
 	}
 
 	var links Checkout
@@ -70,4 +75,20 @@ func (p Providers) checkoutFor(orderID string, amountSum int64, validFor time.Du
 		links.Click = ClickCheckoutURL(p.ClickServiceID, p.ClickMerchantID, orderID, amountSum, returnURL)
 	}
 	return links
+}
+
+// returnPathFor is where a buyer lands when a provider is done with them.
+//
+// A number goes to the order page, which is where the claim is confirmed and
+// which the app claims as a deep link. A device goes to the address form
+// instead: it is the only screen that can finish the purchase, and a buyer who
+// lands anywhere else has to be chased for an address. A subscription goes to
+// the number itself, because there is nothing further to do.
+func returnPathFor(kind, orderID string) string {
+	switch kind {
+	case "device":
+		return "/kabinet/buyurtma/" + orderID
+	default:
+		return "/buyurtma/" + orderID
+	}
 }

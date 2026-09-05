@@ -635,6 +635,60 @@ func (q *Queries) PlaceDeviceOrder(ctx context.Context, arg PlaceDeviceOrderPara
 	return i, err
 }
 
+const placeSubscriptionOrder = `-- name: PlaceSubscriptionOrder :one
+insert into orders (user_id, handle, amount, kind, months)
+select $1, h.normalized, $2, 'subscription', $3
+from handles h
+where h.normalized = $4
+  and h.user_id = $1 and h.status = 'claimed'
+returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at
+`
+
+type PlaceSubscriptionOrderParams struct {
+	UserID uuid.UUID `json:"user_id"`
+	Amount int64     `json:"amount"`
+	Months *int32    `json:"months"`
+	Handle *string   `json:"handle"`
+}
+
+// Premium for a fixed period, against a number the buyer already owns.
+// Ownership is a condition of the insert, so a guessed handle writes nothing.
+func (q *Queries) PlaceSubscriptionOrder(ctx context.Context, arg PlaceSubscriptionOrderParams) (Order, error) {
+	row := q.db.QueryRow(ctx, placeSubscriptionOrder,
+		arg.UserID,
+		arg.Amount,
+		arg.Months,
+		arg.Handle,
+	)
+	var i Order
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Handle,
+		&i.Amount,
+		&i.Status,
+		&i.Provider,
+		&i.ProviderTxID,
+		&i.PaidAt,
+		&i.CancelledAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Kind,
+		&i.Months,
+		&i.DeviceType,
+		&i.Design,
+		&i.Recipient,
+		&i.Phone,
+		&i.Region,
+		&i.Address,
+		&i.DeliveryNote,
+		&i.Fulfilment,
+		&i.ShippedAt,
+		&i.DeliveredAt,
+	)
+	return i, err
+}
+
 const recordClaimAttempt = `-- name: RecordClaimAttempt :exec
 insert into claim_attempts (user_id, ip, handle, succeeded)
 values ($1, $2, $3, $4)

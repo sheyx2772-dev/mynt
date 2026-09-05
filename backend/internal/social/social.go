@@ -10,9 +10,12 @@ package social
 
 import (
 	"context"
+	"errors"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/sheyx2772-dev/flex/backend/internal/store"
@@ -285,4 +288,81 @@ func firstNonEmpty(values ...string) string {
 		}
 	}
 	return ""
+}
+
+// Writing a post, and taking one down.
+
+// PostsPerHour is a generous ceiling that still stops a script filling the
+// feed. Counted in the database rather than in memory, because a second server
+// process would otherwise grant a second allowance.
+const PostsPerHour = 20
+
+var (
+	// ErrNotOwned is a number that is not the writer's, or is not claimed yet.
+	ErrNotOwned = errors.New("bu raqam sizniki emas")
+	// ErrTooMany is the hourly ceiling.
+	ErrTooMany = errors.New("juda ko'p post")
+	// ErrEmpty is a post with nothing in it.
+	ErrEmpty = errors.New("post bo'sh")
+)
+
+// The longest a post may be. Enforced here as well as in the form, because a
+// form is not a limit.
+const maxPostLength = 1000
+
+// AddPost writes one post and answers with the number it was written on.
+func (s *Store) AddPost(ctx context.Context, userID, handle, body string) (string, error) {
+	author, err := uuid.Parse(userID)
+	if err != nil {
+		return "", ErrNotOwned
+	}
+
+	body = strings.TrimSpace(body)
+	if body == "" {
+		return "", ErrEmpty
+	}
+	if len(body) > maxPostLength {
+		body = body[:maxPostLength]
+	}
+
+	recent, err := s.queries.CountRecentPosts(ctx, author)
+	if err != nil {
+		return "", err
+	}
+	if recent >= PostsPerHour {
+		return "", ErrTooMany
+	}
+
+	row, err := s.queries.AddPost(ctx, store.AddPostParams{
+		UserID: author, Handle: &handle, Body: body,
+	})
+	if errors.Is(err, pgx.ErrNoRows) {
+		return "", ErrNotOwned
+	}
+	if err != nil {
+		return "", err
+	}
+	return row.Handle, nil
+}
+
+// DeletePost removes one, and answers with the number it was on so the caller
+// knows which pages to refresh.
+func (s *Store) DeletePost(ctx context.Context, userID, postID string) (string, error) {
+	author, err := uuid.Parse(userID)
+	if err != nil {
+		return "", ErrNotOwned
+	}
+	id, err := uuid.Parse(postID)
+	if err != nil {
+		return "", ErrNotOwned
+	}
+
+	handle, err := s.queries.DeletePost(ctx, store.DeletePostParams{ID: id, UserID: author})
+	if errors.Is(err, pgx.ErrNoRows) {
+		return "", ErrNotOwned
+	}
+	if err != nil {
+		return "", err
+	}
+	return handle, nil
 }

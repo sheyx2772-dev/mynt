@@ -55,6 +55,13 @@ type orderInput struct {
 	ID string `path:"id" format:"uuid"`
 }
 
+type subscribeInput struct {
+	Raqam string `path:"raqam" pattern:"^[A-Za-z]{3}[0-9]{3}$" example:"AAA777"`
+	Body  struct {
+		Period string `json:"muddat" enum:"monthly,yearly"`
+	}
+}
+
 func (s *Server) registerOrders(api huma.API) {
 	huma.Register(api, huma.Operation{
 		OperationID: "raqamni-tekshirish",
@@ -144,6 +151,41 @@ func (s *Server) registerOrders(api huma.API) {
 		}
 		if err != nil {
 			return nil, internalError(err, "buyurtma o'qilmadi")
+		}
+
+		out := &orderOutput{}
+		out.Body.Order = order
+		return out, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID:   "obuna-ochish",
+		Method:        http.MethodPost,
+		Path:          "/qidirish/{raqam}/obuna",
+		Summary:       "Premiumga obuna bo'lish",
+		Description:   "Raqam sizniki bo'lishi kerak. Narx shu yerda hisoblanadi va reja to'lov kelgandan keyin uzayadi.",
+		Tags:          []string{"sotib olish"},
+		DefaultStatus: http.StatusCreated,
+	}, func(ctx context.Context, in *subscribeInput) (*orderOutput, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		parsed, ok := handles.Parse(in.Raqam)
+		if !ok {
+			return nil, huma.Error404NotFound("Bunday raqam yo'q.")
+		}
+
+		order, err := s.orders.Subscribe(ctx, account.ID, parsed.Normalized(), orders.Period(in.Body.Period))
+		switch {
+		case errors.Is(err, orders.ErrCannotSell):
+			return nil, huma.Error503ServiceUnavailable("To'lov tizimi hali ulanmagan. Biz bilan bog'laning.")
+		case errors.Is(err, orders.ErrNotFound):
+			// Not theirs, or no such number. One answer for both.
+			return nil, huma.Error404NotFound("Bu raqam sizga tegishli emas.")
+		case err != nil:
+			return nil, internalError(err, "obuna ochilmadi")
 		}
 
 		out := &orderOutput{}

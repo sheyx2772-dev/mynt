@@ -47,6 +47,11 @@ type Device struct {
 	PaidAt     *time.Time `json:"tolangan,omitempty"`
 	ShippedAt  *time.Time `json:"jonatilgan,omitempty"`
 	CreatedAt  time.Time  `json:"vaqt"`
+
+	// Where to pay, on an order that has not been paid for. Built here rather
+	// than on the website so the merchant ids live in one process — a second
+	// copy of them is a second thing to get wrong about money.
+	Checkout Checkout `json:"tolov,omitzero"`
 }
 
 // Delivery is where a thing is to be sent.
@@ -156,7 +161,12 @@ func (s *Store) PlaceDevice(ctx context.Context, userID, handle, deviceType, des
 	if err != nil {
 		return Device{}, err
 	}
-	return toDevice(row), nil
+
+	order := toDevice(row)
+	// Nothing is reserved by a device order, so the payment page has no window
+	// to match: there is no number underneath it somebody else can buy.
+	order.Checkout = s.paid.checkoutFor(order.ID, returnPathFor("device", order.ID), order.Amount, 0)
+	return order, nil
 }
 
 // SetDelivery writes the address and moves the order into the queue.

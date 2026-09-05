@@ -6,16 +6,6 @@ import { requireOwnHandle } from "@/lib/kabinet";
 import { placeDeviceOrder, settleWithoutProvider } from "@/lib/device-orders";
 import { isDeviceType } from "@/lib/devices";
 import { isCardDesign } from "@/lib/card-designs";
-import { clickCheckoutUrl } from "@/lib/payments/click";
-import { paymeCheckoutUrl } from "@/lib/payments/payme";
-import {
-  clickConfig,
-  isAnyProviderConfigured,
-  isClickConfigured,
-  isPaymeConfigured,
-  paymeConfig,
-} from "@/lib/payments/config";
-import { getSiteOrigin } from "@/lib/site";
 
 // Ordering the object, from the cabinet of the number it belongs to.
 //
@@ -37,7 +27,7 @@ export async function orderDevice(
   form: FormData,
 ): Promise<OrderState> {
   const handleRaw = String(form.get("handle") ?? "");
-  const { normalized, userId } = await requireOwnHandle(
+  const { normalized } = await requireOwnHandle(
     handleRaw,
     "/kabinet/[handle]/qurilma",
   );
@@ -65,39 +55,15 @@ export async function orderDevice(
   }
 
   const addressPath = `/kabinet/buyurtma/${placed.orderId}`;
+  revalidatePath(`/kabinet/${normalized}/qurilma`);
 
-  if (!isAnyProviderConfigured) {
+  // No payment addresses came back, so there is nothing configured to take
+  // money. The order is settled the way a claim is in the same situation, and
+  // the buyer goes straight to the address form.
+  if (!placed.checkout.click && !placed.checkout.payme) {
     await settleWithoutProvider(placed.orderId);
-    revalidatePath(`/kabinet/${normalized}/qurilma`);
     return { next: addressPath };
   }
 
-  const origin = await getSiteOrigin();
-  // Back to the address form rather than to the profile: the money is only
-  // half of what we need from them, and a buyer who lands anywhere else has to
-  // be chased for the other half.
-  const returnUrl = `${origin}${addressPath}`;
-  const checkout: OrderState["checkout"] = {};
-
-  if (isClickConfigured) {
-    checkout.click = clickCheckoutUrl({
-      serviceId: clickConfig.serviceId,
-      merchantId: clickConfig.merchantId,
-      amount: placed.amount,
-      orderId: placed.orderId,
-      returnUrl,
-    });
-  }
-
-  if (isPaymeConfigured) {
-    checkout.payme = paymeCheckoutUrl({
-      merchantId: paymeConfig.merchantId,
-      orderId: placed.orderId,
-      amountSum: placed.amount,
-      returnUrl,
-    });
-  }
-
-  revalidatePath(`/kabinet/${normalized}/qurilma`);
-  return { checkout };
+  return { checkout: placed.checkout };
 }

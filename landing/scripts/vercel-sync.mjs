@@ -24,26 +24,19 @@ const REGION = "fra1";
 
 // An allowlist, not "everything in .env.local".
 //
-// That file also holds credentials that operate the accounts themselves — the
-// Supabase management token, this Vercel token, the new database's Postgres
-// password. None of those belong in a running web server: a server that is
-// broken into should not be able to delete the project it runs on.
+// That file also holds credentials that operate the accounts themselves — this
+// Vercel token, the database's Postgres password. None of those belong in a
+// running web server: a server that is broken into should not be able to
+// delete the project it runs on.
+//
+// It is short now, and that is the point. This deployment renders pages and
+// asks the backend; it holds no database key, no payment secret and no bot
+// token, because it makes no decision that would need one.
 const SEND = [
-  "NEXT_PUBLIC_SUPABASE_URL",
-  "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-  "SUPABASE_SERVICE_ROLE_KEY",
+  "BACKEND_URL",
   "NEXT_PUBLIC_SITE_URL",
-  "PAYME_MERCHANT_ID",
-  "PAYME_SECRET_KEY",
-  "R2_ACCOUNT_ID",
-  "R2_ACCESS_KEY_ID",
-  "R2_SECRET_ACCESS_KEY",
-  "R2_BUCKET_NAME",
   "R2_PUBLIC_URL",
-  "ANALYTICS_SALT",
-  "TELEGRAM_BOT_TOKEN",
   "NEXT_PUBLIC_TELEGRAM_BOT_NAME",
-  "CRON_SECRET",
 ];
 
 const TARGETS = ["production", "preview"];

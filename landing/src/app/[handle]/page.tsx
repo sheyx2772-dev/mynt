@@ -32,7 +32,7 @@ import { listComments } from "@/lib/comments";
 import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
-import { isAnyProviderConfigured } from "@/lib/payments/config";
+import { isPayable } from "@/lib/payments/config";
 import {
   readSource,
   recordProfileView,
@@ -666,6 +666,7 @@ async function VanityHandlePage({
 
   // Handle isn't claimed yet — show the rarity price breakdown and a claim CTA.
   const price = priceForHandle(letters, digits);
+  const paymentEnabled = await isPayable(normalized);
   const lr = letterRarity(letters);
   const dr = digitRarity(digits);
   const isSignedIn = Boolean(await getUser());
@@ -698,7 +699,7 @@ async function VanityHandlePage({
           handle={normalized}
           priceLabel={formatUZS(price)}
           isSignedIn={isSignedIn}
-          paymentEnabled={isAnyProviderConfigured}
+          paymentEnabled={paymentEnabled}
         />
       </div>
     </PageShell>

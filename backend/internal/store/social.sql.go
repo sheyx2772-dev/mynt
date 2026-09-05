@@ -33,6 +33,35 @@ func (q *Queries) AddComment(ctx context.Context, arg AddCommentParams) (int64, 
 	return id, err
 }
 
+const addPost = `-- name: AddPost :one
+insert into posts (handle, user_id, body)
+select h.normalized, $1, $2
+from handles h
+where h.normalized = $3
+  and h.user_id = $1 and h.status = 'claimed'
+returning id, handle
+`
+
+type AddPostParams struct {
+	UserID uuid.UUID `json:"user_id"`
+	Body   string    `json:"body"`
+	Handle *string   `json:"handle"`
+}
+
+type AddPostRow struct {
+	ID     uuid.UUID `json:"id"`
+	Handle string    `json:"handle"`
+}
+
+// Only a claimed handle can post: a reservation is an unfinished purchase.
+// Ownership is a condition of the insert, so a guessed handle writes nothing.
+func (q *Queries) AddPost(ctx context.Context, arg AddPostParams) (AddPostRow, error) {
+	row := q.db.QueryRow(ctx, addPost, arg.UserID, arg.Body, arg.Handle)
+	var i AddPostRow
+	err := row.Scan(&i.ID, &i.Handle)
+	return i, err
+}
+
 const bumpViewCount = `-- name: BumpViewCount :exec
 update handles set view_count = view_count + 1 where normalized = $1
 `
@@ -109,6 +138,19 @@ func (q *Queries) CountFollowing(ctx context.Context, userID uuid.UUID) (int64, 
 	return count, err
 }
 
+const countRecentPosts = `-- name: CountRecentPosts :one
+select count(*) from posts
+where user_id = $1 and created_at >= now() - interval '1 hour'
+`
+
+// A generous ceiling that still stops a script filling the feed.
+func (q *Queries) CountRecentPosts(ctx context.Context, userID uuid.UUID) (int64, error) {
+	row := q.db.QueryRow(ctx, countRecentPosts, userID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const countRecommendations = `-- name: CountRecommendations :one
 select count(*) from recommendations r
 join handles h on h.id = r.handle_id
@@ -143,6 +185,26 @@ func (q *Queries) DeleteComment(ctx context.Context, arg DeleteCommentParams) (i
 		return 0, err
 	}
 	return result.RowsAffected(), nil
+}
+
+const deletePost = `-- name: DeletePost :one
+delete from posts
+where id = $1 and user_id = $2
+returning handle
+`
+
+type DeletePostParams struct {
+	ID     uuid.UUID `json:"id"`
+	UserID uuid.UUID `json:"user_id"`
+}
+
+// The author filter is the authorization check: somebody else's post simply
+// matches nothing.
+func (q *Queries) DeletePost(ctx context.Context, arg DeletePostParams) (string, error) {
+	row := q.db.QueryRow(ctx, deletePost, arg.ID, arg.UserID)
+	var handle string
+	err := row.Scan(&handle)
+	return handle, err
 }
 
 const feed = `-- name: Feed :many

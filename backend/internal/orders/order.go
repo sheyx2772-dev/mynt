@@ -82,7 +82,7 @@ func (s *Store) Order(ctx context.Context, id, userID string) (Order, error) {
 		if row.CreatedAt.Valid {
 			left = time.Until(row.CreatedAt.Time.Add(ReservationFor))
 		}
-		order.Checkout = s.paid.checkoutFor(order.ID, order.Amount, left)
+		order.Checkout = s.paid.checkoutFor(order.ID, returnPathFor(order.Kind, order.ID), order.Amount, left)
 	}
 	return order, nil
 }

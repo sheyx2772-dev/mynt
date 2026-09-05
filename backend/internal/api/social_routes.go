@@ -3,6 +3,7 @@ package api
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"net/netip"
 	"time"
 
@@ -98,6 +99,24 @@ type followCountOutput struct {
 
 type feedInput struct {
 	Limit int `query:"soni" minimum:"1" maximum:"100" default:"30"`
+}
+
+type postInput struct {
+	Raqam string `path:"raqam" pattern:"^[A-Za-z]{3}[0-9]{3}$" example:"AAA777"`
+	Body  struct {
+		Text string `json:"matn" minLength:"1" maxLength:"1000"`
+	}
+}
+
+type postIDInput struct {
+	ID string `path:"id" format:"uuid"`
+}
+
+// The number the post was on, so the caller knows which pages to refresh.
+type deletedPostOutput struct {
+	Body struct {
+		Handle string `json:"raqam"`
+	}
 }
 
 func (s *Server) registerSocial(api huma.API) {
@@ -307,6 +326,67 @@ func (s *Server) registerSocial(api huma.API) {
 
 		out := &postsOutput{}
 		out.Body.Posts = list
+		return out, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID:   "post-yozish",
+		Method:        http.MethodPost,
+		Path:          "/profil/{raqam}/postlar",
+		Summary:       "Post yozish",
+		Description:   "Faqat o'z raqamingizga. Soatiga cheklov bor.",
+		Tags:          []string{"profil"},
+		DefaultStatus: http.StatusCreated,
+	}, func(ctx context.Context, in *postInput) (*struct{}, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		raqam, ok := number(in.Raqam)
+		if !ok {
+			return nil, huma.Error404NotFound("Bunday raqam yo'q.")
+		}
+
+		_, err = s.social.AddPost(ctx, account.ID, raqam, in.Body.Text)
+		switch {
+		case errors.Is(err, social.ErrEmpty):
+			return nil, huma.Error422UnprocessableEntity("Post bo'sh bo'lmasligi kerak.")
+		case errors.Is(err, social.ErrTooMany):
+			return nil, huma.Error429TooManyRequests("Bir soatda juda ko'p post. Birozdan so'ng urining.")
+		case errors.Is(err, social.ErrNotOwned):
+			return nil, huma.Error404NotFound("Bu raqam sizga tegishli emas.")
+		case err != nil:
+			return nil, internalError(err, "post saqlanmadi")
+		}
+
+		return nil, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID:   "postni-ochirish",
+		Method:        http.MethodDelete,
+		Path:          "/postlar/{id}",
+		Summary:       "Postni o'chirish",
+		Tags:          []string{"profil"},
+		DefaultStatus: http.StatusNoContent,
+	}, func(ctx context.Context, in *postIDInput) (*deletedPostOutput, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		handle, err := s.social.DeletePost(ctx, account.ID, in.ID)
+		if errors.Is(err, social.ErrNotOwned) {
+			// Somebody else's post and an invented id get the same answer.
+			return nil, huma.Error404NotFound("Post topilmadi.")
+		}
+		if err != nil {
+			return nil, internalError(err, "post o'chirilmadi")
+		}
+
+		out := &deletedPostOutput{}
+		out.Body.Handle = handle
 		return out, nil
 	})
 

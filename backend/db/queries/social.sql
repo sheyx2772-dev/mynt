@@ -125,3 +125,25 @@ join follows f on f.followed_handle = p.handle
 where f.follower_user_id = sqlc.arg(user_id)
 order by p.created_at desc
 limit sqlc.arg(page_size)::int;
+
+-- name: CountRecentPosts :one
+-- A generous ceiling that still stops a script filling the feed.
+select count(*) from posts
+where user_id = sqlc.arg(user_id) and created_at >= now() - interval '1 hour';
+
+-- name: AddPost :one
+-- Only a claimed handle can post: a reservation is an unfinished purchase.
+-- Ownership is a condition of the insert, so a guessed handle writes nothing.
+insert into posts (handle, user_id, body)
+select h.normalized, sqlc.arg(user_id), sqlc.arg(body)
+from handles h
+where h.normalized = sqlc.arg(handle)
+  and h.user_id = sqlc.arg(user_id) and h.status = 'claimed'
+returning id, handle;
+
+-- name: DeletePost :one
+-- The author filter is the authorization check: somebody else's post simply
+-- matches nothing.
+delete from posts
+where id = sqlc.arg(id) and user_id = sqlc.arg(user_id)
+returning handle;
