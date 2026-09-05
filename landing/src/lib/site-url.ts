@@ -8,8 +8,15 @@
 
 // Canonical production origin. Everything that builds an absolute link starts
 // from here, and it never comes from a request.
+//
+// An empty value falls back as an unset one does. `??` does not: it only
+// catches null and undefined, and a Docker build arg for a variable nobody set
+// arrives as an empty string. That gave SITE_URL = "", which reached
+// `new URL()` in the root layout and failed the build with `Invalid URL` — in
+// CI only, because a developer's machine leaves the variable unset rather than
+// empty, and the two are not the same thing.
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://flex.com.uz"
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://flex.com.uz"
 ).replace(/\/$/, "");
 
 /**

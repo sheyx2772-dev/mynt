@@ -18,7 +18,12 @@ import type { paths } from "./schema";
 
 /** Where the backend is. Same origin in production, behind a proxy in dev. */
 export const BACKEND_URL = (
-  process.env.BACKEND_URL ?? "http://127.0.0.1:8090"
+  // Empty falls back as unset does — see site-url.ts for what `??` cost here.
+  // This one would be worse: an empty BACKEND_URL sends every request to
+  // 127.0.0.1 inside the site's own container, where nothing is listening, and
+  // every page fails for a reason that names neither the setting nor the
+  // backend.
+  process.env.BACKEND_URL?.trim() || "http://127.0.0.1:8090"
 ).replace(/\/$/, "");
 
 /** The cookie the Go backend sets, and the only credential this site holds. */

@@ -42,7 +42,7 @@ export default async function XabarlarPage() {
           {linkState.available ? (
             <TelegramLink
               initial={linkState}
-              botName={process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME ?? null}
+              botName={process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME?.trim() || null}
             />
           ) : (
             /* The bot is not configured. Saying so beats a button that opens a
