@@ -128,7 +128,20 @@ Belgi — nuqta va undan chiqayotgan ikki to'lqin (tegizish belgisi). U **ikkita
 faylda** chiziladi va ikkalasi bir xil raqamlarni ishlatadi:
 
 - `src/components/Mark.tsx` — sahifadagi SVG
-- `scripts/make-icons.mjs` — PNG ikonkalar (manifest, iOS, Telegram)
+- `scripts/make-icons.mjs` — PNG ikonkalar
+
+`make-icons.mjs` to'rtta loyihaga yozadi, shuning uchun `npm run icons` faqat
+landingni emas, hammasini yangilaydi:
+
+| Qayerga | Nima |
+| --- | --- |
+| `landing/public`, `landing/src/app` | manifest, apple-touch, Telegram avatar |
+| `mobile/android/…/mipmap-*` | eski kvadrat + adaptive foreground va XML |
+| `mobile/ios/…/AppIcon.appiconset` | katalogdagi barcha o'lchamlar |
+| `admin/public` | panel favikoni — **teskari** (lime fon, qora belgi) |
+
+Panel favikoni ataylab teskari: sayt va panel yonma-yon ochiq turadi, bir xil
+ikonka ikkitasini ajratib bo'lmaydigan qiladi.
 
 Ikkinchisi birinchisidan import qila olmaydi (skript ilovaga bog'lanmasligi
 kerak), shuning uchun raqamlar takrorlangan va har birida ikkinchisiga ishora

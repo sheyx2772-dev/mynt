@@ -35,6 +35,10 @@ const APP_DIR = join(root, "src", "app");
 // thing to forget.
 const MOBILE_DIR = join(root, "..", "mobile");
 
+// And into the panel, for the same reason. Its tab is the only Flex surface
+// that had no mark at all, and a browser with no favicon draws a blank sheet.
+const ADMIN_DIR = join(root, "..", "admin", "public");
+
 const INK = [0x0e, 0x0a, 0x1b];
 const LIME = [0xab, 0xff, 0x09];
 
@@ -108,7 +112,18 @@ function insideMark(px, py, S, scale) {
 }
 
 // `padding` is a fraction of the icon's edge; `mark` scales the glyph inside it.
-function render(size, { padding, mark, cornerRadius }) {
+//
+// `invert` swaps the two colours — a lime ground with an ink mark. The admin
+// panel uses it: the same mark in the same two colours, but a tab of the panel
+// and a tab of the public site sitting side by side are told apart at a glance.
+//
+// `bare` paints the mark alone and leaves the ground transparent, which is what
+// an Android adaptive icon's foreground layer is: the system draws the
+// background, masks both to whatever shape the launcher uses, and moves the
+// two apart when the icon is animated.
+function render(size, { padding, mark, cornerRadius, invert = false, bare = false }) {
+  const glyph = invert ? INK : LIME;
+  const ground = invert ? LIME : INK;
   const S = size * SS;
   const pad = padding * S;
   const boxSize = S - pad * 2;
@@ -126,9 +141,9 @@ function render(size, { padding, mark, cornerRadius }) {
           const py = y * SS + sy + 0.5;
 
           if (insideMark(px, py, S, mark)) {
-            r += LIME[0]; g += LIME[1]; b += LIME[2]; a += 255;
-          } else if (insideRoundedRect(px - pad, py - pad, boxSize, radius)) {
-            r += INK[0]; g += INK[1]; b += INK[2]; a += 255;
+            r += glyph[0]; g += glyph[1]; b += glyph[2]; a += 255;
+          } else if (!bare && insideRoundedRect(px - pad, py - pad, boxSize, radius)) {
+            r += ground[0]; g += ground[1]; b += ground[2]; a += 255;
           }
         }
       }
@@ -211,6 +226,15 @@ const ICONS = [
   { file: "telegram-avatar.png", size: 512, padding: 0, mark: 0.72, cornerRadius: 0 },
 ];
 
+// The panel's tab. PNG rather than .ico: every browser that can run this panel
+// takes a PNG favicon, and .ico is a container format for a problem nobody has
+// any more. Inverted, so the panel's tab is not the public site's tab.
+const ADMIN_ICONS = [
+  { file: "favicon-32.png", size: 32, padding: 0, mark: 0.78, cornerRadius: 0.22, invert: true },
+  { file: "favicon-180.png", size: 180, padding: 0, mark: 0.74, cornerRadius: 0, invert: true },
+  { file: "favicon-512.png", size: 512, padding: 0, mark: 0.74, cornerRadius: 0.22, invert: true },
+];
+
 // Android's launcher densities, and the one iOS asks for. Square in both cases:
 // Android masks with the launcher's own shape and iOS rounds its own corners,
 // so a corner rounded here is a corner rounded twice.
@@ -233,12 +257,66 @@ for (const icon of ICONS) {
   console.log(`${where}/${icon.file}`.padEnd(34) + `${icon.size}x${icon.size}  ${png.length} bytes`);
 }
 
+mkdirSync(ADMIN_DIR, { recursive: true });
+
+for (const icon of ADMIN_ICONS) {
+  const png = encodePng(render(icon.size, icon), icon.size);
+  writeFileSync(join(ADMIN_DIR, icon.file), png);
+  console.log(`admin/public/${icon.file}`.padEnd(46) + `${icon.size}x${icon.size}`);
+}
+
 for (const { density, size } of ANDROID_ICONS) {
   const dir = join(MOBILE_DIR, "android/app/src/main/res", `mipmap-${density}`);
   mkdirSync(dir, { recursive: true });
+
+  // The legacy square, for Android 7 and older.
   writeFileSync(join(dir, "ic_launcher.png"), encodePng(render(size, { size, mark: 0.7, cornerRadius: 0 }), size));
-  console.log(`mobile/…/mipmap-${density}/ic_launcher.png`.padEnd(46) + `${size}x${size}`);
+
+  // And the adaptive icon's foreground layer for Android 8 and newer, which is
+  // every phone this will ship to. Without one the launcher shrinks the square
+  // above into a white circle and draws that, which is why the icon looked
+  // wrong on the phone rather than merely different.
+  //
+  // The canvas is 108dp and only the middle 72dp is guaranteed to be visible —
+  // the rest is what the launcher eats when it masks, parallaxes or animates.
+  // So the glyph is scaled to two thirds of what it takes on the square.
+  const foreground = Math.round(size * (108 / 48));
+  writeFileSync(
+    join(dir, "ic_launcher_foreground.png"),
+    encodePng(render(foreground, { size: foreground, mark: 0.7 * (72 / 108), cornerRadius: 0, bare: true }), foreground),
+  );
+
+  console.log(`mobile/…/mipmap-${density}/ic_launcher*.png`.padEnd(46) + `${size}x${size} + ${foreground}²`);
 }
+
+// The two layers, named for the launcher. Written here rather than kept by hand
+// because the density folders above are written here: a foreground PNG with no
+// XML pointing at it is a file Android never looks at.
+const ADAPTIVE_DIR = join(MOBILE_DIR, "android/app/src/main/res/mipmap-anydpi-v26");
+mkdirSync(ADAPTIVE_DIR, { recursive: true });
+const adaptive = `<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background" />
+    <foreground android:drawable="@mipmap/ic_launcher_foreground" />
+    <monochrome android:drawable="@mipmap/ic_launcher_foreground" />
+</adaptive-icon>
+`;
+writeFileSync(join(ADAPTIVE_DIR, "ic_launcher.xml"), adaptive);
+writeFileSync(join(ADAPTIVE_DIR, "ic_launcher_round.xml"), adaptive);
+
+const VALUES_DIR = join(MOBILE_DIR, "android/app/src/main/res/values");
+mkdirSync(VALUES_DIR, { recursive: true });
+writeFileSync(
+  join(VALUES_DIR, "ic_launcher_background.xml"),
+  `<?xml version="1.0" encoding="utf-8"?>
+<!-- Written by landing/scripts/make-icons.mjs. The brand's ink, behind the
+     adaptive icon's foreground layer. -->
+<resources>
+    <color name="ic_launcher_background">#0E0A1B</color>
+</resources>
+`,
+);
+console.log("mobile/…/mipmap-anydpi-v26/ic_launcher.xml".padEnd(46) + "adaptive");
 
 // Every size the asset catalogue lists, read from the catalogue itself rather
 // than repeated here — a list of sizes in two places is a list that drifts, and
