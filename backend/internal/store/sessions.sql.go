@@ -82,6 +82,25 @@ func (q *Queries) CountRecentLoginTokensByIP(ctx context.Context, arg CountRecen
 	return count, err
 }
 
+const countRecentPasswordAttempts = `-- name: CountRecentPasswordAttempts :one
+select count(*) from flex_password_attempts
+where (email = lower($1::text) or ip = $2)
+  and created_at > now() - $3::int * interval '1 second'
+`
+
+type CountRecentPasswordAttemptsParams struct {
+	Email         *string     `json:"email"`
+	Ip            *netip.Addr `json:"ip"`
+	WindowSeconds int32       `json:"window_seconds"`
+}
+
+func (q *Queries) CountRecentPasswordAttempts(ctx context.Context, arg CountRecentPasswordAttemptsParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countRecentPasswordAttempts, arg.Email, arg.Ip, arg.WindowSeconds)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createLoginToken = `-- name: CreateLoginToken :one
 insert into flex_login_tokens (email, token_hash, expires_at, ip)
 values (lower($1::text), $2, $3, $4)
@@ -201,6 +220,61 @@ delete from flex_sessions where user_id = $1
 // Signing out everywhere. The reason this table exists rather than a JWT.
 func (q *Queries) DeleteUserSessions(ctx context.Context, userID uuid.UUID) error {
 	_, err := q.db.Exec(ctx, deleteUserSessions, userID)
+	return err
+}
+
+const passwordFor = `-- name: PasswordFor :one
+
+select p.hash, u.id as user_id, u.email
+from flex_passwords p
+join auth.users u on u.id = p.user_id
+where lower(u.email) = lower($1::text)
+`
+
+type PasswordForRow struct {
+	Hash   string    `json:"hash"`
+	UserID uuid.UUID `json:"user_id"`
+	Email  *string   `json:"email"`
+}
+
+// The password door. See `internal/auth/password.go` for why the hash is slow.
+func (q *Queries) PasswordFor(ctx context.Context, email string) (PasswordForRow, error) {
+	row := q.db.QueryRow(ctx, passwordFor, email)
+	var i PasswordForRow
+	err := row.Scan(&i.Hash, &i.UserID, &i.Email)
+	return i, err
+}
+
+const recordPasswordAttempt = `-- name: RecordPasswordAttempt :exec
+insert into flex_password_attempts (email, ip, succeeded)
+values (lower($1::text), $2, $3)
+`
+
+type RecordPasswordAttemptParams struct {
+	Email     *string     `json:"email"`
+	Ip        *netip.Addr `json:"ip"`
+	Succeeded bool        `json:"succeeded"`
+}
+
+// A refused attempt is counted too, or the limit measures how often somebody
+// stopped trying.
+func (q *Queries) RecordPasswordAttempt(ctx context.Context, arg RecordPasswordAttemptParams) error {
+	_, err := q.db.Exec(ctx, recordPasswordAttempt, arg.Email, arg.Ip, arg.Succeeded)
+	return err
+}
+
+const setPassword = `-- name: SetPassword :exec
+insert into flex_passwords (user_id, hash) values ($1, $2)
+on conflict (user_id) do update set hash = excluded.hash, updated_at = now()
+`
+
+type SetPasswordParams struct {
+	UserID uuid.UUID `json:"user_id"`
+	Hash   string    `json:"hash"`
+}
+
+func (q *Queries) SetPassword(ctx context.Context, arg SetPasswordParams) error {
+	_, err := q.db.Exec(ctx, setPassword, arg.UserID, arg.Hash)
 	return err
 }
 

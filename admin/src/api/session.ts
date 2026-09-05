@@ -7,6 +7,21 @@ import { api } from "./client";
 // the allow-list is what makes an account an administrator, and that list lives
 // on the server where somebody with this bundle cannot read it.
 
+export async function signInWithPassword(email: string, parol: string) {
+  const { data, error } = await api.POST("/kirish/parol", { body: { email, parol } });
+  if (error || !data) {
+    // The server's own sentence, which is deliberately the same for a wrong
+    // password and an address with no account.
+    throw new Error((error as { detail?: string })?.detail ?? "Kirib bo'lmadi.");
+  }
+  return data.account;
+}
+
+export async function setPassword(parol: string) {
+  const { error } = await api.PUT("/men/parol", { body: { parol } });
+  if (error) throw new Error((error as { detail?: string })?.detail ?? "Parol saqlanmadi.");
+}
+
 export async function requestLink(email: string) {
   const { error } = await api.POST("/kirish", { body: { email } });
   if (error) throw new Error("Havola yuborilmadi.");

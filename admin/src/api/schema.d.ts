@@ -135,6 +135,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/kirish/parol": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Email va parol bilan kirish
+         * @description Parolni o'rnatish uchun avval havola bilan kirib, keyin uni belgilang.
+         */
+        post: operations["kirish-parol"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/kirish/tasdiq": {
         parameters: {
             query?: never;
@@ -165,6 +185,26 @@ export interface paths {
         /** Hozir kim kirgan */
         get: operations["men"];
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/men/parol": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * O'z parolini belgilash yoki almashtirish
+         * @description Kirgan holda. Parolni unutgan bo'lsangiz — havola bilan kiring va shu yerdan yangisini qo'ying.
+         */
+        put: operations["parolni-belgilash"];
         post?: never;
         delete?: never;
         options?: never;
@@ -715,6 +755,16 @@ export interface components {
             readonly $schema?: string;
             umumiy: components["schemas"]["Overview"];
         };
+        PasswordInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/PasswordInputBody.json
+             */
+            readonly $schema?: string;
+            email: string;
+            parol: string;
+        };
         ProfileInput: {
             /**
              * Format: uri
@@ -781,6 +831,16 @@ export interface components {
             account: components["schemas"]["AccountBody"];
             /** @description Sessiya kaliti — faqat mobil ilova uchun */
             token: string;
+        };
+        SetPasswordInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/SetPasswordInputBody.json
+             */
+            readonly $schema?: string;
+            /** @description Kamida 10 ta belgi */
+            parol: string;
         };
         SourceStat: {
             /** Format: int64 */
@@ -1042,6 +1102,40 @@ export interface operations {
             };
         };
     };
+    "kirish-parol": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PasswordInputBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "Set-Cookie"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "kirish-tasdiqlash": {
         parameters: {
             query?: never;
@@ -1093,6 +1187,37 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["MeOutputBody"];
                 };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "parolni-belgilash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetPasswordInputBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error */
             default: {

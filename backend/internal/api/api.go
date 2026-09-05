@@ -85,6 +85,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 
 	s.registerHealth(api)
 	s.registerAuth(api)
+	s.registerPassword(api)
 	s.registerHandles(api)
 	s.registerLeads(api)
 	s.registerStats(api)

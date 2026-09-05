@@ -73,3 +73,26 @@ where ip = sqlc.arg(ip)
 -- name: DeleteExpiredLoginTokens :execrows
 delete from flex_login_tokens
 where expires_at < now() - interval '1 day';
+
+-- The password door. See `internal/auth/password.go` for why the hash is slow.
+
+-- name: PasswordFor :one
+select p.hash, u.id as user_id, u.email
+from flex_passwords p
+join auth.users u on u.id = p.user_id
+where lower(u.email) = lower(sqlc.arg(email)::text);
+
+-- name: SetPassword :exec
+insert into flex_passwords (user_id, hash) values (sqlc.arg(user_id), sqlc.arg(hash))
+on conflict (user_id) do update set hash = excluded.hash, updated_at = now();
+
+-- name: CountRecentPasswordAttempts :one
+select count(*) from flex_password_attempts
+where (email = lower(sqlc.narg(email)::text) or ip = sqlc.narg(ip))
+  and created_at > now() - sqlc.arg(window_seconds)::int * interval '1 second';
+
+-- A refused attempt is counted too, or the limit measures how often somebody
+-- stopped trying.
+-- name: RecordPasswordAttempt :exec
+insert into flex_password_attempts (email, ip, succeeded)
+values (lower(sqlc.narg(email)::text), sqlc.narg(ip), sqlc.arg(succeeded));

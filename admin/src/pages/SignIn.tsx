@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { confirmLink, requestLink } from "../api/session";
+import { confirmLink, requestLink, signInWithPassword } from "../api/session";
 import { Failed } from "../ui/parts";
 
 // The panel's front door.
@@ -12,9 +12,13 @@ import { Failed } from "../ui/parts";
 // nothing, and is told nothing about what they cannot see.
 export default function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
   const [email, setEmail] = useState("");
+  const [parol, setParol] = useState("");
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState("");
+  // The link is the way back when a password is forgotten, and the way in
+  // before one is set. It is not the everyday door, so it is behind a word.
+  const [useLink, setUseLink] = useState(false);
 
   // A link opened in this browser lands here with the token in the query. It is
   // spent immediately and taken out of the address, because a token in a URL is
@@ -29,14 +33,19 @@ export default function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
       .catch((error: Error) => setProblem(error.message));
   }, [onSignedIn]);
 
-  async function send(event: React.FormEvent) {
+  async function submit(event: React.FormEvent) {
     event.preventDefault();
     setBusy(true);
     setProblem("");
 
     try {
-      await requestLink(email.trim());
-      setSent(true);
+      if (useLink) {
+        await requestLink(email.trim());
+        setSent(true);
+      } else {
+        await signInWithPassword(email.trim(), parol);
+        onSignedIn();
+      }
     } catch (error) {
       setProblem((error as Error).message);
     } finally {
@@ -56,7 +65,7 @@ export default function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
           Agar manzil to'g'ri bo'lsa, havola yuborildi. U 15 daqiqa amal qiladi.
         </p>
       ) : (
-        <form onSubmit={send} className="mt-6">
+        <form onSubmit={submit} className="mt-6">
           <input
             type="email"
             value={email}
@@ -65,12 +74,39 @@ export default function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
             autoComplete="email"
             className="w-full rounded-xl bg-flex-black/4 px-4 py-3 outline-none"
           />
+
+          {!useLink && (
+            <input
+              type="password"
+              value={parol}
+              onChange={(e) => setParol(e.target.value)}
+              placeholder="Parol"
+              // Named so a password manager fills the right field and offers to
+              // save a new one when it is changed.
+              autoComplete="current-password"
+              className="mt-3 w-full rounded-xl bg-flex-black/4 px-4 py-3 outline-none"
+            />
+          )}
+
           <button
             type="submit"
             disabled={busy}
             className="mt-3 w-full rounded-xl bg-lime py-3 font-medium text-flex-black disabled:opacity-50"
           >
-            {busy ? "Yuborilmoqda…" : "Havola yuborish"}
+            {busy ? "Kutilmoqda…" : useLink ? "Havola yuborish" : "Kirish"}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setUseLink(!useLink);
+              setProblem("");
+            }}
+            className="mt-4 w-full text-flex-black/45 text-sm transition-colors hover:text-flex-black"
+          >
+            {useLink
+              ? "Parol bilan kirish"
+              : "Parolni unutdingizmi? Havola bilan kiring"}
           </button>
         </form>
       )}

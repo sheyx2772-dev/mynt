@@ -144,6 +144,10 @@ func (s *Service) ConsumeLink(ctx context.Context, linkToken, userAgent string, 
 		return "", Account{}, fmt.Errorf("hisob id o'qilmadi: %w", err)
 	}
 
+	// Same as the password door, except that this one runs inside the
+	// transaction that spent the link: a link spent without a session is a
+	// person who followed a valid link, is not signed in, and cannot use it
+	// again.
 	sessionToken, hash, err := NewToken()
 	if err != nil {
 		return "", Account{}, err

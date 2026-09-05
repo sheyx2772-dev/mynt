@@ -58,6 +58,20 @@ type FlexLoginToken struct {
 	Ip         *netip.Addr        `json:"ip"`
 }
 
+type FlexPassword struct {
+	UserID    uuid.UUID          `json:"user_id"`
+	Hash      string             `json:"hash"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
+}
+
+type FlexPasswordAttempt struct {
+	ID        int64              `json:"id"`
+	Email     *string            `json:"email"`
+	Ip        *netip.Addr        `json:"ip"`
+	Succeeded bool               `json:"succeeded"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
 type FlexSession struct {
 	ID         uuid.UUID          `json:"id"`
 	UserID     uuid.UUID          `json:"user_id"`
@@ -301,6 +315,33 @@ type ProfileView struct {
 	ReferrerHost *string            `json:"referrer_host"`
 	CreatedAt    pgtype.Timestamptz `json:"created_at"`
 	Source       *string            `json:"source"`
+}
+
+type PromoCode struct {
+	Code           string             `json:"code"`
+	Kind           string             `json:"kind"`
+	Value          int32              `json:"value"`
+	MaxDiscount    *int64             `json:"max_discount"`
+	AppliesTo      []string           `json:"applies_to"`
+	MaxUses        *int32             `json:"max_uses"`
+	UsedCount      int32              `json:"used_count"`
+	OncePerAccount bool               `json:"once_per_account"`
+	MinAmount      *int64             `json:"min_amount"`
+	StartsAt       pgtype.Timestamptz `json:"starts_at"`
+	ExpiresAt      pgtype.Timestamptz `json:"expires_at"`
+	Active         bool               `json:"active"`
+	Note           *string            `json:"note"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+}
+
+type PromoRedemption struct {
+	ID        int64              `json:"id"`
+	Code      string             `json:"code"`
+	UserID    uuid.UUID          `json:"user_id"`
+	OrderID   *uuid.UUID         `json:"order_id"`
+	Discount  int64              `json:"discount"`
+	Months    int32              `json:"months"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
 }
 
 type Recommendation struct {
