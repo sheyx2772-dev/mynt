@@ -36,6 +36,7 @@ export default async function ThemePage({
   return (
     <SubScreen
       raqam={handle.raqam}
+      screen="theme"
       title={t("theme.title")}
       hint={t("theme.hint")}
     >

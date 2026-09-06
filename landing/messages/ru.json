@@ -795,9 +795,16 @@
       "view": "Открыть профиль",
       "share": "Поделиться",
       "copied": "Ссылка скопирована",
+      "views": "просмотров",
+      "followers": "{count, plural, one {# подписчик} few {# подписчика} other {# подписчиков}}",
       "week": "Последние 7 дней",
       "waiting": "{count, plural, one {# человек просит подписку} few {# человека просят подписку} other {# человек просят подписку}}",
       "endingSoon": "Premium закончится через {days, plural, one {# день} few {# дня} other {# дней}}"
+    },
+    "groups": {
+      "card": "Карта и профиль",
+      "activity": "Активность и связь",
+      "settings": "Управление и настройки"
     },
     "sections": {
       "profile": {

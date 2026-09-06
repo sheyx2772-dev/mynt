@@ -30,6 +30,8 @@ export default async function PrivacyPage({
   return (
     <SubScreen
       raqam={handle.raqam}
+      screen="privacy"
+      waiting={inbox.count}
       title={t("privacy.title")}
       hint={t("privacy.hint")}
     >

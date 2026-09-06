@@ -26,6 +26,8 @@ export default async function LeadsPage({
   return (
     <SubScreen
       raqam={handle.raqam}
+      screen="leads"
+      leadsCount={leads.length}
       title={t("title")}
       hint={t("hint")}
     >

@@ -33,6 +33,7 @@ export default async function PostsPage({
   return (
     <SubScreen
       raqam={handle.raqam}
+      screen="posts"
       title={t("sections.posts.title")}
       hint={t("sections.posts.hint")}
     >

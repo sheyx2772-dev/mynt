@@ -26,6 +26,7 @@ export default async function TransferPage({
   return (
     <SubScreen
       raqam={handle.raqam}
+      screen="transfer"
       title={t("title")}
       hint={t("hint")}
     >

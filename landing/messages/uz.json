@@ -795,9 +795,16 @@
       "view": "Profilni ochish",
       "share": "Ulashish",
       "copied": "Havola nusxalandi",
+      "views": "ko'rish",
+      "followers": "{count, plural, one {# obunachi} other {# obunachi}}",
       "week": "So'nggi 7 kun",
       "waiting": "{count, plural, one {# kishi obuna so'ramoqda} other {# kishi obuna so'ramoqda}}",
       "endingSoon": "Premium {days, plural, one {# kundan} other {# kundan}} keyin tugaydi"
+    },
+    "groups": {
+      "card": "Karta va profil",
+      "activity": "Faollik va aloqa",
+      "settings": "Boshqaruv va sozlamalar"
     },
     "sections": {
       "profile": {

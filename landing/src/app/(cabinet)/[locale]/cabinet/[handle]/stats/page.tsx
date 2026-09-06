@@ -42,7 +42,11 @@ export default async function StatsPage({
   ]);
 
   return (
-    <SubScreen raqam={handle.raqam} title={t("sections.stats.title")}>
+    <SubScreen
+      raqam={handle.raqam}
+      screen="stats"
+      title={t("sections.stats.title")}
+    >
       <WindowTabs raqam={handle.raqam} current={window} />
 
       <div className="mt-4">

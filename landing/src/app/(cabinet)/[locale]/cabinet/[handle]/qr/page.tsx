@@ -28,6 +28,7 @@ export default async function QrPage({
   return (
     <SubScreen
       raqam={handle.raqam}
+      screen="qr"
       title={t("title")}
       hint={t("hint")}
     >

@@ -27,6 +27,7 @@ export default async function ProfilePage({
   return (
     <SubScreen
       raqam={handle.raqam}
+      screen="profile"
       title={t("profile.title")}
       hint={t("profile.hint")}
     >

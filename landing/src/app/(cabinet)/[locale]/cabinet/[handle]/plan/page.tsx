@@ -34,7 +34,11 @@ export default async function PlanPage({
   const plan = planState(handle.tarif, handle.tarif_tugashi);
 
   return (
-    <SubScreen raqam={handle.raqam} title={t("title")}>
+    <SubScreen
+      raqam={handle.raqam}
+      screen="plan"
+      title={t("title")}
+    >
       <section
         className={`rounded-tile p-5 sm:p-6 ${plan.tier === "premium" ? "border border-gold/60 bg-card shadow-slab" : "border border-border"}`}
       >

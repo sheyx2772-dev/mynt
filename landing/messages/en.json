@@ -795,9 +795,16 @@
       "view": "Open profile",
       "share": "Share",
       "copied": "Link copied",
+      "views": "views",
+      "followers": "{count, plural, one {# follower} other {# followers}}",
       "week": "Last 7 days",
       "waiting": "{count, plural, one {# person asking to follow} other {# people asking to follow}}",
       "endingSoon": "Premium ends in {days, plural, one {# day} other {# days}}"
+    },
+    "groups": {
+      "card": "Card & Profile",
+      "activity": "Activity & Contacts",
+      "settings": "Settings & Security"
     },
     "sections": {
       "profile": {
