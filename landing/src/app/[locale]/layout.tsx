@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 
 import { routing } from "@/i18n/routing";
+import { inter, mono, serif } from "../fonts";
 import "../globals.css";
 
 // Every page in the product hangs under a language.
@@ -44,7 +45,10 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   return (
-    <html lang={locale} className="h-full antialiased">
+    <html
+      lang={locale}
+      className={`${inter.variable} ${mono.variable} ${serif.variable} h-full antialiased`}
+    >
       <body className="flex min-h-full flex-col">
         {/* Messages reach client components through this. Server components
             do not need it — they await `getTranslations()` and are rendered

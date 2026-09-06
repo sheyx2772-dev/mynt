@@ -4,10 +4,13 @@ import { Button } from "@/components/ui/button";
 
 // A placeholder, and a proof.
 //
-// It exists to show the three pieces working together before anything real is
-// moved across: the language comes from the address, the words come from
-// `messages/`, and the page is rendered on the server — `getTranslations` is
-// awaited, so no dictionary is shipped to the browser to render it.
+// It exists to show the pieces working together before anything real is moved
+// across: the language comes from the address, the words come from `messages/`,
+// the page is rendered on the server, and the colours come from the brand
+// rather than from shadcn's neutral defaults.
+//
+// Nothing here is the design. The header and footer land next, and then pages
+// start arriving from `old-landing/`.
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -20,8 +23,31 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         {t("title")}
       </h1>
       <p className="text-muted-foreground text-lg text-pretty">{t("lead")}</p>
-      <div>
+
+      <div className="flex flex-wrap items-center gap-3">
         <Button size="lg">{t("cta")}</Button>
+        {/* The number, in the face the number is set in. The one place a
+            second font earns its download. */}
+        <span className="rounded-plate border border-line px-3 py-2 font-mono text-sm font-semibold tracking-[0.18em]">
+          AAA777
+        </span>
+      </div>
+
+      {/* The ladder, visible while there is nothing else to look at. It goes
+          when the real pages arrive. */}
+      <div className="mt-8 flex flex-wrap gap-2 text-xs">
+        {[
+          ["bg-lime", "lime"],
+          ["bg-ink", "ink"],
+          ["bg-paper border border-line", "paper"],
+          ["bg-fill", "fill"],
+          ["bg-gold", "gold"],
+        ].map(([className, name]) => (
+          <span key={name} className="flex items-center gap-2">
+            <span className={`size-5 rounded-plate ${className}`} />
+            <span className="text-muted-foreground">{name}</span>
+          </span>
+        ))}
       </div>
     </main>
   );

@@ -4,12 +4,120 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* The brand, carried over from the site this one replaces.
+ *
+ * Three colours are the brand and the rest are the room they sit in. The
+ * product is not one screen with one mood: a stranger who tapped somebody's
+ * card, the owner working the cabinet, and a tablet propped at a till are
+ * three different rooms. `ink-*` and `paper-*` are the two grounds, and the
+ * second half of each name says how far a value has receded from its ground.
+ *
+ * These are the raw materials. shadcn's semantic tokens below are pointed at
+ * them, so a component that says `bg-primary` gets the lime and never learns
+ * what the lime is. */
+@theme {
+  --color-ink: #0e0a1b;
+  --color-lime: #abff09;
+  --color-lime-press: #9aec00;
+  --color-paper: #fafaf8;
+
+  /* Paper face — what a stranger sees */
+  --color-ink-2: #4a465a; /* secondary text, 8.1:1 on paper */
+  --color-ink-3: #736f82; /* captions, 4.7:1 on paper */
+
+  /* Four weights of line, and the whole ladder is one hue: the ink thinned,
+     never neutral grey. Half the old site drew `border-black/10` instead —
+     the same lightness in a different colour, which side by side on one card
+     reads as a mistake rather than a choice.
+
+       soft  a hairline inside a card, between rows of the same thing
+       line  the edge of a card
+       2     an input, and any border that has to be found by eye
+       lead  the one card being pointed at */
+  --color-line-soft: #f0eef5;
+  --color-line: #e6e4ec;
+  --color-line-2: #cfccd8;
+  --color-line-lead: #b5afc6;
+  --color-fill: #f1f0f4; /* disabled, and chips that are not chosen */
+
+  /* Ink face — the owner's cabinet, and the wall screen */
+  --color-ink-s1: #16122a; /* a card lifted off the ground */
+  --color-ink-s2: #1f1a36; /* lifted again: hover, inputs */
+  --color-ink-line: #2b2644;
+  --color-paper-2: #b3afc2; /* secondary text, 9.3:1 on ink */
+  --color-paper-3: #7f7b92; /* captions, 4.6:1 on ink */
+
+  /* Two of each, deliberately: a red that survives white is not the red that
+     survives near-black. */
+  --color-danger: #c9302a;
+  --color-danger-ink: #ff6b5e;
+  --color-warn: #a86a12;
+  --color-warn-ink: #ffc24b;
+
+  /* The brand lime sits at 1.2:1 on white — unusable for anything that has to
+     be read or seen. Text, focus rings and chart marks get the same hue
+     darkened until it passes. */
+  --color-lime-ink: #6b9e00;
+
+  /* The engraving. A Flex card is black and gold, so gold is a brand colour
+     rather than a decoration: it appears on the card face and the edge of the
+     plate, and nowhere else. */
+  --color-gold: #c9a961;
+
+  /* One grey, not a ramp. A ramp is how a screen ends up with four greys and
+     no hierarchy. 5.9:1 on paper. */
+  --color-mute: #5c586a;
+
+  /* The radius ladder. Every corner in the product is one of these five. */
+  --radius-plate: 8px;
+  --radius-input: 12px;
+  --radius-card: 16px;
+  --radius-tile: 24px;
+  --radius-bezel: 32px;
+
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Five shadows, each describing a real object.
+   *
+   * `card` has an inner highlight and an inner darkness because that is what
+   * the edge of a piece of plastic looks like. `sheet` casts upward: the paper
+   * is under the card, so its shadow appears above it. `slab` is a struck
+   * plate lying on the paper. `deboss` is pressed in rather than raised, which
+   * is why its light comes from below. `glow` is not an object's shadow at
+   * all — the lime tiles are the one loud thing on a page and this is the
+   * light coming off them. */
+  --shadow-card:
+    inset 0 1px 0 rgb(255 255 255 / 0.1), inset 0 -1px 0 rgb(0 0 0 / 0.7),
+    0 1px 1px rgb(14 10 27 / 0.28), 0 6px 10px -4px rgb(14 10 27 / 0.35),
+    0 24px 40px -16px rgb(14 10 27 / 0.45);
+  --shadow-sheet:
+    0 -1px 0 rgb(14 10 27 / 0.06), 0 -12px 32px -20px rgb(14 10 27 / 0.25);
+  --shadow-slab:
+    0 1px 0 rgb(14 10 27 / 0.3), 0 8px 20px -8px rgb(14 10 27 / 0.45);
+  --shadow-deboss:
+    inset 0 1px 2px rgb(14 10 27 / 0.12), inset 0 -1px 0 rgb(255 255 255 / 0.9);
+  --shadow-photo:
+    0 1px 1px rgb(14 10 27 / 0.2), 0 4px 10px -4px rgb(14 10 27 / 0.3);
+  --shadow-glow: 0 24px 60px -30px rgb(171 255 9 / 0.85);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  /* The faces come from `app/fonts.ts`. Left as shadcn wrote them, these
+     pointed at variables nothing defined, so every page fell back to the
+     browser's default serif. */
+  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+  /* Numbers, and only numbers: the plate, the engraving on the card, prices.
+     Kept apart from the body face because 0/O and 1/I have to stay apart when
+     somebody is typing a number back in off a card. */
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  /* No third download. A Flex screen is made recognisable by the number, not
+     by a headline face. */
+  --font-heading: var(--font-inter), system-ui, sans-serif;
+  /* Only the ceremonial profile layouts reach for this. */
+  --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,72 +157,111 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* shadcn's tokens name a role, not a colour — `primary`, `muted`, `ring`.
+   * Pointed at the brand here, once, so no component ever mentions lime.
+   *
+   * This is the paper face: the ground a stranger sees after tapping a card.
+   * The ink face is a surface, not a theme, and arrives with the cabinet. */
+  --background: var(--color-paper);
+  --foreground: var(--color-ink);
+
+  /* A sheet lying on the page. Two whites, and the difference is the trick:
+   * the page is off-white, the card on it is white. */
+  --card: #ffffff;
+  --card-foreground: var(--color-ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--color-ink);
+
+  /* The accent, worn by exactly one element per screen. Near-black on it,
+   * because nothing survives on this lime except the ink. */
+  --primary: var(--color-lime);
+  --primary-foreground: var(--color-ink);
+
+  --secondary: var(--color-fill);
+  --secondary-foreground: var(--color-ink);
+  --muted: var(--color-fill);
+  --muted-foreground: var(--color-mute);
+  --accent: var(--color-fill);
+  --accent-foreground: var(--color-ink);
+
+  --destructive: var(--color-danger);
+
+  --border: var(--color-line);
+  /* An input has to be found by eye, so it is a rung above a card's edge. */
+  --input: var(--color-line-2);
+
+  /* Not the brand lime: at 1.2:1 on white a focus ring is a ring nobody can
+   * see, which is the one thing a focus ring may not be. */
+  --ring: var(--color-lime-ink);
+
+  /* One hue, five steps. Charts are magnitude, not category — a rainbow says
+   * the bars are different kinds of thing when they are the same kind. */
+  --chart-1: var(--color-lime-ink);
+  --chart-2: #8fae3a;
+  --chart-3: #a8b877;
+  --chart-4: #c4cba8;
+  --chart-5: var(--color-line-2);
+
+  /* The card radius. shadcn derives sm/md/lg/xl from this one number, and 16px
+   * is the middle rung of the product's own ladder. */
+  --radius: 1rem;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: var(--color-ink);
+  --sidebar-primary: var(--color-lime);
+  --sidebar-primary-foreground: var(--color-ink);
+  --sidebar-accent: var(--color-fill);
+  --sidebar-accent-foreground: var(--color-ink);
+  --sidebar-border: var(--color-line);
+  --sidebar-ring: var(--color-lime-ink);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* The ink face. Not a "dark mode" somebody toggles — it is the cabinet and
+   * the wall screen, rooms that are dark because of what they are for. */
+  --background: var(--color-ink);
+  --foreground: var(--color-paper);
+
+  --card: var(--color-ink-s1);
+  --card-foreground: var(--color-paper);
+  --popover: var(--color-ink-s2);
+  --popover-foreground: var(--color-paper);
+
+  /* The lime keeps its own value here: on near-black it is already loud, and
+   * darkening it for contrast would be solving a problem this ground does not
+   * have. */
+  --primary: var(--color-lime);
+  --primary-foreground: var(--color-ink);
+
+  --secondary: var(--color-ink-s2);
+  --secondary-foreground: var(--color-paper);
+  --muted: var(--color-ink-s2);
+  --muted-foreground: var(--color-paper-2);
+  --accent: var(--color-ink-s2);
+  --accent-foreground: var(--color-paper);
+
+  --destructive: var(--color-danger-ink);
+
+  --border: var(--color-ink-line);
+  --input: var(--color-ink-line);
+  /* Here it can be the brand lime: on this ground it is the loudest thing
+   * available, which is what a focus ring should be. */
+  --ring: var(--color-lime);
+
+  --chart-1: var(--color-lime);
+  --chart-2: #8fae3a;
+  --chart-3: #6b7d4a;
+  --chart-4: #4a5340;
+  --chart-5: var(--color-ink-line);
+
+  --sidebar: var(--color-ink-s1);
+  --sidebar-foreground: var(--color-paper);
+  --sidebar-primary: var(--color-lime);
+  --sidebar-primary-foreground: var(--color-ink);
+  --sidebar-accent: var(--color-ink-s2);
+  --sidebar-accent-foreground: var(--color-paper);
+  --sidebar-border: var(--color-ink-line);
+  --sidebar-ring: var(--color-lime);
 }
 
 @layer base {
