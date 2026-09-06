@@ -2,6 +2,7 @@ import { COMPANY, DELIVERY, REPLACEMENT_WINDOW_DAYS } from "@/lib/company";
 import { BASE_PRICE } from "@/lib/pricing";
 import { FREE_LINK_LIMIT, SERVICE_LIMIT, plan } from "@/lib/plans";
 import { formatUZS } from "@/lib/format";
+import { SITE_HOST } from "@/lib/site-url";
 import type { Lang } from "@/lib/i18n";
 
 // The public offer, in three languages.
@@ -44,7 +45,7 @@ export function terms(lang: Lang): {
         {
           title: "Что за услуга",
           body: [
-            "Flex — это уникальный номер и личный профиль, который он открывает. Номер состоит из 3 букв и 3 цифр, например FLX007, и открывает профиль покупателя по адресу flex.com.uz/FLX007.",
+            `Flex — это уникальный номер и личный профиль, который он открывает. Номер состоит из 3 букв и 3 цифр, например FLX007, и открывает профиль покупателя по адресу ${SITE_HOST}/FLX007.`,
             "Номер можно носить на физическом устройстве: NFC-карте, кольце или браслете. Устройство продаётся как отдельный товар.",
           ],
         },
@@ -120,7 +121,7 @@ export function terms(lang: Lang): {
         {
           title: "What the service is",
           body: [
-            "Flex is a unique handle and the profile it opens. The handle is three letters and three digits — FLX007, say — and it opens the buyer's profile at flex.com.uz/FLX007.",
+            `Flex is a unique handle and the profile it opens. The handle is three letters and three digits — FLX007, say — and it opens the buyer's profile at ${SITE_HOST}/FLX007.`,
             "The handle can be carried on a physical device: an NFC card, a ring or a bracelet. The device is sold as a separate product.",
           ],
         },
@@ -195,7 +196,7 @@ export function terms(lang: Lang): {
       {
         title: "Xizmat nima",
         body: [
-          "Flex — noyob raqam va u ochadigan shaxsiy profil. Raqam 3 ta harf va 3 ta raqamdan iborat, masalan FLX007. U flex.com.uz/FLX007 manzilida xaridorning profilini ochadi.",
+          `Flex — noyob raqam va u ochadigan shaxsiy profil. Raqam 3 ta harf va 3 ta raqamdan iborat, masalan FLX007. U ${SITE_HOST}/FLX007 manzilida xaridorning profilini ochadi.`,
           "Raqamni jismoniy qurilmada olib yurish mumkin: NFC karta, uzuk yoki braslet. Qurilma alohida mahsulot sifatida sotiladi.",
         ],
       },
