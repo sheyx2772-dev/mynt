@@ -42,10 +42,10 @@
     "titleMark": "your digital",
     "titleB": "business card",
     "pickHandle": "Pick a number",
-    "letters": "Letters",
-    "digits": "Digits",
-    "check": "Check if it's free",
-    "cardHint": "If it's free, you can take it right here."
+    "check": "Check",
+    "numberLabel": "Number",
+    "numberTitle": "Three latin letters and three digits — AAA777, say",
+    "hint": "3 letters + 3 digits · from 100 000 so'm"
   },
   "ways": {
     "eyebrow": "What do you need?",

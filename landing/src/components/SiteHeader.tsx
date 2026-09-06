@@ -27,11 +27,11 @@ export default async function SiteHeader({ session }: { session?: Session }) {
   const t = await getTranslations("nav");
 
   const items = [
-    { href: "/narxlar", label: t("pricing") },
-    { href: "/shaxsiy", label: t("personal") },
-    { href: "/biznes", label: t("business") },
-    { href: "/rezidentlar", label: t("residents") },
-    { href: "/kabinet", label: t("cabinet") },
+    { href: "/pricing", label: t("pricing") },
+    { href: "/personal", label: t("personal") },
+    { href: "/business", label: t("business") },
+    { href: "/residents", label: t("residents") },
+    { href: "/cabinet", label: t("cabinet") },
   ];
 
   return (
@@ -43,7 +43,7 @@ export default async function SiteHeader({ session }: { session?: Session }) {
               ...items,
               // Only in the sheet: on a wide screen this is a button of its
               // own on the right.
-              ...(session ? [] : [{ href: "/kirish", label: t("signIn") }]),
+              ...(session ? [] : [{ href: "/login", label: t("signIn") }]),
             ]}
             openLabel={t("openMenu")}
             closeLabel={t("closeMenu")}
@@ -82,7 +82,7 @@ export default async function SiteHeader({ session }: { session?: Session }) {
               bounced them to the home page with nothing said. */}
           {session ? (
             <Link
-              href="/kabinet"
+              href="/cabinet"
               className="flex h-10 items-center gap-2.5 rounded-input pr-1 pl-1 transition-colors hover:bg-ink-s1"
             >
               <span className="flex size-8 items-center justify-center rounded-full border border-ink-line bg-gold text-xs font-semibold text-ink">
@@ -94,7 +94,7 @@ export default async function SiteHeader({ session }: { session?: Session }) {
             </Link>
           ) : (
             <Link
-              href="/kirish"
+              href="/login"
               className="hidden h-10 items-center px-3.5 text-sm font-medium text-paper-2 transition-colors hover:text-white sm:flex"
             >
               {t("signIn")}
@@ -102,7 +102,7 @@ export default async function SiteHeader({ session }: { session?: Session }) {
           )}
 
           <Link
-            href="/shaxsiy"
+            href="/personal"
             className="flex h-10 items-center rounded-input bg-lime px-[18px] text-sm font-semibold text-ink shadow-slab transition-colors hover:bg-lime-press"
           >
             {t("getNumber")}

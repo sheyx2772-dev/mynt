@@ -42,10 +42,10 @@
     "titleMark": "raqamli",
     "titleB": "vizitkangiz",
     "pickHandle": "Raqam tanlang",
-    "letters": "Harflar",
-    "digits": "Raqamlar",
-    "check": "Bandligini tekshirish",
-    "cardHint": "Bo'sh raqamni shu yerda band qilasiz."
+    "check": "Tekshirish",
+    "numberLabel": "Raqam",
+    "numberTitle": "3 ta lotin harf va 3 ta raqam — masalan AAA777",
+    "hint": "3 harf + 3 raqam · 100 000 so'mdan"
   },
   "ways": {
     "eyebrow": "Nima kerak?",

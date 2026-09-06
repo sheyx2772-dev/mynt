@@ -36,8 +36,9 @@ export default async function Hero() {
             {t("titleB")}
           </h1>
 
-          <p className="cap mt-7 text-ink-3">{t("pickHandle")}</p>
-          <HandleForm />
+          <div className="mt-7">
+            <HandleForm />
+          </div>
         </div>
 
         {/* Container queries, so the engraving scales with the card rather

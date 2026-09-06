@@ -33,29 +33,29 @@ export default async function SiteFooter() {
     {
       title: t("product"),
       links: [
-        { href: "/shaxsiy", label: nav("personal") },
-        { href: "/narxlar", label: nav("pricing") },
-        { href: "/qurilmalar", label: t("devices") },
-        { href: "/rezidentlar", label: nav("residents") },
-        { href: "/lenta", label: t("posts") },
+        { href: "/personal", label: nav("personal") },
+        { href: "/pricing", label: nav("pricing") },
+        { href: "/devices", label: t("devices") },
+        { href: "/residents", label: nav("residents") },
+        { href: "/feed", label: t("posts") },
       ],
     },
     {
       title: t("business"),
       links: [
-        { href: "/biznes", label: t("cafe") },
-        { href: "/biznes#mehmonxona", label: t("hotel") },
-        { href: "/biznes#dokon", label: t("shop") },
-        { href: "/biznes#jamoa", label: t("team") },
+        { href: "/business", label: t("cafe") },
+        { href: "/business#hotels", label: t("hotel") },
+        { href: "/business#shops", label: t("shop") },
+        { href: "/business#teams", label: t("team") },
       ],
     },
     {
       title: t("company"),
       links: [
-        { href: "/aloqa", label: t("contact") },
-        { href: "/oferta", label: t("offer") },
-        { href: "/shartlar", label: t("terms") },
-        { href: "/maxfiylik", label: t("privacy") },
+        { href: "/contact", label: t("contact") },
+        { href: "/offer", label: t("offer") },
+        { href: "/terms", label: t("terms") },
+        { href: "/privacy", label: t("privacy") },
       ],
     },
   ];

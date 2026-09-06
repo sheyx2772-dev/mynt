@@ -22,10 +22,11 @@ export default async function TwoWays() {
       <p className="cap mb-4 text-ink-3">{t("eyebrow")}</p>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        {/* The one lime object on the page. The header's button is chrome on
-            its own ground; this is the page's own accent, spent once. */}
+        {/* The second lime object, and the last. The first is the word
+            highlighted in the headline; nothing between them wears it, which
+            is what keeps two from reading as a pattern. */}
         <Link
-          href="/shaxsiy"
+          href="/personal"
           className="group flex flex-col rounded-tile bg-lime p-6 text-ink shadow-glow transition-transform hover:-translate-y-0.5 sm:p-8"
         >
           <User className="size-6 text-ink-2" strokeWidth={1.6} />
@@ -45,7 +46,7 @@ export default async function TwoWays() {
         </Link>
 
         <Link
-          href="/biznes"
+          href="/business"
           className="group relative flex flex-col overflow-hidden rounded-tile bg-ink p-6 text-white transition-transform hover:-translate-y-0.5 sm:p-8"
         >
           <div className="pointer-events-none absolute -top-20 -right-16 size-56 rounded-full bg-lime/12 blur-[90px]" />

@@ -62,9 +62,16 @@ each carries a `.env.example` that names the keys without holding them. A key
 compiled into a mobile binary is a published key — `strings` on the file is
 enough — so the app holds none and authenticates as a person instead.
 
-**Uzbek in the interface, English in the code.** Route names, screen names and
-anything a person reads are Uzbek, as the product is. Identifiers, types and
-commit messages are English.
+**Uzbek in the interface, English in the code.** Anything a person reads is
+Uzbek, as the product is. Identifiers, types and commit messages are English.
+
+Addresses are English, and that is a change: `old-landing/` still answers on
+`/kirish` and `/kabinet`, and it must, because a card printed last month and
+the app's deep links point there. The site replacing it uses `/login`,
+`/cabinet`, `/pricing` — the language a page is read in now travels in the path
+(`/uz/pricing`, `/ru/pricing`), so a translated path would be the same page at
+three addresses in one language and one address in three. Query names go with
+them: `?number=AAA777`, not `?raqam=`.
 
 **Comments say why, not what.** A line that restates the code is noise; the
 reason a thing is done the harder way is what the next person cannot recover
