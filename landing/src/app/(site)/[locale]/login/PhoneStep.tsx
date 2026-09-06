@@ -78,9 +78,9 @@ export default function PhoneStep({
         autoComplete="tel"
         autoFocus
         enterKeyHint="send"
-        // The formatted length of a full number, not a guess: twelve digits
-        // in four groups is fifteen characters with the spaces.
-        maxLength={15}
+        // The formatted length of a full Uzbek number: twelve digits, a plus
+        // sign and four spaces is seventeen characters. 18 allows the final digit.
+        maxLength={18}
         value={shown}
         onChange={(event) =>
           retype(
