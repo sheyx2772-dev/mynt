@@ -7,6 +7,7 @@ import HandleHub from "@/components/HandleHub";
 import { requireOwnHandle } from "@/lib/kabinet";
 import { getHandleStats } from "@/lib/analytics";
 import { listLeads } from "@/lib/leads";
+import { listFollowRequests } from "@/lib/follow-requests";
 import { getOwnedVenue, countMenuItems } from "@/lib/menu";
 import { countWaiting, countAllRequests } from "@/lib/venue-requests";
 
@@ -25,10 +26,11 @@ export default async function HandlePage(props: PageProps<"/kabinet/[handle]">) 
   const { handle } = await props.params;
   const { normalized, owned, userId } = await requireOwnHandle(handle, "/kabinet/[handle]");
 
-  const [today, leads, venue] = await Promise.all([
+  const [today, leads, venue, requests] = await Promise.all([
     getHandleStats(normalized, 1),
     listLeads(normalized),
     getOwnedVenue(normalized),
+    listFollowRequests(normalized),
   ]);
 
   // Both of these are asked for by number, not by venue id: the API route is
@@ -69,6 +71,7 @@ export default async function HandlePage(props: PageProps<"/kabinet/[handle]">) 
         handle={owned}
         todayViews={today.totalViews}
         leads={leads.length}
+        requests={requests.count}
         venue={venue}
         waiting={waiting}
         setup={setup}

@@ -693,7 +693,7 @@ func (q *Queries) Unrecommend(ctx context.Context, arg UnrecommendParams) error 
 const withdrawFollowRequest = `-- name: WithdrawFollowRequest :exec
 delete from follow_requests
 where requester_user_id = $1 and handle = $2
-  and holat = 'kutilmoqda'
+  and holat in ('kutilmoqda', 'qabul')
 `
 
 type WithdrawFollowRequestParams struct {
@@ -701,7 +701,9 @@ type WithdrawFollowRequestParams struct {
 	Handle string    `json:"handle"`
 }
 
-// Only a pending one. A decided request is the owner's record, not the asker's.
+// A pending request is taken back; an accepted one is spent, so leaving means
+// asking again next time, the way a private account works elsewhere. Only the
+// refusal stays: that is the owner's record, not the asker's.
 func (q *Queries) WithdrawFollowRequest(ctx context.Context, arg WithdrawFollowRequestParams) error {
 	_, err := q.db.Exec(ctx, withdrawFollowRequest, arg.UserID, arg.Handle)
 	return err

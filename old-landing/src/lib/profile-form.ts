@@ -27,6 +27,8 @@ export type ProfileInput = {
   company: string | null;
   services: Service[];
   commentsOpen: boolean;
+  /** Closed profile: strangers see the face and ask to see the rest. */
+  isPrivate: boolean;
   tags: string[];
 };
 
@@ -177,6 +179,7 @@ export async function readProfileForm(
       position: String(formData.get("position") ?? "").trim().slice(0, 80) || null,
       company: String(formData.get("company") ?? "").trim().slice(0, 80) || null,
       commentsOpen: String(formData.get("commentsOpen") ?? "") === "1",
+      isPrivate: String(formData.get("yopiq") ?? "") === "1",
       services: parseServices(
         Array.from({ length: MAX_SERVICES }, (_, i) => ({
           name: String(formData.get(`service${i}Name`) ?? ""),

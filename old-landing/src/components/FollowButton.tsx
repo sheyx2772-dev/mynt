@@ -2,22 +2,26 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { UserPlus, UserCheck } from "lucide-react";
+import { UserPlus, UserCheck, Clock } from "lucide-react";
 import { toggleFollow } from "@/app/[handle]/actions";
 
 export default function FollowButton({
   handle,
   initialFollowing,
+  initialPending = false,
   labels,
   className,
 }: {
   handle: string;
   initialFollowing: boolean;
-  labels: { follow: string; following: string };
+  /** Asked a closed profile and not yet answered. */
+  initialPending?: boolean;
+  labels: { follow: string; following: string; requested: string };
   /** The shape, supplied by whichever layout is rendering it. */
   className?: string;
 }) {
   const [following, setFollowing] = useState(initialFollowing);
+  const [pending_, setPending] = useState(initialPending);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
@@ -35,8 +39,10 @@ export default function FollowButton({
         setError(result.error);
         return;
       }
-      // The server decides the resulting state, not this component.
+      // The server decides the resulting state, not this component — and
+      // for a closed profile that state is "asked", not "following".
       setFollowing(result.following);
+      setPending(Boolean(result.pending));
     });
   }
 
@@ -47,7 +53,7 @@ export default function FollowButton({
         disabled={pending}
         className={
           className ??
-          (following
+          (following || pending_
             ? "flex min-h-14 w-full items-center justify-center gap-2 rounded-input bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute"
             : "flex min-h-14 w-full items-center justify-center gap-2 rounded-input bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5")
         }
@@ -56,6 +62,11 @@ export default function FollowButton({
           <>
             <UserCheck className="size-5 shrink-0" />
             {labels.following}
+          </>
+        ) : pending_ ? (
+          <>
+            <Clock className="size-5 shrink-0" />
+            {labels.requested}
           </>
         ) : (
           <>

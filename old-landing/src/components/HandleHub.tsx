@@ -15,6 +15,7 @@ import {
   UtensilsCrossed,
   Store,
   Clock,
+  UserPlus,
 } from "lucide-react";
 
 import { formatNumber } from "@/lib/format";
@@ -42,6 +43,7 @@ export default function HandleHub({
   handle,
   todayViews,
   leads,
+  requests = 0,
   venue,
   waiting,
   setup,
@@ -50,6 +52,8 @@ export default function HandleHub({
   /** Views in the last day. Zero is an answer, not a missing value. */
   todayViews: number;
   leads: number;
+  /** People waiting to be let into a closed profile. */
+  requests?: number;
   /** Set when this number is a place rather than a person. */
   venue: Venue | null;
   waiting: number;
@@ -211,6 +215,7 @@ export default function HandleHub({
         <Tile href={at("tahrirlash")} label="Tahrirlash" Icon={Pencil} />
         <Tile href={at("statistika")} label="Statistika" Icon={BarChart3} count={leads} />
         <Tile href={at("postlar")} label="Postlar" Icon={MessageSquare} />
+        <Tile href={at("obuna-sorovlari")} label="So'rovlar" Icon={UserPlus} count={requests} />
         <Tile href={at("dizayn")} label="Dizayn" Icon={Palette} />
         <Tile href={at("qurilma")} label="Qurilma" Icon={Package} />
         <Tile href={at("tarmoq")} label="Tarmoq" Icon={Users} />

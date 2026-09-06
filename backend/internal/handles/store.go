@@ -74,6 +74,8 @@ type Handle struct {
 	PlanExpiresAt *time.Time `json:"tarif_tugashi,omitempty"`
 	BannerURL     string     `json:"banner,omitempty"`
 	CommentsOpen  bool       `json:"izohlar_ochiq"`
+	// Closed profile — the owner's switch, so the edit form can show it set.
+	Private bool `json:"yopiq"`
 	// A design somebody had made for them, rather than one of ours. Only the
 	// owner's screens show it, which is why it is here and not on the public
 	// profile — the card is theirs, the artwork file need not be public.
@@ -120,6 +122,7 @@ func toHandle(row store.Handle, teamName *string) Handle {
 		PlanExpiresAt:   optionalTime(row.PlanExpiresAt),
 		BannerURL:       deref(row.BannerUrl),
 		CommentsOpen:    row.CommentsOpen,
+		Private:         row.Yopiq,
 		CustomDesignURL: deref(row.CustomDesignUrl),
 		TeamName:        deref(teamName),
 	}

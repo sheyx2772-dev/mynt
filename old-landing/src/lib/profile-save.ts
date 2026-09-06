@@ -61,6 +61,7 @@ export async function saveProfile(
       avatarUrl: p.avatarUrl ?? undefined,
       bannerUrl: p.bannerUrl ?? undefined,
       commentsOpen: p.commentsOpen,
+      yopiq: p.isPrivate,
     },
   });
 

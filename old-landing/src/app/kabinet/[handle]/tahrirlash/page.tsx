@@ -45,6 +45,7 @@ export default async function EditProfilePage({
             bannerUrl: owned.bannerUrl,
             teamName: owned.teamName,
             commentsOpen: owned.commentsOpen,
+            yopiq: owned.isPrivate,
             tags: owned.tags.join(", "),
             cardDesign: owned.cardDesign,
             customDesignUrl: owned.customDesignUrl,

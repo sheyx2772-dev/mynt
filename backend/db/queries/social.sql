@@ -59,10 +59,12 @@ select holat from follow_requests
 where requester_user_id = sqlc.arg(user_id) and handle = sqlc.arg(handle);
 
 -- name: WithdrawFollowRequest :exec
--- Only a pending one. A decided request is the owner's record, not the asker's.
+-- A pending request is taken back; an accepted one is spent, so leaving means
+-- asking again next time, the way a private account works elsewhere. Only the
+-- refusal stays: that is the owner's record, not the asker's.
 delete from follow_requests
 where requester_user_id = sqlc.arg(user_id) and handle = sqlc.arg(handle)
-  and holat = 'kutilmoqda';
+  and holat in ('kutilmoqda', 'qabul');
 
 -- name: PendingFollowRequests :many
 -- The owner's inbox. Ownership is the join: a number that is not the reader's

@@ -141,7 +141,8 @@ func (s *Store) Ask(ctx context.Context, userID, handle string) (FollowState, er
 	}
 }
 
-// Leave stops following and withdraws any request still waiting.
+// Leave stops following and spends the request: pending is withdrawn, accepted
+// is deleted, so coming back to a closed profile means asking again.
 func (s *Store) Leave(ctx context.Context, userID, handle string) error {
 	id, err := uuid.Parse(userID)
 	if err != nil {

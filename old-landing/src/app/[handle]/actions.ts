@@ -9,7 +9,7 @@ import { readSource } from "@/lib/analytics";
 
 import { revalidatePath } from "next/cache";
 import { parseHandle, priceForHandle } from "@/lib/pricing";
-import { isFollowing, setFollowing } from "@/lib/follows";
+import { followState, setFollowing } from "@/lib/follows";
 import { getUser } from "@/lib/auth";
 import { getSiteOrigin } from "@/lib/site";
 import {   getClientIp } from "@/lib/client-ip";
@@ -119,7 +119,13 @@ export async function claimHandle(
   };
 }
 
-export type FollowResult = { following: boolean; error?: string; needsAuth?: true };
+export type FollowResult = {
+  following: boolean;
+  /** Asked a closed profile; waiting on the owner. */
+  pending?: boolean;
+  error?: string;
+  needsAuth?: true;
+};
 
 // Follow or unfollow, decided by what is already stored rather than by what
 // the client claims the current state is.
@@ -137,11 +143,13 @@ export async function toggleFollow(rawHandle: string): Promise<FollowResult> {
   // The backend answers with the state it reached, so a double click leaves the
   // button showing the truth rather than the opposite of it. Following yourself
   // and following a number nobody has claimed are both refused there.
-  const current = await isFollowing(normalized);
-  const following = await setFollowing(normalized, !current);
+  // "Currently in" means following or waiting: pressing the button while a
+  // request is pending withdraws it, the same as unfollowing.
+  const current = await followState(normalized);
+  const state = await setFollowing(normalized, current === "yoq");
 
   revalidatePath(`/${normalized}`);
-  return { following };
+  return { following: state === "obuna", pending: state === "kutilmoqda" };
 }
 
 export type LeadResult = { ok: boolean; error?: string };

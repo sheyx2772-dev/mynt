@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { after } from "next/server";
 import type { Metadata } from "next";
-import { Clock, Eye, Nfc } from "lucide-react";
+import { Clock, Eye, Nfc, Lock, Users } from "lucide-react";
 import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRarity } from "@/lib/pricing";
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
@@ -264,6 +264,11 @@ async function VanityHandlePage({
     // trips for a screen that is already drawn.
     const following = profile.isFollowing;
     const viewerRecommends = profile.isRecommended;
+    // Closed to this reader. The server already sent the cut profile — empty
+    // links, no bio, no phone — so most of the page empties itself; what is
+    // left to do here is say why, and not draw the parts that would otherwise
+    // read as "this person has nothing", which is a different claim.
+    const closed = profile.isPrivate && !isOwner && !following;
 
     const [posts, comments, recommenders] = await Promise.all([
       tab === "postlar" ? listPostsForHandle(normalized) : Promise.resolve([]),
@@ -422,6 +427,16 @@ async function VanityHandlePage({
             <Plate n={normalized} size="md" />
           </div>
 
+          {closed && (
+            <div className="mt-6 flex items-start gap-3 rounded-input bg-ink/[0.04] px-4 py-3 text-ink">
+              <Lock className="mt-0.5 size-5 shrink-0" strokeWidth={1.8} />
+              <div>
+                <p className="text-[15px] font-semibold">{t.privateProfile}</p>
+                <p className="mt-0.5 text-sm leading-5 text-mute">{t.privateHint}</p>
+              </div>
+            </div>
+          )}
+
           {payHref && !isOwner && (
             <a
               href={payHref}
@@ -443,7 +458,8 @@ async function VanityHandlePage({
               <FollowButton
                 handle={normalized}
                 initialFollowing={following}
-                labels={{ follow: t.follow, following: t.following }}
+                initialPending={profile.isPending}
+                labels={{ follow: t.follow, following: t.following, requested: t.requested }}
                 className="flex h-10 w-full items-center justify-center gap-1.5 rounded-plate bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
               />
             </div>
@@ -465,7 +481,7 @@ async function VanityHandlePage({
           {/* Premium, and only for a visitor: the owner has no reason to send
               themselves a contact, and seeing the form on their own page would
               read as something they are meant to fill in. */}
-          {!isOwner && profile.plan === "premium" && (
+          {!isOwner && !closed && profile.plan === "premium" && (
             <div className="mt-3">
               <ExchangeContactForm
                 handle={normalized}
@@ -488,54 +504,68 @@ async function VanityHandlePage({
             </div>
           )}
 
-          <dl className="mt-6 flex items-center justify-center gap-5 text-sm leading-5 text-mute">
-            <div className="flex items-center gap-1.5">
-              <Eye className="size-4" />
-              <dt className="sr-only">{t.views}</dt>
-              <dd>
-                <span className="font-medium tabular-nums">{profile.viewCount}</span>{" "}
-                {t.views.toLowerCase()}
-              </dd>
-            </div>
-            {lastSeen && (
-              <>
-                <span className="size-1 rounded-full bg-mute/50" aria-hidden />
+          {closed ? (
+            /* The one number a locked account still shows. No views, no
+               last-seen, no tabs: those describe a page the reader is not
+               being shown, and "0 ko'rish" on a profile that plainly exists
+               reads as a broken counter rather than a closed door. */
+            <p className="mt-6 flex items-center justify-center gap-1.5 text-sm leading-5 text-mute">
+              <Users className="size-4" />
+              <span className="font-medium tabular-nums">{profile.followerCount}</span>{" "}
+              {t.followers.toLowerCase()}
+            </p>
+          ) : (
+            <>
+              <dl className="mt-6 flex items-center justify-center gap-5 text-sm leading-5 text-mute">
                 <div className="flex items-center gap-1.5">
-                  <Clock className="size-4" />
-                  <dt className="sr-only">{t.lastSeen}</dt>
-                  <dd>{lastSeen}</dd>
+                  <Eye className="size-4" />
+                  <dt className="sr-only">{t.views}</dt>
+                  <dd>
+                    <span className="font-medium tabular-nums">{profile.viewCount}</span>{" "}
+                    {t.views.toLowerCase()}
+                  </dd>
                 </div>
-              </>
-            )}
-          </dl>
+                {lastSeen && (
+                  <>
+                    <span className="size-1 rounded-full bg-mute/50" aria-hidden />
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="size-4" />
+                      <dt className="sr-only">{t.lastSeen}</dt>
+                      <dd>{lastSeen}</dd>
+                    </div>
+                  </>
+                )}
+              </dl>
 
-          <div className="mt-6 flex justify-center gap-7 border-b border-ink/12">
-            <Link
-              href={`/${normalized}`}
-              className={
-                tab === "vizitka"
-                  ? "-mb-px border-b-2 border-lime pb-2.5 text-[14px] font-bold"
-                  : "-mb-px border-b-2 border-transparent pb-2.5 text-[14px] font-bold text-mute"
-              }
-            >
-              {t.card}
-            </Link>
-            <Link
-              href={`/${normalized}?bolim=postlar`}
-              className={
-                tab === "postlar"
-                  ? "-mb-px flex items-center gap-1.5 border-b-2 border-lime pb-2.5 text-[14px] font-bold"
-                  : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-[14px] font-bold text-mute"
-              }
-            >
-              {t.posts}
-              {profile.postCount > 0 && (
-                <span className="tabular-nums text-mute">{profile.postCount}</span>
-              )}
-            </Link>
-          </div>
+              <div className="mt-6 flex justify-center gap-7 border-b border-ink/12">
+                <Link
+                  href={`/${normalized}`}
+                  className={
+                    tab === "vizitka"
+                      ? "-mb-px border-b-2 border-lime pb-2.5 text-[14px] font-bold"
+                      : "-mb-px border-b-2 border-transparent pb-2.5 text-[14px] font-bold text-mute"
+                  }
+                >
+                  {t.card}
+                </Link>
+                <Link
+                  href={`/${normalized}?bolim=postlar`}
+                  className={
+                    tab === "postlar"
+                      ? "-mb-px flex items-center gap-1.5 border-b-2 border-lime pb-2.5 text-[14px] font-bold"
+                      : "-mb-px flex items-center gap-1.5 border-b-2 border-transparent pb-2.5 text-[14px] font-bold text-mute"
+                  }
+                >
+                  {t.posts}
+                  {profile.postCount > 0 && (
+                    <span className="tabular-nums text-mute">{profile.postCount}</span>
+                  )}
+                </Link>
+              </div>
+            </>
+          )}
 
-          {tab === "vizitka" && (
+          {!closed && tab === "vizitka" && (
             <div className="flex flex-col gap-7">
               {/* Whatever the eight could not hold. Stored in full, shown by
                   plan: an owner who fills in twelve and lets premium lapse
@@ -611,7 +641,7 @@ async function VanityHandlePage({
                 </section>
               )}
 
-              {profile.commentsOpen && (
+              {!closed && profile.commentsOpen && (
                 <ProfileComments
                   handle={normalized}
                   comments={comments}
@@ -630,7 +660,7 @@ async function VanityHandlePage({
             </div>
           )}
 
-          {tab === "postlar" && (
+          {!closed && tab === "postlar" && (
             <div className="mt-4">
               <PostList
                 posts={posts}

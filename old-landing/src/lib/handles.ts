@@ -12,6 +12,10 @@ export type ClaimedProfile = {
   /** What the reader has already done here. */
   isFollowing: boolean;
   isRecommended: boolean;
+  /** Closed: a stranger gets the face and asks for the rest. */
+  isPrivate: boolean;
+  /** The reader asked and is waiting. */
+  isPending: boolean;
   name: string;
   bio: string;
   avatarUrl: string | null;
@@ -51,6 +55,8 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
     isOwner: p.meniki,
     isFollowing: p.obunaman,
     isRecommended: p.tavsiya_qilganman,
+    isPrivate: p.yopiq,
+    isPending: p.sorov_kutilmoqda,
     name: p.ism,
     bio: p.tavsif ?? "",
     avatarUrl: p.rasm ?? null,
@@ -72,7 +78,7 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
     commentsOpen: false,
     recommendCount: 0,
     team: null,
-    followerCount: 0,
+    followerCount: p.obunachilar,
     postCount: 0,
   };
 });
@@ -145,6 +151,7 @@ export type OwnedHandle = {
   /** The company that owns this handle, if any. Its fields are not editable. */
   teamName: string | null;
   commentsOpen: boolean;
+  isPrivate: boolean;
   tags: string[];
   viewCount: number;
   cardDesign: CardDesignId;
@@ -199,6 +206,7 @@ function toOwned(h: BackendHandle): OwnedHandle {
     bannerUrl: h.banner ?? null,
     teamName: h.jamoa ?? null,
     commentsOpen: h.izohlar_ochiq,
+    isPrivate: h.yopiq,
     tags: h.teglar ?? [],
     viewCount: h.korishlar,
     cardDesign: isCardDesign(h.dizayn) ? h.dizayn : DEFAULT_CARD_DESIGN,

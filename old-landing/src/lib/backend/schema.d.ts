@@ -411,7 +411,7 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Email va parol bilan kirish
+         * Username yoki email va parol bilan kirish
          * @description Parolni o'rnatish uchun avval havola bilan kirib, keyin uni belgilang.
          */
         post: operations["kirish-parol"];
@@ -1328,6 +1328,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/raqamlar/{raqam}/obuna-sorovlari": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Yopiq profilga kim kirmoqchi
+         * @description Faqat egasi. Boshqaning raqami — bo'sh ro'yxat.
+         */
+        get: operations["obuna-sorovlari"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/obuna-sorovlari/{foydalanuvchi}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * So'rovni qabul qilish yoki rad etish
+         * @description Qabul — obuna yoziladi. Rad — so'rov yopiladi va qayta so'rab bo'lmaydi.
+         */
+        put: operations["obuna-sorovini-hal-qilish"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/raqamlar/{raqam}/obyekt": {
         parameters: {
             query?: never;
@@ -2088,6 +2128,15 @@ export interface components {
             /** Format: int64 */
             tashrifchilar: number;
         };
+        DecideInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/DecideInputBody.json
+             */
+            readonly $schema?: string;
+            qabul: boolean;
+        };
         DeletedPostOutputBody: {
             /**
              * Format: uri
@@ -2296,7 +2345,28 @@ export interface components {
              * @example /v1/schemas/FollowOutputBody.json
              */
             readonly $schema?: string;
+            /** @enum {string} */
+            holat: "obuna" | "kutilmoqda" | "yoq";
             obuna: boolean;
+        };
+        FollowRequest: {
+            foydalanuvchi: string;
+            ism?: string;
+            raqam?: string;
+            rasm?: string;
+            /** Format: date-time */
+            sorlagan: string;
+        };
+        FollowRequestsOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/FollowRequestsOutputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            soni: number;
+            sorovlar: components["schemas"]["FollowRequest"][] | null;
         };
         GenesisCard: {
             /** Format: date-time */
@@ -2374,6 +2444,7 @@ export interface components {
             /** Format: int64 */
             tolangan?: number;
             xizmatlar: components["schemas"]["Service"][] | null;
+            yopiq: boolean;
         };
         HandleListOutputBody: {
             /**
@@ -2887,7 +2958,8 @@ export interface components {
              * @example /v1/schemas/PasswordInputBody.json
              */
             readonly $schema?: string;
-            email: string;
+            /** @description Username yoki email */
+            login: string;
             parol: string;
         };
         Patch: {
@@ -3008,6 +3080,7 @@ export interface components {
             services?: components["schemas"]["Service"][] | null;
             /** @description Vergul yoki bo'sh joy bilan ajratilgan */
             tags?: string;
+            yopiq: boolean;
         };
         PromoActiveInputBody: {
             /**
@@ -3063,6 +3136,8 @@ export interface components {
             korishlar: number;
             lavozim?: string;
             meniki: boolean;
+            /** Format: int64 */
+            obunachilar: number;
             obunaman: boolean;
             /** Format: date-time */
             oxirgi_faollik?: string;
@@ -3070,12 +3145,14 @@ export interface components {
             raqam: string;
             rasm?: string;
             shahar?: string;
+            sorov_kutilmoqda: boolean;
             tarif: string;
             tavsif?: string;
             tavsiya_qilganman: boolean;
             teglar: string[] | null;
             telefon?: string;
             xizmatlar: components["schemas"]["Service"][] | null;
+            yopiq: boolean;
         };
         PublicProfileOutputBody: {
             /**
@@ -6230,6 +6307,73 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["CreatedOutputBody"];
                 };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "obuna-sorovlari": {
+        parameters: {
+            query?: {
+                soni?: number;
+            };
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FollowRequestsOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "obuna-sorovini-hal-qilish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+                foydalanuvchi: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecideInputBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error */
             default: {

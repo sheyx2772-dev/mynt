@@ -39,6 +39,7 @@ export default function EditProfileForm({
     bannerUrl: string | null;
     teamName: string | null;
     commentsOpen: boolean;
+    yopiq: boolean;
     tags: string;
     cardDesign: CardDesignId;
     customDesignUrl?: string | null;
@@ -379,6 +380,27 @@ export default function EditProfileForm({
               Profilingizga kirgan odamlar izoh yoza oladi. Har kim bittadan, va
               istalganini o&apos;zingiz o&apos;chira olasiz. Yopiq bo&apos;lsa
               izohlar umuman ko&apos;rinmaydi.
+            </span>
+          </span>
+        </label>
+
+        {/* Closed, the way an account is closed on the networks people already
+            use. The cut happens on the server, so this switch changes what is
+            sent, not what is drawn. */}
+        <label className="mt-3 flex cursor-pointer items-start gap-2.5 text-sm">
+          <input
+            type="checkbox"
+            name="yopiq"
+            value="1"
+            defaultChecked={defaults.yopiq}
+            className="mt-0.5"
+          />
+          <span>
+            <span className="font-medium">Yopiq profil</span>
+            <span className="mt-0.5 block text-xs text-paper-3">
+              Begona odam faqat ismingiz, suratingiz va raqamingizni ko&apos;radi.
+              Qolgani obuna so&apos;rovini qabul qilganingizdan keyin ochiladi.
+              So&apos;rovlar kabinetda turadi.
             </span>
           </span>
         </label>

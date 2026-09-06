@@ -7,6 +7,7 @@ import { getUser } from "@/lib/auth";
 import { saveProfile } from "@/lib/profile-save";
 import { requestDesign } from "@/lib/design-requests";
 import { offerTransfer, cancelTransfer, acceptTransfer } from "@/lib/transfers";
+import { decideFollowRequest } from "@/lib/follow-requests";
 
 export type UpdateResult = {
   ok: boolean;
@@ -155,5 +156,36 @@ export async function acceptHandleTransfer(id: string): Promise<TransferActionRe
   // stale. The profile path is not known here — the backend moved it — so the
   // cabinet is refreshed and the profile revalidates on its own next request.
   revalidatePath("/kabinet");
+  return { ok: true };
+}
+
+export type DecideResult = { ok: boolean; error?: string };
+
+// The owner's answer to somebody waiting at the door of a closed profile.
+//
+// Ownership is not checked here because it cannot be: the backend joins the
+// number to the session and a decision on somebody else's number matches
+// nothing — which reads as "not found", the same as a request that was already
+// answered. Both are true from where the owner stands.
+export async function decideRequest(
+  rawHandle: string,
+  userId: string,
+  accept: boolean,
+): Promise<DecideResult> {
+  const parsed = parseHandle(rawHandle);
+  if (!parsed) return { ok: false, error: "Raqam 3 harf va 3 raqamdan iborat bo'lishi kerak." };
+  if (!/^[0-9a-f-]{36}$/i.test(userId)) return { ok: false, error: "So'rov topilmadi." };
+
+  const user = await getUser();
+  if (!user) return { ok: false, error: "Avval hisobingizga kiring." };
+
+  const normalized = `${parsed.letters}${parsed.digits}`;
+  const done = await decideFollowRequest(normalized, userId, accept);
+  if (!done) return { ok: false, error: "So'rov topilmadi — ehtimol allaqachon hal qilingan." };
+
+  // Accepting changes what that person sees on the profile, and the inbox.
+  revalidatePath(`/${normalized}`);
+  revalidatePath(`/kabinet/${normalized}`);
+  revalidatePath(`/kabinet/${normalized}/obuna-sorovlari`);
   return { ok: true };
 }
