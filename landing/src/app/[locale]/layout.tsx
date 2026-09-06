@@ -4,6 +4,8 @@ import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 
+import SiteFooter from "@/components/SiteFooter";
+import SiteHeader from "@/components/SiteHeader";
 import { routing } from "@/i18n/routing";
 import { inter, mono, serif } from "../fonts";
 import "../globals.css";
@@ -53,7 +55,19 @@ export default async function LocaleLayout({
         {/* Messages reach client components through this. Server components
             do not need it — they await `getTranslations()` and are rendered
             before anything is sent. */}
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          {/* One header and one footer, here rather than in a page. The site
+              this replaces had fourteen pages each drawing their own, which is
+              how one product ends up wearing two uniforms.
+
+              `session` is not read yet — the backend client lands with auth.
+              Passing it explicitly keeps the signed-in markup in the tree and
+              exercised the day it arrives, rather than written later against a
+              header nobody has looked at since. */}
+          <SiteHeader session={null} />
+          <div className="flex flex-1 flex-col">{children}</div>
+          <SiteFooter />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

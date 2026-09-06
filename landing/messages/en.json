@@ -9,11 +9,31 @@
     "business": "Business",
     "residents": "Residents",
     "cabinet": "Cabinet",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "getNumber": "Get a number",
+    "openMenu": "Menu",
+    "closeMenu": "Close"
   },
   "home": {
     "title": "Flex — your digital business card",
     "lead": "One tap and your contact is saved. No app to install.",
     "cta": "Get a number"
+  },
+  "footer": {
+    "blurb": "A digital business card shared with one tap.",
+    "product": "Product",
+    "devices": "Devices",
+    "posts": "Posts",
+    "business": "Business",
+    "cafe": "Cafes and restaurants",
+    "hotel": "Hotels",
+    "shop": "Shops",
+    "team": "For teams",
+    "company": "Company",
+    "contact": "Contact",
+    "offer": "Public offer",
+    "terms": "Terms of use",
+    "privacy": "Privacy",
+    "taxId": "Tax ID"
   }
 }

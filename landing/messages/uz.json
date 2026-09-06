@@ -9,11 +9,31 @@
     "business": "Biznes",
     "residents": "Rezidentlar",
     "cabinet": "Kabinet",
-    "signIn": "Kirish"
+    "signIn": "Kirish",
+    "getNumber": "Raqam olish",
+    "openMenu": "Menyu",
+    "closeMenu": "Yopish"
   },
   "home": {
     "title": "Flex — raqamli vizitkangiz",
     "lead": "Bir tegish bilan kontaktingiz saqlanadi. Ilova o'rnatish kerak emas.",
     "cta": "Raqam olish"
+  },
+  "footer": {
+    "blurb": "Bir tegish bilan ulashiladigan raqamli vizitka.",
+    "product": "Mahsulot",
+    "devices": "Qurilmalar",
+    "posts": "Postlar",
+    "business": "Biznes",
+    "cafe": "Kafe va restoran",
+    "hotel": "Mehmonxona",
+    "shop": "Do'kon",
+    "team": "Jamoa uchun",
+    "company": "Kompaniya",
+    "contact": "Aloqa",
+    "offer": "Ommaviy oferta",
+    "terms": "Foydalanish shartlari",
+    "privacy": "Maxfiylik",
+    "taxId": "STIR"
   }
 }

@@ -1,0 +1,17 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html",        "x": 0,    "y": 0,    "w": 1440, "h": 340, "title": "A — ink yuza" },
+    { "file": "HeaderB.dc.html",     "x": 1560, "y": 0,    "w": 1440, "h": 340, "title": "B — paper yuza" },
+    { "file": "HeaderC.dc.html",     "x": 0,    "y": 470,  "w": 1440, "h": 300, "title": "C — ikki qatlam" },
+    { "file": "HeaderD.dc.html",     "x": 1560, "y": 470,  "w": 1440, "h": 430, "title": "D — minimal" },
+    { "file": "HeaderPhone.dc.html", "x": 3120, "y": 0,    "w": 390,  "h": 844, "title": "Telefon" },
+    { "file": "FooterA.dc.html",     "x": 0,    "y": 1030, "w": 1440, "h": 440, "title": "Footer 1 — uch ustun" },
+    { "file": "FooterB.dc.html",     "x": 1560, "y": 1030, "w": 1440, "h": 760, "title": "Footer 2 — to'liq" },
+    { "file": "FooterC.dc.html",     "x": 0,    "y": 1600, "w": 1440, "h": 250, "title": "Footer 3 — ingichka" }
+  ],
+  "annotations": [
+    { "id": "brief", "x": 0, "y": -170, "w": 700, "text": "Header va footer variantlari\n\nRanglar, radiuslar va logotip geometriyasi loyihaning o'z tokenlaridan olingan — taxmin yo'q.\n\nLime qoidasi: ekranda bitta element kiyadi. Bu yerda u har doim \"Raqam olish\"." },
+    { "id": "states", "x": 3120, "y": -170, "w": 390, "text": "Har bir header ikki holatda: kirmagan (Kirish) va kirgan (raqam + avatar). Eski saytdagi xato shu edi — tugma sessiyani bilmasdi." }
+  ],
+  "launch": { "view": "canvas" }
+}

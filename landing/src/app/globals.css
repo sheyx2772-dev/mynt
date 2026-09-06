@@ -275,3 +275,52 @@
     @apply font-sans;
   }
 }
+@layer components {
+  /* Section labels: the small capitals over a footer column or a form group.
+     One place, because the tracking and the size are the whole effect and two
+     copies of them drift. */
+  .cap {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+}
+
+/* The mark, transmitting.
+ *
+ * The glyph is a point and two arcs leaving it, so the honest animation is the
+ * signal travelling outward: the near arc lights, then the far one, then both
+ * fall back. Not a spin and not a bounce — those say "busy" about anything;
+ * this says what this product does.
+ *
+ * It runs only where something is genuinely pending. A logo that animates in
+ * the header all day is noise, and on a phone it is noise that costs battery.
+ */
+@keyframes flex-signal {
+  0%,
+  100% {
+    opacity: 0.22;
+  }
+  35% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.22;
+  }
+}
+
+.signal-arc {
+  animation: flex-signal 1.4s var(--ease-out) infinite;
+}
+/* The stagger is the whole effect: without it two arcs blink together and it
+   reads as a flash rather than as something leaving. */
+.signal-arc:nth-of-type(2) {
+  animation-delay: 0.16s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signal-arc {
+    animation: none;
+    opacity: 1;
+  }
+}
