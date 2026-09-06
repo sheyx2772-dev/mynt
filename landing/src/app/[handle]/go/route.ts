@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { redirectTo } from "@/lib/redirect";
 import { after } from "next/server";
 import { parseHandle } from "@/lib/pricing";
 import { getClaimedProfile } from "@/lib/handles";
@@ -22,12 +23,12 @@ export async function GET(
 
   const normalized = `${parsed.letters}${parsed.digits}`;
   const profile = await getClaimedProfile(normalized);
-  if (!profile) return NextResponse.redirect(new URL(`/${normalized}`, request.url));
+  if (!profile) return redirectTo(`/${normalized}`, 307);
 
   const index = Number(request.nextUrl.searchParams.get("to"));
   const link = Number.isInteger(index) ? profile.links[index] : undefined;
 
-  if (!link) return NextResponse.redirect(new URL(`/${normalized}`, request.url));
+  if (!link) return redirectTo(`/${normalized}`, 307);
   after(() => recordLinkClick(normalized, link.label));
 
   // 307 rather than 301: the mapping is not permanent and must not be cached

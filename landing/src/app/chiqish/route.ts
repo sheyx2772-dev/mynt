@@ -1,10 +1,9 @@
-import { NextResponse, type NextRequest } from "next/server";
-
 import { asReader } from "@/lib/backend/client";
 import { endSession } from "@/lib/backend/session";
+import { redirectTo } from "@/lib/redirect";
 
 // Sign-out is a POST so a stray link preview or prefetch cannot log people out.
-export async function POST(request: NextRequest) {
+export async function POST() {
   // Told to the backend so the session is revoked there rather than merely
   // forgotten here — a token that still works is a token that still works,
   // whoever has stopped holding it.
@@ -16,5 +15,5 @@ export async function POST(request: NextRequest) {
   // hand; the server-side session expires on its own.
   await endSession();
 
-  return NextResponse.redirect(new URL("/", request.url), { status: 303 });
+  return redirectTo("/");
 }

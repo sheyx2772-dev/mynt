@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isLang } from "@/lib/i18n";
 import { LANG_COOKIE } from "@/lib/lang";
+import { redirectTo } from "@/lib/redirect";
 
 // Remembering a language choice.
 //
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
 
   const next = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/";
 
-  const response = NextResponse.redirect(new URL(next, request.url), 303);
+  const response = redirectTo(next);
   response.cookies.set(LANG_COOKIE, lang, {
     path: "/",
     maxAge: 60 * 60 * 24 * 365,
