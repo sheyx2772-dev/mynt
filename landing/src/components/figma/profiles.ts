@@ -32,6 +32,33 @@ export interface Profile {
   socials: { type: string; handle: string }[];
   tags: string[];
   verified: boolean;
+
+  // ── what ProfileCardV2 draws, where a record carries it ──────────────────
+  //
+  // Which of the seventeen designs a profile is drawn in. Absent means the
+  // original card.
+  template?:
+    | "premium" | "gradient" | "minimal" | "glass" | "stripe"
+    | "feminine" | "terminal" | "comic" | "sport" | "kids"
+    | "nature" | "historical" | "country" | "brand"
+    | "chef" | "artist" | "musician";
+  /** The six colours a V2 design paints itself from. */
+  v2?: { bg1: string; bg2: string; accent: string; text: string; sub: string; tag: string };
+  /** Per-design extras: a flag, a shirt number, a speciality. */
+  extra?: {
+    flag?: string; country?: string; brandName?: string; brandColor?: string;
+    logoChar?: string; specialty?: string; jerseyNum?: string;
+  };
+
+  // Optional, and empty on every organisation in this file — see the note at
+  // the top. The V2 designs draw a contact row when these are present, and the
+  // catalogue has nobody to put in it: inventing a person's telephone number
+  // and an address on a real body's own domain is the thing that was removed.
+  phone?: string;
+  email?: string;
+  address?: string;
+  gender?: "male" | "female";
+  age?: number;
 }
 
 export const profiles: Profile[] = [
