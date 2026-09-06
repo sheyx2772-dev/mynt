@@ -1,26 +1,23 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { CreditCard, Search, Smartphone } from "lucide-react";
+import { Search, Smartphone } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import ProfileMockup from "./ProfileMockup";
 import ThemeSwatch from "./ThemeSwatch";
-import CardFace from "@/components/CardFace";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { chooseTheme } from "@/app/(cabinet)/[locale]/cabinet/[handle]/theme/actions";
-import { type CardDesignId } from "@/lib/card-designs";
 import { PROFILE_THEMES } from "@/lib/profile/theme";
 import { FAMILIES, THEMES, type ThemeFamily } from "@/lib/cabinet/themes";
 
-// The profile theme picker: lets the owner decide how their public page
-// renders when someone touches their card or opens flex.uz/:handle.
+// The profile theme picker: lets the owner choose how their web profile
+// renders when someone touches the NFC card or opens flex.uz/:handle.
 //
-// Carries a live mobile viewport preview so changes can be evaluated on
-// the exact form factor visitors use, plus a toggle to inspect the matching
-// physical NFC card.
+// Shows a live phone viewport so changes can be evaluated on the exact
+// form factor visitors use in the browser.
 export default function ThemePicker({
   raqam,
   current,
@@ -32,7 +29,6 @@ export default function ThemePicker({
 }) {
   const t = useTranslations("cabinet.theme");
   const [picked, setPicked] = useState(current);
-  const [previewMode, setPreviewMode] = useState<"profile" | "card">("profile");
   const [family, setFamily] = useState<ThemeFamily | null>(null);
   const [query, setQuery] = useState("");
   const [pending, start] = useTransition();
@@ -60,63 +56,28 @@ export default function ThemePicker({
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Live Spotlight Preview */}
+      {/* Live Spotlight Preview of the Web Profile */}
       <div className="relative overflow-hidden rounded-tile border border-border bg-card/70 p-4 sm:p-6 shadow-slab backdrop-blur">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="size-2 rounded-full bg-primary animate-pulse" />
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {previewMode === "profile"
-                ? "Jonli veb-profil ko'rinishi (NFC / URL)"
-                : "Jismoniy NFC karta ko'rinishi"}
+              Veb-profil ko'rinishi (NFC / URL)
             </span>
           </div>
 
-          {/* Mode Switcher */}
-          <div className="flex rounded-full border border-border bg-muted/60 p-0.5 text-xs">
-            <button
-              type="button"
-              onClick={() => setPreviewMode("profile")}
-              className={`flex items-center gap-1.5 rounded-full px-3 py-1 font-medium transition-colors ${
-                previewMode === "profile"
-                  ? "bg-foreground text-background shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Smartphone className="size-3.5" />
-              <span>Veb-profil</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setPreviewMode("card")}
-              className={`flex items-center gap-1.5 rounded-full px-3 py-1 font-medium transition-colors ${
-                previewMode === "card"
-                  ? "bg-foreground text-background shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <CreditCard className="size-3.5" />
-              <span>NFC Karta</span>
-            </button>
+          <div className="flex items-center gap-1.5 rounded-full border border-border bg-muted/60 px-3 py-1 text-xs font-medium text-foreground">
+            <Smartphone className="size-3.5 text-primary" />
+            <span>{activeProfileTheme.name}</span>
           </div>
         </div>
 
         <div className="mx-auto max-w-sm drop-shadow-2xl transition-all duration-300">
-          {previewMode === "profile" ? (
-            <ProfileMockup
-              theme={activeProfileTheme}
-              raqam={raqam}
-              name={name}
-            />
-          ) : (
-            <div className="py-4">
-              <CardFace
-                design={picked as CardDesignId}
-                handle={name}
-                sizes="(min-width: 640px) 384px, 92vw"
-              />
-            </div>
-          )}
+          <ProfileMockup
+            theme={activeProfileTheme}
+            raqam={raqam}
+            name={name}
+          />
         </div>
       </div>
 
