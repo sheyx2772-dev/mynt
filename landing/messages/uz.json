@@ -153,17 +153,35 @@
     }
   },
   "price": {
-    "eyebrow": "Narx",
-    "title": "Ikki mahsulot, ikki to'lov",
-    "personal": "Shaxsiy raqam",
-    "personalNote": "Bir marta. Raqam sizniki bo'lib qoladi.",
-    "venue": "Obyekt — kafe, mehmonxona, do'kon",
-    "venueNote": "Oyiga. Menyu, stol belgilari, chaqiruv va hisobot.",
-    "from": "dan",
-    "monthly": "oyiga",
+    "title": "Narx — yashirin to'lovsiz",
+    "startLabel": "Boshlang'ich",
+    "subLabel": "Obuna",
+    "lapsedLabel": "Obuna tugasa",
+    "cta": "Tanlash",
     "soum": "so'm",
-    "cta": "Raqam olish",
-    "venueCta": "Biznes bo'limi"
+    "monthly": "oyiga",
+    "yearly": "Bir yilni oldindan to'lasangiz — {n}, ya'ni o'n oyning puliga o'n ikki oy.",
+    "person": {
+      "name": "Shaxs",
+      "startNote": "Bir marta. Raqam sizniki bo'lib qoladi.",
+      "startFigure": "",
+      "subNote": "Statistika, cheksiz havola, o'z mavzuingiz.",
+      "lapsed": "Profil ochilaveradi — faqat tahrirlash yopiladi. Raqam sizda qoladi."
+    },
+    "team": {
+      "name": "Kompaniya",
+      "startNote": "Kamida 5 xodim. Har bir o'ringa.",
+      "startFigure": "",
+      "subNote": "Hisob-faktura, kompaniya belgisi, bitta panel.",
+      "lapsed": "Raqamlar kompaniyada qoladi, xodim ketsa qaytariladi."
+    },
+    "venue": {
+      "name": "Kafe va do'kon",
+      "startFigure": "Stollar soniga qarab",
+      "startNote": "15 tagacha nuqta shu narxda. Ko'proq bo'lsa — kelishamiz.",
+      "subNote": "Menyu, QR va NFC — hammasi kiradi.",
+      "lapsed": "Menyu ochilaveradi, so'rovlar va statistika to'xtaydi."
+    }
   },
   "faq": {
     "title": "Savol-javob",

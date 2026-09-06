@@ -153,17 +153,35 @@
     }
   },
   "price": {
-    "eyebrow": "Price",
-    "title": "Two products, two payments",
-    "personal": "A personal number",
-    "personalNote": "Once. The number stays yours.",
-    "venue": "A venue — cafe, hotel, shop",
-    "venueNote": "Monthly. Menu, table tags, calls and a report.",
-    "from": "from",
-    "monthly": "a month",
+    "title": "The price, with nothing hidden in it",
+    "startLabel": "To start",
+    "subLabel": "Subscription",
+    "lapsedLabel": "If it lapses",
+    "cta": "Choose",
     "soum": "so'm",
-    "cta": "Get a number",
-    "venueCta": "The business section"
+    "monthly": "a month",
+    "yearly": "A year up front is {n} — twelve months at the price of ten.",
+    "person": {
+      "name": "One person",
+      "startNote": "Once. The number stays yours.",
+      "startFigure": "",
+      "subNote": "Statistics, links without a limit, your own theme.",
+      "lapsed": "The profile keeps opening — only editing closes. The number stays yours."
+    },
+    "team": {
+      "name": "A company",
+      "startNote": "From 5 people. Per seat.",
+      "startFigure": "",
+      "subNote": "Invoicing, your own branding, one panel.",
+      "lapsed": "The numbers stay with the company and come back when somebody leaves."
+    },
+    "venue": {
+      "name": "Cafe and shop",
+      "startFigure": "By how many tables",
+      "startNote": "Up to 15 points at this price. More than that, we talk.",
+      "subNote": "Menu, QR and NFC — all of it included.",
+      "lapsed": "The menu keeps opening; reviews and statistics stop."
+    }
   },
   "faq": {
     "title": "Questions",
