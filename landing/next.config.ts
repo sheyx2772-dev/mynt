@@ -2,6 +2,24 @@ import createNextIntlPlugin from "next-intl/plugin";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // NOTE — every page is server-rendered per request, and that is a cost this
+  // file is the right place to record.
+  //
+  // The header shows who is signed in. Reading a cookie makes a render
+  // dynamic, and the header lives in the layout, so one button took the whole
+  // marketing site out of prerendering. The `Suspense` boundary around it does
+  // not save that on its own: without partial prerendering the boundary
+  // streams, but the shell around it is still built per request.
+  //
+  // `cacheComponents: true` is the fix and it is one line. It is not here yet
+  // because it refuses two route segment configs that landed the same day —
+  // `dynamic = "force-dynamic"` on the feed and `revalidate` on the directory
+  // — and rewriting those to `use cache` is a change worth making on its own
+  // rather than folded into a header. Until then: rendering these pages costs
+  // milliseconds, nothing is behind a CDN that static files would have fed,
+  // and the live sections come back fresher. Indexing is unaffected — the HTML
+  // is complete either way.
+
   images: {
     // Every quality a component is allowed to ask for.
     //

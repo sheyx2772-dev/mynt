@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 
+import HeaderAccount, { SignIn } from "@/components/HeaderAccount";
 import LangSwitch from "@/components/LangSwitch";
 import Mark from "@/components/Mark";
 import MobileMenu from "@/components/MobileMenu";
@@ -18,13 +20,7 @@ import { Link } from "@/i18n/navigation";
 // page's, and there are two limes above the fold. The dark band separates them
 // by ground: one is chrome, one is the page.
 
-export type Session = {
-  /** The number, which is the identity. */
-  handle: string;
-  initials: string;
-} | null;
-
-export default async function SiteHeader({ session }: { session?: Session }) {
+export default async function SiteHeader() {
   const t = await getTranslations("nav");
 
   // `anchor` names the block on the entry page, where one exists. Only the
@@ -46,8 +42,13 @@ export default async function SiteHeader({ session }: { session?: Session }) {
             items={[
               ...items,
               // Only in the sheet: on a wide screen this is a button of its
-              // own on the right.
-              ...(session ? [] : [{ href: "/login", label: t("signIn") }]),
+              // own on the right. It is listed whether or not the reader is
+              // signed in, because deciding would mean reading the session
+              // here — and this is a client component's props, computed in the
+              // layout, so the whole site would go dynamic to hide one row.
+              // Pressing it while signed in lands on the sign-in page, which
+              // says so; that is a smaller cost than the one it saves.
+              { href: "/login", label: t("signIn") },
             ]}
             openLabel={t("openMenu")}
             closeLabel={t("closeMenu")}
@@ -82,29 +83,14 @@ export default async function SiteHeader({ session }: { session?: Session }) {
             <LangSwitch tone="dark" />
           </div>
 
-          {/* What is true, rather than what is always true. The old header
-              offered "Kirish" to somebody already signed in, so pressing it
-              bounced them to the home page with nothing said. */}
-          {session ? (
-            <Link
-              href="/cabinet"
-              className="flex h-10 items-center gap-2.5 rounded-input pr-1 pl-1 transition-colors hover:bg-ink-s1"
-            >
-              <span className="flex size-8 items-center justify-center rounded-full border border-ink-line bg-gold text-xs font-semibold text-ink">
-                {session.initials}
-              </span>
-              <span className="hidden font-mono text-xs font-semibold tracking-[0.14em] text-paper-2 sm:inline">
-                {session.handle}
-              </span>
-            </Link>
-          ) : (
-            <Link
-              href="/login"
-              className="hidden h-10 items-center px-3.5 text-sm font-medium text-paper-2 transition-colors hover:text-white sm:flex"
-            >
-              {t("signIn")}
-            </Link>
-          )}
+          {/* Who is asking is the only thing on this page that is not the
+              same for everybody, so it is the only thing that waits. The
+              signed-out shape is the fallback, so nothing moves for a reader
+              who is not signed in and a signed-in one sees it for the length
+              of one request rather than a gap that jumps. */}
+          <Suspense fallback={<SignIn label={t("signIn")} />}>
+            <HeaderAccount />
+          </Suspense>
 
           <Link
             href="/personal"

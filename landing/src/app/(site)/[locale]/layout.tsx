@@ -6,7 +6,10 @@ import { NextIntlClientProvider } from "next-intl";
 
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import SiteJsonLd from "@/components/SiteJsonLd";
 import { routing } from "@/i18n/routing";
+import { languagesFor, ogLocale } from "@/lib/seo";
+import { SITE_URL } from "@/lib/site";
 import { inter, mono, serif } from "../../fonts";
 import "../../globals.css";
 
@@ -28,8 +31,45 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "site" });
 
   return {
+    // Every relative address below and in every page under this layout is
+    // resolved against this. Without it Next builds `og:image` from whatever
+    // origin the container answers on, which is `localhost:3000` — a picture
+    // no chat client can fetch, on the tag whose whole job is to be fetched by
+    // one. The origin is the configured one, never a request header.
+    metadataBase: new URL(SITE_URL),
     title: { default: t("name"), template: `%s — ${t("name")}` },
     description: t("tagline"),
+
+    // The entry page's three addresses, and the one that negotiates.
+    //
+    // This is the entry page's cluster rather than the site's, because a layout
+    // is rendered for every page under it and cannot know which one it is
+    // rendering. Every other page states its own with `pageSeo`, which replaces
+    // this block wholesale — metadata is merged one field deep, so a page that
+    // sets `alternates` sets all of it.
+    //
+    // Which is exactly why there is no `canonical` here. Inherited by a page
+    // that forgot its own, a canonical would tell a crawler that the pricing
+    // page IS the entry page, and Google would drop the pricing page. An
+    // inherited hreflang is the same mistake with a survivable outcome: the
+    // annotations are not reciprocated, so they are ignored rather than obeyed.
+    alternates: { languages: languagesFor("/") },
+
+    openGraph: {
+      type: "website",
+      siteName: t("name"),
+      locale: ogLocale(locale),
+      // No `title`, `description` or `url`: Next fills the first two from the
+      // page's own, and a URL written here would be the entry page's on every
+      // page that did not replace this block.
+    },
+    twitter: {
+      // The large card is the one that shows the picture at a size worth
+      // having; `summary` crops it to a thumbnail beside the text. X reads
+      // `og:image` when no twitter image is given, which is what the generated
+      // card in `opengraph-image.tsx` is.
+      card: "summary_large_image",
+    },
   };
 }
 
@@ -53,19 +93,18 @@ export default async function LocaleLayout({
       className={`${inter.variable} ${mono.variable} ${serif.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        {/* Who publishes this, once per page and in the only form a crawler
+            reads it in. It draws nothing. */}
+        <SiteJsonLd />
+
         {/* Messages reach client components through this. Server components
             do not need it — they await `getTranslations()` and are rendered
             before anything is sent. */}
         <NextIntlClientProvider>
           {/* One header and one footer, here rather than in a page. The site
               this replaces had fourteen pages each drawing their own, which is
-              how one product ends up wearing two uniforms.
-
-              `session` is not read yet — the backend client lands with auth.
-              Passing it explicitly keeps the signed-in markup in the tree and
-              exercised the day it arrives, rather than written later against a
-              header nobody has looked at since. */}
-          <SiteHeader session={null} />
+              how one product ends up wearing two uniforms. */}
+          <SiteHeader />
           <div className="flex flex-1 flex-col">{children}</div>
           <SiteFooter />
         </NextIntlClientProvider>
