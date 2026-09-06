@@ -12,7 +12,7 @@ import { SITE_URL } from "@/lib/site";
 // the Contacts sheet reliably, on iOS and Android alike.
 //
 // It also fixes something the client version got wrong: the URL written into
-// the card was the literal string "https://flex.com.uz/…", which is not the
+// the card was the literal string "https://flex-nfc.uz/…", which is not the
 // address this site is served from. A saved contact carries that link forever.
 
 const esc = (value: string) =>

@@ -47,7 +47,7 @@
             </intent-filter>
 
             <!-- The sign-in link, opened from the mail app.
-                 `autoVerify` makes Android check flex.com.uz for an
+                 `autoVerify` makes Android check flex-nfc.uz for an
                  assetlinks.json naming this app's signing certificate, and only
                  then hand it the link without asking. Without that file the
                  link opens a browser, which is the safe failure: a custom
@@ -59,14 +59,14 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="https"
-                      android:host="flex.com.uz"
+                      android:host="flex-nfc.uz"
                       android:pathPrefix="/kirish/tasdiq"/>
                 <!-- Where a payment provider sends a buyer back. The site
                      serves the same address, so a phone that has not verified
                      the link shows the page instead — which is the safe
                      failure, not a dead end. -->
                 <data android:scheme="https"
-                      android:host="flex.com.uz"
+                      android:host="flex-nfc.uz"
                       android:pathPrefix="/buyurtma/"/>
             </intent-filter>
         </activity>

@@ -550,7 +550,7 @@ Bosish: `scale 0.97`, 120ms + 30ms `navigator.vibrate`.
 
 ---
 
-## D. Bosh sahifa — flex.com.uz
+## D. Bosh sahifa — flex-nfc.uz
 
 ### Nega hozirgisi ishlamaydi
 
@@ -619,7 +619,7 @@ narsa o'rnatmasdan. Ochilgan sahifa — haqiqiy FLEX profili." O'ngda QR 200×20
 (ink, paper fonda) + ostida `<Plate n="AAA001">`. Mobil: QR o'rniga tugma
 "Namuna profilni ochish" (o'z telefonida QR skanerlab bo'lmaydi).
 
-QR `flex.com.uz/AAA001` ga olib boradi — jonli namuna profil, A-yuz, "Bu
+QR `flex-nfc.uz/AAA001` ga olib boradi — jonli namuna profil, A-yuz, "Bu
 namuna" degan 13px yozuv tepada. Odam mahsulotni his qiladi.
 
 **3. Qanday ishlaydi** — 3 ustun, `py-24`

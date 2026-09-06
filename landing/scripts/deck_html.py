@@ -153,7 +153,7 @@ def head(eyebrow_text, title, light=False):
 
 
 def foot(page, light=False):
-    return f'<div class="pad foot" style="padding-top:0"><span>flex.com.uz</span><span>{page}</span></div>'
+    return f'<div class="pad foot" style="padding-top:0"><span>flex-nfc.uz</span><span>{page}</span></div>'
 
 
 TRIMMED = {"karta", "uzuk", "braslet"}

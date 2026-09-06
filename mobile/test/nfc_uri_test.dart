@@ -11,7 +11,7 @@ import 'package:flex/core/nfc_uri.dart';
 // work, so the bytes are asserted rather than trusted.
 void main() {
   test('the record is a well-known URI record', () {
-    final record = uriRecord('https://flex.com.uz/MYN042?src=nfc');
+    final record = uriRecord('https://flex-nfc.uz/MYN042?src=nfc');
 
     expect(record.typeNameFormat, TypeNameFormat.wellKnown);
     // "U" — the well-known type for a URI.
@@ -20,14 +20,14 @@ void main() {
   });
 
   test('https is abbreviated to one byte', () {
-    final record = uriRecord('https://flex.com.uz/MYN042?src=nfc');
+    final record = uriRecord('https://flex-nfc.uz/MYN042?src=nfc');
 
     // 0x04 stands for the whole of "https://". On an NTAG213 with 144 usable
     // bytes, spending eight of them spelling it out is worth avoiding.
     expect(record.payload.first, 0x04);
     expect(
       utf8.decode(record.payload.sublist(1)),
-      'flex.com.uz/MYN042?src=nfc',
+      'flex-nfc.uz/MYN042?src=nfc',
     );
   });
 
@@ -40,7 +40,7 @@ void main() {
   test('anything that is not an address is refused loudly', () {
     // The only caller builds this from a number the app owns, so reaching here
     // means a bug — and a bug must not become a card in the post.
-    for (final bad in ['flex.com.uz', 'javascript:alert(1)', 'ftp://x.uz', '']) {
+    for (final bad in ['flex-nfc.uz', 'javascript:alert(1)', 'ftp://x.uz', '']) {
       expect(() => uriRecord(bad), throwsArgumentError, reason: bad);
     }
   });

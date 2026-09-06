@@ -716,7 +716,7 @@ declare
 begin
   insert into auth.users (id) values (gen_random_uuid()) returning id into uid;
   insert into handles (letters, digits, status, user_id, claimed_at, banner_url)
-    values ('BNR', '001', 'claimed', uid, now(), 'https://cdn.flex.com.uz/banners/BNR001.jpg');
+    values ('BNR', '001', 'claimed', uid, now(), 'https://cdn.flex-nfc.uz/banners/BNR001.jpg');
   raise notice '   ok   a profile can carry its own cover';
 
   begin
@@ -853,7 +853,7 @@ begin
   insert into auth.users (id) values (gen_random_uuid()) returning id into boss;
   insert into teams (name, owner_user_id, seats, logo_url, website, city)
     values ('MC LEGAL BRAND', boss, 5,
-            'https://cdn.flex.com.uz/logos/mc.png', 'https://mc-legal.uz', 'Toshkent');
+            'https://cdn.flex-nfc.uz/logos/mc.png', 'https://mc-legal.uz', 'Toshkent');
   raise notice '   ok   a company can carry its logo, site and city';
 
   begin

@@ -6,7 +6,7 @@
 Digital identity and networking for Uzbekistan: a rare handle, a public
 profile page, and an NFC card that opens it with one tap.
 
-`flex.com.uz/MYN042` is someone's profile. `flex.com.uz/000001` is a physical card.
+`flex-nfc.uz/MYN042` is someone's profile. `flex-nfc.uz/000001` is a physical card.
 
 ## How the two namespaces work
 
@@ -201,13 +201,13 @@ Deployed on Vercel as the project `flex`, building `main` on every push.
 | | |
 |---|---|
 | Live | `https://flex-five-kohl.vercel.app` |
-| Custom domain | `flex.com.uz` — added to the project, waiting on an `A` record at `@` pointing to `216.198.79.1` |
+| Custom domain | `flex-nfc.uz` — added to the project, waiting on an `A` record at `@` pointing to `216.198.79.1` |
 | Payme | live — the endpoint answers, and was checked both ways in production: correct auth reaches the store, a forged key gets -32504 |
 | Click | half-configured. `CLICK_SERVICE_ID` is 99108; `CLICK_MERCHANT_ID` is not shown anywhere in the merchant cabinet and `CLICK_SECRET_KEY` is still to be copied, so the backend registers no Click callback and builds no Click checkout link |
 
 The apex is the canonical host on purpose: Vercel offers to redirect it to
 `www` and that offer was declined, because `NEXT_PUBLIC_SITE_URL`, the
-backend's `SITE_URL`, the sitemap and every printed card say `flex.com.uz`
+backend's `SITE_URL`, the sitemap and every printed card say `flex-nfc.uz`
 without it.
 
 `output: "standalone"` must stay out of `next.config.ts`. It bundles a server
@@ -244,14 +244,14 @@ Click cannot be finished from the cabinet. The callback URLs are set by Click
 support, not by the merchant, and `merchant_id` is not displayed anywhere in
 it. That needs a call to +998 71 231 0883 quoting the contract number, asking
 for the merchant id, for service 99108 to be renamed to Flex against
-flex.com.uz, and for the two callbacks to be set:
+flex-nfc.uz, and for the two callbacks to be set:
 
     https://<backend host>/click/prepare
     https://<backend host>/click/complete
 
 ### Before deploying
 
-**Still outstanding: `NEXT_PUBLIC_SITE_URL=https://flex.com.uz` in the deployed
+**Still outstanding: `NEXT_PUBLIC_SITE_URL=https://flex-nfc.uz` in the deployed
 environment.** When it is set, `getSiteOrigin()` never reads a request header.
 When it is not, the code falls back to the canonical origin rather than trusting
 the header — a `Host` or `X-Forwarded-Host` an attacker controls would otherwise
@@ -329,7 +329,7 @@ exactly one deployment may answer:
 | Click | Complete | `https://<backend host>/click/complete` |
 | Payme | Endpoint | `https://<backend host>/payme` |
 
-Payme was certified against `https://flex.com.uz/api/payme`, which no longer
+Payme was certified against `https://flex-nfc.uz/api/payme`, which no longer
 exists — that route and the store behind it were deleted when the protocol
 moved. **Repoint the cabinet before taking another payment**, or a settlement
 will be posted to a 404 and retried for hours.

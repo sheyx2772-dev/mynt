@@ -209,7 +209,7 @@ def heading(slide, title, x, y, w, dark=True, size=30):
 
 def footer(slide, page, dark=True):
     tone = FAINT if dark else INK_DIM
-    text(slide, "flex.com.uz", M, H - 34, 200, 14, size=8.5, color=tone, tracking=0.4)
+    text(slide, "flex-nfc.uz", M, H - 34, 200, 14, size=8.5, color=tone, tracking=0.4)
     text(slide, str(page), W - M - 60, H - 34, 60, 14, size=8.5, color=tone,
          align=PP_ALIGN.RIGHT)
 

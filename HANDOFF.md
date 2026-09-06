@@ -7,7 +7,7 @@ ham — shu fayldan boshlang. Batafsili `README.md` da.
 
 Flex — NFC orqali ochiladigan shaxsiy profil va noyob raqamlar bozori.
 Foydalanuvchi 3 harf + 3 raqamdan iborat raqam sotib oladi (masalan `FLX007`),
-u `flex.com.uz/FLX007` manzilida profilini ochadi. Raqamni karta, uzuk yoki
+u `flex-nfc.uz/FLX007` manzilida profilini ochadi. Raqamni karta, uzuk yoki
 braslet ko'rinishida olib yuradi — tanlov foydalanuvchiniki, profil bitta.
 
 ## Hozirgi holat
@@ -17,9 +17,9 @@ braslet ko'rinishida olib yuradi — tanlov foydalanuvchiniki, profil bitta.
 | Sayt | https://flex-five-kohl.vercel.app — ishlayapti |
 | Deploy | Vercel, `main` ga har push avtomatik chiqadi |
 | Baza | O'zimizning Postgres. Butun sxema `backend/db/migrations` da, goose qo'llaydi |
-| Payme | protokol ishlaydi, lekin **kabinetdagi callback manzili backend'ga o'zgartirilishi kerak** — eski `flex.com.uz/api/payme` o'chirildi |
+| Payme | protokol ishlaydi, lekin **kabinetdagi callback manzili backend'ga o'zgartirilishi kerak** — eski `flex-nfc.uz/api/payme` o'chirildi |
 | Click | yarim — `service_id` bor, `merchant_id` va kalit yo'q |
-| Domen | `flex.com.uz` olingan, DNS hali yo'naltirilmagan |
+| Domen | `flex-nfc.uz` olingan, DNS hali yo'naltirilmagan |
 
 Nima qolganini `README.md` dagi **"The payment accounts"** va
 **"Before deploying"** bo'limlari aniq yozadi.
@@ -105,7 +105,7 @@ yashilini o'lchab, brend lime'iga (82°) suradi — qat'iy burilish emas.
 Har bir qurilmaga aynan shu format yoziladi:
 
 ```
-https://flex.com.uz/AAA000?src=nfc
+https://flex-nfc.uz/AAA000?src=nfc
 ```
 
 `?src=nfc` tushib qolsa, tegizish oddiy tashrifdan ajralmaydi va egasi kartasi

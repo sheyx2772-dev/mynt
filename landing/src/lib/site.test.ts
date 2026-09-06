@@ -21,13 +21,13 @@ afterEach(() => {
 
 describe("getSiteOrigin", () => {
   it("uses the configured origin and ignores the request entirely", async () => {
-    process.env.NEXT_PUBLIC_SITE_URL = "https://flex.com.uz";
+    process.env.NEXT_PUBLIC_SITE_URL = "https://flex-nfc.uz";
     const { getSiteOrigin } = await loadSite();
 
     headerStore.set("x-forwarded-host", "evil.com");
     headerStore.set("host", "evil.com");
 
-    await expect(getSiteOrigin()).resolves.toBe("https://flex.com.uz");
+    await expect(getSiteOrigin()).resolves.toBe("https://flex-nfc.uz");
   });
 
   // The attack this guards: a forged host would otherwise end up inside the
@@ -40,7 +40,7 @@ describe("getSiteOrigin", () => {
     await expect(getSiteOrigin()).resolves.toBe("https://flex-nfc.uz");
 
     headerStore.clear();
-    headerStore.set("host", "flex.com.uz.evil.com");
+    headerStore.set("host", "flex-nfc.uz.evil.com");
     await expect(getSiteOrigin()).resolves.toBe("https://flex-nfc.uz");
   });
 
@@ -65,47 +65,47 @@ describe("getSiteOrigin", () => {
   });
 
   it("trims a trailing slash from the configured origin", async () => {
-    process.env.NEXT_PUBLIC_SITE_URL = "https://flex.com.uz/";
+    process.env.NEXT_PUBLIC_SITE_URL = "https://flex-nfc.uz/";
     const { SITE_URL } = await loadSite();
-    expect(SITE_URL).toBe("https://flex.com.uz");
+    expect(SITE_URL).toBe("https://flex-nfc.uz");
   });
 });
 
 describe("pointUrl", () => {
   it("carries the table, so a request says where it came from", async () => {
-    process.env.NEXT_PUBLIC_SITE_URL = "https://flex.com.uz";
+    process.env.NEXT_PUBLIC_SITE_URL = "https://flex-nfc.uz";
     const { pointUrl } = await loadSite();
-    expect(pointUrl("NAV001", "7", "qr")).toBe("https://flex.com.uz/NAV001?src=qr&stol=7");
+    expect(pointUrl("NAV001", "7", "qr")).toBe("https://flex-nfc.uz/NAV001?src=qr&stol=7");
   });
 
   it("records a chip as a tap and a code as a scan", async () => {
-    process.env.NEXT_PUBLIC_SITE_URL = "https://flex.com.uz";
+    process.env.NEXT_PUBLIC_SITE_URL = "https://flex-nfc.uz";
     const { pointUrl } = await loadSite();
     expect(pointUrl("NAV001", "7", "nfc")).toContain("src=nfc");
     expect(pointUrl("NAV001", "7", "qr")).toContain("src=qr");
   });
 
   it("escapes a table that was given a name", async () => {
-    process.env.NEXT_PUBLIC_SITE_URL = "https://flex.com.uz";
+    process.env.NEXT_PUBLIC_SITE_URL = "https://flex-nfc.uz";
     const { pointUrl } = await loadSite();
     expect(pointUrl("NAV001", "Terrasa 1", "qr")).toBe(
-      "https://flex.com.uz/NAV001?src=qr&stol=Terrasa%201",
+      "https://flex-nfc.uz/NAV001?src=qr&stol=Terrasa%201",
     );
   });
 
   it("drops what a label may not contain, rather than ending the query early", async () => {
-    process.env.NEXT_PUBLIC_SITE_URL = "https://flex.com.uz";
+    process.env.NEXT_PUBLIC_SITE_URL = "https://flex-nfc.uz";
     const { pointUrl } = await loadSite();
     // "7&src=nfc" would otherwise let a printed sticker rewrite the source.
     expect(pointUrl("NAV001", "7&src=nfc", "qr")).toBe(
-      "https://flex.com.uz/NAV001?src=qr&stol=7srcnfc",
+      "https://flex-nfc.uz/NAV001?src=qr&stol=7srcnfc",
     );
   });
 
   it("is the plain profile when there is no tag on it", async () => {
-    process.env.NEXT_PUBLIC_SITE_URL = "https://flex.com.uz";
+    process.env.NEXT_PUBLIC_SITE_URL = "https://flex-nfc.uz";
     const { pointUrl } = await loadSite();
-    expect(pointUrl("NAV001", null, "qr")).toBe("https://flex.com.uz/NAV001?src=qr");
-    expect(pointUrl("NAV001", "   ", "qr")).toBe("https://flex.com.uz/NAV001?src=qr");
+    expect(pointUrl("NAV001", null, "qr")).toBe("https://flex-nfc.uz/NAV001?src=qr");
+    expect(pointUrl("NAV001", "   ", "qr")).toBe("https://flex-nfc.uz/NAV001?src=qr");
   });
 });

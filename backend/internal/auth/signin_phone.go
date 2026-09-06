@@ -145,7 +145,7 @@ func (s *Service) accountForPhone(ctx context.Context, phone, country string) (A
 	// The country goes on the row rather than being derived later, because this
 	// is the moment we know it: dial codes are variable length, and working it
 	// out from the digits afterwards needs a prefix table all over again.
-	account, err := s.directory.FindOrCreate(ctx, phone+"@telefon.flex.com.uz")
+	account, err := s.directory.FindOrCreate(ctx, phone+"@telefon.flex-nfc.uz")
 	if err != nil {
 		return Account{}, err
 	}

@@ -25,10 +25,10 @@ void main() {
     // The convincing ones: a lookalike domain, a subdomain, and the right host
     // over plain http where the token could be read off the wire.
     for (final url in [
-      'https://flex.com.uz.evil.com/kirish/tasdiq?t=stolen',
+      'https://flex-nfc.uz.evil.com/kirish/tasdiq?t=stolen',
       'https://evil.com/kirish/tasdiq?t=stolen',
-      'https://kirish.flex.com.uz/kirish/tasdiq?t=stolen',
-      'http://flex.com.uz/kirish/tasdiq?t=stolen',
+      'https://kirish.flex-nfc.uz/kirish/tasdiq?t=stolen',
+      'http://flex-nfc.uz/kirish/tasdiq?t=stolen',
       'flex://kirish/tasdiq?t=stolen',
     ]) {
       links.handle(Uri.parse(url));

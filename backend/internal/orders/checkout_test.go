@@ -29,8 +29,8 @@ func TestPaymeIsGivenTiyinNotSom(t *testing.T) {
 }
 
 func TestPaymeCarriesTheReturnAddressOnlyWhenThereIsOne(t *testing.T) {
-	with := decode(t, PaymeCheckoutURL("m", "o", 100, "https://flex.com.uz/buyurtma/o", 0))
-	if !strings.Contains(with, ";c=https://flex.com.uz/buyurtma/o") {
+	with := decode(t, PaymeCheckoutURL("m", "o", 100, "https://flex-nfc.uz/buyurtma/o", 0))
+	if !strings.Contains(with, ";c=https://flex-nfc.uz/buyurtma/o") {
 		t.Errorf("qaytish manzili yo'q: %q", with)
 	}
 
@@ -62,7 +62,7 @@ func TestClickIsGivenSomNotTiyin(t *testing.T) {
 func TestClickEscapesWhatGoesIntoTheQuery(t *testing.T) {
 	// The order id is a uuid we generated, but the return address is built from
 	// configuration, and neither should be able to add a parameter of its own.
-	link, err := url.Parse(ClickCheckoutURL("1", "2", "3", 100, "https://flex.com.uz/x?a=b&amount=1"))
+	link, err := url.Parse(ClickCheckoutURL("1", "2", "3", 100, "https://flex-nfc.uz/x?a=b&amount=1"))
 	if err != nil {
 		t.Fatalf("manzil o'qilmadi: %v", err)
 	}

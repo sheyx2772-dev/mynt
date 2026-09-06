@@ -31,11 +31,11 @@ describe("safePath", () => {
     expect(safePath("mailto:a@b.uz")).toBe("/");
   });
 
-  // A credentialed authority is how "https://flex.com.uz@evil.com" reads as one
+  // A credentialed authority is how "https://flex-nfc.uz@evil.com" reads as one
   // host and resolves to another.
   it("refuses an authority carrying credentials", () => {
-    expect(safePath("https://flex.com.uz@evil.com")).toBe("/");
-    expect(safePath("//flex.com.uz@evil.com")).toBe("/");
+    expect(safePath("https://flex-nfc.uz@evil.com")).toBe("/");
+    expect(safePath("//flex-nfc.uz@evil.com")).toBe("/");
   });
 
   // A bare relative string resolves against the base and therefore stays on

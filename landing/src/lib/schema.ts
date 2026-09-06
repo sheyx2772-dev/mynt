@@ -147,7 +147,7 @@ export function profilePage({
  * The trail above a page.
  *
  * Google draws it in place of the raw URL in a result, which for a profile is
- * the difference between "flex.com.uz › QXD483" and the address itself.
+ * the difference between "flex-nfc.uz › QXD483" and the address itself.
  */
 export function breadcrumbs(trail: { name: string; path: string }[]) {
   return {

@@ -6,7 +6,7 @@ Quyidagini Figma'ga to'liq ko'chiring.
 
 ## Vazifa
 
-flex.com.uz uchun **kirish sahifasi** dizaynini qiling.
+flex-nfc.uz uchun **kirish sahifasi** dizaynini qiling.
 
 Joylashuvni, tartibni va bo'limlar ketma-ketligini **o'zingiz hal qiling**. Quyida
 faqat sahifada nima bo'lishi kerakligi va qanday cheklovlar borligi yozilgan.
@@ -20,7 +20,7 @@ nimani jadval qilish — bu sizning qaroringiz.
 FLEX — O'zbekistondagi NFC vizitka platformasi.
 
 Odam **umrbod raqam** sotib oladi: `AAA000` — uchta harf va uchta raqam.
-Bu uning manzili: `flex.com.uz/MYN042`. Jami 17 576 000 ta raqam bor, boshqa
+Bu uning manzili: `flex-nfc.uz/MYN042`. Jami 17 576 000 ta raqam bor, boshqa
 bo'lmaydi.
 
 Raqam biror buyumga yoziladi — karta, uzuk, braslet, avtomobil vizitkasi yoki
@@ -41,7 +41,7 @@ Bu **"raqamli vizitka ilovasi" emas.** Farqi muhim, chunki dizayn shunga
 bog'liq.
 
 **Sotiladigan narsa — raqamning o'zi.** `AAA000` — bu taxallus emas, berilgan
-nomer. Shuning uchun u saytning ildizini egallaydi: `flex.com.uz/MYN042`, hech
+nomer. Shuning uchun u saytning ildizini egallaydi: `flex-nfc.uz/MYN042`, hech
 qanday `/profil/` yoki `/u/` yo'q. Til prefiksi (`/ru/...`) ham shu sababli
 qilinmagan — ildiz raqamlarniki.
 
@@ -114,7 +114,7 @@ xohlagan odam bosadi. Kamyoblik — yagona haqiqiy ustunlik.
 ## Sahifada bo'lishi kerak
 
 ### 1. Raqam tanlash
-Kiritish maydoni: `flex.com.uz/` + `AAA` + `000`. Odam terib ko'radi, band
+Kiritish maydoni: `flex-nfc.uz/` + `AAA` + `000`. Odam terib ko'radi, band
 yoki bo'shligini darhol biladi va narxini ko'radi. Bu sahifadagi eng muhim
 harakat — **100 000 so'mdan** boshlanadi.
 

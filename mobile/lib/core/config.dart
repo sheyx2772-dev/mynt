@@ -20,7 +20,7 @@ abstract final class Config {
   /// phone on the same Wi-Fi needs the laptop's address on that network.
   static const apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'https://flex.com.uz',
+    defaultValue: 'https://flex-nfc.uz',
   );
 
   /// Where a tapped card sends a phone. The same host in production, and
@@ -28,7 +28,7 @@ abstract final class Config {
   /// while the profile links still point at the real site.
   static const siteBaseUrl = String.fromEnvironment(
     'SITE_BASE_URL',
-    defaultValue: 'https://flex.com.uz',
+    defaultValue: 'https://flex-nfc.uz',
   );
 
   /// The API is versioned because three clients read it and they are updated on

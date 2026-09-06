@@ -123,7 +123,7 @@ UZ = {
     "road_title": "Keyingi o'n sakkiz oy.",
     "road": [
         ["2026 · IV chorak", "Ishga tushirish", [
-            "flex.com.uz domeni va Payme sertifikatsiyasi",
+            "flex-nfc.uz domeni va Payme sertifikatsiyasi",
             "Birinchi 100 obyekt: kafe, salon, klinika",
             "Avtovizitka va buyum tegi seriyasi savdoda",
         ]],
@@ -244,7 +244,7 @@ EN = {
     "road_title": "The next eighteen months.",
     "road": [
         ["2026 · Q4", "Go live", [
-            "flex.com.uz and Payme certification",
+            "flex-nfc.uz and Payme certification",
             "First 100 venues: cafes, salons, clinics",
             "Car tags and object tags on sale",
         ]],

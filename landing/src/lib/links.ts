@@ -50,7 +50,7 @@ export function websiteLink(raw: string): Link | null {
   if (url.protocol !== "http:" && url.protocol !== "https:") return null;
 
   // Credentials in the authority let a link read as one host while pointing at
-  // another: "https://flex.com.uz@evil.com" is a request to evil.com. It is also
+  // another: "https://flex-nfc.uz@evil.com" is a request to evil.com. It is also
   // how a bare "mailto:a@b.com" survives having https:// prepended.
   if (url.username || url.password) return null;
 

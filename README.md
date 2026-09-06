@@ -1,7 +1,7 @@
 # Flex
 
 Digital identity for Uzbekistan: a rare handle, a public profile, and an NFC
-card that opens it with one tap. `flex.com.uz/MYN042` is somebody's profile.
+card that opens it with one tap. `flex-nfc.uz/MYN042` is somebody's profile.
 
 New here? Read [HANDOFF.md](HANDOFF.md) — the current state, where the keys
 are, and the things that were learned the hard way. [AGENTS.md](AGENTS.md)

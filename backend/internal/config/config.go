@@ -140,8 +140,8 @@ func Load() (Config, error) {
 		// Trimmed here so every caller building a link from it gets one slash.
 		// The sign-in service trimmed it for itself and the checkout builder did
 		// not, which is how a payment return address came to be
-		// "https://flex.com.uz//buyurtma/...".
-		SiteURL:          strings.TrimSuffix(withDefault("SITE_URL", "https://flex.com.uz"), "/"),
+		// "https://flex-nfc.uz//buyurtma/...".
+		SiteURL:          strings.TrimSuffix(withDefault("SITE_URL", "https://flex-nfc.uz"), "/"),
 		PaymeMerchantID:  os.Getenv("PAYME_MERCHANT_ID"),
 		ClickServiceID:   os.Getenv("CLICK_SERVICE_ID"),
 		ClickMerchantID:  os.Getenv("CLICK_MERCHANT_ID"),
@@ -154,7 +154,7 @@ func Load() (Config, error) {
 		OperatorUserID:   strings.TrimSpace(os.Getenv("OPERATOR_USER_ID")),
 		TelegramBotToken: os.Getenv("TELEGRAM_BOT_TOKEN"),
 		ResendAPIKey:     os.Getenv("RESEND_API_KEY"),
-		MailFrom:         withDefault("MAIL_FROM", "Flex <kirish@flex.com.uz>"),
+		MailFrom:         withDefault("MAIL_FROM", "Flex <kirish@flex-nfc.uz>"),
 		AdminEmails:      readList(os.Getenv("ADMIN_EMAILS")),
 		TrustProxy:       os.Getenv("TRUST_PROXY") == "true",
 		ReadTimeout:      15 * time.Second,

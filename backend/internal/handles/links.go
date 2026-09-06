@@ -76,7 +76,7 @@ func WebsiteLink(raw string) (Link, bool) {
 	}
 
 	// Credentials in the authority let a link read as one host while pointing at
-	// another: "https://flex.com.uz@evil.com" is a request to evil.com.
+	// another: "https://flex-nfc.uz@evil.com" is a request to evil.com.
 	if parsed.User != nil {
 		return Link{}, false
 	}

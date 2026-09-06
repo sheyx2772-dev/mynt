@@ -30,7 +30,7 @@ chip nomini aniq aytishi kerak.
 Har bir qurilmada boshqa manzil bo'ladi. Aniq format:
 
 ```
-https://flex.com.uz/AAA000?src=nfc
+https://flex-nfc.uz/AAA000?src=nfc
 ```
 
 Oxiridagi `?src=nfc` **shart**. U tashrif kartani tegizishdan kelganini bildiradi.

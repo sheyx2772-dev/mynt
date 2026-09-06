@@ -18,7 +18,7 @@
 //
 // The fallback is the domain the site is actually deployed at — see
 // deploy/landing/env.example, where DOMAIN_NAME routes flex-nfc.uz to this
-// container. It used to be flex.com.uz, which nothing resolves to: an unset
+// container. It used to be flex-nfc.uz, which nothing resolves to: an unset
 // NEXT_PUBLIC_SITE_URL therefore published a canonical, a sitemap, an hreflang
 // cluster and every QR target pointing at a host that does not answer, and a
 // cross-domain canonical to an unreachable host is discarded.

@@ -14,7 +14,7 @@ func TestWebsiteLinkRefusesWhatIsNotAWebsite(t *testing.T) {
 		{"data:text/html,<script>alert(1)</script>", "a page carried inside the link"},
 		{"file:///etc/passwd", "a path on the visitor's own machine"},
 		{"mailto:aziz@example.com", "not a website, and would survive a naive https:// prefix"},
-		{"https://flex.com.uz@evil.com", "reads as flex.com.uz, requests evil.com"},
+		{"https://flex-nfc.uz@evil.com", "reads as flex-nfc.uz, requests evil.com"},
 		{"https://user:pass@evil.com", "the same trick with a password in it"},
 		{"http://localhost:3000", "a host inside the visitor's network"},
 		{"https://intranet", "a name with no dot resolves somewhere private"},
@@ -31,10 +31,10 @@ func TestWebsiteLinkRefusesWhatIsNotAWebsite(t *testing.T) {
 
 func TestWebsiteLinkAcceptsWhatSomebodyWouldActuallyType(t *testing.T) {
 	cases := map[string]string{
-		"flex.com.uz":          "https://flex.com.uz",
-		"https://flex.com.uz":  "https://flex.com.uz",
-		"http://flex.com.uz":   "http://flex.com.uz",
-		"  flex.com.uz/aziz  ": "https://flex.com.uz/aziz",
+		"flex-nfc.uz":          "https://flex-nfc.uz",
+		"https://flex-nfc.uz":  "https://flex-nfc.uz",
+		"http://flex-nfc.uz":   "http://flex-nfc.uz",
+		"  flex-nfc.uz/aziz  ": "https://flex-nfc.uz/aziz",
 	}
 
 	for input, want := range cases {
@@ -94,7 +94,7 @@ func TestEmptyFieldsProduceNoLinks(t *testing.T) {
 
 func TestLinksComeBackInTheOrderTheyAreRead(t *testing.T) {
 	links := BuildLinks(LinkInput{
-		Website:   "flex.com.uz",
+		Website:   "flex-nfc.uz",
 		Instagram: "aziz",
 		Booking:   "calendly.com/aziz",
 		Telegram:  "aziz",

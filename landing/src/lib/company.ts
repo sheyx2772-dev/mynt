@@ -17,7 +17,7 @@ export const COMPANY = {
   contactPerson: "Abrorov Javohir",
   phone: "+998 97 724 79 99",
   phoneHref: "+998977247999",
-  // A mailbox that actually receives, which info@flex.com.uz did not: nothing
+  // A mailbox that actually receives, which info@flex-nfc.uz did not: nothing
   // resolves that host. It is on the public offer and in the Organization
   // schema, and a payment provider checks it against a message it sends.
   email: "flexnfc@gmail.com",

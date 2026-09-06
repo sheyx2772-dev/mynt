@@ -30,12 +30,12 @@ describe("socialLink", () => {
 
 describe("websiteLink", () => {
   it("adds https:// when the scheme is missing", () => {
-    expect(websiteLink("flex.com.uz")?.href).toBe("https://flex.com.uz/");
+    expect(websiteLink("flex-nfc.uz")?.href).toBe("https://flex-nfc.uz/");
   });
 
   it("keeps an explicit http or https scheme", () => {
-    expect(websiteLink("http://flex.com.uz")?.href).toBe("http://flex.com.uz/");
-    expect(websiteLink("https://flex.com.uz/path")?.href).toBe("https://flex.com.uz/path");
+    expect(websiteLink("http://flex-nfc.uz")?.href).toBe("http://flex-nfc.uz/");
+    expect(websiteLink("https://flex-nfc.uz/path")?.href).toBe("https://flex-nfc.uz/path");
   });
 
   // These would otherwise become clickable anchors on a public profile.
@@ -51,9 +51,9 @@ describe("websiteLink", () => {
     }
   });
 
-  // "https://flex.com.uz@evil.com" reads as flex.com.uz but resolves to evil.com.
+  // "https://flex-nfc.uz@evil.com" reads as flex-nfc.uz but resolves to evil.com.
   it("rejects URLs carrying credentials in the authority", () => {
-    expect(websiteLink("https://flex.com.uz@evil.com")).toBeNull();
+    expect(websiteLink("https://flex-nfc.uz@evil.com")).toBeNull();
     expect(websiteLink("https://user:pass@evil.com")).toBeNull();
   });
 
@@ -75,12 +75,12 @@ describe("buildProfileLinks", () => {
         telegram: "@aziz",
         instagram: "../evil",
         linkedin: "aziz-karimov",
-        website: "flex.com.uz",
+        website: "flex-nfc.uz",
       })
     ).toEqual([
       { label: "Telegram", href: "https://t.me/aziz" },
       { label: "LinkedIn", href: "https://linkedin.com/in/aziz-karimov" },
-      { label: "Veb-sayt", href: "https://flex.com.uz/" },
+      { label: "Veb-sayt", href: "https://flex-nfc.uz/" },
     ]);
   });
 
@@ -110,7 +110,7 @@ describe("linkValue", () => {
   });
 
   it("shows a website by its host", () => {
-    expect(linkValue({ label: "Veb-sayt", href: "https://www.flex.com.uz/" })).toBe("flex.com.uz");
+    expect(linkValue({ label: "Veb-sayt", href: "https://www.flex-nfc.uz/" })).toBe("flex-nfc.uz");
     expect(linkValue({ label: "Veb-sayt", href: "https://mc-legal.uz/team" })).toBe(
       "mc-legal.uz/team",
     );
@@ -150,7 +150,7 @@ describe("bookingLink", () => {
   // The same guards as a website link: this is rendered as a clickable anchor.
   it("refuses anything that is not an http address", () => {
     expect(bookingLink("javascript:alert(1)")).toBeNull();
-    expect(bookingLink("https://flex.com.uz@evil.com")).toBeNull();
+    expect(bookingLink("https://flex-nfc.uz@evil.com")).toBeNull();
     expect(bookingLink("")).toBeNull();
   });
 });
@@ -165,7 +165,7 @@ describe("buildProfileLinks", () => {
       linkedin: "aziz-karimov",
       facebook: "aziz",
       youtube: "aziz",
-      website: "flex.com.uz",
+      website: "flex-nfc.uz",
     });
     expect(links.map((l) => l.label)).toEqual([
       "Uchrashuv",

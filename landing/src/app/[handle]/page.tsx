@@ -83,7 +83,7 @@ export async function generateMetadata(props: PageProps<"/[handle]">): Promise<M
 
   return {
     // Absolute, so the brand is not appended twice: the layout's template
-    // would otherwise make this "QXD483 — flex.com.uz — Flex".
+    // would otherwise make this "QXD483 — flex-nfc.uz — Flex".
     title: { absolute: role ? `${who} — ${role} | ${number}` : `${who} | ${number}` },
     description,
     ...social({

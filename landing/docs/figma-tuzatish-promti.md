@@ -7,7 +7,7 @@ Har bir band ekrandagi aniq nuqson — "chiroyliroq qil" degan gap yo'q.
 
 ## Kontekst
 
-flex.com.uz — O'zbekiston uchun NFC vizitka platformasi. Ikkita ekran bor:
+flex-nfc.uz — O'zbekiston uchun NFC vizitka platformasi. Ikkita ekran bor:
 **katalog** (profillar ro'yxati) va **profil kartasi**. Til: o'zbek, RU almashtirgich bilan.
 Maket iPhone 15/16 Pro (393×852pt) uchun, lekin 360pt dan 430pt gacha cho'zilishi kerak.
 
