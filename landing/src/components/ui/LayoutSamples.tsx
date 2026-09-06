@@ -138,14 +138,17 @@ function ReceiptSample() {
   );
 }
 
+// These samples are shown to customers — on the entry page shelf and in the
+// catalogue — so they are in the language the customer reads. They were in
+// English, beside four Uzbek samples, with LinkedIn and YouTube miscased.
 const NFC_ACTIONS = [
-  { kind: "email", label: "Email", href: "mailto:aziz@mclegal.uz" },
-  { kind: "call", label: "Call", href: "tel:+998901234567" },
-  { kind: "calendar", label: "Calendar", href: "#" },
-  { kind: "connect", label: "Connect", href: "#" },
-  { kind: "LinkedIn", label: "Linkedin", href: "#" },
+  { kind: "email", label: "E-pochta", href: "mailto:aziz@mclegal.uz" },
+  { kind: "call", label: "Qo'ng'iroq", href: "tel:+998901234567" },
+  { kind: "calendar", label: "Uchrashuv", href: "#" },
+  { kind: "connect", label: "Havola", href: "#" },
+  { kind: "LinkedIn", label: "LinkedIn", href: "#" },
   { kind: "Instagram", label: "Instagram", href: "#" },
-  { kind: "YouTube", label: "Youtube", href: "#" },
+  { kind: "YouTube", label: "YouTube", href: "#" },
   { kind: "Telegram", label: "Telegram", href: "#" },
 ];
 
@@ -159,7 +162,7 @@ function NfcSample({ theme }: { theme: string }) {
         locationHref="#"
         actions={NFC_ACTIONS}
         websiteHref="#"
-        labels={{ addToContacts: "Add to contacts", share: "Share" }}
+        labels={{ addToContacts: "Kontaktni saqlash", share: "Ulashish" }}
         logo={
           <span className="text-[15px] font-black tracking-[0.24em] text-on-accent uppercase">
             FLEX
@@ -178,25 +181,25 @@ function NfcSample({ theme }: { theme: string }) {
 export const LAYOUTS = [
   {
     name: "NFC vizitka — ko'k",
-    note: "Papkadagi shablon: brend lentasi, ustidan chiqib turgan doira portret, 4×2 dumaloq tugmalar to'ri, ikkita tugma qatori, sayt tugmasi, va \"haqida\" bo'limi.",
+    note: "Brend lentasi, ustidan chiqib turgan doira portret, sakkizta dumaloq tugma, sayt tugmasi va «haqida» bo'limi.",
     who: "Tashkilot xodimi — bank, universitet, vazirlik. Brend rangi lentada va tugmalarda.",
     render: () => <NfcSample theme="nfc-kok" />,
   },
   {
     name: "NFC vizitka — tungi",
-    note: "Xuddi shu shablon, qora fon va to'q sariq aksent bilan.",
-    who: "Papkadagi uchinchi variant: gradient lenta, qora tana.",
+    note: "Xuddi shu joylashuv, qora fonda.",
+    who: "Qora fon, to'q sariq aksent. Kechqurun va yorug'da bir xil o'qiladi.",
     render: () => <NfcSample theme="nfc-tun" />,
   },
   {
     name: "NFC vizitka — yashil",
-    note: "Xuddi shu shablon, bank yashili bilan.",
-    who: "Papkadagi to'rtinchi variant.",
+    note: "Xuddi shu joylashuv, yashil aksent bilan.",
+    who: "Bank yashili. Moliya va sug'urta uchun.",
     render: () => <NfcSample theme="nfc-yashil" />,
   },
   {
     name: "Zarbof",
-    note: "Markazda, oltin serif, ikonkali konturli tabletkalar, halqadagi portret. Fonda oqim chiziqlari. Varaq yo'q — bitta panel.",
+    note: "Qora fon, oltin serif, halqadagi portret. Bitta panel — varaq yo'q.",
     who: "Fotograf, restoran, raqamni chiroyli bo'lgani uchun olgan odam.",
     render: () => <PlaqueSample />,
   },

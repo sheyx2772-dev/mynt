@@ -50,7 +50,7 @@ export default function PostList({
 }) {
   if (posts.length === 0) {
     return (
-      <section className="rounded-[1.5rem] border border-line bg-white p-10 text-center">
+      <section className="rounded-[1.5rem] border border-line bg-white p-10 text-center text-ink">
         <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-black/[0.04]">
           <MessageSquare className="h-4 w-4 text-ink-3" />
         </span>
@@ -66,7 +66,7 @@ export default function PostList({
       {posts.map((post, i) => (
         <li
           key={post.id}
-          className="rise rounded-2xl border border-line bg-white px-5 py-4 transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
+          className="rise rounded-2xl border border-line bg-white px-5 py-4 text-ink transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
           // Capped: past the eighth row nobody is watching the animation.
           style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
         >
