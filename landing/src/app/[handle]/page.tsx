@@ -220,7 +220,7 @@ async function VanityHandlePage({
               <LangSwitch lang={lang} next={`/${normalized}`} tone="dark" />
             </div>
 
-            <article className="overflow-hidden rounded-tile bg-white px-5 py-5 text-ink shadow-[0_24px_60px_-24px_rgba(0,0,0,0.6)]">
+            <article className="overflow-hidden rounded-tile bg-white p-6 sm:p-8 text-ink shadow-[0_24px_60px_-24px_rgba(0,0,0,0.6)]">
               <MenuView venue={venue} categories={categories} point={point} w={w} />
             </article>
           </div>
@@ -674,7 +674,7 @@ async function VanityHandlePage({
             <div className="mt-6 rounded-input bg-ink/[0.04] px-5 py-5 text-center">
               <p className="text-[15px] font-bold">{t.ownItTitle}</p>
               <p className="mt-2 text-sm leading-relaxed text-mute">{t.ownItLead}</p>
-              <p className="mt-4 mb-2 text-[12px] font-bold tracking-[0.12em] uppercase">
+              <p className="mt-4 mb-2 text-xs font-semibold tracking-widest uppercase">
                 {t.ownItCta}
               </p>
               <ProfileHandleSearch />
@@ -694,7 +694,7 @@ async function VanityHandlePage({
 
   return (
     <PageShell>
-      <div className="relative rounded-tile border border-line bg-white p-8 text-center">
+      <div className="relative rounded-tile border border-line bg-white p-6 sm:p-8 text-center">
         <p className="inline-block rounded-full bg-lime/20 px-3 py-1 text-xs font-semibold tracking-wide text-ink-2 uppercase">
           Bo&apos;sh
         </p>
@@ -732,7 +732,7 @@ async function GenesisCardPage({ serial }: { serial: string }) {
 
   return (
     <PageShell>
-      <div className="relative overflow-hidden rounded-tile bg-flex-black p-8 text-white shadow-card">
+      <div className="relative overflow-hidden rounded-tile bg-flex-black p-6 sm:p-8 text-white shadow-card">
         <div className="relative flex items-center justify-between text-xs text-paper-3">
           <span className="font-medium tracking-wide uppercase">FLEX CARD</span>
           <Nfc className="h-5 w-5 text-paper-3" />

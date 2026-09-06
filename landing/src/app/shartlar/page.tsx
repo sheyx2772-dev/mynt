@@ -86,7 +86,7 @@ export default async function TermsPage({ searchParams }: PageProps<"/shartlar">
           ))}
 
           {section.title === t.sections[1]!.title && (
-            <dl className="mt-4 rounded-card border border-line-soft bg-black/[0.02] px-5 py-3">
+            <dl className="mt-4 rounded-card border border-line-soft bg-black/[0.02] px-5 py-4">
               {DEVICE_TYPES.map((d) => (
                 <Row
                   key={d.id}
@@ -98,7 +98,7 @@ export default async function TermsPage({ searchParams }: PageProps<"/shartlar">
           )}
 
           {section.title === t.sections[7]!.title && (
-            <dl className="rounded-card border border-line-soft bg-black/[0.02] px-5 py-3">
+            <dl className="rounded-card border border-line-soft bg-black/[0.02] px-5 py-4">
               {t.requisites.map((label, i) => (
                 <Row key={label} label={label} value={requisiteValues[i]!} />
               ))}
@@ -106,7 +106,7 @@ export default async function TermsPage({ searchParams }: PageProps<"/shartlar">
           )}
 
           {section.title === t.sections[8]!.title && (
-            <dl className="rounded-card border border-line-soft bg-black/[0.02] px-5 py-3">
+            <dl className="rounded-card border border-line-soft bg-black/[0.02] px-5 py-4">
               {t.contact.map((label, i) => (
                 <Row key={label} label={label} value={contactValues[i]!} />
               ))}

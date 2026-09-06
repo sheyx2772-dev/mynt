@@ -37,7 +37,7 @@ export default function DeviceOrderForm({
   // moving the ground under them again reads as a failure.
   if (state.next) {
     return (
-      <section className="rounded-tile border border-lime/50 bg-lime/[0.08] p-6 sm:p-8">
+      <section className="rounded-tile border border-lime/50 bg-lime/[0.08] p-6 sm:p-8 sm:p-8">
         <h2 className="font-display text-lg font-semibold">Buyurtma qabul qilindi</h2>
         <p className="mt-2 text-sm leading-relaxed text-paper-2">
           Qurilmani qayerga yuborishimizni yozing — shundan keyin yasashga
@@ -54,7 +54,7 @@ export default function DeviceOrderForm({
   if (state.checkout) {
     const { click, payme } = state.checkout;
     return (
-      <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
+      <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8 sm:p-8">
         <h2 className="font-display text-lg font-semibold">To&apos;lovni tanlang</h2>
         <p className="mt-2 text-sm leading-relaxed text-paper-2">
           To&apos;lovdan keyin manzilni so&apos;raymiz.
@@ -79,11 +79,11 @@ export default function DeviceOrderForm({
     <form action={action} className="space-y-6">
       <input type="hidden" name="handle" value={handle} />
 
-      <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
+      <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8 sm:p-8">
         <DevicePicker handle={handle} device={device} design={design} prices />
       </section>
 
-      <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
+      <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8 sm:p-8">
         {/* The prices are on the tiles, where the selection is. What is left
             to say here is how long it takes to arrive, which is the other
             question a buyer has at this point. */}

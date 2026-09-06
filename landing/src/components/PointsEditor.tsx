@@ -126,7 +126,7 @@ export default function PointsEditor({
               written one at a time with a phone held against it, so the address
               has to be copyable one at a time. */}
           <section className="mt-8">
-            <h2 className="mb-1 text-xs font-semibold tracking-widest text-paper-3 uppercase">
+            <h2 className="mb-1 text-paper-3 text-xs font-semibold tracking-widest uppercase">
               NFC uchun manzillar
             </h2>
             <p className="mb-3 text-sm text-paper-2">

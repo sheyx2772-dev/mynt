@@ -100,7 +100,7 @@ export default function VenuePlanPanel({
 
       {invoices.length > 0 && (
         <section className="mt-8">
-          <h2 className="mb-3 text-xs font-semibold tracking-widest text-paper-3 uppercase">
+          <h2 className="mb-3 text-paper-3 text-xs font-semibold tracking-widest uppercase">
             Hisob-fakturalar
           </h2>
           <div className="divide-y divide-ink-line rounded-card border border-ink-line bg-ink-s1">

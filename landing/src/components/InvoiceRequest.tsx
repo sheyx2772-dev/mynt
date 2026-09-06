@@ -27,8 +27,8 @@ export default function InvoiceRequest({ currentSeats }: { currentSeats: number 
   const total = seats * months * TEAM_SEAT_MONTHLY;
 
   return (
-    <div className="rounded-card border border-ink-line bg-ink-s2 px-5 py-5">
-      <h3 className="text-xs font-medium tracking-[0.14em] text-paper-3 uppercase">
+    <div className="rounded-card border border-ink-line bg-ink-s2 p-5">
+      <h3 className="text-paper-3 text-xs font-semibold tracking-widest uppercase">
         Hisob-faktura
       </h3>
 

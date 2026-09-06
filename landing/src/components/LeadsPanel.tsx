@@ -27,13 +27,13 @@ export default function LeadsPanel({
 }) {
   if (plan === "free") {
     return (
-      <section className="rounded-tile border border-ink-line bg-ink-s1 p-7">
+      <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
         <h2 className="font-display text-lg font-semibold tracking-tight">Kelgan kontaktlar</h2>
         <p className="mt-1 text-sm text-paper-2">
           Profilingizni ochgan odam o&apos;z ismi va telefonini sizga qoldira oladi.
         </p>
-        <div className="mt-6 rounded-card border border-ink-line bg-ink-s2 px-5 py-5">
-          <p className="text-xs font-medium tracking-[0.14em] text-paper-3 uppercase">
+        <div className="mt-6 rounded-card border border-ink-line bg-ink-s2 p-5">
+          <p className="text-paper-3 text-xs font-semibold tracking-widest uppercase">
             Premium
           </p>
           <p className="mt-2 text-sm text-paper-2">
@@ -43,7 +43,7 @@ export default function LeadsPanel({
           </p>
           <Link
             href="/tarif"
-            className="mt-4 inline-block rounded-input border border-line-lead px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-paper uppercase transition-colors hover:border-paper-3"
+            className="mt-4 inline-block rounded-input border border-line-lead px-5 py-2.5 text-paper transition-colors hover:border-paper-3 text-xs font-semibold tracking-widest uppercase"
           >
             Tariflar
           </Link>
@@ -53,7 +53,7 @@ export default function LeadsPanel({
   }
 
   return (
-    <section className="rounded-tile border border-ink-line bg-ink-s1 p-7">
+    <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="font-display text-lg font-semibold tracking-tight">

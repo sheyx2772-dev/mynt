@@ -26,7 +26,7 @@ export type PreviewLabels = {
 export default function ProfilePreview({ labels }: { labels: PreviewLabels }) {
   return (
     <div className="w-full">
-      <div className="relative overflow-hidden rounded-tile bg-flex-black p-5 text-white shadow-card">
+      <div className="relative overflow-hidden rounded-tile bg-flex-black p-6 sm:p-8 text-white shadow-card">
         <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-lime font-display text-lg font-semibold text-flex-black">
           AR
         </div>

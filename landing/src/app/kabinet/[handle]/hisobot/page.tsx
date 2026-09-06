@@ -75,7 +75,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
         hint={`${venue.name} — so'nggi ${DAYS} kun.`}
       >
         {report.total === 0 ? (
-          <div className="rounded-card border border-dashed border-ink-line px-6 py-12 text-center">
+          <div className="rounded-card border border-dashed border-ink-line px-6 py-10 text-center">
             <p className="text-sm text-paper-2">
               Hali so&apos;rov kelmagan. {w.pointsTitle} belgilanib, kodlar
               qo&apos;yilgach shu yerda ko&apos;rinadi.
@@ -91,19 +91,19 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
           <>
             {/* The two numbers worth a glance: how many, and how fast. */}
             <div className="grid grid-cols-2 gap-2.5">
-              <div className="relative overflow-hidden rounded-card bg-ink-s2 px-5 py-5 text-paper">
+              <div className="relative overflow-hidden rounded-card bg-ink-s2 p-5 text-paper">
                 <p className="font-display font-tabular text-3xl font-semibold">
                   {formatNumber(report.total)}
                 </p>
-                <p className="mt-1 text-xs tracking-widest text-paper uppercase">
+                <p className="mt-1 text-paper text-xs font-semibold tracking-widest uppercase">
                   So&apos;rov
                 </p>
               </div>
-              <div className="rounded-card border border-ink-line bg-ink-s1 px-5 py-5">
+              <div className="rounded-card border border-ink-line bg-ink-s1 p-5">
                 <p className="font-display font-tabular text-3xl font-semibold">
                   {formatWait(report.medianWait)}
                 </p>
-                <p className="mt-1 text-xs tracking-widest text-paper-3 uppercase">
+                <p className="mt-1 text-paper-3 text-xs font-semibold tracking-widest uppercase">
                   O&apos;rtacha javob
                 </p>
               </div>
@@ -112,7 +112,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             {/* The worst one is the number that changes behaviour: an owner who
                 learns a table waited forty minutes goes and asks why. */}
             {report.worstWait !== null && (
-              <p className="mt-2.5 rounded-card border border-ink-line bg-ink-s1 px-5 py-3.5 text-sm text-paper-2">
+              <p className="mt-2.5 rounded-card border border-ink-line bg-ink-s1 px-5 py-4 text-sm text-paper-2">
                 Eng uzoq kutish — <strong className="font-medium text-paper">
                   {formatWait(report.worstWait)}
                 </strong>
@@ -121,7 +121,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             )}
 
             <section className="mt-8">
-              <h2 className="mb-3 text-xs font-semibold tracking-widest text-paper-3 uppercase">
+              <h2 className="mb-3 text-paper-3 text-xs font-semibold tracking-widest uppercase">
                 Nima so&apos;ralgan
               </h2>
               <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
@@ -133,7 +133,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             </section>
 
             <section className="mt-8">
-              <h2 className="mb-1 text-xs font-semibold tracking-widest text-paper-3 uppercase">
+              <h2 className="mb-1 text-paper-3 text-xs font-semibold tracking-widest uppercase">
                 Qaysi {w.pointPrefix.toLowerCase()}dan
               </h2>
               <p className="mb-3 text-sm text-paper-2">
@@ -162,7 +162,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             </section>
 
             <section className="mt-8">
-              <h2 className="mb-1 text-xs font-semibold tracking-widest text-paper-3 uppercase">
+              <h2 className="mb-1 text-paper-3 text-xs font-semibold tracking-widest uppercase">
                 Qaysi soatlarda
               </h2>
               <p className="mb-4 text-sm text-paper-2">
@@ -189,7 +189,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             </section>
 
             {report.reviews.count > 0 && (
-              <section className="mt-8 rounded-card border border-ink-line bg-ink-s1 px-5 py-5">
+              <section className="mt-8 rounded-card border border-ink-line bg-ink-s1 p-5">
                 <div className="flex items-baseline gap-3">
                   <p className="font-display font-tabular text-3xl font-semibold">
                     {report.reviews.average}

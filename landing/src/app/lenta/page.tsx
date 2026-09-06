@@ -67,7 +67,7 @@ export default async function FeedPage() {
             feed the second thing on a page that exists for it. */}
         <aside className="hidden lg:sticky lg:top-8 lg:block lg:space-y-4">
           {top.length > 0 && (
-            <section className="relative overflow-hidden rounded-tile bg-flex-black p-5 text-white">
+            <section className="relative overflow-hidden rounded-tile bg-flex-black p-6 sm:p-8 text-white">
               <div className="relative">
                 <p className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-paper-3 uppercase">
                   <TrendingUp className="h-3.5 w-3.5" />
@@ -103,8 +103,8 @@ export default async function FeedPage() {
           )}
 
           {newest.length > 0 && (
-            <section className="rounded-tile border border-line bg-white p-5">
-              <p className="text-[11px] font-medium tracking-[0.12em] text-ink-3 uppercase">
+            <section className="rounded-tile border border-line bg-white p-6 sm:p-8">
+              <p className="text-ink-3 text-xs font-semibold tracking-widest uppercase">
                 Yangi rezidentlar
               </p>
               <ul className="mt-3.5 space-y-2.5">

@@ -215,7 +215,7 @@ export default function NetworkBrief({
             <button
               type="submit"
               disabled={working || !enough}
-              className="w-full rounded-card bg-lime px-6 py-3.5 text-[14px] font-semibold text-ink transition-transform hover:scale-[1.02] active:scale-[0.99] disabled:opacity-25 disabled:shadow-none sm:w-auto sm:px-8"
+              className="w-full rounded-card bg-lime px-5 py-4 text-[14px] font-semibold text-ink transition-transform hover:scale-[1.02] active:scale-[0.99] disabled:opacity-25 disabled:shadow-none sm:w-auto sm:px-8"
             >
               {working ? "O'qiyapti…" : "Tahlil qilish"}
             </button>

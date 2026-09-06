@@ -32,7 +32,7 @@ export default function DesignRequestForm({
   const inQueue = requests.some((r) => r.status === "pending");
 
   return (
-    <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
+    <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8 sm:p-8">
       <div className="flex items-start gap-3">
         <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime">
           <Sparkles className="h-4 w-4 text-paper" />

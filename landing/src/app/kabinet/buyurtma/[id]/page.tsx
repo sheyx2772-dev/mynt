@@ -49,7 +49,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
   return (
     <PageShell wide surface="ink">
       <SubScreen handle={order.handle} title={device.name}>
-        <section className="relative overflow-hidden rounded-tile bg-ink-s2 p-6 text-paper sm:p-7">
+        <section className="relative overflow-hidden rounded-tile bg-ink-s2 p-6 sm:p-8 text-paper sm:p-7">
 
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
@@ -120,7 +120,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
         )}
 
         {order.recipient && order.region && order.address && (
-          <section className="mt-5 rounded-tile border border-ink-line bg-ink-s1 p-6">
+          <section className="mt-5 rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
             <h2 className="flex items-center gap-2 text-[13px] font-semibold tracking-wide text-paper-3 uppercase">
               <MapPin className="h-3.5 w-3.5" />
               Manzil

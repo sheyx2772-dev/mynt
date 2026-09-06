@@ -22,7 +22,7 @@ export function SampleShelf({
   return (
     <section className="py-8">
       <div className="mx-auto mb-4 flex max-w-6xl items-baseline justify-between gap-4 px-6">
-        <h2 className="font-display text-xs font-semibold tracking-widest text-lime-ink uppercase">
+        <h2 className="font-display text-lime-ink text-xs font-semibold tracking-widest uppercase">
           {label}
         </h2>
         <p className="text-xs text-ink-3">{note}</p>

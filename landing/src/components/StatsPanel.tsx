@@ -40,8 +40,8 @@ const SOURCE_LABEL: Record<string, string> = {
 // without a line of new analytics code.
 function PremiumTeaser() {
   return (
-    <div className="mt-7 rounded-card border border-ink-line bg-ink-s2 px-5 py-5">
-      <p className="text-xs font-medium tracking-[0.14em] text-paper-3 uppercase">
+    <div className="mt-7 rounded-card border border-ink-line bg-ink-s2 p-5">
+      <p className="text-paper-3 text-xs font-semibold tracking-widest uppercase">
         Premium
       </p>
       <ul className="mt-3 space-y-1.5 text-sm text-paper-2">
@@ -64,7 +64,7 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
   const busiest = stats.daily.find((d) => d.views === peak && peak > 0);
 
   return (
-    <section className="rounded-tile border border-ink-line bg-ink-s1 p-7">
+    <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
       <h2 className="font-display text-lg font-semibold tracking-tight">Statistika</h2>
       <p className="mt-1 text-sm text-paper-2">So&apos;nggi 30 kun.</p>
 

@@ -76,7 +76,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
           return (
             <li
               key={tag.id}
-              className="rise rounded-card border border-ink-line bg-ink-s1 p-4"
+              className="rise rounded-card border border-ink-line bg-ink-s1 p-5"
               style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
             >
               <div className="flex items-center gap-3.5">
@@ -138,7 +138,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
       {open ? (
         <form
           action={action}
-          className="mt-4 rounded-tile border border-ink-line bg-ink-s1 p-5"
+          className="mt-4 rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8"
         >
           <input type="hidden" name="handle" value={handle} />
           <input type="hidden" name="kind" value={kind} />
@@ -200,7 +200,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="mt-4 flex items-center gap-2 rounded-card border border-dashed border-ink-line px-5 py-3 text-[13px] text-paper-2 transition-colors hover:border-line"
+          className="mt-4 flex items-center gap-2 rounded-card border border-dashed border-ink-line px-5 py-4 text-[13px] text-paper-2 transition-colors hover:border-line"
         >
           <Plus className="h-4 w-4" />
           Buyum qo&apos;shish

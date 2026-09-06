@@ -34,12 +34,12 @@ export default async function OrderPage({ params }: PageProps<"/buyurtma/[id]">)
 
   return (
     <PageShell>
-      <div className="mx-auto max-w-lg px-6 py-20">
-        <p className="text-xs uppercase tracking-[0.2em] text-ink-3">Buyurtma</p>
+      <div className="mx-auto max-w-lg px-6 py-16 sm:py-24">
+        <p className="text-ink-3 text-xs font-semibold tracking-widest uppercase">Buyurtma</p>
         <h1 className="mt-2 font-display font-semibold text-3xl">{order.handle}</h1>
         <p className="mt-1 text-ink-2">{formatUZS(order.amount)}</p>
 
-        <div className="mt-8 rounded-card border border-flex-black/10 p-6">{status(order)}</div>
+        <div className="mt-8 rounded-card border border-flex-black/10 p-5">{status(order)}</div>
 
         <Link
           href="/kabinet"

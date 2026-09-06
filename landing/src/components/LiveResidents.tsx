@@ -42,7 +42,7 @@ export default function LiveResidents({
           </p>
 
           <div className="flex items-center gap-2">
-            <span className="text-[11px] tracking-[0.14em] text-paper-3 uppercase">
+            <span className="text-paper-3 text-xs font-semibold tracking-widest uppercase">
               {labels.latest}
             </span>
             <div className="flex flex-wrap gap-1.5">

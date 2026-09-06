@@ -68,7 +68,7 @@ export default async function PrintPointsPage({
             key={point}
             className="flex break-inside-avoid flex-col items-center rounded-card border border-line px-4 py-5 text-center print:rounded-none print:border-dashed"
           >
-            <p className="text-[11px] font-semibold tracking-widest text-ink-3 uppercase">
+            <p className="text-ink-3 text-xs font-semibold tracking-widest uppercase">
               {venue.name}
             </p>
             <p className="mt-1 font-display font-tabular text-2xl font-semibold">

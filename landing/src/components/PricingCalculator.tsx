@@ -103,7 +103,7 @@ export default function PricingCalculator({
   return (
     <div className="relative w-full max-w-xl">
       <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-lime/10 blur-3xl" />
-      <div className="rounded-tile border border-line bg-white p-6 sm:p-8">
+      <div className="rounded-tile border border-line bg-white p-6 sm:p-8 sm:p-8">
         <div className="mb-7 flex flex-wrap items-center gap-3">
           <div className="flex overflow-hidden rounded-card border-2 border-flex-black/90 font-display text-2xl font-semibold tracking-tight shadow-photo">
             <input
@@ -203,7 +203,7 @@ export default function PricingCalculator({
                 buyer on the page, and there was nothing here for them to press. */}
             <Link
               href={`/${cleanLetters}${cleanDigits}`}
-              className="mt-5 flex items-center justify-center gap-2 rounded-card bg-flex-black px-6 py-4 font-medium text-white transition-transform hover:scale-[1.01]"
+              className="mt-5 flex items-center justify-center gap-2 rounded-card bg-flex-black px-5 py-4 font-medium text-white transition-transform hover:scale-[1.01]"
             >
               {labels.take.replace("{handle}", `${cleanLetters}${cleanDigits}`)}
               <ArrowRight className="h-4 w-4" />

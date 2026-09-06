@@ -79,7 +79,7 @@ export default async function DevicesPage({ searchParams }: PageProps<"/qurilmal
 
         {/* Devices */}
         <div className="mt-12 flex items-baseline justify-between gap-4">
-          <h2 className="font-display text-xs font-semibold tracking-widest text-lime uppercase">
+          <h2 className="font-display text-lime text-xs font-semibold tracking-widest uppercase">
             {p.groupDevices}
           </h2>
           <p className="text-xs text-paper-3">{p.groupDevicesNote}</p>
@@ -107,7 +107,7 @@ export default async function DevicesPage({ searchParams }: PageProps<"/qurilmal
 
         {/* Directions */}
         <div className="mt-14 flex items-baseline justify-between gap-4">
-          <h2 className="font-display text-xs font-semibold tracking-widest text-lime uppercase">
+          <h2 className="font-display text-lime text-xs font-semibold tracking-widest uppercase">
             {p.groupDirections}
           </h2>
           <p className="text-xs text-paper-3">{p.groupDirectionsNote}</p>

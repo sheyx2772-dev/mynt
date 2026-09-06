@@ -53,7 +53,7 @@ export default function RequestList({
   return (
     <>
       {queue.length === 0 ? (
-        <div className="rounded-card border border-dashed border-ink-line px-6 py-12 text-center">
+        <div className="rounded-card border border-dashed border-ink-line px-6 py-10 text-center">
           <Inbox className="mx-auto h-6 w-6 text-paper-3" />
           <p className="mt-3 text-base leading-6 text-paper-3">{emptyText}</p>
         </div>
@@ -164,7 +164,7 @@ export default function RequestList({
 
       {closed.length > 0 && (
         <section className="mt-8">
-          <h2 className="mb-2 text-xs leading-4 font-medium tracking-[0.04em] text-paper-3 uppercase">
+          <h2 className="mb-2 leading-4 text-paper-3 text-xs font-semibold tracking-widest uppercase">
             Bajarilgan
           </h2>
           <div className="divide-y divide-ink-line overflow-hidden rounded-card border border-ink-line">

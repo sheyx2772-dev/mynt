@@ -63,7 +63,7 @@ export default async function JamoaPage() {
             </a>
             <Link
               href="/biznes#jamoa"
-              className="rounded-input border border-ink-line px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] uppercase transition-colors hover:bg-ink-s2"
+              className="rounded-input border border-ink-line px-5 py-2.5 transition-colors hover:bg-ink-s2 text-xs font-semibold tracking-widest uppercase"
             >
               So&apos;rov qoldirish
             </Link>
@@ -82,7 +82,7 @@ export default async function JamoaPage() {
 
   return (
     <PageShell surface="ink">
-      <p className="text-[11px] font-medium tracking-[0.18em] text-paper-3 uppercase">
+      <p className="text-paper-3 text-xs font-semibold tracking-widest uppercase">
         Firma
       </p>
       <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight">{team.name}</h1>
@@ -104,7 +104,7 @@ export default async function JamoaPage() {
         </div>
       </div>
 
-      <section className="mt-8 rounded-tile border border-ink-line bg-ink-s1 p-7">
+      <section className="mt-8 rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
         <h2 className="font-display text-lg font-semibold tracking-tight">
           Jamoa bo&apos;yicha
         </h2>
@@ -123,7 +123,7 @@ export default async function JamoaPage() {
         </div>
       </section>
 
-      <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-7">
+      <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
         <h2 className="font-display text-lg font-semibold tracking-tight">Raqamlar</h2>
 
         {handles.length === 0 ? (
@@ -165,7 +165,7 @@ export default async function JamoaPage() {
         )}
       </section>
 
-      <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-7">
+      <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
         <h2 className="font-display text-lg font-semibold tracking-tight">To&apos;lov</h2>
         <p className="mt-1 mb-5 text-sm text-paper-2">
           Firma to&apos;lovi bank o&apos;tkazmasi orqali. Hisob-fakturani

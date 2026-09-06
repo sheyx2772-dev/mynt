@@ -67,7 +67,7 @@ export default function HandleHub({
       {/* The card, which is also the way to look at the public page. */}
       <Link
         href={`/${handle.normalized}`}
-        className="relative block overflow-hidden rounded-tile bg-ink-s2 px-6 py-6 text-paper transition-transform active:scale-[0.995]"
+        className="relative block overflow-hidden rounded-tile bg-ink-s2 p-6 sm:p-8 text-paper transition-transform active:scale-[0.995]"
       >
 
         <div className="relative flex items-start justify-between gap-3">
@@ -196,7 +196,7 @@ export default function HandleHub({
           {plan?.endingSoon && (
             <Link
               href={at("obuna")}
-              className="flex items-center gap-3 rounded-card border border-ink-line bg-ink-s1 px-5 py-3.5 text-sm text-paper-2"
+              className="flex items-center gap-3 rounded-card border border-ink-line bg-ink-s1 px-5 py-4 text-sm text-paper-2"
             >
               Obunaga {plan.daysLeft} kun qoldi.
             </Link>
@@ -244,7 +244,7 @@ function Stat({ value, label }: { value: number; label: string }) {
   return (
     <div>
       <p className="font-display font-tabular text-xl font-semibold">{formatNumber(value)}</p>
-      <p className="mt-0.5 text-[10px] tracking-widest text-paper uppercase">{label}</p>
+      <p className="mt-0.5 text-paper text-xs font-semibold tracking-widest uppercase">{label}</p>
     </div>
   );
 }

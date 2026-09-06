@@ -80,7 +80,7 @@ export default function MenuView({
         categories.map((category) => (
           <section key={category.id} className="mt-6">
             {category.name && (
-              <h2 className="mb-2 text-xs leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+              <h2 className="mb-2 leading-4 text-ink-3 text-xs font-semibold tracking-widest uppercase">
                 {category.name}
               </h2>
             )}

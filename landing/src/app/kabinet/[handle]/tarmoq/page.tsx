@@ -119,7 +119,7 @@ export default async function NetworkPage({
             that decision deserves — and on the brand's own ground rather than
             on white, because a card that is white on white is a page and this
             is meant to be an application. */}
-        <section className="relative overflow-hidden rounded-tile bg-ink-s2 p-6 text-paper sm:p-7">
+        <section className="relative overflow-hidden rounded-tile bg-ink-s2 p-6 sm:p-8 text-paper sm:p-7">
 
           <div className="relative">
             <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-paper uppercase">

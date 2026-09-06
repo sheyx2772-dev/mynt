@@ -76,7 +76,7 @@ export default async function QueuePage() {
         {/* The count, on the brand's own ground. A queue rendered as a white
             page is a spreadsheet; this is the screen somebody opens to find out
             what their morning is. */}
-        <section className="relative mt-4 overflow-hidden rounded-tile bg-ink-s2 p-6 text-paper sm:p-7">
+        <section className="relative mt-4 overflow-hidden rounded-tile bg-ink-s2 p-6 sm:p-8 text-paper sm:p-7">
 
           <div className="relative">
             <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-paper uppercase">

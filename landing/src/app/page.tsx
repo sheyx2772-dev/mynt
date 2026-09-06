@@ -423,7 +423,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             </div>
 
             <div className="hidden flex-col items-center gap-4 lg:flex">
-              <div className="rounded-card border border-line bg-white p-4">
+              <div className="rounded-card border border-line bg-white p-5">
                 {/* Served by the same route a printed card points at, so what
                     a visitor scans here is what a buyer gets. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -511,7 +511,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 logo we do not have permission for is somebody else's mark. */}
             {newest.length > 0 && (
               <div className="mt-7">
-                <p className="text-xs leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+                <p className="leading-4 text-ink-3 text-xs font-semibold tracking-widest uppercase">
                   {h.tractionLatest}
                 </p>
                 <ul className="mt-3 flex flex-wrap gap-2">
@@ -556,7 +556,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
 
                   <dl className="mt-4 flex-1 space-y-3.5">
                     <div>
-                      <dt className="text-xs leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+                      <dt className="leading-4 text-ink-3 text-xs font-semibold tracking-widest uppercase">
                         {h.pricesStart}
                       </dt>
                       <dd className="num mt-1 text-base leading-6 font-semibold">
@@ -567,7 +567,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-xs leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+                      <dt className="leading-4 text-ink-3 text-xs font-semibold tracking-widest uppercase">
                         {h.pricesSub}
                       </dt>
                       <dd className="num mt-1 text-base leading-6 font-semibold">
@@ -580,7 +580,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                     {/* Everybody asks this one silently. Answer it in the
                         table, or they assume the answer is a trap. */}
                     <div>
-                      <dt className="text-xs leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+                      <dt className="leading-4 text-ink-3 text-xs font-semibold tracking-widest uppercase">
                         {h.pricesAfter}
                       </dt>
                       <dd className="mt-1 text-sm leading-5 text-ink-2">
@@ -604,8 +604,8 @@ export default async function Home({ searchParams }: PageProps<"/">) {
 
 
         {/* FAQ */}
-        <section id="savollar" className="scroll-mt-20 mx-auto max-w-3xl px-6 py-14 sm:py-24">
-          <p className="mb-3 text-center text-xs font-semibold tracking-widest text-ink-3 uppercase">
+        <section id="savollar" className="scroll-mt-20 mx-auto max-w-3xl px-6 py-16 sm:py-24">
+          <p className="mb-3 text-center text-ink-3 text-xs font-semibold tracking-widest uppercase">
             {h.faqTitle}
           </p>
           <h2 className="text-center font-display text-2xl font-semibold tracking-tight sm:text-4xl">
@@ -653,7 +653,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </p>
             </div>
             <div>
-              <p className="text-xs font-semibold tracking-widest text-paper-3 uppercase">
+              <p className="text-paper-3 text-xs font-semibold tracking-widest uppercase">
                 {s.product}
               </p>
               <ul className="mt-3 space-y-0.5 text-sm text-paper-2">
@@ -681,7 +681,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </ul>
             </div>
             <div>
-              <p className="text-xs font-semibold tracking-widest text-paper-3 uppercase">
+              <p className="text-paper-3 text-xs font-semibold tracking-widest uppercase">
                 {s.navBusiness}
               </p>
               <ul className="mt-3 space-y-0.5 text-sm text-paper-2">
@@ -706,7 +706,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </ul>
             </div>
             <div>
-              <p className="text-xs font-semibold tracking-widest text-paper-3 uppercase">
+              <p className="text-paper-3 text-xs font-semibold tracking-widest uppercase">
                 {s.company}
               </p>
               <ul className="mt-3 space-y-0.5 text-sm text-paper-2">

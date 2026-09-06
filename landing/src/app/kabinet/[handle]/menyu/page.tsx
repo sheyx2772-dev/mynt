@@ -130,7 +130,7 @@ export default async function MenuAdminPage({
       {categories.map((category) => (
         <section key={category.id} className="mt-8">
           <div className="mb-3 flex items-baseline justify-between gap-3">
-            <h2 className="text-xs font-semibold tracking-widest text-paper-3 uppercase">
+            <h2 className="text-paper-3 text-xs font-semibold tracking-widest uppercase">
               {category.name || "Bo'limsiz"}
             </h2>
             {category.id !== "boshqa" && (

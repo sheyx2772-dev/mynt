@@ -118,7 +118,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
 
           <div className="relative mx-auto grid max-w-6xl gap-10 px-6 pt-12 pb-14 sm:pt-20 sm:pb-20 lg:grid-cols-[1fr_320px] lg:items-center lg:gap-16">
             <div>
-            <p className="text-xs font-semibold tracking-widest text-paper-3 uppercase">
+            <p className="text-paper-3 text-xs font-semibold tracking-widest uppercase">
               {t.eyebrow}
             </p>
             <h1 className="mt-4 max-w-2xl font-display text-[2.1rem] leading-[1.06] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
@@ -173,7 +173,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
             the demo venue, opened on their own phone, which argues better than
             the rest of the page put together. */}
         <section className="mx-auto max-w-6xl px-6 pt-12">
-          <div className="rounded-tile border-l-[3px] border-lime-ink bg-black/[0.03] px-6 py-5">
+          <div className="rounded-tile border-l-[3px] border-lime-ink bg-black/[0.03] p-6 sm:p-8">
             <h2 className="font-display font-semibold">{t.pilotTitle}</h2>
             <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-ink-2">
               {t.pilotBody}
@@ -189,8 +189,8 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
         </section>
 
         {/* The shared layer */}
-        <section className="mx-auto max-w-6xl px-6 py-14 sm:py-20">
-          <p className="text-xs font-semibold tracking-widest text-ink-3 uppercase">
+        <section className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+          <p className="text-ink-3 text-xs font-semibold tracking-widest uppercase">
             {t.coreEyebrow}
           </p>
           <h2 className="mt-3 max-w-lg font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
@@ -204,7 +204,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
               return (
                 <div
                   key={item.title}
-                  className="rounded-tile border border-line bg-white p-6"
+                  className="rounded-tile border border-line bg-white p-6 sm:p-8"
                 >
                   <Icon className="h-5 w-5 text-ink-3" strokeWidth={1.75} />
                   <h3 className="mt-5 font-display font-semibold">{item.title}</h3>
@@ -218,9 +218,9 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
         </section>
 
         {/* Vertical picker + price */}
-        <section id="soha" className="scroll-mt-20 border-t border-line-soft bg-black/[0.02] py-14 sm:py-20">
+        <section id="soha" className="scroll-mt-20 border-t border-line-soft bg-black/[0.02] py-16 sm:py-24">
           <div className="mx-auto max-w-6xl px-6">
-            <p className="text-xs font-semibold tracking-widest text-ink-3 uppercase">
+            <p className="text-ink-3 text-xs font-semibold tracking-widest uppercase">
               {t.priceEyebrow}
             </p>
             <h2 className="mt-3 max-w-lg font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
@@ -245,8 +245,8 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
         </section>
 
         {/* The rest of the verticals */}
-        <section className="mx-auto max-w-6xl px-6 py-14 sm:py-20">
-          <p className="text-xs font-semibold tracking-widest text-ink-3 uppercase">
+        <section className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+          <p className="text-ink-3 text-xs font-semibold tracking-widest uppercase">
             {t.otherEyebrow}
           </p>
           <h2 className="mt-3 max-w-lg font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
@@ -261,7 +261,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                   {t.tableHead.map((head) => (
                     <th
                       key={head}
-                      className="border-b border-line px-4 py-3 text-left text-[11px] font-semibold tracking-widest text-ink-3 uppercase"
+                      className="border-b border-line px-4 py-3 text-left text-ink-3 text-xs font-semibold tracking-widest uppercase"
                     >
                       {head}
                     </th>
@@ -293,7 +293,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
           className="relative scroll-mt-20 overflow-hidden bg-flex-black py-14 text-white sm:py-20"
         >
           <div className="relative mx-auto max-w-3xl px-6">
-            <p className="text-xs font-semibold tracking-widest text-lime/70 uppercase">
+            <p className="text-lime/70 text-xs font-semibold tracking-widest uppercase">
               {t.formEyebrow}
             </p>
             <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
@@ -310,11 +310,11 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
         {/* Business */}
         <section
           id="jamoa"
-          className="relative scroll-mt-20 overflow-hidden bg-flex-black py-14 sm:py-24"
+          className="relative scroll-mt-20 overflow-hidden bg-flex-black py-16 sm:py-24"
         >
           <div className="relative mx-auto max-w-6xl px-6">
             <div className="max-w-xl">
-              <p className="mb-3 text-xs font-semibold tracking-widest text-lime/70 uppercase">
+              <p className="mb-3 text-lime/70 text-xs font-semibold tracking-widest uppercase">
                 {s.navBusiness}
               </p>
               <h2 className="font-display text-3xl font-semibold tracking-tight text-balance text-white sm:text-4xl">

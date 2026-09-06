@@ -42,7 +42,7 @@ export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselIt
           it has moved. It is the one thing somebody can do here without
           choosing a side first: everybody wants to know whether the number
           they have in mind is free. */}
-      <p className="mt-7 text-xs font-semibold tracking-widest text-ink-3 uppercase">
+      <p className="mt-7 text-ink-3 text-xs font-semibold tracking-widest uppercase">
         {s.pickHandle}
       </p>
       <div className="-mt-4 max-w-xl">
@@ -62,14 +62,14 @@ export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselIt
         </div>
       </div>
 
-      <p className="mt-10 mb-4 text-xs font-semibold tracking-widest text-ink-3 uppercase">
+      <p className="mt-10 mb-4 text-ink-3 text-xs font-semibold tracking-widest uppercase">
         {s.waysEyebrow}
       </p>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Link
           href="/shaxsiy"
-          className="group flex flex-col rounded-tile bg-lime p-7 text-flex-black shadow-[0_24px_60px_-30px_rgba(171,255,9,0.85)] transition-transform hover:-translate-y-0.5 sm:p-8"
+          className="group flex flex-col rounded-tile bg-lime p-6 sm:p-8 text-flex-black shadow-[0_24px_60px_-30px_rgba(171,255,9,0.85)] transition-transform hover:-translate-y-0.5 sm:p-8"
         >
           <User className="h-6 w-6 text-ink-2" strokeWidth={1.6} />
           <h2 className="mt-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
@@ -86,7 +86,7 @@ export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselIt
 
         <Link
           href="/biznes"
-          className="grain group relative flex flex-col overflow-hidden rounded-tile bg-flex-black p-7 text-white transition-transform hover:-translate-y-0.5 sm:p-8"
+          className="grain group relative flex flex-col overflow-hidden rounded-tile bg-flex-black p-6 sm:p-8 text-white transition-transform hover:-translate-y-0.5 sm:p-8"
         >
           <div className="bg-dot-grid-light absolute inset-0 opacity-30" />
           <div className="absolute -top-20 -right-16 h-56 w-56 rounded-full bg-lime/[0.13] blur-[90px]" />

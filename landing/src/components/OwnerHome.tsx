@@ -33,13 +33,13 @@ export default function OwnerHome({
 }) {
   return (
     <section className="px-6 pt-6">
-      <p className="text-xs font-semibold tracking-widest text-paper-3 uppercase">
+      <p className="text-paper-3 text-xs font-semibold tracking-widest uppercase">
         {s.yourHandle}
       </p>
 
       <Link
         href={`/${handle.normalized}`}
-        className="relative mt-3 block overflow-hidden rounded-tile bg-ink-s2 px-5 py-5 text-paper transition-transform active:scale-[0.99]"
+        className="relative mt-3 block overflow-hidden rounded-tile bg-ink-s2 p-6 sm:p-8 text-paper transition-transform active:scale-[0.99]"
       >
         <div className="relative flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -81,7 +81,7 @@ export default function OwnerHome({
       {leads > 0 && (
         <Link
           href={`/kabinet/${handle.normalized}/statistika`}
-          className="mt-3 flex items-center gap-3 rounded-card border border-lime-ink/25 bg-lime/[0.12] px-4 py-3.5 transition-transform active:scale-[0.99]"
+          className="mt-3 flex items-center gap-3 rounded-card border border-lime-ink/25 bg-lime/[0.12] px-4 py-3 transition-transform active:scale-[0.99]"
         >
           <Inbox className="h-5 w-5 shrink-0 text-paper" strokeWidth={1.8} />
           <p className="flex-1 text-sm font-medium">{s.leadsWaiting(formatNumber(leads))}</p>
@@ -98,7 +98,7 @@ function Stat({ value, label }: { value: number; label: string }) {
       <p className="font-display font-tabular text-xl font-semibold">
         {formatNumber(value)}
       </p>
-      <p className="mt-0.5 text-[10px] tracking-widest text-paper uppercase">{label}</p>
+      <p className="mt-0.5 text-paper text-xs font-semibold tracking-widest uppercase">{label}</p>
     </div>
   );
 }

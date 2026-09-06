@@ -26,7 +26,7 @@ export default function PostComposer({ handle }: { handle: string }) {
   return (
     <form
       action={formAction}
-      className="rounded-tile border border-ink-line bg-ink-s1 p-5"
+      className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8"
     >
       <textarea
         name="body"

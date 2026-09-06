@@ -51,7 +51,7 @@ export default async function TagsPage({
   return (
     <PageShell wide surface="ink">
       <SubScreen handle={normalized} title="Buyumlar">
-        <section className="relative overflow-hidden rounded-tile bg-ink-s2 p-6 text-paper sm:p-7">
+        <section className="relative overflow-hidden rounded-tile bg-ink-s2 p-6 sm:p-8 text-paper sm:p-7">
 
           <div className="relative">
             <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-paper uppercase">
@@ -101,7 +101,7 @@ export default async function TagsPage({
                   return (
                     <li
                       key={message.id}
-                      className="rise rounded-card border border-ink-line bg-ink-s1 p-4"
+                      className="rise rounded-card border border-ink-line bg-ink-s1 p-5"
                       style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
                     >
                       <div className="flex items-start gap-3">

@@ -26,7 +26,7 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
 
   if (state.saved) {
     return (
-      <section className="rounded-tile border border-lime/50 bg-lime/[0.08] p-6 sm:p-8">
+      <section className="rounded-tile border border-lime/50 bg-lime/[0.08] p-6 sm:p-8 sm:p-8">
         <h2 className="font-display text-lg font-semibold">Manzil saqlandi</h2>
         <p className="mt-2 text-sm leading-relaxed text-paper-2">
           Buyurtma navbatga qo&apos;yildi. Yasalgach yuboramiz va bu sahifada
@@ -37,7 +37,7 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
   }
 
   return (
-    <form action={action} className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
+    <form action={action} className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8 sm:p-8">
       <input type="hidden" name="orderId" value={orderId} />
 
       <div className="flex items-start gap-3">
@@ -137,7 +137,7 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
       <button
         type="submit"
         disabled={saving}
-        className="mt-6 w-full rounded-card bg-ink-s2 px-6 py-3.5 text-sm font-medium text-paper transition-transform hover:scale-[1.01] disabled:opacity-50 sm:w-auto"
+        className="mt-6 w-full rounded-card bg-ink-s2 px-5 py-4 text-sm font-medium text-paper transition-transform hover:scale-[1.01] disabled:opacity-50 sm:w-auto"
       >
         {saving ? "Saqlanmoqda…" : "Saqlash"}
       </button>

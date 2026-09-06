@@ -77,7 +77,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
       />
       <div className="absolute -top-24 right-[-6rem] h-80 w-80 rounded-full bg-lime/20 blur-[100px]" />
 
-      <div className="relative mx-auto max-w-3xl px-6 py-16">
+      <div className="relative mx-auto max-w-3xl px-6 py-16 sm:py-24">
         <Link href="/" className="mb-10 flex items-center gap-2 font-display text-lg font-semibold">
           <Mark />
           flex
@@ -155,7 +155,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
         <section className="mt-10">
           {residents.length === 0 ? (
-            <div className="rounded-tile border border-dashed border-line-2 px-6 py-14 text-center">
+            <div className="rounded-tile border border-dashed border-line-2 px-6 py-10 text-center">
               <p className="text-sm text-ink-2">
                 {query
                   ? t.nothingFound(query)
