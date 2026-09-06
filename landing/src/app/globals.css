@@ -917,3 +917,37 @@ body:has([data-no-app-bar]) {
     transition-delay: 0s, 0.08s, 0s;
   }
 }
+
+/* A shelf that drifts, left to right, without end.
+ *
+ * The step-scroller this replaces only moved when its cards overflowed the
+ * rail, so it ran on a phone and stood still on every desktop — four cards
+ * fit inside 1280px with room to spare, the wrap condition was true on the
+ * first tick, and it scrolled to zero forever.
+ *
+ * The track holds the items twice and travels exactly half its own width, so
+ * the second copy is under the cursor at the moment the first ends and the
+ * seam never arrives. Each card carries its own trailing margin rather than
+ * the track carrying a gap: a gap sits *between* children, so half of one
+ * would be missing from the loop and the seam would jump by six pixels.
+ */
+@keyframes drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.drift {
+  animation: drift var(--drift, 30s) linear infinite;
+  will-change: transform;
+}
+
+/* Stops under a cursor, because a shelf that keeps moving while somebody is
+   reading a price is worse than a shelf that never moved. */
+.drift-hold:hover .drift,
+.drift-hold:focus-within .drift {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drift { animation: none; }
+}
