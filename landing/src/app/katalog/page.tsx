@@ -75,7 +75,7 @@ export default function KatalogPage() {
   const sohalar  = new Set(profiles.map(p => p.category)).size;
 
   return (
-    <div className="figma-katalog" data-figma-theme={theme} style={{ minHeight: "100vh", background: "var(--bg-app)", color: "var(--text-primary)", fontFamily: "var(--font-sans)" }}>
+    <div className="figma-katalog" data-figma-theme={theme} style={{ minHeight: "100vh", background: "var(--bg-app)", color: "var(--text-primary)", fontFamily: "var(--fk-sans)" }}>
 
       {/* ══ HEADER ═══════════════════════════════════════════ */}
       <header style={{
@@ -118,7 +118,7 @@ export default function KatalogPage() {
                     padding: "4px 10px",
                     fontSize: 11,
                     fontWeight: 700,
-                    fontFamily: "var(--font-sans)",
+                    fontFamily: "var(--fk-sans)",
                     border: "none",
                     cursor: "pointer",
                     background: lang === l ? "#c8973a" : "transparent",
@@ -183,7 +183,7 @@ export default function KatalogPage() {
                   border: `1.5px solid ${active ? "transparent" : "var(--chip-border)"}`,
                   background: active ? "var(--chip-active-bg)" : "var(--chip-bg)",
                   color: active ? "var(--chip-active-text)" : "var(--text-secondary)",
-                  fontFamily: "var(--font-sans)",
+                  fontFamily: "var(--fk-sans)",
                   fontSize: 12,
                   fontWeight: 700,
                   whiteSpace: "nowrap",
@@ -233,28 +233,26 @@ export default function KatalogPage() {
         margin: "0 auto",
       }}>
         {filtered.map(profile => (
+          // One scroll surface, not three.
+          //
+          // This card used to be two nested `overflowY: auto` boxes, both
+          // capped at 620px, inside a page that scrolls. On a touch screen
+          // that is a trap: a drag started on a card scrolls the card, reaches
+          // its end, and stops — the page underneath does not take over, so
+          // the catalogue appears frozen until the thumb happens to land in a
+          // gutter. The cards are now their full height and the page is the
+          // only thing that scrolls, which also removes the need for the fade
+          // that hid the cut.
           <div
             key={profile.id}
-            className="card-fade"
             style={{
               position: "relative",
               borderRadius: "var(--r-2xl)",
               overflow: "hidden",
               boxShadow: "var(--card-shadow)",
-              maxHeight: 620,
-              overflowY: "auto",
             }}
-            // remove card-fade overflow so scroll works
           >
-            <div className="scrollbar-hide" style={{ overflowY: "auto", maxHeight: 620, borderRadius: "var(--r-2xl)" }}>
-              <ProfileCard profile={profile} lang={lang} theme={theme} />
-            </div>
-            {/* Bottom fade overlay */}
-            <div style={{
-              position: "absolute", left: 0, right: 0, bottom: 0, height: 60, pointerEvents: "none",
-              background: "linear-gradient(to bottom, transparent, var(--bg-app))",
-              borderRadius: "0 0 var(--r-2xl) var(--r-2xl)",
-            }} />
+            <ProfileCard profile={profile} lang={lang} theme={theme} />
           </div>
         ))}
       </div>

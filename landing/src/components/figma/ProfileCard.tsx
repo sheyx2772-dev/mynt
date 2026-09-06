@@ -208,7 +208,7 @@ export default function ProfileCard({ profile, lang, theme, banner: bannerProp }
   const banner = bannerProp === undefined ? BANNER[profile.id] : (bannerProp ?? undefined);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", background: c.cardBg, fontFamily: "var(--font-sans)" }}>
+    <div style={{ display: "flex", flexDirection: "column", background: c.cardBg, fontFamily: "var(--fk-sans)" }}>
 
       {/* ══ BANNER — brand image full-bleed ══════════════════ */}
       {/* overflow was "hidden" here, which clipped the avatar's lower half — it is
@@ -294,7 +294,7 @@ export default function ProfileCard({ profile, lang, theme, banner: bannerProp }
       {/* ══ IDENTITY ═════════════════════════════════════════ */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "50px 20px 16px" }}>
         {/* Name — 24px / 600 weight / serif for name only */}
-        <h2 style={{ fontSize: 22, fontWeight: 700, lineHeight: "28px", color: "#ffffff", fontFamily: "var(--font-serif)", margin: 0, letterSpacing: "-0.3px" }}>
+        <h2 style={{ fontSize: 22, fontWeight: 700, lineHeight: "28px", color: "#ffffff", fontFamily: "var(--fk-serif)", margin: 0, letterSpacing: "-0.3px" }}>
           {profile.fullName}
         </h2>
         {/* Org — 13px / 600 / accent color (lighter than name — corrected hierarchy) */}
@@ -340,7 +340,7 @@ export default function ProfileCard({ profile, lang, theme, banner: bannerProp }
           flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
           padding: "11px 8px", borderRadius: "var(--r-lg)",
           border: `1.5px solid ${c.accent}`, background: "transparent", color: c.accent,
-          fontSize: 9, fontWeight: 800, fontFamily: "var(--font-sans)", letterSpacing: "0.04em", cursor: "pointer",
+          fontSize: 9, fontWeight: 800, fontFamily: "var(--fk-sans)", letterSpacing: "0.04em", cursor: "pointer",
         }}>
           {I.plus}
           {t.add}
@@ -350,7 +350,7 @@ export default function ProfileCard({ profile, lang, theme, banner: bannerProp }
           display: "flex", alignItems: "center", gap: 6,
           padding: "11px 14px", borderRadius: "var(--r-lg)",
           border: "1.5px solid rgba(255,255,255,0.18)", background: "transparent", color: "rgba(255,255,255,0.55)",
-          fontSize: 9, fontWeight: 800, fontFamily: "var(--font-sans)", letterSpacing: "0.04em", cursor: "pointer",
+          fontSize: 9, fontWeight: 800, fontFamily: "var(--fk-sans)", letterSpacing: "0.04em", cursor: "pointer",
         }}>
           {I.share}
           {t.share}
@@ -363,7 +363,7 @@ export default function ProfileCard({ profile, lang, theme, banner: bannerProp }
         <button className="btn-primary" style={{
           width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
           padding: "11px", borderRadius: "var(--r-lg)", background: c.accent2, border: "none",
-          color: "white", fontSize: 10, fontWeight: 800, fontFamily: "var(--font-sans)", letterSpacing: "0.02em", cursor: "pointer",
+          color: "white", fontSize: 10, fontWeight: 800, fontFamily: "var(--fk-sans)", letterSpacing: "0.02em", cursor: "pointer",
         }}>
           {I.web}
           {profile.website}

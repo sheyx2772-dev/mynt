@@ -41,8 +41,8 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 
   /* Font families */
-  --font-sans:  'Nunito', system-ui, sans-serif;
-  --font-serif: 'Instrument Serif', Georgia, serif;
+  --fk-sans:  'Nunito', system-ui, sans-serif;
+  --fk-serif: 'Instrument Serif', Georgia, serif;
 }
 
 /* ── Light theme (default) ─────────────────────────────── */
@@ -53,7 +53,7 @@
   --bg-muted:     #f5f3ee;
   --text-primary: #111111;
   --text-secondary:#444444;
-  --text-muted:   #888888;
+  --text-muted:   #736f82; /* was #888 — 3.5:1 on white, under AA */
   --border:       #e2ddd6;
   --header-bg:    #1a3a6b;
   --header-text:  #ffffff;
@@ -73,7 +73,7 @@
   --bg-muted:     #111116;
   --text-primary: #f0f0f0;
   --text-secondary:#aaaaaa;
-  --text-muted:   #666666;
+  --text-muted:   #7f7b92; /* was #666 — 3.3:1 on this ground, under AA */
   --border:       #2a2a35;
   --header-bg:    #08091a;
   --header-text:  #ffffff;
@@ -88,7 +88,7 @@
 
 /* ── Base ──────────────────────────────────────────────── */
 .figma-katalog {
-  font-family: var(--font-sans);
+  font-family: var(--fk-sans);
   background: var(--bg-app);
   color: var(--text-primary);
   transition: background 0.25s, color 0.25s;
