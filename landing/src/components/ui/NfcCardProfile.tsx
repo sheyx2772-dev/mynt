@@ -58,7 +58,16 @@ export default function NfcCardProfile({
   addToContacts,
   share,
   children,
+  heading: Name = "h1",
 }: {
+  /**
+   * Which element the name is.
+   *
+   * A layout drawn as a sample sits fourteen to a page beside six others, and
+   * every one of them claiming to be the page's heading is sixteen h1s on the
+   * entry page. The real profile is the only place the name is the heading.
+   */
+  heading?: "h1" | "p";
   name: string;
   org?: string | null;
   role?: string | null;
@@ -146,9 +155,9 @@ export default function NfcCardProfile({
           )}
         </div>
 
-        <h1 className="mt-3 text-center text-[22px] leading-tight font-bold text-balance">
+        <Name className="mt-3 text-center text-[22px] leading-tight font-bold text-balance">
           {name}
-        </h1>
+        </Name>
         {org && (
           <p className="mt-1 text-center text-[13px] leading-5 font-medium text-page-mute">
             {org}

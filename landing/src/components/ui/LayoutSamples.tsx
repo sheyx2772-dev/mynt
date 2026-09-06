@@ -15,6 +15,7 @@ function PlaqueSample() {
   return (
     <div data-theme="zarbof" className="themed rounded-card">
       <PlaqueProfile
+        heading="p"
         n="MYN042"
         name="Aziz Karimov"
         role="Direktor"
@@ -82,6 +83,7 @@ function SocialSample() {
   return (
     <div data-theme="ijtimoiy" className="themed rounded-card">
       <SocialProfile
+        heading="p"
         n="MYN042"
         name="Aziz Karimov"
         tagline="Fotograf · Toshkent"
@@ -102,7 +104,7 @@ function SocialSample() {
 function PosterSample() {
   return (
     <div data-theme="plakat" className="themed rounded-card">
-      <PosterProfile n="MYN042" name="Aziz Karimov" role="Direktor · MC LEGAL" rows={ROWS}>
+      <PosterProfile heading="p" n="MYN042" name="Aziz Karimov" role="Direktor · MC LEGAL" rows={ROWS}>
         <a
           href="#"
           className="mt-10 flex h-16 w-full items-center justify-center bg-lime text-[18px] font-bold tracking-[0.14em] text-on-accent uppercase"
@@ -118,6 +120,7 @@ function ReceiptSample() {
   return (
     <div data-theme="kvitansiya" className="themed rounded-card">
       <ReceiptProfile
+        heading="p"
         n="MYN042"
         name="Aziz Karimov"
         role="Direktor · MC LEGAL"
@@ -156,6 +159,7 @@ function NfcSample({ theme }: { theme: string }) {
   return (
     <div data-theme={theme} className="themed overflow-hidden rounded-card">
       <NfcCardProfile
+        heading="p"
         name="Aziz Karimov"
         org="MC LEGAL"
         role="CEO"

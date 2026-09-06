@@ -28,7 +28,16 @@ export default function ReceiptProfile({
   rows,
   services,
   children,
+  heading: Name = "h1",
 }: {
+  /**
+   * Which element the name is.
+   *
+   * A layout drawn as a sample sits fourteen to a page beside six others, and
+   * every one of them claiming to be the page's heading is sixteen h1s on the
+   * entry page. The real profile is the only place the name is the heading.
+   */
+  heading?: "h1" | "p";
   n: string;
   name: string;
   role?: string | null;
@@ -48,9 +57,9 @@ export default function ReceiptProfile({
 
         <div className="my-5 border-t border-dashed border-ink/30" />
 
-        <h1 className="text-center text-[22px] leading-tight font-bold tracking-[0.04em] uppercase">
+        <Name className="text-center text-[22px] leading-tight font-bold tracking-[0.04em] uppercase">
           {name}
-        </h1>
+        </Name>
         {role && (
           <p className="mt-1 text-center text-[16px] text-mute">{role}</p>
         )}

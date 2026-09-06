@@ -38,7 +38,16 @@ export default function PlaqueProfile({
   tabs,
   links,
   children,
+  heading: Name = "h1",
 }: {
+  /**
+   * Which element the name is.
+   *
+   * A layout drawn as a sample sits fourteen to a page beside six others, and
+   * every one of them claiming to be the page's heading is sixteen h1s on the
+   * entry page. The real profile is the only place the name is the heading.
+   */
+  heading?: "h1" | "p";
   n: string;
   name: string;
   role?: string | null;
@@ -115,9 +124,9 @@ export default function PlaqueProfile({
           </div>
 
           <div className="rise-in" style={step()}>
-            <h1 className="mt-4 font-serif text-[clamp(28px,8vw,32px)] leading-[1.08] tracking-[-0.03em] text-gold text-balance">
+            <Name className="mt-4 font-serif text-[clamp(28px,8vw,32px)] leading-[1.08] tracking-[-0.03em] text-gold text-balance">
               {name}
-            </h1>
+            </Name>
 
             {lastSeen && (
               <p className="mt-1.5 font-serif text-[13px] leading-5 text-mute">{lastSeen}</p>

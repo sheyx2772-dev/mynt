@@ -430,6 +430,8 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 <img
                   src={`/${DEMO_HANDLE}/qr`}
                   alt={`${DEMO_HANDLE} QR`}
+                  loading="lazy"
+                  decoding="async"
                   width={200}
                   height={200}
                   className="h-[200px] w-[200px]"

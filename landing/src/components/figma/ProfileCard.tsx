@@ -230,6 +230,8 @@ export default function ProfileCard({ profile, lang, theme, banner: bannerProp }
           <img
             src={banner}
             alt={profile.orgShort}
+            loading="lazy"
+            decoding="async"
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: profile.bannerFit ?? "cover", objectPosition: profile.bannerPosition ?? "center",
               WebkitMaskImage: "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)", maskImage: "linear-gradient(to bottom, #000 0%, #000 42%, rgba(0,0,0,0) 88%)" }}
           />
@@ -274,7 +276,7 @@ export default function ProfileCard({ profile, lang, theme, banner: bannerProp }
                   organisation cards carry no face at all — the stock strangers
                   that used to stand in for invented officials are gone. */}
               {profile.avatar ? (
-                <img src={profile.avatar} alt={profile.fullName}
+                <img src={profile.avatar} alt={profile.fullName} loading="lazy" decoding="async"
                   style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
               ) : (
               <div style={{
@@ -392,7 +394,7 @@ export default function ProfileCard({ profile, lang, theme, banner: bannerProp }
         {/* Mini banner strip */}
         {banner && (
           <div style={{ position: "relative", height: 56, overflow: "hidden" }}>
-            <img src={banner} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 30%" }} />
+            <img src={banner} alt="" loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 30%" }} />
             <div style={{ position: "absolute", inset: 0, background: `linear-gradient(90deg,${c.bodyBg} 0%,transparent 45%,${c.bodyBg} 100%)` }} />
             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", paddingLeft: 12 }}>
               <div>

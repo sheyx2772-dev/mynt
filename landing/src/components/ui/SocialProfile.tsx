@@ -27,7 +27,16 @@ export default function SocialProfile({
   reach,
   pay,
   children,
+  heading: Name = "h1",
 }: {
+  /**
+   * Which element the name is.
+   *
+   * A layout drawn as a sample sits fourteen to a page beside six others, and
+   * every one of them claiming to be the page's heading is sixteen h1s on the
+   * entry page. The real profile is the only place the name is the heading.
+   */
+  heading?: "h1" | "p";
   n: string;
   name: string;
   tagline?: string | null;
@@ -60,9 +69,9 @@ export default function SocialProfile({
           </div>
         )}
 
-        <h1 className="mt-4 text-[24px] leading-tight font-bold tracking-[-0.02em]">
+        <Name className="mt-4 text-[24px] leading-tight font-bold tracking-[-0.02em]">
           {name}
-        </h1>
+        </Name>
         {tagline && <p className="mt-1 text-[16px] leading-6 text-mute">{tagline}</p>}
       </div>
 

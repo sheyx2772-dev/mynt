@@ -41,4 +41,7 @@ export const serif = Playfair_Display({
   weight: ["500", "700"],
   variable: "--font-playfair",
   display: "swap",
+  // One layout out of seven uses it, and it was preloaded on every page —
+  // a woff2 with Cyrillic in it, fetched before anything that renders.
+  preload: false,
 });

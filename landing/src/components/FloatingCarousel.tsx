@@ -68,9 +68,16 @@ export default function FloatingCarousel({
         />
 
         {/* All of them are mounted and only one is opaque, so the swap is a
-            cross-fade with nothing to load at the moment it happens. */}
+            cross-fade with nothing to load at the moment it happens — but
+            "nothing to load" only holds for the slide after this one. Loading
+            all twenty-eight eagerly put the whole shelf on the critical path
+            of a page whose largest paint is one of them. */}
         <div className="relative aspect-[3/2] w-full">
           {items.map((it, i) => {
+            // The first slide is drawn rather than photographed, so `i === 0`
+            // preloaded nothing and the real hero image waited its turn.
+            const first = items.findIndex((x) => x.src);
+            const near = i === at || i === (at + 1) % items.length;
             const shown = i === at;
             const fade = `transition-opacity duration-700 ${shown ? "opacity-100" : "opacity-0"}`;
 
@@ -90,7 +97,8 @@ export default function FloatingCarousel({
                 src={it.src!}
                 alt=""
                 fill
-                priority={i === 0}
+                priority={i === first}
+                loading={i === first || near ? undefined : "lazy"}
                 sizes="(min-width: 1024px) 26rem, 80vw"
                 className={`float-bob object-contain drop-shadow-[0_28px_40px_rgba(0,0,0,0.55)] ${fade}`}
               />

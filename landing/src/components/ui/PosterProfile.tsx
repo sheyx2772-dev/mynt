@@ -26,7 +26,16 @@ export default function PosterProfile({
   role,
   rows,
   children,
+  heading: Name = "h1",
 }: {
+  /**
+   * Which element the name is.
+   *
+   * A layout drawn as a sample sits fourteen to a page beside six others, and
+   * every one of them claiming to be the page's heading is sixteen h1s on the
+   * entry page. The real profile is the only place the name is the heading.
+   */
+  heading?: "h1" | "p";
   n: string;
   name: string;
   role?: string | null;
@@ -44,9 +53,9 @@ export default function PosterProfile({
 
       {/* Set from the viewport, not from a type scale: on a poster the name is
           measured against the paper it is printed on. */}
-      <h1 className="mt-10 text-[clamp(46px,15vw,72px)] leading-[0.92] font-bold tracking-[-0.04em] uppercase text-balance">
+      <Name className="mt-10 text-[clamp(46px,15vw,72px)] leading-[0.92] font-bold tracking-[-0.04em] uppercase text-balance">
         {name}
-      </h1>
+      </Name>
 
       {role && (
         <p className="mt-5 text-[16px] leading-6 tracking-[0.16em] text-mute uppercase">
