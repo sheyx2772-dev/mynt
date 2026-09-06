@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FlaskConical } from "lucide-react";
 
+import Toast from "@/components/Toast";
 import {
   confirmSignInCode,
   sendSignInCode,
@@ -90,11 +91,23 @@ function AskForCode({
         yuborildi.
       </p>
 
+      {/* Over the page rather than in the form. The code is not part of
+          signing in — it is what the SMS would have said, and putting it in
+          the form makes a temporary crutch look like a field somebody is
+          meant to fill. It goes when Eskiz is connected: the backend stops
+          returning `kod` and this stops rendering, with nothing to remember
+          to remove. */}
       {testCode && (
-        <p className="flex items-start gap-2 rounded-input border border-[#E8C86A] bg-[#FFF4D6] px-3 py-2.5 text-xs leading-relaxed text-[#6B5514]">
-          <FlaskConical className="mt-px h-4 w-4 shrink-0" />
-          <span>Sinov rejimi: SMS yuborilmadi. Kod — {testCode}</span>
-        </p>
+        <Toast>
+          <span className="flex items-start gap-2">
+            <FlaskConical className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>
+              Sinov rejimi — SMS yuborilmadi.
+              <br />
+              Kod: <b className="font-semibold tracking-[0.2em]">{testCode}</b>
+            </span>
+          </span>
+        </Toast>
       )}
 
       <input

@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
-import SignInForm from "@/components/SignInForm";
 import PhoneSignIn from "@/components/PhoneSignIn";
 import { getUser } from "@/lib/auth";
 import { safePath } from "@/lib/safe-path";
@@ -41,20 +40,17 @@ export default async function SignInPage(props: PageProps<"/kirish">) {
           </p>
         )}
 
-        {/* The phone first: it is what everybody here has, what every payment
-            app signs in with, and the same door the app uses — so one person
-            is one account whichever they opened. Email stays underneath for
-            the people a number does not reach: foreign buyers, and companies
-            whose accounting wants a mailbox. */}
+        {/* One door, and it is the number. It is what everybody here has,
+            what every payment app signs in with, and the same door the app
+            uses — so one person is one account whichever they opened.
+
+            Email used to stand underneath it. Two doors are two ways to end up
+            with two accounts for one person, and the second one was reaching
+            for buyers this product does not have yet. The link itself still
+            works — `/kirish/tasdiq` still spends one — so an address that
+            already has an account is not locked out; nothing here asks for one
+            any more. */}
         <PhoneSignIn next={next} />
-
-        <div className="my-6 flex items-center gap-3">
-          <span className="h-px flex-1 bg-line" />
-          <span className="text-xs tracking-wide text-ink-3 uppercase">yoki</span>
-          <span className="h-px flex-1 bg-line" />
-        </div>
-
-        <SignInForm next={next} />
       </div>
     </PageShell>
   );

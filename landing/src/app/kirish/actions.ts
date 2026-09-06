@@ -4,50 +4,14 @@ import { backend } from "@/lib/backend/client";
 import { startSession } from "@/lib/backend/session";
 import { safePath } from "@/lib/safe-path";
 
-// The two doors, both answered by our own backend.
+// The one door, answered by our own backend.
 //
-// There used to be a third door through Telegram. The phone replaces it: SMS
-// is what the app signs in with, it is what every payment app here signs in
-// with, and one person arriving twice through two doors is one person with two
-// accounts.
-
-export type SignInResult =
-  /**
-   * `email` is echoed back on failure: React 19 empties an uncontrolled form
-   * once its action returns, and an error is a return, so without it a
-   * mistyped address had to be typed again from nothing.
-   */
-  | { sent: false; error: string; email?: string }
-  | { sent: true; email: string };
-
-/**
- * Sends a one-time sign-in link.
- *
- * The backend creates the account when the link is followed rather than when
- * the address is typed, so there is no separate registration step — and an
- * address nobody can read mail at never becomes an account.
- */
-export async function sendSignInLink(
-  _prevState: SignInResult,
-  formData: FormData,
-): Promise<SignInResult> {
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { sent: false, error: "Email manzilini to'g'ri kiriting.", email };
-  }
-
-  const { error } = await backend.POST("/kirish", { body: { email } });
-  if (error) {
-    return { sent: false, error: "Xat yuborib bo'lmadi. Qaytadan urinib ko'ring.", email };
-  }
-
-  // Said the same way whether the address has an account or not: the backend
-  // answers identically, and this must not claim more than it said.
-  return { sent: true, email };
-}
-
-// --- Telefon -------------------------------------------------------------
+// There were three: a Telegram code, an email link, and this. Each extra door
+// is another way for one person to end up with two accounts, and the number is
+// the one everybody here already signs in with everywhere else. The email link
+// still exists in the backend and `/kirish/tasdiq` still spends one, so an
+// address that already has an account can still be let in — but nothing on the
+// site asks for an address any more.
 
 export type CodeResult =
   | { sent: false; error: string }
