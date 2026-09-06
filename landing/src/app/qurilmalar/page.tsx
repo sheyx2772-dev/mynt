@@ -57,14 +57,14 @@ export default async function DevicesPage({ searchParams }: PageProps<"/qurilmal
         <h1 className="max-w-2xl font-display text-3xl font-semibold tracking-tight text-balance sm:text-5xl">
           {p.title}
         </h1>
-        <p className="mt-4 max-w-xl leading-relaxed text-white/55">{p.lead}</p>
+        <p className="mt-4 max-w-xl leading-relaxed text-paper-2">{p.lead}</p>
 
         {/* Devices */}
         <div className="mt-12 flex items-baseline justify-between gap-4">
           <h2 className="font-display text-xs font-semibold tracking-widest text-lime uppercase">
             {p.groupDevices}
           </h2>
-          <p className="text-xs text-white/35">{p.groupDevicesNote}</p>
+          <p className="text-xs text-paper-3">{p.groupDevicesNote}</p>
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
@@ -92,7 +92,7 @@ export default async function DevicesPage({ searchParams }: PageProps<"/qurilmal
           <h2 className="font-display text-xs font-semibold tracking-widest text-lime uppercase">
             {p.groupDirections}
           </h2>
-          <p className="text-xs text-white/35">{p.groupDirectionsNote}</p>
+          <p className="text-xs text-paper-3">{p.groupDirectionsNote}</p>
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">

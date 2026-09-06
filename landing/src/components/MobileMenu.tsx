@@ -88,7 +88,7 @@ export default function MobileMenu({
             </div>
 
             <nav className="flex-1 overflow-y-auto px-6 pt-4 pb-8">
-              <ul className="divide-y divide-white/10 border-y border-white/10">
+              <ul className="divide-y divide-white/10 border-y border-ink-line">
                 {items.map((item) => (
                   <li key={item.href}>
                     {item.href.startsWith("#") ? (

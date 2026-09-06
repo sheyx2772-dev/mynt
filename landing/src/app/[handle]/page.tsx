@@ -690,11 +690,11 @@ async function VanityHandlePage({
   return (
     <PageShell>
       <div className="relative rounded-[1.75rem] border border-line bg-white p-8 text-center shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
-        <p className="inline-block rounded-full bg-lime/20 px-3 py-1 text-xs font-semibold tracking-wide text-flex-black/70 uppercase">
+        <p className="inline-block rounded-full bg-lime/20 px-3 py-1 text-xs font-semibold tracking-wide text-ink-2 uppercase">
           Bo&apos;sh
         </p>
         <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">{normalized}</h1>
-        <p className="mt-1 text-sm text-flex-black/50">flex.com.uz/{normalized}</p>
+        <p className="mt-1 text-sm text-ink-2">flex.com.uz/{normalized}</p>
 
         <div className="mt-8 space-y-1 text-left font-tabular text-sm">
           <div className="flex justify-between border-b border-line-soft py-2.5">
@@ -728,26 +728,26 @@ async function GenesisCardPage({ serial }: { serial: string }) {
   return (
     <PageShell>
       <div className="relative overflow-hidden rounded-[1.75rem] bg-flex-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
-        <div className="relative flex items-center justify-between text-xs text-white/50">
+        <div className="relative flex items-center justify-between text-xs text-paper-3">
           <span className="font-medium tracking-wide uppercase">FLEX CARD</span>
-          <Nfc className="h-5 w-5 text-white/40" />
+          <Nfc className="h-5 w-5 text-paper-3" />
         </div>
         <div className="relative mt-10 font-display text-4xl font-semibold tracking-tight">
           #<span className="text-lime">{serial}</span>
         </div>
-        <p className="relative mt-1 text-center font-tabular text-sm text-white/50">flex.com.uz/{serial}</p>
+        <p className="relative mt-1 text-center font-tabular text-sm text-paper-3">flex.com.uz/{serial}</p>
 
         {card?.status === "claimed" ? (
-          <div className="relative mt-8 border-t border-white/10 pt-6">
-            <p className="text-xs tracking-wide text-white/40 uppercase">Egasi</p>
+          <div className="relative mt-8 border-t border-ink-line pt-6">
+            <p className="text-xs tracking-wide text-paper-3 uppercase">Egasi</p>
             <p className="mt-1 font-display text-lg font-semibold">{card.ownerName}</p>
             {card.mintedAt && (
-              <p className="mt-1 text-xs text-white/40">Ishlab chiqarilgan: {card.mintedAt}</p>
+              <p className="mt-1 text-xs text-paper-3">Ishlab chiqarilgan: {card.mintedAt}</p>
             )}
           </div>
         ) : (
-          <div className="relative mt-8 border-t border-white/10 pt-6">
-            <p className="text-sm text-white/60">
+          <div className="relative mt-8 border-t border-ink-line pt-6">
+            <p className="text-sm text-paper-2">
               {card ? "Bu karta hali egasiga topshirilmagan." : "Bu seriya raqami hali chiqarilmagan."}
             </p>
           </div>
@@ -763,7 +763,7 @@ async function GenesisCardPage({ serial }: { serial: string }) {
         </Link>
       )}
 
-      <p className="mt-6 text-center text-xs text-flex-black/40">
+      <p className="mt-6 text-center text-xs text-ink-3">
         FLEX CARD — ishlab chiqarilish tartibidagi noyob seriya raqami. Har bir karta faqat
         bitta marta chiqariladi va qayta ishlab chiqarilmaydi.
       </p>

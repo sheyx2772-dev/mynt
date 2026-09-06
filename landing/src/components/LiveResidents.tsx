@@ -28,13 +28,13 @@ export default function LiveResidents({
   if (residents.length === 0) return null;
 
   return (
-    <section className="border-y border-white/10 bg-white/[0.03] py-5">
+    <section className="border-y border-ink-line bg-white/[0.03] py-5">
       <div className="mx-auto max-w-6xl px-6">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-          <p className="font-tabular text-sm text-white/55">
+          <p className="font-tabular text-sm text-paper-2">
             <span className="font-semibold text-white">{formatNumber(claimed)}</span>{" "}
             {labels.taken}
-            <span className="mx-2 text-white/25">·</span>
+            <span className="mx-2 text-paper-3">·</span>
             <span className="font-semibold text-white">
               {formatNumber(namespace - claimed)}
             </span>{" "}
@@ -42,7 +42,7 @@ export default function LiveResidents({
           </p>
 
           <div className="flex items-center gap-2">
-            <span className="text-[11px] tracking-[0.14em] text-white/35 uppercase">
+            <span className="text-[11px] tracking-[0.14em] text-paper-3 uppercase">
               {labels.latest}
             </span>
             <div className="flex flex-wrap gap-1.5">
@@ -51,7 +51,7 @@ export default function LiveResidents({
                   key={r.normalized}
                   href={`/${r.normalized}`}
                   title={r.name}
-                  className="rounded-lg border border-white/12 bg-white/[0.06] px-2.5 py-1 font-tabular text-xs text-white/70 transition-colors hover:border-white/30 hover:text-white"
+                  className="rounded-lg border border-ink-line bg-white/[0.06] px-2.5 py-1 font-tabular text-xs text-paper-2 transition-colors hover:border-paper-3 hover:text-white"
                 >
                   {r.normalized}
                 </Link>

@@ -227,7 +227,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
 
   return (
     <div className="flex min-h-full flex-col overflow-x-clip">
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-flex-black/85 text-white backdrop-blur-md">
+      <header className="sticky top-0 z-30 border-b border-ink-line bg-flex-black/85 text-white backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2 font-display text-xl font-semibold tracking-tight">
             {/* Telefonda sarlavha qatoridagi yagona yo'l — desktopdagi
@@ -253,7 +253,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             <Mark className="h-7 w-7" tone="dark" />
             flex
           </div>
-          <nav className="hidden gap-8 text-sm font-medium text-white/55 lg:flex">
+          <nav className="hidden gap-8 text-sm font-medium text-paper-2 lg:flex">
             <Link href="/shaxsiy#narx" className="transition-colors hover:text-white">
               {s.navPricing}
             </Link>
@@ -299,7 +299,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 Quiet against the lime, which stays the one loud thing. */}
             <Link
               href="/kirish"
-              className="hidden rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:border-white/45 hover:text-white sm:inline-flex"
+              className="hidden rounded-full border border-paper-3 px-4 py-2 text-sm font-medium text-paper-2 transition-colors hover:border-white/45 hover:text-white sm:inline-flex"
             >
               {s.signIn}
             </Link>
@@ -357,9 +357,9 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             >
               <span>
                 <span className="block font-semibold">{p.samplesLabel}</span>
-                <span className="block text-sm text-flex-black/50">{p.samplesCta}</span>
+                <span className="block text-sm text-ink-2">{p.samplesCta}</span>
               </span>
-              <ArrowUpRight className="h-5 w-5 shrink-0 text-flex-black/40 transition-transform group-hover:translate-x-0.5" />
+              <ArrowUpRight className="h-5 w-5 shrink-0 text-ink-3 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
         </div>
@@ -624,9 +624,9 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between font-medium marker:content-none">
                   {item.q}
-                  <ChevronDown className="h-4 w-4 text-flex-black/40 transition-transform duration-300 group-open:rotate-180" />
+                  <ChevronDown className="h-4 w-4 text-ink-3 transition-transform duration-300 group-open:rotate-180" />
                 </summary>
-                <p className="pt-3 text-sm leading-relaxed text-flex-black/65">
+                <p className="pt-3 text-sm leading-relaxed text-ink-2">
                   {item.a}
                 </p>
               </details>
@@ -646,15 +646,15 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 </span>
                 flex
               </div>
-              <p className="mt-3 max-w-[220px] text-sm text-white/50">
+              <p className="mt-3 max-w-[220px] text-sm text-paper-3">
                 {s.tagline}
               </p>
             </div>
             <div>
-              <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
+              <p className="text-xs font-semibold tracking-widest text-paper-3 uppercase">
                 {s.product}
               </p>
-              <ul className="mt-3 space-y-0.5 text-sm text-white/60">
+              <ul className="mt-3 space-y-0.5 text-sm text-paper-2">
                 <li>
                   <a
                     href="#narxlar"
@@ -679,10 +679,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </ul>
             </div>
             <div>
-              <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
+              <p className="text-xs font-semibold tracking-widest text-paper-3 uppercase">
                 {s.navBusiness}
               </p>
-              <ul className="mt-3 space-y-0.5 text-sm text-white/60">
+              <ul className="mt-3 space-y-0.5 text-sm text-paper-2">
                 <li>
                   <Link
                     href="/biznes#jamoa"
@@ -704,10 +704,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </ul>
             </div>
             <div>
-              <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
+              <p className="text-xs font-semibold tracking-widest text-paper-3 uppercase">
                 {s.company}
               </p>
-              <ul className="mt-3 space-y-0.5 text-sm text-white/60">
+              <ul className="mt-3 space-y-0.5 text-sm text-paper-2">
                 <li>
                   <a
                     href="#savollar"
@@ -732,12 +732,12 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </ul>
             </div>
           </div>
-          <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-white/40 sm:flex-row">
+          <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-ink-line pt-6 text-sm text-paper-3 sm:flex-row">
             <p>
               &copy; {new Date().getFullYear()} Flex &mdash; {COMPANY.legalName}. STIR{" "}
               {COMPANY.inn}.
             </p>
-            <Link href="/shartlar" className="block py-1.5 transition-colors hover:text-white/70">
+            <Link href="/shartlar" className="block py-1.5 transition-colors hover:text-paper-2">
               {s.delivery}
             </Link>
           </div>

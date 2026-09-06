@@ -27,7 +27,7 @@ export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselIt
           meets it before any of the personal pitch. */}
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-center lg:gap-14">
         <div>
-      <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-black/[0.03] px-3 py-1.5 text-[11px] font-medium tracking-wide text-flex-black/60 uppercase">
+      <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-black/[0.03] px-3 py-1.5 text-[11px] font-medium tracking-wide text-ink-2 uppercase">
         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime-ink" />
         {s.heroBadge}
       </p>
@@ -42,7 +42,7 @@ export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselIt
           it has moved. It is the one thing somebody can do here without
           choosing a side first: everybody wants to know whether the number
           they have in mind is free. */}
-      <p className="mt-7 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+      <p className="mt-7 text-xs font-semibold tracking-widest text-ink-3 uppercase">
         {s.pickHandle}
       </p>
       <div className="-mt-4 max-w-xl">
@@ -62,7 +62,7 @@ export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselIt
         </div>
       </div>
 
-      <p className="mt-10 mb-4 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+      <p className="mt-10 mb-4 text-xs font-semibold tracking-widest text-ink-3 uppercase">
         {s.waysEyebrow}
       </p>
 
@@ -71,11 +71,11 @@ export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselIt
           href="/shaxsiy"
           className="group flex flex-col rounded-3xl bg-lime p-7 text-flex-black shadow-[0_24px_60px_-30px_rgba(171,255,9,0.85)] transition-transform hover:-translate-y-0.5 sm:p-8"
         >
-          <User className="h-6 w-6 text-flex-black/70" strokeWidth={1.6} />
+          <User className="h-6 w-6 text-ink-2" strokeWidth={1.6} />
           <h2 className="mt-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
             {s.wayPersonal}
           </h2>
-          <p className="mt-3 flex-1 leading-relaxed text-flex-black/70">
+          <p className="mt-3 flex-1 leading-relaxed text-ink-2">
             {s.wayPersonalDesc}
           </p>
           <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium">
@@ -95,7 +95,7 @@ export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselIt
           <h2 className="relative mt-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
             {s.wayBusiness}
           </h2>
-          <p className="relative mt-3 flex-1 leading-relaxed text-white/60">
+          <p className="relative mt-3 flex-1 leading-relaxed text-paper-2">
             {s.wayBusinessDesc}
           </p>
           <span className="relative mt-6 inline-flex items-center gap-2 text-sm font-medium text-lime">

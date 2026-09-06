@@ -69,7 +69,7 @@ export default function VenuePicker({
               className={
                 active
                   ? "rounded-full bg-flex-black px-5 py-2.5 text-sm font-medium text-white"
-                  : "rounded-full border border-line px-5 py-2.5 text-sm text-flex-black/60 transition-colors hover:bg-black/[0.03]"
+                  : "rounded-full border border-line px-5 py-2.5 text-sm text-ink-2 transition-colors hover:bg-black/[0.03]"
               }
             >
               {t.verticals[id].name}
@@ -78,7 +78,7 @@ export default function VenuePicker({
         })}
       </div>
 
-      <p className="mt-4 text-sm text-flex-black/55">{v.tagline}</p>
+      <p className="mt-4 text-sm text-ink-2">{v.tagline}</p>
 
       {shots[vertical].length > 0 && (
         <div
@@ -129,7 +129,7 @@ export default function VenuePicker({
             </h3>
             <div className="relative mt-4 grid gap-4 sm:grid-cols-2">
               {v.why.map((line) => (
-                <p key={line} className="text-sm leading-relaxed text-white/60">
+                <p key={line} className="text-sm leading-relaxed text-paper-2">
                   {line}
                 </p>
               ))}
@@ -150,7 +150,7 @@ export default function VenuePicker({
           <div>
             <label
               htmlFor="points"
-              className="mb-2 block text-xs font-semibold tracking-widest text-flex-black/40 uppercase"
+              className="mb-2 block text-xs font-semibold tracking-widest text-ink-3 uppercase"
             >
               {t.pointsLabel} — {v.pointsWord}
             </label>
@@ -182,7 +182,7 @@ export default function VenuePicker({
                 <p className="font-display text-2xl font-semibold tracking-tight">
                   {t.negotiated}
                 </p>
-                <p className="mt-1 max-w-xs text-xs text-flex-black/45">
+                <p className="mt-1 max-w-xs text-xs text-ink-3">
                   {t.negotiatedNote}
                 </p>
               </>
@@ -191,7 +191,7 @@ export default function VenuePicker({
                 <p className="rounded-2xl bg-lime px-5 py-3 font-display text-2xl font-semibold text-flex-black">
                   {formatUZS(monthly, lang)}
                 </p>
-                <p className="mt-2 font-tabular text-xs text-flex-black/45">
+                <p className="mt-2 font-tabular text-xs text-ink-3">
                   {t.monthlyWord}
                   {perPoint !== null && (
                     <>
@@ -218,7 +218,7 @@ export default function VenuePicker({
                   : "rounded-2xl border border-line px-4 py-3 opacity-60"
               }
             >
-              <p className="text-[11px] font-semibold tracking-widest text-flex-black/40 uppercase">
+              <p className="text-[11px] font-semibold tracking-widest text-ink-3 uppercase">
                 {t.bandNames[i]}
               </p>
               <p className="mt-1 font-tabular font-display font-semibold">
@@ -266,7 +266,7 @@ function Panel({
 }) {
   return (
     <div className="rounded-3xl border border-line bg-white p-6">
-      <h3 className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+      <h3 className="text-xs font-semibold tracking-widest text-ink-3 uppercase">
         {title}
       </h3>
       <ul className="mt-4 space-y-2.5">

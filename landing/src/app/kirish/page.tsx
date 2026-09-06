@@ -31,7 +31,7 @@ export default async function SignInPage(props: PageProps<"/kirish">) {
     <PageShell>
       <div className="rounded-[1.75rem] border border-line bg-white p-8 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <h1 className="font-display text-2xl font-semibold tracking-tight">Hisobingizga kiring</h1>
-        <p className="mt-2 mb-7 text-sm text-flex-black/60">
+        <p className="mt-2 mb-7 text-sm text-ink-2">
           Raqam band qilish va profilni tahrirlash uchun avval kiring.
         </p>
 
@@ -50,7 +50,7 @@ export default async function SignInPage(props: PageProps<"/kirish">) {
 
         <div className="my-6 flex items-center gap-3">
           <span className="h-px flex-1 bg-line" />
-          <span className="text-xs tracking-wide text-flex-black/35 uppercase">yoki</span>
+          <span className="text-xs tracking-wide text-ink-3 uppercase">yoki</span>
           <span className="h-px flex-1 bg-line" />
         </div>
 

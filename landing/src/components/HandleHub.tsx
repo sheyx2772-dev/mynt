@@ -93,7 +93,7 @@ export default function HandleHub({
           )}
         </div>
 
-        <div className="relative mt-6 grid grid-cols-3 gap-3 border-t border-white/10 pt-4">
+        <div className="relative mt-6 grid grid-cols-3 gap-3 border-t border-ink-line pt-4">
           <Stat value={handle.viewCount} label="Ko'rish" />
           <Stat value={todayViews} label="Bugun" />
           <Stat value={leads} label="Kontakt" />

@@ -16,11 +16,11 @@ export default function SignInForm({ next }: { next: string }) {
           <MailCheck className="h-6 w-6 text-flex-black" />
         </div>
         <h2 className="mt-5 font-display text-xl font-semibold">Xat yuborildi</h2>
-        <p className="mt-2 text-sm text-flex-black/60">
+        <p className="mt-2 text-sm text-ink-2">
           <span className="font-medium text-flex-black">{state.email}</span> manziliga kirish
           havolasi yubordik. Xatni oching va havolani bosing.
         </p>
-        <p className="mt-4 text-xs text-flex-black/40">
+        <p className="mt-4 text-xs text-ink-3">
           Xat kelmadimi? &quot;Spam&quot; papkasini tekshiring.
         </p>
       </div>
@@ -48,7 +48,7 @@ export default function SignInForm({ next }: { next: string }) {
       >
         {isPending ? "Yuborilmoqda..." : "Kirish havolasini yuborish"}
       </button>
-      <p className="text-center text-xs text-flex-black/40">
+      <p className="text-center text-xs text-ink-3">
         Parol kerak emas — emailingizga bir martalik havola yuboramiz.
       </p>
     </form>

@@ -99,7 +99,7 @@ export default async function InvoicePage(props: PageProps<"/kabinet/jamoa/hisob
           </tr>
         </thead>
         <tbody>
-          <tr className="border-b border-black/15">
+          <tr className="border-b border-line">
             <td className="py-2.5">
               Flex raqamli vizitka — firma obunasi
               <span className="block text-black/50">

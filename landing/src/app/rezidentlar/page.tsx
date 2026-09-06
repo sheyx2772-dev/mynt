@@ -60,7 +60,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
           </h1>
           <LangSwitch lang={lang} next="/rezidentlar" />
         </div>
-        <p className="mt-2 font-tabular text-sm text-flex-black/50">
+        <p className="mt-2 font-tabular text-sm text-ink-2">
           {t.handleCounts(
             formatNumber(counts.claimed),
             formatNumber(counts.namespace - counts.claimed),
@@ -72,7 +72,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
             noindexed, so this link is the only way anyone arrives at it. */}
         <Link
           href="/katalog"
-          className="mt-3 inline-flex items-center gap-1.5 text-sm text-flex-black/60 underline-offset-4 hover:text-flex-black hover:underline"
+          className="mt-3 inline-flex items-center gap-1.5 text-sm text-ink-2 underline-offset-4 hover:text-flex-black hover:underline"
         >
           {lang === "ru" ? "Образцы карточек и макеты" : "Karta namunalari va maketlar"}
           <span aria-hidden>→</span>
@@ -80,7 +80,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
         <form className="mt-7 flex gap-2">
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-flex-black/30" />
+            <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-ink-3" />
             <input
               name="q"
               defaultValue={query}
@@ -98,7 +98,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
         {top.length > 0 && !query && (
           <section className="mt-10">
-            <h2 className="mb-4 flex items-center gap-2 text-xs font-medium tracking-wide text-flex-black/45 uppercase">
+            <h2 className="mb-4 flex items-center gap-2 text-xs font-medium tracking-wide text-ink-3 uppercase">
               <Trophy className="h-3.5 w-3.5" />
               {t.topThree}
             </h2>
@@ -111,10 +111,10 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
                 >
                   <span className="relative font-display text-xs text-lime">#{index + 1}</span>
                   <p className="relative mt-3 font-display font-semibold">{entry.name}</p>
-                  <p className="relative font-tabular text-xs text-white/45">
+                  <p className="relative font-tabular text-xs text-paper-3">
                     flex.com.uz/{entry.normalized}
                   </p>
-                  <p className="relative mt-3 flex items-center gap-1.5 font-tabular text-xs text-white/35">
+                  <p className="relative mt-3 flex items-center gap-1.5 font-tabular text-xs text-paper-3">
                     <Eye className="h-3 w-3" />
                     {entry.views}
                   </p>
@@ -127,7 +127,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
         <section className="mt-10">
           {residents.length === 0 ? (
             <div className="rounded-[1.5rem] border border-dashed border-line-2 px-6 py-14 text-center">
-              <p className="text-sm text-flex-black/55">
+              <p className="text-sm text-ink-2">
                 {query
                   ? t.nothingFound(query)
                   : t.noResidents}
@@ -153,11 +153,11 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
                       <div className="min-w-0 flex-1">
                         <p className="truncate font-medium">{resident.name}</p>
-                        <p className="font-tabular text-xs text-flex-black/40">
+                        <p className="font-tabular text-xs text-ink-3">
                           flex.com.uz/{resident.normalized}
                         </p>
                         {resident.tags.length > 0 && (
-                          <p className="mt-1 truncate text-xs text-flex-black/45">
+                          <p className="mt-1 truncate text-xs text-ink-3">
                             {resident.tags.map((tag) => `#${tag}`).join(" ")}
                           </p>
                         )}
@@ -165,16 +165,16 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
                       <div className="shrink-0 text-right">
                         {resident.city && (
-                          <p className="flex items-center justify-end gap-1 text-xs text-flex-black/50">
+                          <p className="flex items-center justify-end gap-1 text-xs text-ink-2">
                             <MapPin className="h-3 w-3" />
                             {resident.city}
                           </p>
                         )}
-                        <p className="mt-1 flex items-center justify-end gap-1 font-tabular text-xs text-flex-black/35">
+                        <p className="mt-1 flex items-center justify-end gap-1 font-tabular text-xs text-ink-3">
                           <Eye className="h-3 w-3" />
                           {resident.viewCount}
                         </p>
-                        {seen && <p className="mt-1 text-[11px] text-flex-black/25">{seen}</p>}
+                        {seen && <p className="mt-1 text-[11px] text-ink-3">{seen}</p>}
                       </div>
                     </Link>
                   </li>

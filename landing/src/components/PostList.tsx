@@ -50,11 +50,11 @@ export default function PostList({
 }) {
   if (posts.length === 0) {
     return (
-      <section className="rounded-[1.5rem] border border-black/6 bg-white p-10 text-center">
+      <section className="rounded-[1.5rem] border border-line bg-white p-10 text-center">
         <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-black/[0.04]">
-          <MessageSquare className="h-4 w-4 text-flex-black/35" />
+          <MessageSquare className="h-4 w-4 text-ink-3" />
         </span>
-        <p className="mx-auto mt-4 max-w-xs text-[13px] leading-relaxed text-flex-black/50">
+        <p className="mx-auto mt-4 max-w-xs text-[13px] leading-relaxed text-ink-2">
           {emptyMessage}
         </p>
       </section>
@@ -66,7 +66,7 @@ export default function PostList({
       {posts.map((post, i) => (
         <li
           key={post.id}
-          className="rise rounded-2xl border border-black/6 bg-white px-5 py-4 transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
+          className="rise rounded-2xl border border-line bg-white px-5 py-4 transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
           // Capped: past the eighth row nobody is watching the animation.
           style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
         >
@@ -89,7 +89,7 @@ export default function PostList({
                   >
                     {post.author?.name ?? post.handle}
                   </Link>
-                  <span className="font-tabular text-[11px] text-flex-black/30">
+                  <span className="font-tabular text-[11px] text-ink-3">
                     {post.handle}
                   </span>
                 </div>
@@ -101,7 +101,7 @@ export default function PostList({
                 {post.body}
               </p>
 
-              <p className="mt-2.5 font-tabular text-[11px] text-flex-black/30">
+              <p className="mt-2.5 font-tabular text-[11px] text-ink-3">
                 {timeAgo(post.createdAt)}
               </p>
             </div>

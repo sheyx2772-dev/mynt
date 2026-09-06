@@ -34,13 +34,13 @@ export default function ProfileHandleSearch() {
       className="mb-4"
     >
       <div className="flex items-center gap-2 rounded-xl border border-line bg-white px-4 py-2.5 shadow-sm">
-        <span className="font-tabular text-sm text-flex-black/35">flex.com.uz/</span>
+        <span className="font-tabular text-sm text-ink-3">flex.com.uz/</span>
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="AAA000"
           aria-label="Raqamni tekshirish"
-          className="min-w-0 flex-1 bg-transparent font-tabular text-sm tracking-wider outline-none placeholder:text-flex-black/25"
+          className="min-w-0 flex-1 bg-transparent font-tabular text-sm tracking-wider outline-none placeholder:text-ink-3"
         />
         <button
           type="submit"

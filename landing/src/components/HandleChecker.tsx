@@ -73,15 +73,15 @@ export default function HandleChecker({
         <div
           className={
             dark
-              ? "flex items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.06] p-1.5 backdrop-blur-sm focus-within:border-lime/50"
+              ? "flex items-center gap-2 rounded-2xl border border-ink-line bg-white/[0.06] p-1.5 backdrop-blur-sm focus-within:border-lime/50"
               : "flex items-center gap-2 rounded-2xl border border-line bg-white p-1.5 shadow-sm focus-within:border-flex-black/40"
           }
         >
           <span
             className={
               dark
-                ? "pl-3 font-tabular text-sm text-white/40"
-                : "pl-3 font-tabular text-sm text-flex-black/40"
+                ? "pl-3 font-tabular text-sm text-paper-3"
+                : "pl-3 font-tabular text-sm text-ink-3"
             }
           >
             flex.com.uz/
@@ -97,8 +97,8 @@ export default function HandleChecker({
             placeholder="AAA"
             className={
               dark
-                ? "w-16 bg-transparent py-2 text-center font-display text-lg font-semibold tracking-tight text-white outline-none placeholder:text-white/25"
-                : "w-16 bg-transparent py-2 text-center font-display text-lg font-semibold tracking-tight outline-none placeholder:text-flex-black/20"
+                ? "w-16 bg-transparent py-2 text-center font-display text-lg font-semibold tracking-tight text-white outline-none placeholder:text-paper-3"
+                : "w-16 bg-transparent py-2 text-center font-display text-lg font-semibold tracking-tight outline-none placeholder:text-ink-3"
             }
           />
           <input

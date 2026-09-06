@@ -30,7 +30,7 @@ export default function AddContactForm({ handle }: { handle: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 rounded-2xl border border-dashed border-ink-line px-5 py-3 text-sm text-paper-2 transition-colors hover:border-black/40"
+        className="flex items-center gap-2 rounded-2xl border border-dashed border-ink-line px-5 py-3 text-sm text-paper-2 transition-colors hover:border-line"
       >
         <Plus className="h-4 w-4" />
         Kontakt qo&apos;shish

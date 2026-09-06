@@ -81,7 +81,7 @@ export default function BottomNav({
                 className={
                   active
                     ? "flex flex-col items-center gap-1 py-2.5 text-flex-black"
-                    : "flex flex-col items-center gap-1 py-2.5 text-flex-black/40 transition-colors hover:text-flex-black/70"
+                    : "flex flex-col items-center gap-1 py-2.5 text-ink-3 transition-colors hover:text-ink-2"
                 }
               >
                 <span className="relative">

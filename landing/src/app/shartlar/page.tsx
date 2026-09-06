@@ -23,7 +23,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <section className="border-t border-line-soft py-8">
       <h2 className="font-display text-lg font-semibold tracking-tight">{title}</h2>
-      <div className="mt-3 space-y-3 text-sm leading-relaxed text-flex-black/65">
+      <div className="mt-3 space-y-3 text-sm leading-relaxed text-ink-2">
         {children}
       </div>
     </section>
@@ -33,7 +33,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-wrap gap-x-3 gap-y-0.5 py-1.5">
-      <dt className="w-48 shrink-0 text-flex-black/45">{label}</dt>
+      <dt className="w-48 shrink-0 text-ink-3">{label}</dt>
       <dd className="font-tabular">{value}</dd>
     </div>
   );
@@ -64,13 +64,13 @@ export default async function TermsPage({ searchParams }: PageProps<"/shartlar">
         <LangSwitch lang={lang} next="/shartlar" />
       </div>
 
-      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-flex-black/55">{t.intro}</p>
+      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-2">{t.intro}</p>
 
       {/* Stated before anything it could contradict. A buyer and a seller
           reading different words need to know which words they agreed to, and
           this is the sentence that makes a translated contract safe to publish
           at all. */}
-      <p className="mt-4 rounded-2xl border border-line bg-black/[0.03] px-5 py-4 text-sm leading-relaxed text-flex-black/70">
+      <p className="mt-4 rounded-2xl border border-line bg-black/[0.03] px-5 py-4 text-sm leading-relaxed text-ink-2">
         {t.authority}
       </p>
 

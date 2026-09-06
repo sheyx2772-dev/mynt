@@ -49,7 +49,7 @@ export default async function PrintPointsPage({
       <div className="mb-8 flex items-center justify-between gap-4 print:hidden">
         <Link
           href={`/kabinet/${normalized}/nuqtalar`}
-          className="inline-flex items-center gap-1.5 text-sm text-flex-black/50 transition-colors hover:text-flex-black"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-2 transition-colors hover:text-flex-black"
         >
           <ArrowLeft className="h-4 w-4" />
           {w.pointsTitle}
@@ -57,7 +57,7 @@ export default async function PrintPointsPage({
         <PrintButton />
       </div>
 
-      <p className="mb-6 text-sm text-flex-black/50 print:hidden">
+      <p className="mb-6 text-sm text-ink-2 print:hidden">
         {venue.points.length} ta kartochka. Chop eting, qirqing va{" "}
         {w.pointPrefix.toLowerCase()} ustiga qo&apos;ying.
       </p>
@@ -66,9 +66,9 @@ export default async function PrintPointsPage({
         {venue.points.map((point) => (
           <div
             key={point}
-            className="flex break-inside-avoid flex-col items-center rounded-2xl border border-black/15 px-4 py-5 text-center print:rounded-none print:border-dashed"
+            className="flex break-inside-avoid flex-col items-center rounded-2xl border border-line px-4 py-5 text-center print:rounded-none print:border-dashed"
           >
-            <p className="text-[11px] font-semibold tracking-widest text-flex-black/45 uppercase">
+            <p className="text-[11px] font-semibold tracking-widest text-ink-3 uppercase">
               {venue.name}
             </p>
             <p className="mt-1 font-display font-tabular text-2xl font-semibold">
@@ -84,10 +84,10 @@ export default async function PrintPointsPage({
               />
             </div>
 
-            <p className="mt-3 text-[11px] leading-snug text-flex-black/55">
+            <p className="mt-3 text-[11px] leading-snug text-ink-2">
               Kodni telefon kamerasi bilan oching — {w.listTitle.toLowerCase()}, {action}.
             </p>
-            <p className="mt-1 font-tabular text-[10px] text-flex-black/35">
+            <p className="mt-1 font-tabular text-[10px] text-ink-3">
               {printed}
             </p>
           </div>

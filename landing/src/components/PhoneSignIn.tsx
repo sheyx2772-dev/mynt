@@ -85,7 +85,7 @@ function AskForCode({
       <input type="hidden" name="telefon" value={phone} />
       <input type="hidden" name="keyin" value={next} />
 
-      <p className="text-sm text-flex-black/60">
+      <p className="text-sm text-ink-2">
         <span className="font-medium text-flex-black">{group(`+${phone}`)}</span> raqamiga kod
         yuborildi.
       </p>

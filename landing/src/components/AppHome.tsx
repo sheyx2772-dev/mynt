@@ -36,7 +36,7 @@ function Tile({
       href={href}
       className="flex flex-col justify-between rounded-3xl border border-line-soft bg-white px-4 py-4 shadow-[0_2px_10px_-6px_rgba(14,10,27,0.25)] transition-transform active:scale-[0.98]"
     >
-      <Icon className="h-6 w-6 text-flex-black/70" strokeWidth={1.6} />
+      <Icon className="h-6 w-6 text-ink-2" strokeWidth={1.6} />
       <span className="mt-6 text-sm leading-tight font-medium">{label}</span>
     </Link>
   );
@@ -98,7 +98,7 @@ export default function AppHome({
 
         <div className="relative lg:grid lg:grid-cols-[minmax(0,1fr)_26rem] lg:items-center lg:gap-12">
           <div className="relative">
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-[10px] font-medium tracking-wide text-white/70 uppercase">
+          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-ink-line bg-white/5 px-3 py-1.5 text-[10px] font-medium tracking-wide text-paper-2 uppercase">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
             {s.heroBadge}
           </p>
@@ -114,10 +114,10 @@ export default function AppHome({
             {s.heroTitleB}
           </h1>
 
-          <p className="mt-5 text-xs font-semibold tracking-widest text-white/40 uppercase">
+          <p className="mt-5 text-xs font-semibold tracking-widest text-paper-3 uppercase">
             {s.pickHandle}
           </p>
-          <p className="mt-1.5 text-sm leading-relaxed text-white/55">
+          <p className="mt-1.5 text-sm leading-relaxed text-paper-2">
             {s.stepHandleDesc}
           </p>
 
@@ -136,11 +136,11 @@ export default function AppHome({
           </div>
 
           {claimed > 0 && (
-            <p className="mt-5 font-tabular text-xs text-white/40">
-              <span className="text-white/70">{formatNumber(claimed)}</span>{" "}
+            <p className="mt-5 font-tabular text-xs text-paper-3">
+              <span className="text-paper-2">{formatNumber(claimed)}</span>{" "}
               {s.takenWord}
               <span className="mx-2 text-white/20">·</span>
-              <span className="text-white/70">
+              <span className="text-paper-2">
                 {formatNumber(namespace - claimed)}
               </span>{" "}
               {s.leftWord}
@@ -162,7 +162,7 @@ export default function AppHome({
           tiles below are. */}
       {!owner && (
       <section className="px-6 pt-7">
-        <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+        <p className="mb-3 text-xs font-semibold tracking-widest text-ink-3 uppercase">
           {s.waysEyebrow}
         </p>
         <div className="grid gap-3">
@@ -170,16 +170,16 @@ export default function AppHome({
             href="/shaxsiy"
             className="flex items-center gap-4 rounded-3xl bg-lime px-5 py-5 text-flex-black shadow-[0_16px_40px_-22px_rgba(171,255,9,0.9)] transition-transform active:scale-[0.99]"
           >
-            <User className="h-6 w-6 shrink-0 text-flex-black/70" strokeWidth={1.6} />
+            <User className="h-6 w-6 shrink-0 text-ink-2" strokeWidth={1.6} />
             <div className="min-w-0 flex-1">
               <p className="font-display text-lg font-semibold tracking-tight">
                 {s.wayPersonal}
               </p>
-              <p className="mt-1 text-xs leading-relaxed text-flex-black/70">
+              <p className="mt-1 text-xs leading-relaxed text-ink-2">
                 {s.wayPersonalDesc}
               </p>
             </div>
-            <ChevronRight className="h-4 w-4 shrink-0 text-flex-black/45" />
+            <ChevronRight className="h-4 w-4 shrink-0 text-ink-3" />
           </Link>
 
           <Link
@@ -191,7 +191,7 @@ export default function AppHome({
               <p className="font-display text-lg font-semibold tracking-tight">
                 {s.wayBusiness}
               </p>
-              <p className="mt-1 text-xs leading-relaxed text-white/55">
+              <p className="mt-1 text-xs leading-relaxed text-paper-2">
                 {s.wayBusinessDesc}
               </p>
             </div>
@@ -235,9 +235,9 @@ export default function AppHome({
           >
             <span>
               <span className="block text-[15px] font-semibold">{stripLabels.samples}</span>
-              <span className="block text-[13px] text-flex-black/50">{stripLabels.samplesCta}</span>
+              <span className="block text-[13px] text-ink-2">{stripLabels.samplesCta}</span>
             </span>
-            <ArrowUpRight className="h-5 w-5 shrink-0 text-flex-black/40" />
+            <ArrowUpRight className="h-5 w-5 shrink-0 text-ink-3" />
           </Link>
         </div>
       </div>
@@ -254,12 +254,12 @@ export default function AppHome({
       {newest.length > 0 && (
         <section className="px-6 pt-9">
           <div className="mb-3 flex items-baseline justify-between">
-            <h2 className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+            <h2 className="text-xs font-semibold tracking-widest text-ink-3 uppercase">
               {s.appNewResidents}
             </h2>
             <Link
               href="/rezidentlar"
-              className="text-xs font-medium text-flex-black/50"
+              className="text-xs font-medium text-ink-2"
             >
               {s.seeAll}
             </Link>
@@ -290,11 +290,11 @@ export default function AppHome({
                   )}
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium">{r.name}</p>
-                    <p className="font-tabular text-xs text-flex-black/40">
+                    <p className="font-tabular text-xs text-ink-3">
                       flex.com.uz/{r.normalized}
                     </p>
                   </div>
-                  <ChevronRight className="h-4 w-4 shrink-0 text-flex-black/25" />
+                  <ChevronRight className="h-4 w-4 shrink-0 text-ink-3" />
                 </Link>
               </li>
             ))}

@@ -47,7 +47,7 @@ export default async function FeedPage() {
             </h1>
             <Link
               href="/rezidentlar"
-              className="flex items-center gap-1 text-[13px] text-flex-black/45 transition-colors hover:text-flex-black lg:hidden"
+              className="flex items-center gap-1 text-[13px] text-ink-3 transition-colors hover:text-flex-black lg:hidden"
             >
               Rezidentlar
               <ArrowRight className="h-3.5 w-3.5" />
@@ -69,7 +69,7 @@ export default async function FeedPage() {
           {top.length > 0 && (
             <section className="relative overflow-hidden rounded-[1.5rem] bg-flex-black p-5 text-white">
               <div className="relative">
-                <p className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-white/40 uppercase">
+                <p className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-paper-3 uppercase">
                   <TrendingUp className="h-3.5 w-3.5" />
                   Uch kunda eng ko&apos;p ochilgan
                 </p>
@@ -87,11 +87,11 @@ export default async function FeedPage() {
                           <span className="block truncate text-[13px] font-semibold tracking-tight">
                             {entry.name || entry.normalized}
                           </span>
-                          <span className="block font-tabular text-[11px] text-white/35">
+                          <span className="block font-tabular text-[11px] text-paper-3">
                             {entry.normalized}
                           </span>
                         </span>
-                        <span className="font-tabular text-[12px] text-white/45">
+                        <span className="font-tabular text-[12px] text-paper-3">
                           {entry.views}
                         </span>
                       </Link>
@@ -103,8 +103,8 @@ export default async function FeedPage() {
           )}
 
           {newest.length > 0 && (
-            <section className="rounded-[1.5rem] border border-black/6 bg-white p-5">
-              <p className="text-[11px] font-medium tracking-[0.12em] text-flex-black/40 uppercase">
+            <section className="rounded-[1.5rem] border border-line bg-white p-5">
+              <p className="text-[11px] font-medium tracking-[0.12em] text-ink-3 uppercase">
                 Yangi rezidentlar
               </p>
               <ul className="mt-3.5 space-y-2.5">
@@ -114,7 +114,7 @@ export default async function FeedPage() {
                       href={`/${resident.normalized}`}
                       className="flex items-center gap-3 transition-opacity hover:opacity-70"
                     >
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-black/[0.05] font-display text-[11px] font-semibold text-flex-black/70">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-black/[0.05] font-display text-[11px] font-semibold text-ink-2">
                         {(resident.name || resident.normalized)
                           .split(/\s+/)
                           .map((p) => p[0] ?? "")
@@ -126,7 +126,7 @@ export default async function FeedPage() {
                         <span className="block truncate text-[13px] font-medium">
                           {resident.name || resident.normalized}
                         </span>
-                        <span className="block font-tabular text-[11px] text-flex-black/35">
+                        <span className="block font-tabular text-[11px] text-ink-3">
                           {resident.normalized}
                         </span>
                       </span>
@@ -137,7 +137,7 @@ export default async function FeedPage() {
 
               <Link
                 href="/rezidentlar"
-                className="mt-4 flex items-center justify-center gap-1.5 rounded-xl bg-black/[0.04] px-4 py-2.5 text-[12px] font-medium text-flex-black/60 transition-colors hover:bg-black/[0.07] hover:text-flex-black"
+                className="mt-4 flex items-center justify-center gap-1.5 rounded-xl bg-black/[0.04] px-4 py-2.5 text-[12px] font-medium text-ink-2 transition-colors hover:bg-black/[0.07] hover:text-flex-black"
               >
                 Hammasi
                 <ArrowRight className="h-3.5 w-3.5" />

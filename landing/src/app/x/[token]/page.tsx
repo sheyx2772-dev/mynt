@@ -50,7 +50,7 @@ export default async function TagPage({
       <h1 className="font-display text-[26px] leading-tight font-semibold tracking-tight">
         {words.heading}
       </h1>
-      <p className="mt-2.5 text-[15px] leading-relaxed text-flex-black/55">
+      <p className="mt-2.5 text-[15px] leading-relaxed text-ink-2">
         {words.lead}
       </p>
 
@@ -67,7 +67,7 @@ export default async function TagPage({
           has finished can notice it. The point of this screen is the errand,
           not the introduction — but the stranger who used it is the person
           most likely to want one of these themselves tomorrow. */}
-      <p className="mt-auto pt-10 text-center text-[12px] text-flex-black/30">
+      <p className="mt-auto pt-10 text-center text-[12px] text-ink-3">
         flex.com.uz
       </p>
     </main>

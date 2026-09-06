@@ -25,8 +25,8 @@ export default function LangSwitch({
       : "rounded-md bg-flex-black px-2 py-1 font-medium text-white";
   const off =
     tone === "dark"
-      ? "rounded-md px-2.5 py-2 text-white/40 transition-colors hover:text-white/80"
-      : "rounded-md px-2.5 py-2 text-flex-black/40 transition-colors hover:text-flex-black/70";
+      ? "rounded-md px-2.5 py-2 text-paper-3 transition-colors hover:text-paper-2"
+      : "rounded-md px-2.5 py-2 text-ink-3 transition-colors hover:text-ink-2";
 
   return (
     <form

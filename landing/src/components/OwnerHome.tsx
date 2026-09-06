@@ -56,7 +56,7 @@ export default function OwnerHome({
           )}
         </div>
 
-        <div className="relative mt-5 grid grid-cols-3 gap-3 border-t border-white/10 pt-4">
+        <div className="relative mt-5 grid grid-cols-3 gap-3 border-t border-ink-line pt-4">
           <Stat value={handle.viewCount} label={s.statViews} />
           <Stat value={todayViews} label={s.statToday} />
           <Stat value={leads} label={s.statLeads} />

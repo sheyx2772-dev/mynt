@@ -5,8 +5,8 @@ import { requestTeamOrder, type TeamFormState } from "@/app/biznes/actions";
 import { COMPANY } from "@/lib/company";
 
 const field =
-  "w-full rounded-2xl border border-white/15 bg-white/[0.06] px-4 py-3 text-sm text-white outline-none placeholder:text-white/30 focus:border-lime/50";
-const label = "mb-1.5 block text-xs font-medium tracking-wide text-white/45 uppercase";
+  "w-full rounded-2xl border border-ink-line bg-white/[0.06] px-4 py-3 text-sm text-white outline-none placeholder:text-paper-3 focus:border-lime/50";
+const label = "mb-1.5 block text-xs font-medium tracking-wide text-paper-3 uppercase";
 
 export default function TeamOrderForm() {
   const [state, action, sending] = useActionState<TeamFormState, FormData>(requestTeamOrder, {
@@ -17,7 +17,7 @@ export default function TeamOrderForm() {
     return (
       <div className="rounded-3xl border border-lime/40 bg-lime/[0.08] p-8">
         <h3 className="font-display text-lg font-semibold text-white">Qabul qilindi</h3>
-        <p className="mt-2 text-sm leading-relaxed text-white/65">
+        <p className="mt-2 text-sm leading-relaxed text-paper-2">
           Bir ish kuni ichida bog&apos;lanamiz. Shoshilinch bo&apos;lsa{" "}
           <a href={`tel:${COMPANY.phoneHref}`} className="text-lime hover:underline">
             {COMPANY.phone}
@@ -29,7 +29,7 @@ export default function TeamOrderForm() {
   }
 
   return (
-    <form action={action} className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+    <form action={action} className="rounded-3xl border border-ink-line bg-white/[0.03] p-6 sm:p-8">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="company" className={label}>
@@ -94,7 +94,7 @@ export default function TeamOrderForm() {
       <button
         type="submit"
         disabled={sending}
-        className="mt-6 rounded-full bg-lime px-7 py-3 font-medium text-flex-black transition-transform hover:scale-[1.02] disabled:bg-white/20 disabled:text-white/40"
+        className="mt-6 rounded-full bg-lime px-7 py-3 font-medium text-flex-black transition-transform hover:scale-[1.02] disabled:bg-white/20 disabled:text-paper-3"
       >
         {sending ? "Yuborilmoqda…" : "Hisob-kitob so'rash"}
       </button>

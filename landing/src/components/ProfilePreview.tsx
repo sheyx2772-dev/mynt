@@ -30,26 +30,26 @@ export default function ProfilePreview({ labels }: { labels: PreviewLabels }) {
           AR
         </div>
         <p className="relative mt-4 font-display text-xl font-semibold">Aziza Rahimova</p>
-        <p className="relative mt-0.5 font-tabular text-xs text-white/45">flex.com.uz/TOS001</p>
-        <p className="relative mt-3 text-sm text-white/70">{labels.role}</p>
+        <p className="relative mt-0.5 font-tabular text-xs text-paper-3">flex.com.uz/TOS001</p>
+        <p className="relative mt-3 text-sm text-paper-2">{labels.role}</p>
 
         <div className="relative mt-4 flex gap-2">
-          <span className="rounded-full border border-white/15 px-2.5 py-0.5 text-[11px] text-white/60">
+          <span className="rounded-full border border-ink-line px-2.5 py-0.5 text-[11px] text-paper-2">
             #{labels.tagOne}
           </span>
-          <span className="rounded-full border border-white/15 px-2.5 py-0.5 text-[11px] text-white/60">
+          <span className="rounded-full border border-ink-line px-2.5 py-0.5 text-[11px] text-paper-2">
             #{labels.tagTwo}
           </span>
         </div>
 
-        <div className="relative mt-5 flex gap-5 border-t border-white/10 pt-4">
+        <div className="relative mt-5 flex gap-5 border-t border-ink-line pt-4">
           <div>
             <p className="font-display text-base font-semibold tabular-nums">128</p>
-            <p className="text-[11px] text-white/40">{labels.followers}</p>
+            <p className="text-[11px] text-paper-3">{labels.followers}</p>
           </div>
           <div>
             <p className="font-display text-base font-semibold tabular-nums">2 481</p>
-            <p className="flex items-center gap-1 text-[11px] text-white/40">
+            <p className="flex items-center gap-1 text-[11px] text-paper-3">
               <Eye className="h-2.5 w-2.5" />
               {labels.views}
             </p>

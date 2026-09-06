@@ -10,7 +10,7 @@ export default function HeroStage({ shot }: { shot: string | null }) {
     return (
       <div className="relative w-full max-w-[34rem]">
         <div className="absolute -inset-16 -z-10 rounded-full bg-lime/20 blur-[110px]" />
-        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_60px_120px_-40px_rgba(0,0,0,0.9)]">
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[2rem] border border-ink-line shadow-[0_60px_120px_-40px_rgba(0,0,0,0.9)]">
           <Image
             src={shot}
             alt="Flex NFC karta"
@@ -63,7 +63,7 @@ function Face() {
         <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[radial-gradient(circle_at_35%_30%,#2a2145,#0a0714)] shadow-[inset_0_1px_2px_rgba(255,255,255,0.12),inset_0_-2px_4px_rgba(0,0,0,0.8)]">
           <Nfc className="h-4 w-4 text-lime/80" />
         </span>
-        <span className="font-tabular text-[10px] tracking-[0.22em] text-white/30 uppercase">
+        <span className="font-tabular text-[10px] tracking-[0.22em] text-paper-3 uppercase">
           flex
         </span>
       </div>
@@ -71,9 +71,9 @@ function Face() {
       <div className="relative mt-12 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
         MYN<span className="text-lime">042</span>
       </div>
-      <p className="relative mt-1 font-tabular text-sm text-white/40">flex.com.uz/MYN042</p>
+      <p className="relative mt-1 font-tabular text-sm text-paper-3">flex.com.uz/MYN042</p>
 
-      <div className="relative mt-8 flex items-center justify-between text-[11px] font-medium tracking-wide text-white/35 uppercase">
+      <div className="relative mt-8 flex items-center justify-between text-[11px] font-medium tracking-wide text-paper-3 uppercase">
         <span>Tegizing</span>
         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
       </div>

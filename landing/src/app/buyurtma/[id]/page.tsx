@@ -35,9 +35,9 @@ export default async function OrderPage({ params }: PageProps<"/buyurtma/[id]">)
   return (
     <PageShell>
       <div className="mx-auto max-w-lg px-6 py-20">
-        <p className="text-xs uppercase tracking-[0.2em] text-flex-black/40">Buyurtma</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-ink-3">Buyurtma</p>
         <h1 className="mt-2 font-display font-semibold text-3xl">{order.handle}</h1>
-        <p className="mt-1 text-flex-black/60">{formatUZS(order.amount)}</p>
+        <p className="mt-1 text-ink-2">{formatUZS(order.amount)}</p>
 
         <div className="mt-8 rounded-2xl border border-flex-black/10 p-6">{status(order)}</div>
 
@@ -57,7 +57,7 @@ function status(order: Awaited<ReturnType<typeof getPurchase>> & object) {
     return (
       <>
         <p className="font-medium text-flex-black">To&apos;landi.</p>
-        <p className="mt-1 text-flex-black/60 text-sm">
+        <p className="mt-1 text-ink-2 text-sm">
           {order.handle} sizniki. Kabinetda profilini to&apos;ldirishingiz mumkin.
         </p>
       </>
@@ -72,7 +72,7 @@ function status(order: Awaited<ReturnType<typeof getPurchase>> & object) {
     return (
       <>
         <p className="font-medium text-red-700">To&apos;lov o&apos;tdi, lekin raqam biriktirilmadi.</p>
-        <p className="mt-1 text-flex-black/60 text-sm">
+        <p className="mt-1 text-ink-2 text-sm">
           Bu bo&apos;lmasligi kerak edi. Biz bilan bog&apos;laning — buyurtma raqami{" "}
           <span className="font-mono">{order.id}</span>.
         </p>
@@ -84,7 +84,7 @@ function status(order: Awaited<ReturnType<typeof getPurchase>> & object) {
     return (
       <>
         <p className="font-medium text-flex-black">To&apos;lov kutilmoqda.</p>
-        <p className="mt-1 text-flex-black/60 text-sm">
+        <p className="mt-1 text-ink-2 text-sm">
           Bank tasdig&apos;i bir necha daqiqa olishi mumkin. Sahifani yangilab ko&apos;ring.
         </p>
       </>
@@ -94,7 +94,7 @@ function status(order: Awaited<ReturnType<typeof getPurchase>> & object) {
   return (
     <>
       <p className="font-medium text-flex-black">Bu buyurtma bekor qilingan.</p>
-      <p className="mt-1 text-flex-black/60 text-sm">
+      <p className="mt-1 text-ink-2 text-sm">
         Raqam yana bo&apos;shadi. Qaytadan urinib ko&apos;rishingiz mumkin.
       </p>
     </>

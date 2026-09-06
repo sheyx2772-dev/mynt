@@ -52,7 +52,7 @@ export default function VenueSetup({
                     step.done
                       ? "flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lime text-ink"
                       : isNext
-                        ? "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/25 font-tabular text-xs text-paper"
+                        ? "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-paper-3 font-tabular text-xs text-paper"
                         : "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-ink-line font-tabular text-xs text-paper-3"
                   }
                 >

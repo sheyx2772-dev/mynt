@@ -88,7 +88,7 @@ export default function LoadoutStrip({
         <h2 className="font-display text-xs font-semibold tracking-widest text-lime-ink uppercase">
           {label}
         </h2>
-        <p className="text-xs text-flex-black/40">{note}</p>
+        <p className="text-xs text-ink-3">{note}</p>
       </div>
 
       <div
@@ -123,7 +123,7 @@ export default function LoadoutStrip({
                 <p className="font-display text-base leading-tight font-semibold text-white">
                   {item.name}
                 </p>
-                <p className="mt-0.5 text-[11px] tracking-wide text-white/45 uppercase">
+                <p className="mt-0.5 text-[11px] tracking-wide text-paper-3 uppercase">
                   {item.note}
                 </p>
               </div>
@@ -131,7 +131,7 @@ export default function LoadoutStrip({
 
             <div className="flex items-center justify-between gap-3 px-4 py-3">
               <span className="font-tabular text-sm font-medium text-lime">{item.price}</span>
-              <ChevronRight className="h-4 w-4 text-white/35 transition-transform group-hover:translate-x-0.5" />
+              <ChevronRight className="h-4 w-4 text-paper-3 transition-transform group-hover:translate-x-0.5" />
             </div>
           </Link>
         ))}

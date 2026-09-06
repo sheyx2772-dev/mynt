@@ -96,7 +96,7 @@ export default async function DevicePage({
         <div className="mb-10 flex items-center justify-between gap-4">
           <Link
             href="/qurilmalar"
-            className="flex items-center gap-2 text-sm font-medium text-white/60 transition-colors hover:text-white"
+            className="flex items-center gap-2 text-sm font-medium text-paper-2 transition-colors hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
             {p.back}
@@ -136,21 +136,21 @@ export default async function DevicePage({
             <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
               {name}
             </h1>
-            <p className="mt-5 leading-relaxed text-white/60">{description}</p>
+            <p className="mt-5 leading-relaxed text-paper-2">{description}</p>
 
             <div className="mt-8 flex items-baseline gap-3">
               <span className="font-display text-3xl font-semibold tracking-tight">
                 {price === null ? p.priceUnknown : formatUZS(price, lang)}
               </span>
             </div>
-            <p className="mt-2 text-sm text-white/40">{p.priceNote}</p>
+            <p className="mt-2 text-sm text-paper-3">{p.priceNote}</p>
 
-            <h2 className="mt-9 text-xs font-semibold tracking-widest text-white/40 uppercase">
+            <h2 className="mt-9 text-xs font-semibold tracking-widest text-paper-3 uppercase">
               {p.includesLabel}
             </h2>
             <ul className="mt-3 space-y-2">
               {(isCar ? p.carIncludes : p.includes).map((line) => (
-                <li key={line} className="flex gap-3 text-sm leading-relaxed text-white/70">
+                <li key={line} className="flex gap-3 text-sm leading-relaxed text-paper-2">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-lime" strokeWidth={2.4} />
                   {line}
                 </li>

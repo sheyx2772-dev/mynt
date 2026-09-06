@@ -20,7 +20,7 @@ export default function PlanTable({ c, lang }: { c: CatalogueDict; lang: Lang })
             }
           >
             <h3 className="font-display text-lg font-semibold">{c.plans[p.id].name}</h3>
-            <p className={`mt-1 text-sm ${paid ? "text-white/50" : "text-flex-black/50"}`}>
+            <p className={`mt-1 text-sm ${paid ? "text-paper-3" : "text-ink-2"}`}>
               {c.plans[p.id].tagline}
             </p>
 
@@ -30,18 +30,18 @@ export default function PlanTable({ c, lang }: { c: CatalogueDict; lang: Lang })
               className={
                 paid
                   ? "mt-6 font-display text-3xl font-semibold tracking-tight"
-                  : "mt-6 font-display text-xl font-semibold tracking-tight text-flex-black/70"
+                  : "mt-6 font-display text-xl font-semibold tracking-tight text-ink-2"
               }
             >
               {paid ? formatUZS(p.monthly, lang) : c.plans.free.tagline}
               {paid && (
-                <span className={`ml-1 text-sm font-normal ${paid ? "text-white/45" : ""}`}>
+                <span className={`ml-1 text-sm font-normal ${paid ? "text-paper-3" : ""}`}>
                   / {c.perMonth}
                 </span>
               )}
             </p>
             {paid && (
-              <p className="mt-1 text-xs text-white/45">
+              <p className="mt-1 text-xs text-paper-3">
                 {c.perYear(formatUZS(p.yearly, lang), yearlyMonthsFree())}
               </p>
             )}
@@ -55,7 +55,7 @@ export default function PlanTable({ c, lang }: { c: CatalogueDict; lang: Lang })
                   <Check
                     className={`mt-0.5 h-4 w-4 shrink-0 ${paid ? "text-lime" : "text-lime-ink"}`}
                   />
-                  <span className={paid ? "text-white/75" : "text-flex-black/65"}>{line}</span>
+                  <span className={paid ? "text-paper-2" : "text-ink-2"}>{line}</span>
                 </li>
               ))}
             </ul>

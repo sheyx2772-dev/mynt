@@ -25,7 +25,7 @@ export function SampleShelf({
         <h2 className="font-display text-xs font-semibold tracking-widest text-lime-ink uppercase">
           {label}
         </h2>
-        <p className="text-xs text-flex-black/40">{note}</p>
+        <p className="text-xs text-ink-3">{note}</p>
       </div>
 
       <div className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 [scroll-padding-left:1.5rem]">
@@ -82,7 +82,7 @@ export function SampleTile({
         <p className="font-display text-[15px] leading-tight font-semibold">
           {name}
         </p>
-        <p className="mt-0.5 line-clamp-2 text-[12px] leading-snug text-flex-black/50">
+        <p className="mt-0.5 line-clamp-2 text-[12px] leading-snug text-ink-2">
           {who}
         </p>
         <p className="mt-2 flex items-center gap-1 text-sm font-medium text-lime-ink">

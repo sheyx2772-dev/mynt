@@ -60,13 +60,13 @@ export default function LoadoutTile({
           <p className="font-display text-base leading-tight font-semibold text-white">
             {name}
           </p>
-          <p className="mt-0.5 text-[11px] tracking-wide text-white/45 uppercase">{note}</p>
+          <p className="mt-0.5 text-[11px] tracking-wide text-paper-3 uppercase">{note}</p>
         </div>
       </div>
 
       <div className="flex items-center justify-between gap-3 px-4 py-3">
         <span className="font-tabular text-sm font-medium text-lime">{price}</span>
-        <ChevronRight className="h-4 w-4 text-white/35 transition-transform group-hover:translate-x-0.5" />
+        <ChevronRight className="h-4 w-4 text-paper-3 transition-transform group-hover:translate-x-0.5" />
       </div>
     </Link>
   );

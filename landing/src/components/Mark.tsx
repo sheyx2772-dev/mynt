@@ -44,7 +44,7 @@ export default function Mark({
 }) {
   const tile =
     tone === "dark"
-      ? "rounded-lg border border-white/15 bg-white/5"
+      ? "rounded-lg border border-ink-line bg-white/5"
       : "rounded-md bg-flex-black";
 
   return (

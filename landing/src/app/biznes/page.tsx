@@ -57,7 +57,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
 
   return (
     <div className="flex min-h-full flex-col overflow-x-clip">
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-flex-black/85 text-white backdrop-blur-md">
+      <header className="sticky top-0 z-30 border-b border-ink-line bg-flex-black/85 text-white backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link
             href="/"
@@ -73,7 +73,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                 Quiet against the lime, which stays the one loud thing. */}
             <Link
               href="/kirish"
-              className="hidden rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:border-white/45 hover:text-white sm:inline-flex"
+              className="hidden rounded-full border border-paper-3 px-4 py-2 text-sm font-medium text-paper-2 transition-colors hover:border-white/45 hover:text-white sm:inline-flex"
             >
               {s.signIn}
             </Link>
@@ -94,13 +94,13 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
 
           <div className="relative mx-auto grid max-w-6xl gap-10 px-6 pt-12 pb-14 sm:pt-20 sm:pb-20 lg:grid-cols-[1fr_320px] lg:items-center lg:gap-16">
             <div>
-            <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">
+            <p className="text-xs font-semibold tracking-widest text-paper-3 uppercase">
               {t.eyebrow}
             </p>
             <h1 className="mt-4 max-w-2xl font-display text-[2.1rem] leading-[1.06] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
               {t.title}
             </h1>
-            <p className="mt-6 max-w-xl leading-relaxed text-white/60 sm:text-lg">
+            <p className="mt-6 max-w-xl leading-relaxed text-paper-2 sm:text-lg">
               {t.lede}
             </p>
 
@@ -109,18 +109,18 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
               <span className="rounded-xl border border-lime/40 bg-white/[0.05] px-3.5 py-2 text-lime">
                 {t.chain[0]}
               </span>
-              <span className="text-xs text-white/30">{t.chainNow}</span>
+              <span className="text-xs text-paper-3">{t.chainNow}</span>
             </div>
             <div className="mt-2.5 flex flex-wrap items-center gap-2 font-display text-sm">
               {t.chain.slice(1).map((step) => (
                 <span
                   key={step}
-                  className="rounded-xl border border-white/12 bg-white/[0.05] px-3.5 py-2 text-white/75"
+                  className="rounded-xl border border-ink-line bg-white/[0.05] px-3.5 py-2 text-paper-2"
                 >
                   {step}
                 </span>
               ))}
-              <span className="text-xs text-white/30">{t.chainNext}</span>
+              <span className="text-xs text-paper-3">{t.chainNext}</span>
             </div>
             </div>
 
@@ -151,7 +151,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
         <section className="mx-auto max-w-6xl px-6 pt-12">
           <div className="rounded-3xl border-l-[3px] border-lime-ink bg-black/[0.03] px-6 py-5">
             <h2 className="font-display font-semibold">{t.pilotTitle}</h2>
-            <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-flex-black/65">
+            <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-ink-2">
               {t.pilotBody}
             </p>
             <a
@@ -166,13 +166,13 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
 
         {/* The shared layer */}
         <section className="mx-auto max-w-6xl px-6 py-14 sm:py-20">
-          <p className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+          <p className="text-xs font-semibold tracking-widest text-ink-3 uppercase">
             {t.coreEyebrow}
           </p>
           <h2 className="mt-3 max-w-lg font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
             {t.coreTitle}
           </h2>
-          <p className="mt-4 max-w-xl leading-relaxed text-flex-black/60">{t.coreLede}</p>
+          <p className="mt-4 max-w-xl leading-relaxed text-ink-2">{t.coreLede}</p>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-3">
             {t.core.map((item, i) => {
@@ -182,9 +182,9 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                   key={item.title}
                   className="rounded-3xl border border-line bg-white p-6"
                 >
-                  <Icon className="h-5 w-5 text-flex-black/35" strokeWidth={1.75} />
+                  <Icon className="h-5 w-5 text-ink-3" strokeWidth={1.75} />
                   <h3 className="mt-5 font-display font-semibold">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-flex-black/60">
+                  <p className="mt-2 text-sm leading-relaxed text-ink-2">
                     {item.desc}
                   </p>
                 </div>
@@ -196,13 +196,13 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
         {/* Vertical picker + price */}
         <section id="soha" className="scroll-mt-20 border-t border-line-soft bg-black/[0.02] py-14 sm:py-20">
           <div className="mx-auto max-w-6xl px-6">
-            <p className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+            <p className="text-xs font-semibold tracking-widest text-ink-3 uppercase">
               {t.priceEyebrow}
             </p>
             <h2 className="mt-3 max-w-lg font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
               {t.priceTitle}
             </h2>
-            <p className="mt-4 max-w-xl leading-relaxed text-flex-black/60">{t.priceLede}</p>
+            <p className="mt-4 max-w-xl leading-relaxed text-ink-2">{t.priceLede}</p>
 
             <div className="mt-10">
               <VenuePicker
@@ -222,13 +222,13 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
 
         {/* The rest of the verticals */}
         <section className="mx-auto max-w-6xl px-6 py-14 sm:py-20">
-          <p className="text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+          <p className="text-xs font-semibold tracking-widest text-ink-3 uppercase">
             {t.otherEyebrow}
           </p>
           <h2 className="mt-3 max-w-lg font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
             {t.otherTitle}
           </h2>
-          <p className="mt-4 max-w-2xl leading-relaxed text-flex-black/60">{t.otherLede}</p>
+          <p className="mt-4 max-w-2xl leading-relaxed text-ink-2">{t.otherLede}</p>
 
           <div className="mt-10 overflow-x-auto">
             <table className="w-full min-w-[38rem] border-collapse text-sm">
@@ -237,7 +237,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                   {t.tableHead.map((head) => (
                     <th
                       key={head}
-                      className="border-b border-line px-4 py-3 text-left text-[11px] font-semibold tracking-widest text-flex-black/40 uppercase"
+                      className="border-b border-line px-4 py-3 text-left text-[11px] font-semibold tracking-widest text-ink-3 uppercase"
                     >
                       {head}
                     </th>
@@ -250,10 +250,10 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                     <td className="border-b border-line-soft px-4 py-3.5 font-medium">
                       {row[0]}
                     </td>
-                    <td className="border-b border-line-soft px-4 py-3.5 text-flex-black/60">
+                    <td className="border-b border-line-soft px-4 py-3.5 text-ink-2">
                       {row[1]}
                     </td>
-                    <td className="border-b border-line-soft px-4 py-3.5 text-flex-black/60">
+                    <td className="border-b border-line-soft px-4 py-3.5 text-ink-2">
                       {row[2]}
                     </td>
                   </tr>
@@ -275,7 +275,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
             <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
               {t.formTitle}
             </h2>
-            <p className="mt-3 text-white/55">{t.formLede}</p>
+            <p className="mt-3 text-paper-2">{t.formLede}</p>
 
             <div className="mt-9">
               <VenueRequestForm t={t} />
@@ -296,18 +296,18 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
               <h2 className="font-display text-3xl font-semibold tracking-tight text-balance text-white sm:text-4xl">
                 {s.notOneCard}
               </h2>
-              <p className="mt-4 text-white/55">
+              <p className="mt-4 text-paper-2">
                 {s.businessDesc}
               </p>
             </div>
 
-            <div className="mt-14 hidden gap-x-14 border-t border-white/10 sm:grid-cols-2 lg:grid">
+            <div className="mt-14 hidden gap-x-14 border-t border-ink-line sm:grid-cols-2 lg:grid">
               {copy.business.map((f, i) => {
                 const Icon = BUSINESS_ICONS[i]!;
                 return (
                 <div
                   key={f.title}
-                  className="flex gap-5 border-b border-white/10 py-7"
+                  className="flex gap-5 border-b border-ink-line py-7"
                 >
                   <Icon
                     className="mt-0.5 h-5 w-5 shrink-0 text-lime"
@@ -317,7 +317,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                     <h3 className="font-display font-semibold text-white">
                       {f.title}
                     </h3>
-                    <p className="mt-1.5 text-sm leading-relaxed text-white/55">
+                    <p className="mt-1.5 text-sm leading-relaxed text-paper-2">
                       {f.desc}
                     </p>
                   </div>
@@ -341,7 +341,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                   <dt className="inline font-medium text-white">
                     {formatUZS(TEAM_SEAT_MONTHLY, lang)} — {s.perSeat}
                   </dt>{" "}
-                  <dd className="inline text-white/55">
+                  <dd className="inline text-paper-2">
                     {s.minSeats} {MIN_TEAM_SEATS} {s.seatsWord}
                   </dd>
                 </div>
@@ -349,7 +349,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                   <dt className="inline font-medium text-white">
                     {s.seatBought}
                   </dt>{" "}
-                  <dd className="inline text-white/55">
+                  <dd className="inline text-paper-2">
                     {s.seatFrees}
                   </dd>
                 </div>
@@ -357,7 +357,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                   <dt className="inline font-medium text-white">
                     {s.handleIsCompany}
                   </dt>{" "}
-                  <dd className="inline text-white/55">
+                  <dd className="inline text-paper-2">
                     {s.handleStays}
                   </dd>
                 </div>
@@ -371,7 +371,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
       </main>
 
       <footer className="border-t border-line-soft py-10">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 text-sm text-flex-black/45">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 text-sm text-ink-3">
           <Link href="/" className="hover:text-flex-black">
             flex.com.uz
           </Link>

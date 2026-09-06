@@ -53,7 +53,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
 
   return (
     <div className="flex min-h-full flex-col overflow-x-clip">
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-flex-black/85 text-white backdrop-blur-md">
+      <header className="sticky top-0 z-30 border-b border-ink-line bg-flex-black/85 text-white backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link
             href="/"
@@ -69,7 +69,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
                 Quiet against the lime, which stays the one loud thing. */}
             <Link
               href="/kirish"
-              className="hidden rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:border-white/45 hover:text-white sm:inline-flex"
+              className="hidden rounded-full border border-paper-3 px-4 py-2 text-sm font-medium text-paper-2 transition-colors hover:border-white/45 hover:text-white sm:inline-flex"
             >
               {s.signIn}
             </Link>
@@ -112,8 +112,8 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
               </div>
 
               <div className="relative flex justify-center lg:justify-end">
-                <div className="absolute -right-6 -bottom-4 z-20 hidden rotate-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 backdrop-blur-md sm:block">
-                  <p className="flex items-center gap-1.5 text-xs font-medium text-white/75">
+                <div className="absolute -right-6 -bottom-4 z-20 hidden rotate-3 rounded-2xl border border-ink-line bg-white/[0.07] px-4 py-3 backdrop-blur-md sm:block">
+                  <p className="flex items-center gap-1.5 text-xs font-medium text-paper-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-lime" />
                     {s.nfcOn}
                   </p>
@@ -130,7 +130,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
 
         {/* How it works */}
         <section className="mx-auto max-w-6xl px-6 py-14 sm:py-24">
-          <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+          <p className="mb-3 text-xs font-semibold tracking-widest text-ink-3 uppercase">
             {s.howItWorks}
           </p>
           <h2 className="max-w-lg font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
@@ -140,7 +140,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
           <ol className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-3">
             <li>
               <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
-                <div className="relative flex overflow-hidden rounded-xl border border-white/15 font-display text-xl font-semibold text-white">
+                <div className="relative flex overflow-hidden rounded-xl border border-ink-line font-display text-xl font-semibold text-white">
                   <span className="px-3 py-2">MYN</span>
                   <span className="w-px bg-white/15" />
                   <span className="bg-lime px-3 py-2 font-tabular text-flex-black">
@@ -148,13 +148,13 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
                   </span>
                 </div>
               </div>
-              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-flex-black/30">
+              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-ink-3">
                 01
               </p>
               <h3 className="mt-1 font-display text-lg font-semibold">
                 {s.pickHandle}
               </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
+              <p className="mt-1.5 text-sm leading-relaxed text-ink-2">
                 {s.stepHandleDesc}
               </p>
             </li>
@@ -175,24 +175,24 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
                     {/* Card, ring, bracelet — three silhouettes, each given one
                     lime mark so a black object stays legible on a black stage. */}
                     <div className="relative flex items-center gap-4">
-                      <span className="relative h-16 w-24 rotate-[-8deg] rounded-lg border border-white/20 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
+                      <span className="relative h-16 w-24 rotate-[-8deg] rounded-lg border border-paper-3 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
                         <span className="absolute bottom-2 left-2 h-1 w-6 rounded-full bg-lime" />
                       </span>
-                      <span className="h-16 w-16 rounded-full border-[6px] border-white/20 bg-[linear-gradient(140deg,#312653,#0c0818)]" />
-                      <span className="relative h-20 w-9 rotate-[6deg] rounded-full border border-white/20 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
+                      <span className="h-16 w-16 rounded-full border-[6px] border-paper-3 bg-[linear-gradient(140deg,#312653,#0c0818)]" />
+                      <span className="relative h-20 w-9 rotate-[6deg] rounded-full border border-paper-3 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
                         <span className="absolute top-1/2 left-1/2 h-6 w-4 -translate-x-1/2 -translate-y-1/2 rounded-[40%] bg-black ring-1 ring-lime/60" />
                       </span>
                     </div>
                   </>
                 )}
               </div>
-              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-flex-black/30">
+              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-ink-3">
                 02
               </p>
               <h3 className="mt-1 font-display text-lg font-semibold">
                 {s.pickDevice}
               </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
+              <p className="mt-1.5 text-sm leading-relaxed text-ink-2">
                 {s.pickDeviceDesc}
               </p>
             </li>
@@ -219,13 +219,13 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
                   </>
                 )}
               </div>
-              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-flex-black/30">
+              <p className="mt-5 font-tabular text-xs font-semibold tracking-widest text-ink-3">
                 03
               </p>
               <h3 className="mt-1 font-display text-lg font-semibold">
                 {s.stepTap}
               </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-flex-black/60">
+              <p className="mt-1.5 text-sm leading-relaxed text-ink-2">
                 {s.stepTapDesc}
               </p>
             </li>
@@ -240,13 +240,13 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
         >
           <div className="mx-auto grid max-w-6xl gap-14 px-6 lg:grid-cols-[1fr_320px] lg:gap-20">
             <div>
-              <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+              <p className="mb-3 text-xs font-semibold tracking-widest text-ink-3 uppercase">
                 Shaxsiy
               </p>
               <h2 className="max-w-md font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
                 {s.oneTap}
               </h2>
-              <p className="mt-4 max-w-md text-flex-black/65">
+              <p className="mt-4 max-w-md text-ink-2">
                 {s.tapDesc}
               </p>
 
@@ -256,12 +256,12 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
                   return (
                   <div key={f.title} className="flex gap-5 py-5">
                     <Icon
-                      className="mt-0.5 h-5 w-5 shrink-0 text-flex-black/35"
+                      className="mt-0.5 h-5 w-5 shrink-0 text-ink-3"
                       strokeWidth={1.75}
                     />
                     <div>
                       <dt className="font-display font-semibold">{f.title}</dt>
-                      <dd className="mt-1 text-sm leading-relaxed text-flex-black/60">
+                      <dd className="mt-1 text-sm leading-relaxed text-ink-2">
                         {f.desc}
                       </dd>
                     </div>
@@ -323,7 +323,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
             <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-4xl">
               {s.priceOpen}
             </h2>
-            <p className="mt-3 text-flex-black/65">
+            <p className="mt-3 text-ink-2">
               {s.pricingDesc}
             </p>
           </div>
@@ -348,13 +348,13 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
         {/* The three parts of the price */}
         <section id="tarif" className="mx-auto max-w-6xl px-6 pb-24">
           <div className="mb-10 max-w-lg">
-            <p className="mb-3 text-xs font-semibold tracking-widest text-flex-black/40 uppercase">
+            <p className="mb-3 text-xs font-semibold tracking-widest text-ink-3 uppercase">
               Obuna
             </p>
             <h2 className="font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
               {s.priceThree}
             </h2>
-            <p className="mt-4 leading-relaxed text-flex-black/60">
+            <p className="mt-4 leading-relaxed text-ink-2">
               {s.subscriptionDesc}
             </p>
           </div>
@@ -364,7 +364,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
       </main>
 
       <footer className="border-t border-line-soft py-10">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 text-sm text-flex-black/45">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 text-sm text-ink-3">
           <Link href="/" className="hover:text-flex-black">
             flex.com.uz
           </Link>

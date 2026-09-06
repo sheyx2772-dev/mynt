@@ -110,7 +110,7 @@ export default async function VenueInvoicePage(
           </tr>
         </thead>
         <tbody>
-          <tr className="border-b border-black/15">
+          <tr className="border-b border-line">
             <td className="py-2.5">
               Flex — obyekt obunasi ({venue.name})
               <span className="block text-black/50">

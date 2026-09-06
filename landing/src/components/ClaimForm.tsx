@@ -34,7 +34,7 @@ export default function ClaimForm({
         >
           Kirib, band qilish
         </Link>
-        <p className="mt-3 text-center text-xs text-flex-black/40">
+        <p className="mt-3 text-center text-xs text-ink-3">
           Handle sizga biriktirilishi uchun hisob kerak.
         </p>
       </div>
@@ -45,7 +45,7 @@ export default function ClaimForm({
   if (state.ok && state.checkout) {
     return (
       <div className="mt-8 space-y-3">
-        <p className="text-sm text-flex-black/60">
+        <p className="text-sm text-ink-2">
           <span className="font-medium text-flex-black">{handle}</span> siz uchun 30 daqiqaga
           band qilindi. To&apos;lovni yakunlang:
         </p>
@@ -72,7 +72,7 @@ export default function ClaimForm({
             Payme orqali to&apos;lash — {priceLabel}
           </a>
         )}
-        <p className="text-center text-xs text-flex-black/40">
+        <p className="text-center text-xs text-ink-3">
           To&apos;lov tasdiqlangach handle butunlay sizniki bo&apos;ladi.
         </p>
       </div>
@@ -81,7 +81,7 @@ export default function ClaimForm({
 
   return (
     <form action={formAction} className="mt-8 space-y-3 text-left">
-      <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-line-2 bg-black/[0.02] px-4 py-2.5 text-sm text-flex-black/50">
+      <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-line-2 bg-black/[0.02] px-4 py-2.5 text-sm text-ink-2">
         <span>Profil rasmi (ixtiyoriy)</span>
         <input
           type="file"
@@ -118,7 +118,7 @@ export default function ClaimForm({
             ? `${priceLabel} — To'lovga o'tish`
             : `${priceLabel} — Band qilish`}
       </button>
-      <p className="text-center text-xs text-flex-black/40">
+      <p className="text-center text-xs text-ink-3">
         {paymentEnabled
           ? "Keyingi qadamda Click yoki Payme tanlaysiz."
           : "Hozircha to'lov tizimi ulanmagan — bu demo/test rejimida bepul band qilish."}
