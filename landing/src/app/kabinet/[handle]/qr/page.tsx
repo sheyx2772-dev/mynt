@@ -18,10 +18,10 @@ export default async function QrPage({ params }: PageProps<"/kabinet/[handle]/qr
       <SubScreen
         handle={normalized}
         title="QR-kod"
-        hint="NFC ishlamaydigan telefonlar uchun zaxira. Kartaga bosish uchun ham shu kod."
+        hint="NFC yo'q telefonlar uchun. Kartaga bosish uchun ham shu kod. Kartaga bosish uchun ham shu kod."
       >
-        <div className="rounded-[1.75rem] border border-ink-line bg-ink-s1 p-7 text-center shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
-          <div className="mx-auto w-64 max-w-full rounded-2xl border border-ink-line p-5">
+        <div className="rounded-tile border border-ink-line bg-ink-s1 p-7 text-center shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+          <div className="mx-auto w-64 max-w-full rounded-card border border-ink-line p-5">
             {/* eslint-disable-next-line @next/next/no-img-element -- an SVG route, not an optimizable asset */}
             <img
               src={`/${normalized}/qr`}

@@ -7,7 +7,7 @@ import type { B2BDict } from "@/lib/i18n";
 import { VERTICALS, TYPICAL_POINTS } from "@/lib/venues";
 
 const field =
-  "w-full rounded-2xl border border-ink-line bg-white/[0.06] px-4 py-3 text-sm text-white outline-none placeholder:text-paper-3 focus:border-lime/50";
+  "w-full rounded-card border border-ink-line bg-white/[0.06] px-4 py-3 text-sm text-white outline-none placeholder:text-paper-3 focus:border-lime/50";
 const label = "mb-1.5 block text-xs font-medium tracking-wide text-paper-3 uppercase";
 
 export default function VenueRequestForm({ t }: { t: B2BDict }) {
@@ -18,7 +18,7 @@ export default function VenueRequestForm({ t }: { t: B2BDict }) {
 
   if (state.sent) {
     return (
-      <div className="rounded-3xl border border-lime/40 bg-lime/[0.08] p-8">
+      <div className="rounded-tile border border-lime/40 bg-lime/[0.08] p-8">
         <h3 className="font-display text-lg font-semibold text-white">{t.sentTitle}</h3>
         <p className="mt-2 text-sm leading-relaxed text-paper-2">
           {t.sentBody}{" "}
@@ -35,7 +35,7 @@ export default function VenueRequestForm({ t }: { t: B2BDict }) {
   const message = state.code ? t.errors[state.code] : null;
 
   return (
-    <form action={action} className="rounded-3xl border border-ink-line bg-white/[0.03] p-6 sm:p-8">
+    <form action={action} className="rounded-tile border border-ink-line bg-white/[0.03] p-6 sm:p-8">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="vertical" className={label}>

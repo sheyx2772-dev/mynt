@@ -36,7 +36,7 @@ export default function SignInForm({ next }: { next: string }) {
         autoComplete="email"
         required
         placeholder="siz@email.com"
-        className="w-full rounded-xl border border-line bg-black/[0.02] px-4 py-3 text-sm outline-none transition-colors focus:border-line-lead focus:bg-white"
+        className="w-full rounded-input border border-line bg-black/[0.02] px-4 py-3 text-sm outline-none transition-colors focus:border-line-lead focus:bg-white"
       />
 
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}

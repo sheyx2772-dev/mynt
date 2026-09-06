@@ -66,7 +66,7 @@ export default function TelegramLink({
           )}
         </p>
 
-        <p className="mt-3 inline-block rounded-xl border border-ink-line bg-ink-s2 px-5 py-3 font-tabular text-2xl font-semibold tracking-[0.25em]">
+        <p className="mt-3 inline-block rounded-input border border-ink-line bg-ink-s2 px-5 py-3 font-tabular text-2xl font-semibold tracking-[0.25em]">
           {state.code}
         </p>
 
@@ -90,7 +90,7 @@ export default function TelegramLink({
           })
         }
         disabled={pending}
-        className="mt-4 rounded-xl bg-ink-s2 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-paper uppercase disabled:opacity-50"
+        className="mt-4 rounded-input bg-ink-s2 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-paper uppercase disabled:opacity-50"
       >
         {pending ? "Ulanmoqda…" : "Telegramni ulash"}
       </button>

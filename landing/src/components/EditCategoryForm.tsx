@@ -15,7 +15,7 @@ import type { VenueWords } from "@/lib/venue-words";
 // in the Russian.
 
 const field =
-  "w-full rounded-xl border border-ink-line bg-ink-s1 px-3 py-2.5 text-sm outline-none focus:border-paper-3";
+  "w-full rounded-input border border-ink-line bg-ink-s1 px-3 py-2.5 text-sm outline-none focus:border-paper-3";
 const label = "mb-1 block text-[11px] font-medium tracking-wide text-paper-3 uppercase";
 
 const idle: EditResult = { ok: true };
@@ -36,7 +36,7 @@ export default function EditCategoryForm({
       <input type="hidden" name="handle" value={handle} />
       <input type="hidden" name="id" value={category.id} />
 
-      <div className="rounded-2xl border border-ink-line bg-ink-s1 p-5">
+      <div className="rounded-card border border-ink-line bg-ink-s1 p-5">
         <div className="grid gap-3">
           <div>
             <label htmlFor="ec-name" className={label}>
@@ -82,7 +82,7 @@ export default function EditCategoryForm({
 
         <button
           disabled={busy}
-          className="mt-4 w-full rounded-xl bg-lime px-5 py-3.5 font-medium text-ink disabled:opacity-60"
+          className="mt-4 w-full rounded-input bg-lime px-5 py-3.5 font-medium text-ink disabled:opacity-60"
         >
           {busy ? "Saqlanmoqda…" : "Saqlash"}
         </button>

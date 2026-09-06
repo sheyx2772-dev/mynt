@@ -353,7 +353,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <div className="mx-auto max-w-6xl px-6 pt-2">
             <Link
               href="/katalog?bolim=layouts"
-              className="group flex items-center justify-between gap-4 rounded-2xl border border-line px-5 py-4 transition-colors hover:bg-black/[0.03]"
+              className="group flex items-center justify-between gap-4 rounded-card border border-line px-5 py-4 transition-colors hover:bg-black/[0.03]"
             >
               <span>
                 <span className="block font-semibold">{p.samplesLabel}</span>
@@ -620,7 +620,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             {copy.faqs.map((item) => (
               <details
                 key={item.q}
-                className="reveal group rounded-2xl border border-line bg-white p-5 transition-shadow duration-300 open:shadow-[0_12px_30px_-16px_rgba(14,10,27,0.2)]"
+                className="reveal group rounded-card border border-line bg-white p-5 transition-shadow duration-300 open:shadow-[0_12px_30px_-16px_rgba(14,10,27,0.2)]"
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between font-medium marker:content-none">
                   {item.q}
@@ -641,7 +641,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <div className="flex items-center gap-2 font-display text-xl font-semibold">
-                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-lime">
+                <span className="flex h-7 w-7 items-center justify-center rounded-plate bg-lime">
                   <span className="h-2 w-2 rounded-full bg-flex-black" />
                 </span>
                 flex

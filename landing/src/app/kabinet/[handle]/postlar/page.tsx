@@ -25,8 +25,8 @@ export default async function PostsPage({ params }: PageProps<"/kabinet/[handle]
         {owned.status === "claimed" ? (
           <PostComposer handle={normalized} />
         ) : (
-          <section className="rounded-[1.5rem] border border-ink-line bg-ink-s1 p-8 text-center">
-            <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-ink-s2">
+          <section className="rounded-tile border border-ink-line bg-ink-s1 p-8 text-center">
+            <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-input bg-ink-s2">
               <Clock className="h-4 w-4 text-paper-3" />
             </span>
             <p className="mx-auto mt-4 max-w-xs text-[13px] leading-relaxed text-paper-2">

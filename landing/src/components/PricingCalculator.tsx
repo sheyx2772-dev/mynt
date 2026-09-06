@@ -102,9 +102,9 @@ export default function PricingCalculator({
   return (
     <div className="relative w-full max-w-xl">
       <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-lime/10 blur-3xl" />
-      <div className="rounded-3xl border border-line bg-white p-6 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)] sm:p-8">
+      <div className="rounded-tile border border-line bg-white p-6 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)] sm:p-8">
         <div className="mb-7 flex flex-wrap items-center gap-3">
-          <div className="flex overflow-hidden rounded-2xl border-2 border-flex-black/90 font-display text-2xl font-semibold tracking-tight shadow-[0_6px_16px_-8px_rgba(14,10,27,0.4)]">
+          <div className="flex overflow-hidden rounded-card border-2 border-flex-black/90 font-display text-2xl font-semibold tracking-tight shadow-[0_6px_16px_-8px_rgba(14,10,27,0.4)]">
             <input
               aria-label="Harflar"
               ref={lettersRef}
@@ -137,7 +137,7 @@ export default function PricingCalculator({
             onClick={randomise}
             aria-label={labels.randomise}
             title={labels.randomise}
-            className="flex h-11 w-11 items-center justify-center rounded-2xl border-2 border-flex-black/90 transition-colors hover:bg-black/[0.04]"
+            className="flex h-11 w-11 items-center justify-center rounded-card border-2 border-flex-black/90 transition-colors hover:bg-black/[0.04]"
           >
             <Shuffle className="h-4 w-4" />
           </button>
@@ -160,7 +160,7 @@ export default function PricingCalculator({
             /* No price, and no way through to a page that would 404. The
                reason is not named: a message saying which word it objected to
                is a message that maps the list. */
-            <p className="rounded-2xl border border-line-soft bg-black/[0.03] px-4 py-6 text-center text-black/50">
+            <p className="rounded-card border border-line-soft bg-black/[0.03] px-4 py-6 text-center text-black/50">
               {labels.notForSale}
             </p>
           ) : (
@@ -185,7 +185,7 @@ export default function PricingCalculator({
             </div>
             <div className="flex items-center justify-between pt-5">
               <div className="font-display text-lg font-semibold">{labels.total}</div>
-              <div className="rounded-xl bg-lime px-4 py-2 font-display text-xl font-semibold text-flex-black">
+              <div className="rounded-input bg-lime px-4 py-2 font-display text-xl font-semibold text-flex-black">
                 {formatUZS(total, lang)}
               </div>
             </div>
@@ -202,7 +202,7 @@ export default function PricingCalculator({
                 buyer on the page, and there was nothing here for them to press. */}
             <Link
               href={`/${cleanLetters}${cleanDigits}`}
-              className="mt-5 flex items-center justify-center gap-2 rounded-2xl bg-flex-black px-6 py-4 font-medium text-white transition-transform hover:scale-[1.01]"
+              className="mt-5 flex items-center justify-center gap-2 rounded-card bg-flex-black px-6 py-4 font-medium text-white transition-transform hover:scale-[1.01]"
             >
               {labels.take.replace("{handle}", `${cleanLetters}${cleanDigits}`)}
               <ArrowRight className="h-4 w-4" />

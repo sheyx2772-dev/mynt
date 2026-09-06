@@ -50,13 +50,13 @@ function AskForNumber({
         value={phone}
         onChange={(e) => setPhone(group(e.target.value))}
         placeholder="+998 90 123 45 67"
-        className="w-full rounded-xl border border-line bg-black/[0.02] px-4 py-3 text-sm outline-none transition-colors focus:border-line-lead focus:bg-white"
+        className="w-full rounded-input border border-line bg-black/[0.02] px-4 py-3 text-sm outline-none transition-colors focus:border-line-lead focus:bg-white"
       />
       {error && <p className="text-sm text-red-700">{error}</p>}
       <button
         type="submit"
         disabled={busy}
-        className="w-full rounded-xl bg-flex-black py-3 text-sm font-medium text-white transition-colors hover:bg-flex-black/85 disabled:opacity-50"
+        className="w-full rounded-input bg-flex-black py-3 text-sm font-medium text-white transition-colors hover:bg-flex-black/85 disabled:opacity-50"
       >
         {busy ? "Yuborilmoqda…" : "Kod yuborish"}
       </button>
@@ -91,7 +91,7 @@ function AskForCode({
       </p>
 
       {testCode && (
-        <p className="flex items-start gap-2 rounded-xl border border-[#E8C86A] bg-[#FFF4D6] px-3 py-2.5 text-xs leading-relaxed text-[#6B5514]">
+        <p className="flex items-start gap-2 rounded-input border border-[#E8C86A] bg-[#FFF4D6] px-3 py-2.5 text-xs leading-relaxed text-[#6B5514]">
           <FlaskConical className="mt-px h-4 w-4 shrink-0" />
           <span>Sinov rejimi: SMS yuborilmadi. Kod — {testCode}</span>
         </p>
@@ -105,7 +105,7 @@ function AskForCode({
         required
         defaultValue={testCode ?? ""}
         placeholder="000000"
-        className="w-full rounded-xl border border-line bg-black/[0.02] px-4 py-3 text-center text-lg font-semibold tracking-[0.4em] outline-none transition-colors focus:border-line-lead focus:bg-white"
+        className="w-full rounded-input border border-line bg-black/[0.02] px-4 py-3 text-center text-lg font-semibold tracking-[0.4em] outline-none transition-colors focus:border-line-lead focus:bg-white"
       />
 
       {!state.ok && state.error && <p className="text-sm text-red-700">{state.error}</p>}
@@ -113,7 +113,7 @@ function AskForCode({
       <button
         type="submit"
         disabled={busy}
-        className="w-full rounded-xl bg-flex-black py-3 text-sm font-medium text-white transition-colors hover:bg-flex-black/85 disabled:opacity-50"
+        className="w-full rounded-input bg-flex-black py-3 text-sm font-medium text-white transition-colors hover:bg-flex-black/85 disabled:opacity-50"
       >
         {busy ? "Tekshirilmoqda…" : "Kirish"}
       </button>

@@ -163,7 +163,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
       {team && (
         <Link
           href="/kabinet/jamoa"
-          className="mb-4 flex items-center gap-4 rounded-[1.5rem] border border-ink-line bg-ink-s2 px-6 py-5 text-paper transition-transform active:scale-[0.995]"
+          className="mb-4 flex items-center gap-4 rounded-tile border border-ink-line bg-ink-s2 px-6 py-5 text-paper transition-transform active:scale-[0.995]"
         >
           <Building2 className="h-5 w-5 shrink-0 text-paper" strokeWidth={1.75} />
           <div className="min-w-0 flex-1">
@@ -181,7 +181,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
       {queue > 0 && (
         <Link
           href="/kabinet/buyurtmalar"
-          className="mb-4 flex items-center gap-4 rounded-[1.5rem] border border-lime/50 bg-lime px-6 py-5 text-ink transition-transform active:scale-[0.995]"
+          className="mb-4 flex items-center gap-4 rounded-tile border border-lime/50 bg-lime px-6 py-5 text-ink transition-transform active:scale-[0.995]"
         >
           <Package className="h-5 w-5 shrink-0" strokeWidth={1.75} />
           <div className="min-w-0 flex-1">
@@ -195,7 +195,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
       )}
 
       {!open || !detail ? (
-        <div className="rounded-[1.75rem] border border-dashed border-ink-line p-8 text-center">
+        <div className="rounded-tile border border-dashed border-ink-line p-8 text-center">
           <p className="text-sm text-paper-2">
             Hali raqam olmagansiz. Bosh sahifadagi hisoblagichda narxni ko&apos;rib,
             o&apos;zingizga mos kombinatsiyani tanlang.

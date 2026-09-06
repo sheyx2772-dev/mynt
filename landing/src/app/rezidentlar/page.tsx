@@ -107,7 +107,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
                 <Link
                   key={entry.normalized}
                   href={`/${entry.normalized}`}
-                  className="relative overflow-hidden rounded-2xl bg-flex-black p-5 text-white transition-transform hover:-translate-y-0.5"
+                  className="relative overflow-hidden rounded-card bg-flex-black p-5 text-white transition-transform hover:-translate-y-0.5"
                 >
                   <span className="relative font-display text-xs text-lime">#{index + 1}</span>
                   <p className="relative mt-3 font-display font-semibold">{entry.name}</p>
@@ -126,7 +126,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
         <section className="mt-10">
           {residents.length === 0 ? (
-            <div className="rounded-[1.5rem] border border-dashed border-line-2 px-6 py-14 text-center">
+            <div className="rounded-tile border border-dashed border-line-2 px-6 py-14 text-center">
               <p className="text-sm text-ink-2">
                 {query
                   ? t.nothingFound(query)
@@ -147,7 +147,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
                   <li key={resident.normalized}>
                     <Link
                       href={`/${resident.normalized}`}
-                      className="flex items-center gap-4 rounded-2xl border border-line bg-white px-5 py-4 transition-all hover:-translate-y-0.5 hover:shadow-md"
+                      className="flex items-center gap-4 rounded-card border border-line bg-white px-5 py-4 transition-all hover:-translate-y-0.5 hover:shadow-md"
                     >
                       <Avatar name={resident.name} url={resident.avatarUrl} />
 

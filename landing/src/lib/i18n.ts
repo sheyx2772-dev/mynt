@@ -43,7 +43,7 @@ const STRINGS = {
     send: "Yuborish",
     sending: "Yuborilyapti",
     cancel: "Bekor qilish",
-    reachYou: (name: string) => `${name} sizga bog'lana olishi uchun`,
+    reachYou: (name: string) => `${name} siz bilan bog'lana olishi uchun`,
     contactHint: (name: string) =>
       `Telefon yoki email — kamida bittasi. Ma'lumotingiz faqat ${name}ga boradi.`,
     checkYours: "O'z raqamingizni tekshiring",
@@ -266,7 +266,7 @@ const SITE = {
     heroTitleA: "Flex — sizning",
     heroTitleMark: "raqamli",
     heroTitleB: "shaxsingiz",
-    heroLead: "Siz noyob raqam sotib olasiz — u umrbod sizniki. Uni karta, uzuk yoki braslet ko'rinishida olib yurasiz, tanlov sizniki. Har biri bitta profilni ochadi.",
+    heroLead: "Siz noyob raqam sotib olasiz — u umrbod sizniki. Uni karta, uzuk yoki braslet ko'rinishida olib yurasiz, tanlov sizniki. Uchalasi ham bitta profilni ochadi.",
     stepTap: "Tegizing",
     stepTapDesc: "Telefonga tegizasiz, profilingiz ochiladi. Hech kim ilova o'rnatmaydi.",
     stepHandleDesc: "3 harf + 3 raqam. Narx darhol ko'rinadi — yashirin to'lov yo'q.",
@@ -309,7 +309,7 @@ const SITE = {
     offerTitle: "Ommaviy oferta",
     offerAuthority: "Ushbu hujjatning asl matni o'zbek tilida tuzilgan. Rus va ingliz tilidagi versiyalar qulaylik uchun berilgan; nizo yuzaga kelganda o'zbek tilidagi matn hisobga olinadi.",
     tagline: "Sizning raqamli shaxsingiz",
-    metaDescription: "Noyob raqam, shaxsiy profil va NFC karta. Bir tegish bilan shaxsingizni ulashing; jamoangiz uchun raqamlar chiqaring va kontakt yig'ing.",
+    metaDescription: "Noyob raqam, shaxsiy profil va NFC karta. Bir tegish bilan profilingizni ulashing; jamoangiz uchun raqamlar chiqaring va kontakt yig'ing.",
     product: "Mahsulot",
     whyFlex: "Nega Flex?",
     tiers: { common: "Oddiy", rare: "Noyob", epic: "Epik", legendary: "Afsonaviy", genesis: "Genesis" },
@@ -700,7 +700,7 @@ const LANDING = {
       },
       {
         title: "Qurilmani o'zingiz tanlaysiz",
-        desc: "Karta, uzuk yoki braslet — uchalasi ham bir tegishda o'sha profilni ochadi. NFC yo'q telefonlar uchun QR-kod zaxira variant.",
+        desc: "Karta, uzuk yoki braslet — uchalasi ham bir tegishda o'sha profilni ochadi. NFC yo'q telefonlar uchun NFC yo'q telefonlarda QR-kod ishlaydi.",
       },
       {
         title: "Kamyob raqam",
@@ -712,7 +712,7 @@ const LANDING = {
       },
       {
         title: "Avtovizitka",
-        desc: "Mashinangiz old oynasiga QR va NFC plastina. Yo'lda to'sib qo'ysangiz yoki faralar yoqiq qolsa — sizga xabar keladi, telefon raqamingiz esa ochilmaydi.",
+        desc: "Mashinangiz old oynasiga QR va NFC plastina. Yo'lda to'sib qo'ysangiz yoki faralaringiz yoniq qolsa — sizga xabar keladi, telefon raqamingiz esa ochilmaydi.",
       },
     ],
     business: [
@@ -748,7 +748,7 @@ const LANDING = {
       },
       {
         q: "NFC qurilma qanday ishlaydi?",
-        a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, sizning flex.com.uz profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC ishlamaydigan telefonlar uchun QR-kod zaxira variant sifatida ishlaydi.",
+        a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, sizning flex.com.uz profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC ishlamaydigan telefonlar uchun NFC yo'q telefonlarda QR-kod orqali ochiladi.",
       },
       {
         q: "Kafe yoki mehmonxonaga nima beradi?",
@@ -1758,7 +1758,7 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "shop" | "other", Screen>>
       rows: [
         ["Chiqish vaqti", "", "12:00"],
         ["Nonushta", "Restoran, 2-qavat", "07:00 – 10:00"],
-        ["Room service", "Kechayu kunduz", "24/7"],
+        ["Xonaga xizmat", "Kechayu kunduz", "24/7"],
       ],
       actions: ["Xonani tozalash", "Kir yuvish", "Taksi", "Uyg'otish"],
       primary: "So'rov yuborish",
@@ -1813,7 +1813,7 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "shop" | "other", Screen>>
       rows: [
         ["Время выезда", "", "12:00"],
         ["Завтрак", "Ресторан, 2 этаж", "07:00 – 10:00"],
-        ["Room service", "Круглосуточно", "24/7"],
+        ["Обслуживание в номере", "Круглосуточно", "24/7"],
       ],
       actions: ["Уборка номера", "Прачечная", "Такси", "Разбудить"],
       primary: "Отправить запрос",
@@ -1962,7 +1962,7 @@ const PICKER = {
       name: "Avtovizitka",
       tagline: "Mashina old oynasida",
       description:
-        "QR va NFC plastina. Yo'lda to'sib qo'ysangiz yoki faralar yoqiq qolsa — sizga xabar keladi, telefon raqamingiz esa ochilmaydi.",
+        "QR va NFC plastina. Yo'lda to'sib qo'ysangiz yoki faralaringiz yoniq qolsa — sizga xabar keladi, telefon raqamingiz esa ochilmaydi.",
     },
   },
 

@@ -56,7 +56,7 @@ export default function SaveContactButton({
       }}
       className={
         className ??
-        "flex h-14 w-full items-center justify-center gap-2.5 rounded-xl bg-lime text-[16px] font-semibold text-on-accent shadow-slab transition-transform duration-[120ms] active:translate-y-px active:shadow-none"
+        "flex h-14 w-full items-center justify-center gap-2.5 rounded-input bg-lime text-[16px] font-semibold text-on-accent shadow-slab transition-transform duration-[120ms] active:translate-y-px active:shadow-none"
       }
     >
       {saved ? (

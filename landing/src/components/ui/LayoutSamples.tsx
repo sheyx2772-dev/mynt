@@ -13,7 +13,7 @@ import NfcCardProfile from "@/components/ui/NfcCardProfile";
 
 function PlaqueSample() {
   return (
-    <div data-theme="zarbof" className="themed rounded-2xl">
+    <div data-theme="zarbof" className="themed rounded-card">
       <PlaqueProfile
         n="MYN042"
         name="Aziz Karimov"
@@ -80,7 +80,7 @@ const SERVICES = [
 
 function SocialSample() {
   return (
-    <div data-theme="ijtimoiy" className="themed rounded-2xl">
+    <div data-theme="ijtimoiy" className="themed rounded-card">
       <SocialProfile
         n="MYN042"
         name="Aziz Karimov"
@@ -90,7 +90,7 @@ function SocialSample() {
       >
         <a
           href="#"
-          className="mt-6 flex h-14 w-full items-center justify-center rounded-2xl bg-lime text-[16px] font-bold text-on-accent"
+          className="mt-6 flex h-14 w-full items-center justify-center rounded-card bg-lime text-[16px] font-bold text-on-accent"
         >
           Kontaktni saqlash
         </a>
@@ -101,7 +101,7 @@ function SocialSample() {
 
 function PosterSample() {
   return (
-    <div data-theme="plakat" className="themed rounded-2xl">
+    <div data-theme="plakat" className="themed rounded-card">
       <PosterProfile n="MYN042" name="Aziz Karimov" role="Direktor · MC LEGAL" rows={ROWS}>
         <a
           href="#"
@@ -116,7 +116,7 @@ function PosterSample() {
 
 function ReceiptSample() {
   return (
-    <div data-theme="kvitansiya" className="themed rounded-2xl">
+    <div data-theme="kvitansiya" className="themed rounded-card">
       <ReceiptProfile
         n="MYN042"
         name="Aziz Karimov"
@@ -154,7 +154,7 @@ const NFC_ACTIONS = [
 
 function NfcSample({ theme }: { theme: string }) {
   return (
-    <div data-theme={theme} className="themed overflow-hidden rounded-2xl">
+    <div data-theme={theme} className="themed overflow-hidden rounded-card">
       <NfcCardProfile
         name="Aziz Karimov"
         org="MC LEGAL"

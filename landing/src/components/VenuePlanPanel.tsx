@@ -35,12 +35,12 @@ export default function VenuePlanPanel({
   return (
     <div>
       {monthly === null ? (
-        <div className="rounded-2xl border border-ink-line bg-ink-s1 p-5 text-sm text-paper-2">
+        <div className="rounded-card border border-ink-line bg-ink-s1 p-5 text-sm text-paper-2">
           {points} ta nuqta — bu o&apos;lchamdagi obyekt uchun narxi kelishiladi.
           Biz bilan bog&apos;laning, hisob-fakturani qo&apos;lda yozamiz.
         </div>
       ) : (
-        <form action={action} className="rounded-2xl border border-ink-line bg-ink-s1 p-5">
+        <form action={action} className="rounded-card border border-ink-line bg-ink-s1 p-5">
           <input type="hidden" name="handle" value={handle} />
           <input type="hidden" name="months" value={months} />
 
@@ -61,8 +61,8 @@ export default function VenuePlanPanel({
                 aria-pressed={months === option}
                 className={
                   months === option
-                    ? "rounded-xl bg-ink-s2 px-3 py-3 font-tabular text-sm font-medium text-paper"
-                    : "rounded-xl border border-ink-line px-3 py-3 font-tabular text-sm text-paper-2 hover:bg-ink-s2"
+                    ? "rounded-input bg-ink-s2 px-3 py-3 font-tabular text-sm font-medium text-paper"
+                    : "rounded-input border border-ink-line px-3 py-3 font-tabular text-sm text-paper-2 hover:bg-ink-s2"
                 }
               >
                 {option} oy
@@ -84,7 +84,7 @@ export default function VenuePlanPanel({
 
           <button
             disabled={busy}
-            className="mt-4 w-full rounded-xl bg-lime px-5 py-3.5 font-medium text-ink disabled:opacity-60"
+            className="mt-4 w-full rounded-input bg-lime px-5 py-3.5 font-medium text-ink disabled:opacity-60"
           >
             {busy ? "Yozilmoqda…" : "Hisob-faktura olish"}
           </button>
@@ -103,7 +103,7 @@ export default function VenuePlanPanel({
           <h2 className="mb-3 text-xs font-semibold tracking-widest text-paper-3 uppercase">
             Hisob-fakturalar
           </h2>
-          <div className="divide-y divide-ink-line rounded-2xl border border-ink-line bg-ink-s1">
+          <div className="divide-y divide-ink-line rounded-card border border-ink-line bg-ink-s1">
             {invoices.map((invoice) => (
               <Link
                 key={invoice.id}

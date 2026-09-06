@@ -33,7 +33,7 @@ export default function ProfileHandleSearch() {
       }}
       className="mb-4"
     >
-      <div className="flex items-center gap-2 rounded-xl border border-line bg-white px-4 py-2.5 shadow-sm">
+      <div className="flex items-center gap-2 rounded-input border border-line bg-white px-4 py-2.5 shadow-sm">
         <span className="font-tabular text-sm text-ink-3">flex.com.uz/</span>
         <input
           value={value}
@@ -46,7 +46,7 @@ export default function ProfileHandleSearch() {
           type="submit"
           disabled={parseHandle(value) === null}
           aria-label="Qidirish"
-          className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-flex-black text-white transition-opacity disabled:opacity-25"
+          className="flex size-11 shrink-0 items-center justify-center rounded-plate bg-flex-black text-white transition-opacity disabled:opacity-25"
         >
           <Search className="h-4 w-4" />
         </button>

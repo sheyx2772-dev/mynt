@@ -112,7 +112,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
               </div>
 
               <div className="relative flex justify-center lg:justify-end">
-                <div className="absolute -right-6 -bottom-4 z-20 hidden rotate-3 rounded-2xl border border-ink-line bg-white/[0.07] px-4 py-3 backdrop-blur-md sm:block">
+                <div className="absolute -right-6 -bottom-4 z-20 hidden rotate-3 rounded-card border border-ink-line bg-white/[0.07] px-4 py-3 backdrop-blur-md sm:block">
                   <p className="flex items-center gap-1.5 text-xs font-medium text-paper-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-lime" />
                     {s.nfcOn}
@@ -139,8 +139,8 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
 
           <ol className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-3">
             <li>
-              <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
-                <div className="relative flex overflow-hidden rounded-xl border border-ink-line font-display text-xl font-semibold text-white">
+              <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-card bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
+                <div className="relative flex overflow-hidden rounded-input border border-ink-line font-display text-xl font-semibold text-white">
                   <span className="px-3 py-2">MYN</span>
                   <span className="w-px bg-white/15" />
                   <span className="bg-lime px-3 py-2 font-tabular text-flex-black">
@@ -160,7 +160,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
             </li>
 
             <li>
-              <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
+              <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-card bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
                 {familyShot ? (
                   <Image
                     src={familyShot}
@@ -175,7 +175,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
                     {/* Card, ring, bracelet — three silhouettes, each given one
                     lime mark so a black object stays legible on a black stage. */}
                     <div className="relative flex items-center gap-4">
-                      <span className="relative h-16 w-24 rotate-[-8deg] rounded-lg border border-paper-3 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
+                      <span className="relative h-16 w-24 rotate-[-8deg] rounded-plate border border-paper-3 bg-[linear-gradient(140deg,#2b2250,#0c0818)] shadow-[0_18px_32px_-14px_rgba(0,0,0,0.95)]">
                         <span className="absolute bottom-2 left-2 h-1 w-6 rounded-full bg-lime" />
                       </span>
                       <span className="h-16 w-16 rounded-full border-[6px] border-paper-3 bg-[linear-gradient(140deg,#312653,#0c0818)]" />
@@ -198,7 +198,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
             </li>
 
             <li>
-              <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
+              <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-card bg-[radial-gradient(ellipse_at_50%_30%,#211a3c_0%,#0b0817_72%)]">
                 {tapShot ? (
                   <Image
                     src={tapShot}
@@ -288,7 +288,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
               {/* The car card, on the side of the site it belongs to: one
                   person, one car, bought the way a card or a ring is. */}
               {carShot && (
-                <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-2xl bg-flex-black">
+                <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-card bg-flex-black">
                   <Image
                     src={carShot}
                     alt={copy.consumer[4]?.title ?? ""}

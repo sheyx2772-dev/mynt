@@ -43,7 +43,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
     return (
       <PageShell surface="ink">
         <SubScreen handle={normalized} title="Hisobot" hint={venue.name}>
-          <div className="rounded-2xl border-l-[3px] border-danger-ink bg-danger-ink/10 px-6 py-6">
+          <div className="rounded-card border-l-[3px] border-danger-ink bg-danger-ink/10 px-6 py-6">
             <p className="font-display font-semibold">Obuna muddati tugagan</p>
             <p className="mt-1.5 text-sm leading-relaxed text-paper-2">
               Hisobot to&apos;lovdan keyin ochiladi. {w.listTitle} mehmonlarga
@@ -75,7 +75,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
         hint={`${venue.name} — so'nggi ${DAYS} kun.`}
       >
         {report.total === 0 ? (
-          <div className="rounded-2xl border border-dashed border-ink-line px-6 py-12 text-center">
+          <div className="rounded-card border border-dashed border-ink-line px-6 py-12 text-center">
             <p className="text-sm text-paper-2">
               Hali so&apos;rov kelmagan. {w.pointsTitle} belgilanib, kodlar
               qo&apos;yilgach shu yerda ko&apos;rinadi.
@@ -91,7 +91,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
           <>
             {/* The two numbers worth a glance: how many, and how fast. */}
             <div className="grid grid-cols-2 gap-2.5">
-              <div className="relative overflow-hidden rounded-2xl bg-ink-s2 px-5 py-5 text-paper">
+              <div className="relative overflow-hidden rounded-card bg-ink-s2 px-5 py-5 text-paper">
                 <p className="font-display font-tabular text-3xl font-semibold">
                   {formatNumber(report.total)}
                 </p>
@@ -99,7 +99,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
                   So&apos;rov
                 </p>
               </div>
-              <div className="rounded-2xl border border-ink-line bg-ink-s1 px-5 py-5">
+              <div className="rounded-card border border-ink-line bg-ink-s1 px-5 py-5">
                 <p className="font-display font-tabular text-3xl font-semibold">
                   {formatWait(report.medianWait)}
                 </p>
@@ -112,7 +112,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             {/* The worst one is the number that changes behaviour: an owner who
                 learns a table waited forty minutes goes and asks why. */}
             {report.worstWait !== null && (
-              <p className="mt-2.5 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-3.5 text-sm text-paper-2">
+              <p className="mt-2.5 rounded-card border border-ink-line bg-ink-s1 px-5 py-3.5 text-sm text-paper-2">
                 Eng uzoq kutish — <strong className="font-medium text-paper">
                   {formatWait(report.worstWait)}
                 </strong>
@@ -140,7 +140,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
                 Ko&apos;p chaqirgani yuqorida.
               </p>
 
-              <div className="divide-y divide-ink-line rounded-2xl border border-ink-line bg-ink-s1">
+              <div className="divide-y divide-ink-line rounded-card border border-ink-line bg-ink-s1">
                 {report.points.slice(0, 12).map((entry) => (
                   <div key={entry.point} className="flex items-center gap-3 px-4 py-3">
                     <span className="w-16 shrink-0 font-tabular text-sm font-semibold">
@@ -189,7 +189,7 @@ export default async function ReportPage({ params }: PageProps<"/kabinet/[handle
             </section>
 
             {report.reviews.count > 0 && (
-              <section className="mt-8 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-5">
+              <section className="mt-8 rounded-card border border-ink-line bg-ink-s1 px-5 py-5">
                 <div className="flex items-baseline gap-3">
                   <p className="font-display font-tabular text-3xl font-semibold">
                     {report.reviews.average}
@@ -235,7 +235,7 @@ function Kind({
   value: number;
 }) {
   return (
-    <div className="rounded-2xl border border-ink-line bg-ink-s1 px-4 py-4">
+    <div className="rounded-card border border-ink-line bg-ink-s1 px-4 py-4">
       <span className="text-paper-3">{icon}</span>
       <p className="mt-2 font-display font-tabular text-xl font-semibold">
         {formatNumber(value)}

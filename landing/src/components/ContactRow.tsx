@@ -63,7 +63,7 @@ export default function ContactRow({
 
   return (
     <li
-      className="rise relative overflow-hidden rounded-2xl border border-ink-line bg-ink-s1 transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
+      className="rise relative overflow-hidden rounded-card border border-ink-line bg-ink-s1 transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
       style={{ animationDelay: `${delayMs}ms` }}
     >
       {reason && (
@@ -75,7 +75,7 @@ export default function ContactRow({
         onClick={() => setOpen((was) => !was)}
         className="flex w-full items-center gap-3.5 py-3.5 pl-5 pr-4 text-left"
       >
-        <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink-s2 font-display text-[12px] font-semibold tracking-tight text-paper">
+        <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-input bg-ink-s2 font-display text-[12px] font-semibold tracking-tight text-paper">
           {initials(contact.name)}
           {/* The stage, on the corner of the face, so the list can be read
               without opening anything. */}
@@ -97,7 +97,7 @@ export default function ContactRow({
 
         {label ? (
           <span
-            className={`flex shrink-0 items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-medium ${CHIP[reason as Exclude<Reason, null>]}`}
+            className={`flex shrink-0 items-center gap-1 rounded-plate px-2 py-1 text-[11px] font-medium ${CHIP[reason as Exclude<Reason, null>]}`}
           >
             <ReasonIcon reason={reason as Exclude<Reason, null>} className="h-3 w-3" />
             {label}
@@ -115,7 +115,7 @@ export default function ContactRow({
             {contact.phone && (
               <a
                 href={`tel:${contact.phone.replace(/[^0-9+]/g, "")}`}
-                className="flex items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
+                className="flex items-center gap-1.5 rounded-input bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
               >
                 <Phone className="h-3.5 w-3.5" />
                 {contact.phone}
@@ -126,7 +126,7 @@ export default function ContactRow({
                 href={telegram}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
+                className="flex items-center gap-1.5 rounded-input bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
               >
                 <Send className="h-3.5 w-3.5" />
                 Telegram
@@ -135,7 +135,7 @@ export default function ContactRow({
             {contact.email && (
               <a
                 href={`mailto:${contact.email}`}
-                className="flex items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
+                className="flex items-center gap-1.5 rounded-input bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
               >
                 <Mail className="h-3.5 w-3.5" />
                 {contact.email}
@@ -152,7 +152,7 @@ export default function ContactRow({
             </p>
           )}
 
-          <div className="mt-4 inline-flex rounded-xl bg-ink-s2 p-1">
+          <div className="mt-4 inline-flex rounded-input bg-ink-s2 p-1">
             {STAGES.map((stage) => (
               <form action={moveStage} key={stage}>
                 <input type="hidden" name="handle" value={handle} />
@@ -162,8 +162,8 @@ export default function ContactRow({
                   type="submit"
                   className={
                     stage === contact.stage
-                      ? "flex items-center gap-1.5 rounded-lg bg-ink-s1 px-3 py-1.5 text-[12px] font-semibold shadow-[0_1px_3px_rgba(14,10,27,0.12)]"
-                      : "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] text-paper-3 transition-colors hover:text-paper-2"
+                      ? "flex items-center gap-1.5 rounded-plate bg-ink-s1 px-3 py-1.5 text-[12px] font-semibold shadow-[0_1px_3px_rgba(14,10,27,0.12)]"
+                      : "flex items-center gap-1.5 rounded-plate px-3 py-1.5 text-[12px] text-paper-3 transition-colors hover:text-paper-2"
                   }
                 >
                   <StageIcon stage={stage} className="h-3 w-3" />
@@ -181,12 +181,12 @@ export default function ContactRow({
               rows={2}
               defaultValue={contact.ownerNote ?? ""}
               placeholder="Nima kelishildi"
-              className="w-full resize-none rounded-xl bg-ink-s2 px-3.5 py-3 text-[13px] outline-none placeholder:text-paper-3 focus:bg-ink-s2"
+              className="w-full resize-none rounded-input bg-ink-s2 px-3.5 py-3 text-[13px] outline-none placeholder:text-paper-3 focus:bg-ink-s2"
             />
             <div className="mt-2 flex items-center gap-2">
               <label
                 htmlFor={`due-${contact.id}`}
-                className="flex items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] text-paper-3"
+                className="flex items-center gap-1.5 rounded-input bg-ink-s2 px-3 py-2 text-[12px] text-paper-3"
               >
                 <CalendarDays className="h-3.5 w-3.5" />
                 <input
@@ -199,7 +199,7 @@ export default function ContactRow({
               </label>
               <button
                 type="submit"
-                className="ml-auto rounded-xl bg-ink-s2 px-4 py-2 text-[12px] font-semibold text-paper transition-transform hover:scale-[1.02]"
+                className="ml-auto rounded-input bg-ink-s2 px-4 py-2 text-[12px] font-semibold text-paper transition-transform hover:scale-[1.02]"
               >
                 Saqlash
               </button>

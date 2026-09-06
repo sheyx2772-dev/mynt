@@ -164,7 +164,7 @@ const HOTEL: Record<Lang, VenueWords> = {
     itemPlaceholder: "Laundry",
     itemPlaceholderRu: "Стирка",
     itemPlaceholderEn: "Laundry",
-    categoryPlaceholder: "Room service",
+    categoryPlaceholder: "Xonaga xizmat",
     notePlaceholder: "Collected in the morning, back by evening",
     pointLabel: "Room number",
     pointsTitle: "Rooms",

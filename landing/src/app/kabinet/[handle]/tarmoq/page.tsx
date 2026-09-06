@@ -103,8 +103,8 @@ export default async function NetworkPage({
 
   const pill = (active: boolean) =>
     active
-      ? "flex shrink-0 items-center gap-1.5 rounded-xl bg-ink-s2 px-3.5 py-2 text-[12px] font-semibold text-paper shadow-[0_4px_14px_-6px_rgba(14,10,27,0.6)]"
-      : "flex shrink-0 items-center gap-1.5 rounded-xl bg-ink-s2 px-3.5 py-2 text-[12px] font-medium text-paper-2 transition-all hover:bg-ink-s2 hover:text-paper";
+      ? "flex shrink-0 items-center gap-1.5 rounded-input bg-ink-s2 px-3.5 py-2 text-[12px] font-semibold text-paper shadow-[0_4px_14px_-6px_rgba(14,10,27,0.6)]"
+      : "flex shrink-0 items-center gap-1.5 rounded-input bg-ink-s2 px-3.5 py-2 text-[12px] font-medium text-paper-2 transition-all hover:bg-ink-s2 hover:text-paper";
 
   return (
     <PageShell wide surface="ink">
@@ -119,7 +119,7 @@ export default async function NetworkPage({
             that decision deserves — and on the brand's own ground rather than
             on white, because a card that is white on white is a page and this
             is meant to be an application. */}
-        <section className="relative overflow-hidden rounded-[1.75rem] bg-ink-s2 p-6 text-paper sm:p-7">
+        <section className="relative overflow-hidden rounded-tile bg-ink-s2 p-6 text-paper sm:p-7">
 
           <div className="relative">
             <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-paper uppercase">
@@ -195,7 +195,7 @@ export default async function NetworkPage({
         )}
 
         {contacts.length === 0 ? (
-          <section className="mt-6 rounded-[1.75rem] border border-ink-line bg-ink-s1 p-10 text-center">
+          <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-10 text-center">
             <p className="font-display text-[17px] font-semibold tracking-tight">
               Hali hech kim kontakt qoldirmagan
             </p>
@@ -225,7 +225,7 @@ export default async function NetworkPage({
             </ul>
 
             {shown.length === 0 && (
-              <p className="mt-4 rounded-2xl border border-dashed border-ink-line p-8 text-center text-[13px] text-paper-3">
+              <p className="mt-4 rounded-card border border-dashed border-ink-line p-8 text-center text-[13px] text-paper-3">
                 Bu bo&apos;limda hech kim yo&apos;q.
               </p>
             )}

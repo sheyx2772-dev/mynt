@@ -38,8 +38,8 @@ export default async function SubscriptionPage({
         <div
           className={
             plan.active
-              ? "relative overflow-hidden rounded-2xl bg-ink-s2 px-5 py-5 text-paper"
-              : "rounded-2xl border-l-[3px] border-danger-ink bg-danger-ink/10 px-5 py-5"
+              ? "relative overflow-hidden rounded-card bg-ink-s2 px-5 py-5 text-paper"
+              : "rounded-card border-l-[3px] border-danger-ink bg-danger-ink/10 px-5 py-5"
           }
         >
           {plan.active ? (

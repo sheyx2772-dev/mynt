@@ -25,7 +25,7 @@ export default function VenueSetup({
   const done = steps.filter((step) => step.done).length;
 
   return (
-    <section className="rounded-[1.75rem] border border-ink-line bg-ink-s1 p-6 shadow-[0_20px_45px_-30px_rgba(14,10,27,0.3)]">
+    <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 shadow-[0_20px_45px_-30px_rgba(14,10,27,0.3)]">
       <div className="mb-4 flex items-baseline justify-between gap-3">
         <h2 className="font-display font-semibold tracking-tight">Ishga tushirish</h2>
         <span className="font-tabular text-sm text-paper-3">
@@ -43,8 +43,8 @@ export default function VenueSetup({
                 href={`/kabinet/${handle}/${step.screen}`}
                 className={
                   isNext
-                    ? "flex items-center gap-3 rounded-2xl bg-ink-s2 px-4 py-3.5 text-paper transition-transform active:scale-[0.99]"
-                    : "flex items-center gap-3 rounded-2xl px-4 py-3 transition-colors hover:bg-ink-s2"
+                    ? "flex items-center gap-3 rounded-card bg-ink-s2 px-4 py-3.5 text-paper transition-transform active:scale-[0.99]"
+                    : "flex items-center gap-3 rounded-card px-4 py-3 transition-colors hover:bg-ink-s2"
                 }
               >
                 <span

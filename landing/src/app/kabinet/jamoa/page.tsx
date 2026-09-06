@@ -49,7 +49,7 @@ export default async function JamoaPage() {
           </p>
         </div>
 
-        <div className="mt-8 rounded-2xl border border-ink-line bg-ink-s2 px-6 py-5">
+        <div className="mt-8 rounded-card border border-ink-line bg-ink-s2 px-6 py-5">
           <p className="text-sm text-paper-2">
             Firma hisobini biz ochamiz — o&apos;rinlar soni, raqamlar bloki va
             kartalar bitta buyurtmada tayyorlanadi.
@@ -57,13 +57,13 @@ export default async function JamoaPage() {
           <div className="mt-4 flex flex-wrap gap-3">
             <a
               href={`tel:${COMPANY.phoneHref}`}
-              className="rounded-xl bg-lime px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-ink uppercase"
+              className="rounded-input bg-lime px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-ink uppercase"
             >
               {COMPANY.phone}
             </a>
             <Link
               href="/biznes#jamoa"
-              className="rounded-xl border border-ink-line px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] uppercase transition-colors hover:bg-ink-s2"
+              className="rounded-input border border-ink-line px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] uppercase transition-colors hover:bg-ink-s2"
             >
               So&apos;rov qoldirish
             </Link>
@@ -88,23 +88,23 @@ export default async function JamoaPage() {
       <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight">{team.name}</h1>
 
       <div className="mt-6 grid grid-cols-3 gap-3">
-        <div className="rounded-2xl border border-ink-line bg-ink-s2 px-4 py-3">
+        <div className="rounded-card border border-ink-line bg-ink-s2 px-4 py-3">
           <p className="font-display text-2xl font-semibold tabular-nums">{taken}</p>
           <p className="mt-0.5 text-xs text-paper-3">Band</p>
         </div>
-        <div className="rounded-2xl border border-ink-line bg-ink-s2 px-4 py-3">
+        <div className="rounded-card border border-ink-line bg-ink-s2 px-4 py-3">
           <p className="font-display text-2xl font-semibold tabular-nums">
             {Math.max(0, team.seats - taken)}
           </p>
           <p className="mt-0.5 text-xs text-paper-3">Bo&apos;sh o&apos;rin</p>
         </div>
-        <div className="rounded-2xl border border-ink-line bg-ink-s2 px-4 py-3">
+        <div className="rounded-card border border-ink-line bg-ink-s2 px-4 py-3">
           <p className="font-display text-2xl font-semibold tabular-nums">{team.seats}</p>
           <p className="mt-0.5 text-xs text-paper-3">Jami</p>
         </div>
       </div>
 
-      <section className="mt-8 rounded-[1.75rem] border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <section className="mt-8 rounded-tile border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <h2 className="font-display text-lg font-semibold tracking-tight">
           Jamoa bo&apos;yicha
         </h2>
@@ -112,22 +112,22 @@ export default async function JamoaPage() {
           Barcha raqamlar bo&apos;yicha jami.
         </p>
         <div className="mt-5 grid grid-cols-2 gap-3">
-          <div className="rounded-2xl border border-ink-line bg-ink-s2 px-4 py-3">
+          <div className="rounded-card border border-ink-line bg-ink-s2 px-4 py-3">
             <p className="font-display text-2xl font-semibold tabular-nums">{stats.views}</p>
             <p className="mt-0.5 text-xs text-paper-3">Profil ochilgan</p>
           </div>
-          <div className="rounded-2xl border border-ink-line bg-ink-s2 px-4 py-3">
+          <div className="rounded-card border border-ink-line bg-ink-s2 px-4 py-3">
             <p className="font-display text-2xl font-semibold tabular-nums">{stats.taken}</p>
             <p className="mt-0.5 text-xs text-paper-3">Kelgan kontakt</p>
           </div>
         </div>
       </section>
 
-      <section className="mt-6 rounded-[1.75rem] border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <h2 className="font-display text-lg font-semibold tracking-tight">Raqamlar</h2>
 
         {handles.length === 0 ? (
-          <p className="mt-6 rounded-2xl border border-dashed border-ink-line px-4 py-6 text-center text-sm text-paper-3">
+          <p className="mt-6 rounded-card border border-dashed border-ink-line px-4 py-6 text-center text-sm text-paper-3">
             Bu firmaga hali raqam biriktirilmagan.
           </p>
         ) : (
@@ -165,7 +165,7 @@ export default async function JamoaPage() {
         )}
       </section>
 
-      <section className="mt-6 rounded-[1.75rem] border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <h2 className="font-display text-lg font-semibold tracking-tight">To&apos;lov</h2>
         <p className="mt-1 mb-5 text-sm text-paper-2">
           Firma to&apos;lovi bank o&apos;tkazmasi orqali. Hisob-fakturani
@@ -191,8 +191,8 @@ export default async function JamoaPage() {
                 <span
                   className={
                     inv.status === "paid"
-                      ? "rounded-lg bg-lime/25 px-2.5 py-1 text-xs font-medium"
-                      : "rounded-lg border border-ink-line px-2.5 py-1 text-xs text-paper-2"
+                      ? "rounded-plate bg-lime/25 px-2.5 py-1 text-xs font-medium"
+                      : "rounded-plate border border-ink-line px-2.5 py-1 text-xs text-paper-2"
                   }
                 >
                   {inv.status === "paid" ? "To'langan" : "Kutilmoqda"}

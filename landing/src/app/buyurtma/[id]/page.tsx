@@ -39,7 +39,7 @@ export default async function OrderPage({ params }: PageProps<"/buyurtma/[id]">)
         <h1 className="mt-2 font-display font-semibold text-3xl">{order.handle}</h1>
         <p className="mt-1 text-ink-2">{formatUZS(order.amount)}</p>
 
-        <div className="mt-8 rounded-2xl border border-flex-black/10 p-6">{status(order)}</div>
+        <div className="mt-8 rounded-card border border-flex-black/10 p-6">{status(order)}</div>
 
         <Link
           href="/kabinet"

@@ -23,7 +23,7 @@ export default function DeviceTile({
 
   if (shot) {
     return (
-      <div className="relative aspect-square overflow-hidden rounded-2xl border border-line-soft bg-[#f9f9f9]">
+      <div className="relative aspect-square overflow-hidden rounded-card border border-line-soft bg-[#f9f9f9]">
         <Image
           src={shot}
           alt={alt}
@@ -36,7 +36,7 @@ export default function DeviceTile({
   }
 
   return (
-    <div className="grain relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_50%_35%,#211a3c_0%,#0b0817_70%)] p-8">
+    <div className="grain relative flex aspect-square items-center justify-center overflow-hidden rounded-card bg-[radial-gradient(ellipse_at_50%_35%,#211a3c_0%,#0b0817_70%)] p-8">
       <div className="absolute inset-x-0 -top-10 h-40 bg-lime/10 blur-3xl" />
       <div className="relative">
         <DeviceFace type={type} design="genesis" handle="FLX007" />

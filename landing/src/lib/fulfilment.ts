@@ -124,7 +124,7 @@ const WORDS: Record<Lang, Record<Fulfilment, Words>> = {
     },
     shipped: {
       label: "Yuborildi",
-      buyer: "Yo'lda — pochtaga topshirildi",
+      buyer: "Yo'lda — kuryerga topshirildi",
       action: "Yetkazildi deb belgilash",
     },
     delivered: {

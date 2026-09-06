@@ -27,7 +27,7 @@ export default function InvoiceRequest({ currentSeats }: { currentSeats: number 
   const total = seats * months * TEAM_SEAT_MONTHLY;
 
   return (
-    <div className="rounded-2xl border border-ink-line bg-ink-s2 px-5 py-5">
+    <div className="rounded-card border border-ink-line bg-ink-s2 px-5 py-5">
       <h3 className="text-xs font-medium tracking-[0.14em] text-paper-3 uppercase">
         Hisob-faktura
       </h3>
@@ -41,7 +41,7 @@ export default function InvoiceRequest({ currentSeats }: { currentSeats: number 
             max={500}
             value={seats}
             onChange={(e) => setSeats(Number(e.target.value))}
-            className="w-24 rounded-xl border border-ink-line bg-ink-s1 px-3 py-2 font-tabular text-sm outline-none"
+            className="w-24 rounded-input border border-ink-line bg-ink-s1 px-3 py-2 font-tabular text-sm outline-none"
           />
         </label>
 
@@ -50,7 +50,7 @@ export default function InvoiceRequest({ currentSeats }: { currentSeats: number 
           <select
             value={months}
             onChange={(e) => setMonths(Number(e.target.value))}
-            className="rounded-xl border border-ink-line bg-ink-s1 px-3 py-2 text-sm outline-none"
+            className="rounded-input border border-ink-line bg-ink-s1 px-3 py-2 text-sm outline-none"
           >
             {PERIODS.map((p) => (
               <option key={p.months} value={p.months}>
@@ -78,7 +78,7 @@ export default function InvoiceRequest({ currentSeats }: { currentSeats: number 
           })
         }
         disabled={pending}
-        className="mt-4 rounded-xl bg-ink-s2 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-paper uppercase disabled:opacity-50"
+        className="mt-4 rounded-input bg-ink-s2 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-paper uppercase disabled:opacity-50"
       >
         {pending ? "Tayyorlanmoqda" : "Hisob-faktura olish"}
       </button>

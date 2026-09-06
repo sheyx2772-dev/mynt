@@ -48,14 +48,14 @@ export default function EditProfileForm({
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
 
   const inputClass =
-    "w-full rounded-xl border border-ink-line bg-ink-s2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-paper-3 focus:bg-ink-s1";
+    "w-full rounded-input border border-ink-line bg-ink-s2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-paper-3 focus:bg-ink-s1";
   const labelClass = "mb-1.5 block text-xs font-medium tracking-wide text-paper-2 uppercase";
 
   return (
     <form action={formAction} className="space-y-4 text-left">
       <div>
         <span className={labelClass}>Profil rasmi</span>
-        <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-ink-line bg-ink-s2 px-4 py-2.5 text-sm text-paper-2">
+        <label className="flex cursor-pointer items-center justify-between rounded-input border border-dashed border-ink-line bg-ink-s2 px-4 py-2.5 text-sm text-paper-2">
           <span>Yangi rasm tanlang</span>
           <input
             type="file"
@@ -72,7 +72,7 @@ export default function EditProfileForm({
       {defaults.plan === "premium" ? (
         <div>
           <span className={labelClass}>Fon rasmi</span>
-          <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-ink-line bg-ink-s2 px-4 py-2.5 text-sm text-paper-2">
+          <label className="flex cursor-pointer items-center justify-between rounded-input border border-dashed border-ink-line bg-ink-s2 px-4 py-2.5 text-sm text-paper-2">
             <span>Yangi fon tanlang</span>
             <input
               type="file"
@@ -92,7 +92,7 @@ export default function EditProfileForm({
           )}
         </div>
       ) : (
-        <div className="rounded-xl border border-ink-line bg-ink-s2 px-4 py-3">
+        <div className="rounded-input border border-ink-line bg-ink-s2 px-4 py-3">
           <p className="text-xs text-paper-2">
             <span className="font-medium text-paper-2">Fon rasmi</span> — premium
             rejada o&apos;z rasmingizni qo&apos;yish mumkin. Hozir kartangiz dizayni
@@ -363,7 +363,7 @@ export default function EditProfileForm({
         </div>
       </div>
 
-      <div className="rounded-xl border border-ink-line bg-ink-s2 px-4 py-3">
+      <div className="rounded-input border border-ink-line bg-ink-s2 px-4 py-3">
         <label className="flex cursor-pointer items-start gap-2.5 text-sm">
           <input
             type="checkbox"

@@ -39,12 +39,12 @@ function designsIn(theme: string): string[] {
 
 function Sample({ theme }: { theme: string }) {
   return (
-    <div data-theme={theme} className="themed rounded-2xl px-3 pt-6 pb-8">
+    <div data-theme={theme} className="themed rounded-card px-3 pt-6 pb-8">
       <CardObject n="MYN042" name="Aziz Karimov" />
 
-      <div className="relative z-10 mx-3 -mt-12 rounded-2xl bg-sheet px-5 pt-16 pb-6 text-ink shadow-sheet">
+      <div className="relative z-10 mx-3 -mt-12 rounded-card bg-sheet px-5 pt-16 pb-6 text-ink shadow-sheet">
         <div className="flex items-end gap-4">
-          <div className="relative -mt-10 flex size-24 shrink-0 items-center justify-center rounded-[14px] border-[3px] border-sheet bg-ink text-[28px] font-semibold text-sheet shadow-photo">
+          <div className="relative -mt-10 flex size-24 shrink-0 items-center justify-center rounded-card border-[3px] border-sheet bg-ink text-[28px] font-semibold text-sheet shadow-photo">
             AK
           </div>
           <div className="min-w-0 pb-1">
@@ -66,21 +66,21 @@ function Sample({ theme }: { theme: string }) {
         </p>
 
         <div className="mt-5 grid grid-cols-2 gap-3">
-          <span className="flex h-14 items-center justify-center gap-2.5 rounded-xl bg-ink text-[16px] font-semibold text-sheet shadow-slab">
+          <span className="flex h-14 items-center justify-center gap-2.5 rounded-input bg-ink text-[16px] font-semibold text-sheet shadow-slab">
             <Phone className="size-5" />
             Qo&apos;ng&apos;iroq
           </span>
-          <span className="flex h-14 items-center justify-center gap-2.5 rounded-xl bg-ink text-[16px] font-semibold text-sheet shadow-slab">
+          <span className="flex h-14 items-center justify-center gap-2.5 rounded-input bg-ink text-[16px] font-semibold text-sheet shadow-slab">
             <Send className="size-5" />
             Telegram
           </span>
         </div>
 
         <div className="mt-3 grid grid-cols-2 gap-3">
-          <span className="flex min-h-14 items-center justify-center rounded-xl bg-paper px-3 py-2 text-[16px] leading-5 font-medium text-balance shadow-deboss">
+          <span className="flex min-h-14 items-center justify-center rounded-input bg-paper px-3 py-2 text-[16px] leading-5 font-medium text-balance shadow-deboss">
             Tavsiya qilaman
           </span>
-          <span className="flex min-h-14 items-center justify-center rounded-xl bg-paper px-3 py-2 text-[16px] leading-5 font-medium text-balance shadow-deboss">
+          <span className="flex min-h-14 items-center justify-center rounded-input bg-paper px-3 py-2 text-[16px] leading-5 font-medium text-balance shadow-deboss">
             Obuna bo&apos;lish
           </span>
         </div>
@@ -110,7 +110,7 @@ function Sample({ theme }: { theme: string }) {
         </div>
 
         <div className="mt-6">
-          <span className="flex h-14 items-center justify-center rounded-xl bg-lime text-[16px] font-semibold text-ink shadow-slab">
+          <span className="flex h-14 items-center justify-center rounded-input bg-lime text-[16px] font-semibold text-ink shadow-slab">
             Kontaktni saqlash
           </span>
         </div>

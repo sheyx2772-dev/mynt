@@ -82,7 +82,7 @@ export function heroCarousel(lang: Lang): CarouselItem[] {
   const petTag = {
     id: "hayvon-teg",
     href: "/qurilmalar",
-    name: lang === "ru" ? "Жетон для животного" : lang === "en" ? "Pet tag" : "Hayvon jetoni",
+    name: lang === "ru" ? "Жетон для животного" : lang === "en" ? "Pet tag" : "Hayvon tegi",
     price: p.priceUnknown,
   };
 

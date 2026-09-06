@@ -95,7 +95,7 @@ export default function InstallHint() {
   if (!showIos && !showButton) return null;
 
   return (
-    <div className="relative mb-6 rounded-2xl border border-ink-line bg-ink-s2 p-4 pr-10">
+    <div className="relative mb-6 rounded-card border border-ink-line bg-ink-s2 p-4 pr-10">
       <button
         onClick={dismissForever}
         aria-label="Yopish"

@@ -54,7 +54,7 @@ export default function ExchangeContactForm({
       <div
         className={
           className ??
-          "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute"
+          "flex min-h-14 w-full items-center justify-center gap-2 rounded-input bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute"
         }
       >
         <Check className="h-5 w-5" />
@@ -69,7 +69,7 @@ export default function ExchangeContactForm({
         onClick={() => setOpen(true)}
         className={
           className ??
-          "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5"
+          "flex min-h-14 w-full items-center justify-center gap-2 rounded-input bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5"
         }
       >
         <UserRoundPlus className="h-5 w-5" />
@@ -82,7 +82,7 @@ export default function ExchangeContactForm({
     // 16px and not a pixel less: Android Chrome zooms the page when a field
     // under that size takes focus, and on a form this tall the send button
     // then leaves the screen.
-    "h-14 w-full rounded-lg border border-ink/15 bg-sheet px-4 text-[16px] text-ink outline-none placeholder:text-mute focus:border-ink";
+    "h-14 w-full rounded-plate border border-ink/15 bg-sheet px-4 text-[16px] text-ink outline-none placeholder:text-mute focus:border-ink";
 
   return (
     <form
@@ -94,7 +94,7 @@ export default function ExchangeContactForm({
           else setError(result.error ?? "Yuborilmadi. Qaytadan urinib ko'ring.");
         })
       }
-      className="rounded-xl bg-ink/[0.04] p-4 shadow-deboss"
+      className="rounded-input bg-ink/[0.04] p-4 shadow-deboss"
     >
       <p className="text-[17px] leading-6 font-semibold">
         {t.reachYou}
@@ -131,14 +131,14 @@ export default function ExchangeContactForm({
         <button
           type="submit"
           disabled={pending}
-          className="flex h-14 flex-1 items-center justify-center rounded-xl bg-slab px-5 text-[16px] font-semibold text-on-slab shadow-slab active:translate-y-px active:shadow-none disabled:bg-ink/20 disabled:shadow-none"
+          className="flex h-14 flex-1 items-center justify-center rounded-input bg-slab px-5 text-[16px] font-semibold text-on-slab shadow-slab active:translate-y-px active:shadow-none disabled:bg-ink/20 disabled:shadow-none"
         >
           {pending ? t.sending : t.send}
         </button>
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="h-14 rounded-xl px-5 text-[16px] font-medium text-mute"
+          className="h-14 rounded-input px-5 text-[16px] font-medium text-mute"
         >
           {t.cancel}
         </button>

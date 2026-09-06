@@ -33,7 +33,7 @@ export default function LoadoutTile({
   return (
     <Link
       href={href}
-      className={`group relative flex flex-col overflow-hidden rounded-3xl bg-flex-black ring-1 ring-white/10 transition-transform active:scale-[0.99] hover:-translate-y-0.5 ${
+      className={`group relative flex flex-col overflow-hidden rounded-tile bg-flex-black ring-1 ring-white/10 transition-transform active:scale-[0.99] hover:-translate-y-0.5 ${
         wide ? "sm:col-span-2" : ""
       }`}
     >

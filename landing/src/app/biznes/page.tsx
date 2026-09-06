@@ -106,7 +106,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
 
             {/* What the address points at today, and what it will point at. */}
             <div className="mt-9 flex flex-wrap items-center gap-2 font-display text-sm">
-              <span className="rounded-xl border border-lime/40 bg-white/[0.05] px-3.5 py-2 text-lime">
+              <span className="rounded-input border border-lime/40 bg-white/[0.05] px-3.5 py-2 text-lime">
                 {t.chain[0]}
               </span>
               <span className="text-xs text-paper-3">{t.chainNow}</span>
@@ -115,7 +115,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
               {t.chain.slice(1).map((step) => (
                 <span
                   key={step}
-                  className="rounded-xl border border-ink-line bg-white/[0.05] px-3.5 py-2 text-paper-2"
+                  className="rounded-input border border-ink-line bg-white/[0.05] px-3.5 py-2 text-paper-2"
                 >
                   {step}
                 </span>
@@ -149,7 +149,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
             the demo venue, opened on their own phone, which argues better than
             the rest of the page put together. */}
         <section className="mx-auto max-w-6xl px-6 pt-12">
-          <div className="rounded-3xl border-l-[3px] border-lime-ink bg-black/[0.03] px-6 py-5">
+          <div className="rounded-tile border-l-[3px] border-lime-ink bg-black/[0.03] px-6 py-5">
             <h2 className="font-display font-semibold">{t.pilotTitle}</h2>
             <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-ink-2">
               {t.pilotBody}
@@ -180,7 +180,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
               return (
                 <div
                   key={item.title}
-                  className="rounded-3xl border border-line bg-white p-6"
+                  className="rounded-tile border border-line bg-white p-6"
                 >
                   <Icon className="h-5 w-5 text-ink-3" strokeWidth={1.75} />
                   <h3 className="mt-5 font-display font-semibold">{item.title}</h3>

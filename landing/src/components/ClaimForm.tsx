@@ -23,7 +23,7 @@ export default function ClaimForm({
   const typed = state.ok ? undefined : state.values;
 
   const inputClass =
-    "w-full rounded-xl border border-line bg-black/[0.02] px-4 py-2.5 text-sm outline-none transition-colors focus:border-line-lead focus:bg-white";
+    "w-full rounded-input border border-line bg-black/[0.02] px-4 py-2.5 text-sm outline-none transition-colors focus:border-line-lead focus:bg-white";
 
   if (!isSignedIn) {
     return (
@@ -81,7 +81,7 @@ export default function ClaimForm({
 
   return (
     <form action={formAction} className="mt-8 space-y-3 text-left">
-      <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-line-2 bg-black/[0.02] px-4 py-2.5 text-sm text-ink-2">
+      <label className="flex cursor-pointer items-center justify-between rounded-input border border-dashed border-line-2 bg-black/[0.02] px-4 py-2.5 text-sm text-ink-2">
         <span>Profil rasmi (ixtiyoriy)</span>
         <input
           type="file"

@@ -40,7 +40,7 @@ export default async function FeedPage() {
         <div>
           <div className="mb-5 flex items-baseline justify-between gap-4">
             <h1 className="flex items-center gap-2.5 font-display text-2xl font-semibold tracking-tight">
-              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-flex-black">
+              <span className="flex h-8 w-8 items-center justify-center rounded-input bg-flex-black">
                 <Rss className="h-4 w-4 text-lime" />
               </span>
               Postlar
@@ -67,7 +67,7 @@ export default async function FeedPage() {
             feed the second thing on a page that exists for it. */}
         <aside className="hidden lg:sticky lg:top-8 lg:block lg:space-y-4">
           {top.length > 0 && (
-            <section className="relative overflow-hidden rounded-[1.5rem] bg-flex-black p-5 text-white">
+            <section className="relative overflow-hidden rounded-tile bg-flex-black p-5 text-white">
               <div className="relative">
                 <p className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-paper-3 uppercase">
                   <TrendingUp className="h-3.5 w-3.5" />
@@ -103,7 +103,7 @@ export default async function FeedPage() {
           )}
 
           {newest.length > 0 && (
-            <section className="rounded-[1.5rem] border border-line bg-white p-5">
+            <section className="rounded-tile border border-line bg-white p-5">
               <p className="text-[11px] font-medium tracking-[0.12em] text-ink-3 uppercase">
                 Yangi rezidentlar
               </p>
@@ -114,7 +114,7 @@ export default async function FeedPage() {
                       href={`/${resident.normalized}`}
                       className="flex items-center gap-3 transition-opacity hover:opacity-70"
                     >
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-black/[0.05] font-display text-[11px] font-semibold text-ink-2">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-plate bg-black/[0.05] font-display text-[11px] font-semibold text-ink-2">
                         {(resident.name || resident.normalized)
                           .split(/\s+/)
                           .map((p) => p[0] ?? "")
@@ -137,7 +137,7 @@ export default async function FeedPage() {
 
               <Link
                 href="/rezidentlar"
-                className="mt-4 flex items-center justify-center gap-1.5 rounded-xl bg-black/[0.04] px-4 py-2.5 text-[12px] font-medium text-ink-2 transition-colors hover:bg-black/[0.07] hover:text-flex-black"
+                className="mt-4 flex items-center justify-center gap-1.5 rounded-input bg-black/[0.04] px-4 py-2.5 text-[12px] font-medium text-ink-2 transition-colors hover:bg-black/[0.07] hover:text-flex-black"
               >
                 Hammasi
                 <ArrowRight className="h-3.5 w-3.5" />

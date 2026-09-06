@@ -202,7 +202,7 @@ export function terms(lang: Lang): {
       {
         title: "Narxlar",
         body: [
-          `Raqam narxi ${money(BASE_PRICE)}dan boshlanadi va harflar hamda raqamlarning kamyobligiga qarab avtomatik hisoblanadi. Formula ochiq: bazaviy narx × harf koeffitsienti × raqam koeffitsienti. Yakuniy summa to'lovdan oldin ko'rsatiladi.`,
+          `Raqam narxi ${money(BASE_PRICE)}dan boshlanadi va harflar hamda raqamlarning kamyobligiga qarab avtomatik hisoblanadi. Formula ochiq: boshlang'ich narx × harf koeffitsienti × raqam koeffitsienti. Yakuniy summa to'lovdan oldin ko'rsatiladi.`,
           "Narxlar O'zbekiston so'mida ko'rsatilgan.",
         ],
       },

@@ -70,7 +70,7 @@ export default async function TermsPage({ searchParams }: PageProps<"/shartlar">
           reading different words need to know which words they agreed to, and
           this is the sentence that makes a translated contract safe to publish
           at all. */}
-      <p className="mt-4 rounded-2xl border border-line bg-black/[0.03] px-5 py-4 text-sm leading-relaxed text-ink-2">
+      <p className="mt-4 rounded-card border border-line bg-black/[0.03] px-5 py-4 text-sm leading-relaxed text-ink-2">
         {t.authority}
       </p>
 
@@ -81,7 +81,7 @@ export default async function TermsPage({ searchParams }: PageProps<"/shartlar">
           ))}
 
           {section.title === t.sections[1]!.title && (
-            <dl className="mt-4 rounded-2xl border border-line-soft bg-black/[0.02] px-5 py-3">
+            <dl className="mt-4 rounded-card border border-line-soft bg-black/[0.02] px-5 py-3">
               {DEVICE_TYPES.map((d) => (
                 <Row
                   key={d.id}
@@ -93,7 +93,7 @@ export default async function TermsPage({ searchParams }: PageProps<"/shartlar">
           )}
 
           {section.title === t.sections[7]!.title && (
-            <dl className="rounded-2xl border border-line-soft bg-black/[0.02] px-5 py-3">
+            <dl className="rounded-card border border-line-soft bg-black/[0.02] px-5 py-3">
               {t.requisites.map((label, i) => (
                 <Row key={label} label={label} value={requisiteValues[i]!} />
               ))}
@@ -101,7 +101,7 @@ export default async function TermsPage({ searchParams }: PageProps<"/shartlar">
           )}
 
           {section.title === t.sections[8]!.title && (
-            <dl className="rounded-2xl border border-line-soft bg-black/[0.02] px-5 py-3">
+            <dl className="rounded-card border border-line-soft bg-black/[0.02] px-5 py-3">
               {t.contact.map((label, i) => (
                 <Row key={label} label={label} value={contactValues[i]!} />
               ))}

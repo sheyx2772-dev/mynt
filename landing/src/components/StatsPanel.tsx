@@ -9,7 +9,7 @@ import type { PlanId } from "@/lib/plans";
 
 function StatTile({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-2xl border border-ink-line bg-ink-s2 px-4 py-3">
+    <div className="rounded-card border border-ink-line bg-ink-s2 px-4 py-3">
       <p className="font-display text-2xl font-semibold tracking-tight tabular-nums">{value}</p>
       <p className="mt-0.5 text-xs text-paper-3">{label}</p>
     </div>
@@ -40,7 +40,7 @@ const SOURCE_LABEL: Record<string, string> = {
 // without a line of new analytics code.
 function PremiumTeaser() {
   return (
-    <div className="mt-7 rounded-2xl border border-ink-line bg-ink-s2 px-5 py-5">
+    <div className="mt-7 rounded-card border border-ink-line bg-ink-s2 px-5 py-5">
       <p className="text-xs font-medium tracking-[0.14em] text-paper-3 uppercase">
         Premium
       </p>
@@ -51,7 +51,7 @@ function PremiumTeaser() {
       </ul>
       <Link
         href="/tarif"
-        className="mt-4 inline-block rounded-xl bg-lime px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-ink uppercase transition-opacity hover:opacity-90"
+        className="mt-4 inline-block rounded-input bg-lime px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-ink uppercase transition-opacity hover:opacity-90"
       >
         Tariflar
       </Link>
@@ -64,7 +64,7 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
   const busiest = stats.daily.find((d) => d.views === peak && peak > 0);
 
   return (
-    <section className="rounded-[1.75rem] border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+    <section className="rounded-tile border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
       <h2 className="font-display text-lg font-semibold tracking-tight">Statistika</h2>
       <p className="mt-1 text-sm text-paper-2">So&apos;nggi 30 kun.</p>
 
@@ -77,7 +77,7 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
       {plan === "free" ? (
         <PremiumTeaser />
       ) : peak === 0 ? (
-        <p className="mt-7 rounded-2xl border border-dashed border-ink-line px-4 py-6 text-center text-sm text-paper-3">
+        <p className="mt-7 rounded-card border border-dashed border-ink-line px-4 py-6 text-center text-sm text-paper-3">
           Hali tashrif yo&apos;q. Profilingizni ulashganingizdan keyin bu yerda kunlik
           statistika paydo bo&apos;ladi.
         </p>
@@ -105,7 +105,7 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
               <div
                 key={d.day}
                 title={`${dayLabel(d.day)} — ${d.views} tashrif, ${d.clicks} bosish`}
-                className="flex-1 rounded-t-[4px] bg-lime-ink transition-opacity hover:opacity-70"
+                className="flex-1 rounded-t-sm bg-lime-ink transition-opacity hover:opacity-70"
                 style={{
                   // A quiet day draws nothing; the solid hairline underneath is
                   // the axis. Drawing a stub for every empty day turned that

@@ -36,7 +36,7 @@ export default function TagMessageForm({
 
   if (state.sent) {
     return (
-      <section className="rounded-[1.5rem] border border-lime/50 bg-lime/[0.10] p-7 text-center">
+      <section className="rounded-tile border border-lime/50 bg-lime/[0.10] p-7 text-center">
         <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-lime">
           <Check className="h-5 w-5 text-flex-black" />
         </span>
@@ -65,8 +65,8 @@ export default function TagMessageForm({
               onClick={() => setChosen(message)}
               className={
                 active
-                  ? "flex w-full items-center gap-3 rounded-2xl bg-flex-black px-5 py-4 text-left text-[15px] font-semibold text-white"
-                  : "flex w-full items-center gap-3 rounded-2xl border border-line px-5 py-4 text-left text-[15px] transition-colors hover:border-line-2"
+                  ? "flex w-full items-center gap-3 rounded-card bg-flex-black px-5 py-4 text-left text-[15px] font-semibold text-white"
+                  : "flex w-full items-center gap-3 rounded-card border border-line px-5 py-4 text-left text-[15px] transition-colors hover:border-line-2"
               }
             >
               <span
@@ -99,7 +99,7 @@ export default function TagMessageForm({
                 name="replyTo"
                 inputMode="tel"
                 placeholder="+998 90 123 45 67"
-                className="w-full rounded-2xl border border-line px-4 py-3.5 text-[15px] outline-none placeholder:text-ink-3 focus:border-line-lead"
+                className="w-full rounded-card border border-line px-4 py-3.5 text-[15px] outline-none placeholder:text-ink-3 focus:border-line-lead"
               />
               <p className="mt-1.5 text-[12px] text-ink-3">{words.replyHint}</p>
             </div>
@@ -109,20 +109,20 @@ export default function TagMessageForm({
             name="place"
             placeholder={words.placePlaceholder}
             aria-label={words.placeLabel}
-            className="w-full rounded-2xl border border-line px-4 py-3.5 text-[15px] outline-none placeholder:text-ink-3 focus:border-line-lead"
+            className="w-full rounded-card border border-line px-4 py-3.5 text-[15px] outline-none placeholder:text-ink-3 focus:border-line-lead"
           />
 
           <textarea
             name="body"
             rows={2}
             placeholder={words.notePlaceholder}
-            className="w-full resize-none rounded-2xl border border-line px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-ink-3 focus:border-line-lead"
+            className="w-full resize-none rounded-card border border-line px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-ink-3 focus:border-line-lead"
           />
         </div>
       )}
 
       {state.error && (
-        <p className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-[14px] text-red-700">
+        <p className="mt-4 rounded-card bg-red-50 px-4 py-3 text-[14px] text-red-700">
           {state.error}
         </p>
       )}
@@ -130,7 +130,7 @@ export default function TagMessageForm({
       <button
         type="submit"
         disabled={sending || !chosen}
-        className="mt-5 w-full rounded-2xl bg-flex-black px-6 py-4 text-[15px] font-semibold text-white transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:bg-black/[0.08] disabled:text-ink-3"
+        className="mt-5 w-full rounded-card bg-flex-black px-6 py-4 text-[15px] font-semibold text-white transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:bg-black/[0.08] disabled:text-ink-3"
       >
         {sending ? "Yuborilmoqda…" : words.send}
       </button>

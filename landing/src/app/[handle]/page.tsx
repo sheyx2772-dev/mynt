@@ -396,7 +396,7 @@ async function VanityHandlePage({
               handle={normalized}
               name={profile.name}
               label={t.share}
-              className="flex h-10 w-full items-center justify-center gap-1.5 rounded-md bg-lime text-[11px] font-bold tracking-[0.04em] text-on-accent uppercase"
+              className="flex h-10 w-full items-center justify-center gap-1.5 rounded-plate bg-lime text-[11px] font-bold tracking-[0.04em] text-on-accent uppercase"
             />
           }
         >
@@ -410,7 +410,7 @@ async function VanityHandlePage({
           {payHref && !isOwner && (
             <a
               href={payHref}
-              className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-lime text-[11px] font-bold tracking-[0.04em] text-on-accent uppercase"
+              className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-plate bg-lime text-[11px] font-bold tracking-[0.04em] text-on-accent uppercase"
             >
               {t.payOwner}
             </a>
@@ -423,13 +423,13 @@ async function VanityHandlePage({
                 count={profile.recommendCount}
                 recommended={viewerRecommends}
                 labels={{ recommend: t.recommend, recommended: t.recommended }}
-                className="flex h-10 w-full items-center justify-center gap-1.5 rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
+                className="flex h-10 w-full items-center justify-center gap-1.5 rounded-plate bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
               />
               <FollowButton
                 handle={normalized}
                 initialFollowing={following}
                 labels={{ follow: t.follow, following: t.following }}
-                className="flex h-10 w-full items-center justify-center gap-1.5 rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
+                className="flex h-10 w-full items-center justify-center gap-1.5 rounded-plate bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
               />
             </div>
           )}
@@ -468,7 +468,7 @@ async function VanityHandlePage({
                   sending: t.sending,
                   cancel: t.cancel,
                 }}
-                className="flex h-10 w-full items-center justify-center gap-1.5 rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
+                className="flex h-10 w-full items-center justify-center gap-1.5 rounded-plate bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
               />
             </div>
           )}
@@ -631,7 +631,7 @@ async function VanityHandlePage({
           {isOwner && (
             <Link
               href={`/kabinet/${normalized}`}
-              className="mt-6 flex h-11 items-center justify-center rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
+              className="mt-6 flex h-11 items-center justify-center rounded-plate bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
             >
               Tahrirlash
             </Link>
@@ -660,7 +660,7 @@ async function VanityHandlePage({
               promise, and removing a small label while adding a larger block
               would be keeping the letter of it and breaking the rest. */}
           {profile.plan === "free" && (
-            <div className="mt-6 rounded-xl bg-ink/[0.04] px-5 py-5 text-center">
+            <div className="mt-6 rounded-input bg-ink/[0.04] px-5 py-5 text-center">
               <p className="text-[15px] font-bold">{t.ownItTitle}</p>
               <p className="mt-2 text-[13px] leading-relaxed text-mute">{t.ownItLead}</p>
               <p className="mt-4 mb-2 text-[12px] font-bold tracking-[0.12em] uppercase">
@@ -683,7 +683,7 @@ async function VanityHandlePage({
 
   return (
     <PageShell>
-      <div className="relative rounded-[1.75rem] border border-line bg-white p-8 text-center shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <div className="relative rounded-tile border border-line bg-white p-8 text-center shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
         <p className="inline-block rounded-full bg-lime/20 px-3 py-1 text-xs font-semibold tracking-wide text-ink-2 uppercase">
           Bo&apos;sh
         </p>
@@ -721,7 +721,7 @@ async function GenesisCardPage({ serial }: { serial: string }) {
 
   return (
     <PageShell>
-      <div className="relative overflow-hidden rounded-[1.75rem] bg-flex-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
+      <div className="relative overflow-hidden rounded-tile bg-flex-black p-8 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
         <div className="relative flex items-center justify-between text-xs text-paper-3">
           <span className="font-medium tracking-wide uppercase">FLEX CARD</span>
           <Nfc className="h-5 w-5 text-paper-3" />

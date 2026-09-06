@@ -85,7 +85,7 @@ export function parseDelivery(form: {
   }
 
   if (address.length < LIMITS.address.min) {
-    errors.address = "ko'cha, uy va xonani yozing";
+    errors.address = "Ko'cha, uy va xonadonni yozing";
   } else if (address.length > LIMITS.address.max) {
     errors.address = "manzil juda uzun";
   }

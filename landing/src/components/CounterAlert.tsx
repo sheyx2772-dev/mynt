@@ -148,10 +148,10 @@ export default function CounterAlert({ waiting }: { waiting: string[] }) {
         <button
           type="button"
           onClick={enable}
-          className="mb-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-lime px-5 py-3.5 font-medium text-flex-black"
+          className="mb-4 flex w-full items-center justify-center gap-2 rounded-card bg-lime px-5 py-3.5 font-medium text-flex-black"
         >
           <Volume2 className="h-4 w-4" />
-          {wanted ? "Ovozni qayta yoqing" : "Ovozni yoqish"}
+          {wanted ? "Ovozni qayta yoqish" : "Ovozni yoqish"}
         </button>
       )}
     </>

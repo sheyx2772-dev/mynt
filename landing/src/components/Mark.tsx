@@ -44,8 +44,8 @@ export default function Mark({
 }) {
   const tile =
     tone === "dark"
-      ? "rounded-lg border border-ink-line bg-white/5"
-      : "rounded-md bg-flex-black";
+      ? "rounded-plate border border-ink-line bg-white/5"
+      : "rounded-plate bg-flex-black";
 
   return (
     <span className={`flex items-center justify-center ${tile} ${className}`} aria-hidden>

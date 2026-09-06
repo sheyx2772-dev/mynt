@@ -16,7 +16,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Flex",
     short_name: "Flex",
     description:
-      "Noyob raqam, shaxsiy profil va NFC karta. Bir tegish bilan shaxsingizni ulashing.",
+      "Noyob raqam, shaxsiy profil va NFC karta. Bir tegish bilan profilingizni ulashing.",
     // An installed copy belongs to someone who owns a handle, so it opens on
     // their cabinet rather than the marketing page. Signed-out launches are
     // redirected to sign-in and land back here.

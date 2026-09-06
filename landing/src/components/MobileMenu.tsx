@@ -65,7 +65,7 @@ export default function MobileMenu({
         onClick={() => setOpen(true)}
         aria-label={openLabel}
         aria-expanded={open}
-        className="-ml-1 flex h-9 w-9 items-center justify-center rounded-xl text-white transition-colors hover:bg-white/10 lg:hidden"
+        className="-ml-1 flex h-9 w-9 items-center justify-center rounded-input text-white transition-colors hover:bg-white/10 lg:hidden"
       >
         <Menu className="h-6 w-6" strokeWidth={1.9} />
       </button>
@@ -81,7 +81,7 @@ export default function MobileMenu({
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label={closeLabel}
-                className="-mr-1 flex h-9 w-9 items-center justify-center rounded-xl transition-colors hover:bg-white/10"
+                className="-mr-1 flex h-9 w-9 items-center justify-center rounded-input transition-colors hover:bg-white/10"
               >
                 <X className="h-6 w-6" strokeWidth={1.9} />
               </button>

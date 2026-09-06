@@ -14,7 +14,7 @@ import type { VenueWords } from "@/lib/venue-words";
 // underneath it in the order somebody would think of it.
 
 const field =
-  "w-full rounded-xl border border-ink-line bg-ink-s1 px-3 py-2.5 text-sm outline-none focus:border-paper-3";
+  "w-full rounded-input border border-ink-line bg-ink-s1 px-3 py-2.5 text-sm outline-none focus:border-paper-3";
 const label = "mb-1 block text-[11px] font-medium tracking-wide text-paper-3 uppercase";
 
 const idle: EditResult = { ok: true };
@@ -46,7 +46,7 @@ export default function EditDishForm({
       <input type="hidden" name="handle" value={handle} />
       <input type="hidden" name="id" value={item.id} />
 
-      <div className="rounded-2xl border border-ink-line bg-ink-s1 p-5">
+      <div className="rounded-card border border-ink-line bg-ink-s1 p-5">
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
             <label htmlFor="ed-price" className={label}>
@@ -143,7 +143,7 @@ export default function EditDishForm({
                 <img
                   src={item.photoUrl}
                   alt=""
-                  className="h-14 w-14 shrink-0 rounded-xl object-cover"
+                  className="h-14 w-14 shrink-0 rounded-input object-cover"
                 />
               )}
               <input
@@ -165,7 +165,7 @@ export default function EditDishForm({
         {!state.ok && <p className="mt-3 text-sm text-danger-ink">{state.error}</p>}
         <button
           disabled={busy}
-          className="mt-4 w-full rounded-xl bg-lime px-5 py-3.5 font-medium text-ink disabled:opacity-60"
+          className="mt-4 w-full rounded-input bg-lime px-5 py-3.5 font-medium text-ink disabled:opacity-60"
         >
           {busy ? "Saqlanmoqda…" : "Saqlash"}
         </button>

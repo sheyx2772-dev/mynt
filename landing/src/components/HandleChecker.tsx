@@ -73,8 +73,8 @@ export default function HandleChecker({
         <div
           className={
             dark
-              ? "flex items-center gap-2 rounded-2xl border border-ink-line bg-white/[0.06] p-1.5 backdrop-blur-sm focus-within:border-lime/50"
-              : "flex items-center gap-2 rounded-2xl border border-line bg-white p-1.5 shadow-sm focus-within:border-flex-black/40"
+              ? "flex items-center gap-2 rounded-card border border-ink-line bg-white/[0.06] p-1.5 backdrop-blur-sm focus-within:border-lime/50"
+              : "flex items-center gap-2 rounded-card border border-line bg-white p-1.5 shadow-sm focus-within:border-flex-black/40"
           }
         >
           <span

@@ -51,7 +51,7 @@ export default async function TagsPage({
   return (
     <PageShell wide surface="ink">
       <SubScreen handle={normalized} title="Buyumlar">
-        <section className="relative overflow-hidden rounded-[1.75rem] bg-ink-s2 p-6 text-paper sm:p-7">
+        <section className="relative overflow-hidden rounded-tile bg-ink-s2 p-6 text-paper sm:p-7">
 
           <div className="relative">
             <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-paper uppercase">
@@ -88,7 +88,7 @@ export default async function TagsPage({
             </h2>
 
             {messages.length === 0 ? (
-              <p className="rounded-2xl border border-dashed border-ink-line p-8 text-center text-[13px] text-paper-3">
+              <p className="rounded-card border border-dashed border-ink-line p-8 text-center text-[13px] text-paper-3">
                 Hozircha xabar yo&apos;q.
               </p>
             ) : (
@@ -101,11 +101,11 @@ export default async function TagsPage({
                   return (
                     <li
                       key={message.id}
-                      className="rise rounded-2xl border border-ink-line bg-ink-s1 p-4"
+                      className="rise rounded-card border border-ink-line bg-ink-s1 p-4"
                       style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
                     >
                       <div className="flex items-start gap-3">
-                        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-ink-s2">
+                        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-plate bg-ink-s2">
                           <Icon className="h-3.5 w-3.5 text-paper-2" />
                         </span>
                         <div className="min-w-0 flex-1">
@@ -141,7 +141,7 @@ export default async function TagsPage({
                       {message.replyTo && (
                         <a
                           href={`tel:${message.replyTo.replace(/[^0-9+]/g, "")}`}
-                          className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-ink-s2 px-3.5 py-2 text-[12px] font-semibold text-paper transition-transform hover:scale-[1.02]"
+                          className="mt-3 inline-flex items-center gap-1.5 rounded-input bg-ink-s2 px-3.5 py-2 text-[12px] font-semibold text-paper transition-transform hover:scale-[1.02]"
                         >
                           <Phone className="h-3.5 w-3.5" />
                           {message.replyTo}

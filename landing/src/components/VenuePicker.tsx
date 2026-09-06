@@ -91,7 +91,7 @@ export default function VenuePicker({
           {shots[vertical].map((src) => (
             <div
               key={src}
-              className="relative aspect-[16/9] overflow-hidden rounded-3xl bg-flex-black shadow-[0_30px_70px_-40px_rgba(14,10,27,0.6)]"
+              className="relative aspect-[16/9] overflow-hidden rounded-tile bg-flex-black shadow-[0_30px_70px_-40px_rgba(14,10,27,0.6)]"
             >
               <Image
                 src={src}
@@ -123,7 +123,7 @@ export default function VenuePicker({
             </div>
           )}
 
-          <div className="relative overflow-hidden rounded-3xl bg-flex-black p-6 text-white sm:col-span-2">
+          <div className="relative overflow-hidden rounded-tile bg-flex-black p-6 text-white sm:col-span-2">
             <h3 className="relative font-display text-xs font-semibold tracking-widest text-lime uppercase">
               {t.whyPay}
             </h3>
@@ -145,7 +145,7 @@ export default function VenuePicker({
       </div>
 
       {/* How big, and what that costs */}
-      <div className="mt-10 rounded-3xl border border-line bg-white p-6 shadow-[0_30px_60px_-40px_rgba(14,10,27,0.3)] sm:p-8">
+      <div className="mt-10 rounded-tile border border-line bg-white p-6 shadow-[0_30px_60px_-40px_rgba(14,10,27,0.3)] sm:p-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <label
@@ -162,7 +162,7 @@ export default function VenuePicker({
                 max={500}
                 value={points}
                 onChange={(e) => setPoints(Math.max(1, Number(e.target.value) || 1))}
-                className="font-tabular w-28 rounded-2xl border-2 border-flex-black/90 px-4 py-3 text-center font-display text-xl font-semibold outline-none"
+                className="font-tabular w-28 rounded-card border-2 border-flex-black/90 px-4 py-3 text-center font-display text-xl font-semibold outline-none"
               />
               <input
                 type="range"
@@ -188,7 +188,7 @@ export default function VenuePicker({
               </>
             ) : (
               <>
-                <p className="rounded-2xl bg-lime px-5 py-3 font-display text-2xl font-semibold text-flex-black">
+                <p className="rounded-card bg-lime px-5 py-3 font-display text-2xl font-semibold text-flex-black">
                   {formatUZS(monthly, lang)}
                 </p>
                 <p className="mt-2 font-tabular text-xs text-ink-3">
@@ -214,8 +214,8 @@ export default function VenuePicker({
               aria-current={i === bandIndex ? "true" : undefined}
               className={
                 i === bandIndex
-                  ? "rounded-2xl border-2 border-flex-black/90 px-4 py-3"
-                  : "rounded-2xl border border-line px-4 py-3 opacity-60"
+                  ? "rounded-card border-2 border-flex-black/90 px-4 py-3"
+                  : "rounded-card border border-line px-4 py-3 opacity-60"
               }
             >
               <p className="text-[11px] font-semibold tracking-widest text-ink-3 uppercase">
@@ -245,7 +245,7 @@ export default function VenuePicker({
             if (pointsField) pointsField.value = String(points);
             form?.scrollIntoView({ behavior: "smooth", block: "start" });
           }}
-          className="mt-7 flex items-center justify-center gap-2 rounded-2xl bg-flex-black px-6 py-4 font-medium text-white transition-transform hover:scale-[1.01]"
+          className="mt-7 flex items-center justify-center gap-2 rounded-card bg-flex-black px-6 py-4 font-medium text-white transition-transform hover:scale-[1.01]"
         >
           {t.askForThis}
           <ArrowRight className="h-4 w-4" />
@@ -265,7 +265,7 @@ function Panel({
   tone?: "lime" | "gold";
 }) {
   return (
-    <div className="rounded-3xl border border-line bg-white p-6">
+    <div className="rounded-tile border border-line bg-white p-6">
       <h3 className="text-xs font-semibold tracking-widest text-ink-3 uppercase">
         {title}
       </h3>

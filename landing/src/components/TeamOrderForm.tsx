@@ -5,7 +5,7 @@ import { requestTeamOrder, type TeamFormState } from "@/app/biznes/actions";
 import { COMPANY } from "@/lib/company";
 
 const field =
-  "w-full rounded-2xl border border-ink-line bg-white/[0.06] px-4 py-3 text-sm text-white outline-none placeholder:text-paper-3 focus:border-lime/50";
+  "w-full rounded-card border border-ink-line bg-white/[0.06] px-4 py-3 text-sm text-white outline-none placeholder:text-paper-3 focus:border-lime/50";
 const label = "mb-1.5 block text-xs font-medium tracking-wide text-paper-3 uppercase";
 
 export default function TeamOrderForm() {
@@ -15,7 +15,7 @@ export default function TeamOrderForm() {
 
   if (state.sent) {
     return (
-      <div className="rounded-3xl border border-lime/40 bg-lime/[0.08] p-8">
+      <div className="rounded-tile border border-lime/40 bg-lime/[0.08] p-8">
         <h3 className="font-display text-lg font-semibold text-white">Qabul qilindi</h3>
         <p className="mt-2 text-sm leading-relaxed text-paper-2">
           Bir ish kuni ichida bog&apos;lanamiz. Shoshilinch bo&apos;lsa{" "}
@@ -29,7 +29,7 @@ export default function TeamOrderForm() {
   }
 
   return (
-    <form action={action} className="rounded-3xl border border-ink-line bg-white/[0.03] p-6 sm:p-8">
+    <form action={action} className="rounded-tile border border-ink-line bg-white/[0.03] p-6 sm:p-8">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="company" className={label}>

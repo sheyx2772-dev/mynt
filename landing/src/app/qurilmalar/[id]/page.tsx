@@ -111,7 +111,7 @@ export default async function DevicePage({
 
         <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-14">
           <div
-            className={`relative overflow-hidden rounded-3xl bg-flex-black ring-1 ring-white/10 ${
+            className={`relative overflow-hidden rounded-tile bg-flex-black ring-1 ring-white/10 ${
               isCar ? "aspect-[16/9] lg:aspect-square" : "aspect-square"
             }`}
           >
@@ -168,7 +168,7 @@ export default async function DevicePage({
             {price === null ? (
               <a
                 href={`tel:${COMPANY.phoneHref}`}
-                className="mt-9 flex items-center justify-center gap-2 rounded-2xl bg-lime px-6 py-4 font-medium text-flex-black transition-transform hover:scale-[1.01]"
+                className="mt-9 flex items-center justify-center gap-2 rounded-card bg-lime px-6 py-4 font-medium text-flex-black transition-transform hover:scale-[1.01]"
               >
                 <Phone className="h-4 w-4" />
                 {p.askPrice}
@@ -176,7 +176,7 @@ export default async function DevicePage({
             ) : (
               <Link
                 href={order.href}
-                className="mt-9 flex items-center justify-center gap-2 rounded-2xl bg-lime px-6 py-4 font-medium text-flex-black transition-transform hover:scale-[1.01]"
+                className="mt-9 flex items-center justify-center gap-2 rounded-card bg-lime px-6 py-4 font-medium text-flex-black transition-transform hover:scale-[1.01]"
               >
                 {order.label}
                 <ArrowRight className="h-4 w-4" />

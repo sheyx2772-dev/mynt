@@ -32,7 +32,7 @@ export default function ActionRow({ label, icon, value, href, external = false }
       <a
         href={href}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-        className="-mx-2 flex min-h-16 items-center gap-4 rounded-lg px-2 py-2 active:bg-ink/5"
+        className="-mx-2 flex min-h-16 items-center gap-4 rounded-plate px-2 py-2 active:bg-ink/5"
       >
         <span className="size-5 shrink-0 text-mute">
           {icon === "call" ? (

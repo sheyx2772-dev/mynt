@@ -49,7 +49,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
   return (
     <PageShell wide surface="ink">
       <SubScreen handle={order.handle} title={device.name}>
-        <section className="relative overflow-hidden rounded-[1.75rem] bg-ink-s2 p-6 text-paper sm:p-7">
+        <section className="relative overflow-hidden rounded-tile bg-ink-s2 p-6 text-paper sm:p-7">
 
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
@@ -61,7 +61,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
                   {order.handle} · {formatUZS(order.amount, "uz")}
                 </p>
               </div>
-              <span className="flex shrink-0 items-center gap-1.5 rounded-lg bg-ink-s1/10 px-2.5 py-1.5 text-[11px] font-medium">
+              <span className="flex shrink-0 items-center gap-1.5 rounded-plate bg-ink-s1/10 px-2.5 py-1.5 text-[11px] font-medium">
                 {paid ? (
                   <>
                     <FulfilmentIcon state={order.fulfilment} className="h-3 w-3" />
@@ -120,7 +120,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
         )}
 
         {order.recipient && order.region && order.address && (
-          <section className="mt-5 rounded-[1.5rem] border border-ink-line bg-ink-s1 p-6">
+          <section className="mt-5 rounded-tile border border-ink-line bg-ink-s1 p-6">
             <h2 className="flex items-center gap-2 text-[13px] font-semibold tracking-wide text-paper-3 uppercase">
               <MapPin className="h-3.5 w-3.5" />
               Manzil

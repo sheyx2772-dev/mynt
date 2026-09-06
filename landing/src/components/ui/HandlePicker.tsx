@@ -53,7 +53,7 @@ export default function HandlePicker({
 
   return (
     <form onSubmit={submit} className="mx-auto max-w-[420px]">
-      <div className="inline-flex h-20 w-full items-stretch overflow-hidden rounded-md bg-slab shadow-slab">
+      <div className="inline-flex h-20 w-full items-stretch overflow-hidden rounded-plate bg-slab shadow-slab">
         <span className="w-3 bg-gold/90" aria-hidden />
         <span className="flex flex-1 items-center justify-center">
           <input

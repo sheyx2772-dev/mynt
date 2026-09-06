@@ -56,7 +56,7 @@ export default function PointsEditor({
       <form action={action}>
         <input type="hidden" name="handle" value={handle} />
 
-        <div className="rounded-2xl border border-ink-line bg-ink-s1 p-5">
+        <div className="rounded-card border border-ink-line bg-ink-s1 p-5">
           <p className="mb-1 text-[11px] font-medium tracking-wide text-paper-3 uppercase">
             Raqamlab to&apos;ldirish
           </p>
@@ -66,7 +66,7 @@ export default function PointsEditor({
               onChange={(e) => setFrom(e.target.value)}
               inputMode="numeric"
               aria-label="Boshlanishi"
-              className="w-20 rounded-xl border border-ink-line px-3 py-2.5 text-center font-tabular text-sm outline-none focus:border-paper-3"
+              className="w-20 rounded-input border border-ink-line px-3 py-2.5 text-center font-tabular text-sm outline-none focus:border-paper-3"
             />
             <span className="text-paper-3">—</span>
             <input
@@ -74,12 +74,12 @@ export default function PointsEditor({
               onChange={(e) => setTo(e.target.value)}
               inputMode="numeric"
               aria-label="Tugashi"
-              className="w-20 rounded-xl border border-ink-line px-3 py-2.5 text-center font-tabular text-sm outline-none focus:border-paper-3"
+              className="w-20 rounded-input border border-ink-line px-3 py-2.5 text-center font-tabular text-sm outline-none focus:border-paper-3"
             />
             <button
               type="button"
               onClick={fill}
-              className="rounded-xl border border-ink-line px-4 py-2.5 text-sm font-medium transition-colors hover:bg-ink-s2"
+              className="rounded-input border border-ink-line px-4 py-2.5 text-sm font-medium transition-colors hover:bg-ink-s2"
             >
               Qo&apos;shish
             </button>
@@ -98,14 +98,14 @@ export default function PointsEditor({
             onChange={(e) => setText(e.target.value)}
             rows={8}
             placeholder={`1\n2\n3\nTerrasa 1`}
-            className="w-full resize-y rounded-xl border border-ink-line bg-ink-s1 px-3 py-2.5 font-tabular text-sm outline-none focus:border-paper-3"
+            className="w-full resize-y rounded-input border border-ink-line bg-ink-s1 px-3 py-2.5 font-tabular text-sm outline-none focus:border-paper-3"
           />
 
           {!state.ok && <p className="mt-3 text-sm text-danger-ink">{state.error}</p>}
 
           <button
             disabled={busy}
-            className="mt-4 w-full rounded-xl bg-ink-s2 px-5 py-3 font-medium text-paper disabled:opacity-60"
+            className="mt-4 w-full rounded-input bg-ink-s2 px-5 py-3 font-medium text-paper disabled:opacity-60"
           >
             {busy ? "Saqlanmoqda…" : "Saqlash"}
           </button>
@@ -116,7 +116,7 @@ export default function PointsEditor({
         <>
           <Link
             href={`/kabinet/${handle}/nuqtalar/chop`}
-            className="mt-3 flex items-center justify-center gap-2 rounded-2xl bg-lime px-5 py-4 font-medium text-ink transition-transform active:scale-[0.99]"
+            className="mt-3 flex items-center justify-center gap-2 rounded-card bg-lime px-5 py-4 font-medium text-ink transition-transform active:scale-[0.99]"
           >
             <Printer className="h-4 w-4" />
             {points.length} ta {w.pointPrefix.toLowerCase()}ni chop etish
@@ -133,7 +133,7 @@ export default function PointsEditor({
               Har bir chipga o&apos;ziniki yoziladi.
             </p>
 
-            <div className="divide-y divide-ink-line rounded-2xl border border-ink-line bg-ink-s1">
+            <div className="divide-y divide-ink-line rounded-card border border-ink-line bg-ink-s1">
               {points.map((point) => {
                 // Exactly what the QR carries, except that a chip records
                 // itself as a tap rather than a scan.
@@ -158,7 +158,7 @@ export default function PointsEditor({
                         }
                       }}
                       aria-label="Nusxalash"
-                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink-line text-paper-2 hover:bg-ink-s2"
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-plate border border-ink-line text-paper-2 hover:bg-ink-s2"
                     >
                       {copied === point ? (
                         <Check className="h-4 w-4 text-paper" />

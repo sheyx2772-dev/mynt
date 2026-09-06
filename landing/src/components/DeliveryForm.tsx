@@ -14,7 +14,7 @@ import { saveDelivery, type DeliveryState } from "@/app/kabinet/buyurtma/[id]/ac
 // wrong door.
 
 const field =
-  "w-full rounded-2xl border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-paper-3";
+  "w-full rounded-card border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-paper-3";
 const label = "mb-1.5 block text-xs font-medium tracking-wide text-paper-2 uppercase";
 const problem = "mt-1.5 text-xs text-danger-ink";
 
@@ -26,7 +26,7 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
 
   if (state.saved) {
     return (
-      <section className="rounded-3xl border border-lime/50 bg-lime/[0.08] p-6 sm:p-8">
+      <section className="rounded-tile border border-lime/50 bg-lime/[0.08] p-6 sm:p-8">
         <h2 className="font-display text-lg font-semibold">Manzil saqlandi</h2>
         <p className="mt-2 text-sm leading-relaxed text-paper-2">
           Buyurtma navbatga qo&apos;yildi. Yasalgach yuboramiz va bu sahifada
@@ -37,7 +37,7 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
   }
 
   return (
-    <form action={action} className="rounded-3xl border border-ink-line bg-ink-s1 p-6 sm:p-8">
+    <form action={action} className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
       <input type="hidden" name="orderId" value={orderId} />
 
       <div className="flex items-start gap-3">
@@ -137,7 +137,7 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
       <button
         type="submit"
         disabled={saving}
-        className="mt-6 w-full rounded-2xl bg-ink-s2 px-6 py-3.5 text-sm font-medium text-paper transition-transform hover:scale-[1.01] disabled:opacity-50 sm:w-auto"
+        className="mt-6 w-full rounded-card bg-ink-s2 px-6 py-3.5 text-sm font-medium text-paper transition-transform hover:scale-[1.01] disabled:opacity-50 sm:w-auto"
       >
         {saving ? "Saqlanmoqda…" : "Saqlash"}
       </button>

@@ -22,7 +22,7 @@ export default function ReleaseHandleButton({
     return (
       <button
         onClick={() => setConfirming(true)}
-        className="rounded-lg border border-ink-line px-3.5 py-1.5 text-xs font-medium transition-colors hover:bg-ink-s2"
+        className="rounded-plate border border-ink-line px-3.5 py-1.5 text-xs font-medium transition-colors hover:bg-ink-s2"
       >
         Bo&apos;shatish
       </button>
@@ -46,7 +46,7 @@ export default function ReleaseHandleButton({
             })
           }
           disabled={pending}
-          className="rounded-lg bg-ink-s2 px-3.5 py-1.5 text-xs font-medium text-paper disabled:opacity-50"
+          className="rounded-plate bg-ink-s2 px-3.5 py-1.5 text-xs font-medium text-paper disabled:opacity-50"
         >
           {pending ? "Bo'shatilmoqda…" : "O'chirish"}
         </button>
@@ -55,7 +55,7 @@ export default function ReleaseHandleButton({
             setConfirming(false);
             setError(null);
           }}
-          className="rounded-lg border border-ink-line px-3.5 py-1.5 text-xs font-medium"
+          className="rounded-plate border border-ink-line px-3.5 py-1.5 text-xs font-medium"
         >
           Bekor
         </button>

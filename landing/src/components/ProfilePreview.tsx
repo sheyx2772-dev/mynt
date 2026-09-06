@@ -25,7 +25,7 @@ export type PreviewLabels = {
 export default function ProfilePreview({ labels }: { labels: PreviewLabels }) {
   return (
     <div className="w-full">
-      <div className="relative overflow-hidden rounded-[1.4rem] bg-flex-black p-5 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
+      <div className="relative overflow-hidden rounded-tile bg-flex-black p-5 text-white shadow-[0_35px_70px_-25px_rgba(14,10,27,0.55)]">
         <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-lime font-display text-lg font-semibold text-flex-black">
           AR
         </div>
@@ -58,13 +58,13 @@ export default function ProfilePreview({ labels }: { labels: PreviewLabels }) {
       </div>
 
       <div className="mt-3 space-y-2">
-        <div className="rounded-xl bg-lime px-4 py-2.5 text-center text-sm font-medium text-flex-black">
+        <div className="rounded-input bg-lime px-4 py-2.5 text-center text-sm font-medium text-flex-black">
           {labels.saveContact}
         </div>
-        <div className="rounded-xl border border-line bg-white px-4 py-2.5 text-center text-sm font-medium shadow-sm">
+        <div className="rounded-input border border-line bg-white px-4 py-2.5 text-center text-sm font-medium shadow-sm">
           Telegram
         </div>
-        <div className="rounded-xl border border-line bg-white px-4 py-2.5 text-center text-sm font-medium shadow-sm">
+        <div className="rounded-input border border-line bg-white px-4 py-2.5 text-center text-sm font-medium shadow-sm">
           Instagram
         </div>
       </div>

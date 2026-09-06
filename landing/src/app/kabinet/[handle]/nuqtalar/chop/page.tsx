@@ -66,7 +66,7 @@ export default async function PrintPointsPage({
         {venue.points.map((point) => (
           <div
             key={point}
-            className="flex break-inside-avoid flex-col items-center rounded-2xl border border-line px-4 py-5 text-center print:rounded-none print:border-dashed"
+            className="flex break-inside-avoid flex-col items-center rounded-card border border-line px-4 py-5 text-center print:rounded-none print:border-dashed"
           >
             <p className="text-[11px] font-semibold tracking-widest text-ink-3 uppercase">
               {venue.name}

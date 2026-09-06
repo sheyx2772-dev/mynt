@@ -31,7 +31,7 @@ function TagAddress({ token }: { token: string }) {
 
   return (
     <div className="mt-3 flex items-center gap-2">
-      <code className="min-w-0 flex-1 truncate rounded-xl bg-ink-s2 px-3 py-2 font-tabular text-[12px] text-paper-2">
+      <code className="min-w-0 flex-1 truncate rounded-input bg-ink-s2 px-3 py-2 font-tabular text-[12px] text-paper-2">
         {url}
       </code>
       <button
@@ -46,14 +46,14 @@ function TagAddress({ token }: { token: string }) {
             // screen and can be selected.
           }
         }}
-        className="flex shrink-0 items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
+        className="flex shrink-0 items-center gap-1.5 rounded-input bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
       >
         {copied ? <Check className="h-3.5 w-3.5 text-paper" /> : <Copy className="h-3.5 w-3.5" />}
         {copied ? "Nusxa olindi" : "Nusxa"}
       </button>
       <a
         href={`/${token}/qr`}
-        className="flex shrink-0 items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
+        className="flex shrink-0 items-center gap-1.5 rounded-input bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
         aria-label="QR"
       >
         <QrCode className="h-3.5 w-3.5" />
@@ -75,15 +75,15 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
           return (
             <li
               key={tag.id}
-              className="rise rounded-2xl border border-ink-line bg-ink-s1 p-4"
+              className="rise rounded-card border border-ink-line bg-ink-s1 p-4"
               style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
             >
               <div className="flex items-center gap-3.5">
                 <span
                   className={
                     tag.active
-                      ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink-s2 text-paper"
-                      : "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink-s2 text-paper-3"
+                      ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-input bg-ink-s2 text-paper"
+                      : "flex h-10 w-10 shrink-0 items-center justify-center rounded-input bg-ink-s2 text-paper-3"
                   }
                 >
                   <Icon className="h-4 w-4" />
@@ -104,7 +104,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
                 </div>
 
                 {tag.unread > 0 && (
-                  <span className="shrink-0 rounded-lg bg-lime px-2 py-1 font-tabular text-[11px] font-semibold text-ink">
+                  <span className="shrink-0 rounded-plate bg-lime px-2 py-1 font-tabular text-[11px] font-semibold text-ink">
                     {tag.unread}
                   </span>
                 )}
@@ -115,7 +115,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
                   <input type="hidden" name="active" value={tag.active ? "0" : "1"} />
                   <button
                     type="submit"
-                    className="rounded-xl px-3 py-2 text-[12px] text-paper-3 transition-colors hover:text-paper"
+                    className="rounded-input px-3 py-2 text-[12px] text-paper-3 transition-colors hover:text-paper"
                   >
                     {tag.active ? "To'xtatish" : "Yoqish"}
                   </button>
@@ -129,7 +129,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
       </ul>
 
       {state.token && (
-        <p className="mt-3 rounded-2xl border border-lime/50 bg-lime/[0.08] px-4 py-3 text-[13px]">
+        <p className="mt-3 rounded-card border border-lime/50 bg-lime/[0.08] px-4 py-3 text-[13px]">
           Qo&apos;shildi. Manzilni nusxa olib, stikerga yoki NFC tegiga yozing.
         </p>
       )}
@@ -137,7 +137,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
       {open ? (
         <form
           action={action}
-          className="mt-4 rounded-[1.5rem] border border-ink-line bg-ink-s1 p-5"
+          className="mt-4 rounded-tile border border-ink-line bg-ink-s1 p-5"
         >
           <input type="hidden" name="handle" value={handle} />
           <input type="hidden" name="kind" value={kind} />
@@ -152,8 +152,8 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
                   onClick={() => setKind(k)}
                   className={
                     kind === k
-                      ? "flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2.5 text-[12px] font-semibold text-paper"
-                      : "flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2.5 text-[12px] text-paper-2 transition-colors hover:bg-ink-s2"
+                      ? "flex flex-1 items-center justify-center gap-1.5 rounded-input bg-ink-s2 px-3 py-2.5 text-[12px] font-semibold text-paper"
+                      : "flex flex-1 items-center justify-center gap-1.5 rounded-input bg-ink-s2 px-3 py-2.5 text-[12px] text-paper-2 transition-colors hover:bg-ink-s2"
                   }
                 >
                   <Icon className="h-3.5 w-3.5" />
@@ -166,7 +166,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
           <input
             name="label"
             placeholder={kind === "pet" ? "Rex" : kind === "car" ? "Malibu" : "Kalitlar"}
-            className="mt-3 w-full rounded-xl bg-ink-s2 px-4 py-3 text-[14px] outline-none placeholder:text-paper-3 focus:bg-ink-s2"
+            className="mt-3 w-full rounded-input bg-ink-s2 px-4 py-3 text-[14px] outline-none placeholder:text-paper-3 focus:bg-ink-s2"
           />
           {/* Said here because it is not obvious and it matters: a stranger who
               is greeted by name sounds like somebody who knows you. */}
@@ -182,14 +182,14 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
             <button
               type="submit"
               disabled={saving}
-              className="rounded-xl bg-ink-s2 px-5 py-2.5 text-[13px] font-semibold text-paper disabled:opacity-40"
+              className="rounded-input bg-ink-s2 px-5 py-2.5 text-[13px] font-semibold text-paper disabled:opacity-40"
             >
               {saving ? "Qo'shilmoqda…" : "Qo'shish"}
             </button>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-2.5 text-[13px] text-paper-3"
+              className="rounded-input px-4 py-2.5 text-[13px] text-paper-3"
             >
               Yopish
             </button>
@@ -199,7 +199,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="mt-4 flex items-center gap-2 rounded-2xl border border-dashed border-ink-line px-5 py-3 text-[13px] text-paper-2 transition-colors hover:border-line"
+          className="mt-4 flex items-center gap-2 rounded-card border border-dashed border-ink-line px-5 py-3 text-[13px] text-paper-2 transition-colors hover:border-line"
         >
           <Plus className="h-4 w-4" />
           Buyum qo&apos;shish

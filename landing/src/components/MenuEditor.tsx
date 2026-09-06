@@ -20,7 +20,7 @@ import type { EditResult } from "@/lib/menu-edit";
 // they use once a week should not be standing in front of it.
 
 const field =
-  "w-full rounded-xl border border-ink-line bg-ink-s1 px-3 py-2.5 text-sm outline-none focus:border-paper-3";
+  "w-full rounded-input border border-ink-line bg-ink-s1 px-3 py-2.5 text-sm outline-none focus:border-paper-3";
 const label = "mb-1 block text-[11px] font-medium tracking-wide text-paper-3 uppercase";
 
 const idle: EditResult = { ok: true };
@@ -66,7 +66,7 @@ export default function MenuEditor({
       </div>
 
       {open === "item" && (
-        <form action={itemAction} className="mt-4 rounded-2xl border border-ink-line bg-ink-s1 p-5">
+        <form action={itemAction} className="mt-4 rounded-card border border-ink-line bg-ink-s1 p-5">
           <input type="hidden" name="handle" value={handle} />
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -155,7 +155,7 @@ export default function MenuEditor({
 
           <button
             disabled={itemBusy}
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-lime px-5 py-3 font-medium text-ink disabled:opacity-60"
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-input bg-lime px-5 py-3 font-medium text-ink disabled:opacity-60"
           >
             <Plus className="h-4 w-4" />
             {itemBusy ? "Qo'shilmoqda…" : "Qo'shish"}
@@ -164,7 +164,7 @@ export default function MenuEditor({
       )}
 
       {open === "category" && (
-        <form action={catAction} className="mt-4 rounded-2xl border border-ink-line bg-ink-s1 p-5">
+        <form action={catAction} className="mt-4 rounded-card border border-ink-line bg-ink-s1 p-5">
           <input type="hidden" name="handle" value={handle} />
           <div className="grid gap-3 sm:grid-cols-3">
             <div>
@@ -191,7 +191,7 @@ export default function MenuEditor({
 
           <button
             disabled={catBusy}
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-ink-s2 px-5 py-3 font-medium text-paper disabled:opacity-60"
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-input bg-ink-s2 px-5 py-3 font-medium text-paper disabled:opacity-60"
           >
             <Plus className="h-4 w-4" />
             {catBusy ? "Qo'shilmoqda…" : "Bo'lim qo'shish"}
@@ -200,7 +200,7 @@ export default function MenuEditor({
       )}
 
       {open === "venue" && (
-        <form action={venueAction} className="mt-4 rounded-2xl border border-ink-line bg-ink-s1 p-5">
+        <form action={venueAction} className="mt-4 rounded-card border border-ink-line bg-ink-s1 p-5">
           <input type="hidden" name="handle" value={handle} />
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="sm:col-span-2">
@@ -260,7 +260,7 @@ export default function MenuEditor({
 
           <button
             disabled={venueBusy}
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-ink-s2 px-5 py-3 font-medium text-paper disabled:opacity-60"
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-input bg-ink-s2 px-5 py-3 font-medium text-paper disabled:opacity-60"
           >
             <Settings2 className="h-4 w-4" />
             {venueBusy ? "Saqlanmoqda…" : "Saqlash"}

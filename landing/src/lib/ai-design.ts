@@ -60,7 +60,7 @@ export function screenWish(wish: string): WishVerdict {
   const text = normalise(wish);
 
   if (text.length < 3) {
-    return { ok: false, reason: "Nima xohlayotganingizni birozroq yozing." };
+    return { ok: false, reason: "Nima xohlayotganingizni biroz batafsilroq yozing." };
   }
   if (text.length > 400) {
     return { ok: false, reason: "Tavsif juda uzun — 400 belgigacha qisqartiring." };

@@ -34,7 +34,7 @@ function Tile({
   return (
     <Link
       href={href}
-      className="flex flex-col justify-between rounded-3xl border border-line-soft bg-white px-4 py-4 shadow-[0_2px_10px_-6px_rgba(14,10,27,0.25)] transition-transform active:scale-[0.98]"
+      className="flex flex-col justify-between rounded-tile border border-line-soft bg-white px-4 py-4 shadow-[0_2px_10px_-6px_rgba(14,10,27,0.25)] transition-transform active:scale-[0.98]"
     >
       <Icon className="h-6 w-6 text-ink-2" strokeWidth={1.6} />
       <span className="mt-6 text-sm leading-tight font-medium">{label}</span>
@@ -108,7 +108,7 @@ export default function AppHome({
               desktop hero says this and the phone was left without it. */}
           <h1 className="font-display text-[1.75rem] leading-[1.12] font-semibold tracking-tight text-balance">
             {s.heroTitleA && <>{s.heroTitleA} </>}
-            <span className="rounded-md bg-lime px-1.5 text-flex-black">
+            <span className="rounded-plate bg-lime px-1.5 text-flex-black">
               {s.heroTitleMark}
             </span>{" "}
             {s.heroTitleB}
@@ -168,7 +168,7 @@ export default function AppHome({
         <div className="grid gap-3">
           <Link
             href="/shaxsiy"
-            className="flex items-center gap-4 rounded-3xl bg-lime px-5 py-5 text-flex-black shadow-[0_16px_40px_-22px_rgba(171,255,9,0.9)] transition-transform active:scale-[0.99]"
+            className="flex items-center gap-4 rounded-tile bg-lime px-5 py-5 text-flex-black shadow-[0_16px_40px_-22px_rgba(171,255,9,0.9)] transition-transform active:scale-[0.99]"
           >
             <User className="h-6 w-6 shrink-0 text-ink-2" strokeWidth={1.6} />
             <div className="min-w-0 flex-1">
@@ -184,7 +184,7 @@ export default function AppHome({
 
           <Link
             href="/biznes"
-            className="grain relative flex items-center gap-4 overflow-hidden rounded-3xl bg-flex-black px-5 py-5 text-white transition-transform active:scale-[0.99]"
+            className="grain relative flex items-center gap-4 overflow-hidden rounded-tile bg-flex-black px-5 py-5 text-white transition-transform active:scale-[0.99]"
           >
             <Store className="relative h-6 w-6 shrink-0 text-lime" strokeWidth={1.6} />
             <div className="relative min-w-0 flex-1">
@@ -231,7 +231,7 @@ export default function AppHome({
         <div className="px-6 pt-3">
           <Link
             href="/katalog?bolim=layouts"
-            className="flex items-center justify-between gap-4 rounded-2xl border border-line px-4 py-3.5 active:bg-black/[0.04]"
+            className="flex items-center justify-between gap-4 rounded-card border border-line px-4 py-3.5 active:bg-black/[0.04]"
           >
             <span>
               <span className="block text-[15px] font-semibold">{stripLabels.samples}</span>
@@ -270,7 +270,7 @@ export default function AppHome({
               <li key={r.normalized}>
                 <Link
                   href={`/${r.normalized}`}
-                  className="flex items-center gap-3 rounded-2xl border border-line-soft bg-white px-4 py-3 transition-transform active:scale-[0.99]"
+                  className="flex items-center gap-3 rounded-card border border-line-soft bg-white px-4 py-3 transition-transform active:scale-[0.99]"
                 >
                   {r.avatarUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element -- external R2 URL

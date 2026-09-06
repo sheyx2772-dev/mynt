@@ -34,7 +34,7 @@ export default function TransferPanel({
   const past = transfers.filter((t) => t.status !== "pending");
 
   return (
-    <section className="rounded-3xl border border-ink-line bg-ink-s1 p-6 sm:p-8">
+    <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
       <div className="flex items-start gap-3">
         <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink-s2">
           <ArrowRightLeft className="h-4 w-4 text-paper-2" />
@@ -49,7 +49,7 @@ export default function TransferPanel({
       </div>
 
       {live ? (
-        <div className="mt-6 rounded-2xl border border-ink-line bg-ink-s2 p-5">
+        <div className="mt-6 rounded-card border border-ink-line bg-ink-s2 p-5">
           <p className="text-sm text-paper-2">
             <span className="font-medium">{live.toEmail}</span> ga taklif yuborilgan.
           </p>

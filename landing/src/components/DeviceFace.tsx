@@ -23,7 +23,7 @@ function Card({ design, handle, compact, customImage }: FaceProps) {
   const art = customImage ? { ...catalogue, image: customImage, artworkHasNfc: true } : catalogue;
   return (
     <div
-      className={`relative isolate aspect-[1.586] w-full overflow-hidden ${compact ? "rounded-lg p-2" : "rounded-2xl p-5"} ${skin.shell} ${skin.ink} shadow-[0_20px_40px_-24px_rgba(14,10,27,0.5)]`}
+      className={`relative isolate aspect-[1.586] w-full overflow-hidden ${compact ? "rounded-plate p-2" : "rounded-card p-5"} ${skin.shell} ${skin.ink} shadow-[0_20px_40px_-24px_rgba(14,10,27,0.5)]`}
     >
       {art.image ? (
         <Image
@@ -142,9 +142,9 @@ function Bracelet({ design, handle, compact }: FaceProps) {
 
         {/* The plate, sitting proud of the strap. */}
         <div
-          className={`absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center ${compact ? "h-5 gap-1 rounded-lg px-1.5" : "h-11 gap-2 rounded-2xl px-4"} ${skin.shell} shadow-[0_8px_18px_-8px_rgba(14,10,27,0.75)] ring-1 ring-white/20`}
+          className={`absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center ${compact ? "h-5 gap-1 rounded-plate px-1.5" : "h-11 gap-2 rounded-card px-4"} ${skin.shell} shadow-[0_8px_18px_-8px_rgba(14,10,27,0.75)] ring-1 ring-white/20`}
         >
-          {skin.overlay && <div className="absolute inset-0 -z-10 rounded-2xl" style={skin.overlay} />}
+          {skin.overlay && <div className="absolute inset-0 -z-10 rounded-card" style={skin.overlay} />}
           <span
             className={`shrink-0 rounded-full ${compact ? "h-1 w-1" : "h-1.5 w-1.5"} ${skin.accent}`}
           />

@@ -26,7 +26,7 @@ export default function PostComposer({ handle }: { handle: string }) {
   return (
     <form
       action={formAction}
-      className="rounded-[1.5rem] border border-ink-line bg-ink-s1 p-5 transition-shadow duration-300 focus-within:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
+      className="rounded-tile border border-ink-line bg-ink-s1 p-5 transition-shadow duration-300 focus-within:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
     >
       <textarea
         name="body"
@@ -55,7 +55,7 @@ export default function PostComposer({ handle }: { handle: string }) {
         <button
           type="submit"
           disabled={isPending || used === 0}
-          className="flex items-center gap-1.5 rounded-xl bg-ink-s2 px-4 py-2 text-[13px] font-semibold text-paper shadow-[0_6px_18px_-8px_rgba(14,10,27,0.7)] transition-transform hover:scale-[1.02] active:scale-[0.99] disabled:opacity-25 disabled:shadow-none"
+          className="flex items-center gap-1.5 rounded-input bg-ink-s2 px-4 py-2 text-[13px] font-semibold text-paper shadow-[0_6px_18px_-8px_rgba(14,10,27,0.7)] transition-transform hover:scale-[1.02] active:scale-[0.99] disabled:opacity-25 disabled:shadow-none"
         >
           <Send className="h-3.5 w-3.5" />
           {isPending ? "Yuborilmoqda…" : "Joylash"}

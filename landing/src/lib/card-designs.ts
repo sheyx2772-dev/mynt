@@ -129,7 +129,7 @@ export const CARD_DESIGNS = [
     theme: "registon",
     name: "Xarita",
     description:
-      "Qora fonda oltin o'ymakori: O'zbekiston xaritasi va yonida Humo medalyoni. Davlat ramzi emas — o'z chizmamiz.",
+      "Qora fonda oltin o'ymakorlik: O'zbekiston xaritasi va yonida Humo medalyoni. Davlat ramzi emas — o'z chizmamiz.",
     image: "/kartalar/xarita.webp",
     artworkHasNfc: true,
     accent: "gold",

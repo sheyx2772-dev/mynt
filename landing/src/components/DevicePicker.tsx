@@ -59,8 +59,8 @@ export default function DevicePicker({
                 key={type.id}
                 className={
                   active
-                    ? "cursor-pointer rounded-2xl p-2 ring-2 ring-flex-black"
-                    : "cursor-pointer rounded-2xl p-2 ring-1 ring-black/10 transition-colors hover:ring-black/25"
+                    ? "cursor-pointer rounded-card p-2 ring-2 ring-flex-black"
+                    : "cursor-pointer rounded-card p-2 ring-1 ring-black/10 transition-colors hover:ring-black/25"
                 }
               >
                 <input
@@ -121,7 +121,7 @@ export default function DevicePicker({
           })}
         </div>
         <p className="mt-2 text-xs text-paper-3">
-          Tanlovingiz qurilmangizga tushadi. Istalgan vaqtda almashtirasiz.
+          Shu dizayn qurilmangizga bosiladi. Keyin ham almashtira olasiz.
         </p>
       </fieldset>
     </div>

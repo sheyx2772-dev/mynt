@@ -24,7 +24,7 @@ const HOME = {
     heroEyebrow: "Toshkent · 2025 yildan",
     heroTitle: "Telefonni tegizing. Tanishib bo'ldingiz.",
     heroLead:
-      "FLEX — umrbod raqamingiz. Karta, uzuk yoki braslet. Tegilgan telefon profilingizni ochadi. Ilova o'rnatilmaydi — na sizda, na unda.",
+      "FLEX — umrbod raqamingiz. Karta, uzuk yoki braslet. Tegizgan odamning telefonida profilingiz ochiladi. Ilova kerak emas — na sizga, na unga.",
     heroPlateNote: "shunday raqam sizniki bo'ladi",
     heroPrimary: "Raqam olish",
     heroSecondary: "Ishlayotganini ko'rish",
@@ -38,7 +38,7 @@ const HOME = {
     // -- 2. try it --------------------------------------------------------
     tryTitle: "Sotib olishdan oldin sinab ko'ring",
     tryLead:
-      "Kamerangizni shu kodga tuting — hozir, shu yerda, hech narsa o'rnatmasdan. Ochilgan sahifa — haqiqiy FLEX profili, namuna rasm emas.",
+      "Kamerangizni shu kodga tuting — hozir, shu yerda, hech narsa o'rnatmasdan. Ochiladigan sahifa — haqiqiy FLEX profili, surat emas.",
     tryButton: "Namuna profilni ochish",
     tryCaption: "namuna raqam",
 
@@ -62,7 +62,7 @@ const HOME = {
       {
         title: "Tegizasiz",
         body:
-          "Odam telefonini tegizadi, profilingiz ochiladi. Kontaktni bir bosishda saqlaydi. Siz esa u haqida yozuv olasiz — kim, qachon, qayerda.",
+          "Odam telefonini tegizadi, profilingiz ochiladi. Kontaktni bir bosishda saqlaydi. Sizda esa yozuv qoladi — kim, qachon, qayerda.",
         photo: "/mahsulot/skan.webp",
         alt: "Telefon FLEX qurilmasini o'qiyapti",
       },

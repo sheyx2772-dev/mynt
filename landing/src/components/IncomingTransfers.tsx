@@ -14,7 +14,7 @@ export default function IncomingTransfers({ transfers }: { transfers: Transfer[]
   if (transfers.length === 0) return null;
 
   return (
-    <section className="mb-6 rounded-3xl border border-lime/40 bg-lime/[0.07] p-6 sm:p-8">
+    <section className="mb-6 rounded-tile border border-lime/40 bg-lime/[0.07] p-6 sm:p-8">
       <div className="flex items-start gap-3">
         <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime">
           <Gift className="h-4 w-4 text-paper" />
@@ -33,7 +33,7 @@ export default function IncomingTransfers({ transfers }: { transfers: Transfer[]
         {transfers.map((t) => (
           <li
             key={t.id}
-            className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-4"
+            className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-ink-line bg-ink-s1 px-5 py-4"
           >
             <span className="font-display text-lg font-semibold tracking-tight">
               {t.handle}

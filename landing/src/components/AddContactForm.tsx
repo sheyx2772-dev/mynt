@@ -16,7 +16,7 @@ import {
 // gets kept alongside a notebook rather than replacing it.
 
 const field =
-  "w-full rounded-2xl border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-paper-3";
+  "w-full rounded-card border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-paper-3";
 
 export default function AddContactForm({ handle }: { handle: string }) {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ export default function AddContactForm({ handle }: { handle: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 rounded-2xl border border-dashed border-ink-line px-5 py-3 text-sm text-paper-2 transition-colors hover:border-line"
+        className="flex items-center gap-2 rounded-card border border-dashed border-ink-line px-5 py-3 text-sm text-paper-2 transition-colors hover:border-line"
       >
         <Plus className="h-4 w-4" />
         Kontakt qo&apos;shish
@@ -39,7 +39,7 @@ export default function AddContactForm({ handle }: { handle: string }) {
   }
 
   return (
-    <form action={action} className="rounded-3xl border border-ink-line bg-ink-s1 p-6">
+    <form action={action} className="rounded-tile border border-ink-line bg-ink-s1 p-6">
       <input type="hidden" name="handle" value={handle} />
 
       <div className="grid gap-3 sm:grid-cols-2">
@@ -56,14 +56,14 @@ export default function AddContactForm({ handle }: { handle: string }) {
         <button
           type="submit"
           disabled={saving}
-          className="rounded-2xl bg-ink-s2 px-5 py-2.5 text-sm font-medium text-paper disabled:opacity-50"
+          className="rounded-card bg-ink-s2 px-5 py-2.5 text-sm font-medium text-paper disabled:opacity-50"
         >
           {saving ? "Saqlanmoqda…" : "Saqlash"}
         </button>
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="rounded-2xl px-4 py-2.5 text-sm text-paper-2"
+          className="rounded-card px-4 py-2.5 text-sm text-paper-2"
         >
           Yopish
         </button>

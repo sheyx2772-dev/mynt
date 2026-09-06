@@ -205,7 +205,7 @@ export default function MenuRequests({
         className="absolute inset-0 bg-ink/50"
       />
 
-      <div className="relative w-full max-w-md rounded-t-[1.75rem] bg-white px-6 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div className="relative w-full max-w-md rounded-t-tile bg-white px-6 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <div className="mb-5 flex items-start justify-between gap-4">
           <h2 className="font-display text-lg font-semibold">
             {sheet === "review"

@@ -76,7 +76,7 @@ export default async function QueuePage() {
         {/* The count, on the brand's own ground. A queue rendered as a white
             page is a spreadsheet; this is the screen somebody opens to find out
             what their morning is. */}
-        <section className="relative mt-4 overflow-hidden rounded-[1.75rem] bg-ink-s2 p-6 text-paper sm:p-7">
+        <section className="relative mt-4 overflow-hidden rounded-tile bg-ink-s2 p-6 text-paper sm:p-7">
 
           <div className="relative">
             <div className="flex items-center gap-2 text-[11px] font-medium tracking-[0.12em] text-paper uppercase">
@@ -114,7 +114,7 @@ export default async function QueuePage() {
         </section>
 
         {orders.length === 0 ? (
-          <section className="mt-6 rounded-[1.75rem] border border-ink-line bg-ink-s1 p-10 text-center">
+          <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-10 text-center">
             <p className="font-display text-[17px] font-semibold tracking-tight">
               Navbat bo&apos;sh
             </p>
@@ -133,7 +133,7 @@ export default async function QueuePage() {
               return (
                 <li
                   key={order.id}
-                  className="rise relative overflow-hidden rounded-2xl border border-ink-line bg-ink-s1 transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
+                  className="rise relative overflow-hidden rounded-card border border-ink-line bg-ink-s1 transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
                   style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
                 >
                   <span
@@ -141,7 +141,7 @@ export default async function QueuePage() {
                   />
 
                   <div className="flex items-center gap-3.5 py-4 pr-4 pl-5">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink-s2 text-paper">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-input bg-ink-s2 text-paper">
                       <FulfilmentIcon state={order.fulfilment} className="h-4 w-4" />
                     </span>
 
@@ -171,7 +171,7 @@ export default async function QueuePage() {
                     </div>
 
                     <span
-                      className={`flex shrink-0 items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-medium ${CHIP[order.fulfilment]}`}
+                      className={`flex shrink-0 items-center gap-1 rounded-plate px-2 py-1 text-[11px] font-medium ${CHIP[order.fulfilment]}`}
                     >
                       <FulfilmentIcon state={order.fulfilment} className="h-3 w-3" />
                       {fulfilmentLabel(order.fulfilment, LANG)}
@@ -194,7 +194,7 @@ export default async function QueuePage() {
                         {order.phone && (
                           <a
                             href={`tel:${order.phone.replace(/[^0-9+]/g, "")}`}
-                            className="mt-2.5 inline-flex items-center gap-1.5 rounded-xl bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
+                            className="mt-2.5 inline-flex items-center gap-1.5 rounded-input bg-ink-s2 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-ink-s2"
                           >
                             <Phone className="h-3.5 w-3.5" />
                             {order.phone}
@@ -202,7 +202,7 @@ export default async function QueuePage() {
                         )}
                       </div>
                     ) : (
-                      <p className="flex items-center gap-2 rounded-xl bg-warn-ink/10 px-3.5 py-3 text-[13px] text-warn-ink">
+                      <p className="flex items-center gap-2 rounded-input bg-warn-ink/10 px-3.5 py-3 text-[13px] text-warn-ink">
                         <FulfilmentIcon
                           state="address_needed"
                           className="h-3.5 w-3.5 shrink-0"
@@ -218,7 +218,7 @@ export default async function QueuePage() {
                           <input type="hidden" name="to" value={next} />
                           <button
                             type="submit"
-                            className="flex items-center gap-1.5 rounded-xl bg-ink-s2 px-4 py-2 text-[12px] font-semibold text-paper shadow-[0_6px_18px_-8px_rgba(14,10,27,0.7)] transition-transform hover:scale-[1.02] active:scale-[0.99]"
+                            className="flex items-center gap-1.5 rounded-input bg-ink-s2 px-4 py-2 text-[12px] font-semibold text-paper shadow-[0_6px_18px_-8px_rgba(14,10,27,0.7)] transition-transform hover:scale-[1.02] active:scale-[0.99]"
                           >
                             <FulfilmentIcon state={next} className="h-3.5 w-3.5" />
                             {advanceLabel(order.fulfilment, LANG)}
@@ -234,7 +234,7 @@ export default async function QueuePage() {
                           <input type="hidden" name="to" value={state} />
                           <button
                             type="submit"
-                            className="flex items-center gap-1.5 rounded-xl bg-ink-s2 px-4 py-2 text-[12px] text-paper-2 transition-colors hover:bg-ink-s2 hover:text-paper"
+                            className="flex items-center gap-1.5 rounded-input bg-ink-s2 px-4 py-2 text-[12px] text-paper-2 transition-colors hover:bg-ink-s2 hover:text-paper"
                           >
                             <FulfilmentIcon state={state} className="h-3.5 w-3.5" />
                             {fulfilmentLabel(state, LANG)}

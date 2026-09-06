@@ -38,7 +38,7 @@ export default function OwnerHome({
 
       <Link
         href={`/${handle.normalized}`}
-        className="relative mt-3 block overflow-hidden rounded-3xl bg-ink-s2 px-5 py-5 text-paper transition-transform active:scale-[0.99]"
+        className="relative mt-3 block overflow-hidden rounded-tile bg-ink-s2 px-5 py-5 text-paper transition-transform active:scale-[0.99]"
       >
         <div className="relative flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -80,7 +80,7 @@ export default function OwnerHome({
       {leads > 0 && (
         <Link
           href={`/kabinet/${handle.normalized}/statistika`}
-          className="mt-3 flex items-center gap-3 rounded-2xl border border-lime-ink/25 bg-lime/[0.12] px-4 py-3.5 transition-transform active:scale-[0.99]"
+          className="mt-3 flex items-center gap-3 rounded-card border border-lime-ink/25 bg-lime/[0.12] px-4 py-3.5 transition-transform active:scale-[0.99]"
         >
           <Inbox className="h-5 w-5 shrink-0 text-paper" strokeWidth={1.8} />
           <p className="flex-1 text-sm font-medium">{s.leadsWaiting(formatNumber(leads))}</p>
@@ -114,7 +114,7 @@ function Action({
   return (
     <Link
       href={href}
-      className="flex flex-col items-center gap-2 rounded-2xl border border-ink-line bg-ink-s1 px-2 py-4 text-center transition-transform active:scale-[0.98]"
+      className="flex flex-col items-center gap-2 rounded-card border border-ink-line bg-ink-s1 px-2 py-4 text-center transition-transform active:scale-[0.98]"
     >
       <Icon className="h-5 w-5 text-paper-2" strokeWidth={1.7} />
       <span className="text-xs leading-tight font-medium">{label}</span>

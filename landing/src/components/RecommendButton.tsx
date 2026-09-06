@@ -54,8 +54,8 @@ export default function RecommendButton({
         className={
           className ??
           (on
-            ? "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute"
-            : "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5")
+            ? "flex min-h-14 w-full items-center justify-center gap-2 rounded-input bg-ink/[0.045] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-mute"
+            : "flex min-h-14 w-full items-center justify-center gap-2 rounded-input bg-ink/[0.04] px-3 py-2 text-[16px] leading-5 font-medium text-balance text-ink shadow-deboss active:bg-ink/5")
         }
       >
         <BadgeCheck className="size-5 shrink-0" />

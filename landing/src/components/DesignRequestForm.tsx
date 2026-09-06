@@ -32,7 +32,7 @@ export default function DesignRequestForm({
   const inQueue = requests.some((r) => r.status === "pending");
 
   return (
-    <section className="rounded-3xl border border-ink-line bg-ink-s1 p-6 sm:p-8">
+    <section className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8">
       <div className="flex items-start gap-3">
         <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime">
           <Sparkles className="h-4 w-4 text-paper" />
@@ -58,7 +58,7 @@ export default function DesignRequestForm({
           required
           disabled={inQueue || pending}
           placeholder="Masalan: qora fonda oltin naqsh, jiddiy va sodda"
-          className="w-full resize-none rounded-2xl border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-paper-3 disabled:bg-ink-s2 disabled:text-paper-3"
+          className="w-full resize-none rounded-card border border-ink-line px-4 py-3 text-sm outline-none placeholder:text-paper-3 focus:border-paper-3 disabled:bg-ink-s2 disabled:text-paper-3"
         />
 
         <div className="mt-3 flex flex-wrap items-center gap-3">

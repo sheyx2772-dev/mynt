@@ -63,7 +63,7 @@ export default function NewVenueForm({ handle }: { handle: string }) {
         name="name"
         required
         placeholder="Choyxona Navro'z"
-        className="w-full rounded-xl border border-ink-line bg-ink-s1 px-3 py-2.5 text-sm outline-none focus:border-paper-3"
+        className="w-full rounded-input border border-ink-line bg-ink-s1 px-3 py-2.5 text-sm outline-none focus:border-paper-3"
       />
 
       <p className="mt-6 mb-2 text-[11px] font-medium tracking-wide text-paper-3 uppercase">
@@ -79,8 +79,8 @@ export default function NewVenueForm({ handle }: { handle: string }) {
             aria-pressed={kind === id}
             className={
               kind === id
-                ? "flex w-full items-center gap-4 rounded-2xl border-2 border-flex-black bg-ink-s1 px-5 py-4 text-left"
-                : "flex w-full items-center gap-4 rounded-2xl border border-ink-line bg-ink-s1 px-5 py-4 text-left transition-colors hover:bg-ink-s2"
+                ? "flex w-full items-center gap-4 rounded-card border-2 border-flex-black bg-ink-s1 px-5 py-4 text-left"
+                : "flex w-full items-center gap-4 rounded-card border border-ink-line bg-ink-s1 px-5 py-4 text-left transition-colors hover:bg-ink-s2"
             }
           >
             <Icon
@@ -99,7 +99,7 @@ export default function NewVenueForm({ handle }: { handle: string }) {
 
       <button
         disabled={busy}
-        className="mt-6 w-full rounded-xl bg-lime px-5 py-3.5 font-medium text-ink disabled:opacity-60"
+        className="mt-6 w-full rounded-input bg-lime px-5 py-3.5 font-medium text-ink disabled:opacity-60"
       >
         {busy ? "Ochilmoqda…" : "Obyektni ochish"}
       </button>

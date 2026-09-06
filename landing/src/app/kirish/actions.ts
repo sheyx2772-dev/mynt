@@ -34,7 +34,7 @@ export async function sendSignInLink(
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { sent: false, error: "To'g'ri email manzil kiriting.", email };
+    return { sent: false, error: "Email manzilini to'g'ri kiriting.", email };
   }
 
   const { error } = await backend.POST("/kirish", { body: { email } });

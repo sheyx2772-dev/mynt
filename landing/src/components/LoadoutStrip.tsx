@@ -104,7 +104,7 @@ export default function LoadoutStrip({
           <Link
             key={item.href + item.name}
             href={item.href}
-            className="group relative w-[58vw] max-w-[15rem] shrink-0 snap-start overflow-hidden rounded-3xl bg-flex-black ring-1 ring-white/10 transition-transform active:scale-[0.99]"
+            className="group relative w-[58vw] max-w-[15rem] shrink-0 snap-start overflow-hidden rounded-tile bg-flex-black ring-1 ring-white/10 transition-transform active:scale-[0.99]"
           >
             <div className="relative aspect-square w-full overflow-hidden">
               {item.src ? (
