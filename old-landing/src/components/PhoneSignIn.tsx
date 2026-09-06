@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FlaskConical } from "lucide-react";
 
@@ -76,6 +76,14 @@ function AskForCode({
 }) {
   const router = useRouter();
   const [state, action, busy] = useActionState(confirmSignInCode, confirmState);
+  const [code, setCode] = useState(testCode ?? "");
+
+  // Auto-fill test code when available so testing is fast and seamless
+  useEffect(() => {
+    if (testCode) {
+      setCode(testCode);
+    }
+  }, [testCode]);
 
   // The server action cannot navigate on its own, because it has to set the
   // cookie on the same response.
@@ -98,16 +106,26 @@ function AskForCode({
           returning `kod` and this stops rendering, with nothing to remember
           to remove. */}
       {testCode && (
-        <Toast>
-          <span className="flex items-start gap-2">
-            <FlaskConical className="mt-0.5 h-4 w-4 shrink-0" />
-            <span>
-              Sinov rejimi — SMS yuborilmadi.
-              <br />
-              Kod: <b className="font-semibold tracking-[0.2em]">{testCode}</b>
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setCode(testCode)}
+          className="cursor-pointer"
+        >
+          <Toast>
+            <span className="flex items-center justify-between gap-2 w-full">
+              <span className="flex items-center gap-2">
+                <FlaskConical className="h-4 w-4 shrink-0 text-lime" />
+                <span>
+                  Sinov rejimi — Kod: <b className="font-semibold tracking-[0.2em]">{testCode}</b>
+                </span>
+              </span>
+              <span className="text-xs font-semibold text-lime bg-lime/10 px-2 py-0.5 rounded">
+                Kiritildi ✓
+              </span>
             </span>
-          </span>
-        </Toast>
+          </Toast>
+        </div>
       )}
 
       <input
@@ -116,7 +134,8 @@ function AskForCode({
         autoComplete="one-time-code"
         maxLength={6}
         required
-        defaultValue={testCode ?? ""}
+        value={code}
+        onChange={(e) => setCode(e.target.value.replace(/[^0-9]/g, "").slice(0, 6))}
         placeholder="000000"
         className="w-full rounded-input border border-line bg-black/[0.02] px-4 py-3 text-center text-lg font-semibold tracking-[0.4em] outline-none transition-colors focus:border-line-lead focus:bg-white"
       />
@@ -125,7 +144,7 @@ function AskForCode({
 
       <button
         type="submit"
-        disabled={busy}
+        disabled={busy || code.length !== 6}
         className="w-full rounded-input bg-flex-black py-3 text-sm font-medium text-white transition-colors hover:bg-flex-black/85 disabled:opacity-50"
       >
         {busy ? "Tekshirilmoqda…" : "Kirish"}

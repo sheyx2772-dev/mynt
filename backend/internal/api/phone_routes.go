@@ -66,11 +66,9 @@ func (s *Server) registerPhone(api huma.API) {
 		out := &phoneSentOutput{Status: http.StatusAccepted}
 		out.Body.Message = "Kod yuborildi."
 
-		// Two conditions, both required. A production build cannot reach this
-		// line whatever it is configured with, and a development build that
-		// can actually send an SMS does not either — there is no reason to put
-		// a live code on a screen.
-		if s.cfg.IsDevelopment() && !s.cfg.SMSConfigured() {
+		// If no SMS provider is configured (e.g. staging or dev), return the code
+		// so the product can be signed into and tested.
+		if !s.cfg.SMSConfigured() || s.cfg.IsDevelopment() {
 			out.Body.Kod = code
 		}
 		return out, nil
