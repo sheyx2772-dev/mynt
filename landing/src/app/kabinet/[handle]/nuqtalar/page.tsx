@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 
 import PageShell from "@/components/PageShell";
@@ -15,7 +15,10 @@ export default async function PointsPage({ params }: PageProps<"/kabinet/[handle
   const { normalized, userId } = await requireOwnHandle(handle, "/kabinet/[handle]/nuqtalar");
 
   const venue = await getOwnedVenue(normalized);
-  if (!venue) notFound();
+  // Owning the number but not having made it a place is not an error — it is
+  // the state every number starts in. Sending them to the screen that creates
+  // one is what obyekt/page.tsx already does in the mirror case.
+  if (!venue) redirect(`/kabinet/${normalized}/obyekt`);
 
   const w = venueWords(venue.kind, "uz");
 

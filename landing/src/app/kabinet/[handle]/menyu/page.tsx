@@ -1,9 +1,9 @@
+import ConfirmDelete from "@/components/ConfirmDelete";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import {
   ArrowLeft,
-  Trash2,
   Eye,
   EyeOff,
   ExternalLink,
@@ -84,7 +84,10 @@ export default async function MenuAdminPage({
   const venue = await getOwnedVenue(normalized);
 
   // Not theirs, or the number is not a venue. Either way there is nothing here.
-  if (!venue) notFound();
+  // Owning the number but not having made it a place is not an error — it is
+  // the state every number starts in. Sending them to the screen that creates
+  // one is what obyekt/page.tsx already does in the mirror case.
+  if (!venue) redirect(`/kabinet/${normalized}/obyekt`);
 
   const categories = await getMenu(normalized, "uz");
   const w = venueWords(venue.kind, "uz");
@@ -151,13 +154,14 @@ export default async function MenuAdminPage({
                   id={category.id}
                   direction="down"
                 />
-                <form action={removeCategoryAction}>
-                  <input type="hidden" name="handle" value={normalized} />
-                  <input type="hidden" name="id" value={category.id} />
-                  <button className="ml-1.5 text-xs text-paper-3 hover:text-danger-ink">
-                    O&apos;chirish
-                  </button>
-                </form>
+                <ConfirmDelete
+                  className="ml-1.5"
+                  what={`«${category.name}» va undagi ${category.items.length} ta ${w.itemWord}`}
+                  action={async () => {
+                    "use server";
+                    return removeCategoryAction(normalized, category.id);
+                  }}
+                />
               </div>
             )}
           </div>
@@ -258,16 +262,15 @@ export default async function MenuAdminPage({
                     </button>
                   </form>
 
-                  <form action={removeItemAction} className="shrink-0">
-                    <input type="hidden" name="handle" value={normalized} />
-                    <input type="hidden" name="id" value={item.id} />
-                    <button
-                      title="O'chirish"
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-ink-line text-paper-3 hover:bg-danger-ink/10 hover:text-danger-ink"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </form>
+                  <div className="shrink-0">
+                    <ConfirmDelete
+                      what={`«${item.name}»`}
+                      action={async () => {
+                        "use server";
+                        return removeItemAction(normalized, item.id);
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             ))}

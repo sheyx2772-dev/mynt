@@ -25,6 +25,12 @@ import {
 // getOwnedVenue filters on user_id, and a handle somebody else owns comes back
 // null rather than editable.
 
+/** The same ownership check, for the two actions called with plain arguments. */
+async function venueForHandle(raw: string) {
+  await requireUser();
+  return getOwnedVenue(raw.toUpperCase());
+}
+
 async function venueFor(form: FormData) {
   const user = await requireUser();
   const handle = String(form.get("handle") ?? "").toUpperCase();
@@ -42,12 +48,19 @@ export async function addCategoryAction(_prev: EditResult, form: FormData) {
   return result;
 }
 
-export async function removeCategoryAction(form: FormData) {
-  const { venue, handle } = await venueFor(form);
-  if (!venue) return;
+export async function removeCategoryAction(
+  handle: string,
+  id: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const venue = await venueForHandle(handle);
+  if (!venue) return { ok: false, error: "Bu raqam sizniki emas." };
 
-  await removeCategory(handle, String(form.get("id") ?? ""));
+  const result = await removeCategory(handle, id);
+  if (result && result.ok === false) {
+    return { ok: false, error: result.error ?? "O'chirilmadi." };
+  }
   revalidatePath(`/kabinet/${handle}/menyu`);
+  return { ok: true };
 }
 
 export async function addItemAction(_prev: EditResult, form: FormData) {
@@ -72,12 +85,19 @@ export async function toggleItemAction(form: FormData) {
   revalidatePath(`/${handle}`);
 }
 
-export async function removeItemAction(form: FormData) {
-  const { venue, handle } = await venueFor(form);
-  if (!venue) return;
+export async function removeItemAction(
+  handle: string,
+  id: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const venue = await venueForHandle(handle);
+  if (!venue) return { ok: false, error: "Bu raqam sizniki emas." };
 
-  await removeItem(handle, String(form.get("id") ?? ""));
+  const result = await removeItem(handle, id);
+  if (result && result.ok === false) {
+    return { ok: false, error: result.error ?? "O'chirilmadi." };
+  }
   revalidatePath(`/kabinet/${handle}/menyu`);
+  return { ok: true };
 }
 
 export async function saveVenueAction(_prev: EditResult, form: FormData) {

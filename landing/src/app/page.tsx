@@ -664,17 +664,17 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                   </a>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="/shaxsiy#individual"
                     className="block py-2 transition-colors hover:text-white"
                   >
                     {s.personalProfile}
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/qurilmalar/card" className="block py-2 transition-colors hover:text-white">
+                  <Link href="/qurilmalar/card" className="block py-2 transition-colors hover:text-white">
                     FLEX CARD
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -684,22 +684,22 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </p>
               <ul className="mt-3 space-y-0.5 text-sm text-white/60">
                 <li>
-                  <a
+                  <Link
                     href="/biznes#jamoa"
                     className="block py-2 transition-colors hover:text-white"
                   >
                     {s.teamCards}
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/biznes#soha" className="block py-2 transition-colors hover:text-white">
+                  <Link href="/biznes#soha" className="block py-2 transition-colors hover:text-white">
                     {s.contactCollection}
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/biznes#sorov" className="block py-2 transition-colors hover:text-white">
+                  <Link href="/biznes#sorov" className="block py-2 transition-colors hover:text-white">
                     {lang === "ru" ? "Режим мероприятия" : lang === "en" ? "Event mode" : "Tadbir rejimi"}
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
