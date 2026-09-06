@@ -124,5 +124,18 @@
     "a3": "Every table or room gets its own QR code and its own NFC tag. A guest taps it, the menu or service list opens, and from there they call a waiter, ask for the bill or leave a review. The request arrives on the phone by the till with a sound and with the table number on it. The monthly report shows the average time to answer and which table calls most.",
     "a4": "The team plan is sold by the seat, minimum five. A seat belongs to the company rather than to a person: when somebody leaves it frees up and goes to the next hire.",
     "a5": "Payme for a number and a personal subscription. Cafes, hotels and companies pay by invoice and bank transfer: the document is issued in the cabinet and the subscription is extended when the money arrives."
+  },
+  "verticals": {
+    "eyebrow": "Where it goes",
+    "note": "A table, a room, a till or a door — the page opens wherever the tag is.",
+    "open": "Open",
+    "name1": "Cafes and restaurants",
+    "name2": "Hotels",
+    "name3": "Salons and clinics",
+    "name4": "Shops and the rest",
+    "note1": "NFC and QR on a table stand or a sticker",
+    "note2": "A stand in the room or a tag on the door — it replaces the leather folder",
+    "note3": "At the chair or the consulting-room door — prices, booking, reviews",
+    "note4": "At the till or on a product label — same shape, different page"
   }
 }

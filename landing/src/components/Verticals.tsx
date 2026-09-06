@@ -1,0 +1,73 @@
+import Image from "next/image";
+import { getTranslations } from "next-intl/server";
+import { ArrowRight } from "lucide-react";
+
+import { Link } from "@/i18n/navigation";
+
+// Where the tag goes.
+//
+// Photographs here, not drawings, and that is not a contradiction of the
+// devices shelf. A card is one object and a drawing of it is exact; a cafe is
+// a room, and the thing being sold is a stand on a table in it — which a
+// visitor recognises from a photograph in a second and from a line drawing
+// not at all.
+//
+// The pictures are 704x396 at source, which is soft at hero size and fine at
+// this one: these are quarter-width tiles. That is the rule the whole page
+// follows — a photograph where its resolution is enough, a drawing where it
+// is not.
+const TILES = [
+  { photo: "/mahsulot/kafe.webp", href: "/business" },
+  { photo: "/mahsulot/mehmonxona.webp", href: "/business#hotels" },
+  { photo: "/mahsulot/salon.webp", href: "/business#salons" },
+  { photo: "/mahsulot/klinika.webp", href: "/business#shops" },
+] as const;
+
+export default async function Verticals() {
+  const t = await getTranslations("verticals");
+
+  return (
+    <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <p className="cap text-ink-3">{t("eyebrow")}</p>
+      <p className="mt-2 max-w-xl text-ink-2">{t("note")}</p>
+
+      <ul className="mt-8 grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+        {TILES.map((tile, i) => (
+          <li key={tile.photo}>
+            <Link
+              href={tile.href}
+              className="group relative flex aspect-[3/4] flex-col justify-end overflow-hidden rounded-card"
+            >
+              <Image
+                src={tile.photo}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 276px, (min-width: 640px) 50vw, 100vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none"
+              />
+
+              {/* Dark at the foot, clear at the head. A flat scrim over the
+                  whole picture would dim the thing the picture is there to
+                  show; the text only needs the bottom third. */}
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-transparent" />
+
+              <div className="relative p-4 text-white">
+                <h3 className="font-semibold">{t(`name${i + 1}`)}</h3>
+                <p className="mt-1 text-[13px] leading-snug text-paper-2">
+                  {t(`note${i + 1}`)}
+                </p>
+                <span className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-medium text-lime">
+                  {t("open")}
+                  <ArrowRight
+                    className="size-3.5 transition-transform group-hover:translate-x-0.5"
+                    strokeWidth={2}
+                  />
+                </span>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
