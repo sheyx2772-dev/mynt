@@ -60,9 +60,9 @@ export default async function DevicePage({
         </Link>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-2 lg:gap-14">
-          <div className="relative aspect-square overflow-hidden rounded-tile border border-line bg-paper">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-tile border border-line bg-paper">
             <Image
-              src={`/mahsulot/${device.photo}.webp`}
+              src={`/mahsulot/${device.large}.webp`}
               alt={item("name")}
               fill
               // The largest picture on the page, so it loads with the page
@@ -124,7 +124,10 @@ export default async function DevicePage({
             .slice(0, 4)
             .map((d) => (
               <li key={d.slug}>
-                <DeviceTile device={d} sizes="(min-width: 1024px) 276px, 50vw" />
+                <DeviceTile
+                  device={d}
+                  sizes="(min-width: 1024px) 276px, 50vw"
+                />
               </li>
             ))}
         </ul>
@@ -140,7 +143,10 @@ function Specs({ title, lines }: { title: string; lines: string[] }) {
       <ul className="mt-3 space-y-2">
         {lines.map((line) => (
           <li key={line} className="flex gap-2.5 text-[15px] text-ink-2">
-            <Check className="mt-0.5 size-4 shrink-0 text-lime-ink" strokeWidth={2.4} />
+            <Check
+              className="mt-0.5 size-4 shrink-0 text-lime-ink"
+              strokeWidth={2.4}
+            />
             {line}
           </li>
         ))}

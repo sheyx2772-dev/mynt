@@ -13,18 +13,31 @@ export type Device = {
   slug: string;
   /** Cut-out on the shelf ground, 900x900, under public/mahsulot. */
   photo: string;
+  /**
+   * The same object on its own page, 1400x1050 and never upscaled past 1.35x.
+   *
+   * A separate file rather than the tile shown larger, because the tile is
+   * mostly ground: these renders carry between 450 and 1350 pixels of actual
+   * object, so a square crop blown up to a half-width column was showing a
+   * two-times enlargement of the smallest part of the file. The ring is the
+   * floor at 487 pixels across — it needs re-rendering to be crisp any bigger,
+   * and no amount of sharpening substitutes for that.
+   */
+  large: string;
   /** The object in use, for its own page. Not every device has one yet. */
   scene?: string;
   price: number;
 };
 
 export const DEVICES: Device[] = [
-  { slug: "card", photo: "karta", price: 200_000 },
-  { slug: "ring", photo: "uzuk", price: 350_000 },
-  { slug: "band", photo: "braslet", price: 250_000 },
-  { slug: "cartag", photo: "avto", scene: "avto-joyida", price: 150_000 },
-  { slug: "pettag", photo: "hayvon", price: 120_000 },
-  { slug: "stand", photo: "stend", scene: "stend-joyida", price: 250_000 },
+  { slug: "card", photo: "karta", large: "karta-katta", price: 200_000 },
+  { slug: "ring", photo: "uzuk", large: "uzuk-katta", price: 350_000 },
+  { slug: "band", photo: "braslet", large: "braslet-katta", price: 250_000 },
+  // prettier-ignore
+  { slug: "cartag", photo: "avto", large: "avto-katta", scene: "avto-joyida", price: 150_000 },
+  { slug: "pettag", photo: "hayvon", large: "hayvon-katta", price: 120_000 },
+  // prettier-ignore
+  { slug: "stand", photo: "stend", large: "stend-katta", scene: "stend-joyida", price: 250_000 },
 ];
 
 /** The four on the entry page. The rest are one click away, on the shelf. */
