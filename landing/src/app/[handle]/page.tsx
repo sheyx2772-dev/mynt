@@ -52,15 +52,13 @@ export async function generateMetadata(props: PageProps<"/[handle]">): Promise<M
   const { handle } = await props.params;
   const { til } = await props.searchParams;
   const lang = await getLang(til);
-  const title = `${handle.toUpperCase()} — ${SITE_HOST}`;
+  const title = handle.toUpperCase();
 
   // Only pages with a real person or a real card behind them are worth
   // indexing. An unclaimed handle is a price quote, and there are 17.5M of
   // them — letting crawlers in would bury the profiles that matter.
-  const serial = parseGenesisSerial(handle);
-  if (serial) {
-    const card = await getGenesisCard(serial);
-    return { title, robots: card ? undefined : { index: false } };
+  if (parseGenesisSerial(handle)) {
+    return { title, robots: { index: false, follow: true } };
   }
 
   const parsed = parseHandle(handle);

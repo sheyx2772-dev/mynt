@@ -22,12 +22,30 @@ export const revalidate = 3600;
 // being read at all.
 const RELEASED = new Date(process.env.BUILD_DATE ?? "2026-09-06T00:00:00Z");
 
+// The same three-language cluster the pages themselves declare in their
+// hreflang tags. Repeating it here is not redundancy: a crawler that has not
+// fetched a page yet learns from the sitemap that the other two exist, which
+// is the difference between the Russian page being discovered on the first
+// visit and on the third.
+function langs(path: string): { languages: Record<string, string> } {
+  const base = `${SITE_URL}${path}`;
+  return {
+    languages: {
+      "x-default": base,
+      uz: base,
+      ru: `${base}?til=ru`,
+      en: `${base}?til=en`,
+    },
+  };
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const handles = await listPublicHandles();
 
   return [
     {
       url: SITE_URL,
+      alternates: langs(""),
       lastModified: RELEASED,
       changeFrequency: "weekly",
       priority: 1,
@@ -37,12 +55,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // land on.
     {
       url: `${SITE_URL}/shaxsiy`,
+      alternates: langs("/shaxsiy"),
       lastModified: RELEASED,
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${SITE_URL}/biznes`,
+      alternates: langs("/biznes"),
       lastModified: RELEASED,
       changeFrequency: "monthly",
       priority: 0.9,
@@ -51,6 +71,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // looks for before approving.
     {
       url: `${SITE_URL}/qurilmalar`,
+      alternates: langs("/qurilmalar"),
       lastModified: RELEASED,
       changeFrequency: "monthly",
       priority: 0.8,
@@ -60,6 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // more to a buyer than the index above them.
     ...LOADOUT_DEVICES.map((id) => ({
       url: `${SITE_URL}/qurilmalar/${id}`,
+      alternates: langs(`/qurilmalar/${id}`),
       lastModified: RELEASED,
       changeFrequency: "monthly" as const,
       priority: 0.7,
@@ -68,12 +90,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // anyway, and the page itself is the one place they are all linked from.
     {
       url: `${SITE_URL}/rezidentlar`,
+      alternates: langs("/rezidentlar"),
       lastModified: RELEASED,
       changeFrequency: "daily",
       priority: 0.7,
     },
     {
       url: `${SITE_URL}/shartlar`,
+      alternates: langs("/shartlar"),
       lastModified: RELEASED,
       changeFrequency: "yearly",
       priority: 0.5,

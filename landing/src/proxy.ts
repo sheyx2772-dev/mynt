@@ -81,6 +81,11 @@ export function proxy(request: NextRequest) {
   // The root layout decides <html lang> and cannot see searchParams, so a page
   // opened with ?til=ru rendered Russian text inside lang="uz". The choice
   // travels as a request header instead, which getLang() reads first.
+  // No `Vary: Cookie, Accept-Language` here, though the language is negotiated
+  // from both. Next writes its own Vary for the router and overwrites anything
+  // set in next.config or appended here — measured, not assumed. It costs
+  // nothing either way: the root layout reads cookies, so every page is served
+  // `private, no-cache, no-store` and there is no shared cache to confuse.
   const til = searchParams.get("til");
   if (!til) return NextResponse.next({ request });
 
