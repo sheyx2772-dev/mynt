@@ -56,7 +56,7 @@ export default function AppHome({
   owner?: { handle: OwnedHandle; todayViews: number; leads: number } | null;
 }) {
   return (
-    <div className="lg:hidden">
+    <div>
       {owner && (
         <OwnerHome
           s={s}
@@ -71,11 +71,11 @@ export default function AppHome({
           holding — so for them this whole block is skipped and the shelf below
           is where buying still lives. */}
       {!owner && (
-      <section className="grain relative overflow-hidden bg-flex-black px-6 pt-7 pb-9 text-white">
+      <section className="grain relative overflow-hidden bg-flex-black px-6 pt-7 pb-9 text-white sm:pt-12 lg:pt-16 lg:pb-16">
         <div className="bg-dot-grid-light absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_0%,black,transparent)]" />
         <div className="absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-lime/[0.15] blur-[110px]" />
 
-        <div className="relative lg:grid lg:grid-cols-[minmax(0,1fr)_26rem] lg:items-center lg:gap-12">
+        <div className="relative mx-auto max-w-6xl lg:grid lg:grid-cols-[minmax(0,1fr)_26rem] lg:items-center lg:gap-12">
           <div className="relative">
           <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-ink-line bg-white/5 px-3 py-1.5 text-[10px] font-medium tracking-wide text-paper-2 uppercase">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
@@ -146,8 +146,8 @@ export default function AppHome({
           Everything under it is the personal side, which is what the four
           tiles below are. */}
       {!owner && (
-      <section className="px-6 pt-7">
-        <div className="grid gap-3">
+      <section className="mx-auto max-w-6xl px-6 pt-7 lg:pt-10">
+        <div className="grid gap-3 lg:grid-cols-2 lg:gap-4">
           <Link
             href="/shaxsiy"
             className="flex items-center gap-4 rounded-tile bg-lime p-6 sm:p-8 text-flex-black shadow-glow transition-transform active:scale-[0.99]"
@@ -205,10 +205,10 @@ export function AppTiles({
   const newest = residents.slice(0, 3);
 
   return (
-    <div className="lg:hidden">
+    <div>
       {/* Four destinations, thumb-sized. The sections these replace are hidden
           on a phone; each of these is where that content actually lives. */}
-      <nav className="grid grid-cols-2 gap-3 px-6 pt-6">
+      <nav className="mx-auto grid max-w-6xl grid-cols-2 gap-3 px-6 pt-6 lg:grid-cols-4 lg:gap-4 lg:pt-10">
         <Tile href="/shaxsiy#narx" label={s.calcPrice} Icon={Calculator} />
         <Tile href="/qurilmalar" label={s.navDevices} Icon={Nfc} />
         <Tile href="/rezidentlar" label={s.navResidents} Icon={Users} />
@@ -216,7 +216,7 @@ export function AppTiles({
       </nav>
 
       {newest.length > 0 && (
-        <section className="px-6 pt-9">
+        <section className="mx-auto max-w-6xl px-6 pt-9 lg:pt-12">
           <div className="mb-3 flex items-baseline justify-between">
             <h2 className="text-ink-3 text-xs font-semibold tracking-widest uppercase">
               {s.appNewResidents}
@@ -229,7 +229,7 @@ export function AppTiles({
             </Link>
           </div>
 
-          <ul className="space-y-2">
+          <ul className="grid gap-2 lg:grid-cols-3">
             {newest.map((r) => (
               <li key={r.normalized}>
                 <Link

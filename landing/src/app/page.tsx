@@ -42,11 +42,9 @@ import { listNewestResidents, getDirectoryCounts, listHandlesForUser } from "@/l
 import { getUser } from "@/lib/auth";
 import { getHandleStats } from "@/lib/analytics";
 import { listLeads } from "@/lib/leads";
-import LiveResidents from "@/components/LiveResidents";
 import AppHome, { AppTiles } from "@/components/AppHome";
 import Strips from "@/components/Strips";
 import CardFan from "@/components/CardFan";
-import TwoWays from "@/components/TwoWays";
 import { deviceStrip, verticalStrip, heroCarousel } from "@/lib/strip-items";
 import MobileMenu from "@/components/MobileMenu";
 import { getLang } from "@/lib/lang";
@@ -313,16 +311,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
       </header>
 
       <main className="flex-1">
-        {/* The fork is the first screen: two products, said as two, before
-            anything is explained. The hero that used to be here follows it —
-            it sells the personal side, and a visitor who came for the business
-            side should not have to scroll past a pitch to find out we have one.
-            The phone gets the same pair inside AppHome. */}
-        <div className="hidden lg:block">
-          <TwoWays s={s} carousel={carousel} />
-        </div>
-
-        {/* On a phone this is the entry screen. See AppHome. */}
+        {/* The entrance, at every width. See AppHome. */}
         <AppHome
           s={s}
           claimed={counts.claimed}
@@ -379,18 +368,6 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           }}
           lang={lang}
         />
-
-        {/* Who has just joined, and how much of the namespace is gone. Directly
-            under the hero, because it is the first thing a scroll reveals and
-            it is the only proof on the page that other people are buying. */}
-        <div className="hidden bg-flex-black lg:block">
-          <LiveResidents
-            residents={newest}
-            claimed={counts.claimed}
-            namespace={counts.namespace}
-            labels={{ taken: s.takenWord, left: s.leftWord, latest: s.latestWord }}
-          />
-        </div>
 
         <AppTiles s={s} residents={newest} />
 
