@@ -135,7 +135,7 @@ function TplPremium({ p }: { p: Profile }) {
       {/* CTA */}
       <div style={{ padding:"18px 20px 20px" }}>
         <button className="press" style={{ width:"100%", padding:"13px", borderRadius:3, background:"transparent", border:`1px solid ${v.accent}60`, color:v.accent, fontWeight:800, fontSize:11, letterSpacing:"0.12em", textTransform:"uppercase", cursor:"pointer", fontFamily:"var(--font-sans)" }}>
-          KONTAKTGA QO'SHISH
+          KONTAKTGA QO&apos;SHISH
         </button>
       </div>
       <NfcFoot color={`${v.accent}35`} />
@@ -195,7 +195,7 @@ function TplGradient({ p }: { p: Profile }) {
       {/* CTA */}
       <div style={{ padding:"16px" }}>
         <button className="press" style={{ width:"100%", padding:"14px", borderRadius:14, background:"rgba(255,255,255,0.95)", border:"none", color:v.bg2, fontWeight:900, fontSize:12, cursor:"pointer", fontFamily:"var(--font-sans)", letterSpacing:"0.04em" }}>
-          KONTAKTGA QO'SHISH
+          KONTAKTGA QO&apos;SHISH
         </button>
       </div>
       <NfcFoot color="rgba(255,255,255,0.3)" />
@@ -255,7 +255,7 @@ function TplMinimal({ p }: { p: Profile }) {
       {/* CTA */}
       <div style={{ padding:"0 28px 28px", display:"flex", gap:10 }}>
         <button className="press" style={{ flex:1, padding:"13px", borderRadius:3, background:v.accent, border:"none", color:v.bg1, fontWeight:900, fontSize:11, letterSpacing:"0.08em", textTransform:"uppercase", cursor:"pointer", fontFamily:"var(--font-sans)" }}>
-          Kontaktga qo'shish
+          Kontaktga qo&apos;shish
         </button>
         <button className="press" style={{ width:44, padding:"13px", borderRadius:3, background:v.tag, border:"none", color:v.sub, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>
           {Ic.share}
@@ -379,7 +379,7 @@ function TplStripe({ p }: { p: Profile }) {
         <div style={{ padding:"12px 22px" }}><Socials s={p.socials} fg={v.text} /></div>
         <div style={{ padding:"0 22px 22px" }}>
           <button className="press" style={{ width:"100%", padding:"12px", borderRadius:4, background:v.accent, border:"none", color:v.bg1, fontWeight:900, fontSize:11, letterSpacing:"0.08em", textTransform:"uppercase", cursor:"pointer", fontFamily:"var(--font-sans)" }}>
-            Kontaktga qo'shish
+            Kontaktga qo&apos;shish
           </button>
         </div>
         <div style={{ borderTop:`1px solid ${v.tag}`, padding:"8px 22px", display:"flex", justifyContent:"flex-end" }}>
@@ -450,7 +450,7 @@ function TplFeminine({ p }: { p: Profile }) {
       {/* CTA */}
       <div style={{ padding:"0 18px 22px" }}>
         <button className="press" style={{ width:"100%", padding:"14px", borderRadius:40, background:v.accent, border:"none", color:"#fff", fontWeight:800, fontSize:12, cursor:"pointer", fontFamily:"var(--font-sans)" }}>
-          Kontaktga qo'shish
+          Kontaktga qo&apos;shish
         </button>
       </div>
       <NfcFoot color={`${v.accent}45`} />
@@ -588,7 +588,7 @@ function TplComic({ p }: { p: Profile }) {
       {/* Big CTA */}
       <div style={{ padding:"0 14px 18px" }}>
         <button className="press" style={{ width:"100%", padding:"16px", borderRadius:16, background:v.accent, border:`3px solid ${v.text}`, color:v.text, fontWeight:900, fontSize:14, cursor:"pointer", fontFamily:"var(--font-sans)", letterSpacing:"-0.3px", boxShadow:`4px 4px 0 ${v.text}40` }}>
-          Kontaktga qo'shish
+          Kontaktga qo&apos;shish
         </button>
       </div>
       <div style={{ textAlign:"center", paddingBottom:14, borderTop:`2px solid ${v.tag}` }}>
@@ -650,7 +650,7 @@ function TplSport({ p }: { p: Profile }) {
       {/* CTA */}
       <div style={{ padding:"0 20px 20px" }}>
         <button className="press" style={{ width:"100%", padding:"15px", borderRadius:6, background:v.accent, border:"none", color:v.bg1, fontWeight:900, fontSize:13, cursor:"pointer", fontFamily:"var(--font-sans)", letterSpacing:"0.06em", textTransform:"uppercase" }}>
-          KONTAKTGA QO'SHISH
+          KONTAKTGA QO&apos;SHISH
         </button>
       </div>
       <NfcFoot color={`${v.accent}44`} />
@@ -714,7 +714,7 @@ function TplKids({ p }: { p: Profile }) {
       {/* CTA */}
       <div style={{ padding:"0 14px 18px" }}>
         <button className="press" style={{ width:"100%", padding:"16px", borderRadius:24, background:"rgba(255,255,255,0.95)", border:"none", color:v.bg2, fontWeight:900, fontSize:14, cursor:"pointer", fontFamily:"var(--font-sans)", boxShadow:"0 6px 24px rgba(0,0,0,0.2)" }}>
-          🌟 Kontaktga qo'shish 🌟
+          🌟 Kontaktga qo&apos;shish 🌟
         </button>
       </div>
       <NfcFoot color="rgba(255,255,255,0.35)" />
@@ -771,7 +771,7 @@ function TplNature({ p }: { p: Profile }) {
       {/* CTA */}
       <div style={{ padding:"0 22px 22px" }}>
         <button className="press" style={{ width:"100%", padding:"14px", borderRadius:12, background:v.accent, border:"none", color:v.bg1, fontWeight:800, fontSize:12, cursor:"pointer", fontFamily:"var(--font-sans)", display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
-          {Ic.leaf} Kontaktga qo'shish
+          {Ic.leaf} Kontaktga qo&apos;shish
         </button>
       </div>
       <NfcFoot color={`${v.accent}40`} />
@@ -844,7 +844,7 @@ function TplHistorical({ p }: { p: Profile }) {
       {/* CTA */}
       <div style={{ padding:"0 24px 24px" }}>
         <button className="press" style={{ width:"100%", padding:"14px", borderRadius:4, background:"transparent", border:`1px solid ${v.accent}70`, color:v.accent, fontWeight:700, fontSize:11, letterSpacing:"0.12em", textTransform:"uppercase", cursor:"pointer", fontFamily:"var(--font-serif)" }}>
-          KONTAKTGA QO'SHISH
+          KONTAKTGA QO&apos;SHISH
         </button>
       </div>
       <div style={{ borderTop:`1px solid ${v.accent}20`, textAlign:"center", padding:"10px 0 14px" }}>
@@ -908,7 +908,7 @@ function TplCountry({ p }: { p: Profile }) {
           {/* CTA */}
           <div style={{ marginTop:16, paddingBottom:22 }}>
             <button className="press" style={{ width:"100%", padding:"14px", borderRadius:8, background:v.bg1, border:"none", color:"#fff", fontWeight:800, fontSize:12, cursor:"pointer", fontFamily:"var(--font-sans)", letterSpacing:"0.04em" }}>
-              Kontaktga qo'shish
+              Kontaktga qo&apos;shish
             </button>
           </div>
         </div>
@@ -971,7 +971,7 @@ function TplBrand({ p }: { p: Profile }) {
         {/* CTA */}
         <div style={{ marginTop:16, paddingBottom:20 }}>
           <button className="press" style={{ width:"100%", padding:"14px", borderRadius:12, background:v.accent, border:"none", color:v.bg1, fontWeight:900, fontSize:12, cursor:"pointer", fontFamily:"var(--font-sans)", letterSpacing:"0.04em" }}>
-            KONTAKTGA QO'SHISH
+            KONTAKTGA QO&apos;SHISH
           </button>
         </div>
       </div>
@@ -1033,7 +1033,7 @@ function TplChef({ p }: { p: Profile }) {
       {/* CTA */}
       <div style={{ padding:"0 22px 22px" }}>
         <button className="press" style={{ width:"100%", padding:"14px", borderRadius:4, background:`${v.accent}15`, border:`1px solid ${v.accent}60`, color:v.accent, fontWeight:700, fontSize:11, letterSpacing:"0.12em", textTransform:"uppercase", cursor:"pointer", fontFamily:"var(--font-serif)" }}>
-          Kontaktga qo'shish
+          Kontaktga qo&apos;shish
         </button>
       </div>
       <NfcFoot color={`${v.accent}35`} />
@@ -1092,7 +1092,7 @@ function TplArtist({ p }: { p: Profile }) {
       {/* CTA */}
       <div style={{ padding:"0 24px 24px" }}>
         <button className="press" style={{ width:"100%", padding:"14px", borderRadius:10, background:v.accent, border:"none", color:"#fff", fontWeight:800, fontSize:12, cursor:"pointer", fontFamily:"var(--font-sans)", display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
-          {Ic.palette} Kontaktga qo'shish
+          {Ic.palette} Kontaktga qo&apos;shish
         </button>
       </div>
       <NfcFoot color={`${v.accent}40`} />
@@ -1150,7 +1150,7 @@ function TplMusician({ p }: { p: Profile }) {
       {/* CTA */}
       <div style={{ padding:"0 22px 22px" }}>
         <button className="press" style={{ width:"100%", padding:"14px", borderRadius:10, background:`${v.accent}`, border:"none", color:v.bg1, fontWeight:900, fontSize:12, cursor:"pointer", fontFamily:"var(--font-sans)", letterSpacing:"0.04em", boxShadow:`0 0 24px ${v.accent}70` }}>
-          KONTAKTGA QO'SHISH
+          KONTAKTGA QO&apos;SHISH
         </button>
       </div>
       <NfcFoot color={`${v.accent}45`} />

@@ -11,6 +11,7 @@
 import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import ProfileCard from "@/components/figma/ProfileCard";
+import ProfileCardV2 from "@/components/figma/ProfileCardV2";
 import { profiles } from "@/components/figma/profiles";
 import { LAYOUTS } from "@/components/ui/LayoutSamples";
 import "@/components/figma/katalog.css";
@@ -25,6 +26,8 @@ const CATS = [
   // rather than a person. A bank's own page still belongs under Banklar too,
   // so this cuts across the sector chips instead of replacing them.
   { id: "org",      uz: "Tashkilotlar",       ru: "Организации" },
+  // The seventeen designs from the Make project, one card each.
+  { id: "dizayn",   uz: "Yangi dizaynlar",    ru: "Новые дизайны" },
   { id: "gov",      uz: "Davlat organlari",   ru: "Госорганы" },
   { id: "ministry", uz: "Vazirliklar",        ru: "Министерства" },
   { id: "bank",     uz: "Banklar",            ru: "Банки" },
@@ -54,7 +57,7 @@ function IconNFC()      { return <svg width="20" height="20" viewBox="0 0 24 24"
 const CAT_ICON: Record<string, () => React.ReactElement> = {
   all: IconAll, gov: IconGov, ministry: IconMin,
   bank: IconBank, venture: IconVC, startup: IconStartup, corp: IconCorp,
-  org: IconOrg, layouts: IconLayouts,
+  org: IconOrg, layouts: IconLayouts, dizayn: IconLayouts,
 };
 
 export default function KatalogPage() {
@@ -71,6 +74,7 @@ export default function KatalogPage() {
   const filtered =
     cat === "all" ? profiles
     : cat === "org" ? profiles.filter(p => !p.avatar)
+    : cat === "dizayn" ? profiles.filter(p => p.template)
     : profiles.filter(p => p.category === cat);
   const total    = profiles.length;
   const sohalar  = new Set(profiles.map(p => p.category)).size;
@@ -253,7 +257,11 @@ export default function KatalogPage() {
               boxShadow: "var(--card-shadow)",
             }}
           >
-            <ProfileCard profile={profile} lang={lang} theme={theme} />
+            {profile.template ? (
+              <ProfileCardV2 profile={profile} />
+            ) : (
+              <ProfileCard profile={profile} lang={lang} theme={theme} />
+            )}
           </div>
         ))}
       </div>
