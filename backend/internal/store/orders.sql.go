@@ -16,7 +16,7 @@ const advanceDeviceOrder = `-- name: AdvanceDeviceOrder :one
 update orders set fulfilment = $1, updated_at = now()
 where id = $2 and kind = 'device'
   and fulfilment = $3
-returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at
+returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at, sticker, gift_note
 `
 
 type AdvanceDeviceOrderParams struct {
@@ -54,6 +54,8 @@ func (q *Queries) AdvanceDeviceOrder(ctx context.Context, arg AdvanceDeviceOrder
 		&i.Fulfilment,
 		&i.ShippedAt,
 		&i.DeliveredAt,
+		&i.Sticker,
+		&i.GiftNote,
 	)
 	return i, err
 }
@@ -62,7 +64,7 @@ const claimHandleOutright = `-- name: ClaimHandleOutright :one
 insert into handles (letters, digits, status, user_id, owner_name, price_paid, claimed_at)
 values ($1, $2, 'claimed', $3,
         $4, $5, now())
-returning id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq
+returning id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq, korinish, tugilgan_kun, status_emoji, musiqa
 `
 
 type ClaimHandleOutrightParams struct {
@@ -125,6 +127,10 @@ func (q *Queries) ClaimHandleOutright(ctx context.Context, arg ClaimHandleOutrig
 		&i.CommentsOpen,
 		&i.RecommendCount,
 		&i.Yopiq,
+		&i.Korinish,
+		&i.TugilganKun,
+		&i.StatusEmoji,
+		&i.Musiqa,
 	)
 	return i, err
 }
@@ -229,7 +235,7 @@ func (q *Queries) CountRecentClaimsByUser(ctx context.Context, arg CountRecentCl
 const createOrder = `-- name: CreateOrder :one
 insert into orders (user_id, handle, amount)
 values ($1, $2, $3)
-returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at
+returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at, sticker, gift_note
 `
 
 type CreateOrderParams struct {
@@ -265,12 +271,14 @@ func (q *Queries) CreateOrder(ctx context.Context, arg CreateOrderParams) (Order
 		&i.Fulfilment,
 		&i.ShippedAt,
 		&i.DeliveredAt,
+		&i.Sticker,
+		&i.GiftNote,
 	)
 	return i, err
 }
 
 const deviceOrder = `-- name: DeviceOrder :one
-select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at from orders where id = $1 and kind = 'device'
+select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at, sticker, gift_note from orders where id = $1 and kind = 'device'
 `
 
 // One order without an owner, for the operator's queue.
@@ -301,13 +309,15 @@ func (q *Queries) DeviceOrder(ctx context.Context, id uuid.UUID) (Order, error) 
 		&i.Fulfilment,
 		&i.ShippedAt,
 		&i.DeliveredAt,
+		&i.Sticker,
+		&i.GiftNote,
 	)
 	return i, err
 }
 
 const deviceOrders = `-- name: DeviceOrders :many
 
-select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at from orders
+select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at, sticker, gift_note from orders
 where user_id = $1 and kind = 'device'
   and status in ('pending', 'paid')
 order by created_at desc
@@ -350,6 +360,8 @@ func (q *Queries) DeviceOrders(ctx context.Context, userID uuid.UUID) ([]Order, 
 			&i.Fulfilment,
 			&i.ShippedAt,
 			&i.DeliveredAt,
+			&i.Sticker,
+			&i.GiftNote,
 		); err != nil {
 			return nil, err
 		}
@@ -362,7 +374,7 @@ func (q *Queries) DeviceOrders(ctx context.Context, userID uuid.UUID) ([]Order, 
 }
 
 const deviceQueue = `-- name: DeviceQueue :many
-select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at from orders
+select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at, sticker, gift_note from orders
 where kind = 'device' and status = 'paid' and fulfilment <> 'delivered'
 order by paid_at
 limit 200
@@ -404,6 +416,8 @@ func (q *Queries) DeviceQueue(ctx context.Context) ([]Order, error) {
 			&i.Fulfilment,
 			&i.ShippedAt,
 			&i.DeliveredAt,
+			&i.Sticker,
+			&i.GiftNote,
 		); err != nil {
 			return nil, err
 		}
@@ -446,7 +460,7 @@ func (q *Queries) HandleState(ctx context.Context, normalized *string) (HandleSt
 }
 
 const orderForUser = `-- name: OrderForUser :one
-select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at from orders
+select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at, sticker, gift_note from orders
 where id = $1 and user_id = $2
 `
 
@@ -483,12 +497,14 @@ func (q *Queries) OrderForUser(ctx context.Context, arg OrderForUserParams) (Ord
 		&i.Fulfilment,
 		&i.ShippedAt,
 		&i.DeliveredAt,
+		&i.Sticker,
+		&i.GiftNote,
 	)
 	return i, err
 }
 
 const ordersForUser = `-- name: OrdersForUser :many
-select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at from orders
+select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at, sticker, gift_note from orders
 where user_id = $1
 order by created_at desc
 limit 50
@@ -527,6 +543,8 @@ func (q *Queries) OrdersForUser(ctx context.Context, userID uuid.UUID) ([]Order,
 			&i.Fulfilment,
 			&i.ShippedAt,
 			&i.DeliveredAt,
+			&i.Sticker,
+			&i.GiftNote,
 		); err != nil {
 			return nil, err
 		}
@@ -539,7 +557,7 @@ func (q *Queries) OrdersForUser(ctx context.Context, userID uuid.UUID) ([]Order,
 }
 
 const ownDeviceOrder = `-- name: OwnDeviceOrder :one
-select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at from orders
+select id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at, sticker, gift_note from orders
 where id = $1 and user_id = $2 and kind = 'device'
 `
 
@@ -575,6 +593,8 @@ func (q *Queries) OwnDeviceOrder(ctx context.Context, arg OwnDeviceOrderParams) 
 		&i.Fulfilment,
 		&i.ShippedAt,
 		&i.DeliveredAt,
+		&i.Sticker,
+		&i.GiftNote,
 	)
 	return i, err
 }
@@ -586,7 +606,7 @@ select $1, h.normalized, $2, 'device',
 from handles h
 where h.normalized = $5
   and h.user_id = $1 and h.status = 'claimed'
-returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at
+returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at, sticker, gift_note
 `
 
 type PlaceDeviceOrderParams struct {
@@ -632,6 +652,8 @@ func (q *Queries) PlaceDeviceOrder(ctx context.Context, arg PlaceDeviceOrderPara
 		&i.Fulfilment,
 		&i.ShippedAt,
 		&i.DeliveredAt,
+		&i.Sticker,
+		&i.GiftNote,
 	)
 	return i, err
 }
@@ -642,7 +664,7 @@ select $1, h.normalized, $2, 'subscription', $3
 from handles h
 where h.normalized = $4
   and h.user_id = $1 and h.status = 'claimed'
-returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at
+returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at, sticker, gift_note
 `
 
 type PlaceSubscriptionOrderParams struct {
@@ -686,6 +708,8 @@ func (q *Queries) PlaceSubscriptionOrder(ctx context.Context, arg PlaceSubscript
 		&i.Fulfilment,
 		&i.ShippedAt,
 		&i.DeliveredAt,
+		&i.Sticker,
+		&i.GiftNote,
 	)
 	return i, err
 }
@@ -717,7 +741,7 @@ const reserveHandle = `-- name: ReserveHandle :one
 insert into handles (letters, digits, status, user_id, owner_name, price_paid, reserved_until)
 values ($1, $2, 'reserved', $3,
         $4, $5, $6)
-returning id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq
+returning id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq, korinish, tugilgan_kun, status_emoji, musiqa
 `
 
 type ReserveHandleParams struct {
@@ -785,6 +809,10 @@ func (q *Queries) ReserveHandle(ctx context.Context, arg ReserveHandleParams) (H
 		&i.CommentsOpen,
 		&i.RecommendCount,
 		&i.Yopiq,
+		&i.Korinish,
+		&i.TugilganKun,
+		&i.StatusEmoji,
+		&i.Musiqa,
 	)
 	return i, err
 }
@@ -797,7 +825,7 @@ update orders set
   fulfilment = 'queued', updated_at = now()
 where id = $6 and user_id = $7
   and kind = 'device' and status = 'paid' and fulfilment = 'address_needed'
-returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at
+returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at, sticker, gift_note
 `
 
 type SetDeliveryAddressParams struct {
@@ -850,6 +878,8 @@ func (q *Queries) SetDeliveryAddress(ctx context.Context, arg SetDeliveryAddress
 		&i.Fulfilment,
 		&i.ShippedAt,
 		&i.DeliveredAt,
+		&i.Sticker,
+		&i.GiftNote,
 	)
 	return i, err
 }
@@ -858,7 +888,7 @@ const settleDeviceOrder = `-- name: SettleDeviceOrder :one
 update orders set status = 'paid', paid_at = now(), updated_at = now()
 where id = $1 and user_id = $2
   and kind = 'device' and status = 'pending'
-returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at
+returning id, user_id, handle, amount, status, provider, provider_tx_id, paid_at, cancelled_at, created_at, updated_at, kind, months, device_type, design, recipient, phone, region, address, delivery_note, fulfilment, shipped_at, delivered_at, sticker, gift_note
 `
 
 type SettleDeviceOrderParams struct {
@@ -895,6 +925,8 @@ func (q *Queries) SettleDeviceOrder(ctx context.Context, arg SettleDeviceOrderPa
 		&i.Fulfilment,
 		&i.ShippedAt,
 		&i.DeliveredAt,
+		&i.Sticker,
+		&i.GiftNote,
 	)
 	return i, err
 }

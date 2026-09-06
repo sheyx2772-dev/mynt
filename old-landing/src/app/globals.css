@@ -934,3 +934,33 @@ body:has([data-no-app-bar]) {
 @media (prefers-reduced-motion: reduce) {
   .tap-intro-mark { animation: none; }
 }
+
+/* Confetti, once, on the birthday. Fourteen slips of the page's own colours
+   falling from the top edge of the card and gone; nothing loops. */
+.confetti i {
+  position: absolute;
+  top: -8px;
+  width: 6px;
+  height: 10px;
+  border-radius: 1px;
+  background: var(--color-lime, #c8f04a);
+  opacity: 0;
+  animation: confetti-fall 1.8s ease-in forwards;
+}
+.confetti i:nth-child(3n) { background: var(--color-slab, #111); width: 5px; height: 5px; border-radius: 50%; }
+.confetti i:nth-child(4n) { background: #ff5c8a; }
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(160px) rotate(300deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .confetti { display: none; }
+}
+
+/* Gift stickers, by tier. The emoji is the sticker; the tile behind it is
+   what says a crown cost more than a rose. */
+.gift-tile { background: color-mix(in oklab, currentColor 8%, transparent); }
+.gift-oddiy { background: linear-gradient(135deg, #f1f5f0, #dfe8dc); }
+.gift-kumush { background: linear-gradient(135deg, #e8ecf3, #c9d1de); }
+.gift-oltin { background: linear-gradient(135deg, #fbe9b6, #e9c45a); }
+.gift-noyob { background: linear-gradient(135deg, #d7f26a, #b8ff3c 55%, #7ce0ff); box-shadow: 0 0 0 1px rgba(0,0,0,.08) inset; }

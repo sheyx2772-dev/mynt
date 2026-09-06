@@ -7,6 +7,7 @@ import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRar
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import { linkValue } from "@/lib/links";
+import { FIELD_BY_LABEL } from "@/lib/visibility";
 import { dict, menuBar, site as siteWords, type Lang } from "@/lib/i18n";
 import { venueWords } from "@/lib/venue-words";
 import { planState } from "@/lib/venue-billing";
@@ -30,6 +31,11 @@ import ProfileComments from "@/components/ProfileComments";
 import RecommendButton from "@/components/RecommendButton";
 import { listRecommenders, isRecommended } from "@/lib/recommendations";
 import { listComments } from "@/lib/comments";
+import { listGreetings } from "@/lib/greetings";
+import BirthdayCard from "@/components/BirthdayCard";
+import MusicCard from "@/components/MusicCard";
+import GiftShelf from "@/components/GiftShelf";
+import { listGifts, EMPTY_SHELF } from "@/lib/gifts";
 import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
@@ -270,10 +276,14 @@ async function VanityHandlePage({
     // read as "this person has nothing", which is a different claim.
     const closed = profile.isPrivate && !isOwner && !following;
 
-    const [posts, comments, recommenders] = await Promise.all([
+    const [posts, comments, recommenders, birthday, shelf] = await Promise.all([
       tab === "postlar" ? listPostsForHandle(normalized) : Promise.resolve([]),
       listComments(normalized),
       listRecommenders(normalized),
+      // Only in the week: outside it the card is not drawn, and the list is
+      // last year's, which is not this year's news.
+      !closed && profile.birthday.week ? listGreetings(normalized) : Promise.resolve({ greetings: [], count: 0 }),
+      !closed ? listGifts(normalized) : Promise.resolve(EMPTY_SHELF),
     ]);
 
     // The owner's own cover wins over the catalogue artwork, which wins over
@@ -332,6 +342,22 @@ async function VanityHandlePage({
     const payAt = profile.links.findIndex((l) => l.kind === "payment");
     const payHref = payAt >= 0 ? `/${normalized}/go?to=${payAt}` : null;
 
+    // What the owner has narrowed, said on their own page in the words the
+    // reader would use — "Telefon", "Instagram" — so they can check the page
+    // does what the form said without signing in as somebody else.
+    const fieldWord = (field: string) =>
+      field === "telefon" ? t.phoneWord : field === "email" ? t.email
+        : (Object.entries(FIELD_BY_LABEL).find(([, f]) => f === field)?.[0] ?? field);
+    const narrowed = isOwner
+      ? Object.entries(profile.visibility).reduce(
+          (acc, [field, audience]) => {
+            (audience === "yopiq" ? acc.onlyYou : acc.followers).push(fieldWord(field));
+            return acc;
+          },
+          { onlyYou: [] as string[], followers: [] as string[] },
+        )
+      : null;
+
     const inGrid = new Set(gridActions.map((a) => a.href));
     if (payHref) inGrid.add(payHref);
     const restLinks = profile.links
@@ -381,7 +407,7 @@ async function VanityHandlePage({
         />
 
         <NfcCardProfile
-          name={profile.name}
+          name={profile.statusEmoji ? `${profile.name} ${profile.statusEmoji}` : profile.name}
           org={profile.company}
           role={profile.position}
           // The band carries the artwork of the card they actually hold, which
@@ -435,6 +461,41 @@ async function VanityHandlePage({
                 <p className="mt-0.5 text-sm leading-5 text-mute">{t.privateHint}</p>
               </div>
             </div>
+          )}
+
+          {!closed && profile.birthday.week && (
+            <BirthdayCard
+              handle={normalized}
+              name={profile.name}
+              today={profile.birthday.today}
+              greetings={birthday.greetings}
+              count={birthday.count}
+              signedIn={Boolean(viewer)}
+              isOwner={isOwner}
+              labels={{
+                today: t.birthdayToday,
+                week: t.birthdayWeek,
+                greet: t.greet,
+                greeted: t.greeted,
+                placeholder: t.greetPlaceholder,
+                send: t.send,
+                signIn: t.greetSignIn,
+                greetings: t.greetings,
+              }}
+            />
+          )}
+
+          {!closed && profile.music && (
+            <MusicCard music={profile.music} labels={{ song: t.song, listen: t.listen }} />
+          )}
+
+          {!closed && (
+            <GiftShelf
+              handle={normalized}
+              shelf={shelf}
+              isOwner={isOwner}
+              labels={{ gifts: t.gifts, sendGift: t.sendGift, empty: t.giftEmpty, manage: t.manageGifts }}
+            />
           )}
 
           {payHref && !isOwner && (
@@ -670,6 +731,23 @@ async function VanityHandlePage({
                     : t.noPosts
                 }
               />
+            </div>
+          )}
+
+          {narrowed && (narrowed.onlyYou.length > 0 || narrowed.followers.length > 0) && (
+            <div className="mt-6 space-y-1.5 rounded-plate border border-line px-4 py-3 text-[12px] text-mute">
+              {narrowed.onlyYou.length > 0 && (
+                <p className="flex items-center gap-2">
+                  <Lock className="h-3.5 w-3.5 shrink-0" strokeWidth={1.7} aria-hidden />
+                  <span>{t.onlyYouSee}: {narrowed.onlyYou.join(", ")}</span>
+                </p>
+              )}
+              {narrowed.followers.length > 0 && (
+                <p className="flex items-center gap-2">
+                  <Users className="h-3.5 w-3.5 shrink-0" strokeWidth={1.7} aria-hidden />
+                  <span>{t.followersSee}: {narrowed.followers.join(", ")}</span>
+                </p>
+              )}
             </div>
           )}
 

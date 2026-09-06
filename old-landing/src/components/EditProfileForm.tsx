@@ -9,6 +9,8 @@ import DevicePicker from "@/components/DevicePicker";
 import type { CardDesignId } from "@/lib/card-designs";
 import type { DeviceTypeId } from "@/lib/devices";
 import { SITE_HOST } from "@/lib/site-url";
+import AudienceSelect from "@/components/AudienceSelect";
+import { audienceOf, type Visibility } from "@/lib/visibility";
 
 const initialState: UpdateResult = { ok: false };
 
@@ -40,6 +42,13 @@ export default function EditProfileForm({
     teamName: string | null;
     commentsOpen: boolean;
     yopiq: boolean;
+    /** Who sees which field — the backend's `korinish`. */
+    korinish: Visibility;
+    birthday: string;
+    statusEmoji: string;
+    musicTitle: string;
+    musicArtist: string;
+    musicUrl: string;
     tags: string;
     cardDesign: CardDesignId;
     customDesignUrl?: string | null;
@@ -52,6 +61,8 @@ export default function EditProfileForm({
   const inputClass =
     "w-full rounded-input border border-ink-line bg-ink-s2 px-4 py-2.5 text-sm outline-none transition-colors focus:border-paper-3 focus:bg-ink-s1";
   const labelClass = "mb-1.5 block text-xs font-medium tracking-wide text-paper-2 uppercase";
+  // The same label without the margin, for a row that also holds "who sees it".
+  const labelRowClass = "block text-xs font-medium tracking-wide text-paper-2 uppercase";
 
   return (
     <form action={formAction} className="space-y-4 text-left">
@@ -136,9 +147,12 @@ export default function EditProfileForm({
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className={labelClass} htmlFor="telegram">
-            Telegram
-          </label>
+          <div className="mb-1.5 flex items-center justify-between gap-2">
+            <label className={labelRowClass} htmlFor="telegram">
+              Telegram
+            </label>
+            <AudienceSelect field="telegram" value={audienceOf(defaults.korinish, "telegram")} />
+          </div>
           <input
             id="telegram"
             name="telegram"
@@ -148,9 +162,12 @@ export default function EditProfileForm({
           />
         </div>
         <div>
-          <label className={labelClass} htmlFor="instagram">
-            Instagram
-          </label>
+          <div className="mb-1.5 flex items-center justify-between gap-2">
+            <label className={labelRowClass} htmlFor="instagram">
+              Instagram
+            </label>
+            <AudienceSelect field="instagram" value={audienceOf(defaults.korinish, "instagram")} />
+          </div>
           <input
             id="instagram"
             name="instagram"
@@ -160,9 +177,12 @@ export default function EditProfileForm({
           />
         </div>
         <div>
-          <label className={labelClass} htmlFor="linkedin">
-            LinkedIn
-          </label>
+          <div className="mb-1.5 flex items-center justify-between gap-2">
+            <label className={labelRowClass} htmlFor="linkedin">
+              LinkedIn
+            </label>
+            <AudienceSelect field="linkedin" value={audienceOf(defaults.korinish, "linkedin")} />
+          </div>
           <input
             id="linkedin"
             name="linkedin"
@@ -172,9 +192,12 @@ export default function EditProfileForm({
           />
         </div>
         <div>
-          <label className={labelClass} htmlFor="whatsapp">
-            WhatsApp
-          </label>
+          <div className="mb-1.5 flex items-center justify-between gap-2">
+            <label className={labelRowClass} htmlFor="whatsapp">
+              WhatsApp
+            </label>
+            <AudienceSelect field="whatsapp" value={audienceOf(defaults.korinish, "whatsapp")} />
+          </div>
           <input
             id="whatsapp"
             name="whatsapp"
@@ -186,9 +209,12 @@ export default function EditProfileForm({
           />
         </div>
         <div>
-          <label className={labelClass} htmlFor="facebook">
-            Facebook
-          </label>
+          <div className="mb-1.5 flex items-center justify-between gap-2">
+            <label className={labelRowClass} htmlFor="facebook">
+              Facebook
+            </label>
+            <AudienceSelect field="facebook" value={audienceOf(defaults.korinish, "facebook")} />
+          </div>
           <input
             id="facebook"
             name="facebook"
@@ -198,9 +224,12 @@ export default function EditProfileForm({
           />
         </div>
         <div>
-          <label className={labelClass} htmlFor="youtube">
-            YouTube
-          </label>
+          <div className="mb-1.5 flex items-center justify-between gap-2">
+            <label className={labelRowClass} htmlFor="youtube">
+              YouTube
+            </label>
+            <AudienceSelect field="youtube" value={audienceOf(defaults.korinish, "youtube")} />
+          </div>
           <input
             id="youtube"
             name="youtube"
@@ -212,9 +241,12 @@ export default function EditProfileForm({
       </div>
 
       <div>
-        <label className={labelClass} htmlFor="payment">
-          To&apos;lov havolasi
-        </label>
+        <div className="mb-1.5 flex items-center justify-between gap-2">
+          <label className={labelRowClass} htmlFor="payment">
+            To&apos;lov havolasi
+          </label>
+          <AudienceSelect field="payment" value={audienceOf(defaults.korinish, "payment")} />
+        </div>
         <input
           id="payment"
           name="payment"
@@ -230,9 +262,12 @@ export default function EditProfileForm({
       </div>
 
       <div>
-        <label className={labelClass} htmlFor="booking">
-          Uchrashuv belgilash havolasi
-        </label>
+        <div className="mb-1.5 flex items-center justify-between gap-2">
+          <label className={labelRowClass} htmlFor="booking">
+            Uchrashuv belgilash havolasi
+          </label>
+          <AudienceSelect field="booking" value={audienceOf(defaults.korinish, "booking")} />
+        </div>
         <input
           id="booking"
           name="booking"
@@ -247,9 +282,12 @@ export default function EditProfileForm({
       </div>
 
       <div>
-        <label className={labelClass} htmlFor="website">
-          Veb-sayt
-        </label>
+        <div className="mb-1.5 flex items-center justify-between gap-2">
+          <label className={labelRowClass} htmlFor="website">
+            Veb-sayt
+          </label>
+          <AudienceSelect field="website" value={audienceOf(defaults.korinish, "website")} />
+        </div>
         <input
           id="website"
           name="website"
@@ -274,6 +312,88 @@ export default function EditProfileForm({
           Vergul bilan ajrating, 5 tagacha. Profilda #teg ko&apos;rinishida chiqadi.
         </p>
       </div>
+
+      <div>
+        <label className={labelClass} htmlFor="birthday">
+          Tug&apos;ilgan kun
+        </label>
+        <input
+          id="birthday"
+          name="birthday"
+          type="date"
+          defaultValue={defaults.birthday}
+          className={inputClass}
+        />
+        <p className="mt-1 text-xs text-paper-3">
+          Profilda yil ko&apos;rinmaydi — faqat kun va oy. O&apos;sha kuni sahifa bayram
+          qiladi, tanishlar tabrik qoldiradi va sizga Telegramga xabar keladi.
+        </p>
+      </div>
+
+      {defaults.plan === "premium" ? (
+        <div className="space-y-4 rounded-input border border-ink-line bg-ink-s2 p-4">
+          <p className="text-xs font-medium tracking-wide text-paper-2 uppercase">Premium</p>
+          <div>
+            <label className={labelClass} htmlFor="statusEmoji">
+              Ism yonidagi emoji
+            </label>
+            <input
+              id="statusEmoji"
+              name="statusEmoji"
+              placeholder="🔥"
+              maxLength={16}
+              defaultValue={defaults.statusEmoji}
+              className={inputClass}
+            />
+            <p className="mt-1 text-xs text-paper-3">Bitta emoji. So&apos;z qabul qilinmaydi.</p>
+          </div>
+          <div>
+            <label className={labelClass} htmlFor="musicUrl">
+              Profil qo&apos;shig&apos;i
+            </label>
+            <input
+              id="musicUrl"
+              name="musicUrl"
+              inputMode="url"
+              placeholder="https://open.spotify.com/track/…"
+              defaultValue={defaults.musicUrl}
+              className={inputClass}
+            />
+            <div className="mt-2 grid grid-cols-2 gap-3">
+              <input
+                name="musicTitle"
+                placeholder="Qo'shiq nomi"
+                maxLength={80}
+                defaultValue={defaults.musicTitle}
+                aria-label="Qo'shiq nomi"
+                className={inputClass}
+              />
+              <input
+                name="musicArtist"
+                placeholder="Ijrochi"
+                maxLength={80}
+                defaultValue={defaults.musicArtist}
+                aria-label="Ijrochi"
+                className={inputClass}
+              />
+            </div>
+            <p className="mt-1 text-xs text-paper-3">
+              Spotify yoki YouTube havolasi — sahifada pleyer chiqadi. Yandex Music, SoundCloud,
+              Apple Music — tugma bilan.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="rounded-input border border-ink-line bg-ink-s2 px-4 py-3">
+          <p className="text-xs text-paper-2">
+            <span className="font-medium text-paper-2">Emoji-status va profil qo&apos;shig&apos;i</span>{" "}
+            — premium rejada. Ism yonida emoji, sahifada o&apos;z qo&apos;shig&apos;ingiz.{" "}
+            <Link href="/tarif" className="underline underline-offset-2">
+              Tariflar
+            </Link>
+          </p>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-3">
         <div>
@@ -313,9 +433,12 @@ export default function EditProfileForm({
       </div>
 
       <div>
-        <label className={labelClass} htmlFor="phone">
-          Telefon
-        </label>
+        <div className="mb-1.5 flex items-center justify-between gap-2">
+          <label className={labelRowClass} htmlFor="phone">
+            Telefon
+          </label>
+          <AudienceSelect field="telefon" value={audienceOf(defaults.korinish, "telefon")} />
+        </div>
         <input
           id="phone"
           name="phone"
@@ -420,9 +543,12 @@ export default function EditProfileForm({
           />
         </div>
         <div>
-          <label className={labelClass} htmlFor="contactEmail">
-            Email
-          </label>
+          <div className="mb-1.5 flex items-center justify-between gap-2">
+            <label className={labelRowClass} htmlFor="contactEmail">
+              Email
+            </label>
+            <AudienceSelect field="email" value={audienceOf(defaults.korinish, "email")} />
+          </div>
           <input
             id="contactEmail"
             name="contactEmail"
@@ -434,7 +560,8 @@ export default function EditProfileForm({
         </div>
       </div>
       <p className="text-xs text-paper-3">
-        Shahar va email profilda ochiq ko&apos;rinadi.
+        Har bir havola, telefon va email oldida kim ko&apos;rishini tanlaysiz: hammaga, faqat
+        obunachilarga yoki faqat o&apos;zingizga. Shahar hamisha ochiq.
       </p>
 
       <DevicePicker

@@ -88,6 +88,9 @@ func returnPathFor(kind, orderID string) string {
 	switch kind {
 	case "device":
 		return "/kabinet/buyurtma/" + orderID
+	case "gift":
+		// The order page knows what a paid gift means and links to the profile.
+		return "/buyurtma/" + orderID
 	default:
 		return "/buyurtma/" + orderID
 	}

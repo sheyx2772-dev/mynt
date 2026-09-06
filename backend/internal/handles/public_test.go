@@ -51,9 +51,9 @@ func TestForStrangerCutsAClosedProfileToItsFace(t *testing.T) {
 		Handle: "QXD483", Name: "Aziz", Avatar: "a.webp", Banner: "b.webp",
 		Bio: "yurist", City: "Toshkent", Email: "a@b.uz", Phone: "+998",
 		Position: "Direktor", Company: "MC", Tags: []string{"huquq"},
-		Links: []Link{{Label: "Telegram", Href: "https://t.me/a"}},
+		Links:    []Link{{Label: "Telegram", Href: "https://t.me/a"}},
 		Services: []Service{{Name: "Maslahat", Price: "100 000"}},
-		Design: "genesis", Plan: PlanPremium, Views: 9, Followers: 3,
+		Design:   "genesis", Plan: PlanPremium, Views: 9, Followers: 3,
 		Private: true,
 	}
 
@@ -98,5 +98,54 @@ func TestForStrangerCutsAClosedProfileToItsFace(t *testing.T) {
 	asked.Pending = true
 	if cut := asked.ForStranger(false); !cut.Pending || cut.Bio != "" {
 		t.Errorf("asker lost their standing or gained the profile: %+v", cut)
+	}
+}
+
+// A field narrowed to followers is there for a follower and gone for a
+// stranger; one narrowed to the owner is gone for both. The owner keeps
+// everything, and is the only one told what is narrowed.
+func TestForReaderCutsWhatTheOwnerNarrowed(t *testing.T) {
+	full := PublicProfile{
+		Handle: "TST001",
+		Phone:  "+998 90 000 00 00",
+		Email:  "a@b.uz",
+		Links: []Link{
+			{Label: "Telegram", Href: "https://t.me/a"},
+			{Label: "Instagram", Href: "https://instagram.com/a"},
+			{Label: "Veb-sayt", Href: "https://a.uz"},
+		},
+		Visibility: ReadVisibility(map[string]string{
+			"telefon":   "obuna",
+			"email":     "yopiq",
+			"instagram": "obuna",
+			"website":   "yopiq",
+			"invented":  "obuna",
+			"telegram":  "nonsense",
+		}),
+	}
+
+	stranger := full.ForReader(false)
+	if stranger.Phone != "" || stranger.Email != "" {
+		t.Fatalf("stranger still reaches the owner: phone %q email %q", stranger.Phone, stranger.Email)
+	}
+	if len(stranger.Links) != 1 || stranger.Links[0].Label != "Telegram" {
+		t.Fatalf("stranger links = %+v, want only Telegram", stranger.Links)
+	}
+	if stranger.Visibility != nil {
+		t.Fatal("the map of what is hidden was sent to the person it is hidden from")
+	}
+
+	follower := full.ForReader(true)
+	if follower.Phone == "" || follower.Email != "" {
+		t.Fatalf("follower: phone %q email %q", follower.Phone, follower.Email)
+	}
+	if len(follower.Links) != 2 {
+		t.Fatalf("follower links = %+v, want Telegram and Instagram", follower.Links)
+	}
+
+	full.Mine = true
+	owner := full.ForReader(false)
+	if len(owner.Links) != 3 || owner.Email == "" || len(owner.Visibility) != 4 {
+		t.Fatalf("owner lost something of their own: %+v", owner)
 	}
 }

@@ -128,6 +128,27 @@ type GenesisCard struct {
 	ClaimedAt   pgtype.Timestamptz `json:"claimed_at"`
 }
 
+type Gift struct {
+	ID          int64              `json:"id"`
+	OrderID     uuid.UUID          `json:"order_id"`
+	Handle      string             `json:"handle"`
+	FromUserID  *uuid.UUID         `json:"from_user_id"`
+	Sticker     string             `json:"sticker"`
+	Note        string             `json:"note"`
+	Korsatiladi bool               `json:"korsatiladi"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+}
+
+type Greeting struct {
+	ID        int64              `json:"id"`
+	Handle    string             `json:"handle"`
+	UserID    uuid.UUID          `json:"user_id"`
+	Emoji     string             `json:"emoji"`
+	Matn      string             `json:"matn"`
+	Yil       int32              `json:"yil"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
 type Handle struct {
 	ID              uuid.UUID          `json:"id"`
 	Letters         string             `json:"letters"`
@@ -168,6 +189,10 @@ type Handle struct {
 	CommentsOpen    bool               `json:"comments_open"`
 	RecommendCount  int32              `json:"recommend_count"`
 	Yopiq           bool               `json:"yopiq"`
+	Korinish        []byte             `json:"korinish"`
+	TugilganKun     pgtype.Date        `json:"tugilgan_kun"`
+	StatusEmoji     string             `json:"status_emoji"`
+	Musiqa          []byte             `json:"musiqa"`
 }
 
 type HandleTransfer struct {
@@ -307,6 +332,8 @@ type Order struct {
 	Fulfilment   *string            `json:"fulfilment"`
 	ShippedAt    pgtype.Timestamptz `json:"shipped_at"`
 	DeliveredAt  pgtype.Timestamptz `json:"delivered_at"`
+	Sticker      *string            `json:"sticker"`
+	GiftNote     *string            `json:"gift_note"`
 }
 
 type PaymeTransaction struct {
@@ -344,6 +371,14 @@ type ProfileView struct {
 	ReferrerHost *string            `json:"referrer_host"`
 	CreatedAt    pgtype.Timestamptz `json:"created_at"`
 	Source       *string            `json:"source"`
+}
+
+type ProfileVisit struct {
+	Handle       string             `json:"handle"`
+	ViewerUserID uuid.UUID          `json:"viewer_user_id"`
+	FirstAt      pgtype.Timestamptz `json:"first_at"`
+	LastAt       pgtype.Timestamptz `json:"last_at"`
+	Soni         int32              `json:"soni"`
 }
 
 type PromoCode struct {
@@ -507,4 +542,10 @@ type VenueRequest struct {
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
 	DoneAt    pgtype.Timestamptz `json:"done_at"`
 	Ip        *string            `json:"ip"`
+}
+
+type ViewerSetting struct {
+	UserID    uuid.UUID          `json:"user_id"`
+	Korinmas  bool               `json:"korinmas"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
 }

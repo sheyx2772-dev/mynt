@@ -47,6 +47,15 @@ type PublicProfile struct {
 	// Closed: a stranger sees the name, the picture and the number, and the
 	// rest after the owner has accepted them. See ForStranger.
 	Private bool `json:"yopiq"`
+	// Which lines are narrowed to followers or to the owner. Sent to the
+	// owner only — see ForReader — and empty for everyone else.
+	Visibility Visibility `json:"korinish,omitempty"`
+
+	// The day, without the year, and where today falls against it.
+	Birthday BirthdayState `json:"tugilgan_kun"`
+	// Premium: beside the name, and on the page.
+	StatusEmoji string `json:"status_emoji,omitempty"`
+	Music       *Music `json:"musiqa,omitempty"`
 
 	// Whether the reader owns this number.
 	//
@@ -83,28 +92,41 @@ func (s *Store) Public(ctx context.Context, normalized, viewerID string) (Public
 	mine := viewerID != "" && row.UserID != nil && row.UserID.String() == viewerID
 
 	return PublicProfile{
-		Mine:     mine,
-		Handle:   deref(row.Normalized),
-		Name:     firstNonEmpty(deref(row.OwnerName), deref(row.Normalized)),
-		Bio:      deref(row.Bio),
-		Avatar:   deref(row.AvatarUrl),
-		Banner:   deref(row.BannerUrl),
-		Links:    decodeLinks(row.Links),
-		Services: decodeServices(row.Services),
-		City:     deref(row.City),
-		Email:    deref(row.ContactEmail),
-		Phone:    deref(row.Phone),
-		Position: deref(row.Position),
-		Company:  deref(row.Company),
-		Tags:     row.Tags,
-		Design:   CardDesign(row.CardDesign),
-		Device:   DeviceType(row.DeviceType),
-		Plan:     EffectivePlan(row.Plan, optionalTime(row.PlanExpiresAt)),
-		Views:     row.ViewCount,
-		Followers: row.FollowerCount,
-		LastSeen:  optionalTime(row.LastSeenAt),
-		Private:   row.Yopiq,
+		Mine:        mine,
+		Handle:      deref(row.Normalized),
+		Name:        firstNonEmpty(deref(row.OwnerName), deref(row.Normalized)),
+		Bio:         deref(row.Bio),
+		Avatar:      deref(row.AvatarUrl),
+		Banner:      deref(row.BannerUrl),
+		Links:       decodeLinks(row.Links),
+		Services:    decodeServices(row.Services),
+		City:        deref(row.City),
+		Email:       deref(row.ContactEmail),
+		Phone:       deref(row.Phone),
+		Position:    deref(row.Position),
+		Company:     deref(row.Company),
+		Tags:        row.Tags,
+		Design:      CardDesign(row.CardDesign),
+		Device:      DeviceType(row.DeviceType),
+		Plan:        EffectivePlan(row.Plan, optionalTime(row.PlanExpiresAt)),
+		Views:       row.ViewCount,
+		Followers:   row.FollowerCount,
+		LastSeen:    optionalTime(row.LastSeenAt),
+		Private:     row.Yopiq,
+		Visibility:  decodeVisibility(row.Korinish),
+		Birthday:    birthdayState(optionalDate(row.TugilganKun), time.Now()),
+		StatusEmoji: premiumOnly(EffectivePlan(row.Plan, optionalTime(row.PlanExpiresAt)), row.StatusEmoji),
+		Music:       publicMusic(EffectivePlan(row.Plan, optionalTime(row.PlanExpiresAt)), decodeMusic(row.Musiqa)),
 	}, nil
+}
+
+// A lapsed premium stops the song and the emoji with everything else. They
+// stay on the row, so paying again brings them back as they were.
+func publicMusic(plan string, m Music) *Music {
+	if plan != PlanPremium || m.URL == "" {
+		return nil
+	}
+	return &m
 }
 
 // ForStranger is the closed profile as somebody outside it sees it.
@@ -132,6 +154,8 @@ func (p PublicProfile) ForStranger(following bool) PublicProfile {
 		Private:   true,
 		Mine:      false,
 		Following: false,
+		// Part of the face, like the picture.
+		StatusEmoji: p.StatusEmoji,
 		// The one thing a stranger is told about their own standing: that
 		// they asked and are waiting. Without it the button offers to ask
 		// again the moment the page reloads.

@@ -76,6 +76,12 @@ type Handle struct {
 	CommentsOpen  bool       `json:"izohlar_ochiq"`
 	// Closed profile — the owner's switch, so the edit form can show it set.
 	Private bool `json:"yopiq"`
+	// Per-field audiences, for the same form.
+	Visibility Visibility `json:"korinish"`
+	// YYYY-MM-DD, for the form; the public profile carries the day alone.
+	Birthday    string `json:"tugilgan_kun,omitempty"`
+	StatusEmoji string `json:"status_emoji,omitempty"`
+	Music       Music  `json:"musiqa"`
 	// A design somebody had made for them, rather than one of ours. Only the
 	// owner's screens show it, which is why it is here and not on the public
 	// profile — the card is theirs, the artwork file need not be public.
@@ -123,6 +129,10 @@ func toHandle(row store.Handle, teamName *string) Handle {
 		BannerURL:       deref(row.BannerUrl),
 		CommentsOpen:    row.CommentsOpen,
 		Private:         row.Yopiq,
+		Visibility:      decodeVisibility(row.Korinish),
+		Birthday:        formatDate(optionalDate(row.TugilganKun)),
+		StatusEmoji:     row.StatusEmoji,
+		Music:           decodeMusic(row.Musiqa),
 		CustomDesignURL: deref(row.CustomDesignUrl),
 		TeamName:        deref(teamName),
 	}

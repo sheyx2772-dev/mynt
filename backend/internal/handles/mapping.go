@@ -60,3 +60,19 @@ func decodeServices(raw []byte) []Service {
 	}
 	return services
 }
+
+// optionalDate is optionalTime for a date column.
+func optionalDate(d pgtype.Date) *time.Time {
+	if !d.Valid {
+		return nil
+	}
+	t := d.Time
+	return &t
+}
+
+func formatDate(t *time.Time) string {
+	if t == nil {
+		return ""
+	}
+	return t.Format("2006-01-02")
+}

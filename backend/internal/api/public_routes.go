@@ -81,10 +81,18 @@ func (s *Server) registerPublic(api huma.API) {
 			profile.Pending = s.social.State(ctx, viewer.ID, parsed.Normalized()) == social.FollowStatePending
 		}
 
+		// A signed-in reader who is not the owner is somebody the owner may
+		// ask about. Recorded after the response, never awaited: a page is
+		// not made to wait to be counted. The invisible switch is in the
+		// insert itself.
+		if viewer.ID != "" && !profile.Mine {
+			go s.social.RecordVisit(context.WithoutCancel(ctx), parsed.Normalized(), viewer.ID)
+		}
+
 		// A closed profile is cut here, after the three facts that open it are
 		// known. Cut on the server rather than hidden by the page: a hidden
 		// field is still in the response, and a response is a file.
-		profile = profile.ForStranger(profile.Following)
+		profile = profile.ForReader(profile.Following).ForStranger(profile.Following)
 
 		out := &publicProfileOutput{}
 		out.Body.Profile = profile

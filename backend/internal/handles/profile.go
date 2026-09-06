@@ -3,6 +3,7 @@ package handles
 import (
 	"regexp"
 	"strings"
+	"time"
 )
 
 // A service is a line on a price list: what it is, and what it costs.
@@ -38,6 +39,10 @@ type Profile struct {
 	BannerURL    string
 	CommentsOpen bool
 	Private      bool
+	Visibility   Visibility
+	Birthday     *time.Time
+	StatusEmoji  string
+	Music        Music
 }
 
 // ProfileInput is what arrives from a form or an app.
@@ -70,6 +75,16 @@ type ProfileInput struct {
 	// Closed profile: strangers see the face and ask to see the rest. A switch
 	// like commentsOpen, and sent every time for the same reason.
 	Yopiq bool `json:"yopiq"`
+	// Who sees which field: `telegram`, `telefon`, `email`… → `obuna` or
+	// `yopiq`. A field left out is open. Optional, so a client that does not
+	// show the setting leaves every field open rather than being refused.
+	Korinish map[string]string `json:"korinish,omitempty" doc:"Maydon → kim ko'radi: obuna yoki yopiq; yo'q bo'lsa hammaga ochiq"`
+	// YYYY-MM-DD. Empty clears it. Shown to visitors without the year.
+	Birthday string `json:"birthday,omitempty" maxLength:"10" doc:"Tug'ilgan kun, YYYY-MM-DD"`
+	// Premium: an emoji beside the name, and a song on the page. A free
+	// profile that sends them saves nothing — the form never offers them.
+	StatusEmoji string `json:"statusEmoji,omitempty" maxLength:"32" doc:"Ism yonidagi emoji (premium)"`
+	Music       Music  `json:"music,omitempty" doc:"Profil qo'shig'i (premium)"`
 }
 
 // ReadProfile turns an edit into something storable, or says what is wrong.
@@ -111,6 +126,10 @@ func ReadProfile(in ProfileInput, plan string) (Profile, string) {
 		BannerURL:    trim(in.BannerURL, 500),
 		CommentsOpen: in.CommentsOpen,
 		Private:      in.Yopiq,
+		Visibility:   ReadVisibility(in.Korinish),
+		Birthday:     readBirthday(in.Birthday),
+		StatusEmoji:  premiumOnly(plan, readStatusEmoji(in.StatusEmoji)),
+		Music:        premiumMusic(plan, readMusic(in.Music)),
 	}, ""
 }
 
@@ -143,4 +162,21 @@ func trim(s string, limit int) string {
 		return s
 	}
 	return strings.TrimSpace(string(runes[:limit]))
+}
+
+// The premium-only fields. Dropped rather than refused for a free profile: the
+// form never shows them there, so a value arriving is a client that does not
+// know the plan, not a person to be told off.
+func premiumOnly(plan, value string) string {
+	if plan != PlanPremium {
+		return ""
+	}
+	return value
+}
+
+func premiumMusic(plan string, m Music) Music {
+	if plan != PlanPremium {
+		return Music{}
+	}
+	return m
 }

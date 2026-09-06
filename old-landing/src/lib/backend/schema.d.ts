@@ -590,6 +590,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/men/korinmas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ko'rinmas rejim holati */
+        get: operations["korinmas"];
+        /**
+         * Ko'rinmas rejimni yoqish yoki o'chirish
+         * @description Yoqilsa siz ochgan profillar egalari sizni ko'rmaydi — va siz ham o'zingiznikini kim ko'rganini ko'rmaysiz. Avval yozilganlar o'chiriladi.
+         */
+        put: operations["korinmas-qilish"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/men/obunalar": {
         parameters: {
             query?: never;
@@ -1006,6 +1027,64 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/profil/{raqam}/sovga": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Profilga stiker sovg'a qilish
+         * @description Narx shu yerda hisoblanadi. Sovg'a to'lov kelgandan keyin profilda ko'rinadi.
+         */
+        post: operations["sovga-qilish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/profil/{raqam}/sovgalar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Profildagi sovg'alar */
+        get: operations["sovgalar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/profil/{raqam}/tabriklar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tug'ilgan kun tabriklari */
+        get: operations["tabriklar"];
+        put?: never;
+        /**
+         * Tug'ilgan kun bilan tabriklash
+         * @description Faqat tug'ilgan kun haftasida. Bir kishi yiliga bir marta; qayta yuborilsa avvalgisi o'zgaradi.
+         */
+        post: operations["tabriklash"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/profil/{raqam}/tashrif": {
         parameters: {
             query?: never;
@@ -1294,6 +1373,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/raqamlar/{raqam}/korganlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Profilni kim ko'rgani
+         * @description Soni hammaga; ismlar premium rejada va faqat o'zi ko'rinmas bo'lmagan egaga.
+         */
+        get: operations["korganlar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/raqamlar/{raqam}/menyu/bolimlar": {
         parameters: {
             query?: never;
@@ -1505,6 +1604,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/raqamlar/{raqam}/sovgalar/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Sovg'ani javondan olish yoki qaytarish */
+        put: operations["sovgani-korsatish"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/raqamlar/{raqam}/statistika": {
         parameters: {
             query?: never;
@@ -1704,6 +1820,23 @@ export interface paths {
         };
         /** Baza bilan birga tekshiruv */
         get: operations["sogliq"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sovgalar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Sovg'a stikerlar katalogi */
+        get: operations["stikerlar"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1985,6 +2118,11 @@ export interface components {
         };
         AliveOutputHeader: {
             CacheControl: string;
+        };
+        BirthdayState: {
+            bugun: boolean;
+            hafta: boolean;
+            kun?: string;
         };
         Brief: {
             /**
@@ -2385,6 +2523,58 @@ export interface components {
             readonly $schema?: string;
             karta: components["schemas"]["GenesisCard"];
         };
+        Gift: {
+            daraja: string;
+            emoji: string;
+            /** Format: int64 */
+            id: number;
+            kimdan: string;
+            kimdan_raqam?: string;
+            kimdan_rasm?: string;
+            korsatiladi: boolean;
+            nom: string;
+            stiker: string;
+            /** Format: date-time */
+            vaqt: string;
+            xabar?: string;
+        };
+        GiftCount: {
+            daraja: string;
+            emoji: string;
+            nom: string;
+            /** Format: int64 */
+            soni: number;
+            stiker: string;
+        };
+        GiftInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/GiftInputBody.json
+             */
+            readonly $schema?: string;
+            stiker: string;
+            xabar?: string;
+        };
+        GiftShownInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/GiftShownInputBody.json
+             */
+            readonly $schema?: string;
+            korsatiladi: boolean;
+        };
+        GiftsOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/GiftsOutputBody.json
+             */
+            readonly $schema?: string;
+            jami: components["schemas"]["GiftCount"][] | null;
+            sovgalar: components["schemas"]["Gift"][] | null;
+        };
         GiveInputBody: {
             /**
              * Format: uri
@@ -2409,6 +2599,39 @@ export interface components {
             readonly $schema?: string;
             raqam: string;
         };
+        GreetInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/GreetInputBody.json
+             */
+            readonly $schema?: string;
+            emoji: string;
+            matn?: string;
+        };
+        Greeting: {
+            emoji: string;
+            /** Format: int64 */
+            id: number;
+            ism: string;
+            matn?: string;
+            meniki: boolean;
+            raqam?: string;
+            rasm?: string;
+            /** Format: date-time */
+            vaqt: string;
+        };
+        GreetingsOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/GreetingsOutputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            soni: number;
+            tabriklar: components["schemas"]["Greeting"][] | null;
+        };
         Handle: {
             /** Format: date-time */
             band_muddati?: string;
@@ -2423,10 +2646,14 @@ export interface components {
             izohlar_ochiq: boolean;
             jamoa?: string;
             kompaniya?: string;
+            korinish: {
+                [key: string]: string;
+            };
             /** Format: int64 */
             korishlar: number;
             lavozim?: string;
             maxsus_dizayn?: string;
+            musiqa: components["schemas"]["Music"];
             /** Format: date-time */
             olingan?: string;
             /** @enum {string} */
@@ -2435,6 +2662,7 @@ export interface components {
             raqam: string;
             rasm?: string;
             shahar?: string;
+            status_emoji?: string;
             /** @enum {string} */
             tarif: "free" | "premium";
             /** Format: date-time */
@@ -2443,6 +2671,7 @@ export interface components {
             telefon?: string;
             /** Format: int64 */
             tolangan?: number;
+            tugilgan_kun?: string;
             xizmatlar: components["schemas"]["Service"][] | null;
             yopiq: boolean;
         };
@@ -2494,6 +2723,24 @@ export interface components {
             /** @enum {string} */
             manba?: "nfc" | "qr" | "share";
             telefon?: string;
+        };
+        InvisibleInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/InvisibleInputBody.json
+             */
+            readonly $schema?: string;
+            korinmas: boolean;
+        };
+        InvisibleOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/InvisibleOutputBody.json
+             */
+            readonly $schema?: string;
+            korinmas: boolean;
         };
         Invoice: {
             /** Format: date-time */
@@ -2747,6 +2994,11 @@ export interface components {
             /** Format: int32 */
             tartib: number;
         };
+        Music: {
+            ijrochi?: string;
+            sarlavha: string;
+            url: string;
+        };
         NewPromoCode: {
             /**
              * Format: uri
@@ -2833,7 +3085,7 @@ export interface components {
             summa: number;
             tolov?: components["schemas"]["Checkout"];
             /** @enum {string} */
-            turi: "handle" | "subscription" | "device" | "transfer" | "venue";
+            turi: "handle" | "subscription" | "device" | "transfer" | "venue" | "gift";
         };
         OrderDetail: {
             /** Format: date-time */
@@ -3066,18 +3318,28 @@ export interface components {
             avatarUrl?: string;
             bannerUrl?: string;
             bio?: string;
+            /** @description Tug'ilgan kun, YYYY-MM-DD */
+            birthday?: string;
             cardDesign?: string;
             city?: string;
             commentsOpen: boolean;
             company?: string;
             contactEmail?: string;
             deviceType?: string;
+            /** @description Maydon → kim ko'radi: obuna yoki yopiq; yo'q bo'lsa hammaga ochiq */
+            korinish?: {
+                [key: string]: string;
+            };
             links?: components["schemas"]["LinkInput"];
+            /** @description Profil qo'shig'i (premium) */
+            music?: components["schemas"]["Music"];
             /** @description Yagona majburiy maydon */
             name: string;
             phone?: string;
             position?: string;
             services?: components["schemas"]["Service"][] | null;
+            /** @description Ism yonidagi emoji (premium) */
+            statusEmoji?: string;
             /** @description Vergul yoki bo'sh joy bilan ajratilgan */
             tags?: string;
             yopiq: boolean;
@@ -3132,10 +3394,14 @@ export interface components {
             havolalar: components["schemas"]["Link"][] | null;
             ism: string;
             kompaniya?: string;
+            korinish?: {
+                [key: string]: string;
+            };
             /** Format: int64 */
             korishlar: number;
             lavozim?: string;
             meniki: boolean;
+            musiqa?: components["schemas"]["Music"];
             /** Format: int64 */
             obunachilar: number;
             obunaman: boolean;
@@ -3146,11 +3412,13 @@ export interface components {
             rasm?: string;
             shahar?: string;
             sorov_kutilmoqda: boolean;
+            status_emoji?: string;
             tarif: string;
             tavsif?: string;
             tavsiya_qilganman: boolean;
             teglar: string[] | null;
             telefon?: string;
+            tugilgan_kun: components["schemas"]["BirthdayState"];
             xizmatlar: components["schemas"]["Service"][] | null;
             yopiq: boolean;
         };
@@ -3455,6 +3723,24 @@ export interface components {
             /** Format: int64 */
             kun: number;
         };
+        Sticker: {
+            /** @enum {string} */
+            daraja: "oddiy" | "kumush" | "oltin" | "noyob";
+            emoji: string;
+            id: string;
+            /** Format: int64 */
+            narx: number;
+            nom: string;
+        };
+        StickersOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/StickersOutputBody.json
+             */
+            readonly $schema?: string;
+            stikerlar: components["schemas"]["Sticker"][] | null;
+        };
         Stored: {
             havola?: string;
             /** Format: int64 */
@@ -3721,6 +4007,28 @@ export interface components {
             havola?: string;
             /** @enum {string} */
             manba?: "nfc" | "qr" | "share";
+        };
+        Viewer: {
+            ism: string;
+            /** Format: int32 */
+            marta: number;
+            raqam?: string;
+            rasm?: string;
+            /** Format: date-time */
+            vaqt: string;
+        };
+        ViewersOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/ViewersOutputBody.json
+             */
+            readonly $schema?: string;
+            korganlar: components["schemas"]["Viewer"][] | null;
+            /** @enum {string} */
+            sabab: "ochiq" | "bepul" | "korinmas";
+            /** Format: int64 */
+            soni: number;
         };
     };
     responses: never;
@@ -4784,6 +5092,66 @@ export interface operations {
             };
         };
     };
+    korinmas: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvisibleOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "korinmas-qilish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InvisibleInputBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     obunalarim: {
         parameters: {
             query?: never;
@@ -5663,6 +6031,140 @@ export interface operations {
             };
         };
     };
+    "sovga-qilish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GiftInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrderOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    sovgalar: {
+        parameters: {
+            query?: {
+                soni?: number;
+            };
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GiftsOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    tabriklar: {
+        parameters: {
+            query?: {
+                soni?: number;
+            };
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GreetingsOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    tabriklash: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GreetInputBody"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     tashrif: {
         parameters: {
             query?: never;
@@ -6249,6 +6751,39 @@ export interface operations {
             };
         };
     };
+    korganlar: {
+        parameters: {
+            query?: {
+                soni?: number;
+            };
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ViewersOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
     "bolim-qoshish": {
         parameters: {
             query?: never;
@@ -6697,6 +7232,40 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "sovgani-korsatish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GiftShownInputBody"];
+            };
+        };
         responses: {
             /** @description No Content */
             204: {
@@ -7212,6 +7781,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    stikerlar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StickersOutputBody"];
                 };
             };
             /** @description Error */

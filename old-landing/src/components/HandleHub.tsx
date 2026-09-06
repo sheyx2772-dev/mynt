@@ -16,6 +16,7 @@ import {
   Store,
   Clock,
   UserPlus,
+  Gift,
 } from "lucide-react";
 
 import { formatNumber } from "@/lib/format";
@@ -216,6 +217,7 @@ export default function HandleHub({
         <Tile href={at("statistika")} label="Statistika" Icon={BarChart3} count={leads} />
         <Tile href={at("postlar")} label="Postlar" Icon={MessageSquare} />
         <Tile href={at("obuna-sorovlari")} label="So'rovlar" Icon={UserPlus} count={requests} />
+        <Tile href={at("sovgalar")} label="Sovg'alar" Icon={Gift} />
         <Tile href={at("dizayn")} label="Dizayn" Icon={Palette} />
         <Tile href={at("qurilma")} label="Qurilma" Icon={Package} />
         <Tile href={at("tarmoq")} label="Tarmoq" Icon={Users} />

@@ -5,6 +5,7 @@ import "server-only";
 import { acceptedLinkFields, buildProfileLinks, type LinkFields } from "@/lib/links";
 import { checkAvatar, checkBanner } from "@/lib/uploads";
 import { uploadImage, isStorageConfigured } from "@/lib/storage";
+import { readVisibilityForm, type Visibility } from "@/lib/visibility";
 
 export type ProfileInput = {
   name: string;
@@ -29,6 +30,13 @@ export type ProfileInput = {
   commentsOpen: boolean;
   /** Closed profile: strangers see the face and ask to see the rest. */
   isPrivate: boolean;
+  /** Who sees which field; open fields absent. */
+  visibility: Visibility;
+  /** YYYY-MM-DD or empty; the backend refuses a date nobody has. */
+  birthday: string;
+  /** Premium. Sent regardless; a free profile's are dropped on the server. */
+  statusEmoji: string;
+  music: { title: string; artist: string; url: string };
   tags: string[];
 };
 
@@ -180,6 +188,14 @@ export async function readProfileForm(
       company: String(formData.get("company") ?? "").trim().slice(0, 80) || null,
       commentsOpen: String(formData.get("commentsOpen") ?? "") === "1",
       isPrivate: String(formData.get("yopiq") ?? "") === "1",
+      visibility: readVisibilityForm(formData),
+      birthday: String(formData.get("birthday") ?? "").trim().slice(0, 10),
+      statusEmoji: String(formData.get("statusEmoji") ?? "").trim().slice(0, 32),
+      music: {
+        title: String(formData.get("musicTitle") ?? "").trim().slice(0, 80),
+        artist: String(formData.get("musicArtist") ?? "").trim().slice(0, 80),
+        url: String(formData.get("musicUrl") ?? "").trim().slice(0, 500),
+      },
       services: parseServices(
         Array.from({ length: MAX_SERVICES }, (_, i) => ({
           name: String(formData.get(`service${i}Name`) ?? ""),
