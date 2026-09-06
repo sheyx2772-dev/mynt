@@ -199,7 +199,7 @@ export default async function NetworkPage({
             <p className="font-display text-[17px] font-semibold tracking-tight">
               Hali hech kim kontakt qoldirmagan
             </p>
-            <p className="mx-auto mt-2 max-w-sm text-[13px] leading-relaxed text-paper-2">
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-paper-2">
               Kartangizni tegizgan odam o&apos;z ismini va raqamini shu yerga
               yuboradi. Qog&apos;ozda olingan raqamlarni esa o&apos;zingiz
               qo&apos;shasiz.

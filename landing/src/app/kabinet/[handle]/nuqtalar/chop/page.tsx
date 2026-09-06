@@ -84,7 +84,7 @@ export default async function PrintPointsPage({
               />
             </div>
 
-            <p className="mt-3 text-[11px] leading-snug text-ink-2">
+            <p className="mt-3 text-xs leading-snug text-ink-2">
               Kodni telefon kamerasi bilan oching — {w.listTitle.toLowerCase()}, {action}.
             </p>
             <p className="mt-1 font-tabular text-[10px] text-ink-3">

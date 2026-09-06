@@ -35,7 +35,7 @@ export default function PostComposer({ handle }: { handle: string }) {
         maxLength={MAX_POST_LENGTH}
         onChange={(event) => setUsed(event.target.value.length)}
         placeholder="Nima yangilik?"
-        className="w-full resize-none bg-transparent text-[15px] leading-relaxed outline-none placeholder:text-paper-3"
+        className="w-full resize-none bg-transparent text-base leading-relaxed outline-none placeholder:text-paper-3"
       />
 
       {state.error && <p className="mt-2 text-[13px] text-danger-ink">{state.error}</p>}

@@ -118,7 +118,7 @@ export default async function QueuePage() {
             <p className="font-display text-[17px] font-semibold tracking-tight">
               Navbat bo&apos;sh
             </p>
-            <p className="mx-auto mt-2 max-w-sm text-[13px] leading-relaxed text-paper-2">
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-paper-2">
               To&apos;langan buyurtma kelganda shu yerda paydo bo&apos;ladi va
               Telegramga xabar keladi.
             </p>
@@ -157,7 +157,7 @@ export default async function QueuePage() {
                       {/* Wraps rather than truncating: "250 00…" reads as a
                           broken price, and the row has the height for a second
                           line. */}
-                      <p className="mt-0.5 text-[12px] leading-snug text-paper-3">
+                      <p className="mt-0.5 text-xs leading-snug text-paper-3">
                         <Link
                           href={`/${order.handle}`}
                           className="font-medium text-paper-2 hover:underline"
@@ -180,7 +180,7 @@ export default async function QueuePage() {
 
                   <div className="border-t border-ink-line px-5 py-4 sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start sm:gap-6">
                     {hasAddress ? (
-                      <div className="text-[13px] leading-relaxed">
+                      <div className="text-sm leading-relaxed">
                         <p className="font-semibold">{order.recipient}</p>
                         <p className="text-paper-2">
                           {addressLine({

@@ -45,8 +45,8 @@ export default function ActionRow({ label, icon, value, href, external = false }
         </span>
 
         <span className="flex min-w-0 flex-1 flex-col">
-          <span className="text-[16px] leading-6 text-mute">{label}</span>
-          <span className="text-[16px] leading-6 font-medium break-words text-ink">
+          <span className="text-base leading-6 text-mute">{label}</span>
+          <span className="text-base leading-6 font-medium break-words text-ink">
             {value}
           </span>
         </span>

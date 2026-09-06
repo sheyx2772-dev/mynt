@@ -33,11 +33,11 @@ export default function MenuView({
       <header className="-mx-5 border-b border-line px-5 pb-4">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <h1 className="text-[24px] leading-7 font-semibold tracking-[-0.01em]">
+            <h1 className="text-2xl leading-7 font-semibold tracking-[-0.01em]">
               {venue.name}
             </h1>
             {venue.hours && (
-              <p className="mt-1 flex items-center gap-1.5 text-[16px] leading-6 text-ink-2">
+              <p className="mt-1 flex items-center gap-1.5 text-base leading-6 text-ink-2">
                 <Clock className="h-4 w-4 shrink-0" />
                 {venue.hours}
               </p>
@@ -54,7 +54,7 @@ export default function MenuView({
         {(venue.address || venue.wifiName) && (
           <div className="mt-4 flex flex-wrap gap-2">
             {venue.wifiName && (
-              <span className="flex items-center gap-1.5 rounded-full bg-fill px-3 py-1.5 text-[13px] leading-[18px] text-ink-2">
+              <span className="flex items-center gap-1.5 rounded-full bg-fill px-3 py-1.5 text-sm leading-[18px] text-ink-2">
                 <Wifi className="h-4 w-4 shrink-0" />
                 {venue.wifiName}
                 {venue.wifiPassword && (
@@ -63,7 +63,7 @@ export default function MenuView({
               </span>
             )}
             {venue.address && (
-              <span className="flex items-center gap-1.5 rounded-full bg-fill px-3 py-1.5 text-[13px] leading-[18px] text-ink-2">
+              <span className="flex items-center gap-1.5 rounded-full bg-fill px-3 py-1.5 text-sm leading-[18px] text-ink-2">
                 <MapPin className="h-4 w-4 shrink-0" />
                 {venue.address}
               </span>
@@ -73,14 +73,14 @@ export default function MenuView({
       </header>
 
       {categories.length === 0 ? (
-        <p className="mt-8 rounded-card border border-dashed border-line-2 px-6 py-10 text-center text-[16px] leading-6 text-ink-3">
+        <p className="mt-8 rounded-card border border-dashed border-line-2 px-6 py-10 text-center text-base leading-6 text-ink-3">
           {w.listEmpty}
         </p>
       ) : (
         categories.map((category) => (
           <section key={category.id} className="mt-6">
             {category.name && (
-              <h2 className="mb-2 text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+              <h2 className="mb-2 text-xs leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
                 {category.name}
               </h2>
             )}
@@ -106,20 +106,20 @@ export default function MenuView({
                   )}
 
                   <div className="min-w-0 flex-1">
-                    <p className="text-[16px] leading-6">{item.name}</p>
+                    <p className="text-base leading-6">{item.name}</p>
                     {item.note && (
-                      <p className="text-[13px] leading-[18px] text-ink-3">
+                      <p className="text-sm leading-[18px] text-ink-3">
                         {item.note}
                       </p>
                     )}
                     {!item.available && (
-                      <p className="mt-0.5 text-[13px] leading-[18px] font-medium text-ink-2">
+                      <p className="mt-0.5 text-sm leading-[18px] font-medium text-ink-2">
                         {w.soldOut}
                       </p>
                     )}
                   </div>
 
-                  <p className="num shrink-0 text-[16px] leading-6 font-semibold">
+                  <p className="num shrink-0 text-base leading-6 font-semibold">
                     {item.price === 0 ? (
                       <span className="font-normal text-ink-3">{w.freeWord}</span>
                     ) : (

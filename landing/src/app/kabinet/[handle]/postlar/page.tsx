@@ -29,7 +29,7 @@ export default async function PostsPage({ params }: PageProps<"/kabinet/[handle]
             <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-input bg-ink-s2">
               <Clock className="h-4 w-4 text-paper-3" />
             </span>
-            <p className="mx-auto mt-4 max-w-xs text-[13px] leading-relaxed text-paper-2">
+            <p className="mx-auto mt-4 max-w-xs text-sm leading-relaxed text-paper-2">
               To&apos;lov yakunlangach post joylashingiz mumkin bo&apos;ladi.
             </p>
           </section>

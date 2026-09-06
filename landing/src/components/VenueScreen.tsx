@@ -72,9 +72,9 @@ export default function VenueScreen({
             }
           >
             <div className="min-w-0">
-              <p className="text-[13px] leading-tight font-medium">{name}</p>
+              <p className="text-sm leading-tight font-medium">{name}</p>
               {note && (
-                <p className="mt-0.5 text-[11px] leading-tight text-paper-3">{note}</p>
+                <p className="mt-0.5 text-xs leading-tight text-paper-3">{note}</p>
               )}
             </div>
             {value && (
@@ -89,7 +89,7 @@ export default function VenueScreen({
           {screen.actions.map((action) => (
             <span
               key={action}
-              className="rounded-input border border-ink-line bg-ink-s2 px-2.5 py-2 text-[11px] leading-tight font-medium"
+              className="rounded-input border border-ink-line bg-ink-s2 px-2.5 py-2 text-xs leading-tight font-medium"
             >
               {action}
             </span>

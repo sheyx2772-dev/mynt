@@ -54,7 +54,7 @@ export default function PostList({
         <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-input bg-black/[0.04]">
           <MessageSquare className="h-4 w-4 text-ink-3" />
         </span>
-        <p className="mx-auto mt-4 max-w-xs text-[13px] leading-relaxed text-ink-2">
+        <p className="mx-auto mt-4 max-w-xs text-sm leading-relaxed text-ink-2">
           {emptyMessage}
         </p>
       </section>
@@ -97,7 +97,7 @@ export default function PostList({
 
               {/* User text: rendered as plain text, and wrapped so a long
                   unbroken string cannot stretch the layout. */}
-              <p className="mt-1.5 text-[14px] leading-relaxed break-words whitespace-pre-wrap">
+              <p className="mt-1.5 text-sm leading-relaxed break-words whitespace-pre-wrap">
                 {post.body}
               </p>
 

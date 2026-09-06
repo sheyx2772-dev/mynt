@@ -122,7 +122,7 @@ export default function NetworkBrief({
 
       {brief ? (
         <>
-          <p className="relative px-6 pt-4 text-[15px] leading-relaxed text-paper sm:px-7">
+          <p className="relative px-6 pt-4 text-base leading-relaxed text-paper sm:px-7">
             {brief.summary}
           </p>
 
@@ -140,11 +140,11 @@ export default function NetworkBrief({
                     </span>
                     <p className="text-[15px] font-semibold tracking-tight">{s.name}</p>
                   </div>
-                  <p className="mt-1.5 pl-[26px] text-[13px] leading-relaxed text-paper">
+                  <p className="mt-1.5 pl-[26px] text-sm leading-relaxed text-paper">
                     {s.why}
                   </p>
                   <div className="mt-3 pl-[26px]">
-                    <p className="rounded-input bg-ink-s1/[0.06] p-3.5 text-[13px] leading-relaxed text-paper">
+                    <p className="rounded-input bg-ink-s1/[0.06] p-3.5 text-sm leading-relaxed text-paper">
                       {s.draft}
                     </p>
                     <DraftActions draft={s.draft} phone={s.phone} />
@@ -179,7 +179,7 @@ export default function NetworkBrief({
         </>
       ) : (
         <div className="relative px-6 pb-6 pt-3 sm:px-7">
-          <p className="text-[15px] leading-relaxed text-paper">
+          <p className="text-base leading-relaxed text-paper">
             {enough
               ? "Ro'yxatni o'qib, bugun kimga javob berish kerakligini va nima yozishni aytadi."
               : `Kamida to'rtta kontakt kerak. Hozir ${contactCount} ta.`}
@@ -201,7 +201,7 @@ export default function NetworkBrief({
           </button>
 
           {showTerms && (
-            <p className="mt-3 rounded-input bg-ink-s1/[0.06] p-4 text-[13px] leading-relaxed text-paper">
+            <p className="mt-3 rounded-input bg-ink-s1/[0.06] p-4 text-sm leading-relaxed text-paper">
               Ism, telefon va email <strong className="text-paper">yuborilmaydi</strong>.
               Faqat kompaniya, bosqich, kunlar soni va izohlar ketadi; har bir odam
               K1, K2 kabi belgi bilan boradi va ismni faqat siz ko&apos;rasiz.

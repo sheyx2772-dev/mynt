@@ -408,7 +408,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               <h2 className="font-display text-[28px] leading-[32px] font-semibold tracking-[-0.01em] text-balance">
                 {h.tryTitle}
               </h2>
-              <p className="mt-4 max-w-[46ch] text-[16px] leading-6 text-ink-2">
+              <p className="mt-4 max-w-[46ch] text-base leading-6 text-ink-2">
                 {h.tryLead}
               </p>
               {/* On a phone the QR is useless — nobody scans a code with the
@@ -437,7 +437,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </div>
               <div className="flex items-center gap-2">
                 <Plate n={DEMO_HANDLE} size="sm" />
-                <span className="text-[13px] leading-[18px] text-ink-3">
+                <span className="text-sm leading-[18px] text-ink-3">
                   {h.tryCaption}
                 </span>
               </div>
@@ -462,13 +462,13 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                     className="object-cover"
                   />
                 </div>
-                <p className="num mt-4 font-display text-[20px] leading-6 font-semibold text-ink-3">
+                <p className="num mt-4 font-display text-xl leading-6 font-semibold text-ink-3">
                   {i + 1}
                 </p>
-                <h3 className="mt-1 text-[20px] leading-6 font-semibold">
+                <h3 className="mt-1 text-xl leading-6 font-semibold">
                   {step.title}
                 </h3>
-                <p className="mt-2 text-[16px] leading-6 text-ink-2">{step.body}</p>
+                <p className="mt-2 text-base leading-6 text-ink-2">{step.body}</p>
               </li>
             ))}
           </ol>
@@ -479,8 +479,8 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {h.trust.map((item) => (
               <li key={item.q}>
-                <h3 className="text-[16px] leading-6 font-semibold">{item.q}</h3>
-                <p className="mt-1.5 text-[14px] leading-5 text-ink-2">{item.a}</p>
+                <h3 className="text-base leading-6 font-semibold">{item.q}</h3>
+                <p className="mt-1.5 text-sm leading-5 text-ink-2">{item.a}</p>
               </li>
             ))}
           </ul>
@@ -489,18 +489,18 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         {/* 6 — traction, counted rather than claimed -------------------- */}
         <section className="border-y border-line bg-white py-14 sm:py-16">
           <div className="mx-auto max-w-[1120px] px-4 sm:px-6">
-            <h2 className="text-[13px] leading-[18px] text-ink-3">
+            <h2 className="text-sm leading-[18px] text-ink-3">
               {h.tractionTitle}
             </h2>
             <div className="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-1">
               <span className="num font-display text-[48px] leading-none font-bold sm:text-[56px]">
                 {formatNumber(counts.claimed)}
               </span>
-              <span className="text-[17px] leading-6 text-ink-2">
+              <span className="text-lg leading-6 text-ink-2">
                 {h.tractionUnit}
               </span>
             </div>
-            <p className="mt-2 text-[13px] leading-[18px] text-ink-3">
+            <p className="mt-2 text-sm leading-[18px] text-ink-3">
               {formatNumber(counts.namespace - counts.claimed)} {h.tractionLeft}
             </p>
 
@@ -509,7 +509,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 logo we do not have permission for is somebody else's mark. */}
             {newest.length > 0 && (
               <div className="mt-7">
-                <p className="text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+                <p className="text-xs leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
                   {h.tractionLatest}
                 </p>
                 <ul className="mt-3 flex flex-wrap gap-2">
@@ -550,38 +550,38 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                       : "border-line"
                   }`}
                 >
-                  <h3 className="text-[17px] leading-6 font-semibold">{p.name}</h3>
+                  <h3 className="text-lg leading-6 font-semibold">{p.name}</h3>
 
                   <dl className="mt-4 flex-1 space-y-3.5">
                     <div>
-                      <dt className="text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+                      <dt className="text-xs leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
                         {h.pricesStart}
                       </dt>
-                      <dd className="num mt-1 text-[16px] leading-6 font-semibold">
+                      <dd className="num mt-1 text-base leading-6 font-semibold">
                         {p.start}
                       </dd>
-                      <dd className="text-[13px] leading-[18px] text-ink-3">
+                      <dd className="text-sm leading-[18px] text-ink-3">
                         {p.startNote}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+                      <dt className="text-xs leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
                         {h.pricesSub}
                       </dt>
-                      <dd className="num mt-1 text-[16px] leading-6 font-semibold">
+                      <dd className="num mt-1 text-base leading-6 font-semibold">
                         {p.sub}
                       </dd>
-                      <dd className="text-[13px] leading-[18px] text-ink-3">
+                      <dd className="text-sm leading-[18px] text-ink-3">
                         {p.subNote}
                       </dd>
                     </div>
                     {/* Everybody asks this one silently. Answer it in the
                         table, or they assume the answer is a trap. */}
                     <div>
-                      <dt className="text-[12px] leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
+                      <dt className="text-xs leading-4 font-medium tracking-[0.04em] text-ink-3 uppercase">
                         {h.pricesAfter}
                       </dt>
-                      <dd className="mt-1 text-[14px] leading-5 text-ink-2">
+                      <dd className="mt-1 text-sm leading-5 text-ink-2">
                         {p.after}
                       </dd>
                     </div>

@@ -48,10 +48,10 @@ function Sample({ theme }: { theme: string }) {
             AK
           </div>
           <div className="min-w-0 pb-1">
-            <p className="text-[24px] leading-tight font-semibold tracking-[-0.01em]">
+            <p className="text-2xl leading-tight font-semibold tracking-[-0.01em]">
               Aziz Karimov
             </p>
-            <p className="mt-1 text-[16px] leading-6 text-mute">
+            <p className="mt-1 text-base leading-6 text-mute">
               Direktor · <span className="font-medium text-ink">MC LEGAL</span>
             </p>
           </div>
@@ -61,7 +61,7 @@ function Sample({ theme }: { theme: string }) {
           <Plate n="MYN042" size="lg" />
         </div>
 
-        <p className="mt-5 text-[16px] leading-relaxed text-ink/85">
+        <p className="mt-5 text-base leading-relaxed text-ink/85">
           Korporativ huquq, shartnomalar va sud vakilligi — 12 yillik amaliyot.
         </p>
 
@@ -77,15 +77,15 @@ function Sample({ theme }: { theme: string }) {
         </div>
 
         <div className="mt-3 grid grid-cols-2 gap-3">
-          <span className="flex min-h-14 items-center justify-center rounded-input bg-paper px-3 py-2 text-[16px] leading-5 font-medium text-balance shadow-deboss">
+          <span className="flex min-h-14 items-center justify-center rounded-input bg-paper px-3 py-2 text-base leading-5 font-medium text-balance shadow-deboss">
             Tavsiya qilaman
           </span>
-          <span className="flex min-h-14 items-center justify-center rounded-input bg-paper px-3 py-2 text-[16px] leading-5 font-medium text-balance shadow-deboss">
+          <span className="flex min-h-14 items-center justify-center rounded-input bg-paper px-3 py-2 text-base leading-5 font-medium text-balance shadow-deboss">
             Obuna bo&apos;lish
           </span>
         </div>
 
-        <div className="mt-5 flex items-center gap-5 text-[16px] leading-6 text-mute">
+        <div className="mt-5 flex items-center gap-5 text-base leading-6 text-mute">
           <span className="flex items-center gap-2">
             <Eye className="size-4" />
             <span className="font-medium text-ink tabular-nums">823</span> ko&apos;rish
@@ -101,9 +101,9 @@ function Sample({ theme }: { theme: string }) {
             Xizmatlar
           </p>
           <div className="rule flex min-h-14 items-baseline gap-3 py-3">
-            <span className="text-[16px] leading-6">Sudda vakillik</span>
+            <span className="text-base leading-6">Sudda vakillik</span>
             <span className="mb-1.5 min-w-6 flex-1 self-end border-b-2 border-dotted border-ink/35" />
-            <span className="shrink-0 text-[16px] leading-6 font-semibold tabular-nums">
+            <span className="shrink-0 text-base leading-6 font-semibold tabular-nums">
               4&nbsp;000&nbsp;000&nbsp;so&apos;m
             </span>
           </div>
@@ -124,26 +124,26 @@ export default function ThemesPage() {
   return (
     <div className="min-h-full bg-paper px-4 py-10 text-ink">
       <div className="mx-auto max-w-[1400px]">
-        <h1 className="text-[24px] leading-tight font-semibold tracking-[-0.01em]">
+        <h1 className="text-2xl leading-tight font-semibold tracking-[-0.01em]">
           Mavzular
         </h1>
-        <p className="mt-2 max-w-[60ch] text-[16px] leading-6 text-mute">
+        <p className="mt-2 max-w-[60ch] text-base leading-6 text-mute">
           Oltitasi ham bir xil profilni ko&apos;rsatadi — bir xil ism, bir
           xil raqam, bir xil to&apos;rtta tugma. Har biri o&apos;z matni bilan
           bezansa, hammasi chiroyli chiqadi; farqni faqat shunday ko&apos;rish
           mumkin. Kontrasti <code className="font-mono">npm run themes</code>{" "}
           bilan o&apos;lchangan.
         </p>
-        <p className="mt-2 text-[16px] leading-6 text-mute">
+        <p className="mt-2 text-base leading-6 text-mute">
           <Link href="/MYN042" className="font-medium text-ink underline">
             Haqiqiy profilni ochish →
           </Link>
         </p>
 
-        <h2 className="mt-10 text-[20px] leading-6 font-semibold">
+        <h2 className="mt-10 text-xl leading-6 font-semibold">
           Yettita maket
         </h2>
-        <p className="mt-1 max-w-[70ch] text-[16px] leading-6 text-mute">
+        <p className="mt-1 max-w-[70ch] text-base leading-6 text-mute">
           Bular bir-birining rangi emas. Har birida tekislash, shrift, tugma
           shakli va tuzilma boshqa — va har biri boshqa odam uchun.
         </p>
@@ -152,16 +152,16 @@ export default function ThemesPage() {
           {LAYOUTS.map((l) => (
             <section key={l.name}>
               <header className="mb-3">
-                <h3 className="text-[17px] leading-6 font-semibold">{l.name}</h3>
-                <p className="text-[16px] leading-6 text-mute">{l.note}</p>
-                <p className="mt-0.5 text-[16px] leading-6 text-mute">{l.who}</p>
+                <h3 className="text-lg leading-6 font-semibold">{l.name}</h3>
+                <p className="text-base leading-6 text-mute">{l.note}</p>
+                <p className="mt-0.5 text-base leading-6 text-mute">{l.who}</p>
               </header>
               {l.render()}
             </section>
           ))}
         </div>
 
-        <h2 className="mt-14 text-[20px] leading-6 font-semibold">
+        <h2 className="mt-14 text-xl leading-6 font-semibold">
           Bitta maket, oltita rang
         </h2>
         <div className="mt-4 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
@@ -170,9 +170,9 @@ export default function ThemesPage() {
             return (
               <section key={t.id}>
                 <header className="mb-3">
-                  <h2 className="text-[17px] leading-6 font-semibold">{t.name}</h2>
-                  <p className="text-[16px] leading-6 text-mute">{t.note}</p>
-                  <p className="mt-0.5 text-[16px] leading-6 text-mute">
+                  <h2 className="text-lg leading-6 font-semibold">{t.name}</h2>
+                  <p className="text-base leading-6 text-mute">{t.note}</p>
+                  <p className="mt-0.5 text-base leading-6 text-mute">
                     {designs.length > 0 ? designs.join(", ") : "— hali kartasi yo'q"}
                   </p>
                 </header>

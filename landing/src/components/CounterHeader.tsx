@@ -157,12 +157,12 @@ export default function CounterHeader({
   return (
     <>
       <header className="mb-5 flex items-baseline justify-between gap-3">
-        <h1 className="truncate text-[24px] leading-7 font-semibold tracking-[-0.01em] text-paper">
+        <h1 className="truncate text-2xl leading-7 font-semibold tracking-[-0.01em] text-paper">
           {venueName}
         </h1>
         {/* paper-2, not paper-3: the faint tier is unreadable at two metres,
             which is the only distance this screen is ever read from. */}
-        <span className="num shrink-0 text-[20px] leading-7 text-paper-2">
+        <span className="num shrink-0 text-xl leading-7 text-paper-2">
           {!trust ? "aloqa yo'q" : waiting > 0 ? `${waiting} ta kutmoqda` : "bo'sh"}
         </span>
       </header>

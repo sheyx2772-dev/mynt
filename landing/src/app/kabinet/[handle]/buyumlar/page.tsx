@@ -66,7 +66,7 @@ export default async function TagsPage({
                 <span className="mb-2 h-2 w-2 rounded-full bg-lime" aria-hidden />
               )}
             </div>
-            <p className="mt-5 max-w-md text-[13px] leading-relaxed text-paper">
+            <p className="mt-5 max-w-md text-sm leading-relaxed text-paper">
               Mashinangizga, hayvoningizga yoki buyumingizga belgi qo&apos;ying.
               Tegizgan odam profilingizni emas, sizga xabar yozadigan ekranni
               ko&apos;radi — telefon raqamlar ikki tomonga ham ko&apos;rinmaydi.
@@ -131,7 +131,7 @@ export default async function TagsPage({
                       )}
 
                       {message.body && (
-                        <p className="mt-2 border-l-2 border-ink-line pl-3 text-[13px] leading-relaxed text-paper-2">
+                        <p className="mt-2 border-l-2 border-ink-line pl-3 text-sm leading-relaxed text-paper-2">
                           {message.body}
                         </p>
                       )}

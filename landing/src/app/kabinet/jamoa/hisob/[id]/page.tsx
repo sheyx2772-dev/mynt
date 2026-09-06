@@ -49,7 +49,7 @@ export default async function InvoicePage(props: PageProps<"/kabinet/jamoa/hisob
   const issued = invoice.issuedAt.slice(0, 10).split("-").reverse().join(".");
 
   return (
-    <main className="mx-auto max-w-3xl bg-white p-8 text-[13px] leading-relaxed text-black sm:p-12">
+    <main className="mx-auto max-w-3xl bg-white p-8 text-sm leading-relaxed text-black sm:p-12">
       {/* A document, not one of our screens: the app bar has nowhere to go
           from here and would print. */}
       <span data-no-app-bar hidden />

@@ -54,7 +54,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
           <div className="relative">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="font-display text-[22px] leading-tight font-semibold tracking-tight">
+                <p className="font-display text-2xl leading-tight font-semibold tracking-tight">
                   {device.name}
                 </p>
                 <p className="mt-1 font-tabular text-[13px] text-paper">
@@ -76,7 +76,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
               </span>
             </div>
 
-            <p className="mt-4 text-[14px] leading-relaxed text-paper">
+            <p className="mt-4 text-sm leading-relaxed text-paper">
               {paid ? fulfilmentForBuyer(order.fulfilment, "uz") : "To'lov kutilmoqda"}
             </p>
 
@@ -129,7 +129,7 @@ export default async function OrderPage({ params }: PageProps<"/kabinet/buyurtma
               <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lime">
                 <Check className="h-3.5 w-3.5 text-paper" />
               </span>
-              <p className="text-[14px] leading-relaxed">
+              <p className="text-sm leading-relaxed">
                 <span className="font-semibold">{order.recipient}</span>
                 <br />
                 <span className="text-paper-2">{order.phone}</span>

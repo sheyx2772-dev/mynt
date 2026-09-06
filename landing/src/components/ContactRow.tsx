@@ -147,7 +147,7 @@ export default function ContactRow({
               that explains why the meeting happened. Kept apart, and kept
               theirs. */}
           {contact.note && (
-            <p className="mt-4 border-l-2 border-ink-line pl-3 text-[13px] leading-relaxed text-paper-2">
+            <p className="mt-4 border-l-2 border-ink-line pl-3 text-sm leading-relaxed text-paper-2">
               {contact.note}
             </p>
           )}

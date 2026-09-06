@@ -143,14 +143,14 @@ export default function MenuRequests({
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
       <div className="pointer-events-auto w-full max-w-md">
         {confirmation && (
-          <p className="mb-2 flex items-center justify-center gap-2 rounded-input border border-line bg-white px-4 py-2.5 text-center text-[14px] leading-5 font-medium text-ink">
+          <p className="mb-2 flex items-center justify-center gap-2 rounded-input border border-line bg-white px-4 py-2.5 text-center text-sm leading-5 font-medium text-ink">
             <Check className="h-4 w-4 shrink-0" />
             {confirmation}
           </p>
         )}
 
         {error && !sheet && (
-          <p className="mb-2 rounded-input border border-danger/30 bg-white px-4 py-2.5 text-center text-[14px] leading-5 text-danger">
+          <p className="mb-2 rounded-input border border-danger/30 bg-white px-4 py-2.5 text-center text-sm leading-5 text-danger">
             {error}
           </p>
         )}
@@ -220,7 +220,7 @@ export default function MenuRequests({
         {/* Asked for once and then remembered. Everything after this is
             answerable — "table 7 wants the bill" reaches somebody, "somebody
             wants the bill" reaches nobody. */}
-        <label htmlFor="req-point" className="mb-1.5 block text-[13px] leading-[18px] font-medium text-ink-2">
+        <label htmlFor="req-point" className="mb-1.5 block text-sm leading-[18px] font-medium text-ink-2">
           {w.pointLabel}
         </label>
         <input
@@ -258,7 +258,7 @@ export default function MenuRequests({
               onChange={(e) => setNote(e.target.value.slice(0, 500))}
               rows={3}
               placeholder={s.menuReviewPlaceholder}
-              className="mt-3 w-full resize-none rounded-input border border-line-2 bg-white px-4 py-3.5 text-[16px] leading-6 outline-none placeholder:text-ink-3 focus:border-ink"
+              className="mt-3 w-full resize-none rounded-input border border-line-2 bg-white px-4 py-3.5 text-base leading-6 outline-none placeholder:text-ink-3 focus:border-ink"
             />
           </>
         )}

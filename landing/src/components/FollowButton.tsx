@@ -64,7 +64,7 @@ export default function FollowButton({
           </>
         )}
       </button>
-      {error && <p className="mt-2 text-center text-[16px] leading-6 text-danger">{error}</p>}
+      {error && <p className="mt-2 text-center text-base leading-6 text-danger">{error}</p>}
     </div>
   );
 }

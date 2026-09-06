@@ -43,7 +43,7 @@ export default function TagMessageForm({
         <p className="mt-4 font-display text-[18px] font-semibold tracking-tight">
           {words.sent}
         </p>
-        <p className="mt-2 text-[14px] leading-relaxed text-ink-2">
+        <p className="mt-2 text-sm leading-relaxed text-ink-2">
           {words.sentLead}
         </p>
       </section>
@@ -116,7 +116,7 @@ export default function TagMessageForm({
             name="body"
             rows={2}
             placeholder={words.notePlaceholder}
-            className="w-full resize-none rounded-card border border-line px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-ink-3 focus:border-line-lead"
+            className="w-full resize-none rounded-card border border-line px-4 py-3.5 text-base leading-relaxed outline-none placeholder:text-ink-3 focus:border-line-lead"
           />
         </div>
       )}
@@ -138,7 +138,7 @@ export default function TagMessageForm({
       {/* The promise, under the button where somebody hesitating will read it.
           It is the reason this screen exists rather than a phone number written
           on a windscreen. */}
-      <p className="mt-4 flex items-start gap-2 text-[12px] leading-relaxed text-ink-3">
+      <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-ink-3">
         <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0" />
         Telefon raqamingiz egasiga ko&apos;rinmaydi. Egasining raqami ham sizga
         ko&apos;rsatilmaydi.

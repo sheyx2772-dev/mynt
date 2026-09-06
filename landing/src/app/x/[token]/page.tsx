@@ -47,10 +47,10 @@ export default async function TagPage({
           accident on the way out. */}
       <span data-no-app-bar hidden />
 
-      <h1 className="font-display text-[26px] leading-tight font-semibold tracking-tight">
+      <h1 className="font-display text-2xl leading-tight font-semibold tracking-tight">
         {words.heading}
       </h1>
-      <p className="mt-2.5 text-[15px] leading-relaxed text-ink-2">
+      <p className="mt-2.5 text-base leading-relaxed text-ink-2">
         {words.lead}
       </p>
 

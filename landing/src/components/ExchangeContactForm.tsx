@@ -96,7 +96,7 @@ export default function ExchangeContactForm({
       }
       className="rounded-input bg-ink/[0.04] p-4 shadow-deboss"
     >
-      <p className="text-[17px] leading-6 font-semibold">
+      <p className="text-lg leading-6 font-semibold">
         {t.reachYou}
       </p>
 
@@ -121,11 +121,11 @@ export default function ExchangeContactForm({
         />
       </div>
 
-      <p className="mt-2 text-[16px] leading-6 text-mute">
+      <p className="mt-2 text-base leading-6 text-mute">
         {t.contactHint}
       </p>
 
-      {error && <p className="mt-2 text-[16px] leading-6 text-danger">{error}</p>}
+      {error && <p className="mt-2 text-base leading-6 text-danger">{error}</p>}
 
       <div className="mt-3 flex gap-2">
         <button

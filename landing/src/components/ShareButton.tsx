@@ -60,14 +60,14 @@ export default function ShareButton({
   if (manual) {
     return (
       <div className="absolute top-0 right-0 z-10 w-[min(20rem,80vw)] rounded-card border border-line bg-white px-4 py-3">
-        <p className="mb-1.5 text-[13px] leading-[18px] text-ink-3">Havolani nusxalab oling:</p>
+        <p className="mb-1.5 text-sm leading-[18px] text-ink-3">Havolani nusxalab oling:</p>
         <input
           readOnly
           value={manual}
           onFocus={(e) => e.currentTarget.select()}
           autoFocus
           onBlur={() => setManual(null)}
-          className="num w-full bg-transparent text-[13px] leading-[18px] text-ink outline-none"
+          className="num w-full bg-transparent text-sm leading-[18px] text-ink outline-none"
         />
       </div>
     );

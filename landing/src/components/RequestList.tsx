@@ -55,7 +55,7 @@ export default function RequestList({
       {queue.length === 0 ? (
         <div className="rounded-card border border-dashed border-ink-line px-6 py-12 text-center">
           <Inbox className="mx-auto h-6 w-6 text-paper-3" />
-          <p className="mt-3 text-[16px] leading-6 text-paper-3">{emptyText}</p>
+          <p className="mt-3 text-base leading-6 text-paper-3">{emptyText}</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -84,7 +84,7 @@ export default function RequestList({
                   )}
 
                   <div className="min-w-0 flex-1">
-                    <p className="flex items-center gap-2 text-[16px] leading-6 font-semibold">
+                    <p className="flex items-center gap-2 text-base leading-6 font-semibold">
                       <Icon kind={request.kind} />
                       {REQUEST_LABEL[request.kind]}
                     </p>
@@ -164,14 +164,14 @@ export default function RequestList({
 
       {closed.length > 0 && (
         <section className="mt-8">
-          <h2 className="mb-2 text-[12px] leading-4 font-medium tracking-[0.04em] text-paper-3 uppercase">
+          <h2 className="mb-2 text-xs leading-4 font-medium tracking-[0.04em] text-paper-3 uppercase">
             Bajarilgan
           </h2>
           <div className="divide-y divide-ink-line overflow-hidden rounded-card border border-ink-line">
             {closed.map((request) => (
               <div
                 key={request.id}
-                className="flex items-center gap-3 px-4 py-3 text-[14px] leading-5"
+                className="flex items-center gap-3 px-4 py-3 text-sm leading-5"
               >
                 <span className="num w-14 shrink-0 text-paper-3">
                   {request.point ?? "—"}

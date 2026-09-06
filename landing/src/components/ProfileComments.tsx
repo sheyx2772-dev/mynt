@@ -75,9 +75,9 @@ export default function ProfileComments({
             rows={2}
             maxLength={500}
             placeholder={labels.placeholder}
-            className="w-full resize-none rounded-plate border border-ink/15 bg-sheet px-4 py-3.5 text-[16px] leading-6 text-ink outline-none placeholder:text-mute focus:border-ink"
+            className="w-full resize-none rounded-plate border border-ink/15 bg-sheet px-4 py-3.5 text-base leading-6 text-ink outline-none placeholder:text-mute focus:border-ink"
           />
-          {error && <p className="mt-1.5 text-[16px] leading-6 text-danger">{error}</p>}
+          {error && <p className="mt-1.5 text-base leading-6 text-danger">{error}</p>}
           <button
             type="submit"
             disabled={pending || body.trim().length === 0}
@@ -89,14 +89,14 @@ export default function ProfileComments({
       )}
 
       {comments.length === 0 ? (
-        <p className="mt-3 text-[16px] leading-6 text-mute">{labels.empty}</p>
+        <p className="mt-3 text-base leading-6 text-mute">{labels.empty}</p>
       ) : (
         <ul className="mt-3 flex flex-col">
           {comments.map((c) => (
             <li key={c.id} className="rule py-3 last:bg-none">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-[16px] leading-6 text-mute">
+                  <p className="text-base leading-6 text-mute">
                     {c.authorHandle ? (
                       <Link
                         href={`/${c.authorHandle}`}
@@ -108,7 +108,7 @@ export default function ProfileComments({
                       c.authorName
                     )}
                   </p>
-                  <p className="mt-1 text-[16px] leading-6 break-words whitespace-pre-wrap text-ink">
+                  <p className="mt-1 text-base leading-6 break-words whitespace-pre-wrap text-ink">
                     {c.body}
                   </p>
                 </div>

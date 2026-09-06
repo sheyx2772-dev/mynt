@@ -437,7 +437,7 @@ async function VanityHandlePage({
           {/* Who vouched, by their own handle. A name is a claim; a handle is a
               profile the reader can open and judge. */}
           {recommenders.length > 0 && (
-            <p className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[13px] leading-5 text-mute">
+            <p className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm leading-5 text-mute">
               <span>{t.whoRecommended}</span>
               {recommenders.map((r) => (
                 <Link key={r.handle} href={`/${r.handle}`} title={r.name} className="font-mono">
@@ -473,7 +473,7 @@ async function VanityHandlePage({
             </div>
           )}
 
-          <dl className="mt-6 flex items-center justify-center gap-5 text-[13px] leading-5 text-mute">
+          <dl className="mt-6 flex items-center justify-center gap-5 text-sm leading-5 text-mute">
             <div className="flex items-center gap-1.5">
               <Eye className="size-4" />
               <dt className="sr-only">{t.views}</dt>
@@ -578,7 +578,7 @@ async function VanityHandlePage({
                         key={service.name}
                         className="rule flex min-h-14 items-baseline gap-3 py-3 last:bg-none"
                       >
-                        <span className="text-[15px] leading-6 text-pretty">
+                        <span className="text-base leading-6 text-pretty">
                           {service.name}
                         </span>
                         <span
@@ -586,7 +586,7 @@ async function VanityHandlePage({
                           className="mb-1.5 min-w-6 flex-1 self-end border-b-2 border-dotted border-ink/30"
                         />
                         {service.price && (
-                          <span className="shrink-0 text-[15px] leading-6 font-bold tabular-nums whitespace-nowrap">
+                          <span className="shrink-0 text-base leading-6 font-bold tabular-nums whitespace-nowrap">
                             {service.price}
                           </span>
                         )}
@@ -662,7 +662,7 @@ async function VanityHandlePage({
           {profile.plan === "free" && (
             <div className="mt-6 rounded-input bg-ink/[0.04] px-5 py-5 text-center">
               <p className="text-[15px] font-bold">{t.ownItTitle}</p>
-              <p className="mt-2 text-[13px] leading-relaxed text-mute">{t.ownItLead}</p>
+              <p className="mt-2 text-sm leading-relaxed text-mute">{t.ownItLead}</p>
               <p className="mt-4 mb-2 text-[12px] font-bold tracking-[0.12em] uppercase">
                 {t.ownItCta}
               </p>

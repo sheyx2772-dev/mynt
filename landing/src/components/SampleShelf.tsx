@@ -79,10 +79,10 @@ export function SampleTile({
       </div>
 
       <div className="mt-3 px-1">
-        <p className="font-display text-[15px] leading-tight font-semibold">
+        <p className="font-display text-base leading-tight font-semibold">
           {name}
         </p>
-        <p className="mt-0.5 line-clamp-2 text-[12px] leading-snug text-ink-2">
+        <p className="mt-0.5 line-clamp-2 text-xs leading-snug text-ink-2">
           {who}
         </p>
         <p className="mt-2 flex items-center gap-1 text-sm font-medium text-lime-ink">
