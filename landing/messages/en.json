@@ -75,5 +75,54 @@
     "soum": "so'm",
     "checkFailed": "Could not check just now. Try again shortly.",
     "letters50": "A status word"
+  },
+  "how": {
+    "title": "Three steps",
+    "step1Title": "Pick a number",
+    "step2Title": "Pick a thing to carry it",
+    "step3Title": "Touch",
+    "step1Body": "Random, or the one you want. The number is yours for life — lose the card and the replacement carries the same number.",
+    "step2Body": "Card, ring, band, windscreen tag, pet tag. One or several — all of them answer to the same number.",
+    "step3Body": "They hold their phone to it and your profile opens. One press saves your contact. You get a record of it — who, when, where."
+  },
+  "devices": {
+    "eyebrow": "What carries it",
+    "note": "One number, several things. All of them open the same profile.",
+    "seeAll": "All devices",
+    "name1": "Card",
+    "name2": "Ring",
+    "name3": "Band",
+    "name4": "Sticker",
+    "price1": "200 000",
+    "price2": "350 000",
+    "price3": "250 000",
+    "price4": "[PRICE]",
+    "soum": "so'm"
+  },
+  "price": {
+    "eyebrow": "Price",
+    "title": "Two products, two payments",
+    "personal": "A personal number",
+    "personalNote": "Once. The number stays yours.",
+    "venue": "A venue — cafe, hotel, shop",
+    "venueNote": "Monthly. Menu, table tags, calls and a report.",
+    "from": "from",
+    "monthly": "a month",
+    "soum": "so'm",
+    "cta": "Get a number",
+    "venueCta": "The business section"
+  },
+  "faq": {
+    "title": "Questions",
+    "q1": "What is a number and how is it priced?",
+    "q2": "How does the NFC device work?",
+    "q3": "What does it do for a cafe or a hotel?",
+    "q4": "How many staff can I add?",
+    "q5": "How do I pay?",
+    "a1": "A number is a unique code of three letters and three digits — MYN042, say — and it becomes the address of your profile. The price starts from a base and rises with how rare the letters and digits are. Type any combination on the pricing page and its price appears straight away.",
+    "a2": "Hold the device — card, ring or bracelet — to somebody's phone and your Flex profile opens by itself. Nobody installs an app. Phones without NFC use the QR code instead.",
+    "a3": "Every table or room gets its own QR code and its own NFC tag. A guest taps it, the menu or service list opens, and from there they call a waiter, ask for the bill or leave a review. The request arrives on the phone by the till with a sound and with the table number on it. The monthly report shows the average time to answer and which table calls most.",
+    "a4": "The team plan is sold by the seat, minimum five. A seat belongs to the company rather than to a person: when somebody leaves it frees up and goes to the next hire.",
+    "a5": "Payme for a number and a personal subscription. Cafes, hotels and companies pay by invoice and bank transfer: the document is issued in the cabinet and the subscription is extended when the money arrives."
   }
 }

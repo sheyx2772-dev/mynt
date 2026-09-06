@@ -1,6 +1,10 @@
 import { setRequestLocale } from "next-intl/server";
 
+import Devices from "@/components/Devices";
+import Faq from "@/components/Faq";
 import Hero from "@/components/Hero";
+import HowItWorks from "@/components/HowItWorks";
+import Pricing from "@/components/Pricing";
 import TwoWays from "@/components/TwoWays";
 
 // The entry page, being rebuilt a screen at a time.
@@ -26,6 +30,10 @@ export default async function HomePage({
     <main className="flex-1">
       <Hero asked={asked} />
       <TwoWays />
+      <HowItWorks />
+      <Devices />
+      <Pricing />
+      <Faq />
     </main>
   );
 }

@@ -75,5 +75,54 @@
     "soum": "so'm",
     "checkFailed": "Hozir tekshirib bo'lmadi. Birozdan keyin urinib ko'ring.",
     "letters50": "Status so'zi"
+  },
+  "how": {
+    "title": "Uch qadam",
+    "step1Title": "Raqam tanlaysiz",
+    "step2Title": "Buyum tanlaysiz",
+    "step3Title": "Tegizasiz",
+    "step1Body": "Tasodifiy yoki o'zingiz yoqtirgan. Raqam umrbod sizniki — karta yo'qolsa, yangisiga o'sha raqam yoziladi.",
+    "step2Body": "Karta, uzuk, braslet, avtovizitka, hayvon tegi. Bittasini yoki bir nechtasini — hammasi bitta raqam.",
+    "step3Body": "Odam telefonini tegizadi, profilingiz ochiladi. Kontaktni bir bosishda saqlaydi. Sizda esa yozuv qoladi — kim, qachon, qayerda."
+  },
+  "devices": {
+    "eyebrow": "Nimada olib yurasiz",
+    "note": "Bitta raqam, bir nechta buyum. Hammasi bitta profilga olib boradi.",
+    "seeAll": "Barcha qurilmalar",
+    "name1": "Karta",
+    "name2": "Uzuk",
+    "name3": "Braslet",
+    "name4": "Stiker",
+    "price1": "200 000",
+    "price2": "350 000",
+    "price3": "250 000",
+    "price4": "[NARX]",
+    "soum": "so'm"
+  },
+  "price": {
+    "eyebrow": "Narx",
+    "title": "Ikki mahsulot, ikki to'lov",
+    "personal": "Shaxsiy raqam",
+    "personalNote": "Bir marta. Raqam sizniki bo'lib qoladi.",
+    "venue": "Obyekt — kafe, mehmonxona, do'kon",
+    "venueNote": "Oyiga. Menyu, stol belgilari, chaqiruv va hisobot.",
+    "from": "dan",
+    "monthly": "oyiga",
+    "soum": "so'm",
+    "cta": "Raqam olish",
+    "venueCta": "Biznes bo'limi"
+  },
+  "faq": {
+    "title": "Savol-javob",
+    "q1": "Raqam nima va u qanday narxlanadi?",
+    "q2": "NFC qurilma qanday ishlaydi?",
+    "q3": "Kafe yoki mehmonxonaga nima beradi?",
+    "q4": "Jamoa uchun qancha xodim qo'shsam bo'ladi?",
+    "q5": "Qanday to'layman?",
+    "a1": "Raqam — 3 harf + 3 raqamdan iborat noyob kod (masalan FLX007), profilingiz manzili bo'ladi. Narx bazaviy summadan, harflar va raqamlarning kamyobligiga qarab ko'payadigan koeffitsientlardan hisoblanadi. Narxlar sahifasida istalgan kombinatsiyani yozib, narxini darhol ko'rasiz.",
+    "a2": "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, Flex profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC ishlamaydigan telefonlarda QR-kod orqali ochiladi.",
+    "a3": "Har bir stol yoki xonaga alohida QR va NFC belgisi beriladi. Mehmon tegizadi — menyu yoki xizmatlar ro'yxati ochiladi, u yerdan ofitsiantni chaqiradi, hisob so'raydi yoki izoh qoldiradi. So'rov qaysi stoldan kelgani bilan kassadagi telefonda ovoz bilan chiqadi. Oylik hisobotda o'rtacha javob vaqti va qaysi stol ko'p chaqirgani ko'rinadi.",
+    "a4": "Jamoa tarifi o'rinlar bo'yicha sotiladi, eng kami 5 ta. O'rin odamga emas, firmaga tegishli: xodim ketsa o'rin bo'shaydi va keyingisiga beriladi.",
+    "a5": "Raqam va shaxsiy obuna uchun — Payme. Kafe, mehmonxona va firmalar uchun — hisob-faktura va bank o'tkazmasi: hujjatni kabinetdan o'zingiz olasiz, pul kelgach obuna uzaytiriladi."
   }
 }

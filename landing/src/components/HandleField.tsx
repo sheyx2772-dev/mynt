@@ -1,15 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import { useFormatter, useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
-
-import {
-  digitRarity,
-  isBlocked,
-  letterRarity,
-  priceForHandle,
-} from "@/lib/pricing";
 
 // The number, as it is typed, and whatever should be said underneath it.
 //
@@ -18,21 +10,19 @@ import {
 // field took SDFSDF and said nothing until the button was pressed — six
 // characters of work thrown away for a rule nobody had been told.
 //
-// It prices as it goes, which is the reason to ship any JavaScript here at
-// all. Rarity is the product's whole story — SDF423 is 100 000 and AAA777 is
-// 120 million — and a visitor learns that by typing rather than by reading a
-// table. The arithmetic is local and mirrored from the Go the server charges
-// with, guarded by a test that hashes both word lists, so it cannot quietly
-// disagree with the price at checkout.
+// It does not price as it goes, and that was a deliberate reversal. Quoting
+// while somebody types puts a figure on a number before anyone knows whether
+// it can be bought — a price under a number that turns out to be taken is
+// worse than no price — and it answers the question the button is there to
+// ask, so the button stops meaning anything. It also put the whole pricing
+// table in the browser for the asking.
 //
-// It owns the space under the field because two things want it: the live
-// price, and the server's answer about the number that was actually asked.
-// Only one of them is ever true at a time. Rendered independently they drew on
-// top of each other — which is what happens when two components are given the
-// same slot and neither is told about the other.
+// So the price arrives with the answer, from the server, and the only
+// JavaScript left here is the one thing the platform cannot do: refuse a
+// keystroke.
 //
 // Without JavaScript this is a plain input with `pattern` and `required`: the
-// filtering and the price go, the form still submits, the server still answers.
+// filtering goes, the form still submits, the server still answers.
 
 /** Positions 0-2 take letters, 3-5 take digits. Anything else is dropped. */
 function mask(raw: string): string {
@@ -66,9 +56,6 @@ export default function HandleField({
   /** The server's answer, or the hint before there is one. */
   children: React.ReactNode;
 }) {
-  const t = useTranslations("rarity");
-  const format = useFormatter();
-
   const [value, setValue] = useState(() => mask(asked ?? ""));
   const input = useRef<HTMLInputElement>(null);
   const caret = useRef<number | null>(null);
@@ -81,15 +68,6 @@ export default function HandleField({
     input.current.setSelectionRange(caret.current, caret.current);
     caret.current = null;
   });
-
-  const letters = value.slice(0, 3);
-  const digits = value.slice(3, 6);
-  const complete = value.length === 6;
-
-  // The server's answer stands until the number stops being the one it answered
-  // about. From the first keystroke after that it is about somebody else's
-  // number, and the live price takes over.
-  const answered = asked !== undefined && value === mask(asked);
 
   return (
     <>
@@ -156,23 +134,7 @@ export default function HandleField({
         </button>
       </div>
 
-      <div aria-live="polite">
-        {answered || !complete ? (
-          children
-        ) : isBlocked(letters) ? (
-          <p className="mt-3 text-[13px] text-danger">{t("blocked")}</p>
-        ) : (
-          <p className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[13px]">
-            <span className="font-mono font-semibold tracking-[0.06em] text-ink">
-              {format.number(priceForHandle(letters, digits))} {t("soum")}
-            </span>
-            <span className="text-ink-3">
-              {t(`letters${letterRarity(letters).multiplier}`)} ·{" "}
-              {t(`digits${digitRarity(digits).multiplier}`)}
-            </span>
-          </p>
-        )}
-      </div>
+      {children}
     </>
   );
 }
