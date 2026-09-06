@@ -31,7 +31,6 @@ import ProfilePreview from "@/components/ProfilePreview";
 import PhoneFrame from "@/components/PhoneFrame";
 import HandleChecker from "@/components/HandleChecker";
 import HeroStage from "@/components/HeroStage";
-import Image from "next/image";
 import { productShot } from "@/lib/product-shots";
 import DeviceTile from "@/components/DeviceTile";
 import { DEVICE_TYPES } from "@/lib/devices";
@@ -44,6 +43,7 @@ import { getHandleStats } from "@/lib/analytics";
 import { listLeads } from "@/lib/leads";
 import AppHome, { AppTiles } from "@/components/AppHome";
 import Strips from "@/components/Strips";
+import ThreeSteps from "@/components/ThreeSteps";
 import CardFan from "@/components/CardFan";
 import { deviceStrip, verticalStrip, heroCarousel } from "@/lib/strip-items";
 import MobileMenu from "@/components/MobileMenu";
@@ -320,34 +320,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           owner={owner}
         />
 
-        {/* 3 — how it works, before anything is offered for sale ------- */}
-        <section className="mx-auto max-w-[1120px] px-4 py-16 sm:px-6 sm:py-24">
-          <h2 className="font-display text-[28px] leading-[32px] font-semibold tracking-[-0.01em]">
-            {h.howTitle}
-          </h2>
-          <ol className="mt-8 grid gap-8 sm:grid-cols-3 sm:gap-6">
-            {h.howSteps.map((step, i) => (
-              <li key={step.title}>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-input border border-line bg-white">
-                  <Image
-                    src={step.photo}
-                    alt={step.alt}
-                    fill
-                    sizes="(min-width: 640px) 344px, 100vw"
-                    className="object-cover"
-                  />
-                </div>
-                <p className="num mt-4 font-display text-xl leading-6 font-semibold text-ink-3">
-                  {i + 1}
-                </p>
-                <h3 className="mt-1 text-xl leading-6 font-semibold">
-                  {step.title}
-                </h3>
-                <p className="mt-2 text-base leading-6 text-ink-2">{step.body}</p>
-              </li>
-            ))}
-          </ol>
-        </section>
+        {/* 3 — how it works, before anything is offered for sale.
+            The same block /shaxsiy carries: this is where most people meet
+            the explanation first, so it should not be the weaker of two. */}
+        <ThreeSteps s={s} familyShot={productShot("oila")} tapShot={productShot("tegizish")} />
 
         {/* The three shelves, rendered once for both layouts. On a wide screen
             they follow the fork above; on a phone they follow the app's own
