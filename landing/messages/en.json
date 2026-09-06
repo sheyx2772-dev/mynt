@@ -55,5 +55,24 @@
     "business": "NFC for business",
     "businessDesc": "It goes on a table, in a room or at the till: menu, call button, requests and statistics. Unlike a printed menu it is edited at any moment and counts how often it was opened.",
     "businessCta": "The business section"
+  },
+  "rarity": {
+    "letters30": "Three of the same letter",
+    "letters20": "A word people know",
+    "letters4": "A palindrome in the letters",
+    "letters1": "Ordinary letters",
+    "digits40": "Three of the same digit",
+    "digits15": "Two leading zeros",
+    "digits12": "Digits in a row",
+    "digits5": "A palindrome in the digits",
+    "digits1": "Ordinary digits",
+    "price": "Price",
+    "taken": "Taken",
+    "free": "Free",
+    "takeIt": "Take it",
+    "seeProfile": "See the profile",
+    "blocked": "This number is not for sale",
+    "soum": "so'm",
+    "checkFailed": "Could not check just now. Try again shortly."
   }
 }

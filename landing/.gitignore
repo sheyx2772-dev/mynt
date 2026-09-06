@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# The backend's address is deployment configuration, not a secret — but the
+# file it lives in is where a key will end up the first time one is needed.
+.env.local

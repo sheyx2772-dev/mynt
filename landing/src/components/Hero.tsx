@@ -13,7 +13,7 @@ import HandleForm from "@/components/HandleForm";
 // Nothing on it runs in the browser. The badge, the heading, the form and the
 // card are all rendered on the server, so the page is usable the moment it
 // arrives rather than the moment a bundle does.
-export default async function Hero() {
+export default async function Hero({ asked }: { asked?: string }) {
   const t = await getTranslations("hero");
 
   return (
@@ -37,7 +37,7 @@ export default async function Hero() {
           </h1>
 
           <div className="mt-7">
-            <HandleForm />
+            <HandleForm asked={asked} />
           </div>
         </div>
 

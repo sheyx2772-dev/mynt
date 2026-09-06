@@ -1,6 +1,8 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRight } from "lucide-react";
 
+import HandleField from "@/components/HandleField";
+import HandleResult from "@/components/HandleResult";
 import { getPathname } from "@/i18n/navigation";
 
 // Ask whether a number is free.
@@ -22,14 +24,17 @@ import { getPathname } from "@/i18n/navigation";
 // The cost of one field is the numeric keypad on a phone: a text input opens
 // letters, so the digits take one "?123" tap. That is what the number being
 // one thing costs, and it is worth it.
-export default async function HandleForm() {
+export default async function HandleForm({ asked }: { asked?: string }) {
   const t = await getTranslations("hero");
   const locale = await getLocale();
 
-  // Written out rather than left to a redirect. `action="/personal"` posts to a
-  // path with no locale on it, so every submit took a detour through the proxy
-  // before it reached the page.
-  const action = getPathname({ href: "/personal", locale });
+  // Back to this page, not away from it. Somebody asking "is AAA777 free"
+  // should not be moved somewhere to find out — and because it is a GET, the
+  // answer has an address they can send to somebody.
+  //
+  // Written out rather than left to a redirect: a path with no locale on it
+  // takes a detour through the proxy before it reaches the page.
+  const action = getPathname({ href: "/", locale });
 
   const button =
     "flex h-12 shrink-0 items-center justify-center gap-2 bg-ink text-sm font-semibold text-white transition-colors hover:bg-ink-s2 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none";
@@ -39,7 +44,7 @@ export default async function HandleForm() {
       <div className="flex max-w-xl flex-col gap-2 sm:flex-row sm:items-center">
         {/* One plate. `focus-within` moves the whole thing, so the address and
             the number light up together — they are one object. */}
-        <div className="flex h-14 flex-1 items-center rounded-input border border-line-2 bg-white pl-4 transition-colors focus-within:border-ink focus-within:ring-2 focus-within:ring-ring">
+        <div className="relative flex h-14 flex-1 items-center rounded-input border border-line-2 bg-white pl-4 transition-colors focus-within:border-ink focus-within:ring-2 focus-within:ring-ring">
           <span
             aria-hidden="true"
             className="shrink-0 text-[15px] text-ink-3 select-none"
@@ -50,32 +55,12 @@ export default async function HandleForm() {
           <label htmlFor="raqam" className="sr-only">
             {t("numberLabel")}
           </label>
-          <input
+          <HandleField
             id="raqam"
             name="number"
-            required
-            maxLength={6}
-            pattern="[A-Za-z]{3}[0-9]{3}"
-            // The browser's own message for a failed pattern arrives in the
-            // browser's language and explains nothing. This is what it says.
+            defaultValue={asked ?? ""}
             title={t("numberTitle")}
-            autoComplete="off"
-            autoCapitalize="characters"
-            autoCorrect="off"
-            spellCheck={false}
-            enterKeyHint="go"
-            // `ABC123` rather than `AAA777`. The shape is the point, and
-            // AAA777 is the most expensive number in the catalogue — a
-            // placeholder that spells the trophy sets the price in a visitor's
-            // head three lines before the one that says 100 000.
             placeholder="ABC123"
-            // The engraving's tracking, so the number on screen and the number
-            // on the card are one object at two sizes.
-            //
-            // The placeholder keeps the tracking — it is showing a shape — but
-            // drops to regular weight and the palest line on the ladder, so it
-            // cannot be mistaken for something already typed. Same size, same
-            // weight, pale grey is what makes a hint read as a value.
             className="w-full min-w-0 bg-transparent px-1 font-mono text-xl font-semibold tracking-[0.22em] text-ink uppercase placeholder:font-normal placeholder:text-line-lead focus:outline-none"
           />
 
@@ -103,7 +88,14 @@ export default async function HandleForm() {
         </button>
       </div>
 
-      <p className="mt-3 text-[13px] text-ink-3">{t("hint")}</p>
+      {/* The hint holds the space the live price appears in, so nothing below
+          moves when it does. Once a number has been asked about, the answer
+          replaces it. */}
+      {asked ? (
+        <HandleResult asked={asked} />
+      ) : (
+        <p className="mt-3 text-[13px] text-ink-3">{t("hint")}</p>
+      )}
     </form>
   );
 }

@@ -55,5 +55,24 @@
     "business": "Biznes uchun NFC",
     "businessDesc": "Stol, xona yoki kassaga qo'yiladi: menyu, chaqiruv, so'rov va statistika. Bosilgan menyudan farqi — istalgan payt tahrirlanadi va necha marta ochilganini sanaydi.",
     "businessCta": "Biznes bo'limi"
+  },
+  "rarity": {
+    "letters30": "Uch xil bir harf",
+    "letters20": "Tanish so'z",
+    "letters4": "Palindrom harflar",
+    "letters1": "Oddiy harflar",
+    "digits40": "Uch xil bir raqam",
+    "digits15": "Boshida ikki nol",
+    "digits12": "Ketma-ket raqamlar",
+    "digits5": "Palindrom raqamlar",
+    "digits1": "Oddiy raqamlar",
+    "price": "Narxi",
+    "taken": "Band",
+    "free": "Bo'sh",
+    "takeIt": "Band qilish",
+    "seeProfile": "Profilni ko'rish",
+    "blocked": "Bu raqam sotuvda emas",
+    "soum": "so'm",
+    "checkFailed": "Hozir tekshirib bo'lmadi. Birozdan keyin urinib ko'ring."
   }
 }
