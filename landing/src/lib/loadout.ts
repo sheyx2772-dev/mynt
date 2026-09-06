@@ -29,25 +29,14 @@ const DEVICE_SHOTS: Record<LoadoutDeviceId, ShotName> = {
   card: "karta",
   ring: "uzuk",
   bracelet: "braslet",
-  // The wide shot, not the crop of it. `avtovizitka.webp` is 704×396 — a
-  // landscape sliver of the same scene — and the product page frames its
-  // picture square on a desktop, so it was cropped to the middle third and
-  // then scaled up: a blurry steering wheel with the sticker half out of
-  // frame. `avtostiker.webp` is the whole photograph at 704×1525, and the
-  // middle of it is the windscreen, the phone and the sticker together.
-  // /shaxsiy keeps the landscape file: its frame is 16/9, which is what that
-  // crop was made for.
-  avtovizitka: "avtostiker",
+  avtovizitka: "avtostiker-rangli",
 };
 
 const VERTICAL_SHOTS: Record<VerticalId, ShotName | null> = {
-  cafe: "kafe",
-  hotel: "mehmonxona",
-  // `dokon` names a photograph nobody ever shot, so the shop tile rendered as
-  // an empty black box beside three that had pictures. The counter stand is
-  // the shop as this product meets it — a plate and a phone at a till.
-  shop: "stend2",
-  other: "salon",
+  cafe: "kafe-menyu",
+  hotel: "mehmonxona-konsyerj",
+  shop: "stend-qora",
+  other: "klinika-stend",
 };
 
 export function deviceShot(id: LoadoutDeviceId): ShotName {

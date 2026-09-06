@@ -234,10 +234,14 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
                 lang={lang}
                 initial={isVertical(soha) ? soha : undefined}
                 shots={{
-                  cafe: [productShot("kafe")].filter(Boolean) as string[],
-                  hotel: [productShot("mehmonxona")].filter(Boolean) as string[],
-                  shop: [productShot("stend2")].filter(Boolean) as string[],
-                  other: [productShot("salon")].filter(Boolean) as string[],
+                  cafe: [productShot("kafe-menyu"), productShot("menyu-stend-qora")].filter(
+                    Boolean,
+                  ) as string[],
+                  hotel: [productShot("mehmonxona-konsyerj")].filter(Boolean) as string[],
+                  shop: [productShot("stend-qora")].filter(Boolean) as string[],
+                  other: [productShot("klinika-stend"), productShot("salon-stend")].filter(
+                    Boolean,
+                  ) as string[],
                 }}
               />
             </div>

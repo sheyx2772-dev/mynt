@@ -25,7 +25,13 @@ export type ShotName =
   | "salon"
   | "avto"
   | "avtovizitka"
-  | "avtostiker"
+  | "kafe-menyu"
+  | "menyu-stend-qora"
+  | "mehmonxona-konsyerj"
+  | "klinika-stend"
+  | "salon-stend"
+  | "stend-qora"
+  | "avtostiker-rangli"
   | "stend2"
   | "biznes";
 
