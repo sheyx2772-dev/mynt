@@ -1,6 +1,9 @@
 package handles
 
 import (
+	"os"
+	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -93,6 +96,51 @@ func TestADesignTheRendererCannotDrawFallsBack(t *testing.T) {
 	}
 	if profile.DeviceType != DefaultDeviceType {
 		t.Errorf("qurilma %q bo'lib qoldi", profile.DeviceType)
+	}
+}
+
+// The list in plans.go, the database's check constraint and the site's
+// renderer have to be the same set, and they had drifted: three names here
+// that the constraint would refuse on write, seven the site offers that this
+// file silently replaced with Genesis. Read out of the migration rather than
+// retyped, so adding a design to one place and not the other fails here.
+func TestEveryDesignTheDatabaseAllowsIsAcceptedHere(t *testing.T) {
+	sql, err := os.ReadFile(filepath.Join(
+		"..", "database", "migrations", "00013_xarita_design.sql"))
+	if err != nil {
+		t.Fatalf("migratsiya o'qilmadi: %v", err)
+	}
+
+	// check (card_design in ('genesis', 'lime', ... ))
+	clause := regexp.MustCompile(`(?s)card_design in \((.*?)\)`).FindSubmatch(sql)
+	if clause == nil {
+		t.Fatal("migratsiyada card_design cheklovi topilmadi")
+	}
+	allowed := regexp.MustCompile(`'([a-z]+)'`).FindAllSubmatch(clause[1], -1)
+	if len(allowed) == 0 {
+		t.Fatal("cheklovda bironta dizayn yo'q")
+	}
+
+	for _, m := range allowed {
+		name := string(m[1])
+		if got := CardDesign(name); got != name {
+			t.Errorf("baza %q ga ruxsat beradi, bu yerda %q bo'lib qoldi", name, got)
+		}
+	}
+
+	// And nothing here that the constraint would refuse: such a value passes
+	// this file and then fails the insert.
+	for name := range cardDesigns {
+		found := false
+		for _, m := range allowed {
+			if string(m[1]) == name {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("%q bu yerda bor, lekin baza uni qabul qilmaydi", name)
+		}
 	}
 }
 

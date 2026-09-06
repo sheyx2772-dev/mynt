@@ -29,11 +29,19 @@ func ServiceLimit(plan string) int {
 	return serviceLimits[PlanFree]
 }
 
-// The six designs the site can draw. A stored value the renderer does not know
+// The designs the site can draw. A stored value the renderer does not know
 // would be a blank card, so anything else falls back rather than being kept.
+//
+// This list is the same ten the database's check constraint allows
+// (00013_xarita_design.sql) and the same ten landing/src/lib/card-designs.ts
+// renders. It had drifted from both: it listed humo, paxta and tun, which the
+// constraint would have refused on write, and it was missing seven the site
+// offers — so a buyer choosing Polat, Suzani or Rahbar in the cabinet was
+// silently given Genesis, with no error and nothing to tell them why. Any
+// change here belongs in all three places at once.
 var cardDesigns = map[string]bool{
-	"genesis": true, "xarita": true, "naqsh": true,
-	"humo": true, "paxta": true, "tun": true,
+	"genesis": true, "lime": true, "grid": true, "sheen": true, "naqsh": true,
+	"paper": true, "rahbar": true, "devops": true, "suzani": true, "xarita": true,
 }
 
 const (
