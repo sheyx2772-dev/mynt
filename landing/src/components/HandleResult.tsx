@@ -132,7 +132,16 @@ export default async function HandleResult({ asked }: { asked: string }) {
       </div>
 
       <Link
-        href={{ pathname: "/personal", query: { number: handle } }}
+        // Straight to the step that takes the order, not the top of the page
+        // that contains it. Pressing "reserve" and arriving at a headline is
+        // the reader doing the site's scrolling for it — and the number they
+        // just checked is already in the query, so the step they land on is
+        // filled in.
+        href={{
+          pathname: "/personal",
+          query: { number: handle },
+          hash: "order",
+        }}
         className="flex h-11 shrink-0 items-center gap-2 rounded-input bg-ink px-5 text-sm font-semibold text-white transition-colors hover:bg-ink-s2"
       >
         {t("takeIt")}

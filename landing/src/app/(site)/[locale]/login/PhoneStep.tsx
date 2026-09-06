@@ -78,7 +78,9 @@ export default function PhoneStep({
         autoComplete="tel"
         autoFocus
         enterKeyHint="send"
-        maxLength={20}
+        // The formatted length of a full number, not a guess: twelve digits
+        // in four groups is fifteen characters with the spaces.
+        maxLength={15}
         value={shown}
         onChange={(event) =>
           retype(
