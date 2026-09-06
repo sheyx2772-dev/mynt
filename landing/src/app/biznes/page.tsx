@@ -76,7 +76,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
           serviceType: "NFC menu",
           offers: VENUE_BANDS.filter((b) => b.monthly !== null).map((b) => ({
             price: b.monthly!,
-            description: t.bandUpTo(b.maxPoints),
+            description: t.bandUpTo.replace("{n}", String(b.maxPoints)),
             recurring: true,
           })),
         })}

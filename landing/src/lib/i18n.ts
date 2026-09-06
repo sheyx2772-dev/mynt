@@ -1267,7 +1267,9 @@ const B2B = {
     pointsLabel: "Nuqtalar soni",
     monthlyWord: "oyiga",
     perPointWord: "bitta nuqtaga",
-    bandUpTo: (n: number) => `${n} tagacha nuqta`,
+    // A string with a slot, not a function: the whole b2b dictionary is
+    // handed to a client component, and a function cannot cross that line.
+    bandUpTo: "{n} tagacha nuqta",
     negotiated: "Narxi kelishiladi",
     negotiatedNote: "Tarmoq yoki katta obyekt — narxni gaplashib kelishamiz.",
     bandNames: ["15 nuqtagacha", "40 nuqtagacha", "40 dan ortiq"],
@@ -1479,7 +1481,7 @@ const B2B = {
     pointsLabel: "Число точек",
     monthlyWord: "в месяц",
     perPointWord: "за одну точку",
-    bandUpTo: (n: number) => `до ${n} точек`,
+    bandUpTo: "до {n} точек",
     negotiated: "По договорённости",
     negotiatedNote: "Сеть или крупный объект — цену определим в разговоре.",
     bandNames: ["до 15 точек", "до 40 точек", "больше 40"],
@@ -1691,7 +1693,7 @@ const B2B = {
     pointsLabel: "Number of points",
     monthlyWord: "a month",
     perPointWord: "per point",
-    bandUpTo: (n: number) => `up to ${n} points`,
+    bandUpTo: "up to {n} points",
     negotiated: "By agreement",
     negotiatedNote: "A chain or a large venue — we settle the price in conversation.",
     bandNames: ["up to 15 points", "up to 40 points", "more than 40"],
