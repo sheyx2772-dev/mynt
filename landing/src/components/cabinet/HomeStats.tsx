@@ -1,12 +1,9 @@
+import { Eye, Nfc, Users } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { count } from "@/lib/cabinet/format";
 
-// Three figures for the last week, and nothing to press.
-//
-// Seven days rather than all time, because "did anyone tap it" is a question
-// about this week. The all-time count is on the statistics screen, where the
-// chart gives it a shape.
+// Three figures for the last week with clear icons and fintech aesthetics.
 export default async function HomeStats({
   views,
   visitors,
@@ -19,22 +16,59 @@ export default async function HomeStats({
   caption: string;
 }) {
   const t = await getTranslations("cabinet.stats");
+
   const cells = [
-    { label: t("views"), value: views },
-    { label: t("visitors"), value: visitors },
-    { label: t("taps"), value: taps },
+    {
+      label: t("views"),
+      value: views,
+      Icon: Eye,
+      iconColor: "text-lime bg-lime/10 border-lime/20",
+    },
+    {
+      label: t("visitors"),
+      value: visitors,
+      Icon: Users,
+      iconColor: "text-sky-400 bg-sky-400/10 border-sky-400/20",
+    },
+    {
+      label: t("taps"),
+      value: taps,
+      Icon: Nfc,
+      iconColor: "text-amber-400 bg-amber-400/10 border-amber-400/20",
+    },
   ];
 
   return (
-    <section aria-label={caption}>
-      <p className="cap mb-2 px-1 text-muted-foreground">{caption}</p>
+    <section aria-label={caption} className="flex flex-col gap-2">
+      <div className="flex items-center gap-1.5 px-1">
+        <span className="size-1.5 rounded-full bg-lime animate-pulse" />
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          {caption}
+        </p>
+      </div>
+
       <div className="grid grid-cols-3 gap-2">
-        {cells.map((c) => (
-          <div key={c.label} className="rounded-card bg-card px-4 py-3">
-            <p className="font-mono text-2xl font-semibold tabular-nums">
-              {count(c.value)}
-            </p>
-            <p className="mt-0.5 text-xs text-muted-foreground">{c.label}</p>
+        {cells.map(({ label, value, Icon, iconColor }) => (
+          <div
+            key={label}
+            className="flex flex-col justify-between rounded-card border border-border/70 bg-card p-3.5 transition-all hover:border-border hover:bg-card/90"
+          >
+            <div className="flex items-center justify-between">
+              <span
+                className={`flex size-7 items-center justify-center rounded-lg border ${iconColor}`}
+              >
+                <Icon className="size-3.5" strokeWidth={2} />
+              </span>
+            </div>
+
+            <div className="mt-3">
+              <p className="font-mono text-xl font-bold tracking-tight text-foreground sm:text-2xl tabular-nums">
+                {count(value)}
+              </p>
+              <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
+                {label}
+              </p>
+            </div>
           </div>
         ))}
       </div>

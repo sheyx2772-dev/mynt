@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 
 import AccountMenu from "./AccountMenu";
 import NumberSwitch from "./NumberSwitch";
+import ThemeToggle from "./ThemeToggle";
 import Mark from "@/components/Mark";
 import { Link } from "@/i18n/navigation";
 import { myHandles } from "@/lib/cabinet/handles";
@@ -40,13 +41,16 @@ export default async function CabinetBar() {
           label={t("numbers")}
         />
 
-        <AccountMenu
-          labels={{
-            account: t("account"),
-            orders: t("orders"),
-            signOut: t("signOut"),
-          }}
-        />
+        <div className="flex items-center gap-1 sm:gap-1.5">
+          <ThemeToggle />
+          <AccountMenu
+            labels={{
+              account: t("account"),
+              orders: t("orders"),
+              signOut: t("signOut"),
+            }}
+          />
+        </div>
       </div>
     </header>
   );

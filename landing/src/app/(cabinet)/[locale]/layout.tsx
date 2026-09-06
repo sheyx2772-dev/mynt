@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -45,20 +46,24 @@ export default async function CabinetDocument({
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
 
+  const cookieStore = await cookies();
+  const theme = cookieStore.get("flex-theme")?.value;
+  const isDark = theme !== "light";
+
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${mono.variable} h-full antialiased`}
+      className={`${isDark ? "dark " : ""}${inter.variable} ${mono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      {/* Paper, like the site. The profile is dark because it is the card
-          carrying on; a workbench of forms and figures is not, and a person
-          who came from a light site and goes back to one should not have the
-          ground flip under them in between. A theme switcher would not fix
-          that — it is a stored preference, a flash of the wrong theme on
-          first paint and every component checked twice, which is worth
-          building once for the whole site when people ask for dark mode, not
-          to paper over a ground nobody chose. */}
-      <body className="flex min-h-full flex-col bg-background text-foreground">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("flex-theme");if(t==="light"){document.documentElement.classList.remove("dark");}else if(t==="dark"){document.documentElement.classList.add("dark");}}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body className="flex min-h-full flex-col bg-background text-foreground transition-colors duration-200">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

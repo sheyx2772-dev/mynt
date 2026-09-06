@@ -35,7 +35,7 @@ export default function CabinetLayout({
       <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-5 sm:px-6 sm:py-8">
         {children}
       </main>
-      <Toaster theme="light" />
+      <Toaster theme="dark" />
     </>
   );
 }

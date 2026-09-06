@@ -98,10 +98,10 @@ export default async function CabinetTabs({
             <Link
               key={cluster}
               href={`/cabinet/${raqam}/${clusterDefaults[cluster]}`}
-              className={`rounded-md px-2 py-1 transition-colors ${
+              className={`rounded-lg px-2.5 py-1 transition-all ${
                 isCurrentCluster
-                  ? "bg-secondary text-foreground font-semibold"
-                  : "hover:bg-muted hover:text-foreground"
+                  ? "bg-card text-foreground font-semibold border border-border/80 shadow-xs"
+                  : "hover:bg-card/50 hover:text-foreground text-muted-foreground"
               }`}
             >
               {t(`groups.${cluster}`)}
@@ -111,7 +111,7 @@ export default async function CabinetTabs({
       </div>
 
       {/* Sibling segmented tabs */}
-      <nav className="grid grid-cols-3 gap-1 rounded-xl border border-border bg-muted/70 p-1">
+      <nav className="grid grid-cols-3 gap-1 rounded-xl border border-border/80 bg-muted/40 p-1 backdrop-blur-sm">
         {siblings.map(({ id, Icon }) => {
           const isActive = id === active;
           const badge =
@@ -121,10 +121,10 @@ export default async function CabinetTabs({
             <Link
               key={id}
               href={`/cabinet/${raqam}/${id}`}
-              className={`relative flex items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-medium transition-all ${
+              className={`relative flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-all ${
                 isActive
-                  ? "bg-background text-foreground shadow-xs font-semibold"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-card text-foreground shadow-sm font-semibold border border-border/90"
+                  : "text-muted-foreground hover:text-foreground hover:bg-card/30"
               }`}
             >
               <Icon
