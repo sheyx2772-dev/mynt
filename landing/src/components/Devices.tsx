@@ -13,15 +13,21 @@ import { Link } from "@/i18n/navigation";
 //
 // Photographs, after a detour through drawings. The drawings were sharp and
 // they were also four grey outlines on a white page — the objects are the
-// product, and a line drawing of a ring sells nothing. The photographs are
-// 704x396 to 900x900 at source, which is soft at hero size and correct at a
-// quarter of a six-column row: the rule the page follows is a photograph where
-// its resolution is enough, a drawing where it is not.
+// product, and a line drawing of a ring sells nothing.
+//
+// All four are the same shot: the object cut out, one lime line on it, centred
+// on the same near-white ground at 900x900. That sameness is the whole point of
+// a shelf — four photographs taken four ways read as four suppliers. The fourth
+// tile was a sticker for a while and broke it: the only sticker photograph in
+// the archive was 316x186 of a windscreen at dusk, and blown up to a square it
+// was a dark blur with unreadable text on it. The car tag replaced it because a
+// photograph of it exists in the family, and a product we can show beats a
+// product we can only name.
 const SHELF = [
   { photo: "/mahsulot/karta.webp", href: "/devices/karta" },
   { photo: "/mahsulot/uzuk.webp", href: "/devices/uzuk" },
   { photo: "/mahsulot/braslet.webp", href: "/devices/braslet" },
-  { photo: "/mahsulot/stiker.webp", href: "/devices/stiker" },
+  { photo: "/mahsulot/avto.webp", href: "/devices/avto" },
 ] as const;
 
 export default async function Devices() {

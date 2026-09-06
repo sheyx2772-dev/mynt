@@ -92,11 +92,11 @@
     "name1": "Karta",
     "name2": "Uzuk",
     "name3": "Braslet",
-    "name4": "Stiker",
+    "name4": "Avto vizitka",
     "price1": "200 000",
     "price2": "350 000",
     "price3": "250 000",
-    "price4": "[NARX]",
+    "price4": "150 000",
     "soum": "so'm"
   },
   "price": {
@@ -132,7 +132,7 @@
     "name1": "Kafe va restoran",
     "name2": "Mehmonxona",
     "name3": "Salon va klinika",
-    "name4": "Do'kon va boshqalar",
+    "name4": "Avto vizitka",
     "note1": "Stol ustidagi taglik yoki stikerda NFC va QR",
     "note2": "Xonadagi taglik yoki eshikdagi teg — charm papkani almashtiradi",
     "note3": "Usta o'rindig'i yoki shifokor eshigi — narx, yozilish, izohlar",

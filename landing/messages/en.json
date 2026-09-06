@@ -92,11 +92,11 @@
     "name1": "Card",
     "name2": "Ring",
     "name3": "Band",
-    "name4": "Sticker",
+    "name4": "Car tag",
     "price1": "200 000",
     "price2": "350 000",
     "price3": "250 000",
-    "price4": "[PRICE]",
+    "price4": "150 000",
     "soum": "so'm"
   },
   "price": {
@@ -132,7 +132,7 @@
     "name1": "Cafes and restaurants",
     "name2": "Hotels",
     "name3": "Salons and clinics",
-    "name4": "Shops and the rest",
+    "name4": "Car tag",
     "note1": "NFC and QR on a table stand or a sticker",
     "note2": "A stand in the room or a tag on the door — it replaces the leather folder",
     "note3": "At the chair or the consulting-room door — prices, booking, reviews",
