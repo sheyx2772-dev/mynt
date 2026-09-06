@@ -3,74 +3,34 @@
 import { useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
 
-
 type Props = {
-  fullName: string;
   handle: string;
-  bio?: string | null;
-  phone?: string | null;
-  email?: string | null;
-  position?: string | null;
-  company?: string | null;
   label: string;
-  /** What the button says once the file has been handed over. */
+  /** What the control says once the file has been handed over. */
   savedLabel: string;
   /** The shape, supplied by whichever layout is rendering it. */
   className?: string;
 };
 
-// vCard treats a comma, a semicolon and a backslash as structure, and a raw
-// newline ends the property. A bio written across two lines, or a company
-// name with a comma in it, would otherwise produce a file the phone imports
-// with the fields cut short.
-function esc(value: string): string {
-  return value
-    .replace(/\\/g, "\\\\")
-    .replace(/;/g, "\\;")
-    .replace(/,/g, "\\,")
-    .replace(/\r?\n/g, "\\n");
-}
-
+// The primary action on a profile: save this person to my phone.
+//
+// The card itself is built by /[handle]/vizitka rather than here. This used to
+// assemble the vCard in the browser, wrap it in a Blob, and click a synthetic
+// `<a download>` — which works everywhere except the place that matters. iOS
+// Safari treats a blob download inconsistently, and iOS is most of the phones
+// that will ever tap one of these cards. A normal link to a route that answers
+// with Content-Disposition opens the Contacts sheet on both platforms.
+//
+// Building it on the server also means the card is made from what is stored
+// rather than from whatever the page happened to render, and that the URL
+// written into it is this site's address.
 export default function SaveContactButton({
-  fullName,
   handle,
-  bio,
-  phone,
-  email,
-  position,
-  company,
   label,
   savedLabel,
   className,
 }: Props) {
-  function handleSave() {
-    // Only the fields the owner filled in — an empty TEL line makes a phone
-    // show a blank number field on the saved contact.
-    const lines = [
-      "BEGIN:VCARD",
-      "VERSION:3.0",
-      `FN:${esc(fullName)}`,
-      phone ? `TEL;TYPE=CELL:${esc(phone)}` : null,
-      email ? `EMAIL;TYPE=INTERNET:${esc(email)}` : null,
-      company ? `ORG:${esc(company)}` : null,
-      position ? `TITLE:${esc(position)}` : null,
-      bio ? `NOTE:${esc(bio)}` : null,
-      `URL:https://flex.com.uz/${handle}`,
-      "END:VCARD",
-    ].filter((line): line is string => line !== null);
-
-    const blob = new Blob([lines.join("\r\n")], { type: "text/vcard;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${handle}.vcf`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
-
-  // The confirmation is the button itself, for a second and a half.
+  // The confirmation is the control itself, for a second and a half.
   //
   // A toast would be a second thing appearing on a screen whose whole design
   // budget is one action — and on a phone it lands where the thumb already is.
@@ -87,9 +47,9 @@ export default function SaveContactButton({
   );
 
   return (
-    <button
+    <a
+      href={`/${handle}/vizitka`}
       onClick={() => {
-        handleSave();
         setSaved(true);
         if (timer.current) clearTimeout(timer.current);
         timer.current = setTimeout(() => setSaved(false), 1500);
@@ -107,6 +67,6 @@ export default function SaveContactButton({
       ) : (
         label
       )}
-    </button>
+    </a>
   );
 }

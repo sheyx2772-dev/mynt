@@ -384,16 +384,10 @@ async function VanityHandlePage({
           addToContacts={
             !isOwner ? (
               <SaveContactButton
-                fullName={profile.name}
                 handle={normalized}
-                bio={profile.bio}
-                phone={profile.phone}
-                email={profile.contactEmail}
-                position={profile.position}
-                company={profile.company}
                 label={t.saveContact}
                 savedLabel={t.contactSaved}
-                className="flex h-10 w-full items-center justify-center gap-1.5 rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
+                className="flex h-12 w-full items-center justify-center gap-1.5 rounded-input bg-slab text-[14px] font-bold tracking-[0.04em] text-on-slab uppercase"
               />
             ) : undefined
           }
