@@ -23,6 +23,7 @@
     "blurb": "An NFC card, ring or bracelet. Each bound to one number.",
     "product": "Product",
     "devices": "Devices",
+    "designs": "Card designs",
     "posts": "Posts",
     "business": "Business",
     "cafe": "Cafes and restaurants",
@@ -579,5 +580,448 @@
     "fieldPointsPlaceholder": "12",
     "fieldCompanyPlaceholder": "Choyxona Navro'z",
     "fieldNamePlaceholder": "Sardor Rahimov"
+  },
+  "terms": {
+    "metaTitle": "Terms of use",
+    "metaDescription": "The rules for using a Flex handle and profile: subscription, passing a handle on, combinations that are not sold, and what the profile's owner answers for.",
+    "title": "Terms of use",
+    "lead": "This page sets out the rules for using a Flex handle and profile. The terms of sale — price, payment, delivery and returns — are in a separate document, the public offer. In short: the handle stays yours, the profile keeps opening without a subscription, and what stands on the profile is yours to decide and yours to answer for.",
+    "authority": "The original of this document is drawn up in Uzbek. The Russian and English versions are provided for convenience; in the event of a discrepancy the Uzbek text governs.",
+    "updatedLabel": "Last updated",
+    "tocLabel": "Contents",
+    "s1title": "What these terms cover",
+    "s1p1": "These terms cover the use of the service {company} provides: the handle, the profile and the devices that carry them. Using the site and the profile counts as agreement to them.",
+    "s1p2": "The terms of purchase are not here: price, payment, delivery and returns are written in the public offer.",
+    "s1link": "Public offer",
+    "s2title": "The handle and the profile",
+    "s2p1": "A handle is three letters and three digits — FLX007, say. It opens your profile at {host}/FLX007.",
+    "s2p2": "The handle is assigned to you the moment payment is confirmed and stays yours — it is never deleted. If the device is lost the handle is still yours: the same handle is written onto a new one.",
+    "s3title": "Subscription and plans",
+    "s3p1": "The handle and the device are paid for once. Keeping the profile running is paid for separately: {monthly} so'm a month or {yearly} so'm a year.",
+    "s3p2": "The profile works without a subscription. What each plan carries is set out in full on the pricing page.",
+    "s3p3": "If the subscription stops, the profile returns to the standard plan. Nothing is deleted.",
+    "s3link": "Pricing",
+    "s4title": "Passing a handle to somebody else",
+    "s4p1": "The owner may pass a handle on at any time, from the cabinet, using the recipient's email address. On transfer the profile's contents — name, bio, links, posts, followers — are cleared and do not go to the new owner.",
+    "s5title": "Combinations that are not sold",
+    "s5p1": "Some letter combinations are not sold. They get no different an answer from a handle that does not exist: the site says there is no such handle.",
+    "s5p2": "The list itself is not published. Printing it would hand a ready-made list to the person searching for exactly those words.",
+    "s6title": "What stands on a profile",
+    "s6p1": "What stands on a profile is decided by its owner: name, bio, links, services and prices. The owner answers for whether they are true.",
+    "s6p2": "Material that breaks the law of the Republic of Uzbekistan or another person's rights may be removed from a profile.",
+    "s7title": "Changes to these terms",
+    "s7p1": "If the terms on this page change, the date at the top of the page is updated. The text in force is the text standing on this page."
+  },
+  "offer": {
+    "metaTitle": "Public offer",
+    "metaDescription": "The terms of Flex's public offer: prices, payment, delivery, returns and the seller's registered details.",
+    "title": "Public offer",
+    "lead": "This page sets out the terms of sale between {company} and the buyer. Placing an order and paying on the site counts as agreement to them. In short: the handle is yours the moment payment is confirmed and is not refundable; a device with a manufacturing fault is replaced free of charge within {days} days.",
+    "authority": "The original of this document is drawn up in Uzbek. The Russian and English versions are provided for convenience; in the event of a discrepancy the Uzbek text governs.",
+    "updatedLabel": "Last updated",
+    "tocLabel": "Contents",
+    "s1title": "What the service is",
+    "s1p1": "Flex is a unique handle and the profile it opens. The handle is three letters and three digits — FLX007, say — and it opens the buyer's profile at {host}/FLX007.",
+    "s1p2": "The handle can be carried on a physical device: an NFC card, a ring or a bracelet. The device is sold as a separate product.",
+    "s2title": "Prices",
+    "s2p1": "A handle starts at {base} so'm and is priced automatically by how rare its letters and digits are. The formula is open: base price × letter multiplier × digit multiplier. The final sum is shown before payment.",
+    "s2p2": "Prices are in Uzbek so'm. Device and subscription prices are set out in full on the pages below and are sold on these same terms.",
+    "s2linkPricing": "Pricing",
+    "s2linkDevices": "Devices",
+    "s3title": "Payment",
+    "s3p1": "Payment goes through Payme or Click. Until it is confirmed the handle is held for {minutes} minutes and is sold to nobody else in that time. If payment does not complete, the hold is released and the handle is free again.",
+    "s3p2": "Companies pay by invoice and bank transfer; the document is issued in the cabinet.",
+    "s4title": "Delivery",
+    "s4p1": "The device is delivered once the order is confirmed: {tashkent} day within Tashkent, {from}–{to} days to the regions.",
+    "s4p2": "The handle and the profile start working as soon as payment is confirmed — there is no need to wait for the device.",
+    "s5title": "Returns and replacement",
+    "s5p1": "A handle is not refundable. It is assigned to the buyer the moment payment completes and is sold to nobody else afterwards. That scarcity is what the handle is worth, so returning one would take from other buyers what they paid for.",
+    "s5p2": "If a device has a manufacturing fault — a dead NFC chip, a damaged body, a printing defect — tell us within {days} days of receiving it and we will replace it. The replacement is free.",
+    "s5p3": "Damage from use — scratches, breakage, water — is not a manufacturing fault.",
+    "s6title": "Seller's details",
+    "s6p1": "These are given to identify the seller. There is no need to transfer money here — payment goes through Payme or Click, with the button on the site.",
+    "s7title": "Contact",
+    "s7p1": "Questions and complaints go to the addresses on the contact page. Each is looked at within a working day.",
+    "s7link": "Contact page",
+    "reqCompany": "Company",
+    "reqTaxId": "Tax ID",
+    "reqOked": "OKED",
+    "reqBank": "Bank",
+    "reqAccount": "Account",
+    "reqMfo": "MFO",
+    "reqAddress": "Address"
+  },
+  "privacy": {
+    "metaTitle": "Privacy policy",
+    "metaDescription": "What Flex collects, why it is needed, who can see it and how it is deleted.",
+    "title": "Privacy policy",
+    "lead": "This page explains what Flex collects, why, and who can see it. In short: the profile is a public page and what stands on it is yours to decide; everything else is the least that the service needs in order to work.",
+    "authority": "The original of this document is drawn up in Uzbek. The Russian and English versions are provided for convenience; in the event of a discrepancy the Uzbek text governs.",
+    "updatedLabel": "Last updated",
+    "tocLabel": "Contents",
+    "s1title": "What is collected",
+    "s1p1": "For the account: your phone number or email address. They are what signing in and attaching an order to you need.",
+    "s1p2": "For the profile: name, bio, links, services and an image. You enter these and you change them.",
+    "s1p3": "For an order: the delivery address and a contact number.",
+    "s1p4": "From the business enquiry form: company name, name, phone, number of points and a note. The form sends only the fields you filled in.",
+    "s1p5": "Visits to a profile are counted. On the paid plan that statistic is shown to the profile's owner.",
+    "s1p6": "If you leave a contact on a profile, the name and phone you wrote are shown to the profile's owner and can be exported by them. This is kept only when you left it yourself.",
+    "s2title": "A profile is a public page",
+    "s2p1": "The profile a handle opens is a public, indexable page. Anybody sees everything standing on it, so put only what you want shown there.",
+    "s2p2": "The phone number can be hidden, leaving only a message or Telegram button.",
+    "s3title": "Why it is needed",
+    "s3p1": "What is collected is used only to provide the service: signing in, delivering an order, working out the subscription and showing the profile.",
+    "s3p2": "Data is not sold and is not passed to third parties for advertising.",
+    "s4title": "Who it is passed to",
+    "s4p1": "To the payment systems — Payme or Click — what a payment needs in order to go through. Payment happens on their side; card details are not stored on this site.",
+    "s4p2": "To the delivery service — the address and contact number needed to deliver the device.",
+    "s4p3": "To the authorities, in the cases the law requires.",
+    "s5title": "Cookies",
+    "s5p1": "The site uses two cookies: one that remembers the language you chose, and one that says you are signed in. The second is closed to scripts in the browser.",
+    "s5p2": "No advertising or tracking cookies are used.",
+    "s6title": "Keeping and deleting",
+    "s6p1": "Profile data is kept until you change or delete it. The profile can be deleted at any time.",
+    "s6p2": "When a handle is passed to somebody else the profile's data is cleared and does not go to the new owner.",
+    "s6p3": "Order and payment records are kept for the period the law requires.",
+    "s7title": "Getting in touch",
+    "s7p1": "With a question about your data, or a request to delete it, write to the addresses on the contact page. Each is looked at within a working day.",
+    "s7link": "Contact page"
+  },
+  "contact": {
+    "metaTitle": "Contact",
+    "metaDescription": "How to reach Flex: phone, email, the responsible person and the company's registered details.",
+    "title": "Contact",
+    "lead": "For a question, a complaint or an order — call or write. Each is looked at within a working day.",
+    "phoneLabel": "Phone",
+    "emailLabel": "Email",
+    "personLabel": "Responsible person",
+    "replyTitle": "Reply time",
+    "replyBody": "Each enquiry is looked at within a working day.",
+    "addressNote": "The address of registration. It is not a counter: call before coming.",
+    "reqTitle": "Registered details",
+    "reqNote": "These are given to identify the seller. There is no need to transfer money here — payment goes through Payme or Click, with the button on the site.",
+    "businessTitle": "For business",
+    "businessBody": "For a cafe, a hotel, a clinic or a team — fill in the form on the business page and we will come back to you.",
+    "businessCta": "Business page",
+    "docsTitle": "Documents",
+    "docsBody": "The terms of sale are in the public offer, the rules for using the service are in the terms of use, and data is covered by the privacy policy.",
+    "docsOffer": "Public offer",
+    "docsTerms": "Terms of use",
+    "docsPrivacy": "Privacy policy"
+  },
+  "login": {
+    "metaTitle": "Sign in",
+    "metaDescription": "We text a code to your phone — no password, no email.",
+    "title": "Sign in with your number",
+    "lead": "No password. Type your phone number and we'll text you a code.",
+    "chosenLabel": "Chosen number",
+    "newAccountNote": "If the number is new to us, signing in opens the account.",
+    "phoneLabel": "Phone number",
+    "phoneHint": "The code arrives by SMS on this number.",
+    "send": "Send the code",
+    "sending": "Sending…",
+    "codeSent": "We texted a 6-digit code to <phone>{number}</phone>.",
+    "codeLabel": "Code from the SMS",
+    "codeHint": "The code is good for 5 minutes.",
+    "submit": "Sign in",
+    "checking": "Checking…",
+    "resend": "Send the code again",
+    "resendIn": "Send again in {seconds}s",
+    "changeNumber": "Change the number",
+    "errorPhone": "That number looks incomplete. For example: +998 90 123 45 67",
+    "errorSend": "The code didn't go out. Wait a moment and try again.",
+    "errorCode": "That code is wrong or has expired. Ask for a new one.",
+    "errorServer": "We can't reach the server. Wait a moment and try again."
+  },
+  "feed": {
+    "metaTitle": "Posts",
+    "metaDescription": "Posts from the numbers you follow, in one column, newest first.",
+    "title": "Posts",
+    "lead": "Everything the numbers you follow have written. Newest at the top.",
+    "signedOutTitle": "Sign in to read your feed",
+    "signedOutBody": "A feed is the posts written by the numbers you follow. That makes it a different page for every reader, and until we know who you are there is nothing to show. Sign in and the feed becomes yours.",
+    "signIn": "Sign in",
+    "browse": "Browse residents",
+    "downTitle": "We could not open the feed just now",
+    "downBody": "The server did not answer. That does not mean the numbers you follow have written nothing. Refresh the page in a little while.",
+    "emptyTitle": "Nothing here yet",
+    "emptyBody": "The numbers you follow have not posted anything. Find a few more in the residents list.",
+    "asideTitle": "New residents",
+    "asideAll": "All of them"
+  },
+  "catalogue": {
+    "metaTitle": "Card designs",
+    "metaDescription": "Every design a Flex card can be ordered in. Whichever you pick, it is one number and one profile.",
+    "title": "Card designs",
+    "lead": "What your card can look like. The number stays the same — the design is yours to choose.",
+    "note": "Every card is printed with the number of the person who ordered it. All ten here carry the same sample, {handle}, so you are comparing designs rather than numbers.",
+    "accents": {
+      "lime": "Lime",
+      "gold": "Gold",
+      "steel": "Steel"
+    },
+    "designs": {
+      "genesis": "The standard card. Deep black, a grain in the surface and one lime dot — the FLEX CARD series itself.",
+      "lime": "The inversion: a solid lime field with black type. Read from across a room.",
+      "grid": "A dot grid. Dry and exact, the way an engineering drawing is.",
+      "sheen": "A diagonal run of light — turned in the hand it catches like metal.",
+      "naqsh": "An eight-pointed lattice. Our own drawing, built from the geometry of traditional tilework.",
+      "paper": "White, and nearly empty. The number and a hairline edge.",
+      "rahbar": "Absolute black, crossed by one polished silver line. Shows the least and says the most.",
+      "devops": "A low-contrast circuit trace on black, with a single track lit in lime. Technical without being loud.",
+      "suzani": "A suzani medallion on deep indigo — the texture of embroidery, a shade lighter than its ground, with one gold thread.",
+      "xarita": "Gold engraving on black: the map of Uzbekistan with a Humo medallion beside it. Not a state emblem — our own drawing."
+    },
+    "ctaTitle": "The design is the last thing you choose",
+    "ctaBody": "The number comes first. Which design gets printed on the card is decided at order time, and it can be changed later.",
+    "cta": "Take a number",
+    "devices": "Devices"
+  },
+  "cabinet": {
+    "title": "Cabinet",
+    "signOut": "Sign out",
+    "empty": {
+      "title": "No number yet",
+      "body": "Pick three letters and three digits — it stays yours for life. Once payment clears, the number shows up here.",
+      "cta": "Pick a number"
+    },
+    "state": {
+      "premium": "Premium",
+      "free": "Basic plan",
+      "closed": "Closed",
+      "reserved": "Awaiting payment"
+    },
+    "home": {
+      "view": "Open profile",
+      "share": "Share",
+      "copied": "Link copied",
+      "week": "Last 7 days",
+      "waiting": "{count, plural, one {# person asking to follow} other {# people asking to follow}}",
+      "endingSoon": "Premium ends in {days, plural, one {# day} other {# days}}"
+    },
+    "sections": {
+      "profile": {
+        "title": "Profile",
+        "hint": "Name, role, links, services — everything a stranger reads."
+      },
+      "posts": {
+        "title": "Posts",
+        "hint": "Shown on your profile and in followers' feeds."
+      },
+      "privacy": {
+        "title": "Privacy",
+        "hint": "Who sees the profile, and who is asking in."
+      },
+      "stats": {
+        "title": "Statistics",
+        "hint": "How often it was opened, from where, what got pressed."
+      },
+      "theme": {
+        "title": "Design",
+        "hint": "The look the profile opens in."
+      },
+      "plan": {
+        "title": "Plan",
+        "hint": "What is paid for and when it ends."
+      }
+    },
+    "profile": {
+      "who": "Who",
+      "name": "Name",
+      "position": "Role",
+      "company": "Company",
+      "city": "City",
+      "bio": "About you",
+      "bioHint": "Up to 280 characters. The line or two you say when you meet someone.",
+      "tags": "Fields",
+      "tagsHint": "Comma-separated, up to 5: design, IT, marketing",
+      "pictures": "Pictures",
+      "avatar": "Profile picture",
+      "banner": "Cover picture",
+      "pictureHint": "The address of an uploaded file. Uploading is done in the app for now.",
+      "contacts": "Contact",
+      "phone": "Phone",
+      "email": "Email",
+      "links": "Links",
+      "services": "Services and prices",
+      "serviceName": "Service",
+      "servicePrice": "Price",
+      "addService": "Add a service",
+      "removeService": "Remove row",
+      "serviceLimit": "This plan holds {limit} services.",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "error": {
+        "notFound": "That number was not found.",
+        "invalid": "A name is required.",
+        "server": "Not saved. Try again in a moment."
+      },
+      "link": {
+        "payment": {
+          "label": "Payment link",
+          "hint": "Your personal Payme or Click link. The profile shows a “Pay” button."
+        },
+        "booking": {
+          "label": "Booking",
+          "hint": "Where people book you — Calendly, a bot, a site."
+        },
+        "telegram": {
+          "label": "Telegram",
+          "hint": "Username, without the @."
+        },
+        "whatsapp": {
+          "label": "WhatsApp",
+          "hint": "Number, with +998."
+        },
+        "instagram": {
+          "label": "Instagram",
+          "hint": "Username."
+        },
+        "linkedin": {
+          "label": "LinkedIn",
+          "hint": "Profile name — the part after /in/."
+        },
+        "facebook": {
+          "label": "Facebook",
+          "hint": "Username."
+        },
+        "youtube": {
+          "label": "YouTube",
+          "hint": "Channel name, without the @."
+        },
+        "website": {
+          "label": "Website",
+          "hint": "Full address."
+        }
+      }
+    },
+    "privacy": {
+      "closed": "Closed profile",
+      "closedHint": "A stranger sees only the picture, the name and the number. The rest opens once you say yes.",
+      "nowClosed": "Profile closed",
+      "nowOpen": "Profile opened",
+      "notSaved": "Not saved. Try again.",
+      "whenOpen": "Open",
+      "whenClosed": "Closed",
+      "row": {
+        "bio": "About you",
+        "links": "{count, plural, one {# link} other {# links}}",
+        "services": "{count, plural, one {# service} other {# services}}",
+        "posts": "Posts"
+      },
+      "askButton": "Ask to follow",
+      "comments": "Comments open",
+      "commentsHint": "Strangers can leave comments on your profile.",
+      "inbox": "Asking to get in",
+      "nobodyWaiting": "Nobody is waiting right now. When someone asks to follow, they show up here.",
+      "openNobodyWaits": "The profile is open — following needs no permission. Close it with the switch above and requests land here.",
+      "someone": "Someone",
+      "accept": "Accept",
+      "refuse": "Refuse",
+      "alreadyDecided": "That request was already decided."
+    },
+    "posts": {
+      "placeholder": "What's new?",
+      "post": "Post",
+      "posting": "Posting…",
+      "posted": "Posted",
+      "error": {
+        "empty": "A post cannot be empty.",
+        "tooMany": "Too many posts in an hour. Try again later.",
+        "notFound": "That number was not found.",
+        "server": "Not posted. Try again."
+      },
+      "afterPayment": "You can post once payment has cleared.",
+      "none": "No posts yet.",
+      "delete": "Delete",
+      "deleteTitle": "Delete this post?",
+      "deleteBody": "It disappears from the profile and from followers' feeds. This cannot be undone.",
+      "keep": "Keep",
+      "deleted": "Post deleted",
+      "notDeleted": "Not deleted. Try again."
+    },
+    "stats": {
+      "views": "Views",
+      "visitors": "Visitors",
+      "taps": "Taps",
+      "days": "{days} days",
+      "window": "Last {days} days",
+      "daily": "By day",
+      "busiest": "Busiest day: {day} — {count}",
+      "quiet": "Not opened in this period.",
+      "sources": "Where they came from",
+      "links": "Which link was pressed",
+      "source": {
+        "nfc": "Tapped the card",
+        "qr": "Scanned the QR",
+        "share": "From a shared link",
+        "togridan": "Direct"
+      },
+      "premiumOnly": "On Premium",
+      "premiumDaily": "A daily chart — which day, how many times",
+      "premiumLinks": "Taps on each link",
+      "premiumSources": "Where they came from — card, QR or link",
+      "seePlans": "See plans"
+    },
+    "theme": {
+      "search": "Find a design",
+      "all": "All",
+      "family": {
+        "ink": "Dark",
+        "metal": "Metal",
+        "pattern": "Pattern",
+        "paper": "Light"
+      },
+      "nothing": "No such design.",
+      "use": "Use this design",
+      "inUse": "In use now",
+      "saving": "Saving…",
+      "saved": "Design changed",
+      "notSaved": "Not saved. Try again."
+    },
+    "plan": {
+      "title": "Plan",
+      "premium": "Premium",
+      "free": "Basic plan",
+      "freeLead": "The profile is open and the basics work",
+      "until": "Until {date}",
+      "noEnd": "No end date",
+      "daysLeft": "{days, plural, one {# day left} other {# days left}}",
+      "paidForNumber": "Paid for the number: {sum} soum",
+      "whenLapses": "When it runs out",
+      "lapse": {
+        "opens": "The profile keeps opening — a tap on the card shows the same page.",
+        "stats": "Statistics show totals only: days, links and sources close.",
+        "services": "The services list shrinks to 5.",
+        "keeps": "The number stays yours and nothing is deleted. The day payment resumes, everything is back."
+      },
+      "upgrade": "Go Premium — {sum} soum a month"
+    },
+    "orders": {
+      "title": "Orders",
+      "none": "No orders yet.",
+      "soum": "soum",
+      "device": {
+        "card": "Card",
+        "ring": "Ring",
+        "bracelet": "Bracelet",
+        "tag": "Tag"
+      },
+      "stage": {
+        "pending": "Awaiting payment",
+        "paid": "Paid",
+        "address_needed": "Address needed",
+        "queued": "Queued",
+        "making": "Being made",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "returned": "Returned"
+      }
+    }
+  },
+  "seo": {
+    "ogTitle": "One tap — your whole profile",
+    "ogLead": "A unique number, an NFC card and a profile. No app needed."
   }
 }

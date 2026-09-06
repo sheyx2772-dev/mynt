@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import { pageSeo } from "@/lib/seo";
 import DevicePrices from "./DevicePrices";
 import Examples from "./Examples";
 import Lapsed from "./Lapsed";
@@ -22,7 +23,12 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pricingPage" });
 
-  return { title: t("metaTitle"), description: t("metaDescription") };
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+    // Its own address, its three siblings and the share card block.
+    ...pageSeo("/pricing", locale),
+  };
 }
 
 // The long form of the price.

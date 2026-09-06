@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { DEVICES, deviceBySlug, money } from "@/lib/devices";
+import { pageSeo } from "@/lib/seo";
 
 /** Every device in every language, built once at deploy rather than on a tap. */
 export function generateStaticParams() {
@@ -27,6 +28,8 @@ export async function generateMetadata({
   return {
     title: t(`items.${slug}.name`),
     description: t(`items.${slug}.tagline`),
+    // Its own address, its three siblings and the share card block.
+    ...pageSeo(`/devices/${slug}`, locale),
   };
 }
 

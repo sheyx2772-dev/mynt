@@ -8,6 +8,7 @@ import Teams from "@/components/business/Teams";
 import VenueSection from "@/components/business/VenueSection";
 import { VENUES } from "@/components/business/venues";
 import { routing } from "@/i18n/routing";
+import { pageSeo } from "@/lib/seo";
 
 /** Four trades in three languages, built once at deploy rather than on a tap. */
 export function generateStaticParams() {
@@ -20,7 +21,12 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "business" });
 
-  return { title: t("metaTitle"), description: t("metaDescription") };
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+    // Its own address, its three siblings and the share card block.
+    ...pageSeo("/business", locale),
+  };
 }
 
 // Everything sold to somebody who owns a room full of people.

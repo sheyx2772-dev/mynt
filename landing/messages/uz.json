@@ -23,6 +23,7 @@
     "blurb": "NFC vizitka, uzuk va braslet. Har biri bitta raqamga bog'lanadi.",
     "product": "Mahsulot",
     "devices": "Qurilmalar",
+    "designs": "Kartalar dizayni",
     "posts": "Postlar",
     "business": "Biznes",
     "cafe": "Kafe va restoran",
@@ -579,5 +580,448 @@
     "fieldPointsPlaceholder": "12",
     "fieldCompanyPlaceholder": "Choyxona Navro'z",
     "fieldNamePlaceholder": "Sardor Rahimov"
+  },
+  "terms": {
+    "metaTitle": "Foydalanish shartlari",
+    "metaDescription": "Flex raqami va profilidan foydalanish qoidalari: obuna, raqamni boshqa odamga o'tkazish, sotuvda bo'lmagan kombinatsiyalar va profil egasining javobgarligi.",
+    "title": "Foydalanish shartlari",
+    "lead": "Bu sahifa Flex raqami va profilidan foydalanish qoidalarini belgilaydi. Oldi-sotdi shartlari — narx, to'lov, yetkazib berish va qaytarish — alohida hujjatda, ommaviy ofertada. Qisqasi: raqam sizniki bo'lib qoladi, obunasiz ham profil ochilaveradi, profilda nima turishini esa o'zingiz belgilaysiz va uning uchun o'zingiz javob berasiz.",
+    "authority": "Ushbu hujjatning asl matni o'zbek tilida tuzilgan. Rus va ingliz tilidagi versiyalar qulaylik uchun berilgan; nizo yuzaga kelganda o'zbek tilidagi matn asosiy hisoblanadi.",
+    "updatedLabel": "Oxirgi o'zgarish",
+    "tocLabel": "Mundarija",
+    "s1title": "Bu shartlar nimani qamraydi",
+    "s1p1": "Bu shartlar {company} taqdim etadigan xizmatdan — raqam, profil va ular bilan bog'liq qurilmalardan — foydalanishga taalluqli. Saytdan va profildan foydalanish shu shartlarga rozilik bildirish hisoblanadi.",
+    "s1p2": "Sotib olish shartlari bu yerda emas: narx, to'lov, yetkazib berish va qaytarish ommaviy ofertada yozilgan.",
+    "s1link": "Ommaviy oferta",
+    "s2title": "Raqam va profil",
+    "s2p1": "Raqam 3 ta harf va 3 ta raqamdan iborat, masalan FLX007. U {host}/FLX007 manzilida sizning profilingizni ochadi.",
+    "s2p2": "Raqam to'lov tasdiqlangan zahoti sizga biriktiriladi va sizniki bo'lib qoladi — u hech qachon o'chirilmaydi. Qurilma yo'qolsa ham raqam sizda qoladi: yangi qurilmaga o'sha raqam yoziladi.",
+    "s3title": "Obuna va tariflar",
+    "s3p1": "Raqam va qurilma bir marta to'lanadi. Profilning ishlab turishi uchun obuna alohida to'lanadi: oyiga {monthly} so'm yoki yiliga {yearly} so'm.",
+    "s3p2": "Obunasiz ham profil ishlaydi. Qaysi tarifda nima borligi narxlar sahifasida to'liq keltirilgan.",
+    "s3p3": "Obuna to'xtatilsa, profil oddiy tarifga qaytadi. Ma'lumotlar o'chirilmaydi.",
+    "s3link": "Narxlar sahifasi",
+    "s4title": "Raqamni boshqa odamga o'tkazish",
+    "s4p1": "Raqam egasi uni istalgan vaqtda boshqa odamga o'tkazishi mumkin — kabinetdan, qabul qiluvchining elektron pochtasi orqali. O'tkazishda profil ma'lumotlari (ism, bio, havolalar, postlar, obunachilar) o'chiriladi va yangi egaga o'tmaydi.",
+    "s5title": "Sotuvda bo'lmagan kombinatsiyalar",
+    "s5p1": "Ayrim harf kombinatsiyalari sotilmaydi. Ular sotuvda bo'lgan, lekin band raqamlardan farqli javob olmaydi: bunday raqam mavjud emas deb ko'rsatiladi.",
+    "s5p2": "Ro'yxatning o'zi e'lon qilinmaydi. Uni chop etish — aynan shu so'zlarni qidirayotgan odamga tayyor ro'yxat berish bo'lardi.",
+    "s6title": "Profilda nima turadi",
+    "s6p1": "Profilda nima turishini uning egasi belgilaydi: ism, tavsif, havolalar, xizmatlar va narxlar. Bularning to'g'riligi uchun profil egasi javob beradi.",
+    "s6p2": "O'zbekiston Respublikasi qonunchiligiga zid yoki boshqa odamning huquqini buzadigan material profildan olib tashlanishi mumkin.",
+    "s7title": "Shartlarning o'zgarishi",
+    "s7p1": "Bu sahifadagi shartlar o'zgarsa, sahifa boshidagi sana yangilanadi. Amalda bo'lgan matn — shu sahifada turgan matn."
+  },
+  "offer": {
+    "metaTitle": "Ommaviy oferta",
+    "metaDescription": "Flex xizmatining ommaviy oferta shartlari: narxlar, to'lov, yetkazib berish, qaytarish va sotuvchi rekvizitlari.",
+    "title": "Ommaviy oferta",
+    "lead": "Bu sahifa {company} va xaridor o'rtasidagi oldi-sotdi shartlarini belgilaydi. Saytda buyurtma berish va to'lovni amalga oshirish shu shartlarga rozilik bildirish hisoblanadi. Qisqasi: raqam to'lov tasdiqlangan zahoti sizniki bo'ladi va qaytarilmaydi; qurilmada zavod nuqsoni chiqsa, {days} kun ichida bepul almashtiriladi.",
+    "authority": "Ushbu hujjatning asl matni o'zbek tilida tuzilgan. Rus va ingliz tilidagi versiyalar qulaylik uchun berilgan; nizo yuzaga kelganda o'zbek tilidagi matn asosiy hisoblanadi.",
+    "updatedLabel": "Oxirgi o'zgarish",
+    "tocLabel": "Mundarija",
+    "s1title": "Xizmat nima",
+    "s1p1": "Flex — noyob raqam va u ochadigan shaxsiy profil. Raqam 3 ta harf va 3 ta raqamdan iborat, masalan FLX007. U {host}/FLX007 manzilida xaridorning profilini ochadi.",
+    "s1p2": "Raqamni jismoniy qurilmada olib yurish mumkin: NFC karta, uzuk yoki braslet. Qurilma alohida mahsulot sifatida sotiladi.",
+    "s2title": "Narxlar",
+    "s2p1": "Raqam narxi {base} so'mdan boshlanadi va harflar hamda raqamlarning kamyobligiga qarab avtomatik hisoblanadi. Formula ochiq: boshlang'ich narx × harf koeffitsienti × raqam koeffitsienti. Yakuniy summa to'lovdan oldin ko'rsatiladi.",
+    "s2p2": "Narxlar O'zbekiston so'mida ko'rsatilgan. Qurilmalar va obuna narxlari quyidagi sahifalarda to'liq keltirilgan va shu yerdagi shartlarga bo'ysunadi.",
+    "s2linkPricing": "Narxlar sahifasi",
+    "s2linkDevices": "Qurilmalar",
+    "s3title": "To'lov",
+    "s3p1": "To'lov Payme yoki Click orqali amalga oshiriladi. To'lov tasdiqlangunga qadar raqam {minutes} daqiqaga band qilinadi va shu vaqt ichida boshqa hech kimga sotilmaydi. To'lov amalga oshmasa, band bekor bo'ladi va raqam yana bo'shaydi.",
+    "s3p2": "Firmalar hisob-faktura va bank o'tkazmasi orqali to'laydi; hujjat kabinetdan beriladi.",
+    "s4title": "Yetkazib berish",
+    "s4p1": "Qurilma buyurtma tasdiqlangandan so'ng yetkaziladi: Toshkent shahri bo'yicha {tashkent} kun, viloyatlarga {from}–{to} kun.",
+    "s4p2": "Raqam va profil to'lov tasdiqlangan zahoti ishlay boshlaydi — qurilmani kutish shart emas.",
+    "s5title": "Qaytarish va almashtirish",
+    "s5p1": "Raqam qaytarilmaydi. To'lov amalga oshgan zahoti raqam xaridorga biriktiriladi va boshqa hech kimga sotilmaydi. Aynan shu cheklanganlik raqamning qiymatini tashkil qiladi, shuning uchun uni qaytarish boshqa xaridorlarning huquqini buzadi.",
+    "s5p2": "Qurilmada zavod nuqsoni chiqsa — NFC chip ishlamasa, korpus shikastlangan bo'lsa yoki bosma nuqsonli bo'lsa — uni qabul qilgandan so'ng {days} kun ichida xabar bering, biz yangisiga almashtiramiz. Almashtirish bepul.",
+    "s5p3": "Foydalanish natijasida yuzaga kelgan shikast (chizilish, sinish, suvda qolish) zavod nuqsoni hisoblanmaydi.",
+    "s6title": "Sotuvchi rekvizitlari",
+    "s6p1": "Bu ma'lumotlar sotuvchini tanishtirish uchun keltirilgan. Bu yerga pul o'tkazish shart emas — to'lov Payme yoki Click orqali, saytdagi tugma bilan amalga oshiriladi.",
+    "s7title": "Aloqa",
+    "s7p1": "Savol yoki shikoyat bo'lsa aloqa sahifasidagi manzillarga murojaat qiling. Har bir murojaat bir ish kuni ichida ko'rib chiqiladi.",
+    "s7link": "Aloqa sahifasi",
+    "reqCompany": "Tashkilot",
+    "reqTaxId": "STIR (INN)",
+    "reqOked": "OKED",
+    "reqBank": "Bank",
+    "reqAccount": "Hisob raqami",
+    "reqMfo": "MFO",
+    "reqAddress": "Manzil"
+  },
+  "privacy": {
+    "metaTitle": "Maxfiylik siyosati",
+    "metaDescription": "Flex qanday ma'lumotlarni yig'adi, nima uchun yig'adi, ular kimga ko'rinadi va qanday o'chiriladi.",
+    "title": "Maxfiylik siyosati",
+    "lead": "Bu sahifa Flex qanday ma'lumotlarni yig'ishini, nima uchun yig'ishini va ular kimga ko'rinishini tushuntiradi. Qisqasi: profil — ochiq sahifa va unda nima turishini o'zingiz belgilaysiz; qolgani xizmat ishlashi uchun zarur bo'lgan eng kam ma'lumot.",
+    "authority": "Ushbu hujjatning asl matni o'zbek tilida tuzilgan. Rus va ingliz tilidagi versiyalar qulaylik uchun berilgan; nizo yuzaga kelganda o'zbek tilidagi matn asosiy hisoblanadi.",
+    "updatedLabel": "Oxirgi o'zgarish",
+    "tocLabel": "Mundarija",
+    "s1title": "Qanday ma'lumotlar yig'iladi",
+    "s1p1": "Hisob uchun: telefon raqamingiz yoki elektron pochtangiz. Ular kirish va buyurtmani sizga bog'lash uchun kerak.",
+    "s1p2": "Profil uchun: ism, tavsif, havolalar, xizmatlar va rasm. Bularni o'zingiz kiritasiz va o'zingiz o'zgartirasiz.",
+    "s1p3": "Buyurtma uchun: yetkazib berish manzili va aloqa raqami.",
+    "s1p4": "Biznes so'rovi shaklidan: kompaniya nomi, ism, telefon, nuqtalar soni va izoh. Shakl faqat siz to'ldirgan maydonlarni yuboradi.",
+    "s1p5": "Profil tashriflari hisoblanadi. Obuna tarifida bu statistika profil egasiga ko'rinadi.",
+    "s1p6": "Profilga kontakt qoldirsangiz, siz yozgan ism va telefon profil egasiga ko'rinadi va u tomonidan chiqarib olinishi mumkin. Bu ma'lumot faqat siz o'zingiz qoldirganingizda saqlanadi.",
+    "s2title": "Profil — ochiq sahifa",
+    "s2p1": "Raqam ochadigan profil — izlab topiladigan ochiq sahifa. Unda turgan hamma narsani istalgan odam ko'radi, shuning uchun unga faqat ko'rinishini istagan narsangizni qo'ying.",
+    "s2p2": "Telefon raqamini yashirib, faqat xabar yoki Telegram tugmasini qoldirish mumkin.",
+    "s3title": "Nima uchun kerak",
+    "s3p1": "Yig'ilgan ma'lumot faqat xizmatni ko'rsatish uchun ishlatiladi: hisobga kirish, buyurtmani yetkazish, obunani hisoblash va profilni ko'rsatish.",
+    "s3p2": "Ma'lumotlar sotilmaydi va reklama uchun uchinchi shaxslarga berilmaydi.",
+    "s4title": "Kimga beriladi",
+    "s4p1": "To'lov tizimlariga — Payme yoki Click — to'lovni amalga oshirish uchun zarur bo'lgan ma'lumot. To'lov ularning sahifasida o'tadi; karta ma'lumotlari bu saytda saqlanmaydi.",
+    "s4p2": "Yetkazib berish xizmatiga — qurilmani yetkazish uchun manzil va aloqa raqami.",
+    "s4p3": "Qonun talab qilgan hollarda — vakolatli organlarga.",
+    "s5title": "Cookie fayllar",
+    "s5p1": "Sayt ikkita cookie ishlatadi: tanlagan tilingizni eslab qoladigani va hisobga kirganingizni bildiradigani. Ikkinchisi brauzerdagi skriptlar uchun o'qib bo'lmaydigan qilib qo'yilgan.",
+    "s5p2": "Reklama yoki kuzatuv cookie fayllari ishlatilmaydi.",
+    "s6title": "Saqlash va o'chirish",
+    "s6p1": "Profil ma'lumotlari siz ularni o'zgartirgan yoki o'chirgangacha saqlanadi. Profilni istalgan vaqtda o'chirishingiz mumkin.",
+    "s6p2": "Raqamni boshqa odamga o'tkazganingizda profil ma'lumotlari o'chiriladi va yangi egaga o'tmaydi.",
+    "s6p3": "Buyurtma va to'lov yozuvlari qonun talab qilgan muddat davomida saqlanadi.",
+    "s7title": "Murojaat",
+    "s7p1": "Ma'lumotlaringiz bo'yicha savol yoki ularni o'chirish talabi bo'lsa, aloqa sahifasidagi manzillarga yozing. Har bir murojaat bir ish kuni ichida ko'rib chiqiladi.",
+    "s7link": "Aloqa sahifasi"
+  },
+  "contact": {
+    "metaTitle": "Aloqa",
+    "metaDescription": "Flex bilan bog'lanish: telefon, elektron pochta, mas'ul shaxs va firma rekvizitlari.",
+    "title": "Aloqa",
+    "lead": "Savol, shikoyat yoki buyurtma bo'yicha — telefon qiling yoki yozing. Har bir murojaat bir ish kuni ichida ko'rib chiqiladi.",
+    "phoneLabel": "Telefon",
+    "emailLabel": "Elektron pochta",
+    "personLabel": "Mas'ul shaxs",
+    "replyTitle": "Javob muddati",
+    "replyBody": "Har bir murojaat bir ish kuni ichida ko'rib chiqiladi.",
+    "addressNote": "Ro'yxatdan o'tgan manzil. Bu — qabulxona emas: kelishdan oldin telefon qiling.",
+    "reqTitle": "Rekvizitlar",
+    "reqNote": "Bu ma'lumotlar sotuvchini tanishtirish uchun keltirilgan. Bu yerga pul o'tkazish shart emas — to'lov Payme yoki Click orqali, saytdagi tugma bilan amalga oshiriladi.",
+    "businessTitle": "Biznes uchun",
+    "businessBody": "Kafe, mehmonxona, klinika yoki jamoa uchun — biznes sahifasidagi shaklni to'ldiring, o'zimiz bog'lanamiz.",
+    "businessCta": "Biznes sahifasi",
+    "docsTitle": "Hujjatlar",
+    "docsBody": "Oldi-sotdi shartlari ommaviy ofertada, xizmatdan foydalanish qoidalari foydalanish shartlarida, ma'lumotlar esa maxfiylik siyosatida yozilgan.",
+    "docsOffer": "Ommaviy oferta",
+    "docsTerms": "Foydalanish shartlari",
+    "docsPrivacy": "Maxfiylik siyosati"
+  },
+  "login": {
+    "metaTitle": "Kirish",
+    "metaDescription": "Telefon raqamingizga SMS orqali kod yuboramiz — parol ham, elektron pochta ham kerak emas.",
+    "title": "Raqamingiz bilan kiring",
+    "lead": "Parol yo'q. Telefon raqamingizni kiriting — SMS orqali kod yuboramiz.",
+    "chosenLabel": "Tanlangan raqam",
+    "newAccountNote": "Raqamingiz ro'yxatda bo'lmasa, birinchi kirishda yangi hisob ochiladi.",
+    "phoneLabel": "Telefon raqam",
+    "phoneHint": "Kod shu raqamga SMS bo'lib keladi.",
+    "send": "Kod yuborish",
+    "sending": "Yuborilmoqda…",
+    "codeSent": "<phone>{number}</phone> raqamiga 6 xonali kod yubordik.",
+    "codeLabel": "SMS'dagi kod",
+    "codeHint": "Kod 5 daqiqa amal qiladi.",
+    "submit": "Kirish",
+    "checking": "Tekshirilmoqda…",
+    "resend": "Kodni qayta yuborish",
+    "resendIn": "Qayta yuborish — {seconds} s",
+    "changeNumber": "Raqamni o'zgartirish",
+    "errorPhone": "Raqam to'liq emas. Masalan: +998 90 123 45 67",
+    "errorSend": "Kod yuborilmadi. Biroz kutib, qayta urinib ko'ring.",
+    "errorCode": "Kod noto'g'ri yoki muddati o'tgan. Yangi kod so'rang.",
+    "errorServer": "Aloqa yo'q. Biroz kutib, qayta urinib ko'ring."
+  },
+  "feed": {
+    "metaTitle": "Postlar",
+    "metaDescription": "Siz obuna bo'lgan raqamlar yozgan postlar — bitta ustunda, eng yangisi birinchi.",
+    "title": "Postlar",
+    "lead": "Siz obuna bo'lgan raqamlar nima yozgan bo'lsa, shu yerda. Eng yangisi tepada.",
+    "signedOutTitle": "Lentani ko'rish uchun kiring",
+    "signedOutBody": "Lenta — bu siz obuna bo'lgan raqamlarning yozganlari. Ya'ni u har kimda boshqacha, va kim ekaningizni bilmasak, ko'rsatadigan narsamiz yo'q. Kiring — lenta o'zingizniki bo'ladi.",
+    "signIn": "Kirish",
+    "browse": "Rezidentlarni ko'rish",
+    "downTitle": "Lentani hozir ocholmadik",
+    "downBody": "Server javob bermadi. Bu — obuna bo'lganlaringiz hech nima yozmagan degani emas. Sahifani birozdan keyin yangilang.",
+    "emptyTitle": "Lenta hozircha bo'sh",
+    "emptyBody": "Siz obuna bo'lgan raqamlar hali post yozmagan. Rezidentlar ro'yxatidan yangilarini toping.",
+    "asideTitle": "Yangi rezidentlar",
+    "asideAll": "Hammasi"
+  },
+  "catalogue": {
+    "metaTitle": "Karta dizaynlari",
+    "metaDescription": "Flex kartasini buyurtma qilish mumkin bo'lgan barcha dizaynlar. Qaysinisini tanlasangiz ham — bitta raqam, bitta profil.",
+    "title": "Karta dizaynlari",
+    "lead": "Kartangiz qanday ko'rinishi mumkin. Raqam o'sha-o'sha qoladi, dizaynni esa siz tanlaysiz.",
+    "note": "Har bir kartaga uni buyurgan odamning raqami bosiladi. Bu yerda hammasida bitta namuna — {handle} — turibdi, shunda raqamlarni emas, dizaynlarni solishtirasiz.",
+    "accents": {
+      "lime": "Lime",
+      "gold": "Oltin",
+      "steel": "Po'lat"
+    },
+    "designs": {
+      "genesis": "Asosiy karta. Chuqur qora fon, donador tekstura va bitta lime nuqta — FLEX CARD seriyasining o'zi.",
+      "lime": "Teskari variant: to'liq lime maydon, qora yozuv. Uzoqdan ham ko'zga tashlanadi.",
+      "grid": "Nuqtali to'r. Muhandislik chizmasi kabi quruq va aniq.",
+      "sheen": "Diagonal yorug'lik oqimi — qo'lda burilganda metall kabi tovlanadi.",
+      "naqsh": "Sakkiz burchakli geometrik panjara. An'anaviy koshinkorlik geometriyasidan ilhomlangan o'z chizmamiz.",
+      "paper": "Oq, deyarli bo'sh. Faqat raqam va ingichka chegara.",
+      "rahbar": "Mutlaq qora, ko'ndalangiga bitta sayqallangan kumush chiziq. Eng kam narsa ko'rsatadigan, eng ko'p narsa aytadigan variant.",
+      "devops": "Qora fonda past kontrastli plata chizmasi, bitta yo'lakcha lime bo'lib yonadi. Texnik, ammo shovqinsiz.",
+      "suzani": "Chuqur indigo fonda suzani medalyoni — kashta teksturasi, fonidan bir oz ochiqroq, bitta oltin ip bilan.",
+      "xarita": "Qora fonda oltin o'ymakorlik: O'zbekiston xaritasi va yonida Humo medalyoni. Davlat ramzi emas — o'z chizmamiz."
+    },
+    "ctaTitle": "Dizayn — eng oxirida tanlanadi",
+    "ctaBody": "Avval raqamni oling. Kartaga qaysi dizayn bosilishini buyurtma paytida tanlaysiz, keyin ham o'zgartirsa bo'ladi.",
+    "cta": "Raqam olish",
+    "devices": "Qurilmalar"
+  },
+  "cabinet": {
+    "title": "Kabinet",
+    "signOut": "Chiqish",
+    "empty": {
+      "title": "Hali raqamingiz yo'q",
+      "body": "Uch harf va uch raqam tanlang — u umrbod sizniki bo'ladi. To'lov o'tgach raqam shu yerda paydo bo'ladi.",
+      "cta": "Raqam tanlash"
+    },
+    "state": {
+      "premium": "Premium",
+      "free": "Oddiy tarif",
+      "closed": "Yopiq",
+      "reserved": "To'lov kutilmoqda"
+    },
+    "home": {
+      "view": "Profilni ochish",
+      "share": "Ulashish",
+      "copied": "Havola nusxalandi",
+      "week": "So'nggi 7 kun",
+      "waiting": "{count, plural, one {# kishi obuna so'ramoqda} other {# kishi obuna so'ramoqda}}",
+      "endingSoon": "Premium {days, plural, one {# kundan} other {# kundan}} keyin tugaydi"
+    },
+    "sections": {
+      "profile": {
+        "title": "Profil",
+        "hint": "Ism, lavozim, havolalar, xizmatlar — begona odam o'qiydigan hamma narsa."
+      },
+      "posts": {
+        "title": "Postlar",
+        "hint": "Profilingizda va obunachilar lentasida chiqadi."
+      },
+      "privacy": {
+        "title": "Maxfiylik",
+        "hint": "Profilni kim ko'radi, kim kirishni so'rayapti."
+      },
+      "stats": {
+        "title": "Statistika",
+        "hint": "Necha marta ochilgan, qayerdan kelgan, nimani bosgan."
+      },
+      "theme": {
+        "title": "Dizayn",
+        "hint": "Profil qaysi ko'rinishda ochiladi."
+      },
+      "plan": {
+        "title": "Tarif",
+        "hint": "Nima to'langan, qachon tugaydi."
+      }
+    },
+    "profile": {
+      "who": "Kim",
+      "name": "Ism",
+      "position": "Lavozim",
+      "company": "Kompaniya",
+      "city": "Shahar",
+      "bio": "O'zingiz haqingizda",
+      "bioHint": "280 belgigacha. Uchrashganda aytadigan bir-ikki gap.",
+      "tags": "Yo'nalishlar",
+      "tagsHint": "Vergul bilan, 5 tagacha: dizayn, IT, marketing",
+      "pictures": "Rasmlar",
+      "avatar": "Profil rasmi",
+      "banner": "Muqova rasmi",
+      "pictureHint": "Yuklangan rasmning manzili. Yuklash hozircha ilova orqali.",
+      "contacts": "Aloqa",
+      "phone": "Telefon",
+      "email": "Email",
+      "links": "Havolalar",
+      "services": "Xizmatlar va narxlar",
+      "serviceName": "Xizmat",
+      "servicePrice": "Narxi",
+      "addService": "Xizmat qo'shish",
+      "removeService": "Qatorni o'chirish",
+      "serviceLimit": "Bu tarifda {limit} ta xizmat sig'adi.",
+      "save": "Saqlash",
+      "saving": "Saqlanmoqda…",
+      "saved": "Saqlandi",
+      "error": {
+        "notFound": "Bu raqam topilmadi.",
+        "invalid": "Ism kiritish shart.",
+        "server": "Saqlanmadi. Birozdan keyin qayta urining."
+      },
+      "link": {
+        "payment": {
+          "label": "To'lov havolasi",
+          "hint": "Payme yoki Click shaxsiy havolasi. Profilda «To'lash» tugmasi bo'ladi."
+        },
+        "booking": {
+          "label": "Uchrashuv",
+          "hint": "Yozilish uchun manzil — Calendly, bot, sayt."
+        },
+        "telegram": {
+          "label": "Telegram",
+          "hint": "Foydalanuvchi nomi, @ siz."
+        },
+        "whatsapp": {
+          "label": "WhatsApp",
+          "hint": "Raqam, +998 bilan."
+        },
+        "instagram": {
+          "label": "Instagram",
+          "hint": "Foydalanuvchi nomi."
+        },
+        "linkedin": {
+          "label": "LinkedIn",
+          "hint": "Profil nomi, /in/ dan keyingi qismi."
+        },
+        "facebook": {
+          "label": "Facebook",
+          "hint": "Foydalanuvchi nomi."
+        },
+        "youtube": {
+          "label": "YouTube",
+          "hint": "Kanal nomi, @ siz."
+        },
+        "website": {
+          "label": "Veb-sayt",
+          "hint": "To'liq manzil."
+        }
+      }
+    },
+    "privacy": {
+      "closed": "Yopiq profil",
+      "closedHint": "Begona odam faqat rasm, ism va raqamni ko'radi. Qolgani — siz ruxsat bergandan keyin.",
+      "nowClosed": "Profil yopildi",
+      "nowOpen": "Profil ochildi",
+      "notSaved": "Saqlanmadi. Qayta urining.",
+      "whenOpen": "Ochiq",
+      "whenClosed": "Yopiq",
+      "row": {
+        "bio": "O'zingiz haqingizda",
+        "links": "{count, plural, one {# ta havola} other {# ta havola}}",
+        "services": "{count, plural, one {# ta xizmat} other {# ta xizmat}}",
+        "posts": "Postlar"
+      },
+      "askButton": "Obuna so'rash",
+      "comments": "Izohlar ochiq",
+      "commentsHint": "Begonalar profilingizga izoh yoza oladi.",
+      "inbox": "Kirishni so'raganlar",
+      "nobodyWaiting": "Hozircha hech kim kutmayapti. Kimdir obuna so'rasa, shu yerda ko'rinadi.",
+      "openNobodyWaits": "Profil ochiq — obuna so'rovsiz bo'ladi. Yuqoridagi tugma bilan yopsangiz, so'rovlar shu yerga tushadi.",
+      "someone": "Kimdir",
+      "accept": "Qabul qilish",
+      "refuse": "Rad etish",
+      "alreadyDecided": "Bu so'rov allaqachon hal bo'lgan."
+    },
+    "posts": {
+      "placeholder": "Nima yangilik?",
+      "post": "Joylash",
+      "posting": "Joylanmoqda…",
+      "posted": "Post joylandi",
+      "error": {
+        "empty": "Post bo'sh bo'lmasligi kerak.",
+        "tooMany": "Bir soatda juda ko'p post. Birozdan keyin urining.",
+        "notFound": "Bu raqam topilmadi.",
+        "server": "Joylanmadi. Qayta urining."
+      },
+      "afterPayment": "To'lov yakunlangach post joylay olasiz.",
+      "none": "Hali post yo'q.",
+      "delete": "O'chirish",
+      "deleteTitle": "Postni o'chirasizmi?",
+      "deleteBody": "Profildan va obunachilar lentasidan yo'qoladi. Qaytarib bo'lmaydi.",
+      "keep": "Qoldirish",
+      "deleted": "Post o'chirildi",
+      "notDeleted": "O'chirilmadi. Qayta urining."
+    },
+    "stats": {
+      "views": "Ko'rish",
+      "visitors": "Tashrifchi",
+      "taps": "Bosish",
+      "days": "{days} kun",
+      "window": "So'nggi {days} kun",
+      "daily": "Kunlar bo'yicha",
+      "busiest": "Eng gavjum kun: {day} — {count}",
+      "quiet": "Bu davrda ochilmagan.",
+      "sources": "Qayerdan kelgan",
+      "links": "Qaysi havola bosilgan",
+      "source": {
+        "nfc": "Kartani tegizib",
+        "qr": "QR-kod orqali",
+        "share": "Ulashilgan havoladan",
+        "togridan": "To'g'ridan-to'g'ri"
+      },
+      "premiumOnly": "Premiumda",
+      "premiumDaily": "Kunlik grafik — qaysi kuni necha marta ochilgan",
+      "premiumLinks": "Har bir havola bo'yicha bosishlar",
+      "premiumSources": "Qayerdan kelgan — karta, QR yoki havola",
+      "seePlans": "Tariflarni ko'rish"
+    },
+    "theme": {
+      "search": "Dizayn qidirish",
+      "all": "Hammasi",
+      "family": {
+        "ink": "Qora",
+        "metal": "Metall",
+        "pattern": "Naqsh",
+        "paper": "Oq"
+      },
+      "nothing": "Bunday dizayn yo'q.",
+      "use": "Shu dizaynni qo'llash",
+      "inUse": "Hozir shu dizayn",
+      "saving": "Saqlanmoqda…",
+      "saved": "Dizayn o'zgardi",
+      "notSaved": "Saqlanmadi. Qayta urining."
+    },
+    "plan": {
+      "title": "Tarif",
+      "premium": "Premium",
+      "free": "Oddiy tarif",
+      "freeLead": "Profil ochiq, asosiy imkoniyatlar ishlaydi",
+      "until": "{date} gacha",
+      "noEnd": "Muddatsiz",
+      "daysLeft": "{days, plural, one {# kun qoldi} other {# kun qoldi}}",
+      "paidForNumber": "Raqam uchun to'langan: {sum} so'm",
+      "whenLapses": "Muddat tugasa",
+      "lapse": {
+        "opens": "Profil ochilaveradi — karta tegizilganda o'sha sahifa chiqadi.",
+        "stats": "Statistika faqat umumiy sonlarni ko'rsatadi: kunlar, havolalar va manbalar yopiladi.",
+        "services": "Xizmatlar ro'yxati 5 tagacha qisqaradi.",
+        "keeps": "Raqam sizniki bo'lib qoladi, ma'lumotlar o'chirilmaydi. To'lov tiklangan kuni hammasi o'z joyida."
+      },
+      "upgrade": "Premiumga o'tish — oyiga {sum} so'm"
+    },
+    "orders": {
+      "title": "Buyurtmalar",
+      "none": "Hali buyurtma yo'q.",
+      "soum": "so'm",
+      "device": {
+        "card": "Karta",
+        "ring": "Uzuk",
+        "bracelet": "Braslet",
+        "tag": "Teg"
+      },
+      "stage": {
+        "pending": "To'lov kutilmoqda",
+        "paid": "To'langan",
+        "address_needed": "Manzil kerak",
+        "queued": "Navbatda",
+        "making": "Yasalmoqda",
+        "shipped": "Yuborildi",
+        "delivered": "Yetkazildi",
+        "returned": "Qaytdi"
+      }
+    }
+  },
+  "seo": {
+    "ogTitle": "Bir tegish — butun profilingiz",
+    "ogLead": "Noyob raqam, NFC karta va profil. Ilova kerak emas."
   }
 }

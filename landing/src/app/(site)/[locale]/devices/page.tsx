@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import DeviceTile from "@/components/DeviceTile";
 import { DEVICES } from "@/lib/devices";
+import { pageSeo } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -10,7 +11,12 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "devices" });
 
-  return { title: t("title"), description: t("lead") };
+  return {
+    title: t("title"),
+    description: t("lead"),
+    // Its own address, its three siblings and the share card block.
+    ...pageSeo("/devices", locale),
+  };
 }
 
 // The whole shelf.

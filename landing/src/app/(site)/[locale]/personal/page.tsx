@@ -8,6 +8,7 @@ import PersonalHero from "@/components/personal/PersonalHero";
 import PriceParts from "@/components/personal/PriceParts";
 import WhatArrives from "@/components/personal/WhatArrives";
 import { routing } from "@/i18n/routing";
+import { pageSeo } from "@/lib/seo";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -19,7 +20,12 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "personal" });
 
-  return { title: t("metaTitle"), description: t("metaDescription") };
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+    // Its own address, its three siblings and the share card block.
+    ...pageSeo("/personal", locale),
+  };
 }
 
 // One person, one number.

@@ -11,6 +11,7 @@ import ResidentAvatar from "@/components/ResidentAvatar";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { catalogue } from "@/lib/backend/residents-page";
+import { pageSeo } from "@/lib/seo";
 
 // Prerendered in all three languages and rebuilt on a timer.
 //
@@ -33,7 +34,12 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "residentsPage" });
 
-  return { title: t("metaTitle"), description: t("metaDescription") };
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+    // Its own address, its three siblings and the share card block.
+    ...pageSeo("/residents", locale),
+  };
 }
 
 // Everyone holding a number, newest first.

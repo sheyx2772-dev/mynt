@@ -15,7 +15,7 @@ import type { paths } from "./schema";
 // over the container network, by container name. That address does not resolve
 // anywhere else, and a component that imported this by accident would fail at
 // runtime in production and nowhere else.
-const BACKEND_URL = (
+export const BACKEND_URL = (
   process.env.BACKEND_URL ?? "http://127.0.0.1:8090"
 ).replace(/\/$/, "");
 

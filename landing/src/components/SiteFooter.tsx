@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import LangSwitch from "@/components/LangSwitch";
 import Mark from "@/components/Mark";
 import { Link } from "@/i18n/navigation";
+import { COMPANY } from "@/lib/company";
 
 // The foot of every page.
 //
@@ -16,14 +17,11 @@ import { Link } from "@/i18n/navigation";
 // name and tax number, and a buyer looking for them should not have to open a
 // separate page.
 
-// Written here rather than translated: a company name and a tax number are the
-// same in every language, and a number in a message file is a number somebody
-// will eventually translate.
-const LEGAL = {
-  company: '"MC LEGAL" AB',
-  taxId: "312559000",
-  phone: "+998 97 724 79 99",
-};
+// Not translated: a company name and a tax number are the same in every
+// language, and a number in a message file is a number somebody will
+// eventually translate. Not written here either — `lib/company.ts` is the one
+// copy, and the offer and the contact page print the same constant. Two copies
+// of a tax number is one tax number that will be wrong.
 
 export default async function SiteFooter() {
   const t = await getTranslations("footer");
@@ -36,6 +34,7 @@ export default async function SiteFooter() {
         { href: "/personal", label: nav("personal") },
         { href: "/pricing", label: nav("pricing") },
         { href: "/devices", label: t("devices") },
+        { href: "/catalogue", label: t("designs") },
         { href: "/residents", label: nav("residents") },
         { href: "/feed", label: t("posts") },
       ],
@@ -92,16 +91,16 @@ export default async function SiteFooter() {
 
         <div className="mt-9 flex flex-wrap items-center justify-between gap-6 border-t border-ink-line pt-5">
           <p className="text-[13px] text-paper-3">
-            {LEGAL.company} · {t("taxId")}{" "}
+            {COMPANY.legalName} · {t("taxId")}{" "}
             <span className="font-mono text-xs tracking-[0.14em]">
-              {LEGAL.taxId}
+              {COMPANY.inn}
             </span>{" "}
             ·{" "}
             <a
-              href={`tel:${LEGAL.phone.replace(/\s/g, "")}`}
+              href={`tel:${COMPANY.phoneHref}`}
               className="font-mono text-xs tracking-[0.14em] transition-colors hover:text-paper-2"
             >
-              {LEGAL.phone}
+              {COMPANY.phone}
             </a>
           </p>
           <LangSwitch tone="dark" />
