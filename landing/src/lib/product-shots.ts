@@ -25,6 +25,7 @@ export type ShotName =
   | "salon"
   | "avto"
   | "avtovizitka"
+  | "avtostiker"
   | "stend2"
   | "biznes";
 

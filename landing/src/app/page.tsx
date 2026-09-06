@@ -197,7 +197,6 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     : null;
 
   const tapShot = productShot("tegizish");
-  const carShot = productShot("avtovizitka");
   const devices = deviceStrip(lang);
   const verticals = verticalStrip(lang);
   // The card range leads, drawn rather than photographed and handed in exactly
