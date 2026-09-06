@@ -1004,6 +1004,7 @@
     "theme": {
       "search": "Find a design",
       "all": "All",
+      "preview": "Selected card preview",
       "family": {
         "ink": "Dark",
         "metal": "Metal",
@@ -1016,6 +1017,25 @@
       "saving": "Saving…",
       "saved": "Design changed",
       "notSaved": "Not saved. Try again."
+    },
+    "design": {
+      "title": "Custom card design",
+      "hint": "Describe what kind of card you want in your own words. Our studio will create a custom design specifically for you.",
+      "artworkAlt": "Custom design artwork",
+      "placeholder": "For example: gold engraving on deep black, minimal and executive...",
+      "ask": "Send request",
+      "asking": "Sending…",
+      "asked": "Request submitted. Our studio will review it shortly.",
+      "inFlight": "Your request is currently in queue. You can submit another once it is ready.",
+      "state": {
+        "pending": "In queue",
+        "filled": "Ready",
+        "refused": "Declined"
+      },
+      "error": {
+        "busy": "A request is already in queue.",
+        "failed": "Could not send request. Please try again."
+      }
     },
     "plan": {
       "title": "Plan",

@@ -1,3 +1,4 @@
+import { Sparkles } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import DesignWish from "./DesignWish";
@@ -34,12 +35,17 @@ export default async function DesignRequests({
   const inFlight = requests.some((r) => r.holat === "pending");
 
   return (
-    <section className="flex flex-col gap-4">
-      <div>
-        <h2 className="text-lg font-semibold tracking-tight">{t("title")}</h2>
-        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-          {t("hint")}
-        </p>
+    <section className="flex flex-col gap-5 rounded-tile border border-border bg-card/60 p-5 sm:p-7 shadow-slab">
+      <div className="flex items-start gap-3.5">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+          <Sparkles className="size-4" strokeWidth={2.2} />
+        </span>
+        <div>
+          <h2 className="text-lg font-semibold tracking-tight">{t("title")}</h2>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            {t("hint")}
+          </p>
+        </div>
       </div>
 
       {picture && (

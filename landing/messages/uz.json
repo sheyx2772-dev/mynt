@@ -1004,6 +1004,7 @@
     "theme": {
       "search": "Dizayn qidirish",
       "all": "Hammasi",
+      "preview": "Tanlangan dizayn ko'rinishi",
       "family": {
         "ink": "Qora",
         "metal": "Metall",
@@ -1016,6 +1017,25 @@
       "saving": "Saqlanmoqda…",
       "saved": "Dizayn o'zgardi",
       "notSaved": "Saqlanmadi. Qayta urining."
+    },
+    "design": {
+      "title": "O'zingizga xos dizayn",
+      "hint": "Qanday karta xohlayotganingizni o'z so'zingiz bilan yozing. Kasbingiz, qiziqishingiz, yoqtirgan rangingiz — studiyamiz siz uchun maxsus dizayn chizib beradi.",
+      "artworkAlt": "Shaxsiy dizayn rasmi",
+      "placeholder": "Masalan: qora fonda oltin naqsh, jiddiy va vazmin, IT sohasiga mos...",
+      "ask": "So'rov yuborish",
+      "asking": "Yuborilmoqda…",
+      "asked": "So'rovingiz qabul qilindi. Studiyamiz tez orada ko'rib chiqadi.",
+      "inFlight": "So'rovingiz navbatda turibdi. Tayyor bo'lgach yana yangi so'rov yuborishingiz mumkin.",
+      "state": {
+        "pending": "Navbatda",
+        "filled": "Tayyor",
+        "refused": "Rad etildi"
+      },
+      "error": {
+        "busy": "Ayni paytda so'rovingiz navbatda turibdi.",
+        "failed": "Yuborib bo'lmadi. Qaytadan urinib ko'ring."
+      }
     },
     "plan": {
       "title": "Tarif",
