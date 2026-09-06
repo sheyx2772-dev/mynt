@@ -35,7 +35,10 @@ const DEVICE_SHOTS: Record<LoadoutDeviceId, ShotName> = {
 const VERTICAL_SHOTS: Record<VerticalId, ShotName | null> = {
   cafe: "kafe",
   hotel: "mehmonxona",
-  shop: "dokon",
+  // `dokon` names a photograph nobody ever shot, so the shop tile rendered as
+  // an empty black box beside three that had pictures. The counter stand is
+  // the shop as this product meets it — a plate and a phone at a till.
+  shop: "stend2",
   other: "salon",
 };
 

@@ -51,7 +51,11 @@ export function verticalStrip(lang: Lang): StripItem[] {
       href: `/biznes?soha=${id}#soha`,
       src: shot ? productShot(shot) : null,
       name: t.verticals[id].name,
-      note: t.verticals[id].pointsWord,
+      // The tagline, not the word for a table. `pointsWord` is "stol", "xona",
+      // "nuqta" — one noun under a picture, which told a visitor nothing about
+      // what the thing does. The tagline is a sentence, it is already written
+      // in all three languages, and it is what the tile was for.
+      note: t.verticals[id].tagline,
       price: p.openCta,
     };
   });

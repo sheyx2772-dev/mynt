@@ -331,6 +331,35 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           owner={owner}
         />
 
+        {/* 3 — how it works, before anything is offered for sale ------- */}
+        <section className="mx-auto max-w-[1120px] px-4 py-16 sm:px-6 sm:py-24">
+          <h2 className="font-display text-[28px] leading-[32px] font-semibold tracking-[-0.01em]">
+            {h.howTitle}
+          </h2>
+          <ol className="mt-8 grid gap-8 sm:grid-cols-3 sm:gap-6">
+            {h.howSteps.map((step, i) => (
+              <li key={step.title}>
+                <div className="relative aspect-[4/3] overflow-hidden rounded-input border border-line bg-white">
+                  <Image
+                    src={step.photo}
+                    alt={step.alt}
+                    fill
+                    sizes="(min-width: 640px) 344px, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <p className="num mt-4 font-display text-xl leading-6 font-semibold text-ink-3">
+                  {i + 1}
+                </p>
+                <h3 className="mt-1 text-xl leading-6 font-semibold">
+                  {step.title}
+                </h3>
+                <p className="mt-2 text-base leading-6 text-ink-2">{step.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
         {/* The three shelves, rendered once for both layouts. On a wide screen
             they follow the fork above; on a phone they follow the app's own
             fork, and the tiles below pick the sequence up again. Neither copy
@@ -412,35 +441,6 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               </div>
             </div>
           </div>
-        </section>
-
-        {/* 3 — how it works -------------------------------------------- */}
-        <section className="mx-auto max-w-[1120px] px-4 py-16 sm:px-6 sm:py-24">
-          <h2 className="font-display text-[28px] leading-[32px] font-semibold tracking-[-0.01em]">
-            {h.howTitle}
-          </h2>
-          <ol className="mt-8 grid gap-8 sm:grid-cols-3 sm:gap-6">
-            {h.howSteps.map((step, i) => (
-              <li key={step.title}>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-input border border-line bg-white">
-                  <Image
-                    src={step.photo}
-                    alt={step.alt}
-                    fill
-                    sizes="(min-width: 640px) 344px, 100vw"
-                    className="object-cover"
-                  />
-                </div>
-                <p className="num mt-4 font-display text-xl leading-6 font-semibold text-ink-3">
-                  {i + 1}
-                </p>
-                <h3 className="mt-1 text-xl leading-6 font-semibold">
-                  {step.title}
-                </h3>
-                <p className="mt-2 text-base leading-6 text-ink-2">{step.body}</p>
-              </li>
-            ))}
-          </ol>
         </section>
 
         {/* 7 — the four things people actually ask ---------------------- */}
