@@ -1,8 +1,8 @@
-import Image from "next/image";
 import NextLink from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowRight } from "lucide-react";
 
+import ResidentAvatar from "@/components/ResidentAvatar";
 import { Link } from "@/i18n/navigation";
 import { directory } from "@/lib/backend/residents";
 
@@ -13,57 +13,6 @@ import { directory } from "@/lib/backend/residents";
 // from the real table, and when there are none the strip does not render — a
 // row of placeholder faces would be exactly the lie the counter beside it
 // exists to avoid.
-
-function initials(name: string) {
-  return (
-    name
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase())
-      .join("") || "?"
-  );
-}
-
-/**
- * The face, or the initials standing in for it.
- *
- * A photo is only rendered when `next.config.ts` will let the optimiser fetch
- * it, which today means a path on this origin: the config declares no
- * `images.remotePatterns` at all, so an avatar sitting on the object store
- * falls back to initials until a precise host is added there.
- *
- * The tempting one-line fix is `remotePatterns: [{ hostname: "**" }]`, and it
- * is the thing that must not be done. Next's optimiser fetches the URL from
- * the server, so a wildcard turns this site into an open image proxy pointed
- * at whatever a profile owner typed into their avatar field — including
- * addresses only our own network can reach, the backend among them. Initials
- * are the cheap answer: a missing face costs a visitor nothing.
- *
- * `//host/path` is checked apart from `/path` because a protocol-relative URL
- * also begins with a slash and is not local at all.
- */
-function Avatar({ name, photo }: { name: string; photo?: string }) {
-  const local = photo?.startsWith("/") && !photo.startsWith("//");
-
-  if (local && photo) {
-    return (
-      <Image
-        src={photo}
-        alt=""
-        width={44}
-        height={44}
-        className="size-11 shrink-0 rounded-full object-cover"
-      />
-    );
-  }
-
-  return (
-    <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-lime text-sm font-semibold text-ink">
-      {initials(name)}
-    </span>
-  );
-}
 
 export default async function Residents() {
   const dir = await directory();
@@ -99,7 +48,7 @@ export default async function Residents() {
               href={`/${r.raqam}`}
               className="flex items-center gap-3 rounded-card border border-line bg-white p-3 transition-colors hover:border-line-2"
             >
-              <Avatar name={r.ism} photo={r.rasm} />
+              <ResidentAvatar name={r.ism} photo={r.rasm} />
 
               <span className="min-w-0">
                 <span className="block truncate font-medium text-ink">

@@ -1,7 +1,18 @@
 import { createHash } from "node:crypto";
 
 import { describe, it, expect } from "vitest";
-import { BASE_PRICE, TOP_WORDS, parseHandle, parseGenesisSerial, letterRarity, digitRarity, priceForHandle, rarityTier, RARE_WORDS, BLOCKED_WORDS } from "./pricing";
+import {
+  BASE_PRICE,
+  TOP_WORDS,
+  parseHandle,
+  parseGenesisSerial,
+  letterRarity,
+  digitRarity,
+  priceForHandle,
+  rarityTier,
+  RARE_WORDS,
+  BLOCKED_WORDS,
+} from "./pricing";
 
 describe("parseHandle", () => {
   it("accepts the AAA000 shape and normalizes case", () => {
@@ -10,7 +21,16 @@ describe("parseHandle", () => {
   });
 
   it("rejects anything that isn't exactly 3 letters then 3 digits", () => {
-    for (const bad of ["MYN04", "MYN0422", "MY0422", "123456", "MYNABC", "M1N042", "", "МЫН042"]) {
+    for (const bad of [
+      "MYN04",
+      "MYN0422",
+      "MY0422",
+      "123456",
+      "MYNABC",
+      "M1N042",
+      "",
+      "МЫН042",
+    ]) {
       expect(parseHandle(bad), bad).toBeNull();
     }
   });
@@ -148,13 +168,24 @@ describe("rarityTier", () => {
   // price: a dearer handle is never in a lower band.
   it("never ranks a dearer handle below a cheaper one", () => {
     const order: Record<string, number> = {
-      common: 0, rare: 1, epic: 2, legendary: 3, genesis: 4,
+      common: 0,
+      rare: 1,
+      epic: 2,
+      legendary: 3,
+      genesis: 4,
     };
     const samples = [
-      ["MYN", "042"], ["ABA", "042"], ["MYN", "777"], ["VIP", "007"], ["AAA", "000"],
+      ["MYN", "042"],
+      ["ABA", "042"],
+      ["MYN", "777"],
+      ["VIP", "007"],
+      ["AAA", "000"],
     ] as const;
     const ranked = samples
-      .map(([l, d]) => ({ price: priceForHandle(l, d), band: order[rarityTier(l, d)]! }))
+      .map(([l, d]) => ({
+        price: priceForHandle(l, d),
+        band: order[rarityTier(l, d)]!,
+      }))
       .sort((a, b) => a.price - b.price);
     for (let i = 1; i < ranked.length; i++) {
       expect(ranked[i]!.band).toBeGreaterThanOrEqual(ranked[i - 1]!.band);
@@ -167,18 +198,43 @@ describe("the word tier", () => {
   // and not the other is this site quoting a hundred thousand and the server
   // charging two million, so both are pinned by count.
   it("prices a status word at fifty times the base", () => {
-    for (const word of ["VIP", "CEO", "BOS", "PRO", "LUX", "MAX", "UZB", "ONE", "LAW", "MED"]) {
+    for (const word of [
+      "VIP",
+      "CEO",
+      "BOS",
+      "PRO",
+      "LUX",
+      "MAX",
+      "UZB",
+      "ONE",
+      "LAW",
+      "MED",
+    ]) {
       expect(letterRarity(word).multiplier).toBe(50);
     }
   });
 
   it("prices a word at twenty times the base", () => {
     for (const word of [
-      "BEK", "NUR", "ZAR", "DEV", "XON",
+      "BEK",
+      "NUR",
+      "ZAR",
+      "DEV",
+      "XON",
       // The trades, which sell to a business rather than to a person.
-      "GYM", "WEB", "SPA", "TAX",
+      "GYM",
+      "WEB",
+      "SPA",
+      "TAX",
       // Uzbek, names, cities, and where somebody is from.
-      "OSH", "PUL", "OTA", "ALI", "SAM", "BUX", "RUS", "QOZ",
+      "OSH",
+      "PUL",
+      "OTA",
+      "ALI",
+      "SAM",
+      "BUX",
+      "RUS",
+      "QOZ",
     ]) {
       expect(letterRarity(word).multiplier).toBe(20);
     }
@@ -227,7 +283,10 @@ describe("what may not be sold", () => {
 // other fails on one side or the other, naming the file to go and fix.
 describe("the two copies of each list", () => {
   const fingerprint = (words: readonly string[]) =>
-    createHash("sha256").update([...words].sort().join(",")).digest("hex").slice(0, 8);
+    createHash("sha256")
+      .update([...words].sort().join(","))
+      .digest("hex")
+      .slice(0, 8);
 
   it("matches the backend's status words", () => {
     expect(fingerprint(TOP_WORDS)).toBe("5b56180a");

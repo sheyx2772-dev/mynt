@@ -7,6 +7,7 @@ import {
 } from "next-intl/server";
 import { Eye, MapPin } from "lucide-react";
 
+import ResidentAvatar from "@/components/ResidentAvatar";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { catalogue } from "@/lib/backend/residents-page";
@@ -33,40 +34,6 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "residentsPage" });
 
   return { title: t("metaTitle"), description: t("metaDescription") };
-}
-
-/**
- * Initials on lime, and never the photograph on file.
- *
- * A resident's avatar URL is a value a user put there. Rendering it through
- * `next/image` would mean naming its host in `images.remotePatterns`, and
- * `next.config.ts` names none — so the only way to show these would be to
- * widen the allowlist to `**`, which turns this site into an open image proxy
- * that will fetch and cache anything anybody types into a profile field. A
- * plain `<img>` avoids the proxy and buys a different problem: sixty
- * unmeasured third-party requests, every one of them a hit our visitors make
- * against a host we do not control.
- *
- * Initials cost nothing, cannot be pointed anywhere, and are built from the
- * name rather than passed through it.
- */
-function Initials({ name }: { name: string }) {
-  const letters =
-    name
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase())
-      .join("") || "?";
-
-  return (
-    <span
-      aria-hidden
-      className="flex size-11 shrink-0 items-center justify-center rounded-full bg-lime text-sm font-semibold text-ink"
-    >
-      {letters}
-    </span>
-  );
 }
 
 // Everyone holding a number, newest first.
@@ -138,7 +105,11 @@ export default async function ResidentsPage({
                     href={`/${resident.raqam}`}
                     className="flex items-center gap-4 rounded-card border border-line bg-white px-4 py-4 transition-colors hover:border-line-lead sm:px-5"
                   >
-                    <Initials name={resident.ism} />
+                    <ResidentAvatar
+                      name={resident.ism}
+                      photo={resident.rasm}
+                      size={48}
+                    />
 
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-medium">{resident.ism}</p>

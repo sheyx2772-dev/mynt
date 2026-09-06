@@ -39,7 +39,9 @@ export default async function DeviceTile({
 
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-baseline justify-between gap-2">
-          <span className="font-semibold">{t(`items.${device.slug}.name`)}</span>
+          <span className="font-semibold">
+            {t(`items.${device.slug}.name`)}
+          </span>
           <span className="font-mono text-[13px] tracking-[0.06em] whitespace-nowrap text-ink-3">
             {money(device.price)}
           </span>

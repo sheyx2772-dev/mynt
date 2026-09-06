@@ -2,18 +2,18 @@
 // from there. Round, because a price with a 9 on the end reads as a discount
 // and this is not a discounted thing.
 export const BASE_PRICE = 100_000;
-  // The tier is a multiplier of twenty, so every word added here takes a
-  // combination out of the hundred-thousand pool and puts it in a two-million
-  // one. It is a pricing decision, not a dictionary — a word belongs here when
-  // somebody would pay for it, not when it exists.
-  //
-  // Three groups. What a person is: the titles somebody puts on a card. Where
-  // they are: the ones that read as Uzbek rather than as English. And what
-  // anybody recognises anywhere.
-  //
-  // Uzbek words with an apostrophe — o‘, g‘ — cannot be here at all: a handle
-  // is three letters of A–Z, and "O‘ZB" is four characters of which one is not
-  // a letter.
+// The tier is a multiplier of twenty, so every word added here takes a
+// combination out of the hundred-thousand pool and puts it in a two-million
+// one. It is a pricing decision, not a dictionary — a word belongs here when
+// somebody would pay for it, not when it exists.
+//
+// Three groups. What a person is: the titles somebody puts on a card. Where
+// they are: the ones that read as Uzbek rather than as English. And what
+// anybody recognises anywhere.
+//
+// Uzbek words with an apostrophe — o‘, g‘ — cannot be here at all: a handle
+// is three letters of A–Z, and "O‘ZB" is four characters of which one is not
+// a letter.
 // The words somebody pays for because of what they say about them.
 //
 // A subset of RARE_WORDS, checked first. The shape rules ranked three
@@ -22,10 +22,26 @@ export const BASE_PRICE = 100_000;
 // a business card the meaning is the product: VIP says something, QQQ is only
 // rare.
 export const TOP_WORDS = [
-  "VIP", "CEO", "CTO", "CFO", "MBA", "PRO",
-  "BOS", "SIR", "DOC", "LAW", "MED", "TOP",
-  "LUX", "MAX", "WIN", "ONE", "KEY", "ACE",
-  "UZB", "GOD",
+  "VIP",
+  "CEO",
+  "CTO",
+  "CFO",
+  "MBA",
+  "PRO",
+  "BOS",
+  "SIR",
+  "DOC",
+  "LAW",
+  "MED",
+  "TOP",
+  "LUX",
+  "MAX",
+  "WIN",
+  "ONE",
+  "KEY",
+  "ACE",
+  "UZB",
+  "GOD",
 ] as const;
 
 const TOP = new Set<string>(TOP_WORDS);
@@ -33,28 +49,109 @@ const TOP = new Set<string>(TOP_WORDS);
 export const RARE_WORDS = [
   // What a person is, and what they do. The trades sell to a business rather
   // than to one person, which is a different and larger buyer.
-  "VIP", "CEO", "CTO", "CFO", "MBA", "DEV", "DOC", "PRO", "BOS", "SIR", "BEK", "XON",
-  "GYM", "SPA", "LAW", "MED", "WEB", "APP", "HUB", "LAB", "BAR", "TAX", "PAY", "FIT",
-  "JOB", "CAR", "SEO", "NET",
+  "VIP",
+  "CEO",
+  "CTO",
+  "CFO",
+  "MBA",
+  "DEV",
+  "DOC",
+  "PRO",
+  "BOS",
+  "SIR",
+  "BEK",
+  "XON",
+  "GYM",
+  "SPA",
+  "LAW",
+  "MED",
+  "WEB",
+  "APP",
+  "HUB",
+  "LAB",
+  "BAR",
+  "TAX",
+  "PAY",
+  "FIT",
+  "JOB",
+  "CAR",
+  "SEO",
+  "NET",
   // Uzbek, written the way the alphabet here allows. OSH is the strongest of
   // them: every choyxona in the country wants it.
-  "OTA", "ONA", "AKA", "OPA", "OYI", "JON", "DIL", "YOR", "PUL", "NON", "OSH", "SUV",
-  "QOR", "KUN", "TUN", "YOZ", "KUZ", "TIL", "ISH", "GAP", "BOY", "SOZ",
+  "OTA",
+  "ONA",
+  "AKA",
+  "OPA",
+  "OYI",
+  "JON",
+  "DIL",
+  "YOR",
+  "PUL",
+  "NON",
+  "OSH",
+  "SUV",
+  "QOR",
+  "KUN",
+  "TUN",
+  "YOZ",
+  "KUZ",
+  "TIL",
+  "ISH",
+  "GAP",
+  "BOY",
+  "SOZ",
   // Names. Three letters is a short name here, so there are few — but a person
   // buying their own name is the easiest sale there is.
-  "ALI", "ABU", "UMR", "MIR",
+  "ALI",
+  "ABU",
+  "UMR",
+  "MIR",
   // Where they are: the cities, the way an airport writes them.
-  "UZB", "NUR", "ZAR", "ASL", "TOY", "GUL",
-  "SAM", "BUX", "XIV", "NAV", "AND", "FAR",
+  "UZB",
+  "NUR",
+  "ZAR",
+  "ASL",
+  "TOY",
+  "GUL",
+  "SAM",
+  "BUX",
+  "XIV",
+  "NAV",
+  "AND",
+  "FAR",
   // And where they are from. These were nearly blocked, on the reasoning that
   // somebody could put one on a profile written to insult. The argument that
   // settled it is UZB, which has been in this list from the start and sells for
   // millions: it is bought as pride, not as an insult, and there is no version
   // of that argument that holds for one people and not the next.
-  "RUS", "TAJ", "QOZ", "QIR", "AFG", "ARM",
+  "RUS",
+  "TAJ",
+  "QOZ",
+  "QIR",
+  "AFG",
+  "ARM",
   // What anybody recognises.
-  "GOD", "ACE", "WOW", "TOP", "LUX", "MAX", "WIN", "ONE", "KEY", "NEW", "ART", "ZEN",
-  "SKY", "SUN", "GEM", "FLY", "FOX", "ICE", "BIG", "BUY",
+  "GOD",
+  "ACE",
+  "WOW",
+  "TOP",
+  "LUX",
+  "MAX",
+  "WIN",
+  "ONE",
+  "KEY",
+  "NEW",
+  "ART",
+  "ZEN",
+  "SKY",
+  "SUN",
+  "GEM",
+  "FLY",
+  "FOX",
+  "ICE",
+  "BIG",
+  "BUY",
 ];
 
 /**
@@ -80,21 +177,62 @@ export const RARE_WORDS = [
 export const BLOCKED_WORDS = [
   // Government bodies — the one group here that is a safety rule rather than
   // a taste one.
-  "MVD", "IIB", "SSB", "DXX", "GAI", "YHX", "PRK", "GNK", "MCH", "SES",
+  "MVD",
+  "IIB",
+  "SSB",
+  "DXX",
+  "GAI",
+  "YHX",
+  "PRK",
+  "GNK",
+  "MCH",
+  "SES",
   // Obscene in English.
-  "SEX", "XXX", "PRN", "ASS", "FUK", "FCK", "CUM", "DIC", "DIK", "COK",
-  "TIT", "NUD", "POR",
+  "SEX",
+  "XXX",
+  "PRN",
+  "ASS",
+  "FUK",
+  "FCK",
+  "CUM",
+  "DIC",
+  "DIK",
+  "COK",
+  "TIT",
+  "NUD",
+  "POR",
   // Obscene in Russian, written in Latin letters — which is how they are
   // actually typed here.
-  "XUY", "XUI", "HUY", "HUI", "PIZ", "BLY", "BLD", "SUK", "EBA", "EBI",
-  "EBU", "PID", "MUD", "NAX",
+  "XUY",
+  "XUI",
+  "HUY",
+  "HUI",
+  "PIZ",
+  "BLY",
+  "BLD",
+  "SUK",
+  "EBA",
+  "EBI",
+  "EBU",
+  "PID",
+  "MUD",
+  "NAX",
   // Obscene in Uzbek and Turkish. The shortest of the three, and the one most
   // likely to be incomplete.
-  "SIK", "KOT", "AMK", "QIN", "SKM", "AMG",
+  "SIK",
+  "KOT",
+  "AMK",
+  "QIN",
+  "SKM",
+  "AMG",
   // Slurs.
-  "GAY", "FAG",
+  "GAY",
+  "FAG",
   // Sacred names.
-  "ALH", "XUD", "QUR", "HAJ",
+  "ALH",
+  "XUD",
+  "QUR",
+  "HAJ",
 ];
 
 const BLOCKED = new Set(BLOCKED_WORDS);
@@ -104,7 +242,10 @@ export function isBlocked(letters: string): boolean {
   return BLOCKED.has(letters.toUpperCase());
 }
 
-export function letterRarity(letters: string): { multiplier: number; reason: string } {
+export function letterRarity(letters: string): {
+  multiplier: number;
+  reason: string;
+} {
   const l = letters.toUpperCase().split("");
   if (TOP.has(letters.toUpperCase())) {
     return { multiplier: 50, reason: "status so'zi (masalan VIP)" };
@@ -121,7 +262,10 @@ export function letterRarity(letters: string): { multiplier: number; reason: str
   return { multiplier: 1, reason: "oddiy kombinatsiya" };
 }
 
-export function digitRarity(digits: string): { multiplier: number; reason: string } {
+export function digitRarity(digits: string): {
+  multiplier: number;
+  reason: string;
+} {
   const d = digits.split("").map(Number);
   if (d[0] === d[1] && d[1] === d[2]) {
     return { multiplier: 40, reason: "3 ta bir xil raqam (masalan 000, 777)" };
@@ -140,7 +284,9 @@ export function digitRarity(digits: string): { multiplier: number; reason: strin
   return { multiplier: 1, reason: "oddiy raqam" };
 }
 
-export function parseHandle(raw: string): { letters: string; digits: string } | null {
+export function parseHandle(
+  raw: string,
+): { letters: string; digits: string } | null {
   const match = raw.toUpperCase().match(/^([A-Z]{3})(\d{3})$/);
   if (!match) return null;
   // A blocked combination fails here rather than being refused later, so every
@@ -150,7 +296,11 @@ export function parseHandle(raw: string): { letters: string; digits: string } | 
 }
 
 export function priceForHandle(letters: string, digits: string): number {
-  return BASE_PRICE * letterRarity(letters).multiplier * digitRarity(digits).multiplier;
+  return (
+    BASE_PRICE *
+    letterRarity(letters).multiplier *
+    digitRarity(digits).multiplier
+  );
 }
 
 // Genesis cards: pure 6-digit manufacturing serials (000001, 000002, ...) —
@@ -159,7 +309,6 @@ export function parseGenesisSerial(raw: string): string | null {
   const match = raw.match(/^\d{6}$/);
   return match ? match[0] : null;
 }
-
 
 /**
  * The rarity band a handle falls in, from its combined multiplier.
@@ -177,7 +326,8 @@ export function parseGenesisSerial(raw: string): string | null {
 export type RarityTier = "common" | "rare" | "epic" | "legendary" | "genesis";
 
 export function rarityTier(letters: string, digits: string): RarityTier {
-  const multiplier = letterRarity(letters).multiplier * digitRarity(digits).multiplier;
+  const multiplier =
+    letterRarity(letters).multiplier * digitRarity(digits).multiplier;
   if (multiplier >= 600) return "genesis";
   if (multiplier >= 100) return "legendary";
   if (multiplier >= 10) return "epic";
