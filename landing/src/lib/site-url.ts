@@ -15,8 +15,15 @@
 // `new URL()` in the root layout and failed the build with `Invalid URL` — in
 // CI only, because a developer's machine leaves the variable unset rather than
 // empty, and the two are not the same thing.
+//
+// The fallback is the domain the site is actually deployed at — see
+// deploy/landing/env.example, where DOMAIN_NAME routes flex-nfc.uz to this
+// container. It used to be flex.com.uz, which nothing resolves to: an unset
+// NEXT_PUBLIC_SITE_URL therefore published a canonical, a sitemap, an hreflang
+// cluster and every QR target pointing at a host that does not answer, and a
+// cross-domain canonical to an unreachable host is discarded.
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://flex.com.uz"
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://flex-nfc.uz"
 ).replace(/\/$/, "");
 
 // The bare host, for the places that show the address to a reader instead of

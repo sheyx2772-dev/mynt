@@ -60,7 +60,7 @@ jobs:
           # browser gets them either way — which is why they are variables and
           # not secrets.
           build-args: |
-            NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }}
+            NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL || 'https://flex-nfc.uz' }}
             NEXT_PUBLIC_TELEGRAM_BOT_NAME=${{ vars.NEXT_PUBLIC_TELEGRAM_BOT_NAME }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/flex-web:latest

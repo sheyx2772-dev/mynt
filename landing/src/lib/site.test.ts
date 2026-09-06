@@ -37,11 +37,11 @@ describe("getSiteOrigin", () => {
     const { getSiteOrigin } = await loadSite();
 
     headerStore.set("x-forwarded-host", "evil.com");
-    await expect(getSiteOrigin()).resolves.toBe("https://flex.com.uz");
+    await expect(getSiteOrigin()).resolves.toBe("https://flex-nfc.uz");
 
     headerStore.clear();
     headerStore.set("host", "flex.com.uz.evil.com");
-    await expect(getSiteOrigin()).resolves.toBe("https://flex.com.uz");
+    await expect(getSiteOrigin()).resolves.toBe("https://flex-nfc.uz");
   });
 
   it("still works on localhost for development", async () => {
@@ -61,7 +61,7 @@ describe("getSiteOrigin", () => {
     const { getSiteOrigin } = await loadSite();
 
     headerStore.set("host", "localhost.evil.com");
-    await expect(getSiteOrigin()).resolves.toBe("https://flex.com.uz");
+    await expect(getSiteOrigin()).resolves.toBe("https://flex-nfc.uz");
   });
 
   it("trims a trailing slash from the configured origin", async () => {
