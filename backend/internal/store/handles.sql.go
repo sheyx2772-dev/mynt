@@ -34,7 +34,7 @@ func (q *Queries) GenesisCard(ctx context.Context, normalized *string) (GenesisC
 
 const handlesForUser = `-- name: HandlesForUser :many
 
-select id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq from handles
+select id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq, korinish from handles
 where user_id = $1
 order by claimed_at desc nulls last
 `
@@ -93,6 +93,7 @@ func (q *Queries) HandlesForUser(ctx context.Context, userID *uuid.UUID) ([]Hand
 			&i.CommentsOpen,
 			&i.RecommendCount,
 			&i.Yopiq,
+			&i.Korinish,
 		); err != nil {
 			return nil, err
 		}
@@ -105,7 +106,7 @@ func (q *Queries) HandlesForUser(ctx context.Context, userID *uuid.UUID) ([]Hand
 }
 
 const ownedHandle = `-- name: OwnedHandle :one
-select id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq from handles
+select id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq, korinish from handles
 where normalized = $1
   and user_id = $2
 `
@@ -158,6 +159,7 @@ func (q *Queries) OwnedHandle(ctx context.Context, arg OwnedHandleParams) (Handl
 		&i.CommentsOpen,
 		&i.RecommendCount,
 		&i.Yopiq,
+		&i.Korinish,
 	)
 	return i, err
 }
@@ -167,7 +169,7 @@ select normalized, user_id, owner_name, bio, avatar_url, banner_url, links, serv
        city, contact_email, phone, position, company, tags,
        card_design, device_type, custom_design_url,
        plan, plan_expires_at, view_count, last_seen_at,
-       yopiq, follower_count
+       yopiq, follower_count, korinish
 from handles
 where normalized = $1 and status = 'claimed'
 `
@@ -196,6 +198,7 @@ type PublicProfileRow struct {
 	LastSeenAt      pgtype.Timestamptz `json:"last_seen_at"`
 	Yopiq           bool               `json:"yopiq"`
 	FollowerCount   int64              `json:"follower_count"`
+	Korinish        []byte             `json:"korinish"`
 }
 
 // What a visitor sees. Only claimed numbers: a reservation is an unfinished
@@ -227,6 +230,7 @@ func (q *Queries) PublicProfile(ctx context.Context, normalized *string) (Public
 		&i.LastSeenAt,
 		&i.Yopiq,
 		&i.FollowerCount,
+		&i.Korinish,
 	)
 	return i, err
 }
@@ -310,10 +314,11 @@ update handles set
   avatar_url = $13,
   banner_url = $14,
   comments_open = $15,
-  yopiq = $16
-where normalized = $17
-  and user_id = $18
-returning id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq
+  yopiq = $16,
+  korinish = $17
+where normalized = $18
+  and user_id = $19
+returning id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq, korinish
 `
 
 type UpdateProfileParams struct {
@@ -333,6 +338,7 @@ type UpdateProfileParams struct {
 	BannerUrl    *string    `json:"banner_url"`
 	CommentsOpen bool       `json:"comments_open"`
 	Yopiq        bool       `json:"yopiq"`
+	Korinish     []byte     `json:"korinish"`
 	Normalized   *string    `json:"normalized"`
 	UserID       *uuid.UUID `json:"user_id"`
 }
@@ -360,6 +366,7 @@ func (q *Queries) UpdateProfile(ctx context.Context, arg UpdateProfileParams) (H
 		arg.BannerUrl,
 		arg.CommentsOpen,
 		arg.Yopiq,
+		arg.Korinish,
 		arg.Normalized,
 		arg.UserID,
 	)
@@ -404,6 +411,7 @@ func (q *Queries) UpdateProfile(ctx context.Context, arg UpdateProfileParams) (H
 		&i.CommentsOpen,
 		&i.RecommendCount,
 		&i.Yopiq,
+		&i.Korinish,
 	)
 	return i, err
 }

@@ -7,6 +7,7 @@ import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRar
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import { linkValue } from "@/lib/links";
+import { FIELD_BY_LABEL } from "@/lib/visibility";
 import { dict, menuBar, site as siteWords, type Lang } from "@/lib/i18n";
 import { venueWords } from "@/lib/venue-words";
 import { planState } from "@/lib/venue-billing";
@@ -331,6 +332,22 @@ async function VanityHandlePage({
     // owner being paid, and the eight-icon grid is where things go to be equal.
     const payAt = profile.links.findIndex((l) => l.kind === "payment");
     const payHref = payAt >= 0 ? `/${normalized}/go?to=${payAt}` : null;
+
+    // What the owner has narrowed, said on their own page in the words the
+    // reader would use — "Telefon", "Instagram" — so they can check the page
+    // does what the form said without signing in as somebody else.
+    const fieldWord = (field: string) =>
+      field === "telefon" ? t.phoneWord : field === "email" ? t.email
+        : (Object.entries(FIELD_BY_LABEL).find(([, f]) => f === field)?.[0] ?? field);
+    const narrowed = isOwner
+      ? Object.entries(profile.visibility).reduce(
+          (acc, [field, audience]) => {
+            (audience === "yopiq" ? acc.onlyYou : acc.followers).push(fieldWord(field));
+            return acc;
+          },
+          { onlyYou: [] as string[], followers: [] as string[] },
+        )
+      : null;
 
     const inGrid = new Set(gridActions.map((a) => a.href));
     if (payHref) inGrid.add(payHref);
@@ -670,6 +687,23 @@ async function VanityHandlePage({
                     : t.noPosts
                 }
               />
+            </div>
+          )}
+
+          {narrowed && (narrowed.onlyYou.length > 0 || narrowed.followers.length > 0) && (
+            <div className="mt-6 space-y-1.5 rounded-plate border border-line px-4 py-3 text-[12px] text-mute">
+              {narrowed.onlyYou.length > 0 && (
+                <p className="flex items-center gap-2">
+                  <Lock className="h-3.5 w-3.5 shrink-0" strokeWidth={1.7} aria-hidden />
+                  <span>{t.onlyYouSee}: {narrowed.onlyYou.join(", ")}</span>
+                </p>
+              )}
+              {narrowed.followers.length > 0 && (
+                <p className="flex items-center gap-2">
+                  <Users className="h-3.5 w-3.5 shrink-0" strokeWidth={1.7} aria-hidden />
+                  <span>{t.followersSee}: {narrowed.followers.join(", ")}</span>
+                </p>
+              )}
             </div>
           )}
 

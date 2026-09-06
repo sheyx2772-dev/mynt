@@ -38,6 +38,7 @@ type Profile struct {
 	BannerURL    string
 	CommentsOpen bool
 	Private      bool
+	Visibility   Visibility
 }
 
 // ProfileInput is what arrives from a form or an app.
@@ -70,6 +71,10 @@ type ProfileInput struct {
 	// Closed profile: strangers see the face and ask to see the rest. A switch
 	// like commentsOpen, and sent every time for the same reason.
 	Yopiq bool `json:"yopiq"`
+	// Who sees which field: `telegram`, `telefon`, `email`… → `obuna` or
+	// `yopiq`. A field left out is open. Optional, so a client that does not
+	// show the setting leaves every field open rather than being refused.
+	Korinish map[string]string `json:"korinish,omitempty" doc:"Maydon → kim ko'radi: obuna yoki yopiq; yo'q bo'lsa hammaga ochiq"`
 }
 
 // ReadProfile turns an edit into something storable, or says what is wrong.
@@ -111,6 +116,7 @@ func ReadProfile(in ProfileInput, plan string) (Profile, string) {
 		BannerURL:    trim(in.BannerURL, 500),
 		CommentsOpen: in.CommentsOpen,
 		Private:      in.Yopiq,
+		Visibility:   ReadVisibility(in.Korinish),
 	}, ""
 }
 

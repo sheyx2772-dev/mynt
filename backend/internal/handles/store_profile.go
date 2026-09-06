@@ -36,6 +36,10 @@ func (s *Store) SaveProfile(ctx context.Context, normalized, userID string, in P
 	if err != nil {
 		return Handle{}, "", err
 	}
+	visibility, err := json.Marshal(profile.Visibility)
+	if err != nil {
+		return Handle{}, "", err
+	}
 
 	id := *current.UserID
 	row, err := s.queries.UpdateProfile(ctx, store.UpdateProfileParams{
@@ -55,6 +59,7 @@ func (s *Store) SaveProfile(ctx context.Context, normalized, userID string, in P
 		BannerUrl:    optional(profile.BannerURL),
 		CommentsOpen: profile.CommentsOpen,
 		Yopiq:        profile.Private,
+		Korinish:     visibility,
 		Normalized:   &normalized,
 		UserID:       &id,
 	})

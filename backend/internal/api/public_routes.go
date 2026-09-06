@@ -84,7 +84,7 @@ func (s *Server) registerPublic(api huma.API) {
 		// A closed profile is cut here, after the three facts that open it are
 		// known. Cut on the server rather than hidden by the page: a hidden
 		// field is still in the response, and a response is a file.
-		profile = profile.ForStranger(profile.Following)
+		profile = profile.ForReader(profile.Following).ForStranger(profile.Following)
 
 		out := &publicProfileOutput{}
 		out.Body.Profile = profile

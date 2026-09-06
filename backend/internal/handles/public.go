@@ -47,6 +47,9 @@ type PublicProfile struct {
 	// Closed: a stranger sees the name, the picture and the number, and the
 	// rest after the owner has accepted them. See ForStranger.
 	Private bool `json:"yopiq"`
+	// Which lines are narrowed to followers or to the owner. Sent to the
+	// owner only — see ForReader — and empty for everyone else.
+	Visibility Visibility `json:"korinish,omitempty"`
 
 	// Whether the reader owns this number.
 	//
@@ -83,27 +86,28 @@ func (s *Store) Public(ctx context.Context, normalized, viewerID string) (Public
 	mine := viewerID != "" && row.UserID != nil && row.UserID.String() == viewerID
 
 	return PublicProfile{
-		Mine:     mine,
-		Handle:   deref(row.Normalized),
-		Name:     firstNonEmpty(deref(row.OwnerName), deref(row.Normalized)),
-		Bio:      deref(row.Bio),
-		Avatar:   deref(row.AvatarUrl),
-		Banner:   deref(row.BannerUrl),
-		Links:    decodeLinks(row.Links),
-		Services: decodeServices(row.Services),
-		City:     deref(row.City),
-		Email:    deref(row.ContactEmail),
-		Phone:    deref(row.Phone),
-		Position: deref(row.Position),
-		Company:  deref(row.Company),
-		Tags:     row.Tags,
-		Design:   CardDesign(row.CardDesign),
-		Device:   DeviceType(row.DeviceType),
-		Plan:     EffectivePlan(row.Plan, optionalTime(row.PlanExpiresAt)),
-		Views:     row.ViewCount,
-		Followers: row.FollowerCount,
-		LastSeen:  optionalTime(row.LastSeenAt),
-		Private:   row.Yopiq,
+		Mine:       mine,
+		Handle:     deref(row.Normalized),
+		Name:       firstNonEmpty(deref(row.OwnerName), deref(row.Normalized)),
+		Bio:        deref(row.Bio),
+		Avatar:     deref(row.AvatarUrl),
+		Banner:     deref(row.BannerUrl),
+		Links:      decodeLinks(row.Links),
+		Services:   decodeServices(row.Services),
+		City:       deref(row.City),
+		Email:      deref(row.ContactEmail),
+		Phone:      deref(row.Phone),
+		Position:   deref(row.Position),
+		Company:    deref(row.Company),
+		Tags:       row.Tags,
+		Design:     CardDesign(row.CardDesign),
+		Device:     DeviceType(row.DeviceType),
+		Plan:       EffectivePlan(row.Plan, optionalTime(row.PlanExpiresAt)),
+		Views:      row.ViewCount,
+		Followers:  row.FollowerCount,
+		LastSeen:   optionalTime(row.LastSeenAt),
+		Private:    row.Yopiq,
+		Visibility: decodeVisibility(row.Korinish),
 	}, nil
 }
 

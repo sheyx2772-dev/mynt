@@ -2423,6 +2423,9 @@ export interface components {
             izohlar_ochiq: boolean;
             jamoa?: string;
             kompaniya?: string;
+            korinish: {
+                [key: string]: string;
+            };
             /** Format: int64 */
             korishlar: number;
             lavozim?: string;
@@ -3072,6 +3075,10 @@ export interface components {
             company?: string;
             contactEmail?: string;
             deviceType?: string;
+            /** @description Maydon → kim ko'radi: obuna yoki yopiq; yo'q bo'lsa hammaga ochiq */
+            korinish?: {
+                [key: string]: string;
+            };
             links?: components["schemas"]["LinkInput"];
             /** @description Yagona majburiy maydon */
             name: string;
@@ -3132,6 +3139,9 @@ export interface components {
             havolalar: components["schemas"]["Link"][] | null;
             ism: string;
             kompaniya?: string;
+            korinish?: {
+                [key: string]: string;
+            };
             /** Format: int64 */
             korishlar: number;
             lavozim?: string;

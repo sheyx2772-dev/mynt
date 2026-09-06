@@ -1,3 +1,4 @@
+import type { Visibility } from "@/lib/visibility";
 import { effectivePlan, type PlanId } from "@/lib/plans";
 import { readServices, type Service } from "@/lib/services";
 import { cache } from "react";
@@ -16,6 +17,8 @@ export type ClaimedProfile = {
   isPrivate: boolean;
   /** The reader asked and is waiting. */
   isPending: boolean;
+  /** Which lines are narrowed — only ever filled for the owner. */
+  visibility: Visibility;
   name: string;
   bio: string;
   avatarUrl: string | null;
@@ -57,6 +60,7 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
     isRecommended: p.tavsiya_qilganman,
     isPrivate: p.yopiq,
     isPending: p.sorov_kutilmoqda,
+    visibility: p.korinish ?? {},
     name: p.ism,
     bio: p.tavsif ?? "",
     avatarUrl: p.rasm ?? null,
@@ -152,6 +156,7 @@ export type OwnedHandle = {
   teamName: string | null;
   commentsOpen: boolean;
   isPrivate: boolean;
+  visibility: Visibility;
   tags: string[];
   viewCount: number;
   cardDesign: CardDesignId;
@@ -207,6 +212,7 @@ function toOwned(h: BackendHandle): OwnedHandle {
     teamName: h.jamoa ?? null,
     commentsOpen: h.izohlar_ochiq,
     isPrivate: h.yopiq,
+    visibility: h.korinish ?? {},
     tags: h.teglar ?? [],
     viewCount: h.korishlar,
     cardDesign: isCardDesign(h.dizayn) ? h.dizayn : DEFAULT_CARD_DESIGN,

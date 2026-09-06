@@ -168,6 +168,7 @@ type Handle struct {
 	CommentsOpen    bool               `json:"comments_open"`
 	RecommendCount  int32              `json:"recommend_count"`
 	Yopiq           bool               `json:"yopiq"`
+	Korinish        []byte             `json:"korinish"`
 }
 
 type HandleTransfer struct {
