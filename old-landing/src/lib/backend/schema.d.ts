@@ -590,6 +590,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/men/korinmas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ko'rinmas rejim holati */
+        get: operations["korinmas"];
+        /**
+         * Ko'rinmas rejimni yoqish yoki o'chirish
+         * @description Yoqilsa siz ochgan profillar egalari sizni ko'rmaydi — va siz ham o'zingiznikini kim ko'rganini ko'rmaysiz. Avval yozilganlar o'chiriladi.
+         */
+        put: operations["korinmas-qilish"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/men/obunalar": {
         parameters: {
             query?: never;
@@ -1346,6 +1367,26 @@ export interface paths {
          * @description Summalar chaqiruvchidan keladi va qatorga ko'chiriladi — narxlar ro'yxati o'zgaradi, hujjat esa aytganini aytib turishi kerak.
          */
         post: operations["hisob-berish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/raqamlar/{raqam}/korganlar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Profilni kim ko'rgani
+         * @description Soni hammaga; ismlar premium rejada va faqat o'zi ko'rinmas bo'lmagan egaga.
+         */
+        get: operations["korganlar"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2683,6 +2724,24 @@ export interface components {
             manba?: "nfc" | "qr" | "share";
             telefon?: string;
         };
+        InvisibleInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/InvisibleInputBody.json
+             */
+            readonly $schema?: string;
+            korinmas: boolean;
+        };
+        InvisibleOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/InvisibleOutputBody.json
+             */
+            readonly $schema?: string;
+            korinmas: boolean;
+        };
         Invoice: {
             /** Format: date-time */
             berilgan: string;
@@ -3949,6 +4008,28 @@ export interface components {
             /** @enum {string} */
             manba?: "nfc" | "qr" | "share";
         };
+        Viewer: {
+            ism: string;
+            /** Format: int32 */
+            marta: number;
+            raqam?: string;
+            rasm?: string;
+            /** Format: date-time */
+            vaqt: string;
+        };
+        ViewersOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/ViewersOutputBody.json
+             */
+            readonly $schema?: string;
+            korganlar: components["schemas"]["Viewer"][] | null;
+            /** @enum {string} */
+            sabab: "ochiq" | "bepul" | "korinmas";
+            /** Format: int64 */
+            soni: number;
+        };
     };
     responses: never;
     parameters: never;
@@ -4990,6 +5071,66 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["Requisites"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    korinmas: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvisibleOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "korinmas-qilish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InvisibleInputBody"];
             };
         };
         responses: {
@@ -6597,6 +6738,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["InvoiceOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    korganlar: {
+        parameters: {
+            query?: {
+                soni?: number;
+            };
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ViewersOutputBody"];
                 };
             };
             /** @description Error */

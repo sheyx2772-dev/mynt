@@ -116,6 +116,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 	s.registerSocial(api)
 	s.registerGreetings(api)
 	s.registerGifts(api)
+	s.registerVisits(api)
 	s.registerVenues(api)
 	s.registerMenu(api)
 	s.registerMenuReads(api)

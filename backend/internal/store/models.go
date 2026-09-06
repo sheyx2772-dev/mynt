@@ -373,6 +373,14 @@ type ProfileView struct {
 	Source       *string            `json:"source"`
 }
 
+type ProfileVisit struct {
+	Handle       string             `json:"handle"`
+	ViewerUserID uuid.UUID          `json:"viewer_user_id"`
+	FirstAt      pgtype.Timestamptz `json:"first_at"`
+	LastAt       pgtype.Timestamptz `json:"last_at"`
+	Soni         int32              `json:"soni"`
+}
+
 type PromoCode struct {
 	Code           string             `json:"code"`
 	Kind           string             `json:"kind"`
@@ -534,4 +542,10 @@ type VenueRequest struct {
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
 	DoneAt    pgtype.Timestamptz `json:"done_at"`
 	Ip        *string            `json:"ip"`
+}
+
+type ViewerSetting struct {
+	UserID    uuid.UUID          `json:"user_id"`
+	Korinmas  bool               `json:"korinmas"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
 }

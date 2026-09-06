@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { setGiftShown } from "@/lib/gifts";
+import { setInvisible } from "@/lib/viewers";
 import { writePost, removePost } from "@/lib/posts";
 import { parseHandle } from "@/lib/pricing";
 import { getUser } from "@/lib/auth";
@@ -201,5 +202,12 @@ export async function toggleGift(rawHandle: string, id: number, shown: boolean):
     revalidatePath(`/${normalized}`);
     revalidatePath(`/kabinet/${normalized}/sovgalar`);
   }
+  return ok;
+}
+
+/** Nobody sees you, and you see nobody. The backend forgets what was written. */
+export async function setInvisibleMode(on: boolean): Promise<boolean> {
+  const ok = await setInvisible(on);
+  if (ok) revalidatePath("/kabinet", "layout");
   return ok;
 }
