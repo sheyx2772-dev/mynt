@@ -1,24 +1,26 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { Search } from "lucide-react";
+import { CreditCard, Search, Smartphone } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import ProfileMockup from "./ProfileMockup";
 import ThemeSwatch from "./ThemeSwatch";
 import CardFace from "@/components/CardFace";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { chooseTheme } from "@/app/(cabinet)/[locale]/cabinet/[handle]/theme/actions";
 import { type CardDesignId } from "@/lib/card-designs";
+import { PROFILE_THEMES } from "@/lib/profile/theme";
 import { FAMILIES, THEMES, type ThemeFamily } from "@/lib/cabinet/themes";
 
-// A luxury card catalogue with a live spotlight preview and one-touch apply.
+// The profile theme picker: lets the owner decide how their public page
+// renders when someone touches their card or opens flex.uz/:handle.
 //
-// Shows the 10 authentic Flex card designs as real physical cards. The top
-// spotlight shows the picked design in high resolution with container-based
-// proportions, while the 2-column catalogue lets the user explore each
-// piece's unique finish, accent, and heritage story.
+// Carries a live mobile viewport preview so changes can be evaluated on
+// the exact form factor visitors use, plus a toggle to inspect the matching
+// physical NFC card.
 export default function ThemePicker({
   raqam,
   current,
@@ -30,12 +32,13 @@ export default function ThemePicker({
 }) {
   const t = useTranslations("cabinet.theme");
   const [picked, setPicked] = useState(current);
+  const [previewMode, setPreviewMode] = useState<"profile" | "card">("profile");
   const [family, setFamily] = useState<ThemeFamily | null>(null);
   const [query, setQuery] = useState("");
   const [pending, start] = useTransition();
 
-  const activeTheme = useMemo(
-    () => THEMES.find((th) => th.id === picked) ?? THEMES[0],
+  const activeProfileTheme = useMemo(
+    () => PROFILE_THEMES[picked] || PROFILE_THEMES.genesis,
     [picked],
   );
 
@@ -57,25 +60,63 @@ export default function ThemePicker({
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Live Spotlight Preview of the selected card */}
+      {/* Live Spotlight Preview */}
       <div className="relative overflow-hidden rounded-tile border border-border bg-card/70 p-4 sm:p-6 shadow-slab backdrop-blur">
-        <div className="mb-3 flex items-center justify-between">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="size-2 rounded-full bg-primary animate-pulse" />
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {t("preview")}
+              {previewMode === "profile"
+                ? "Jonli veb-profil ko'rinishi (NFC / URL)"
+                : "Jismoniy NFC karta ko'rinishi"}
             </span>
           </div>
-          <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-foreground">
-            {activeTheme.name}
-          </span>
+
+          {/* Mode Switcher */}
+          <div className="flex rounded-full border border-border bg-muted/60 p-0.5 text-xs">
+            <button
+              type="button"
+              onClick={() => setPreviewMode("profile")}
+              className={`flex items-center gap-1.5 rounded-full px-3 py-1 font-medium transition-colors ${
+                previewMode === "profile"
+                  ? "bg-foreground text-background shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Smartphone className="size-3.5" />
+              <span>Veb-profil</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPreviewMode("card")}
+              className={`flex items-center gap-1.5 rounded-full px-3 py-1 font-medium transition-colors ${
+                previewMode === "card"
+                  ? "bg-foreground text-background shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <CreditCard className="size-3.5" />
+              <span>NFC Karta</span>
+            </button>
+          </div>
         </div>
+
         <div className="mx-auto max-w-sm drop-shadow-2xl transition-all duration-300">
-          <CardFace
-            design={picked as CardDesignId}
-            handle={name}
-            sizes="(min-width: 640px) 384px, 92vw"
-          />
+          {previewMode === "profile" ? (
+            <ProfileMockup
+              theme={activeProfileTheme}
+              raqam={raqam}
+              name={name}
+            />
+          ) : (
+            <div className="py-4">
+              <CardFace
+                design={picked as CardDesignId}
+                handle={name}
+                sizes="(min-width: 640px) 384px, 92vw"
+              />
+            </div>
+          )}
         </div>
       </div>
 
@@ -121,6 +162,7 @@ export default function ThemePicker({
               key={th.id}
               theme={th}
               name={name}
+              raqam={raqam}
               selected={th.id === picked}
               onSelect={() => setPicked(th.id)}
             />

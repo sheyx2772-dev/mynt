@@ -1,5 +1,6 @@
 import { getLocale } from "next-intl/server";
 
+import { ownerOf } from "@/lib/backend/profile";
 import { themeFor } from "@/lib/profile/theme";
 import { inter, mono, serif } from "../../../fonts";
 import "../../../globals.css";
@@ -20,19 +21,26 @@ import "../../../globals.css";
 
 export default async function ProfileLayout({
   children,
+  params,
 }: LayoutProps<"/p/[handle]">) {
+  const { handle } = await params;
   const locale = await getLocale();
+
+  let dizayn: string | undefined;
+  try {
+    const owner = await ownerOf(handle.toUpperCase());
+    dizayn = owner?.dizayn;
+  } catch {}
+
+  const theme = themeFor(dizayn);
 
   return (
     <html
       lang={locale}
-      // The default look, so the ground behind an overscroll and the ground
-      // under the page agree before anything is fetched. The page sets the
-      // owner's own theme on the content below.
-      style={themeFor().style}
+      style={theme.style}
       className={`${inter.variable} ${mono.variable} ${serif.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-[var(--p-ground)] text-[var(--p-text)]">
+      <body className="min-h-full bg-[var(--p-ground)] text-[var(--p-text)] transition-colors duration-300">
         {children}
       </body>
     </html>
