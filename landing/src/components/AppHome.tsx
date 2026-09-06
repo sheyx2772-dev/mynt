@@ -93,7 +93,13 @@ export default function AppHome({
             {s.heroTitleB}
           </h1>
 
-          <p className="mt-5 text-paper-3 text-xs font-semibold tracking-widest uppercase">
+          {/* The same sentence the wide layout opens with. A phone visitor met
+              the form even sooner, with less around it to explain itself. */}
+          <p className="mt-4 text-[15px] leading-6 text-paper-2">
+            {s.heroLede.replace("{host}", SITE_HOST)}
+          </p>
+
+          <p className="mt-6 text-paper-3 text-xs font-semibold tracking-widest uppercase">
             {s.pickHandle}
           </p>
           <p className="mt-1.5 text-sm leading-relaxed text-paper-2">

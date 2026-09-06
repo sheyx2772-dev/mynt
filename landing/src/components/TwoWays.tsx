@@ -3,6 +3,7 @@ import HandleChecker from "@/components/HandleChecker";
 import FloatingCarousel, { type CarouselItem } from "@/components/FloatingCarousel";
 import { ArrowRight, User, Store } from "lucide-react";
 import type { site } from "@/lib/i18n";
+import { SITE_HOST } from "@/lib/site-url";
 
 // The fork, said out loud at the entrance.
 //
@@ -37,6 +38,14 @@ export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselIt
         <span className="rounded-plate bg-lime px-2 text-flex-black">{s.heroTitleMark}</span>{" "}
         {s.heroTitleB}
       </h1>
+
+      {/* What the thing is, before anything is asked of anybody. The page used
+          to go from a five-word headline straight to a form wanting three
+          letters and three digits — a visitor was being asked to pick a number
+          before being told what a number does. */}
+      <p className="mt-5 max-w-xl text-lg leading-7 text-ink-2">
+        {s.heroLede.replace("{host}", SITE_HOST)}
+      </p>
 
       {/* The search stays on the entry page even though the hero that carried
           it has moved. It is the one thing somebody can do here without
