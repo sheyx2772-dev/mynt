@@ -185,6 +185,14 @@ function IBtn({ icon, label, bg, color = "white" }: { icon: React.ReactElement; 
   );
 }
 
+// The three controls at the foot of this card do nothing.
+//
+// This component draws a *sample* of a profile — it is what /katalog shows in
+// a gallery of forty of them. The buttons were real <button> elements with no
+// handler: they took keyboard focus, announced themselves to a screen reader
+// as controls, and did nothing when pressed. They are spans now, hidden from
+// assistive technology, because a picture of a button is not a button.
+//
 // ── Main card ────────────────────────────────────────────────────────────────
 interface Props {
   profile: Profile;
@@ -336,38 +344,35 @@ export default function ProfileCard({ profile, lang, theme, banner: bannerProp }
       {/* ══ CTA BUTTONS ══════════════════════════════════════ */}
       <div style={{ padding: "0 16px", display: "flex", gap: 8 }}>
         {/* ADD TO CONTACTS */}
-        <button className="btn-primary" style={{
+        <span aria-hidden style={{
           flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
           padding: "11px 8px", borderRadius: "var(--r-lg)",
           border: `1.5px solid ${c.accent}`, background: "transparent", color: c.accent,
-          fontSize: 9, fontWeight: 800, fontFamily: "var(--fk-sans)", letterSpacing: "0.04em", cursor: "pointer",
-        }}>
+          fontSize: 9, fontWeight: 800, fontFamily: "var(--fk-sans)", letterSpacing: "0.04em", }}>
           {I.plus}
           {t.add}
-        </button>
+        </span>
         {/* SHARE */}
-        <button className="btn-primary" style={{
+        <span aria-hidden style={{
           display: "flex", alignItems: "center", gap: 6,
           padding: "11px 14px", borderRadius: "var(--r-lg)",
           border: "1.5px solid rgba(255,255,255,0.18)", background: "transparent", color: "rgba(255,255,255,0.55)",
-          fontSize: 9, fontWeight: 800, fontFamily: "var(--fk-sans)", letterSpacing: "0.04em", cursor: "pointer",
-        }}>
+          fontSize: 9, fontWeight: 800, fontFamily: "var(--fk-sans)", letterSpacing: "0.04em", }}>
           {I.share}
           {t.share}
-        </button>
+        </span>
       </div>
 
       {/* Website button — omitted when the organisation publishes no site, rather
           than printing a domain nobody confirmed. */}
       {profile.website && <div style={{ padding: "8px 16px 0" }}>
-        <button className="btn-primary" style={{
+        <span aria-hidden style={{
           width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
           padding: "11px", borderRadius: "var(--r-lg)", background: c.accent2, border: "none",
-          color: "white", fontSize: 10, fontWeight: 800, fontFamily: "var(--fk-sans)", letterSpacing: "0.02em", cursor: "pointer",
-        }}>
+          color: "white", fontSize: 10, fontWeight: 800, fontFamily: "var(--fk-sans)", letterSpacing: "0.02em", }}>
           {I.web}
           {profile.website}
-        </button>
+        </span>
       </div>}
 
       {/* Divider */}
