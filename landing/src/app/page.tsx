@@ -43,11 +43,10 @@ import { getUser } from "@/lib/auth";
 import { getHandleStats } from "@/lib/analytics";
 import { listLeads } from "@/lib/leads";
 import LiveResidents from "@/components/LiveResidents";
-import AppHome from "@/components/AppHome";
+import AppHome, { AppTiles } from "@/components/AppHome";
+import Strips from "@/components/Strips";
 import CardFan from "@/components/CardFan";
 import TwoWays from "@/components/TwoWays";
-import LoadoutStrip from "@/components/LoadoutStrip";
-import SampleStrip from "@/components/SampleStrip";
 import { deviceStrip, verticalStrip, heroCarousel } from "@/lib/strip-items";
 import MobileMenu from "@/components/MobileMenu";
 import { getLang } from "@/lib/lang";
@@ -323,46 +322,34 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <TwoWays s={s} carousel={carousel} />
         </div>
 
-        {/* Third block, straight after the offer. Somebody who has read the
-            fork and then the offer is now deciding what the thing looks like,
-            and that is decided by looking rather than by reading — so nothing
-            goes between. Desktop only; AppHome carries the same two rows. */}
-        <div className="hidden pb-6 lg:block">
-          <LoadoutStrip items={devices} label={p.groupDevices} note={p.groupDevicesNote} />
-          <LoadoutStrip
-            items={verticals}
-            label={p.groupDirections}
-            note={p.groupDirectionsNote}
-          />
+        {/* On a phone this is the entry screen. See AppHome. */}
+        <AppHome
+          s={s}
+          claimed={counts.claimed}
+          namespace={counts.namespace}
+          carousel={carousel}
+          owner={owner}
+        />
 
-          {/* The third question a buyer has, after what to hold and which room:
-              what their own page will look like. A shelf of the layouts and of
-              the organisations, at a phone's size, because that question is
-              answered by looking rather than by reading. */}
-          <SampleStrip
-            label={p.samplesLabel}
-            note={p.samplesNote}
-            open={p.openCta}
-            lang={lang}
-          />
-
-          {/* The same question in one line, for anyone who wants the whole
-              catalogue rather than the shelf. The seven layouts answer it,
-              and until now they sat five clicks deep behind a chip at the far
-              end of a scrolling filter row, which is the same as not existing. */}
-          <div className="mx-auto max-w-6xl px-6 pt-2">
-            <Link
-              href="/katalog?bolim=layouts"
-              className="group flex items-center justify-between gap-4 rounded-card border border-line px-5 py-4 transition-colors hover:bg-black/[0.03]"
-            >
-              <span>
-                <span className="block font-semibold">{p.samplesLabel}</span>
-                <span className="block text-sm text-ink-2">{p.samplesCta}</span>
-              </span>
-              <ArrowUpRight className="h-5 w-5 shrink-0 text-ink-3 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          </div>
-        </div>
+        {/* The three shelves, rendered once for both layouts. On a wide screen
+            they follow the fork above; on a phone they follow the app's own
+            fork, and the tiles below pick the sequence up again. Neither copy
+            is hidden behind a breakpoint any more, which is what used to cost
+            twenty-one profile drawings a second time. */}
+        <Strips
+          devices={devices}
+          verticals={verticals}
+          labels={{
+            devices: p.groupDevices,
+            devicesNote: p.groupDevicesNote,
+            directions: p.groupDirections,
+            directionsNote: p.groupDirectionsNote,
+            samples: p.samplesLabel,
+            samplesNote: p.samplesNote,
+            samplesCta: p.samplesCta,
+          }}
+          lang={lang}
+        />
 
         {/* Who has just joined, and how much of the namespace is gone. Directly
             under the hero, because it is the first thing a scroll reveals and
@@ -376,27 +363,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           />
         </div>
 
-        {/* On a phone this is the whole entry screen. See AppHome. */}
-        <AppHome
-          s={s}
-          residents={newest}
-          claimed={counts.claimed}
-          namespace={counts.namespace}
-          devices={devices}
-          verticals={verticals}
-          carousel={carousel}
-          stripLabels={{
-            devices: p.groupDevices,
-            devicesNote: p.groupDevicesNote,
-            directions: p.groupDirections,
-            directionsNote: p.groupDirectionsNote,
-            samples: p.samplesLabel,
-            samplesCta: p.samplesCta,
-            samplesNote: p.samplesNote,
-          }}
-          lang={lang}
-          owner={owner}
-        />
+        <AppTiles s={s} residents={newest} />
 
         {/* 2 — try it before buying ------------------------------------ */}
         <section

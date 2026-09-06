@@ -10,6 +10,7 @@ import SocialProfile from "@/components/ui/SocialProfile";
 import PosterProfile from "@/components/ui/PosterProfile";
 import ReceiptProfile from "@/components/ui/ReceiptProfile";
 import NfcCardProfile from "@/components/ui/NfcCardProfile";
+import { SITE_HOST } from "@/lib/site-url";
 
 function PlaqueSample() {
   return (
@@ -134,7 +135,7 @@ function ReceiptSample() {
           Kontaktni saqlash
         </a>
         <p className="mt-4 text-center font-mono text-[16px] text-mute">
-          * * * flex.com.uz/MYN042 * * *
+          * * * {SITE_HOST}/MYN042 * * *
         </p>
       </ReceiptProfile>
     </div>

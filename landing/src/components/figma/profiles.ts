@@ -1,3 +1,4 @@
+import { SITE_HOST } from "@/lib/site-url";
 // The catalogue is a design sample, not a directory of people.
 //
 // It shipped with thirteen invented officials: stock photographs of real,
@@ -646,7 +647,7 @@ export const profiles: Profile[] = [
     department: "MC Legal yuridik firmasi rahbari · biznes yurist",
     organization: "FLEX",
     orgShort: "FLEX",
-    website: "flex.com.uz",
+    website: SITE_HOST,
     coverColor: "#161a2e",
     coverAccent: "#b4f01e",
     logoText: "FLEX",
@@ -667,7 +668,7 @@ export const profiles: Profile[] = [
     education: "University of Alberta",
     organization: "FLEX",
     orgShort: "FLEX",
-    website: "flex.com.uz",
+    website: SITE_HOST,
     coverColor: "#161a2e",
     coverAccent: "#b4f01e",
     logoText: "FLEX",
@@ -688,7 +689,7 @@ export const profiles: Profile[] = [
     education: "INHA University in Tashkent",
     organization: "FLEX",
     orgShort: "FLEX",
-    website: "flex.com.uz",
+    website: SITE_HOST,
     coverColor: "#161a2e",
     coverAccent: "#b4f01e",
     logoText: "FLEX",

@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { ArrowUpRight, Calculator, ChevronRight, CreditCard, Nfc, Store, User, Users } from "lucide-react";
+import { Calculator, ChevronRight, CreditCard, Nfc, Store, User, Users } from "lucide-react";
 import HandleChecker from "@/components/HandleChecker";
 import FloatingCarousel, { type CarouselItem } from "@/components/FloatingCarousel";
-import LoadoutStrip, { type StripItem } from "@/components/LoadoutStrip";
-import SampleStrip from "@/components/SampleStrip";
 import OwnerHome from "@/components/OwnerHome";
 import type { OwnedHandle } from "@/lib/handles";
 import { formatNumber } from "@/lib/format";
@@ -45,38 +43,18 @@ function Tile({
 
 export default function AppHome({
   s,
-  residents,
   claimed,
   namespace,
-  devices,
-  verticals,
   carousel,
-  stripLabels,
-  lang,
   owner,
 }: {
   s: Site;
-  residents: Resident[];
   claimed: number;
   namespace: number;
-  devices: StripItem[];
-  verticals: StripItem[];
   carousel: CarouselItem[];
-  stripLabels: {
-    devices: string;
-    devicesNote: string;
-    directions: string;
-    directionsNote: string;
-    samples: string;
-    samplesCta: string;
-    samplesNote: string;
-  };
-  lang: "uz" | "ru" | "en";
   /** Present only for a signed-in owner who has a handle. */
   owner?: { handle: OwnedHandle; todayViews: number; leads: number } | null;
 }) {
-  const newest = residents.slice(0, 3);
-
   return (
     <div className="lg:hidden">
       {owner && (
@@ -202,47 +180,29 @@ export default function AppHome({
       </section>
       )}
 
-      {/* The shelf, moving, right under the fork: whichever of the two you
-          are, the next question is which object. */}
-      <div className="pt-4">
-        <LoadoutStrip
-          items={devices}
-          label={stripLabels.devices}
-          note={stripLabels.devicesNote}
-        />
-        <LoadoutStrip
-          items={verticals}
-          label={stripLabels.directions}
-          note={stripLabels.directionsNote}
-        />
+    </div>
+  );
+}
 
-        {/* The third question, after what to hold and which room: what their
-            own page will look like — a shelf at a phone's size, since that is
-            answered by looking. */}
-        <SampleStrip
-          label={stripLabels.samples}
-          note={stripLabels.samplesNote}
-          open={stripLabels.samplesCta}
-          lang={lang}
-        />
+/**
+ * The lower half of the app layout: where to go next, and who has just joined.
+ *
+ * Split from AppHome so the three shelves between them can be rendered once
+ * for both layouts instead of twice — see Strips.tsx. The page puts that block
+ * between these two, and because each half is hidden at the other width the
+ * sequence still reads in order at both.
+ */
+export function AppTiles({
+  s,
+  residents,
+}: {
+  s: Site;
+  residents: Resident[];
+}) {
+  const newest = residents.slice(0, 3);
 
-        {/* And the whole catalogue in one line, for anyone who wants more than
-            the shelf. Carried here as well as on the desktop block, or a phone
-            visitor never reaches the layouts at all. */}
-        <div className="px-6 pt-3">
-          <Link
-            href="/katalog?bolim=layouts"
-            className="flex items-center justify-between gap-4 rounded-card border border-line px-4 py-3 active:bg-black/[0.04]"
-          >
-            <span>
-              <span className="block text-[15px] font-semibold">{stripLabels.samples}</span>
-              <span className="block text-[13px] text-ink-2">{stripLabels.samplesCta}</span>
-            </span>
-            <ArrowUpRight className="h-5 w-5 shrink-0 text-ink-3" />
-          </Link>
-        </div>
-      </div>
-
+  return (
+    <div className="lg:hidden">
       {/* Four destinations, thumb-sized. The sections these replace are hidden
           on a phone; each of these is where that content actually lives. */}
       <nav className="grid grid-cols-2 gap-3 px-6 pt-6">

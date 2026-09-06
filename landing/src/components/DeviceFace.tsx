@@ -71,7 +71,7 @@ function Card({ design, handle, compact, customImage }: FaceProps) {
             </span>
           </div>
           {!compact && (
-            <p className={`mt-1 font-tabular text-[11px] ${skin.muted}`}>${SITE_HOST}/{handle}</p>
+            <p className={`mt-1 font-tabular text-[11px] ${skin.muted}`}>{SITE_HOST}/{handle}</p>
           )}
         </div>
       </div>
