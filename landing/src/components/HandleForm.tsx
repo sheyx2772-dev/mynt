@@ -39,7 +39,7 @@ export default async function HandleForm() {
       <div className="flex max-w-xl flex-col gap-2 sm:flex-row sm:items-center">
         {/* One plate. `focus-within` moves the whole thing, so the address and
             the number light up together — they are one object. */}
-        <div className="flex h-14 flex-1 items-center rounded-input border border-line-2 bg-white pl-4 transition-colors focus-within:border-line-lead focus-within:ring-2 focus-within:ring-ring">
+        <div className="flex h-14 flex-1 items-center rounded-input border border-line-2 bg-white pl-4 transition-colors focus-within:border-ink focus-within:ring-2 focus-within:ring-ring">
           <span
             aria-hidden="true"
             className="shrink-0 text-[15px] text-ink-3 select-none"
@@ -64,14 +64,31 @@ export default async function HandleForm() {
             autoCorrect="off"
             spellCheck={false}
             enterKeyHint="go"
+            // `ABC123` rather than `AAA777`. The shape is the point, and
+            // AAA777 is the most expensive number in the catalogue — a
+            // placeholder that spells the trophy sets the price in a visitor's
+            // head three lines before the one that says 100 000.
+            placeholder="ABC123"
             // The engraving's tracking, so the number on screen and the number
             // on the card are one object at two sizes.
-            className="w-full min-w-0 bg-transparent px-1 font-mono text-xl font-semibold tracking-[0.22em] text-ink uppercase focus:outline-none"
+            //
+            // The placeholder keeps the tracking — it is showing a shape — but
+            // drops to regular weight and the palest line on the ladder, so it
+            // cannot be mistaken for something already typed. Same size, same
+            // weight, pale grey is what makes a hint read as a value.
+            className="w-full min-w-0 bg-transparent px-1 font-mono text-xl font-semibold tracking-[0.22em] text-ink uppercase placeholder:font-normal placeholder:text-line-lead focus:outline-none"
           />
 
           {/* Docked inside the plate rather than standing beside it: one
-              object, and no second elevation on a row that already has one. */}
-          <button type="submit" className={`${button} m-1 hidden rounded-plate px-5 sm:flex`}>
+              object, and no second elevation on a row that already has one.
+              
+              3px, not 4. The plate is 56 tall with a 1px border, so its inside
+              is 54; a 48px button leaves 3 above and below, and 4 would have
+              stood it 1px proud of its own container at every corner. The
+              radius follows from the same sum — 12 outside, less the border,
+              less the inset, is 8 — which is why the two corners look
+              concentric instead of nested. */}
+          <button type="submit" className={`${button} m-[3px] hidden rounded-plate px-5 sm:flex`}>
             {t("check")}
             <ArrowRight className="size-4" strokeWidth={2} />
           </button>

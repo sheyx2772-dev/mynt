@@ -68,7 +68,14 @@
      no hierarchy. 5.9:1 on paper. */
   --color-mute: #5c586a;
 
-  /* The radius ladder. Every corner in the product is one of these five. */
+  /* The radius ladder. Every corner in the product is one of these five.
+   *
+   * Nesting one inside another is arithmetic, not taste: a child sitting in a
+   * rounded parent's corner takes the parent's radius, less the parent's
+   * border, less the gap between them. 12 - 1 - 3 = 8 is why a button docked
+   * in an input carries `plate`. Get it wrong and the two curves run at
+   * different speeds through the same corner, which is visible long before
+   * anybody can say what is wrong with it. */
   --radius-plate: 8px;
   --radius-input: 12px;
   --radius-card: 16px;
@@ -190,9 +197,14 @@
   /* An input has to be found by eye, so it is a rung above a card's edge. */
   --input: var(--color-line-2);
 
-  /* Not the brand lime: at 1.2:1 on white a focus ring is a ring nobody can
-   * see, which is the one thing a focus ring may not be. */
-  --ring: var(--color-lime-ink);
+  /* The ink, which is the highest contrast this ground has.
+   *
+   * It was the darkened lime, chosen because the brand lime sits at 1.2:1 on
+   * white and a ring nobody can see is the one thing a ring may not be. That
+   * fixed the contrast and left a mid-green outline on a palette with no other
+   * green in it, beside controls that are ink. The ring is the same colour as
+   * the button it is showing you how to reach. */
+  --ring: var(--color-ink);
 
   /* One hue, five steps. Charts are magnitude, not category — a rainbow says
    * the bars are different kinds of thing when they are the same kind. */
@@ -244,8 +256,9 @@
 
   --border: var(--color-ink-line);
   --input: var(--color-ink-line);
-  /* Here it can be the brand lime: on this ground it is the loudest thing
-   * available, which is what a focus ring should be. */
+  /* The lime here, for the same reason the ink is used on paper: it is the
+   * loudest thing this ground has. The rule is one rule — the ring is whatever
+   * its ground cannot ignore — and it lands on two colours. */
   --ring: var(--color-lime);
 
   --chart-1: var(--color-lime);
