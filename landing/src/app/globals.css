@@ -333,31 +333,65 @@
  * the header all day is noise, and on a phone it is noise that costs battery.
  */
 @keyframes flex-signal {
-  0%,
-  100% {
-    opacity: 0.22;
+  0% {
+    opacity: 0;
+    transform: scale(0.55);
   }
-  35% {
+  30% {
     opacity: 1;
   }
-  70% {
-    opacity: 0.22;
+  100% {
+    opacity: 0;
+    transform: scale(1.12);
   }
 }
 
-.signal-arc {
-  animation: flex-signal 1.4s var(--ease-out) infinite;
+@keyframes flex-signal-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
 }
-/* The stagger is the whole effect: without it two arcs blink together and it
-   reads as a flash rather than as something leaving. */
+
+/* The arcs leave the point rather than blinking on it.
+ *
+ * Fading two arcs in and out was the first attempt and it read as a light
+ * being switched, not as something travelling: an arc that brightens where it
+ * already is says nothing about direction. These grow out of the origin and
+ * fade as they go, which is the same picture the contactless symbol is drawing
+ * standing still — the animation is the glyph, moving.
+ *
+ * The origin is the point itself, 27,50 in the mark's 100-unit box, so the
+ * arcs expand away from the dot rather than from the middle of the canvas.
+ * Those numbers come from `MARK` in Mark.tsx; if the geometry moves there, it
+ * moves here.
+ */
+.signal-arc {
+  transform-origin: 27% 50%;
+  animation: flex-signal 1.5s var(--ease-out) infinite;
+}
+/* The stagger is the whole effect: without it two arcs travel together and it
+   reads as one thick ring rather than as a second wave following the first. */
 .signal-arc:nth-of-type(2) {
-  animation-delay: 0.16s;
+  animation-delay: 0.28s;
+}
+
+/* The point stays put and breathes. It is the transmitter, so it may not move
+   — but a dot that is perfectly still under two moving arcs reads as a bug in
+   the animation rather than as the thing the arcs are coming from. */
+.signal-dot {
+  animation: flex-signal-dot 1.5s var(--ease-out) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .signal-arc {
+  .signal-arc,
+  .signal-dot {
     animation: none;
     opacity: 1;
+    transform: none;
   }
 }
 

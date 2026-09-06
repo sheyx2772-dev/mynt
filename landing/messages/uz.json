@@ -77,6 +77,7 @@
     "letters50": "Status so'zi"
   },
   "how": {
+    "eyebrow": "Qanday ishlaydi",
     "title": "Uch qadam",
     "step1Title": "Raqam tanlaysiz",
     "step2Title": "Buyum tanlaysiz",
@@ -570,6 +571,9 @@
     "errorPoints": "Nechta nuqta ekanini kiriting.",
     "errorPointsBig": "Bu son juda katta — tekshirib qayta kiriting.",
     "errorNote": "Izoh juda uzun.",
-    "errorSave": "Hozir yuborib bo'lmadi. Qo'ng'iroq qiling:"
+    "errorSave": "Hozir yuborib bo'lmadi. Qo'ng'iroq qiling:",
+    "fieldPointsPlaceholder": "12",
+    "fieldCompanyPlaceholder": "Choyxona Navro'z",
+    "fieldNamePlaceholder": "Sardor Rahimov"
   }
 }
