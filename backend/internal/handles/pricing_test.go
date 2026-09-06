@@ -14,7 +14,7 @@ func TestPriceMatchesWhatTheSiteQuotes(t *testing.T) {
 	}{
 		{"QXZ483", 100_000, "plain letters, plain digits"},
 		{"AAA483", 3_000_000, "three identical letters"},
-		{"VIP483", 2_000_000, "a word"},
+		{"VIP483", 5_000_000, "a status word"},
 		{"ABA483", 400_000, "palindrome letters"},
 		{"QXZ777", 4_000_000, "three identical digits"},
 		{"QXZ007", 1_500_000, "two leading zeros"},
@@ -22,7 +22,9 @@ func TestPriceMatchesWhatTheSiteQuotes(t *testing.T) {
 		{"QXZ321", 1_200_000, "descending run"},
 		{"QXZ121", 500_000, "palindrome digits"},
 		{"AAA000", 120_000_000, "the most expensive shape there is"},
-		{"VIP007", 30_000_000, "a word and two leading zeros"},
+		{"VIP007", 75_000_000, "a status word and two leading zeros"},
+		{"GUL777", 80_000_000, "an ordinary word and three of a kind"},
+		{"VIP777", 200_000_000, "the dearest shape there is"},
 	}
 
 	for _, c := range cases {
@@ -75,16 +77,35 @@ func TestParseSerialIsADifferentNamespace(t *testing.T) {
 // Which list is which is pinned by fingerprint in blocked_test.go; this one
 // pins what the tier *does*, with a sample from every group.
 func TestTheWordTierIsWhatBothSidesThinkItIs(t *testing.T) {
+	// The words somebody pays for because of what they say about them. Above
+	// three identical letters on purpose: the old order priced QQQ444 over
+	// VIP777, which is the formula reading the shape and not the meaning.
 	for _, word := range []string{
-		"VIP", "CEO", "BEK", "UZB", "NUR", "ZAR", "LUX", "ONE",
+		"VIP", "CEO", "BOS", "PRO", "LUX", "MAX", "UZB", "ONE", "LAW", "MED",
+	} {
+		if LetterRarity(word).Multiplier != 50 {
+			t.Errorf("%s status tarifida emas", word)
+		}
+	}
+
+	for _, word := range []string{
+		"BEK", "NUR", "ZAR", "DEV", "XON",
 		// The trades, which sell to a business rather than to a person.
-		"GYM", "LAW", "MED", "WEB",
+		"GYM", "WEB", "SPA", "TAX",
 		// Uzbek, names, cities, and where somebody is from.
 		"OSH", "PUL", "OTA", "ALI", "SAM", "BUX", "RUS", "QOZ",
 	} {
 		if LetterRarity(word).Multiplier != 20 {
 			t.Errorf("%s so'z tarifida emas", word)
 		}
+	}
+
+	// A status word outranks a shape, and the shape still outranks a plain
+	// word. Stated as an order rather than as three numbers, because the order
+	// is the decision and the numbers are how it is spelled.
+	if !(LetterRarity("VIP").Multiplier > LetterRarity("AAA").Multiplier &&
+		LetterRarity("AAA").Multiplier > LetterRarity("GUL").Multiplier) {
+		t.Error("tartib buzildi: status > uchta bir xil harf > oddiy so'z")
 	}
 
 	// Not words. A three-letter run that nobody would pay extra for must stay

@@ -14,6 +14,22 @@ export const BASE_PRICE = 100_000;
   // Uzbek words with an apostrophe — o‘, g‘ — cannot be here at all: a handle
   // is three letters of A–Z, and "O‘ZB" is four characters of which one is not
   // a letter.
+// The words somebody pays for because of what they say about them.
+//
+// A subset of RARE_WORDS, checked first. The shape rules ranked three
+// identical letters above a word people know, so QQQ444 cost 120 million and
+// VIP777 cost 80 — the formula was reading the pattern and not the meaning. On
+// a business card the meaning is the product: VIP says something, QQQ is only
+// rare.
+export const TOP_WORDS = [
+  "VIP", "CEO", "CTO", "CFO", "MBA", "PRO",
+  "BOS", "SIR", "DOC", "LAW", "MED", "TOP",
+  "LUX", "MAX", "WIN", "ONE", "KEY", "ACE",
+  "UZB", "GOD",
+] as const;
+
+const TOP = new Set<string>(TOP_WORDS);
+
 export const RARE_WORDS = [
   // What a person is, and what they do. The trades sell to a business rather
   // than to one person, which is a different and larger buyer.
@@ -90,6 +106,9 @@ export function isBlocked(letters: string): boolean {
 
 export function letterRarity(letters: string): { multiplier: number; reason: string } {
   const l = letters.toUpperCase().split("");
+  if (TOP.has(letters.toUpperCase())) {
+    return { multiplier: 50, reason: "status so'zi (masalan VIP)" };
+  }
   if (l[0] === l[1] && l[1] === l[2]) {
     return { multiplier: 30, reason: "3 ta bir xil harf (masalan AAA)" };
   }

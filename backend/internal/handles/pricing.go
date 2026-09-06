@@ -27,6 +27,19 @@ const BasePrice = 100_000
 // Uzbek words with an apostrophe — o‘, g‘ — cannot be here at all: a handle
 // is three letters of A–Z, and "O‘ZB" is four characters of which one is not
 // a letter.
+// The words somebody pays for because of what they say about them.
+//
+// A subset of rareWords, checked first. The shape rules ranked three identical
+// letters above a word people know, so QQQ444 cost 120 million and VIP777 cost
+// 80 — the formula was reading the pattern and not the meaning. On a business
+// card the meaning is the product: VIP says something, QQQ is only rare.
+var topWords = map[string]bool{
+	"VIP": true, "CEO": true, "CTO": true, "CFO": true, "MBA": true,
+	"PRO": true, "BOS": true, "SIR": true, "DOC": true, "LAW": true,
+	"MED": true, "TOP": true, "LUX": true, "MAX": true, "WIN": true,
+	"ONE": true, "KEY": true, "ACE": true, "UZB": true, "GOD": true,
+}
+
 var rareWords = map[string]bool{
 	// What a person is, and what they do. The trades sell to a business rather
 	// than to one person, which is a different and larger buyer.
@@ -78,6 +91,8 @@ func LetterRarity(letters string) Rarity {
 	}
 
 	switch {
+	case topWords[l]:
+		return Rarity{50, "status so'zi (masalan VIP)"}
 	case l[0] == l[1] && l[1] == l[2]:
 		return Rarity{30, "3 ta bir xil harf (masalan AAA)"}
 	case rareWords[l]:

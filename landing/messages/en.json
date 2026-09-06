@@ -73,6 +73,7 @@
     "seeProfile": "See the profile",
     "blocked": "This number is not for sale",
     "soum": "so'm",
-    "checkFailed": "Could not check just now. Try again shortly."
+    "checkFailed": "Could not check just now. Try again shortly.",
+    "letters50": "A status word"
   }
 }

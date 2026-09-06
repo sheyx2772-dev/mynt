@@ -73,6 +73,7 @@
     "seeProfile": "Profilni ko'rish",
     "blocked": "Bu raqam sotuvda emas",
     "soum": "so'm",
-    "checkFailed": "Hozir tekshirib bo'lmadi. Birozdan keyin urinib ko'ring."
+    "checkFailed": "Hozir tekshirib bo'lmadi. Birozdan keyin urinib ko'ring.",
+    "letters50": "Status so'zi"
   }
 }
