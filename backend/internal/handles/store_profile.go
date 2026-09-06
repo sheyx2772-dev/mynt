@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 
 	"github.com/sheyx2772-dev/flex/backend/internal/store"
 )
@@ -40,6 +41,14 @@ func (s *Store) SaveProfile(ctx context.Context, normalized, userID string, in P
 	if err != nil {
 		return Handle{}, "", err
 	}
+	music, err := json.Marshal(profile.Music)
+	if err != nil {
+		return Handle{}, "", err
+	}
+	var birthday pgtype.Date
+	if profile.Birthday != nil {
+		birthday = pgtype.Date{Time: *profile.Birthday, Valid: true}
+	}
 
 	id := *current.UserID
 	row, err := s.queries.UpdateProfile(ctx, store.UpdateProfileParams{
@@ -60,6 +69,9 @@ func (s *Store) SaveProfile(ctx context.Context, normalized, userID string, in P
 		CommentsOpen: profile.CommentsOpen,
 		Yopiq:        profile.Private,
 		Korinish:     visibility,
+		TugilganKun:  birthday,
+		StatusEmoji:  profile.StatusEmoji,
+		Musiqa:       music,
 		Normalized:   &normalized,
 		UserID:       &id,
 	})

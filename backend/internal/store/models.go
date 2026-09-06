@@ -128,6 +128,16 @@ type GenesisCard struct {
 	ClaimedAt   pgtype.Timestamptz `json:"claimed_at"`
 }
 
+type Greeting struct {
+	ID        int64              `json:"id"`
+	Handle    string             `json:"handle"`
+	UserID    uuid.UUID          `json:"user_id"`
+	Emoji     string             `json:"emoji"`
+	Matn      string             `json:"matn"`
+	Yil       int32              `json:"yil"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+}
+
 type Handle struct {
 	ID              uuid.UUID          `json:"id"`
 	Letters         string             `json:"letters"`
@@ -169,6 +179,9 @@ type Handle struct {
 	RecommendCount  int32              `json:"recommend_count"`
 	Yopiq           bool               `json:"yopiq"`
 	Korinish        []byte             `json:"korinish"`
+	TugilganKun     pgtype.Date        `json:"tugilgan_kun"`
+	StatusEmoji     string             `json:"status_emoji"`
+	Musiqa          []byte             `json:"musiqa"`
 }
 
 type HandleTransfer struct {

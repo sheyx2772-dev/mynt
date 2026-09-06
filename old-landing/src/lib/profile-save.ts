@@ -63,6 +63,9 @@ export async function saveProfile(
       commentsOpen: p.commentsOpen,
       yopiq: p.isPrivate,
       korinish: p.visibility,
+      birthday: p.birthday || undefined,
+      statusEmoji: p.statusEmoji || undefined,
+      music: p.music.url ? { sarlavha: p.music.title, ijrochi: p.music.artist || undefined, url: p.music.url } : undefined,
     },
   });
 

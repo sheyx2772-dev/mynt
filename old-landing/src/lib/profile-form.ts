@@ -32,6 +32,11 @@ export type ProfileInput = {
   isPrivate: boolean;
   /** Who sees which field; open fields absent. */
   visibility: Visibility;
+  /** YYYY-MM-DD or empty; the backend refuses a date nobody has. */
+  birthday: string;
+  /** Premium. Sent regardless; a free profile's are dropped on the server. */
+  statusEmoji: string;
+  music: { title: string; artist: string; url: string };
   tags: string[];
 };
 
@@ -184,6 +189,13 @@ export async function readProfileForm(
       commentsOpen: String(formData.get("commentsOpen") ?? "") === "1",
       isPrivate: String(formData.get("yopiq") ?? "") === "1",
       visibility: readVisibilityForm(formData),
+      birthday: String(formData.get("birthday") ?? "").trim().slice(0, 10),
+      statusEmoji: String(formData.get("statusEmoji") ?? "").trim().slice(0, 32),
+      music: {
+        title: String(formData.get("musicTitle") ?? "").trim().slice(0, 80),
+        artist: String(formData.get("musicArtist") ?? "").trim().slice(0, 80),
+        url: String(formData.get("musicUrl") ?? "").trim().slice(0, 500),
+      },
       services: parseServices(
         Array.from({ length: MAX_SERVICES }, (_, i) => ({
           name: String(formData.get(`service${i}Name`) ?? ""),

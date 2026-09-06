@@ -1,4 +1,5 @@
 import type { Visibility } from "@/lib/visibility";
+import type { Music } from "@/lib/music";
 import { effectivePlan, type PlanId } from "@/lib/plans";
 import { readServices, type Service } from "@/lib/services";
 import { cache } from "react";
@@ -19,6 +20,11 @@ export type ClaimedProfile = {
   isPending: boolean;
   /** Which lines are narrowed — only ever filled for the owner. */
   visibility: Visibility;
+  /** The day without the year, and where today falls against it. */
+  birthday: { day: string | null; today: boolean; week: boolean };
+  /** Premium: beside the name, and on the page. */
+  statusEmoji: string | null;
+  music: Music | null;
   name: string;
   bio: string;
   avatarUrl: string | null;
@@ -61,6 +67,9 @@ export const getClaimedProfile = cache(async (normalized: string): Promise<Claim
     isPrivate: p.yopiq,
     isPending: p.sorov_kutilmoqda,
     visibility: p.korinish ?? {},
+    birthday: { day: p.tugilgan_kun?.kun ?? null, today: p.tugilgan_kun?.bugun ?? false, week: p.tugilgan_kun?.hafta ?? false },
+    statusEmoji: p.status_emoji ?? null,
+    music: p.musiqa?.url ? { title: p.musiqa.sarlavha, artist: p.musiqa.ijrochi ?? null, url: p.musiqa.url } : null,
     name: p.ism,
     bio: p.tavsif ?? "",
     avatarUrl: p.rasm ?? null,
@@ -157,6 +166,10 @@ export type OwnedHandle = {
   commentsOpen: boolean;
   isPrivate: boolean;
   visibility: Visibility;
+  /** YYYY-MM-DD, or empty. */
+  birthday: string;
+  statusEmoji: string;
+  music: Music | null;
   tags: string[];
   viewCount: number;
   cardDesign: CardDesignId;
@@ -213,6 +226,9 @@ function toOwned(h: BackendHandle): OwnedHandle {
     commentsOpen: h.izohlar_ochiq,
     isPrivate: h.yopiq,
     visibility: h.korinish ?? {},
+    birthday: h.tugilgan_kun ?? "",
+    statusEmoji: h.status_emoji ?? "",
+    music: h.musiqa?.url ? { title: h.musiqa.sarlavha, artist: h.musiqa.ijrochi ?? null, url: h.musiqa.url } : null,
     tags: h.teglar ?? [],
     viewCount: h.korishlar,
     cardDesign: isCardDesign(h.dizayn) ? h.dizayn : DEFAULT_CARD_DESIGN,

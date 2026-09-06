@@ -4,6 +4,7 @@ import { asReader } from "@/lib/backend/client";
 
 import { readLeadForm, saveLead } from "@/lib/leads";
 import { addComment, deleteComment } from "@/lib/comments";
+import { sendGreeting, type GreetResult } from "@/lib/greetings";
 import { isRecommended, toggleRecommendation } from "@/lib/recommendations";
 import { readSource } from "@/lib/analytics";
 
@@ -236,4 +237,18 @@ export async function toggleRecommend(rawHandle: string): Promise<RecommendResul
 
   revalidatePath(`/${normalized}`);
   return { ok: true, recommended: result.on };
+}
+
+/** A birthday greeting: an emoji and maybe a line, once a year per person. */
+export async function greet(rawHandle: string, emoji: string, text: string): Promise<GreetResult> {
+  const user = await getUser();
+  if (!user) return { ok: false, error: "Avval hisobingizga kiring." };
+
+  const parsed = parseHandle(rawHandle);
+  if (!parsed) return { ok: false, error: "Bu profil topilmadi." };
+
+  const normalized = `${parsed.letters}${parsed.digits}`;
+  const result = await sendGreeting(normalized, emoji.slice(0, 8), text.slice(0, 140));
+  if (result.ok) revalidatePath(`/${normalized}`);
+  return result;
 }

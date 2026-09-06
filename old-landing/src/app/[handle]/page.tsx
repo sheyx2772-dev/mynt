@@ -31,6 +31,9 @@ import ProfileComments from "@/components/ProfileComments";
 import RecommendButton from "@/components/RecommendButton";
 import { listRecommenders, isRecommended } from "@/lib/recommendations";
 import { listComments } from "@/lib/comments";
+import { listGreetings } from "@/lib/greetings";
+import BirthdayCard from "@/components/BirthdayCard";
+import MusicCard from "@/components/MusicCard";
 import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
@@ -271,10 +274,13 @@ async function VanityHandlePage({
     // read as "this person has nothing", which is a different claim.
     const closed = profile.isPrivate && !isOwner && !following;
 
-    const [posts, comments, recommenders] = await Promise.all([
+    const [posts, comments, recommenders, birthday] = await Promise.all([
       tab === "postlar" ? listPostsForHandle(normalized) : Promise.resolve([]),
       listComments(normalized),
       listRecommenders(normalized),
+      // Only in the week: outside it the card is not drawn, and the list is
+      // last year's, which is not this year's news.
+      !closed && profile.birthday.week ? listGreetings(normalized) : Promise.resolve({ greetings: [], count: 0 }),
     ]);
 
     // The owner's own cover wins over the catalogue artwork, which wins over
@@ -398,7 +404,7 @@ async function VanityHandlePage({
         />
 
         <NfcCardProfile
-          name={profile.name}
+          name={profile.statusEmoji ? `${profile.name} ${profile.statusEmoji}` : profile.name}
           org={profile.company}
           role={profile.position}
           // The band carries the artwork of the card they actually hold, which
@@ -452,6 +458,32 @@ async function VanityHandlePage({
                 <p className="mt-0.5 text-sm leading-5 text-mute">{t.privateHint}</p>
               </div>
             </div>
+          )}
+
+          {!closed && profile.birthday.week && (
+            <BirthdayCard
+              handle={normalized}
+              name={profile.name}
+              today={profile.birthday.today}
+              greetings={birthday.greetings}
+              count={birthday.count}
+              signedIn={Boolean(viewer)}
+              isOwner={isOwner}
+              labels={{
+                today: t.birthdayToday,
+                week: t.birthdayWeek,
+                greet: t.greet,
+                greeted: t.greeted,
+                placeholder: t.greetPlaceholder,
+                send: t.send,
+                signIn: t.greetSignIn,
+                greetings: t.greetings,
+              }}
+            />
+          )}
+
+          {!closed && profile.music && (
+            <MusicCard music={profile.music} labels={{ song: t.song, listen: t.listen }} />
           )}
 
           {payHref && !isOwner && (

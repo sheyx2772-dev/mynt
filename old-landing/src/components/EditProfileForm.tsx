@@ -44,6 +44,11 @@ export default function EditProfileForm({
     yopiq: boolean;
     /** Who sees which field — the backend's `korinish`. */
     korinish: Visibility;
+    birthday: string;
+    statusEmoji: string;
+    musicTitle: string;
+    musicArtist: string;
+    musicUrl: string;
     tags: string;
     cardDesign: CardDesignId;
     customDesignUrl?: string | null;
@@ -307,6 +312,88 @@ export default function EditProfileForm({
           Vergul bilan ajrating, 5 tagacha. Profilda #teg ko&apos;rinishida chiqadi.
         </p>
       </div>
+
+      <div>
+        <label className={labelClass} htmlFor="birthday">
+          Tug&apos;ilgan kun
+        </label>
+        <input
+          id="birthday"
+          name="birthday"
+          type="date"
+          defaultValue={defaults.birthday}
+          className={inputClass}
+        />
+        <p className="mt-1 text-xs text-paper-3">
+          Profilda yil ko&apos;rinmaydi — faqat kun va oy. O&apos;sha kuni sahifa bayram
+          qiladi, tanishlar tabrik qoldiradi va sizga Telegramga xabar keladi.
+        </p>
+      </div>
+
+      {defaults.plan === "premium" ? (
+        <div className="space-y-4 rounded-input border border-ink-line bg-ink-s2 p-4">
+          <p className="text-xs font-medium tracking-wide text-paper-2 uppercase">Premium</p>
+          <div>
+            <label className={labelClass} htmlFor="statusEmoji">
+              Ism yonidagi emoji
+            </label>
+            <input
+              id="statusEmoji"
+              name="statusEmoji"
+              placeholder="🔥"
+              maxLength={16}
+              defaultValue={defaults.statusEmoji}
+              className={inputClass}
+            />
+            <p className="mt-1 text-xs text-paper-3">Bitta emoji. So&apos;z qabul qilinmaydi.</p>
+          </div>
+          <div>
+            <label className={labelClass} htmlFor="musicUrl">
+              Profil qo&apos;shig&apos;i
+            </label>
+            <input
+              id="musicUrl"
+              name="musicUrl"
+              inputMode="url"
+              placeholder="https://open.spotify.com/track/…"
+              defaultValue={defaults.musicUrl}
+              className={inputClass}
+            />
+            <div className="mt-2 grid grid-cols-2 gap-3">
+              <input
+                name="musicTitle"
+                placeholder="Qo'shiq nomi"
+                maxLength={80}
+                defaultValue={defaults.musicTitle}
+                aria-label="Qo'shiq nomi"
+                className={inputClass}
+              />
+              <input
+                name="musicArtist"
+                placeholder="Ijrochi"
+                maxLength={80}
+                defaultValue={defaults.musicArtist}
+                aria-label="Ijrochi"
+                className={inputClass}
+              />
+            </div>
+            <p className="mt-1 text-xs text-paper-3">
+              Spotify yoki YouTube havolasi — sahifada pleyer chiqadi. Yandex Music, SoundCloud,
+              Apple Music — tugma bilan.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="rounded-input border border-ink-line bg-ink-s2 px-4 py-3">
+          <p className="text-xs text-paper-2">
+            <span className="font-medium text-paper-2">Emoji-status va profil qo&apos;shig&apos;i</span>{" "}
+            — premium rejada. Ism yonida emoji, sahifada o&apos;z qo&apos;shig&apos;ingiz.{" "}
+            <Link href="/tarif" className="underline underline-offset-2">
+              Tariflar
+            </Link>
+          </p>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-3">
         <div>

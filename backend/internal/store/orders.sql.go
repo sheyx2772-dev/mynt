@@ -62,7 +62,7 @@ const claimHandleOutright = `-- name: ClaimHandleOutright :one
 insert into handles (letters, digits, status, user_id, owner_name, price_paid, claimed_at)
 values ($1, $2, 'claimed', $3,
         $4, $5, now())
-returning id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq, korinish
+returning id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq, korinish, tugilgan_kun, status_emoji, musiqa
 `
 
 type ClaimHandleOutrightParams struct {
@@ -126,6 +126,9 @@ func (q *Queries) ClaimHandleOutright(ctx context.Context, arg ClaimHandleOutrig
 		&i.RecommendCount,
 		&i.Yopiq,
 		&i.Korinish,
+		&i.TugilganKun,
+		&i.StatusEmoji,
+		&i.Musiqa,
 	)
 	return i, err
 }
@@ -718,7 +721,7 @@ const reserveHandle = `-- name: ReserveHandle :one
 insert into handles (letters, digits, status, user_id, owner_name, price_paid, reserved_until)
 values ($1, $2, 'reserved', $3,
         $4, $5, $6)
-returning id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq, korinish
+returning id, letters, digits, normalized, status, owner_name, bio, avatar_url, links, price_paid, created_at, claimed_at, user_id, updated_at, reserved_until, city, contact_email, tags, last_seen_at, view_count, follower_count, post_count, owner_deleted_at, card_design, device_type, custom_design_url, plan, plan_expires_at, gift_reason, phone, position, company, services, banner_url, team_id, plan_reminded_for, comments_open, recommend_count, yopiq, korinish, tugilgan_kun, status_emoji, musiqa
 `
 
 type ReserveHandleParams struct {
@@ -787,6 +790,9 @@ func (q *Queries) ReserveHandle(ctx context.Context, arg ReserveHandleParams) (H
 		&i.RecommendCount,
 		&i.Yopiq,
 		&i.Korinish,
+		&i.TugilganKun,
+		&i.StatusEmoji,
+		&i.Musiqa,
 	)
 	return i, err
 }

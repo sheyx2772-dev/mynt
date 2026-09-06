@@ -934,3 +934,25 @@ body:has([data-no-app-bar]) {
 @media (prefers-reduced-motion: reduce) {
   .tap-intro-mark { animation: none; }
 }
+
+/* Confetti, once, on the birthday. Fourteen slips of the page's own colours
+   falling from the top edge of the card and gone; nothing loops. */
+.confetti i {
+  position: absolute;
+  top: -8px;
+  width: 6px;
+  height: 10px;
+  border-radius: 1px;
+  background: var(--color-lime, #c8f04a);
+  opacity: 0;
+  animation: confetti-fall 1.8s ease-in forwards;
+}
+.confetti i:nth-child(3n) { background: var(--color-slab, #111); width: 5px; height: 5px; border-radius: 50%; }
+.confetti i:nth-child(4n) { background: #ff5c8a; }
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(160px) rotate(300deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .confetti { display: none; }
+}

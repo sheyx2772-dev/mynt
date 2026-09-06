@@ -1006,6 +1006,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/profil/{raqam}/tabriklar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tug'ilgan kun tabriklari */
+        get: operations["tabriklar"];
+        put?: never;
+        /**
+         * Tug'ilgan kun bilan tabriklash
+         * @description Faqat tug'ilgan kun haftasida. Bir kishi yiliga bir marta; qayta yuborilsa avvalgisi o'zgaradi.
+         */
+        post: operations["tabriklash"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/profil/{raqam}/tashrif": {
         parameters: {
             query?: never;
@@ -1986,6 +2007,11 @@ export interface components {
         AliveOutputHeader: {
             CacheControl: string;
         };
+        BirthdayState: {
+            bugun: boolean;
+            hafta: boolean;
+            kun?: string;
+        };
         Brief: {
             /**
              * Format: uri
@@ -2409,6 +2435,39 @@ export interface components {
             readonly $schema?: string;
             raqam: string;
         };
+        GreetInputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/GreetInputBody.json
+             */
+            readonly $schema?: string;
+            emoji: string;
+            matn?: string;
+        };
+        Greeting: {
+            emoji: string;
+            /** Format: int64 */
+            id: number;
+            ism: string;
+            matn?: string;
+            meniki: boolean;
+            raqam?: string;
+            rasm?: string;
+            /** Format: date-time */
+            vaqt: string;
+        };
+        GreetingsOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example /v1/schemas/GreetingsOutputBody.json
+             */
+            readonly $schema?: string;
+            /** Format: int64 */
+            soni: number;
+            tabriklar: components["schemas"]["Greeting"][] | null;
+        };
         Handle: {
             /** Format: date-time */
             band_muddati?: string;
@@ -2430,6 +2489,7 @@ export interface components {
             korishlar: number;
             lavozim?: string;
             maxsus_dizayn?: string;
+            musiqa: components["schemas"]["Music"];
             /** Format: date-time */
             olingan?: string;
             /** @enum {string} */
@@ -2438,6 +2498,7 @@ export interface components {
             raqam: string;
             rasm?: string;
             shahar?: string;
+            status_emoji?: string;
             /** @enum {string} */
             tarif: "free" | "premium";
             /** Format: date-time */
@@ -2446,6 +2507,7 @@ export interface components {
             telefon?: string;
             /** Format: int64 */
             tolangan?: number;
+            tugilgan_kun?: string;
             xizmatlar: components["schemas"]["Service"][] | null;
             yopiq: boolean;
         };
@@ -2749,6 +2811,11 @@ export interface components {
             readonly $schema?: string;
             /** Format: int32 */
             tartib: number;
+        };
+        Music: {
+            ijrochi?: string;
+            sarlavha: string;
+            url: string;
         };
         NewPromoCode: {
             /**
@@ -3069,6 +3136,8 @@ export interface components {
             avatarUrl?: string;
             bannerUrl?: string;
             bio?: string;
+            /** @description Tug'ilgan kun, YYYY-MM-DD */
+            birthday?: string;
             cardDesign?: string;
             city?: string;
             commentsOpen: boolean;
@@ -3080,11 +3149,15 @@ export interface components {
                 [key: string]: string;
             };
             links?: components["schemas"]["LinkInput"];
+            /** @description Profil qo'shig'i (premium) */
+            music?: components["schemas"]["Music"];
             /** @description Yagona majburiy maydon */
             name: string;
             phone?: string;
             position?: string;
             services?: components["schemas"]["Service"][] | null;
+            /** @description Ism yonidagi emoji (premium) */
+            statusEmoji?: string;
             /** @description Vergul yoki bo'sh joy bilan ajratilgan */
             tags?: string;
             yopiq: boolean;
@@ -3146,6 +3219,7 @@ export interface components {
             korishlar: number;
             lavozim?: string;
             meniki: boolean;
+            musiqa?: components["schemas"]["Music"];
             /** Format: int64 */
             obunachilar: number;
             obunaman: boolean;
@@ -3156,11 +3230,13 @@ export interface components {
             rasm?: string;
             shahar?: string;
             sorov_kutilmoqda: boolean;
+            status_emoji?: string;
             tarif: string;
             tavsif?: string;
             tavsiya_qilganman: boolean;
             teglar: string[] | null;
             telefon?: string;
+            tugilgan_kun: components["schemas"]["BirthdayState"];
             xizmatlar: components["schemas"]["Service"][] | null;
             yopiq: boolean;
         };
@@ -5652,6 +5728,72 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["RequestInput"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    tabriklar: {
+        parameters: {
+            query?: {
+                soni?: number;
+            };
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GreetingsOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    tabriklash: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                raqam: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GreetInputBody"];
             };
         };
         responses: {
