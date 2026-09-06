@@ -49,13 +49,23 @@ export default async function Verticals() {
                 alt=""
                 fill
                 sizes="(min-width: 1024px) 276px, (min-width: 640px) 50vw, 100vw"
+                // 75 is the default and it is tuned for a photograph shown
+                // large. These are 276 wide, where the encoder has few pixels
+                // to spend and every artefact lands on a face; the file is a
+                // few kilobytes bigger and the tile stops looking hazy.
+                quality={90}
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none"
               />
 
               {/* Dark at the foot, clear at the head. A flat scrim over the
                   whole picture would dim the thing the picture is there to
-                  show; the text only needs the bottom third. */}
-              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-transparent" />
+                  show; the text only needs the bottom third.
+
+                  It used to reach 55% at the midpoint, which is halfway up the
+                  photograph — enough to grey the whole tile and read as a soft
+                  picture rather than a deliberate one. The stops are pushed
+                  down instead: clear to just under half, then it falls. */}
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 via-45% to-transparent to-70%" />
 
               <div className="relative p-4 text-white">
                 <h3 className="font-semibold">{t(`name${i + 1}`)}</h3>

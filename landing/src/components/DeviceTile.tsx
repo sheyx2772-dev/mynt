@@ -33,6 +33,7 @@ export default async function DeviceTile({
           alt={t(`items.${device.slug}.name`)}
           fill
           sizes={sizes}
+          quality={90}
           className="object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none"
         />
       </div>

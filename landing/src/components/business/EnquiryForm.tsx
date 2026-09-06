@@ -3,6 +3,13 @@
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { sendEnquiry, type EnquiryState } from "./actions";
 import { DIRECTIONS } from "./venues";
 
@@ -55,18 +62,33 @@ export default function EnquiryForm({
           <label htmlFor="direction" className={LABEL}>
             {t("fieldVertical")}
           </label>
-          <select
-            id="direction"
-            name="direction"
-            defaultValue="cafes"
-            className={FIELD}
-          >
-            {DIRECTIONS.map((id) => (
-              <option key={id} value={id}>
-                {t(`vertical${id[0].toUpperCase()}${id.slice(1)}`)}
-              </option>
-            ))}
-          </select>
+          {/* Ours rather than the browser's. A native `<select>` opens the
+              operating system's list, which arrives in the system font, at the
+              system size, in the system's blue — beside a form built out of
+              this product's own type and radii it reads as a piece of a
+              different application. Radix keeps a hidden native input in sync
+              behind it, so the form still posts `direction` and still works
+              from the keyboard.
+
+              The server does not trust any of it either way: `actions.ts`
+              matches the posted value against our own list rather than passing
+              it through, because a select is markup and markup is a suggestion
+              to whoever is sending the request. */}
+          <Select name="direction" defaultValue="cafes">
+            <SelectTrigger
+              id="direction"
+              className="h-12! w-full rounded-input border-line-2 bg-white px-3.5 text-[15px] text-ink data-[placeholder]:text-line-lead"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-input">
+              {DIRECTIONS.map((id) => (
+                <SelectItem key={id} value={id} className="text-[15px]">
+                  {t(`vertical${id[0].toUpperCase()}${id.slice(1)}`)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div>
@@ -76,12 +98,12 @@ export default function EnquiryForm({
           <input
             id="points"
             name="points"
-            type="number"
+            type="tel"
             inputMode="numeric"
-            min={1}
-            max={100000}
+            pattern="[0-9]*"
+            maxLength={6}
             required
-            placeholder="12"
+            placeholder={t("fieldPointsPlaceholder")}
             className={FIELD}
           />
           <p className="mt-1.5 text-[13px] text-ink-3">
@@ -99,6 +121,7 @@ export default function EnquiryForm({
             required
             maxLength={120}
             autoComplete="organization"
+            placeholder={t("fieldCompanyPlaceholder")}
             className={FIELD}
           />
         </div>
@@ -113,6 +136,7 @@ export default function EnquiryForm({
             required
             maxLength={80}
             autoComplete="name"
+            placeholder={t("fieldNamePlaceholder")}
             className={FIELD}
           />
         </div>

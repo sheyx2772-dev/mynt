@@ -10,10 +10,16 @@ import Mark from "@/components/Mark";
 //
 // Nothing else on it. A skeleton of a page we have not laid out yet would be a
 // guess at the shape of the answer, and a wrong guess flashes twice.
+//
+// The mark is bare here and large. It sat on its ink tile at first, which is
+// how it is drawn everywhere else — but everywhere else it is an object ON a
+// page, and here it is the only thing there is. The tile put a hard-edged
+// square in the middle of an empty screen and the eye went to the edge instead
+// of to the arcs, which are the part that says something is happening.
 export default function Loading() {
   return (
     <div className="flex flex-1 items-center justify-center py-24">
-      <Mark className="size-12" signal />
+      <Mark className="size-24 sm:size-28" tone="bare" signal />
     </div>
   );
 }

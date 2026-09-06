@@ -32,6 +32,12 @@ function arcPath(radius: number): string {
  * On a light page the tile is the brand's ink, which is what makes the mark
  * read as an object. On the dark header that tile would disappear into the
  * background, so there it becomes a hairline and a lift instead.
+ *
+ * `bare` has no tile at all, and exists for the one screen where the mark is
+ * not an object on a page: the wait between pages, where it IS the page. A
+ * dark square there is a second shape competing with the thing that moves,
+ * and it draws a hard edge across an otherwise empty screen — the eye goes to
+ * the edge rather than to the signal.
  */
 export default function Mark({
   className = "size-7",
@@ -39,7 +45,7 @@ export default function Mark({
   signal = false,
 }: {
   className?: string;
-  tone?: "light" | "dark";
+  tone?: "light" | "dark" | "bare";
   /**
    * Runs the arcs outward, once every 1.4s.
    *
@@ -52,17 +58,29 @@ export default function Mark({
 }) {
   return (
     <span
-      className={`flex items-center justify-center rounded-plate ${
-        tone === "dark" ? "border border-ink-line bg-ink-s1" : "bg-ink"
+      className={`flex items-center justify-center ${
+        tone === "bare"
+          ? ""
+          : `rounded-plate ${
+              tone === "dark" ? "border border-ink-line bg-ink-s1" : "bg-ink"
+            }`
       } ${className}`}
       aria-hidden="true"
     >
-      <svg viewBox="0 0 100 100" className="h-[70%] w-[70%]" fill="none">
+      {/* Inset inside a tile, edge to edge without one — the 70% was the
+          padding the tile needed, and kept on a bare mark it would just be
+          a glyph that renders smaller than the size it was asked for. */}
+      <svg
+        viewBox="0 0 100 100"
+        className={tone === "bare" ? "size-full" : "h-[70%] w-[70%]"}
+        fill="none"
+      >
         <circle
           cx={MARK.originX}
           cy={MARK.originY}
           r={MARK.dotRadius}
           fill="var(--color-lime)"
+          className={signal ? "signal-dot" : undefined}
         />
         {MARK.arcRadii.map((radius) => (
           <path
