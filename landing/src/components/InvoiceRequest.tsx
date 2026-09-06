@@ -74,7 +74,7 @@ export default function InvoiceRequest({ currentSeats }: { currentSeats: number 
             setError(null);
             const result = await requestInvoice(seats, months);
             if (result.ok && result.id) router.push(`/kabinet/jamoa/hisob/${result.id}`);
-            else setError(result.error ?? "Bo'lmadi.");
+            else setError(result.error ?? "Bo'lmadi. Qaytadan urinib ko'ring.");
           })
         }
         disabled={pending}

@@ -184,7 +184,7 @@ export default function TagList({ handle, tags }: { handle: string; tags: Tag[] 
               disabled={saving}
               className="rounded-xl bg-ink-s2 px-5 py-2.5 text-[13px] font-semibold text-paper disabled:opacity-40"
             >
-              {saving ? "Qo'shilyapti…" : "Qo'shish"}
+              {saving ? "Qo'shilmoqda…" : "Qo'shish"}
             </button>
             <button
               type="button"

@@ -44,7 +44,7 @@ export default function IncomingTransfers({ transfers }: { transfers: Transfer[]
               onClick={() =>
                 start(async () => {
                   const result = await acceptHandleTransfer(t.id);
-                  setError(result.ok ? null : (result.error ?? "Qabul qilinmadi."));
+                  setError(result.ok ? null : (result.error ?? "Qabul qilinmadi. Qaytadan urinib ko'ring."));
                 })
               }
               className="rounded-full bg-ink-s2 px-6 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink/90 disabled:bg-black/20"

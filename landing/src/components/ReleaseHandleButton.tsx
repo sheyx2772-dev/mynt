@@ -41,14 +41,14 @@ export default function ReleaseHandleButton({
           onClick={() =>
             startTransition(async () => {
               const result = await releaseHandle(handle);
-              if (!result.ok) setError(result.error ?? "Bo'lmadi.");
+              if (!result.ok) setError(result.error ?? "Bo'lmadi. Qaytadan urinib ko'ring.");
               else setConfirming(false);
             })
           }
           disabled={pending}
           className="rounded-lg bg-ink-s2 px-3.5 py-1.5 text-xs font-medium text-paper disabled:opacity-50"
         >
-          {pending ? "..." : "O'chirish"}
+          {pending ? "Bo'shatilmoqda…" : "O'chirish"}
         </button>
         <button
           onClick={() => {

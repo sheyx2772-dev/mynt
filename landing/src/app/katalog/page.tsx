@@ -19,7 +19,7 @@ type Lang  = "uz" | "ru";
 type Theme = "dark" | "light";
 
 const CATS = [
-  { id: "all",      uz: "Barchasi",          ru: "Все" },
+  { id: "all",      uz: "Hammasi",          ru: "Все" },
   // Not a sector but a type: the fourteen cards that carry an organisation
   // rather than a person. A bank's own page still belongs under Banklar too,
   // so this cuts across the sector chips instead of replacing them.

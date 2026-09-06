@@ -132,7 +132,7 @@ export default function TagMessageForm({
         disabled={sending || !chosen}
         className="mt-5 w-full rounded-2xl bg-flex-black px-6 py-4 text-[15px] font-semibold text-white transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:bg-black/[0.08] disabled:text-ink-3"
       >
-        {sending ? "Yuborilyapti…" : words.send}
+        {sending ? "Yuborilmoqda…" : words.send}
       </button>
 
       {/* The promise, under the button where somebody hesitating will read it.

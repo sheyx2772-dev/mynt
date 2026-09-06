@@ -40,7 +40,7 @@ export async function updateProfile(
 export type PostResult = { ok: boolean; error?: string };
 
 const POST_ERRORS: Record<string, string> = {
-  empty: "Post bo'sh bo'lmasligi kerak.",
+  empty: "Post matnini yozing.",
   tooMany: "Bir soatda juda ko'p post. Birozdan so'ng urining.",
   notOwned: "Bu handle sizga tegishli emas.",
   failed: "Post saqlanmadi. Qaytadan urinib ko'ring.",

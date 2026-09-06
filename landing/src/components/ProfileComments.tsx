@@ -63,7 +63,7 @@ export default function ProfileComments({
                 setBody("");
                 router.refresh();
               } else {
-                setError(result.error ?? "Yuborilmadi.");
+                setError(result.error ?? "Yuborilmadi. Qaytadan urinib ko'ring.");
               }
             })
           }

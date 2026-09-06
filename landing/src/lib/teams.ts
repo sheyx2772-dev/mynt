@@ -130,5 +130,5 @@ export async function assignTeamHandle(handle: string, email: string): Promise<A
   if (response.status === 409 || response.status === 404) {
     return { ok: false, error: said ?? "Bu raqam firmangizga tegishli emas." };
   }
-  return { ok: false, error: "Hozir bo'lmadi." };
+  return { ok: false, error: "Hozir bo'lmadi. Bir daqiqadan so'ng urinib ko'ring." };
 }

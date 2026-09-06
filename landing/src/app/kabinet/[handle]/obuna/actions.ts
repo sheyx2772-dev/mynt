@@ -34,7 +34,7 @@ export async function issueInvoiceAction(
       ok: false,
       error:
         result.error === "negotiated"
-          ? "Bu o'lchamdagi obyekt uchun narx alohida kelishiladi — biz bilan bog'laning."
+          ? "Bu o'lchamdagi obyekt uchun narxi kelishiladi — biz bilan bog'laning."
           : "Hisob-fakturani yaratib bo'lmadi.",
     };
   }

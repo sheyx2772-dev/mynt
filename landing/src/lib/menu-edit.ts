@@ -15,7 +15,7 @@ import { uploadImage, isStorageConfigured } from "@/lib/storage";
 
 export type EditResult = { ok: true } | { ok: false; error: string };
 
-const FAILED: EditResult = { ok: false, error: "Saqlab bo'lmadi." };
+const FAILED: EditResult = { ok: false, error: "Saqlanmadi. Internetni tekshirib, yana urinib ko'ring." };
 
 function text(value: FormDataEntryValue | null, limit: number): string {
   return String(value ?? "").trim().slice(0, limit);

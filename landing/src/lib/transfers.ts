@@ -80,7 +80,7 @@ export async function offerTransfer(handle: string, toEmail: string): Promise<Tr
 export async function cancelTransfer(id: string): Promise<TransferResult> {
   const client = await asReader();
   const { error } = await client.DELETE("/otkazishlar/{id}", { params: { path: { id } } });
-  return error ? { ok: false, error: "Bekor qilinmadi." } : { ok: true };
+  return error ? { ok: false, error: "Bekor qilinmadi. Qaytadan urinib ko'ring." } : { ok: true };
 }
 
 /**

@@ -46,7 +46,7 @@ export default function SignInForm({ next }: { next: string }) {
         disabled={isPending}
         className="w-full rounded-full bg-lime px-6 py-3 font-medium text-flex-black transition-transform hover:scale-[1.01] disabled:opacity-60"
       >
-        {isPending ? "Yuborilmoqda..." : "Kirish havolasini yuborish"}
+        {isPending ? "Yuborilmoqda…" : "Kirish havolasini yuborish"}
       </button>
       <p className="text-center text-xs text-ink-3">
         Parol kerak emas — emailingizga bir martalik havola yuboramiz.

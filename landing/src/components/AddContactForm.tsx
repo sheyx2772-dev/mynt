@@ -58,7 +58,7 @@ export default function AddContactForm({ handle }: { handle: string }) {
           disabled={saving}
           className="rounded-2xl bg-ink-s2 px-5 py-2.5 text-sm font-medium text-paper disabled:opacity-50"
         >
-          {saving ? "Saqlanyapti…" : "Saqlash"}
+          {saving ? "Saqlanmoqda…" : "Saqlash"}
         </button>
         <button
           type="button"

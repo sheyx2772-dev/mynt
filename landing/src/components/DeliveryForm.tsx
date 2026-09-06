@@ -139,7 +139,7 @@ export default function DeliveryForm({ orderId }: { orderId: string }) {
         disabled={saving}
         className="mt-6 w-full rounded-2xl bg-ink-s2 px-6 py-3.5 text-sm font-medium text-paper transition-transform hover:scale-[1.01] disabled:opacity-50 sm:w-auto"
       >
-        {saving ? "Saqlanyapti…" : "Saqlash"}
+        {saving ? "Saqlanmoqda…" : "Saqlash"}
       </button>
     </form>
   );

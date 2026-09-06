@@ -136,7 +136,7 @@ const getCfg = (p: Profile): Cfg =>
 // ── Bilingual labels ─────────────────────────────────────────────────────────
 const L = {
   uz: {
-    email: "E-pochta", call: "Qo'ng'iroq", cal: "Uchrashuv", connect: "Havola",
+    email: "Email", call: "Qo'ng'iroq", cal: "Uchrashuv", connect: "Havola",
     li: "LinkedIn", ig: "Instagram", yt: "YouTube", tg: "Telegram",
     add: "KONTAKTGA QO'SHISH", share: "ULASHISH", website: "Veb-sayt",
     about: "Tashkilot haqida", verified: "NAMUNA",

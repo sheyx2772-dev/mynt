@@ -60,7 +60,7 @@ export async function submitTeamRequest(input: TeamRequestInput): Promise<TeamRe
     },
   });
 
-  if (error) return { ok: false, error: "Saqlab bo'lmadi.", fallback: true };
+  if (error) return { ok: false, error: "Saqlanmadi. Internetni tekshirib, yana urinib ko'ring.", fallback: true };
 
   return { ok: true };
 }

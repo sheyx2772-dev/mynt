@@ -113,7 +113,7 @@ export default function ClaimForm({
         className="w-full rounded-full bg-lime px-6 py-3 font-medium text-flex-black transition-transform hover:scale-[1.01] disabled:opacity-60"
       >
         {isPending
-          ? "Yuborilmoqda..."
+          ? "Yuborilmoqda…"
           : paymentEnabled
             ? `${priceLabel} — To'lovga o'tish`
             : `${priceLabel} — Band qilish`}

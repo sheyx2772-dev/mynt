@@ -37,7 +37,7 @@ export default function AssignHandleForm({ handle }: { handle: string }) {
           setError(null);
           const result = await assignHandle(handle, String(formData.get("email") ?? ""));
           if (!result.ok) {
-            setError(result.error ?? "Bo'lmadi.");
+            setError(result.error ?? "Bo'lmadi. Qaytadan urinib ko'ring.");
             return;
           }
           setMessage(
@@ -61,7 +61,7 @@ export default function AssignHandleForm({ handle }: { handle: string }) {
         disabled={pending}
         className="rounded-lg bg-ink-s2 px-3.5 py-2.5 text-xs font-medium text-paper disabled:opacity-50"
       >
-        {pending ? "..." : "Yuborish"}
+        {pending ? "Yuborilmoqda…" : "Yuborish"}
       </button>
       <button
         type="button"

@@ -57,7 +57,7 @@ export async function removeCategoryAction(
 
   const result = await removeCategory(handle, id);
   if (result && result.ok === false) {
-    return { ok: false, error: result.error ?? "O'chirilmadi." };
+    return { ok: false, error: result.error ?? "O'chirilmadi. Qaytadan urinib ko'ring." };
   }
   revalidatePath(`/kabinet/${handle}/menyu`);
   return { ok: true };
@@ -94,7 +94,7 @@ export async function removeItemAction(
 
   const result = await removeItem(handle, id);
   if (result && result.ok === false) {
-    return { ok: false, error: result.error ?? "O'chirilmadi." };
+    return { ok: false, error: result.error ?? "O'chirilmadi. Qaytadan urinib ko'ring." };
   }
   revalidatePath(`/kabinet/${handle}/menyu`);
   return { ok: true };

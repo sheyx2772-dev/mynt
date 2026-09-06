@@ -99,7 +99,7 @@ export async function sendTagMessage(
       joy: place || undefined,
     },
   });
-  return error ? { ok: false, error: "Yuborib bo'lmadi." } : { ok: true };
+  return error ? { ok: false, error: "Yuborilmadi. Qaytadan urinib ko'ring." } : { ok: true };
 }
 
 export type Tag = {

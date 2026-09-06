@@ -91,7 +91,7 @@ export default function ExchangeContactForm({
           setError(null);
           const result = await submitLead(handle, source, formData);
           if (result.ok) setSent(true);
-          else setError(result.error ?? "Yuborilmadi.");
+          else setError(result.error ?? "Yuborilmadi. Qaytadan urinib ko'ring.");
         })
       }
       className="rounded-xl bg-ink/[0.04] p-4 shadow-deboss"

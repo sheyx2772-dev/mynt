@@ -200,7 +200,7 @@ export async function removeComment(
   if (!parsed) return { ok: false, error: "Bu profil topilmadi." };
 
   const removed = await deleteComment(`${parsed.letters}${parsed.digits}`, id);
-  if (!removed.ok) return { ok: false, error: "O'chirilmadi." };
+  if (!removed.ok) return { ok: false, error: "O'chirilmadi. Qaytadan urinib ko'ring." };
 
   revalidatePath(`/${parsed.letters}${parsed.digits}`);
   return { ok: true };

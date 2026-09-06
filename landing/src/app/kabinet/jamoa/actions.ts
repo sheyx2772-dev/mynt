@@ -65,7 +65,7 @@ export async function requestInvoice(
   // said when it was issued.
   const { total } = invoiceTotal(seats, months, TEAM_SEAT_MONTHLY, VAT.percent);
   const invoice = await issueInvoice(seats, months, TEAM_SEAT_MONTHLY, VAT.percent, total);
-  if (!invoice) return { ok: false, error: "Hisob-faktura yaratilmadi." };
+  if (!invoice) return { ok: false, error: "Hisob-faktura yaratilmadi. Qaytadan urinib ko'ring." };
 
   revalidatePath("/kabinet/jamoa");
   return { ok: true, id: invoice.id };
@@ -85,7 +85,7 @@ export async function assignHandle(
 
   const email = rawEmail.trim().toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-    return { ok: false, error: "Emailni tekshiring." };
+    return { ok: false, error: "Email manzili noto'g'ri yozilgan (masalan: ism@firma.uz)." };
   }
 
   const result = await assignTeamHandle(`${parsed.letters}${parsed.digits}`, email);

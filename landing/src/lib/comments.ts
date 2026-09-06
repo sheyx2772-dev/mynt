@@ -58,5 +58,5 @@ export async function deleteComment(handle: string, id: number): Promise<Comment
   const { error } = await client.DELETE("/profil/{raqam}/izohlar/{id}", {
     params: { path: { raqam: handle, id } },
   });
-  return error ? { ok: false, error: "O'chirib bo'lmadi." } : { ok: true };
+  return error ? { ok: false, error: "O'chirilmadi. Qaytadan urinib ko'ring." } : { ok: true };
 }

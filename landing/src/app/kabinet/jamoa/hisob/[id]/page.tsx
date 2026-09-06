@@ -71,7 +71,7 @@ export default async function InvoicePage(props: PageProps<"/kabinet/jamoa/hisob
         <div>
           <h2 className="mb-2 font-bold uppercase">Yetkazib beruvchi</h2>
           <Field label="Nomi" value={COMPANY.legalName} />
-          <Field label="INN" value={COMPANY.inn} />
+          <Field label="STIR" value={COMPANY.inn} />
           <Field label="Manzil" value={COMPANY.address} />
           <Field label="Bank" value={COMPANY.bank} />
           <Field label="Hisob raqami" value={COMPANY.account} />
@@ -81,7 +81,7 @@ export default async function InvoicePage(props: PageProps<"/kabinet/jamoa/hisob
         <div>
           <h2 className="mb-2 font-bold uppercase">Xaridor</h2>
           <Field label="Nomi" value={buyer?.legalName ?? team.name} />
-          <Field label="INN" value={buyer?.inn ?? "—"} />
+          <Field label="STIR" value={buyer?.inn ?? "—"} />
           <Field label="Manzil" value={buyer?.address ?? "—"} />
           <Field label="Bank" value={buyer?.bankName ?? "—"} />
           <Field label="Hisob raqami" value={buyer?.bankAccount ?? "—"} />

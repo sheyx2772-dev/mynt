@@ -336,7 +336,7 @@ export default function EditProfileForm({
           {defaults.plan === "free" && (
             <>
               {" "}
-              Oddiy rejada {serviceLimit("free")} tagacha, premiumda{" "}
+              Oddiy tarifda {serviceLimit("free")} tagacha, premiumda{" "}
               {serviceLimit("premium")} tagacha.
             </>
           )}
@@ -440,7 +440,7 @@ export default function EditProfileForm({
         disabled={isPending}
         className="w-full rounded-full bg-lime px-6 py-3 font-medium text-ink transition-transform hover:scale-[1.01] disabled:opacity-60"
       >
-        {isPending ? "Saqlanmoqda..." : "Saqlash"}
+        {isPending ? "Saqlanmoqda…" : "Saqlash"}
       </button>
     </form>
   );

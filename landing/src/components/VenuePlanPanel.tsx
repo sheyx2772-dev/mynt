@@ -36,7 +36,7 @@ export default function VenuePlanPanel({
     <div>
       {monthly === null ? (
         <div className="rounded-2xl border border-ink-line bg-ink-s1 p-5 text-sm text-paper-2">
-          {points} ta nuqta — bu o&apos;lchamdagi obyekt uchun narx alohida kelishiladi.
+          {points} ta nuqta — bu o&apos;lchamdagi obyekt uchun narxi kelishiladi.
           Biz bilan bog&apos;laning, hisob-fakturani qo&apos;lda yozamiz.
         </div>
       ) : (
@@ -128,7 +128,7 @@ export default function VenuePlanPanel({
                   {invoice.status === "paid"
                     ? "To'langan"
                     : invoice.status === "cancelled"
-                      ? "Bekor"
+                      ? "Bekor qilish"
                       : "Kutilmoqda"}
                 </span>
               </Link>

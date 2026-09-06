@@ -98,7 +98,7 @@ export default function DeviceOrderForm({
         )}
 
         <button type="submit" disabled={sending} className={`${button} mt-5 w-full sm:w-auto`}>
-          {sending ? "Yuborilyapti…" : "Buyurtma berish"}
+          {sending ? "Yuborilmoqda…" : "Buyurtma berish"}
           <ArrowRight className="h-4 w-4" />
         </button>
       </section>

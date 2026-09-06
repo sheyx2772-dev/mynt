@@ -180,7 +180,7 @@ export function terms(lang: Lang): {
           ],
         },
       ],
-      requisites: ["Company", "INN", "OKED", "Bank", "Account", "MFO", "Address"],
+      requisites: ["Company", "Tax ID", "OKED", "Bank", "Account", "MFO", "Address"],
       contact: ["Responsible person", "Phone", "Email"],
     };
   }
@@ -210,7 +210,7 @@ export function terms(lang: Lang): {
         title: "Obuna",
         body: [
           `Raqam va qurilma bir marta to'lanadi. Profilning ishlab turishi uchun platformaga obuna alohida to'lanadi: oyiga ${money(premium.monthly)} yoki yiliga ${money(premium.yearly)}.`,
-          `Obunasiz ham profil ishlaydi va raqam sizniki bo'lib qoladi — u hech qachon o'chirilmaydi. Oddiy rejada ${FREE_LINK_LIMIT} tagacha havola, ${SERVICE_LIMIT.free} tagacha xizmat va narx, QR-kod va umumiy tashriflar soni mavjud. Obuna cheksiz havolalar, ${SERVICE_LIMIT.premium} tagacha xizmat, to'liq analitika, kelgan kontaktlar va ularni chiqarish, o'z fon rasmingiz hamda sahifadagi Flex yozuvini olib tashlashni ochadi.`,
+          `Obunasiz ham profil ishlaydi va raqam sizniki bo'lib qoladi — u hech qachon o'chirilmaydi. Oddiy tarifda ${FREE_LINK_LIMIT} tagacha havola, ${SERVICE_LIMIT.free} tagacha xizmat va narx, QR-kod va umumiy tashriflar soni mavjud. Obuna cheksiz havolalar, ${SERVICE_LIMIT.premium} tagacha xizmat, to'liq analitika, kelgan kontaktlar va ularni chiqarish, o'z fon rasmingiz hamda sahifadagi Flex yozuvini olib tashlashni ochadi.`,
           "Obuna to'xtatilsa, profil oddiy rejaga qaytadi. Ma'lumotlar o'chirilmaydi.",
         ],
       },

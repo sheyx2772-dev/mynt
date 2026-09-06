@@ -69,7 +69,7 @@ export async function sendSignInCode(
     body: { telefon: phone },
   });
   if (error) {
-    return { sent: false, error: "Kod yuborilmadi. Qaytadan urinib ko'ring." };
+    return { sent: false, error: "SMS yuborilmadi. Raqamni tekshirib, qaytadan urinib ko'ring." };
   }
 
   return { sent: true, phone, kod: data?.kod || undefined };
@@ -92,7 +92,7 @@ export async function confirmSignInCode(
   });
 
   if (error || !data?.token) {
-    return { ok: false, error: "Kod noto'g'ri yoki eskirgan." };
+    return { ok: false, error: "Kod noto'g'ri yoki muddati o'tgan. Yangi kod so'rang." };
   }
 
   await startSession(data.token);

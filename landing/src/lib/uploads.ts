@@ -32,7 +32,7 @@ function checkImage(file: File, limit: number, tooBig: string): AvatarCheck {
 }
 
 export function checkAvatar(file: File): AvatarCheck {
-  return checkImage(file, MAX_AVATAR_BYTES, "Rasm hajmi 2 MB dan oshmasligi kerak.");
+  return checkImage(file, MAX_AVATAR_BYTES, "Rasm 2 MB dan katta. Kichikroq rasm tanlang.");
 }
 
 export function checkBanner(file: File): AvatarCheck {
@@ -46,5 +46,5 @@ export function checkBanner(file: File): AvatarCheck {
 export const MAX_DISH_BYTES = MAX_AVATAR_BYTES;
 
 export function checkDishPhoto(file: File): AvatarCheck {
-  return checkImage(file, MAX_DISH_BYTES, "Rasm hajmi 2 MB dan oshmasligi kerak.");
+  return checkImage(file, MAX_DISH_BYTES, "Rasm 2 MB dan katta. Kichikroq rasm tanlang.");
 }

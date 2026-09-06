@@ -81,7 +81,7 @@ export default async function VenueInvoicePage(
         <div>
           <h2 className="mb-2 font-bold uppercase">Yetkazib beruvchi</h2>
           <Field label="Nomi" value={COMPANY.legalName} />
-          <Field label="INN" value={COMPANY.inn} />
+          <Field label="STIR" value={COMPANY.inn} />
           <Field label="Manzil" value={COMPANY.address} />
           <Field label="Bank" value={COMPANY.bank} />
           <Field label="Hisob raqami" value={COMPANY.account} />
@@ -92,7 +92,7 @@ export default async function VenueInvoicePage(
           <h2 className="mb-2 font-bold uppercase">Xaridor</h2>
           <Field label="Obyekt" value={`${venue.name} · ${normalized}`} />
           <Field label="Nomi" value=" " />
-          <Field label="INN" value=" " />
+          <Field label="STIR" value=" " />
           <Field label="Manzil" value={venue.address ?? " "} />
           <Field label="Bank" value=" " />
           <Field label="Hisob raqami" value=" " />

@@ -46,7 +46,7 @@ export async function startSubscription(
     if (response?.status === 503) {
       return { ok: false, error: "To'lov tizimi hali ulanmagan. Biz bilan bog'laning." };
     }
-    return { ok: false, error: "Buyurtma yaratilmadi." };
+    return { ok: false, error: "Buyurtma yaratilmadi. Qaytadan urinib ko'ring." };
   }
 
   return {
