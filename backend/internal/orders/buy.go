@@ -21,7 +21,7 @@ type Order struct {
 	Status string `json:"holat" enum:"pending,paid,cancelled,failed"`
 	// What was bought. A page that has to say "your number" or "your ring"
 	// cannot work it out from the amount.
-	Kind string `json:"turi" enum:"handle,subscription,device,transfer,venue"`
+	Kind string `json:"turi" enum:"handle,subscription,device,transfer,venue,gift"`
 
 	// Whether the number is still held by this buyer. Not implied by `paid`:
 	// a refund releases it, and money arriving after the hold lapsed leaves a

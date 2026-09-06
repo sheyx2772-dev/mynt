@@ -128,6 +128,17 @@ type GenesisCard struct {
 	ClaimedAt   pgtype.Timestamptz `json:"claimed_at"`
 }
 
+type Gift struct {
+	ID          int64              `json:"id"`
+	OrderID     uuid.UUID          `json:"order_id"`
+	Handle      string             `json:"handle"`
+	FromUserID  *uuid.UUID         `json:"from_user_id"`
+	Sticker     string             `json:"sticker"`
+	Note        string             `json:"note"`
+	Korsatiladi bool               `json:"korsatiladi"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+}
+
 type Greeting struct {
 	ID        int64              `json:"id"`
 	Handle    string             `json:"handle"`
@@ -321,6 +332,8 @@ type Order struct {
 	Fulfilment   *string            `json:"fulfilment"`
 	ShippedAt    pgtype.Timestamptz `json:"shipped_at"`
 	DeliveredAt  pgtype.Timestamptz `json:"delivered_at"`
+	Sticker      *string            `json:"sticker"`
+	GiftNote     *string            `json:"gift_note"`
 }
 
 type PaymeTransaction struct {

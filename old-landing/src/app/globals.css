@@ -956,3 +956,11 @@ body:has([data-no-app-bar]) {
 @media (prefers-reduced-motion: reduce) {
   .confetti { display: none; }
 }
+
+/* Gift stickers, by tier. The emoji is the sticker; the tile behind it is
+   what says a crown cost more than a rose. */
+.gift-tile { background: color-mix(in oklab, currentColor 8%, transparent); }
+.gift-oddiy { background: linear-gradient(135deg, #f1f5f0, #dfe8dc); }
+.gift-kumush { background: linear-gradient(135deg, #e8ecf3, #c9d1de); }
+.gift-oltin { background: linear-gradient(135deg, #fbe9b6, #e9c45a); }
+.gift-noyob { background: linear-gradient(135deg, #d7f26a, #b8ff3c 55%, #7ce0ff); box-shadow: 0 0 0 1px rgba(0,0,0,.08) inset; }

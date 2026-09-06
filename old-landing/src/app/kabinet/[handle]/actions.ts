@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { setGiftShown } from "@/lib/gifts";
 import { writePost, removePost } from "@/lib/posts";
 import { parseHandle } from "@/lib/pricing";
 import { getUser } from "@/lib/auth";
@@ -188,4 +189,17 @@ export async function decideRequest(
   revalidatePath(`/kabinet/${normalized}`);
   revalidatePath(`/kabinet/${normalized}/obuna-sorovlari`);
   return { ok: true };
+}
+
+/** Off the shelf, or back on it. Ownership is the backend's filter. */
+export async function toggleGift(rawHandle: string, id: number, shown: boolean): Promise<boolean> {
+  const parsed = parseHandle(rawHandle);
+  if (!parsed) return false;
+  const normalized = `${parsed.letters}${parsed.digits}`;
+  const ok = await setGiftShown(normalized, id, shown);
+  if (ok) {
+    revalidatePath(`/${normalized}`);
+    revalidatePath(`/kabinet/${normalized}/sovgalar`);
+  }
+  return ok;
 }

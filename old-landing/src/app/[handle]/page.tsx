@@ -34,6 +34,8 @@ import { listComments } from "@/lib/comments";
 import { listGreetings } from "@/lib/greetings";
 import BirthdayCard from "@/components/BirthdayCard";
 import MusicCard from "@/components/MusicCard";
+import GiftShelf from "@/components/GiftShelf";
+import { listGifts, EMPTY_SHELF } from "@/lib/gifts";
 import ClaimForm from "@/components/ClaimForm";
 import PageShell from "@/components/PageShell";
 import { getUser } from "@/lib/auth";
@@ -274,13 +276,14 @@ async function VanityHandlePage({
     // read as "this person has nothing", which is a different claim.
     const closed = profile.isPrivate && !isOwner && !following;
 
-    const [posts, comments, recommenders, birthday] = await Promise.all([
+    const [posts, comments, recommenders, birthday, shelf] = await Promise.all([
       tab === "postlar" ? listPostsForHandle(normalized) : Promise.resolve([]),
       listComments(normalized),
       listRecommenders(normalized),
       // Only in the week: outside it the card is not drawn, and the list is
       // last year's, which is not this year's news.
       !closed && profile.birthday.week ? listGreetings(normalized) : Promise.resolve({ greetings: [], count: 0 }),
+      !closed ? listGifts(normalized) : Promise.resolve(EMPTY_SHELF),
     ]);
 
     // The owner's own cover wins over the catalogue artwork, which wins over
@@ -484,6 +487,15 @@ async function VanityHandlePage({
 
           {!closed && profile.music && (
             <MusicCard music={profile.music} labels={{ song: t.song, listen: t.listen }} />
+          )}
+
+          {!closed && (
+            <GiftShelf
+              handle={normalized}
+              shelf={shelf}
+              isOwner={isOwner}
+              labels={{ gifts: t.gifts, sendGift: t.sendGift, empty: t.giftEmpty, manage: t.manageGifts }}
+            />
           )}
 
           {payHref && !isOwner && (

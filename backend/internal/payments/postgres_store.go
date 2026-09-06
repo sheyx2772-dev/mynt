@@ -11,6 +11,8 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"github.com/sheyx2772-dev/flex/backend/internal/notify"
+	"github.com/sheyx2772-dev/flex/backend/internal/orders"
 	"github.com/sheyx2772-dev/flex/backend/internal/store"
 )
 
@@ -23,10 +25,43 @@ import (
 
 type Postgres struct {
 	queries *store.Queries
+	notify  Notifier
 }
 
 func NewPostgres(pool *pgxpool.Pool) *Postgres {
 	return &Postgres{queries: store.New(pool)}
+}
+
+// Notifier is where a delivered gift is announced. Optional: a store with
+// none delivers silently, which is what the tests want.
+type Notifier interface {
+	Send(ctx context.Context, notice notify.Notice)
+}
+
+// WithNotifier sets it.
+func (p *Postgres) WithNotifier(n Notifier) *Postgres {
+	p.notify = n
+	return p
+}
+
+// tellRecipient raises the notice for a gift that just landed. Never fails
+// the settlement: the money has moved and the gift is on the shelf; a notice
+// that does not go is logged by the service.
+func (p *Postgres) tellRecipient(ctx context.Context, gift store.DeliverGiftRow) {
+	if p.notify == nil {
+		return
+	}
+	owner, err := p.queries.GiftRecipient(ctx, &gift.Handle)
+	if err != nil || owner.UserID == nil {
+		return
+	}
+	from := ""
+	if gift.FromUserID != nil {
+		if name, err := p.queries.SenderName(ctx, gift.FromUserID); err == nil && name != nil {
+			from = *name
+		}
+	}
+	p.notify.Send(context.WithoutCancel(ctx), orders.GiftNotice(owner.UserID.String(), gift.Handle, gift.Sticker, from, gift.Note))
 }
 
 func (p *Postgres) FindOrder(ctx context.Context, orderID string) (*Order, error) {
@@ -89,6 +124,19 @@ func (p *Postgres) MarkOrderPaid(ctx context.Context, orderID, provider, txID st
 		return p.queries.ExtendPremium(ctx, store.ExtendPremiumParams{
 			TargetHandle: settled.Handle, AddMonths: months,
 		})
+
+	case "gift":
+		// Put on the shelf now that it is paid for. The unique order id makes
+		// a provider retry a no-op — no rows, nothing to announce.
+		gift, err := p.queries.DeliverGift(ctx, id)
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+		p.tellRecipient(ctx, gift)
+		return nil
 
 	case "device":
 		// A physical thing. Nothing about the number changes, and the work
@@ -153,6 +201,10 @@ func (p *Postgres) MarkOrderCancelled(ctx context.Context, orderID string) error
 		return p.queries.ExtendPremium(ctx, store.ExtendPremiumParams{
 			TargetHandle: cancelled.Handle, AddMonths: -months,
 		})
+
+	case "gift":
+		// Off the shelf. The order stays as the record of the refund.
+		return p.queries.WithdrawGift(ctx, id)
 
 	case "device":
 		// A ring being refunded does not cancel the number it was ordered

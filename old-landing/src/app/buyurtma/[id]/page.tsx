@@ -53,6 +53,27 @@ export default async function OrderPage({ params }: PageProps<"/buyurtma/[id]">)
 }
 
 function status(order: Awaited<ReturnType<typeof getPurchase>> & object) {
+  // A gift is for somebody else's number, so "held" — is the number still the
+  // buyer's — is the wrong question; the only question is whether it landed.
+  if (order.kind === "gift") {
+    return order.status === "paid" ? (
+      <>
+        <p className="font-medium text-flex-black">Sovg&apos;a yetkazildi.</p>
+        <p className="mt-1 text-ink-2 text-sm">
+          Stiker <Link href={`/${order.handle}`} className="underline underline-offset-2">{order.handle}</Link>{" "}
+          profilida javonda turibdi, egasiga xabar bordi.
+        </p>
+      </>
+    ) : order.status === "pending" ? (
+      <>
+        <p className="font-medium text-flex-black">To&apos;lov kutilmoqda.</p>
+        <p className="mt-1 text-ink-2 text-sm">Tasdiqlangach sovg&apos;a profilda ko&apos;rinadi.</p>
+      </>
+    ) : (
+      <p className="font-medium text-flex-black">Bu buyurtma bekor qilingan.</p>
+    );
+  }
+
   if (order.status === "paid" && order.held) {
     return (
       <>

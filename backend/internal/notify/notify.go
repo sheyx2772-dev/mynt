@@ -34,6 +34,7 @@ const (
 	KindDeviceOrder  Kind = "device_order"
 	KindTagMessage   Kind = "tag_message"
 	KindGreeting     Kind = "greeting"
+	KindGift         Kind = "gift"
 )
 
 // Notice is one thing worth telling somebody.
@@ -103,7 +104,7 @@ func (s *Service) Send(ctx context.Context, notice Notice) {
 	// A table waiting for a waiter is the same kind of event as a lead —
 	// somebody is in front of the product right now — so it follows the same
 	// switch rather than the one about invoices.
-	live := notice.Kind == KindLead || notice.Kind == KindVenueRequest || notice.Kind == KindGreeting
+	live := notice.Kind == KindLead || notice.Kind == KindVenueRequest || notice.Kind == KindGreeting || notice.Kind == KindGift
 	wanted := settings.PlanAlerts
 	if live {
 		wanted = settings.LeadAlerts

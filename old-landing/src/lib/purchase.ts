@@ -13,7 +13,7 @@ export type Purchase = {
   id: string;
   handle: string;
   amount: number;
-  kind: "handle" | "subscription" | "device";
+  kind: "handle" | "subscription" | "device" | "gift";
   status: "pending" | "paid" | "cancelled" | "failed";
   /** Whether the number is still held for this buyer. */
   held: boolean;

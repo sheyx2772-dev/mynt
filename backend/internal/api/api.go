@@ -86,7 +86,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 	s.notify = notify.New(store.New(pool), channels...)
 
 	if cfg.TakesCallbacks() {
-		s.payments = payments.NewPostgres(pool)
+		s.payments = payments.NewPostgres(pool).WithNotifier(s.notify)
 	}
 
 	mux := http.NewServeMux()
@@ -115,6 +115,7 @@ func New(cfg config.Config, pool *pgxpool.Pool, authService *auth.Service) http.
 	s.registerDirectory(api)
 	s.registerSocial(api)
 	s.registerGreetings(api)
+	s.registerGifts(api)
 	s.registerVenues(api)
 	s.registerMenu(api)
 	s.registerMenuReads(api)
