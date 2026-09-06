@@ -1111,7 +1111,7 @@ const B2B = {
     metaDescription:
       "Kafe, restoran va mehmonxonalar uchun NFC: menyu, xona xizmatlari, so'rovlar va statistika. Bir panel, uch til.",
     eyebrow: "Biznes uchun",
-    title: "NFC — endi biznes uchun ham",
+    title: "Kafe, mehmonxona va do'kon uchun NFC menyu",
     lede: "Kafe, mehmonxona va boshqa xizmat obyektlari uchun. Mehmon telefonini tegizadi — kerakli sahifa ochiladi. Hech kim ilova o'rnatmaydi.",
     chainNow: "bugun",
     chainNext: "ertaga",
@@ -1325,7 +1325,7 @@ const B2B = {
     metaDescription:
       "NFC для кафе, ресторанов и отелей: меню, обслуживание в номере, запросы и статистика. Одна панель, три языка.",
     eyebrow: "Для бизнеса",
-    title: "NFC — теперь и для бизнеса",
+    title: "NFC-меню для кафе, отелей и магазинов",
     lede: "Для кафе, отелей и других сервисных объектов. Гость подносит телефон — открывается нужная страница. Приложение никому ставить не нужно.",
     chainNow: "сегодня",
     chainNext: "завтра",
@@ -1537,7 +1537,7 @@ const B2B = {
     metaDescription:
       "NFC for cafes, restaurants and hotels: menus, in-room service, requests and statistics. One panel, three languages.",
     eyebrow: "For business",
-    title: "NFC — now for business too",
+    title: "An NFC menu for cafes, hotels and shops",
     lede: "For cafes, hotels and other service venues. A guest taps their phone and the right page opens. Nobody installs an app.",
     chainNow: "today",
     chainNext: "next",
