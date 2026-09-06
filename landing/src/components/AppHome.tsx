@@ -147,9 +147,6 @@ export default function AppHome({
           tiles below are. */}
       {!owner && (
       <section className="px-6 pt-7">
-        <p className="mb-3 text-ink-3 text-xs font-semibold tracking-widest uppercase">
-          {s.waysEyebrow}
-        </p>
         <div className="grid gap-3">
           <Link
             href="/shaxsiy"

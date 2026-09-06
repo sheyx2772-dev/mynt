@@ -120,10 +120,14 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
           <div className="relative mx-auto max-w-6xl px-6 pt-10 pb-16 sm:pt-28 sm:pb-28">
             <div className="grid items-center gap-10 sm:gap-16 lg:grid-cols-2">
               <div>
-                {/* The brand line moved above, to the fork. What is left here
-                    is the personal offer, which is what this band was always
-                    arguing for — so the lead becomes the statement. */}
-                <p className="max-w-lg font-display text-2xl leading-snug font-medium tracking-tight text-balance text-white/85 sm:text-3xl">
+                {/* The page had no heading at all: it opened on the lead
+                    paragraph, so somebody arriving from a search result was
+                    given three sentences of explanation with nothing above
+                    them saying which page they had landed on. */}
+                <h1 className="max-w-lg font-display text-[2.2rem] leading-[1.06] font-semibold tracking-tight text-balance sm:text-5xl">
+                  {s.personalTitle}
+                </h1>
+                <p className="mt-5 max-w-lg text-lg leading-7 text-paper-2">
                   {s.heroLead}
                 </p>
                 <HandleChecker tone="dark"

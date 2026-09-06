@@ -71,11 +71,7 @@ export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselIt
         </div>
       </div>
 
-      <p className="mt-10 mb-4 text-ink-3 text-xs font-semibold tracking-widest uppercase">
-        {s.waysEyebrow}
-      </p>
-
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="mt-10 grid gap-4 lg:grid-cols-2">
         <Link
           href="/shaxsiy"
           className="group flex flex-col rounded-tile bg-lime p-6 sm:p-8 text-flex-black shadow-glow transition-transform hover:-translate-y-0.5 sm:p-8"
