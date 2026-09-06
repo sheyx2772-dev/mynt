@@ -2,12 +2,27 @@ import "server-only";
 
 import { backend } from "./client";
 
+export type Link = { label: string; href: string; kind?: string };
+export type Service = { name: string; price: string };
+
 export type PublicProfile = {
   raqam: string;
   ism: string;
   lavozim?: string;
   kompaniya?: string;
   rasm?: string;
+  banner?: string;
+  tavsif?: string;
+  shahar?: string;
+  telefon?: string;
+  email?: string;
+  /** Names the card this number was issued on, and so the look it opens in. */
+  dizayn: string;
+  tarif: string;
+  korishlar: number;
+  havolalar: Link[];
+  xizmatlar: Service[];
+  teglar: string[];
 };
 
 /**
@@ -17,6 +32,15 @@ export type PublicProfile = {
  * — the backend down, a timeout — is not an answer, and returning null for it
  * would tell a visitor a number is free when we do not know. So it throws, and
  * the caller says so.
+ *
+ * One function for both readers, because there is one endpoint. The check on
+ * the entry page wants a name and a face; the profile wants everything. Two
+ * functions would be two round trips to the same row and, in time, two
+ * different ideas of what a profile is.
+ *
+ * The three lists come back as `null` when empty and are flattened to `[]`
+ * here. A page that has to remember which of its fields lie about emptiness is
+ * a page that will eventually forget.
  */
 export async function ownerOf(handle: string): Promise<PublicProfile | null> {
   const { data, error, response } = await backend.GET("/profil/{raqam}", {
@@ -37,5 +61,16 @@ export async function ownerOf(handle: string): Promise<PublicProfile | null> {
     lavozim: p.lavozim || undefined,
     kompaniya: p.kompaniya || undefined,
     rasm: p.rasm || undefined,
+    banner: p.banner || undefined,
+    tavsif: p.tavsif || undefined,
+    shahar: p.shahar || undefined,
+    telefon: p.telefon || undefined,
+    email: p.email || undefined,
+    dizayn: p.dizayn,
+    tarif: p.tarif,
+    korishlar: p.korishlar,
+    havolalar: p.havolalar ?? [],
+    xizmatlar: p.xizmatlar ?? [],
+    teglar: p.teglar ?? [],
   };
 }

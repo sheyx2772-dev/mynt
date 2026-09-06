@@ -114,8 +114,8 @@
   /* The faces come from `app/fonts.ts`. Left as shadcn wrote them, these
      pointed at variables nothing defined, so every page fell back to the
      browser's default serif. */
-  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", Roboto,
-    sans-serif;
+  --font-sans:
+    var(--font-inter), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   /* Numbers, and only numbers: the plate, the engraving on the card, prices.
      Kept apart from the body face because 0/O and 1/I have to stay apart when
      somebody is typing a number back in off a card. */
@@ -286,6 +286,29 @@
   }
   html {
     @apply font-sans;
+
+    /* An in-page jump animates rather than teleports.
+       Landing on a block after a jump-cut, the reader has to work out what
+       moved and how far; watching it arrive answers that for free. Honoured
+       by the browser only for anchors, so a page load still starts at the top.
+       Turned off for anybody who has asked their system for less motion —
+       scrolling is the one animation that reliably makes people ill. */
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  /* The header is sticky, so a block scrolled to by anchor would otherwise
+     arrive with its heading underneath it. One rule here rather than a
+     `scroll-mt` remembered on each section, which is a rule that gets
+     forgotten on the next section somebody adds. */
+  :target,
+  [id] {
+    scroll-margin-top: 5rem;
   }
 }
 @layer components {
@@ -352,8 +375,12 @@
  * would be missing from the loop and the seam would jump by six pixels.
  */
 @keyframes drift {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .drift {
@@ -369,5 +396,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .drift { animation: none; }
+  .drift {
+    animation: none;
+  }
 }

@@ -1,75 +1,135 @@
 import { getTranslations } from "next-intl/server";
-import { ArrowRight } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
+import { money } from "@/lib/devices";
+import {
+  PERSONAL_MONTHLY,
+  PERSONAL_YEARLY,
+  TEAM_SEAT_MONTHLY,
+  VENUE_ENTRY_MONTHLY,
+} from "@/lib/plans";
 
-// Two products, two ways of paying, said as two.
+// Three buyers, and the same three questions asked of each.
 //
-// A person buys a number once and owns it; a cafe pays every month for
-// something that keeps working. Putting both in one table would make one of
-// them look like a tier of the other, and a cafe owner would spend the whole
-// section working out which column is theirs.
+// A person buying one number, a company buying them for staff, a venue paying
+// for tables. They are not tiers of one another — a cafe owner reading a
+// column headed "Pro" would spend the whole section working out whether that
+// is them — so they are three columns with the same three rows, and the rows
+// are what makes them comparable.
 //
-// The figures are the entry price of each, not the range. A range on a
-// marketing page is a table somebody has to read; "from 100 000" is a fact
-// somebody can act on, and the calculator above answers the rest.
+// The third row is the one that matters and the one nobody else prints: what
+// happens when the paying stops. The answer is that the profile keeps opening
+// and only editing closes, and saying it here rather than in a policy page is
+// the difference between a subscription and a hostage. It also pre-empts the
+// question that otherwise arrives by phone, one buyer at a time.
+//
+// The figures come from `plans.ts`, which the backend bills from. Typing them
+// into the markup is how a page ends up advertising a price the server will
+// not honour.
+const COLUMNS = [
+  {
+    id: "person",
+    start: `${money(100_000)}+`,
+    sub: `${money(PERSONAL_MONTHLY)}`,
+    href: "/personal",
+    lead: true,
+  },
+  {
+    id: "team",
+    start: `${money(TEAM_SEAT_MONTHLY)}`,
+    sub: `${money(TEAM_SEAT_MONTHLY)}`,
+    href: "/business#team",
+    lead: false,
+  },
+  {
+    id: "venue",
+    start: null,
+    sub: `${money(VENUE_ENTRY_MONTHLY)}`,
+    href: "/business",
+    lead: false,
+  },
+] as const;
+
 export default async function Pricing() {
   const t = await getTranslations("price");
 
   return (
     <section id="narx" className="border-y border-line bg-white">
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
-        <p className="cap text-ink-3">{t("eyebrow")}</p>
-        <h2 className="mt-2 text-[28px] leading-8 font-semibold tracking-tight">
+        <h2 className="text-[28px] leading-8 font-semibold tracking-tight">
           {t("title")}
         </h2>
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
-          <div className="flex flex-col rounded-tile border border-line p-6 sm:p-8">
-            <h3 className="text-xl font-semibold">{t("personal")}</h3>
-            <p className="mt-2 flex-1 text-ink-2">{t("personalNote")}</p>
-
-            <p className="mt-6 flex items-baseline gap-2">
-              <span className="text-[13px] text-ink-3">{t("from")}</span>
-              <span className="font-mono text-3xl font-semibold tracking-[0.04em]">
-                100 000
-              </span>
-              <span className="text-[13px] text-ink-3">{t("soum")}</span>
-            </p>
-
-            <Link
-              href="/personal"
-              className="mt-6 flex h-12 items-center justify-center gap-2 rounded-input bg-ink text-sm font-semibold text-white transition-colors hover:bg-ink-s2"
+        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+          {COLUMNS.map((col) => (
+            <div
+              key={col.id}
+              className={`flex flex-col rounded-tile border p-6 sm:p-7 ${
+                col.lead ? "border-ink shadow-card" : "border-line bg-paper/40"
+              }`}
             >
-              {t("cta")}
-              <ArrowRight className="size-4" strokeWidth={2} />
-            </Link>
-          </div>
+              <h3 className="text-xl font-semibold">{t(`${col.id}.name`)}</h3>
 
-          <div className="flex flex-col rounded-tile border border-line p-6 sm:p-8">
-            <h3 className="text-xl font-semibold">{t("venue")}</h3>
-            <p className="mt-2 flex-1 text-ink-2">{t("venueNote")}</p>
+              <Row label={t("startLabel")}>
+                <Figure>
+                  {col.start
+                    ? `${col.start} ${t("soum")}`
+                    : t(`${col.id}.startFigure`)}
+                </Figure>
+                <Note>{t(`${col.id}.startNote`)}</Note>
+              </Row>
 
-            <p className="mt-6 flex items-baseline gap-2">
-              <span className="text-[13px] text-ink-3">{t("from")}</span>
-              <span className="font-mono text-3xl font-semibold tracking-[0.04em]">
-                149 000
-              </span>
-              <span className="text-[13px] text-ink-3">
-                {t("soum")} / {t("monthly")}
-              </span>
-            </p>
+              <Row label={t("subLabel")}>
+                <Figure>
+                  {col.sub} {t("soum")} / {t("monthly")}
+                </Figure>
+                <Note>{t(`${col.id}.subNote`)}</Note>
+              </Row>
 
-            <Link
-              href="/business"
-              className="mt-6 flex h-12 items-center justify-center gap-2 rounded-input border border-line-2 text-sm font-semibold text-ink transition-colors hover:border-line-lead"
-            >
-              {t("venueCta")}
-              <ArrowRight className="size-4" strokeWidth={2} />
-            </Link>
-          </div>
+              <Row label={t("lapsedLabel")}>
+                <Note>{t(`${col.id}.lapsed`)}</Note>
+              </Row>
+
+              <Button
+                asChild
+                size="lg"
+                variant={col.lead ? "default" : "outline"}
+                className="mt-7 w-full"
+              >
+                <Link href={col.href}>{t("cta")}</Link>
+              </Button>
+            </div>
+          ))}
         </div>
+
+        <p className="mt-5 text-[13px] text-ink-3">
+          {t("yearly", { n: `${money(PERSONAL_YEARLY)} ${t("soum")}` })}
+        </p>
       </div>
     </section>
   );
+}
+
+function Row({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="mt-6">
+      <p className="cap text-ink-3">{label}</p>
+      {children}
+    </div>
+  );
+}
+
+function Figure({ children }: { children: React.ReactNode }) {
+  return <p className="mt-1.5 font-medium">{children}</p>;
+}
+
+function Note({ children }: { children: React.ReactNode }) {
+  return <p className="mt-1 text-[13px] leading-snug text-ink-3">{children}</p>;
 }

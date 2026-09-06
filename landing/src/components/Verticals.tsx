@@ -12,15 +12,21 @@ import { Link } from "@/i18n/navigation";
 // visitor recognises from a photograph in a second and from a line drawing
 // not at all.
 //
-// The pictures are 704x396 at source, which is soft at hero size and fine at
-// this one: these are quarter-width tiles. That is the rule the whole page
-// follows — a photograph where its resolution is enough, a drawing where it
-// is not.
+// Each is cropped to 3:4 at whatever the source actually holds, and that is
+// the whole reason they are sharp. They were landscape before, poured into a
+// portrait tile: `sizes` describes the box's WIDTH, so Next served a 640-wide
+// file, `object-cover` kept the middle third of it, and a 250-pixel-wide sliver
+// was stretched across a 528-pixel-wide tile. The picture was never the problem
+// — the crop was being done by the browser, after the file had been chosen.
+//
+// So the crop happens at build time now, and none of these is upscaled by a
+// pixel: 576 wide is the smallest of them, against the 528 a two-times screen
+// asks for.
 const TILES = [
   { photo: "/mahsulot/kafe.webp", href: "/business" },
   { photo: "/mahsulot/mehmonxona.webp", href: "/business#hotels" },
   { photo: "/mahsulot/salon.webp", href: "/business#salons" },
-  { photo: "/mahsulot/klinika.webp", href: "/business#shops" },
+  { photo: "/mahsulot/klinika.webp", href: "/business#clinics" },
 ] as const;
 
 export default async function Verticals() {

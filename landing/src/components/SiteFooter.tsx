@@ -45,7 +45,7 @@ export default async function SiteFooter() {
       links: [
         { href: "/business", label: t("cafe") },
         { href: "/business#hotels", label: t("hotel") },
-        { href: "/business#shops", label: t("shop") },
+        { href: "/business#clinics", label: t("clinic") },
         { href: "/business#teams", label: t("team") },
       ],
     },

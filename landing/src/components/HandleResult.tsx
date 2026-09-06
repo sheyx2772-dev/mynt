@@ -3,7 +3,12 @@ import { ArrowRight, Check } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
 import { ownerOf } from "@/lib/backend/profile";
-import { digitRarity, letterRarity, parseHandle, priceForHandle } from "@/lib/pricing";
+import {
+  digitRarity,
+  letterRarity,
+  parseHandle,
+  priceForHandle,
+} from "@/lib/pricing";
 
 // The answer, under the field that asked.
 //
