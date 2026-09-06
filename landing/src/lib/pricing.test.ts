@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 
 import { describe, it, expect } from "vitest";
-import { BASE_PRICE, parseHandle, parseGenesisSerial, letterRarity, digitRarity, priceForHandle, rarityTier, RARE_WORDS, BLOCKED_WORDS } from "./pricing";
+import { BASE_PRICE, TOP_WORDS, parseHandle, parseGenesisSerial, letterRarity, digitRarity, priceForHandle, rarityTier, RARE_WORDS, BLOCKED_WORDS } from "./pricing";
 
 describe("parseHandle", () => {
   it("accepts the AAA000 shape and normalizes case", () => {
@@ -44,8 +44,20 @@ describe("letterRarity", () => {
   });
 
   it("recognizes known words", () => {
-    expect(letterRarity("VIP").multiplier).toBe(20);
-    expect(letterRarity("vip").multiplier).toBe(20);
+    expect(letterRarity("NUR").multiplier).toBe(20);
+    expect(letterRarity("nur").multiplier).toBe(20);
+  });
+
+  it("puts a status word above three of the same letter", () => {
+    // The order is the decision; the numbers are how it is spelled. Before
+    // this, QQQ444 cost 120 million and VIP777 cost 80 — the formula reading
+    // the shape and not the meaning.
+    expect(letterRarity("VIP").multiplier).toBeGreaterThan(
+      letterRarity("AAA").multiplier,
+    );
+    expect(letterRarity("AAA").multiplier).toBeGreaterThan(
+      letterRarity("GUL").multiplier,
+    );
   });
 
   it("recognizes the ABA palindrome shape", () => {
@@ -95,7 +107,7 @@ describe("priceForHandle", () => {
   it("multiplies the base price by both rarity factors", () => {
     expect(priceForHandle("MYN", "042")).toBe(BASE_PRICE);
     expect(priceForHandle("AAA", "777")).toBe(BASE_PRICE * 30 * 40);
-    expect(priceForHandle("VIP", "007")).toBe(BASE_PRICE * 20 * 15);
+    expect(priceForHandle("VIP", "007")).toBe(BASE_PRICE * 50 * 15);
   });
 
   it("is case-insensitive, so the same handle never has two prices", () => {
@@ -123,8 +135,8 @@ describe("rarityTier", () => {
   });
 
   it("needs two strong patterns for legendary", () => {
-    // A short word and a leading double zero: ×20 × ×15 = ×300.
-    expect(rarityTier("VIP", "007")).toBe("legendary");
+    // An ordinary word and a leading double zero: ×20 × ×15 = ×300.
+    expect(rarityTier("NUR", "007")).toBe("legendary");
   });
 
   it("reserves genesis for both sides at their strongest", () => {
@@ -154,11 +166,17 @@ describe("the word tier", () => {
   // The same list lives in `backend/internal/handles/pricing.go`. A word in one
   // and not the other is this site quoting a hundred thousand and the server
   // charging two million, so both are pinned by count.
+  it("prices a status word at fifty times the base", () => {
+    for (const word of ["VIP", "CEO", "BOS", "PRO", "LUX", "MAX", "UZB", "ONE", "LAW", "MED"]) {
+      expect(letterRarity(word).multiplier).toBe(50);
+    }
+  });
+
   it("prices a word at twenty times the base", () => {
     for (const word of [
-      "VIP", "CEO", "BEK", "UZB", "NUR", "ZAR", "LUX", "ONE",
+      "BEK", "NUR", "ZAR", "DEV", "XON",
       // The trades, which sell to a business rather than to a person.
-      "GYM", "LAW", "MED", "WEB",
+      "GYM", "WEB", "SPA", "TAX",
       // Uzbek, names, cities, and where somebody is from.
       "OSH", "PUL", "OTA", "ALI", "SAM", "BUX", "RUS", "QOZ",
     ]) {
@@ -204,12 +222,16 @@ describe("what may not be sold", () => {
 //
 // Two copies of a pricing rule is two prices: the site quoting a hundred
 // thousand while the server charges two million. These fingerprints are how
-// the copies are held together. The same two values are asserted in
+// the copies are held together. The same three values are asserted in
 // backend/internal/handles/blocked_test.go, so editing one list without the
 // other fails on one side or the other, naming the file to go and fix.
 describe("the two copies of each list", () => {
   const fingerprint = (words: readonly string[]) =>
     createHash("sha256").update([...words].sort().join(",")).digest("hex").slice(0, 8);
+
+  it("matches the backend's status words", () => {
+    expect(fingerprint(TOP_WORDS)).toBe("5b56180a");
+  });
 
   it("matches the backend's rare words", () => {
     expect(fingerprint(RARE_WORDS)).toBe("3e1d5999");

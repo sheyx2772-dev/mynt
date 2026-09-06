@@ -379,24 +379,27 @@ func (q *Queries) LinkPhone(ctx context.Context, arg LinkPhoneParams) error {
 	return err
 }
 
-const passwordFor = `-- name: PasswordFor :one
+const passwordForLogin = `-- name: PasswordForLogin :one
 
 select p.hash, u.id as user_id, u.email
 from flex_passwords p
 join auth.users u on u.id = p.user_id
 where lower(u.email) = lower($1::text)
+   or p.username = lower($1::text)
 `
 
-type PasswordForRow struct {
+type PasswordForLoginRow struct {
 	Hash   string    `json:"hash"`
 	UserID uuid.UUID `json:"user_id"`
 	Email  *string   `json:"email"`
 }
 
 // The password door. See `internal/auth/password.go` for why the hash is slow.
-func (q *Queries) PasswordFor(ctx context.Context, email string) (PasswordForRow, error) {
-	row := q.db.QueryRow(ctx, passwordFor, email)
-	var i PasswordForRow
+// Either key opens it. The address is still the identity; the username is a
+// shorter thing to type, and only the people who have a password have one.
+func (q *Queries) PasswordForLogin(ctx context.Context, login string) (PasswordForLoginRow, error) {
+	row := q.db.QueryRow(ctx, passwordForLogin, login)
+	var i PasswordForLoginRow
 	err := row.Scan(&i.Hash, &i.UserID, &i.Email)
 	return i, err
 }
@@ -440,6 +443,24 @@ type SetPasswordParams struct {
 
 func (q *Queries) SetPassword(ctx context.Context, arg SetPasswordParams) error {
 	_, err := q.db.Exec(ctx, setPassword, arg.UserID, arg.Hash)
+	return err
+}
+
+const setUsername = `-- name: SetUsername :exec
+update flex_passwords set username = lower($1::text), updated_at = now()
+where user_id = $2
+`
+
+type SetUsernameParams struct {
+	Username string    `json:"username"`
+	UserID   uuid.UUID `json:"user_id"`
+}
+
+// Set on its own, because a password change is not a rename: an operator who
+// rotates their password every quarter should not have to restate their name,
+// and a typo in it should not be able to arrive as a side effect.
+func (q *Queries) SetUsername(ctx context.Context, arg SetUsernameParams) error {
+	_, err := q.db.Exec(ctx, setUsername, arg.Username, arg.UserID)
 	return err
 }
 

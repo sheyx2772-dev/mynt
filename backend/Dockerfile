@@ -21,6 +21,18 @@ COPY . .
 # production and are a map of the program to anybody who pulls the image.
 RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /flex ./cmd/api
 
+# The password setter travels with the server it sets passwords for.
+#
+# The panel signs in with an address and a password and has no emailed link any
+# more, so the only way to give somebody their first password — or their next
+# one — is to run this where the database is. Left out of the image, that means
+# editing an Argon2 hash into a table by hand, which is how a weak hash or a
+# stale algorithm gets in.
+#
+# It is a second entrypoint, not a second image: same code, same build, one
+# thing to keep in step.
+RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /flex-admin ./cmd/admin
+
 FROM scratch
 
 # Certificate authorities, so the process can make outbound HTTPS calls — the
@@ -28,6 +40,7 @@ FROM scratch
 # handshake fails with an unhelpful "certificate signed by unknown authority".
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /flex /flex
+COPY --from=build /flex-admin /flex-admin
 
 # Not root. There is no /etc/passwd here to name a user in, so the id is given
 # directly — the same one Docker's convention reserves for an unprivileged app.

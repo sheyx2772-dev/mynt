@@ -76,15 +76,25 @@ where expires_at < now() - interval '1 day';
 
 -- The password door. See `internal/auth/password.go` for why the hash is slow.
 
--- name: PasswordFor :one
+-- Either key opens it. The address is still the identity; the username is a
+-- shorter thing to type, and only the people who have a password have one.
+-- name: PasswordForLogin :one
 select p.hash, u.id as user_id, u.email
 from flex_passwords p
 join auth.users u on u.id = p.user_id
-where lower(u.email) = lower(sqlc.arg(email)::text);
+where lower(u.email) = lower(sqlc.arg(login)::text)
+   or p.username = lower(sqlc.arg(login)::text);
 
 -- name: SetPassword :exec
 insert into flex_passwords (user_id, hash) values (sqlc.arg(user_id), sqlc.arg(hash))
 on conflict (user_id) do update set hash = excluded.hash, updated_at = now();
+
+-- Set on its own, because a password change is not a rename: an operator who
+-- rotates their password every quarter should not have to restate their name,
+-- and a typo in it should not be able to arrive as a side effect.
+-- name: SetUsername :exec
+update flex_passwords set username = lower(sqlc.arg(username)::text), updated_at = now()
+where user_id = sqlc.arg(user_id);
 
 -- name: CountRecentPasswordAttempts :one
 select count(*) from flex_password_attempts

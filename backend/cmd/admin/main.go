@@ -6,6 +6,7 @@
 // and this is also the way back when somebody is locked out entirely.
 //
 //	go run ./cmd/admin aziz@flex.uz
+//	go run ./cmd/admin aziz@flex.uz admin      # and a name to sign in with
 //
 // The password is read from the terminal rather than taken as an argument: an
 // argument is in the shell history, in `ps` output, and in whatever logs the
@@ -19,6 +20,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/jackc/pgx/v5"
@@ -39,10 +41,20 @@ func main() {
 }
 
 func run() error {
-	if len(os.Args) != 2 {
-		return errors.New("foydalanish: go run ./cmd/admin <email>")
+	if len(os.Args) < 2 || len(os.Args) > 3 {
+		return errors.New("foydalanish: go run ./cmd/admin <email> [username]")
 	}
 	email := strings.ToLower(strings.TrimSpace(os.Args[1]))
+
+	// Optional, and checked here rather than only by the column, so a rejected
+	// name is a sentence instead of a constraint violation.
+	var username string
+	if len(os.Args) == 3 {
+		username = strings.ToLower(strings.TrimSpace(os.Args[2]))
+		if !validUsername.MatchString(username) {
+			return errors.New("username: 3-32 ta kichik harf, raqam yoki pastki chiziq")
+		}
+	}
 
 	_ = godotenv.Load()
 	cfg, err := config.Load()
@@ -89,9 +101,23 @@ func run() error {
 		return err
 	}
 
+	// After the password, because the row has to exist before it can be named
+	// and the password is what creates it.
+	if username != "" {
+		if err := queries.SetUsername(ctx, store.SetUsernameParams{UserID: account.ID, Username: username}); err != nil {
+			return err
+		}
+		fmt.Printf("%s uchun parol o'rnatildi, username: %s\n", email, username)
+		return nil
+	}
+
 	fmt.Printf("%s uchun parol o'rnatildi.\n", email)
 	return nil
 }
+
+// Matches the column's own check, so the message comes from here rather than
+// from Postgres.
+var validUsername = regexp.MustCompile(`^[a-z0-9_]{3,32}$`)
 
 // readPassword takes it from the terminal without echoing, and asks twice —
 // a mistyped password nobody can see is a lockout.

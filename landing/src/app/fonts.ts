@@ -2,16 +2,17 @@ import { Inter, JetBrains_Mono, Playfair_Display } from "next/font/google";
 
 // Two families, and the second one is for numbers.
 //
-// Space Grotesk used to set the headings and it carries no Cyrillic at all.
-// Menus run in three languages and nearly every cafe here keeps a Russian
-// column, so a heading like "Салаты" was silently falling back to whatever the
-// device had and the page came apart. Both faces below have Cyrillic.
+// Every face here carries Cyrillic, and that is the requirement rather than a
+// bonus: the site runs in three languages and nearly every page has a Russian
+// column. A heading like "Салаты" set in a face without Cyrillic falls back
+// silently to whatever the device has, and the page comes apart on exactly the
+// screens nobody is looking at.
 //
-// There is no separate display face any more. What makes a FLEX screen
-// recognisable is the number, not a headline font — so the weight goes there:
-// JetBrains Mono, wide-tracked, for the plate, the engraving on the card and
-// every price. It keeps 0/O and 1/I apart, which is the whole job when the
-// thing being read is a number somebody types back in from a card.
+// There is no separate display face. What makes a Flex screen recognisable is
+// the number, not a headline font — so the weight goes there: JetBrains Mono,
+// wide-tracked, for the plate, the engraving on the card and every price. It
+// keeps 0/O and 1/I apart, which is the whole job when the thing being read is
+// a number somebody types back in from a card.
 
 export const inter = Inter({
   subsets: ["latin", "latin-ext", "cyrillic"],
@@ -41,7 +42,7 @@ export const serif = Playfair_Display({
   weight: ["500", "700"],
   variable: "--font-playfair",
   display: "swap",
-  // One layout out of seven uses it, and it was preloaded on every page —
-  // a woff2 with Cyrillic in it, fetched before anything that renders.
+  // One layout in seven reaches for it, and preloading puts a woff2 with
+  // Cyrillic in it in front of everything that actually renders.
   preload: false,
 });

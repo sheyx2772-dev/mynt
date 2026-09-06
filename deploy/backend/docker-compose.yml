@@ -28,6 +28,28 @@ services:
       - "traefik.http.routers.flex-api.tls.certresolver=le"
       - "traefik.http.services.flex-api.loadbalancer.server.port=8090"
 
+      # TEMPORARY. Delete this router the moment APP_ENV is `production`.
+      #
+      # `POST /v1/kirish/telefon` answers with the login code itself when the
+      # build is development and no SMS sender is configured. That is right on
+      # a laptop and a full authentication bypass on the internet: ask for a
+      # code against somebody's number, read it out of the reply, sign in as
+      # them. The code says a production build cannot reach that line — and it
+      # cannot; this deployment is simply not one yet, because APP_ENV is
+      # `development` so that it can boot without Resend and Eskiz keys.
+      #
+      # So the door is shut where it is reachable rather than where it is
+      # written. It lives here and not on the server because the next deploy
+      # copies this file over whatever is there, and a stopgap that disappears
+      # without anybody noticing is worse than no stopgap.
+      - "traefik.http.routers.flex-api-kod.rule=Host(`${DOMAIN_NAME}`) && Path(`/v1/kirish/telefon`)"
+      - "traefik.http.routers.flex-api-kod.priority=100"
+      - "traefik.http.routers.flex-api-kod.entrypoints=websecure"
+      - "traefik.http.routers.flex-api-kod.tls.certresolver=le"
+      - "traefik.http.routers.flex-api-kod.service=flex-api"
+      - "traefik.http.routers.flex-api-kod.middlewares=faqat-mahalliy"
+      - "traefik.http.middlewares.faqat-mahalliy.ipallowlist.sourcerange=127.0.0.1/32"
+
   db:
     image: postgres:17-alpine
     restart: always

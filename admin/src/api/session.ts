@@ -2,14 +2,18 @@ import { api } from "./client";
 
 // Signing in to the panel.
 //
-// The same door as everywhere else: an address, a link, a session. The panel is
-// not a second authentication system and has no password of its own — being on
-// the allow-list is what makes an account an administrator, and that list lives
-// on the server where somebody with this bundle cannot read it.
+// A username or an address, and a password. The panel could once mail
+// itself a link; that door is gone, because a link is a door that opens for
+// whoever reads the mailbox and this panel hands out numbers worth millions.
+// A forgotten password is reset at the server with `cmd/admin`.
+//
+// None of this is what makes an administrator. The allow-list on the server
+// decides that, and it lives where somebody holding this bundle cannot read
+// it — so a stranger who signs in successfully still sees nothing.
 
-export async function signInWithPassword(email: string, parol: string) {
+export async function signInWithPassword(login: string, parol: string) {
 	const { data, error } = await api.POST("/kirish/parol", {
-		body: { email, parol },
+		body: { login, parol },
 	});
 	if (error || !data) {
 		// The server's own sentence, which is deliberately the same for a wrong
@@ -27,17 +31,6 @@ export async function setPassword(parol: string) {
 		throw new Error(
 			(error as { detail?: string })?.detail ?? "Parol saqlanmadi.",
 		);
-}
-
-export async function requestLink(email: string) {
-	const { error } = await api.POST("/kirish", { body: { email } });
-	if (error) throw new Error("Havola yuborilmadi.");
-}
-
-export async function confirmLink(token: string) {
-	const { data, error } = await api.POST("/kirish/tasdiq", { body: { token } });
-	if (error || !data) throw new Error("Havola eskirgan yoki ishlatilgan.");
-	return data.account;
 }
 
 /**

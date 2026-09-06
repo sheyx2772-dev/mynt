@@ -63,6 +63,7 @@ type FlexPassword struct {
 	UserID    uuid.UUID          `json:"user_id"`
 	Hash      string             `json:"hash"`
 	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
+	Username  *string            `json:"username"`
 }
 
 type FlexPasswordAttempt struct {

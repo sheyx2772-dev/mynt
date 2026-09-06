@@ -1,0 +1,85 @@
+# The image store.
+#
+# The same S3 API the site already speaks, so `landing/src/lib/storage.ts` does
+# not change: R2 in the cloud, this on our own machine, one file talking to
+# both. What differs is configuration.
+#
+# Public reads are served under the site's own hostname, at the bucket's path,
+# rather than from a hostname of its own. Two reasons, and the second is the
+# one that decides it:
+#
+#   - One certificate. A second origin needs a second name, a second DNS
+#     record and a second certificate, all to serve a picture.
+#   - A page loaded over https may not load a picture from an origin the
+#     browser does not trust. On a temporary domain without a real certificate
+#     that is not a warning — the image simply never appears, and the page
+#     looks broken for a reason nothing on screen explains.
+#
+# MinIO addresses an object as /<bucket>/<key>, so the path prefix *is* the
+# bucket. Traefik prefers the longer rule, which is why the site's own router
+# does not swallow it.
+
+name: flex-minio
+
+services:
+  app:
+    image: minio/minio:latest
+    restart: always
+    command: server /data --console-address ":9001"
+    env_file: [.env]
+    volumes:
+      - data:/data
+    # No published ports. The only way in is Traefik, and Traefik only exposes
+    # the one path below — the console and the write API stay on the internal
+    # network, where a root credential belongs.
+    networks: [web]
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flex-rasm.rule=Host(`${DOMAIN_NAME}`) && PathPrefix(`/flex-images/`)"
+      # Stated, not inherited. Traefik orders routers by rule length when no
+      # priority is given, and the site's rule — which carries `www` as well —
+      # is the longer string, so it would take this path and answer with its
+      # own 404 page. Length is not a statement about which router is more
+      # specific; this is.
+      - "traefik.http.routers.flex-rasm.priority=100"
+      - "traefik.http.routers.flex-rasm.entrypoints=websecure"
+      - "traefik.http.routers.flex-rasm.tls.certresolver=le"
+      - "traefik.http.services.flex-rasm.loadbalancer.server.port=9000"
+
+  # Makes the bucket once and exits. Without it the first upload fails against
+  # a store that is running and empty, which reads like a permission problem.
+  #
+  # The policy is written out rather than taken from `mc anonymous set
+  # download`, because that shorthand grants ListBucket as well as GetObject —
+  # and a listable bucket hands a stranger every avatar and every card design
+  # anybody has uploaded, without them needing to know a single filename. A
+  # picture is public because its URL was shared. The index of them was not.
+  #
+  # GetObject only, on this bucket only: a second bucket added later is private
+  # until somebody says otherwise.
+  setup:
+    image: minio/mc:latest
+    env_file: [.env]
+    depends_on:
+      app:
+        condition: service_healthy
+    entrypoint: >
+      sh -c "
+      mc alias set local http://app:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD &&
+      mc mb --ignore-existing local/flex-images &&
+      printf '%s' '{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::flex-images/*\"]}]}' > /tmp/ochiq.json &&
+      mc anonymous set-json /tmp/ochiq.json local/flex-images
+      "
+    networks: [web]
+
+volumes:
+  data:
+
+networks:
+  web:
+    external: true

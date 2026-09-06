@@ -1,16 +1,14 @@
-// The Flex mark: a point and the signal leaving it.
-//
-// It was five copies of the same span, so changing it meant finding all five.
-// Now it is one component and one set of numbers, shared with the icon
-// generator in scripts/make-icons.mjs — which draws the identical geometry into
-// PNG for the manifest, the home screen and the bot.
+// The Flex mark: a point, and the signal leaving it.
 //
 // The shape is the contactless symbol, deliberately. The product is a card you
 // tap, nobody in this market knows the name yet, and a mark that says what is
-// being sold does more work than one that says who is selling it. It also keeps
-// the dot the brand already had rather than discarding it.
+// being sold does more work than one that says who is selling it.
+//
+// One set of numbers, shared with the icon generator that draws the identical
+// geometry into PNG for the manifest, the home screen and the bot. Changing a
+// radius here changes it everywhere or nowhere.
 
-/** Radii and stroke as fractions of a 100-unit box, so both renderers agree. */
+/** Radii and stroke as fractions of a 100-unit box, so every renderer agrees. */
 export const MARK = {
   originX: 27,
   originY: 50,
@@ -36,28 +34,44 @@ function arcPath(radius: number): string {
  * background, so there it becomes a hairline and a lift instead.
  */
 export default function Mark({
-  className = "h-6 w-6",
+  className = "size-7",
   tone = "light",
+  signal = false,
 }: {
   className?: string;
   tone?: "light" | "dark";
+  /**
+   * Runs the arcs outward, once every 1.4s.
+   *
+   * Only while something is genuinely pending — a page arriving, a tag being
+   * written. A mark that animates permanently stops meaning anything, and the
+   * one place it must never run is the header, where it would be moving on
+   * every page all day.
+   */
+  signal?: boolean;
 }) {
-  const tile =
-    tone === "dark"
-      ? "rounded-plate border border-ink-line bg-white/5"
-      : "rounded-plate bg-flex-black";
-
   return (
-    <span className={`flex items-center justify-center ${tile} ${className}`} aria-hidden>
+    <span
+      className={`flex items-center justify-center rounded-plate ${
+        tone === "dark" ? "border border-ink-line bg-ink-s1" : "bg-ink"
+      } ${className}`}
+      aria-hidden="true"
+    >
       <svg viewBox="0 0 100 100" className="h-[70%] w-[70%]" fill="none">
-        <circle cx={MARK.originX} cy={MARK.originY} r={MARK.dotRadius} fill="var(--color-lime)" />
-        {MARK.arcRadii.map((r) => (
+        <circle
+          cx={MARK.originX}
+          cy={MARK.originY}
+          r={MARK.dotRadius}
+          fill="var(--color-lime)"
+        />
+        {MARK.arcRadii.map((radius) => (
           <path
-            key={r}
-            d={arcPath(r)}
+            key={radius}
+            d={arcPath(radius)}
             stroke="var(--color-lime)"
             strokeWidth={MARK.arcStroke}
             strokeLinecap="round"
+            className={signal ? "signal-arc" : undefined}
           />
         ))}
       </svg>

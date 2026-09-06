@@ -30,24 +30,28 @@ const (
 
 // SignInWithPassword returns a session token, or ErrBadPassword.
 //
+// `login` is either the address or the username; whichever was typed is what
+// the attempt is counted against, which is what somebody guessing would have
+// to spend their ten tries on.
+//
 // One error for "no such account", "no password set" and "wrong password". They
 // are three different facts and telling them apart tells somebody which
 // addresses have accounts.
-func (s *Service) SignInWithPassword(ctx context.Context, email, password, userAgent string, ip *netip.Addr) (string, Account, error) {
-	email = strings.ToLower(strings.TrimSpace(email))
+func (s *Service) SignInWithPassword(ctx context.Context, login, password, userAgent string, ip *netip.Addr) (string, Account, error) {
+	login = strings.ToLower(strings.TrimSpace(login))
 
-	allowed, err := s.passwordAttemptsLeft(ctx, email, ip)
+	allowed, err := s.passwordAttemptsLeft(ctx, login, ip)
 	if err != nil {
 		return "", Account{}, err
 	}
 	if !allowed {
-		s.recordPasswordAttempt(ctx, email, ip, false)
+		s.recordPasswordAttempt(ctx, login, ip, false)
 		return "", Account{}, ErrRateLimited
 	}
 
-	row, err := s.queries.PasswordFor(ctx, email)
+	row, err := s.queries.PasswordForLogin(ctx, login)
 	if errors.Is(err, pgx.ErrNoRows) {
-		s.recordPasswordAttempt(ctx, email, ip, false)
+		s.recordPasswordAttempt(ctx, login, ip, false)
 		// Hashed anyway, against a throwaway, so a missing account and a wrong
 		// password take the same time. Otherwise the difference is a way to ask
 		// which addresses exist.
@@ -59,11 +63,11 @@ func (s *Service) SignInWithPassword(ctx context.Context, email, password, userA
 	}
 
 	if !VerifyPassword(password, row.Hash) {
-		s.recordPasswordAttempt(ctx, email, ip, false)
+		s.recordPasswordAttempt(ctx, login, ip, false)
 		return "", Account{}, ErrBadPassword
 	}
 
-	s.recordPasswordAttempt(ctx, email, ip, true)
+	s.recordPasswordAttempt(ctx, login, ip, true)
 
 	account := Account{ID: row.UserID.String(), Verified: true}
 	if row.Email != nil {

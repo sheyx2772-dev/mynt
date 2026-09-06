@@ -60,6 +60,11 @@ func TestListsMatchTheWebsite(t *testing.T) {
 			"landing/src/lib/pricing.ts dagi RARE_WORDS ni ham yangilang, "+
 			"so'ng ikkala testdagi barmoq izini almashtiring", got)
 	}
+	if got := fingerprint(topWords); got != "5b56180a" {
+		t.Errorf("topWords o'zgardi: %s\n"+
+			"landing va old-landing dagi TOP_WORDS ni ham yangilang, "+
+			"so'ng uchala testdagi barmoq izini almashtiring", got)
+	}
 	if got := fingerprint(blockedWords); got != "542778ed" {
 		t.Errorf("blockedWords o'zgardi: %s\n"+
 			"landing/src/lib/pricing.ts dagi BLOCKED_WORDS ni ham yangilang, "+

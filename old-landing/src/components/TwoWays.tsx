@@ -1,0 +1,114 @@
+import Link from "next/link";
+import HandleChecker from "@/components/HandleChecker";
+import FloatingCarousel, { type CarouselItem } from "@/components/FloatingCarousel";
+import { ArrowRight, User, Store } from "lucide-react";
+import type { site } from "@/lib/i18n";
+import { SITE_HOST } from "@/lib/site-url";
+
+// The fork, said out loud at the entrance.
+//
+// Both products were reachable and neither was announced: the personal side
+// was simply what the page was about, and the business side was a link in a
+// header and a card two thirds of the way down. Somebody who runs a cafe had
+// to work out that this site was also for them.
+//
+// So the two are stated as two, side by side, before anything else is
+// explained. The contrast is carried by the cards themselves — one on paper,
+// one on the brand's ink — because a person deciding which of two things they
+// are should be able to see that there are two before reading a word.
+
+type Site = ReturnType<typeof site>;
+
+export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselItem[] }) {
+  return (
+    <section className="mx-auto max-w-6xl px-6 pt-12 pb-14 sm:pt-16 sm:pb-20">
+      {/* The number and the object it is issued on, side by side: one is what
+          you buy and the other is what carries it, and neither explains itself
+          without the other. The fork stays below, so a business visitor still
+          meets it before any of the personal pitch. */}
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-center lg:gap-14">
+        <div>
+      <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-black/[0.03] px-3 py-1.5 text-[11px] font-medium tracking-wide text-ink-2 uppercase">
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime-ink" />
+        {s.heroBadge}
+      </p>
+
+      <h1 className="max-w-2xl font-display text-[2.2rem] leading-[1.06] font-semibold tracking-tight text-balance sm:text-5xl">
+        {s.heroTitleA && <>{s.heroTitleA} </>}
+        <span className="rounded-plate bg-lime px-2 text-flex-black">{s.heroTitleMark}</span>{" "}
+        {s.heroTitleB}
+      </h1>
+
+      {/* What the thing is, before anything is asked of anybody. The page used
+          to go from a five-word headline straight to a form wanting three
+          letters and three digits — a visitor was being asked to pick a number
+          before being told what a number does. */}
+      <p className="mt-5 max-w-xl text-lg leading-7 text-ink-2">
+        {s.heroLede.replace("{host}", SITE_HOST)}
+      </p>
+
+      {/* The search stays on the entry page even though the hero that carried
+          it has moved. It is the one thing somebody can do here without
+          choosing a side first: everybody wants to know whether the number
+          they have in mind is free. */}
+      <p className="mt-7 text-ink-3 text-xs font-semibold tracking-widest uppercase">
+        {s.pickHandle}
+      </p>
+      <div className="-mt-4 max-w-xl">
+        <HandleChecker
+          labels={{
+            check: s.checkFree,
+            letters: s.letters,
+            digits: s.digits,
+            error: s.handleError,
+          }}
+        />
+      </div>
+        </div>
+
+        <div className="mx-auto mt-10 w-full max-w-[20rem] lg:mt-0 lg:max-w-none">
+          <FloatingCarousel items={carousel} />
+        </div>
+      </div>
+
+      <div className="mt-10 grid gap-4 lg:grid-cols-2">
+        <Link
+          href="/shaxsiy"
+          className="group flex flex-col rounded-tile bg-lime p-6 sm:p-8 text-flex-black shadow-glow transition-transform hover:-translate-y-0.5 sm:p-8"
+        >
+          <User className="h-6 w-6 text-ink-2" strokeWidth={1.6} />
+          <h2 className="mt-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+            {s.wayPersonal}
+          </h2>
+          <p className="mt-3 flex-1 leading-relaxed text-ink-2">
+            {s.wayPersonalDesc}
+          </p>
+          <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium">
+            {s.wayPersonalCta}
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </span>
+        </Link>
+
+        <Link
+          href="/biznes"
+          className="grain group relative flex flex-col overflow-hidden rounded-tile bg-flex-black p-6 sm:p-8 text-white transition-transform hover:-translate-y-0.5 sm:p-8"
+        >
+          <div className="bg-dot-grid-light absolute inset-0 opacity-30" />
+          <div className="absolute -top-20 -right-16 h-56 w-56 rounded-full bg-lime/[0.13] blur-[90px]" />
+
+          <Store className="relative h-6 w-6 text-lime" strokeWidth={1.6} />
+          <h2 className="relative mt-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+            {s.wayBusiness}
+          </h2>
+          <p className="relative mt-3 flex-1 leading-relaxed text-paper-2">
+            {s.wayBusinessDesc}
+          </p>
+          <span className="relative mt-6 inline-flex items-center gap-2 text-sm font-medium text-lime">
+            {s.wayBusinessCta}
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </span>
+        </Link>
+      </div>
+    </section>
+  );
+}

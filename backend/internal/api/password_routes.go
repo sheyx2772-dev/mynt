@@ -19,7 +19,10 @@ import (
 
 type passwordInput struct {
 	Body struct {
-		Email string `json:"email" maxLength:"254"`
+		// The address or the username. One field rather than two, because an
+		// operator types one thing and asking which kind it is would be asking
+		// them to know something the server can work out.
+		Login string `json:"login" maxLength:"254" doc:"Username yoki email"`
 		Parol string `json:"parol" maxLength:"200"`
 	}
 }
@@ -35,19 +38,19 @@ func (s *Server) registerPassword(api huma.API) {
 		OperationID: "kirish-parol",
 		Method:      http.MethodPost,
 		Path:        "/kirish/parol",
-		Summary:     "Email va parol bilan kirish",
+		Summary:     "Username yoki email va parol bilan kirish",
 		Description: "Parolni o'rnatish uchun avval havola bilan kirib, keyin uni belgilang.",
 		Tags:        []string{"kirish"},
 	}, func(ctx context.Context, in *passwordInput) (*sessionOutput, error) {
 		info := requestFrom(ctx)
 
-		token, account, err := s.auth.SignInWithPassword(ctx, in.Body.Email, in.Body.Parol, info.UserAgent, info.IP)
+		token, account, err := s.auth.SignInWithPassword(ctx, in.Body.Login, in.Body.Parol, info.UserAgent, info.IP)
 		switch {
 		case errors.Is(err, auth.ErrBadPassword):
 			// One message for "no such account", "no password set" and "wrong
 			// password". Telling them apart tells somebody which addresses have
 			// accounts here.
-			return nil, huma.Error401Unauthorized("Email yoki parol noto'g'ri.")
+			return nil, huma.Error401Unauthorized("Login yoki parol noto'g'ri.")
 		case errors.Is(err, auth.ErrRateLimited):
 			// Said plainly, unlike the link. Somebody typing a password knows
 			// they typed it, so there is nothing to disclose.
