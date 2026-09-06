@@ -27,7 +27,7 @@ const CATS = [
   { id: "gov",      uz: "Davlat organlari",   ru: "Госорганы" },
   { id: "ministry", uz: "Vazirliklar",        ru: "Министерства" },
   { id: "bank",     uz: "Banklar",            ru: "Банки" },
-  { id: "venture",  uz: "Venture / Fondlar",  ru: "Фонды" },
+  { id: "venture",  uz: "Venchur fondlar",  ru: "Фонды" },
   { id: "startup",  uz: "Startaplar",          ru: "Стартапы" },
   { id: "corp",     uz: "Boshqa sohalar",     ru: "Другие сферы" },
   // Not profiles at all but the shapes a profile can take — the seven layouts
@@ -136,8 +136,8 @@ export default function KatalogPage() {
             <button
               className="btn-primary"
               onClick={() => setTheme(t => t === "dark" ? "light" : "dark")}
-              style={{ width: 34, height: 34, borderRadius: 10, background: "rgba(255,255,255,0.1)", border: "1.5px solid rgba(255,255,255,0.14)", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.7)", cursor: "pointer" }}
-              aria-label="Tema almashtirish"
+              style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(255,255,255,0.1)", border: "1.5px solid rgba(255,255,255,0.14)", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.7)", cursor: "pointer" }}
+              aria-label="Mavzuni almashtirish"
             >
               {theme === "dark" ? <IconSun /> : <IconMoon />}
             </button>
@@ -267,7 +267,7 @@ export default function KatalogPage() {
             O&apos;zbekiston Respublikasi · flex.com.uz
           </span>
           <span style={{ fontSize: 10, fontFamily: "monospace", color: "rgba(255,255,255,0.25)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
-            NFC Digital · 2024
+            FLEX · 2026
           </span>
         </div>
       </footer>
