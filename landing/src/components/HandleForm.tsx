@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import HandleField from "@/components/HandleField";
@@ -46,11 +47,35 @@ export default async function HandleForm({ asked }: { asked?: string }) {
         checkLabel={t("check")}
       >
         {asked ? (
-          <HandleResult asked={asked} />
+          // Suspended so the wait lands here and nowhere else. Without it the
+          // lookup suspends the whole route, `loading.tsx` takes the screen,
+          // and somebody who pressed a button watched the page they were
+          // reading disappear — the answer to a small question should not
+          // cost the page it was asked on.
+          //
+          // The shell flushes first and this streams in behind it, so the
+          // header, the hero and the number they typed are all still there
+          // while the server is asked.
+          <Suspense fallback={<Pending />}>
+            <HandleResult asked={asked} />
+          </Suspense>
         ) : (
           <p className="mt-3 text-[13px] text-ink-3">{t("hint")}</p>
         )}
       </HandleField>
     </form>
+  );
+}
+
+// The shape of the answer, holding its own space.
+//
+// Not a spinner: the card that arrives is this tall, so drawing its outline
+// means nothing below it moves when the real one lands.
+function Pending() {
+  return (
+    <div
+      className="mt-4 h-[86px] max-w-xl animate-pulse rounded-card border border-line bg-white motion-reduce:animate-none"
+      aria-hidden="true"
+    />
   );
 }

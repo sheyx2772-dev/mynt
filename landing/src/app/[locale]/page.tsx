@@ -6,6 +6,7 @@ import Hero from "@/components/Hero";
 import HowItWorks from "@/components/HowItWorks";
 import Pricing from "@/components/Pricing";
 import TwoWays from "@/components/TwoWays";
+import Verticals from "@/components/Verticals";
 
 // The entry page, being rebuilt a screen at a time.
 //
@@ -32,6 +33,7 @@ export default async function HomePage({
       <TwoWays />
       <HowItWorks />
       <Devices />
+      <Verticals />
       <Pricing />
       <Faq />
     </main>
