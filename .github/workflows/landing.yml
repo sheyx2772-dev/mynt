@@ -1,11 +1,17 @@
+# Builds `old-landing/`, which is the site currently serving flex.
+#
+# A second site is being written in `landing/`. Until it is the one people see,
+# this workflow must keep pointing here — the day the folder was renamed and
+# this file was not, the next push would have deployed an empty starter page
+# over a live product.
 name: landing
 
 on:
   push:
     branches: [main]
-    paths: ['landing/**', 'deploy/landing/**', '.github/workflows/landing.yml']
+    paths: ['old-landing/**', 'deploy/landing/**', '.github/workflows/landing.yml']
   pull_request:
-    paths: ['landing/**']
+    paths: ['old-landing/**']
 
 concurrency:
   group: deploy-landing
@@ -16,14 +22,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: landing
+        working-directory: old-landing
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: landing/package-lock.json
+          cache-dependency-path: old-landing/package-lock.json
       - run: npm ci
       # Next generates the route types — PageProps and friends — during a
       # build, and they are not committed. Without this, tsc on a clean
@@ -52,7 +58,7 @@ jobs:
 
       - uses: docker/build-push-action@v6
         with:
-          context: landing
+          context: old-landing
           push: true
           # NEXT_PUBLIC_ values are read at build time and baked into the code
           # the browser downloads, so they belong here rather than in the

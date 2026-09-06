@@ -1,0 +1,19 @@
+{
+  "site": {
+    "name": "Flex",
+    "tagline": "Your digital business card"
+  },
+  "nav": {
+    "pricing": "Pricing",
+    "personal": "Personal",
+    "business": "Business",
+    "residents": "Residents",
+    "cabinet": "Cabinet",
+    "signIn": "Sign in"
+  },
+  "home": {
+    "title": "Flex — your digital business card",
+    "lead": "One tap and your contact is saved. No app to install.",
+    "cta": "Get a number"
+  }
+}

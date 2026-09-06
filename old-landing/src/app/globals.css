@@ -1,0 +1,919 @@
+@import "tailwindcss";
+
+/* Three surfaces, one token set.
+ *
+ * The product is not one screen with one mood. A stranger who touched somebody
+ * else's card, the owner working their cabinet, and a tablet propped up at a
+ * till are three different rooms, and they were all being painted the same
+ * dark colour. The names below say which room a colour belongs to: `ink-*` and
+ * `paper-*` are the two grounds, and the second half of each name says how far
+ * a value has receded from its ground.
+ *
+ * Which room a page is in is declared once, on <html data-surface>, and never
+ * decided again inside a component. */
+@theme {
+  /* The three that are actually the brand */
+  --color-ink: #0e0a1b;
+  --color-lime: #abff09;
+  --color-lime-press: #9aec00;
+  --color-paper: #fafaf8;
+
+  /* Paper face — what a stranger sees */
+  --color-white: #ffffff;
+  --color-ink-2: #4a465a; /* secondary text, 8.1:1 on paper */
+  --color-ink-3: #736f82; /* captions, 4.7:1 on paper */
+  /* Four weights of line on paper, and the whole ladder is one hue — the ink
+     thinned, never neutral grey. Half the site was drawing `border-black/10`
+     instead, which is the same lightness in a different colour: side by side
+     on one card the two read as a mistake rather than as a choice.
+
+       soft  a hairline inside a card, between rows of the same thing
+       line  the edge of a card
+       2     an input, and any border that has to be found by eye
+       lead  the one card being pointed at */
+  --color-line-soft: #f0eef5;
+  --color-line: #e6e4ec;
+  --color-line-2: #cfccd8; /* inputs, and borders that must be seen */
+  --color-line-lead: #b5afc6;
+  --color-fill: #f1f0f4; /* disabled, and chips that are not chosen */
+
+  /* Ink face — the owner's cabinet, and the wall screen */
+  --color-ink-s1: #16122a; /* a card lifted off the ground */
+  --color-ink-s2: #1f1a36; /* lifted again: hover, inputs */
+  --color-ink-line: #2b2644;
+  --color-paper-2: #b3afc2; /* secondary text, 9.3:1 on ink */
+  --color-paper-3: #7f7b92; /* captions, 4.6:1 on ink */
+
+  /* Semantic, and deliberately two of each: a red that survives white is not
+     the red that survives near-black. */
+  --color-danger: #c9302a;
+  --color-danger-ink: #ff6b5e;
+  --color-warn: #a86a12;
+  --color-warn-ink: #ffc24b;
+
+  /* Data marks on white. The brand lime sits at 1.2:1 there — unusable — so
+     charts get the same hue darkened until it passes. */
+  --color-lime-ink: #6b9e00;
+
+  /* Kept because 500 places still name it. It is the ink ground. */
+  --color-flex-black: #0e0a1b;
+
+  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+  /* Numbers, and only numbers: the plate, the engraving on the card, prices.
+     A monospace with Cyrillic that keeps 0/O and 1/I apart. */
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  /* Kept because a hundred and sixty places still say font-display. It is the
+     sans now — the screen is made recognisable by the number, not a headline
+     face, so there is no third font to download. */
+  --font-display: var(--font-inter), system-ui, sans-serif;
+  /* Only the ceremonial layouts reach for this. */
+  --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
+
+  /* The white a sheet of paper is, as distinct from the off-white the page
+     under it is. Two whites, and the difference is the whole trick. */
+  --color-sheet: #ffffff;
+  /* One grey. Not a ramp — a ramp is how a screen ends up with four greys and
+     no hierarchy. 5.9:1 on paper. */
+  --color-mute: #5c586a;
+  /* The engraving. A FLEX card is black and gold, so gold is a brand colour
+     and not a decoration; it appears on the card face and on the edge of the
+     plate, and nowhere else. */
+  --color-gold: #c9a961;
+  /* The struck slab — the plate's body, a solid button — and the text that
+     goes on it and on the accent. Separate from `ink` because a dark theme's
+     text is light and its slab still is not. Declared here so Tailwind emits
+     the utilities; the per-theme values are set further down. */
+  --color-slab: #0e0a1b;
+  --color-on-slab: #fafaf8;
+  --color-on-accent: #0e0a1b;
+  /* Text printed straight onto the page rather than onto the sheet. */
+  --color-page-ink: #0e0a1b;
+  --color-page-mute: #5c586a;
+
+  --radius-plate: 8px;
+  --radius-input: 12px;
+  --radius-card: 16px;
+  --radius-tile: 24px;
+  /* The shell of a device drawn on the page — a phone in a frame, a card on a
+   * stage. Above the tile because it is a bigger object, and one value because
+   * three of them were 2rem and the fourth 1.8rem for no reason anybody could
+   * name. The life-size phone in PhoneFrame keeps its own larger pair: it is
+   * drawn at a phone's real size with a 10px bezel, so its corners are a
+   * measurement rather than a style. */
+  --radius-bezel: 32px;
+
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Five shadows, each describing a real object.
+   *
+   * `card` has an inner highlight and an inner darkness because that is what
+   * the edge of a piece of plastic looks like. `sheet` casts upward: the paper
+   * is under the card, so its shadow appears above it. `slab` is a struck
+   * plate lying on the paper. `deboss` is pressed in rather than raised, which
+   * is why its light comes from below. `photo` is a print, mounted. */
+  --shadow-card:
+    inset 0 1px 0 rgb(255 255 255 / 0.1), inset 0 -1px 0 rgb(0 0 0 / 0.7),
+    0 1px 1px rgb(14 10 27 / 0.28), 0 6px 10px -4px rgb(14 10 27 / 0.35),
+    0 24px 40px -16px rgb(14 10 27 / 0.45);
+  --shadow-sheet:
+    0 -1px 0 rgb(14 10 27 / 0.06), 0 -12px 32px -20px rgb(14 10 27 / 0.25);
+  --shadow-slab:
+    0 1px 0 rgb(14 10 27 / 0.3), 0 8px 20px -8px rgb(14 10 27 / 0.45);
+  --shadow-deboss:
+    inset 0 1px 2px rgb(14 10 27 / 0.12), inset 0 -1px 0 rgb(255 255 255 / 0.9);
+  --shadow-photo:
+    0 1px 1px rgb(14 10 27 / 0.2), 0 4px 10px -4px rgb(14 10 27 / 0.3);
+  --shadow-tab:
+    0 -1px 0 rgb(14 10 27 / 0.08), 0 -6px 12px -8px rgb(14 10 27 / 0.25);
+  /* Not an object's shadow: the lime tiles are the one loud thing on the page
+   * and this is the light coming off them. Written twice with two different
+   * falloffs for the same tile at two breakpoints. */
+  --shadow-glow: 0 24px 60px -30px rgb(171 255 9 / 0.85);
+}
+
+/* Themes.
+ *
+ * A theme overrides the six surface tokens and nothing else. No component
+ * knows themes exist — they read `bg-sheet` and `text-mute` as always, and the
+ * values underneath change. That is the whole reason the palette was cut to
+ * six: a theme with twenty variables is a theme nobody can add.
+ *
+ * Why there are eight rather than one. A number somebody owns for life should
+ * not arrive wearing the same suit as everybody else's, and the competitor
+ * here understood that before we did — their profiles each carry a complete
+ * palette and pattern, and it is most of why people buy from them.
+ *
+ * Where these come from: the material is local and nobody is using it. Suzani
+ * and adras, ganch carving, the tilework at Registan, Samarkand paper. Beside
+ * those, four honest materials — black, steel, frosted plastic, night. Nothing
+ * here reproduces anyone's mark; a card sold with a registered logo on it
+ * infringes the moment money changes hands, and it is the weaker product too,
+ * because a logo can be reprinted by anyone with the same machine.
+ *
+ * Every pair below is measured, not judged by eye: `npm run themes` fails the
+ * build if any body text drops under 4.5:1 on the ground it is drawn on. This
+ * is exactly where an unreadable palette slips in — eight of them, each
+ * approved on a good monitor, one at 3.9:1 and gone in the sun.
+ *
+ * `--color-lime` is the accent slot rather than a colour: it keeps its name so
+ * no component has to be edited, and each theme puts its own single accent in
+ * it. The rule that it is worn by exactly one element per screen does not
+ * change with the theme. */
+
+/* Two more tokens, and only two, for the themes whose page is darker than the
+ * sheet lying on it. Everything drawn on the sheet keeps `ink` and `mute`;
+ * the few things printed straight onto the page read these instead. They
+ * default to the same values, so a light theme never has to mention them. */
+:root {
+  --color-page-ink: var(--color-ink);
+  --color-page-mute: var(--color-mute);
+  --color-slab: var(--color-ink);
+  --color-on-slab: var(--color-sheet);
+  --color-on-accent: var(--color-ink);
+}
+
+/* And again on every themed element, which is not redundant.
+ *
+ * `--color-page-ink: var(--color-ink)` declared on :root is computed once, at
+ * the root, against the root's own ink — and the resulting colour is then
+ * inherited downwards. A theme redefining `--color-ink` further down does not
+ * reach back and change it. So a light theme that never mentioned page-ink was
+ * getting the global near-black rather than its own, which is only invisible
+ * while the two happen to be the same colour.
+ *
+ * This block sits before every [data-theme="…"] block on purpose: the two have
+ * equal specificity, so a named theme wins on source order and its own values
+ * still override these. */
+[data-theme] {
+  --color-page-ink: var(--color-ink);
+  --color-page-mute: var(--color-mute);
+  --color-slab: var(--color-ink);
+  --color-on-slab: var(--color-sheet);
+  --color-on-accent: var(--color-ink);
+  color: var(--color-ink);
+}
+
+/* The default. Off-white page, white sheet, black card with gold. */
+[data-theme="paper"] {
+  --color-ink: #0e0a1b;
+  --color-lime: #abff09;
+  --color-paper: #fafaf8;
+  --color-sheet: #ffffff;
+  --color-mute: #5c586a;
+  --color-gold: #c9a961;
+  --color-engraved: #c9a961;
+  --card-base: #12102a;
+  --card-face: linear-gradient(140deg, #17132b 0%, #0e0a1b 70%);
+  --page-pattern: none;
+}
+
+/* Registon. Lapis and turquoise off the madrasa tilework, and the page is the
+   dark one — the only theme where the sheet sits on night rather than day. */
+[data-theme="registon"] {
+  --color-ink: #14294b;
+  --color-lime: #d7b364;
+  --color-paper: #0e1e3a;
+  --color-sheet: #f3f6fb;
+  --color-mute: #5a6c8c;
+  --color-gold: #d7b364;
+  --color-page-ink: #eaf1fb;
+  --color-page-mute: #9db2d0;
+  --color-engraved: #e2c27a;
+  --color-on-accent: #16233d;
+  --card-base: #10254a;
+  --card-face: linear-gradient(155deg, #1c3a6b 0%, #10254a 55%, #0a1730 100%);
+  --page-pattern: repeating-linear-gradient(
+      62deg,
+      rgb(215 179 100 / 0.05) 0 1px,
+      transparent 1px 44px
+    );
+}
+
+/* Samarkand paper. Made from mulberry bark, uneven, warm, and the colour of
+   something that has been in a drawer. Walnut ink because that is what was
+   written on it. */
+[data-theme="qogoz"] {
+  --color-ink: #33291c;
+  --color-lime: #dda45f;
+  --color-paper: #efe7d8;
+  --color-sheet: #f9f3e6;
+  --color-mute: #6d6050;
+  --color-gold: #a8834a;
+  --color-engraved: #4d3d24;
+  --card-base: #cdbb9a;
+  --card-face: linear-gradient(160deg, #e5d9c1 0%, #cdbb9a 55%, #b6a17c 100%);
+  --page-pattern: radial-gradient(circle at 20% 30%, rgb(51 41 28 / 0.05) 0 1px, transparent 1px)
+      0 0 / 17px 19px,
+    radial-gradient(circle at 70% 80%, rgb(51 41 28 / 0.04) 0 1px, transparent 1px) 0 0 / 23px 13px;
+}
+
+/* Brushed steel. No pattern to speak of — the grain is the material. The
+   accent is a signal orange, which is what you paint on metal when you want
+   somebody to press it. */
+[data-theme="polat"] {
+  --color-ink: #14171a;
+  --color-lime: #e4572e;
+  --color-paper: #ecedef;
+  --color-sheet: #ffffff;
+  --color-mute: #5b636b;
+  --color-gold: #98a1aa;
+  --color-engraved: #1c2025;
+  --card-base: #7d858d;
+  --card-face: linear-gradient(112deg, #4a5158 0%, #6d757d 28%, #3d434a 55%, #5b6169 100%);
+  --page-pattern: repeating-linear-gradient(
+    90deg,
+    rgb(20 23 26 / 0.035) 0 1px,
+    transparent 1px 4px
+  );
+}
+
+/* Frosted polycarbonate. The card is translucent, so its face is the page
+   showing through — cooler and paler than anything else here. */
+[data-theme="shaffof"] {
+  --color-ink: #101418;
+  --color-lime: #6f9dff;
+  --color-paper: #e9edf0;
+  --color-sheet: #ffffff;
+  --color-mute: #5a6470;
+  --color-gold: #93a3b5;
+  --color-engraved: #3f4a56;
+  --card-base: #c3d0dc;
+  --card-face: linear-gradient(
+    128deg,
+    rgb(255 255 255 / 0.55) 0%,
+    rgb(210 222 232 / 0.75) 40%,
+    rgb(160 178 194 / 0.85) 100%
+  );
+  --page-pattern: none;
+}
+
+/* Night. The face this product was already wearing, kept as one of eight
+   rather than pretended away — it is the right answer for somebody who wants
+   the plain black card, and the wrong one as the only answer. */
+[data-theme="tungi"] {
+  --color-ink: #0e0a1b;
+  --color-lime: #abff09;
+  --color-paper: #120e22;
+  --color-sheet: #ffffff;
+  --color-mute: #56525f;
+  --color-gold: #c9a961;
+  --color-page-ink: #f4f2f8;
+  --color-page-mute: #a09ab2;
+  --color-engraved: #c9a961;
+  --card-base: #141029;
+  --card-face: linear-gradient(150deg, #1b1630 0%, #0e0a1b 62%, #05030c 100%);
+  --page-pattern: radial-gradient(
+      circle at 50% 50%,
+      rgb(14 10 27 / 0.05) 0 1px,
+      transparent 1px
+    )
+    0 0 / 20px 20px;
+}
+
+/* Zarbof — brocade. A second LAYOUT, not a second palette.
+ *
+ * The nine above are one arrangement in nine colours, which is a set of
+ * paint tins rather than a set of designs. This one is built differently:
+ * centred rather than left-aligned, a serif rather than a sans, hairline
+ * outlined pills rather than solid slabs, a circular portrait in a ring
+ * rather than a square print, and no white sheet at all — the whole page is
+ * one panel, the way a certificate is one piece of card.
+ *
+ * It suits somebody who did not buy a business card. A photographer, a
+ * restaurant, somebody who bought the number because it is a good number. */
+[data-theme="zarbof"] {
+  --color-ink: #f0e4c8;
+  --color-lime: #d8c184;
+  --color-paper: #0b0e16;
+  --color-sheet: #10151f;
+  --color-mute: #9d8f70;
+  --color-gold: #cdb375;
+  --color-page-ink: #f0e4c8;
+  --color-page-mute: #9d8f70;
+  --color-engraved: #e2c98f;
+  --color-slab: #161c29;
+  --color-on-slab: #f0e4c8;
+  --color-on-accent: #0b0e16;
+  --card-base: #121722;
+  --card-face: linear-gradient(150deg, #1b2233 0%, #10151f 58%, #080b12 100%);
+  --page-pattern: radial-gradient(
+      ellipse 130% 55% at 50% 0%,
+      rgb(216 193 132 / 0.10) 0%,
+      transparent 62%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='300' viewBox='0 0 420 300' fill='none'%3E%3Cg stroke='%23d8c184' stroke-opacity='0.12' stroke-width='1' fill='none'%3E%3Cpath d='M-40 54C70 8 150 96 250 62 330 34 380 82 460 58'/%3E%3Cpath d='M-40 96C60 62 160 140 262 104 342 76 386 120 460 98'/%3E%3Cpath d='M-40 168C80 132 140 208 248 178 336 154 392 190 460 172'/%3E%3Cpath d='M-40 214C74 186 158 250 258 224 340 202 390 234 460 220'/%3E%3Cpath d='M-40 268C90 240 150 292 254 274 344 258 396 282 460 272'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Ijtimoiy — the social layout's ground. Pale and quiet on purpose: the
+ * platform marks carry all the colour on that page, so everything under them
+ * has to get out of the way. */
+[data-theme="ijtimoiy"] {
+  --color-ink: #17171a;
+  --color-lime: #17171a;
+  --color-paper: #f1efeb;
+  --color-sheet: #ffffff;
+  --color-mute: #6b6862;
+  --color-gold: #a5a099;
+  --color-engraved: #dfe5ec;
+  --color-slab: #17171a;
+  --color-on-slab: #ffffff;
+  --color-on-accent: #ffffff;
+  --card-base: #1e1e22;
+  --card-face: linear-gradient(140deg, #2a2a30 0%, #17171a 70%);
+  --page-pattern: none;
+}
+
+/* Plakat — the poster. Newsprint white, one black, and a red that exists to be
+ * the only thing on the page that is not black. */
+[data-theme="plakat"] {
+  --color-ink: #111111;
+  --color-lime: #c4200a;
+  --color-paper: #f2f0eb;
+  --color-sheet: #f2f0eb;
+  --color-mute: #6a6660;
+  --color-gold: #b8b2a6;
+  --color-engraved: #e8e4dc;
+  --color-slab: #111111;
+  --color-on-slab: #f2f0eb;
+  --color-on-accent: #f6f4ef;
+  --card-base: #191919;
+  --card-face: linear-gradient(135deg, #232323 0%, #111111 72%);
+  --page-pattern: none;
+}
+
+/* Kvitansiya — the receipt. Thermal paper, which is warm and slightly grey,
+ * and an ink that is never quite black because a till printer's never is. */
+[data-theme="kvitansiya"] {
+  --color-ink: #26241f;
+  --color-lime: #1f6a4b;
+  --color-paper: #d8d5cd;
+  --color-sheet: #f7f5ef;
+  --color-mute: #6c675d;
+  --color-gold: #8d8779;
+  --color-engraved: #efece4;
+  --color-slab: #26241f;
+  --color-on-slab: #f7f5ef;
+  --color-on-accent: #f7f5ef;
+  --color-page-mute: #4d4941;
+  --card-base: #2e2b25;
+  --card-face: linear-gradient(140deg, #3a362e 0%, #26241f 70%);
+  --page-pattern: repeating-linear-gradient(
+    0deg,
+    rgb(38 36 31 / 0.03) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+/* The four colourways the supplied design arrives in. One template, four
+ * brands: cyan, government blue, an orange gradient, and a bank green. Only
+ * the accent and the ground move; the layout is identical in all four, which
+ * is what made it a design rather than four designs. */
+[data-theme="nfc-kok"] {
+  --color-ink: #111418;
+  --color-lime: #17c3d4;
+  --color-paper: #ffffff;
+  --color-sheet: #ffffff;
+  --color-mute: #6b7280;
+  --color-gold: #9aa5b1;
+  --color-engraved: #e6eef0;
+  --color-slab: #111418;
+  --color-on-slab: #ffffff;
+  --color-on-accent: #ffffff;
+  --card-base: #16191e;
+  --card-face: linear-gradient(140deg, #23272e 0%, #111418 70%);
+  --page-pattern: none;
+}
+
+[data-theme="nfc-tun"] {
+  --color-ink: #f4f5f7;
+  --color-lime: #f97316;
+  --color-paper: #0b0c0f;
+  --color-sheet: #14161b;
+  --color-mute: #9aa0aa;
+  --color-gold: #8b929c;
+  --color-engraved: #e8eaee;
+  --color-page-ink: #f4f5f7;
+  --color-page-mute: #9aa0aa;
+  --color-slab: #23262d;
+  --color-on-slab: #f4f5f7;
+  --color-on-accent: #14161b;
+  --card-base: #1a1d23;
+  --card-face: linear-gradient(140deg, #262a32 0%, #14161b 70%);
+  --page-pattern: none;
+}
+
+[data-theme="nfc-yashil"] {
+  --color-ink: #f4f5f7;
+  --color-lime: #16a34a;
+  --color-paper: #0b0c0f;
+  --color-sheet: #14161b;
+  --color-mute: #9aa0aa;
+  --color-gold: #8b929c;
+  --color-engraved: #e8eaee;
+  --color-page-ink: #f4f5f7;
+  --color-page-mute: #9aa0aa;
+  --color-slab: #23262d;
+  --color-on-slab: #f4f5f7;
+  --color-on-accent: #ffffff;
+  --card-base: #1a1d23;
+  --card-face: linear-gradient(140deg, #262a32 0%, #14161b 70%);
+  --page-pattern: none;
+}
+
+/* The page wears its theme's pattern. Fixed, so it does not scroll with the
+   content and read as texture printed on the paper rather than as the surface
+   the paper is lying on. */
+/* Ijtimoiy — the social layout's ground. Pale and quiet on purpose: the
+ * platform marks carry all the colour on that page, so everything under them
+ * has to get out of the way. */
+
+/* Plakat — the poster. Newsprint white, one black, and a red that exists to be
+ * the only thing on the page that is not black. */
+
+/* Kvitansiya — the receipt. Thermal paper, which is warm and slightly grey,
+ * and an ink that is never quite black because a till printer's never is. */
+
+/* The four colourways the supplied design arrives in. One template, four
+ * brands: cyan, government blue, an orange gradient, and a bank green. Only
+ * the accent and the ground move; the layout is identical in all four, which
+ * is what made it a design rather than four designs. */
+[data-theme="nfc-kok"] {
+  --color-ink: #111418;
+  --color-lime: #17c3d4;
+  --color-paper: #ffffff;
+  --color-sheet: #ffffff;
+  --color-mute: #6b7280;
+  --color-gold: #9aa5b1;
+  --color-engraved: #e6eef0;
+  --color-slab: #111418;
+  --color-on-slab: #ffffff;
+  --color-on-accent: #ffffff;
+  --card-base: #16191e;
+  --card-face: linear-gradient(140deg, #23272e 0%, #111418 70%);
+  --page-pattern: none;
+}
+
+[data-theme="nfc-tun"] {
+  --color-ink: #f4f5f7;
+  --color-lime: #f97316;
+  --color-paper: #0b0c0f;
+  --color-sheet: #14161b;
+  --color-mute: #9aa0aa;
+  --color-gold: #8b929c;
+  --color-engraved: #e8eaee;
+  --color-page-ink: #f4f5f7;
+  --color-page-mute: #9aa0aa;
+  --color-slab: #23262d;
+  --color-on-slab: #f4f5f7;
+  --color-on-accent: #14161b;
+  --card-base: #1a1d23;
+  --card-face: linear-gradient(140deg, #262a32 0%, #14161b 70%);
+  --page-pattern: none;
+}
+
+[data-theme="nfc-yashil"] {
+  --color-ink: #f4f5f7;
+  --color-lime: #16a34a;
+  --color-paper: #0b0c0f;
+  --color-sheet: #14161b;
+  --color-mute: #9aa0aa;
+  --color-gold: #8b929c;
+  --color-engraved: #e8eaee;
+  --color-page-ink: #f4f5f7;
+  --color-page-mute: #9aa0aa;
+  --color-slab: #23262d;
+  --color-on-slab: #f4f5f7;
+  --color-on-accent: #ffffff;
+  --card-base: #1a1d23;
+  --card-face: linear-gradient(140deg, #262a32 0%, #14161b 70%);
+  --page-pattern: none;
+}
+
+/* The page wears its theme's pattern.
+ *
+ * Deliberately not `background-attachment: fixed`. It was, so the pattern
+ * would read as the surface the paper lies on rather than as texture printed
+ * on it — but a fixed background is composited against the viewport every
+ * frame, and with several on one page the browser gives up and paints none of
+ * them. It is also among the more expensive things to ask a cheap Android for
+ * while somebody is scrolling. The pattern scrolls with the page. */
+.themed {
+  background-color: var(--color-paper);
+  color: var(--color-page-ink);
+  background-image: var(--page-pattern, none);
+}
+
+/* Arriving.
+ *
+ * The panel comes up and settles; its contents follow a beat behind, staggered
+ * by row. Two keyframes, 700ms and 550ms, on an ease that decelerates hard —
+ * the curve matters more than the distance, because a linear entrance reads as
+ * a page that is still loading rather than one that has arrived.
+ *
+ * Both are off under prefers-reduced-motion by the blanket rule further down. */
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+}
+
+.enter {
+  animation: enter 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.rise-in {
+  animation: rise-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Gold struck into black.
+ *
+ * Two text shadows and no more: a dark line under the glyph and a warm light
+ * one over it. That is what an engraving does to the light falling on it, and
+ * it is the difference between gold-coloured text and text that looks cut. */
+.engraved {
+  color: var(--color-engraved, var(--color-gold));
+  text-shadow:
+    0 1px 0 rgb(0 0 0 / 0.9),
+    0 -1px 0 rgb(255 240 200 / 0.18);
+}
+
+/* A ruled line, drawn as a background rather than a border.
+ *
+ * A border would fight the row's own rounding and would need turning off on
+ * the last item with a second class; this one goes away with `last:bg-none`,
+ * and a row can still have a radius and a pressed state over the top of it. */
+.rule {
+  /* Drawn from the text colour rather than from a fixed ink, so the same class
+     gives a dark hairline on a pale sheet and a pale one on a dark page. It was
+     a literal near-black, which on a dark theme is a line nobody can see. */
+  background-image: linear-gradient(
+    to right,
+    color-mix(in oklab, currentColor 16%, transparent),
+    color-mix(in oklab, currentColor 16%, transparent)
+  );
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+}
+
+/* The card lands.
+ *
+ * Once, on load, 640ms. It arrives from slightly above with a longer shadow,
+ * and the shadow shortening as it comes down is the whole reason it reads as
+ * landing rather than sliding. */
+@keyframes settle {
+  from {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.1), inset 0 -1px 0 rgb(0 0 0 / 0.7),
+      0 2px 2px rgb(14 10 27 / 0.2), 0 14px 20px -6px rgb(14 10 27 / 0.3),
+      0 44px 70px -20px rgb(14 10 27 / 0.4);
+  }
+}
+
+.settle {
+  animation: settle 0.64s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+:root {
+  /* Nothing moves for longer than this. A cabinet is worked, not watched. */
+  --dur-1: 120ms;
+  --dur-2: 200ms;
+  --dur-3: 240ms;
+}
+
+html {
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-text-size-adjust: 100%;
+}
+
+/* The surface is declared once per route, on the element that wraps the page,
+ * and never decided again inside a component. There is only one <html> in an
+ * App Router tree, so it cannot be the thing that switches — a wrapper can.
+ *
+ * The body has to follow, or the rubber-band overscroll on iOS shows white
+ * underneath a dark screen. `:has` settles that before hydration, which is the
+ * only moment that matters for it. */
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+[data-surface="paper"] {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+[data-surface="ink"],
+[data-surface="wall"] {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+body:has(> [data-surface="ink"]),
+body:has(> [data-surface="wall"]) {
+  background: var(--color-ink);
+}
+
+/* Prices, table numbers and times have to stack into columns. */
+.num,
+.font-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* A carousel with a visible scrollbar reads as a bug on a phone and as a
+   second control on a desktop. The rail still scrolls, and still by keyboard. */
+/* Two textures for the near-black sections, and both were being asked for by
+   name long before either existed: `grain` and `bg-dot-grid-light` appear on
+   the footer, the phone hero, the fork cards and the device tiles, where the
+   markup already positions a masked layer over the ground and sets its
+   opacity. Without the rules those layers painted nothing and every dark
+   panel was flat.
+
+   The grain is a fixed-size SVG noise tile rather than a gradient, because a
+   gradient at this scale bands on an OLED phone. It sits above the ground and
+   below the content, and it is deliberately weak — at 0.035 it reads as
+   material rather than as an effect. */
+/* Keyboard focus, which this stylesheet had no rule for at all — every
+   interactive element in the product was reachable by Tab and invisible once
+   reached. The inputs made it worse: they set `outline-none` and then drew a
+   focus border darker than their resting one, so focusing a field in the
+   cabinet made its edge disappear.
+
+   The ring is the accent on the paper face and on the ink face alike: it is
+   the one colour that survives both grounds, and focus is exactly the moment
+   to spend it. `:focus-visible` rather than `:focus`, so a mouse click on a
+   button does not draw it. */
+:where(a, button, summary, [role="button"], [tabindex]):focus-visible,
+:where(input, textarea, select):focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 2px;
+  border-radius: var(--radius-plate, 8px);
+}
+
+/* On the paper face the lime is too pale against white to be seen as a ring,
+   so the ink is used instead — the same decision the chart colours make. */
+[data-surface="paper"] :where(a, button, summary, [role="button"], [tabindex]):focus-visible,
+[data-surface="paper"] :where(input, textarea, select):focus-visible {
+  outline-color: var(--color-ink);
+}
+
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The dot grid the same panels lay over the grain. The caller sets its own
+   opacity and mask, so this only has to draw the dots. */
+.bg-dot-grid-light {
+  background-image: radial-gradient(
+    circle at center,
+    rgb(255 255 255 / 0.22) 0 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* A list arriving rather than appearing. Rows are dealt in with a short
+   stagger, set per row inline and capped there — past about the eighth row
+   nobody is watching the animation, they are waiting for it. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 150ms var(--ease-out) both;
+}
+
+/* Something is happening and we cannot say how far along it is. Honest about
+   that: a band travelling across the surface rather than a bar filling up to a
+   percentage nobody measured. */
+@keyframes sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
+  animation: sweep 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation: none !important;
+  }
+}
+
+/* The bar follows the page it sits under.
+ *
+ * It is fixed to the viewport and rendered as a sibling of the page, so it
+ * cannot inherit the surface — but it can be told which one is on screen. A
+ * white bar under a dark cabinet is the one piece of furniture that never got
+ * the memo. */
+body:has([data-surface="ink"]) .app-bar {
+  border-color: var(--color-ink-line);
+  background: color-mix(in oklab, var(--color-ink) 95%, transparent);
+}
+
+/* The tabs come with it. `aria-current` already says which one is the page,
+   so the active state does not need a second class to carry it here. */
+body:has([data-surface="ink"]) .app-bar a {
+  color: var(--color-paper-3);
+}
+
+body:has([data-surface="ink"]) .app-bar a[aria-current="page"] {
+  color: var(--color-paper);
+}
+
+/* A page that carries somebody else's card asks for the app bar to stay away,
+   and for the space the bar reserves to come back. Answered in CSS so it is
+   settled before hydration rather than after it. */
+body:has([data-no-app-bar]) .app-bar {
+  display: none;
+}
+
+body:has([data-no-app-bar]) {
+  padding-bottom: 0;
+}
+
+/* Paper.
+ *
+ * One page in the whole site is meant to come out of a printer — the sheet of
+ * table cards — and everything the browser adds around it costs somebody ink:
+ * the bottom bar, the page padding, the body's own background. The cards
+ * themselves are laid out by the page; this only takes away what the app wraps
+ * around it. */
+@media print {
+  .app-bar {
+    display: none !important;
+  }
+
+  body {
+    padding-bottom: 0 !important;
+    background: #fff !important;
+  }
+
+  /* A card cut in half by a page break is a card that gets thrown away. */
+  .break-inside-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* A product suspended over the hero.
+   The object and its shadow share one period: as the thing rises the shadow
+   narrows and fades, which is what sells the height. Both stop for anyone who
+   asked their system not to animate — a page that moves on its own is the
+   first thing that setting exists to stop. */
+@keyframes float-bob {
+  0%, 100% { transform: translateY(0) rotate(-2.5deg); }
+  50%      { transform: translateY(-14px) rotate(-1.2deg); }
+}
+@keyframes float-cast {
+  0%, 100% { transform: scaleX(1); opacity: 0.5; }
+  50%      { transform: scaleX(0.84); opacity: 0.26; }
+}
+.float-bob  { animation: float-bob 6s ease-in-out infinite; }
+.float-cast { animation: float-cast 6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .float-bob, .float-cast { animation: none; }
+}
+
+/* An answer that opens rather than appears.
+
+   A <details> snapping to its full height moves everything under it in one
+   frame, and the eye reads that as the page having jumped rather than as an
+   answer having arrived — which is why somebody scrolls back up to check what
+   happened.
+
+   No JavaScript and no measuring. `interpolate-size: allow-keywords` is what
+   makes `height: auto` a value a transition can reach, `::details-content` is
+   the box the browser makes for everything after the <summary>, and the
+   `content-visibility` transition needs `allow-discrete` or the content is
+   hidden for the whole of the closing animation and the panel collapses empty.
+
+   The curve matters more than the duration here. An ease-out quint covers
+   four fifths of the distance in the first quarter of its time, which reads
+   as a snap with a tail rather than as an opening — measured on the FAQ, the
+   panel was at 82% of its height after 99ms of a 280ms transition. This is a
+   gentler ease-out over a longer beat, and the text fades in behind it so
+   there is something to watch even when the answer is two lines tall.
+
+   A browser without `::details-content` ignores all of it and the panel opens
+   instantly, which is what it did before — an addition, not a dependency.
+
+   On <details> itself rather than on a class: both accordions on the site want
+   this, the next one will too, and a class is a thing to forget. `.reveal`
+   stays in the markup as a name for what the element is.
+
+   Guarded by its own media query rather than left to the blanket
+   `prefers-reduced-motion` rule above: that rule names `*`, `*::before` and
+   `*::after`, and `::details-content` is none of the three. */
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  details::details-content {
+    block-size: 0;
+    overflow: clip;
+    opacity: 0;
+    transition:
+      block-size 0.42s cubic-bezier(0.33, 1, 0.68, 1),
+      opacity 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+      content-visibility 0.42s allow-discrete;
+  }
+
+  details[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+    /* The text is late and the box is early, so the answer arrives inside a
+       space that has already been made for it. */
+    transition-delay: 0s, 0.08s, 0s;
+  }
+}

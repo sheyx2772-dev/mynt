@@ -1,0 +1,19 @@
+{
+  "site": {
+    "name": "Flex",
+    "tagline": "Raqamli vizitkangiz"
+  },
+  "nav": {
+    "pricing": "Narxlar",
+    "personal": "Shaxsiy",
+    "business": "Biznes",
+    "residents": "Rezidentlar",
+    "cabinet": "Kabinet",
+    "signIn": "Kirish"
+  },
+  "home": {
+    "title": "Flex — raqamli vizitkangiz",
+    "lead": "Bir tegish bilan kontaktingiz saqlanadi. Ilova o'rnatish kerak emas.",
+    "cta": "Raqam olish"
+  }
+}
