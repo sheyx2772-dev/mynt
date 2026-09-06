@@ -66,7 +66,7 @@ export function SampleTile({
           black reads as broken. 1:2 is 676px — under all of them — so each
           fills its frame and the long ones are clipped, which is what a screen
           does to a page anyway. */}
-      <div className="relative aspect-[1/2] w-full overflow-hidden rounded-[2rem] bg-black shadow-card ring-1 ring-white/15">
+      <div className="relative aspect-[1/2] w-full overflow-hidden rounded-bezel bg-black shadow-card ring-1 ring-white/15">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0"
@@ -94,7 +94,7 @@ export function SampleTile({
       <Link
         href={href}
         aria-label={name}
-        className="absolute inset-0 rounded-[2rem]"
+        className="absolute inset-0 rounded-bezel"
       />
     </div>
   );

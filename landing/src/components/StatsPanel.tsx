@@ -51,7 +51,7 @@ function PremiumTeaser() {
       </ul>
       <Link
         href="/tarif"
-        className="mt-4 inline-block rounded-input bg-lime px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-ink uppercase transition-opacity hover:opacity-90"
+        className="mt-4 inline-block rounded-input bg-lime px-5 py-2.5 text-xs font-semibold tracking-widest text-ink uppercase transition-opacity hover:opacity-90"
       >
         Tariflar
       </Link>

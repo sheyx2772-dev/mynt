@@ -95,6 +95,13 @@
   --radius-input: 12px;
   --radius-card: 16px;
   --radius-tile: 24px;
+  /* The shell of a device drawn on the page — a phone in a frame, a card on a
+   * stage. Above the tile because it is a bigger object, and one value because
+   * three of them were 2rem and the fourth 1.8rem for no reason anybody could
+   * name. The life-size phone in PhoneFrame keeps its own larger pair: it is
+   * drawn at a phone's real size with a 10px bezel, so its corners are a
+   * measurement rather than a style. */
+  --radius-bezel: 32px;
 
   --ease-out: cubic-bezier(0.2, 0, 0, 1);
 
@@ -119,6 +126,10 @@
     0 1px 1px rgb(14 10 27 / 0.2), 0 4px 10px -4px rgb(14 10 27 / 0.3);
   --shadow-tab:
     0 -1px 0 rgb(14 10 27 / 0.08), 0 -6px 12px -8px rgb(14 10 27 / 0.25);
+  /* Not an object's shadow: the lime tiles are the one loud thing on the page
+   * and this is the light coming off them. Written twice with two different
+   * falloffs for the same tile at two breakpoints. */
+  --shadow-glow: 0 24px 60px -30px rgb(171 255 9 / 0.85);
 }
 
 /* Themes.

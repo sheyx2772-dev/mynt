@@ -78,7 +78,7 @@ export default function InvoiceRequest({ currentSeats }: { currentSeats: number 
           })
         }
         disabled={pending}
-        className="mt-4 rounded-input bg-ink-s2 px-5 py-2.5 text-[11px] font-semibold tracking-[0.16em] text-paper uppercase disabled:opacity-50"
+        className="mt-4 rounded-input bg-ink-s2 px-5 py-2.5 text-xs font-semibold tracking-widest text-paper uppercase disabled:opacity-50"
       >
         {pending ? "Tayyorlanmoqda" : "Hisob-faktura olish"}
       </button>

@@ -69,7 +69,7 @@ export default function TwoWays({ s, carousel }: { s: Site; carousel: CarouselIt
       <div className="grid gap-4 lg:grid-cols-2">
         <Link
           href="/shaxsiy"
-          className="group flex flex-col rounded-tile bg-lime p-6 sm:p-8 text-flex-black shadow-[0_24px_60px_-30px_rgba(171,255,9,0.85)] transition-transform hover:-translate-y-0.5 sm:p-8"
+          className="group flex flex-col rounded-tile bg-lime p-6 sm:p-8 text-flex-black shadow-glow transition-transform hover:-translate-y-0.5 sm:p-8"
         >
           <User className="h-6 w-6 text-ink-2" strokeWidth={1.6} />
           <h2 className="mt-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl">

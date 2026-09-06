@@ -149,7 +149,7 @@ export default function PricingCalculator({
         {!blocked && (
           <div className="mb-5">
             <span
-              className={`inline-block rounded-full px-3 py-1 text-[11px] font-semibold tracking-[0.14em] uppercase ${TIER_STYLE[tier]}`}
+              className={`inline-block rounded-full px-3 py-1 text-xs font-semibold tracking-widest uppercase ${TIER_STYLE[tier]}`}
             >
               {labels.tiers[tier]}
             </span>

@@ -151,7 +151,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
             {/* The product in a real room. Absent is a working state — the
                 column simply does not render. */}
             {heroShot && (
-              <div className="relative aspect-[3/4] overflow-hidden rounded-[1.8rem] ring-1 ring-white/10">
+              <div className="relative aspect-[3/4] overflow-hidden rounded-bezel ring-1 ring-white/10">
                 <Image
                   src={heroShot}
                   alt={t.title}

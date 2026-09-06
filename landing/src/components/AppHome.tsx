@@ -169,7 +169,7 @@ export default function AppHome({
         <div className="grid gap-3">
           <Link
             href="/shaxsiy"
-            className="flex items-center gap-4 rounded-tile bg-lime p-6 sm:p-8 text-flex-black shadow-[0_16px_40px_-22px_rgba(171,255,9,0.9)] transition-transform active:scale-[0.99]"
+            className="flex items-center gap-4 rounded-tile bg-lime p-6 sm:p-8 text-flex-black shadow-glow transition-transform active:scale-[0.99]"
           >
             <User className="h-6 w-6 shrink-0 text-ink-2" strokeWidth={1.6} />
             <div className="min-w-0 flex-1">

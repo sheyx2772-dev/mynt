@@ -69,7 +69,7 @@ export default function LeadsPanel({
         {leads.length > 0 && (
           <a
             href={`/kabinet/${handle}/kontaktlar.csv`}
-            className="flex items-center gap-1.5 rounded-input border border-ink-line px-4 py-2 text-[11px] font-semibold tracking-[0.14em] uppercase transition-colors hover:bg-ink-s2"
+            className="flex items-center gap-1.5 rounded-input border border-ink-line px-4 py-2 text-xs font-semibold tracking-widest uppercase transition-colors hover:bg-ink-s2"
           >
             <Download className="h-3.5 w-3.5" />
             Excel
