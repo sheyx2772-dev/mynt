@@ -86,3 +86,22 @@ export function bySampleOrder<T>(
     .sort((a, b) => rank(a.item) - rank(b.item) || a.i - b.i)
     .map((e) => e.item);
 }
+
+/**
+ * The seventeen designs from the Make project, strongest first.
+ *
+ * Ranked the same way as the layouts — all seventeen rendered at one width and
+ * read as a row. The rule that governs the order is the same: no two adjacent
+ * tiles may look like the same card, so the dark ones are broken up by the
+ * light ones rather than being grouped by mood.
+ *
+ * Premium and glass lead because they are the two that look like a finished
+ * product rather than a template. Minimal is last on purpose: it is the
+ * quietest, and a shelf judged by its first two tiles has nothing to gain from
+ * it at the head.
+ */
+export const V2_ORDER = [
+  "premium", "glass", "brand", "artist", "sport", "historical", "chef",
+  "gradient", "musician", "nature", "country", "feminine", "terminal",
+  "stripe", "comic", "kids", "minimal",
+];

@@ -1,8 +1,10 @@
 import { LAYOUTS } from "@/components/ui/LayoutSamples";
 import { SampleShelf, SampleTile } from "@/components/SampleShelf";
 import ProfileCard from "@/components/figma/ProfileCard";
+import ProfileCardV2 from "@/components/figma/ProfileCardV2";
+import { profiles } from "@/components/figma/profiles";
 import { orgSamples, hasOwnLogo } from "@/lib/org-samples";
-import { LAYOUT_ORDER, ORG_ORDER, bySampleOrder } from "@/lib/sample-order";
+import { LAYOUT_ORDER, ORG_ORDER, V2_ORDER, bySampleOrder } from "@/lib/sample-order";
 import "@/components/figma/katalog.css";
 
 /**
@@ -51,6 +53,37 @@ export default function SampleStrip({
           open={open}
         >
           {l.render()}
+        </SampleTile>
+      ))}
+
+      {/* The seventeen designs, between the layouts and the organisations.
+          They answer the same question those two do — what the page behind the
+          number looks like — so they belong on the same rail rather than on a
+          shelf of their own. They sit after the seven because those were
+          ordered by hand and lead with the best thing here; they sit before the
+          fourteen because a row of one template wearing different brands is
+          the weakest stretch of the shelf and should not come first. */}
+      {bySampleOrder(
+        // One tile per design, not one per record. Four of the twenty-five are
+        // the `brand` template wearing different names, and they sorted to the
+        // same rank — four near-identical cards in a row, which is the thing
+        // this shelf's order exists to prevent. The rest stay in /katalog.
+        Object.values(
+          Object.fromEntries(
+            profiles.filter((p) => p.template).map((p) => [p.template!, p]),
+          ),
+        ),
+        (p) => p.template!,
+        V2_ORDER,
+      ).map((p) => (
+        <SampleTile
+          key={p.id}
+          href="/katalog?bolim=dizayn"
+          name={p.orgShort}
+          who={p.categoryLabel}
+          open={open}
+        >
+          <ProfileCardV2 profile={p} />
         </SampleTile>
       ))}
 
