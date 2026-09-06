@@ -820,6 +820,36 @@
         "title": "Dizayn",
         "hint": "Profil qaysi ko'rinishda ochiladi."
       },
+      "qr": {
+        "title": "QR-kod",
+        "hint": "NFC yo'q telefonlar uchun va chop etishga.",
+        "copy": "Havoladan nusxa olish",
+        "copied": "Havola nusxalandi",
+        "downloadSvg": "SVG yuklab olish",
+        "downloadPng": "PNG yuklab olish"
+      },
+      "leads": {
+        "title": "Kontaktlar",
+        "hint": "Profil orqali tashrif buyuruvchilar qoldirgan aloqalar.",
+        "emptyTitle": "Hozircha kontaktlar yo'q",
+        "emptyHint": "Tashrif buyuruvchilar profilingiz orqali vizitka qoldirganida shu yerda chiqadi.",
+        "downloadCsv": "CSV yuklab olish",
+        "deleted": "Kontakt o'chirildi"
+      },
+      "transfer": {
+        "title": "O'tkazish",
+        "hint": "Raqam egaligini boshqa odamga topshirish.",
+        "sendTitle": "Yangi egasiga taklif qilish",
+        "sendHint": "Qabul qiluvchining telefon raqamini kiriting. U qabul qilguncha raqam sizda qoladi.",
+        "recipientLabel": "Qabul qiluvchining telefoni",
+        "recipientPlaceholder": "+998 90 123 45 67",
+        "submit": "Taklif yuborish",
+        "activeTransfers": "Kutilayotgan takliflar",
+        "pending": "Kutilmoqda",
+        "cancel": "Bekor qilish",
+        "cancelled": "Taklif bekor qilindi",
+        "sent": "Taklif yuborildi"
+      },
       "plan": {
         "title": "Tarif",
         "hint": "Nima to'langan, qachon tugaydi."

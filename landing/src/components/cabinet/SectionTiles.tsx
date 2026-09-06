@@ -1,10 +1,13 @@
 import {
+  ArrowRightLeft,
   BarChart3,
   CreditCard,
   Lock,
   MessageSquare,
   Palette,
+  QrCode,
   UserRound,
+  Users,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
@@ -13,19 +16,17 @@ import type { OwnedHandle } from "@/lib/cabinet/handles";
 
 // The screens behind the number, one tile each.
 //
-// Six, in two columns, so all of them fit above the fold on a phone with the
-// card and the figures above them. The old cabinet had fourteen and most
-// were for a cafe; those are not built here yet and would not belong on a
-// person's home if they were. The order is how often each is opened: the
-// profile most, the plan least.
-//
-// A tile carries a count only when the count is a reason to open it.
+// Nine essential tiles in two columns.
+// A tile carries a count only when the count is a reason to open it (e.g. pending
+// follower requests, or newly received leads).
 export default async function SectionTiles({
   handle,
   waiting,
+  leadsCount = 0,
 }: {
   handle: OwnedHandle;
   waiting: number;
+  leadsCount?: number;
 }) {
   const t = await getTranslations("cabinet.sections");
   const at = (screen: string) => `/cabinet/${handle.raqam}/${screen}`;
@@ -33,9 +34,12 @@ export default async function SectionTiles({
   const tiles = [
     { id: "profile", Icon: UserRound, count: 0 },
     { id: "posts", Icon: MessageSquare, count: 0 },
+    { id: "qr", Icon: QrCode, count: 0 },
+    { id: "leads", Icon: Users, count: leadsCount },
     { id: "privacy", Icon: Lock, count: waiting },
     { id: "stats", Icon: BarChart3, count: 0 },
     { id: "theme", Icon: Palette, count: 0 },
+    { id: "transfer", Icon: ArrowRightLeft, count: 0 },
     { id: "plan", Icon: CreditCard, count: 0 },
   ] as const;
 

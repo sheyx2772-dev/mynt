@@ -820,6 +820,36 @@
         "title": "Design",
         "hint": "The look the profile opens in."
       },
+      "qr": {
+        "title": "QR code",
+        "hint": "For phones without NFC and for print.",
+        "copy": "Copy link",
+        "copied": "Link copied",
+        "downloadSvg": "Download SVG",
+        "downloadPng": "Download PNG"
+      },
+      "leads": {
+        "title": "Contacts",
+        "hint": "Contacts left by visitors on your profile.",
+        "emptyTitle": "No contacts yet",
+        "emptyHint": "When visitors exchange their business card on your profile, they appear here.",
+        "downloadCsv": "Download CSV",
+        "deleted": "Contact deleted"
+      },
+      "transfer": {
+        "title": "Transfer",
+        "hint": "Transfer number ownership to another person.",
+        "sendTitle": "Offer to a new owner",
+        "sendHint": "Enter the recipient's phone number. Until accepted, the number remains yours.",
+        "recipientLabel": "Recipient phone number",
+        "recipientPlaceholder": "+998 90 123 45 67",
+        "submit": "Send offer",
+        "activeTransfers": "Pending transfers",
+        "pending": "Pending",
+        "cancel": "Cancel",
+        "cancelled": "Offer cancelled",
+        "sent": "Offer sent"
+      },
       "plan": {
         "title": "Plan",
         "hint": "What is paid for and when it ends."
