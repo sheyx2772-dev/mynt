@@ -2,7 +2,7 @@ import { parseServices, MAX_SERVICES, type Service } from "@/lib/services";
 import { serviceLimit, type PlanId } from "@/lib/plans";
 import "server-only";
 
-import { buildProfileLinks } from "@/lib/links";
+import { acceptedLinkFields, buildProfileLinks, type LinkFields } from "@/lib/links";
 import { checkAvatar, checkBanner } from "@/lib/uploads";
 import { uploadImage, isStorageConfigured } from "@/lib/storage";
 
@@ -10,6 +10,14 @@ export type ProfileInput = {
   name: string;
   bio: string;
   links: { label: string; href: string }[];
+  /**
+   * The same links as the nine raw fields the backend stores.
+   *
+   * Both are needed: the page renders addresses, the backend keeps parts and
+   * rebuilds them. They come from one set of validators, so a field the page
+   * refuses to draw is a field the save does not send.
+   */
+  linkFields: LinkFields;
   avatarUrl: string | null;
   bannerUrl: string | null;
   city: string | null;
@@ -80,7 +88,7 @@ export async function readProfileForm(
 
   if (!name) return { ok: false, error: "Ism kiritish shart." };
 
-  const links = buildProfileLinks({
+  const linkInput = {
     payment: String(formData.get("payment") ?? ""),
     booking: String(formData.get("booking") ?? ""),
     telegram: String(formData.get("telegram") ?? ""),
@@ -90,7 +98,9 @@ export async function readProfileForm(
     facebook: String(formData.get("facebook") ?? ""),
     youtube: String(formData.get("youtube") ?? ""),
     website: String(formData.get("website") ?? ""),
-  });
+  };
+  const links = buildProfileLinks(linkInput);
+  const linkFields = acceptedLinkFields(linkInput);
 
   let avatarUrl = currentAvatarUrl;
   // Whether a picture the owner chose failed to reach the bucket.
@@ -158,6 +168,7 @@ export async function readProfileForm(
       name,
       bio,
       links,
+      linkFields,
       avatarUrl,
       bannerUrl,
       city: String(formData.get("city") ?? "").trim().slice(0, 60) || null,

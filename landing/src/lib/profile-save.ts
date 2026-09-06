@@ -43,11 +43,13 @@ export async function saveProfile(
     body: {
       name: p.name,
       bio: p.bio ?? undefined,
-      // The backend rebuilds every link from validated parts and refuses what
-      // it cannot, so the form's own shape is passed through rather than
-      // checked twice.
-      links: p.links as never,
-      services: p.services as never,
+      // The nine raw fields, not the rendered rows. This was `p.links as
+      // never` — an array where the backend wants an object — and the cast
+      // hid it, so every save came back 422 and no profile could be edited.
+      links: p.linkFields,
+      // A service with no price is stored as an empty one; the schema has no
+      // null here, and `as never` was hiding that too.
+      services: p.services.map((s) => ({ name: s.name, price: s.price ?? "" })),
       city: p.city ?? undefined,
       contactEmail: p.contactEmail ?? undefined,
       phone: p.phone ?? undefined,

@@ -142,6 +142,48 @@ export function buildProfileLinks(input: {
   ].filter((l): l is Link => l !== null);
 }
 
+/** The nine fields the edit form has, exactly as the backend names them. */
+export type LinkFields = {
+  payment?: string;
+  booking?: string;
+  telegram?: string;
+  whatsapp?: string;
+  instagram?: string;
+  linkedin?: string;
+  facebook?: string;
+  youtube?: string;
+  website?: string;
+};
+
+/**
+ * The same nine fields, with everything invalid dropped.
+ *
+ * The backend stores a profile's links as these raw parts and rebuilds the
+ * addresses itself — it will not accept the built `Link[]` that this page
+ * renders from. Both shapes are needed, so they are derived here from one set
+ * of validators: a field survives this exactly when buildProfileLinks would
+ * have produced a row for it.
+ */
+export function acceptedLinkFields(input: LinkFields): LinkFields {
+  const kept: LinkFields = {};
+  const take = (key: keyof LinkFields, link: Link | null) => {
+    const raw = input[key]?.trim();
+    if (raw && link) kept[key] = raw;
+  };
+
+  take("payment", paymentLink(input.payment ?? ""));
+  take("booking", bookingLink(input.booking ?? ""));
+  take("telegram", socialLink("Telegram", input.telegram ?? "", "https://t.me/"));
+  take("whatsapp", whatsappLink(input.whatsapp ?? ""));
+  take("instagram", socialLink("Instagram", input.instagram ?? "", "https://instagram.com/"));
+  take("linkedin", socialLink("LinkedIn", input.linkedin ?? "", "https://linkedin.com/in/"));
+  take("facebook", socialLink("Facebook", input.facebook ?? "", "https://facebook.com/"));
+  take("youtube", socialLink("YouTube", input.youtube ?? "", "https://youtube.com/@"));
+  take("website", websiteLink(input.website ?? ""));
+
+  return kept;
+}
+
 // What a link row shows underneath its label: the part a person recognises.
 // A full "https://instagram.com/username" in a row is noise — the username is
 // the information, and for a website the host is.
