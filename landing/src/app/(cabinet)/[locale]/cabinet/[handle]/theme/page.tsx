@@ -45,7 +45,7 @@ export default async function ThemePage({
         <ThemePicker
           raqam={handle.raqam}
           current={themeEntry(handle.dizayn).id}
-          name={handle.ism || handle.raqam}
+          profile={handle}
         />
         <DesignRequests
           raqam={handle.raqam}

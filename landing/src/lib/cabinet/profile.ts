@@ -18,12 +18,14 @@ import { ownedHandle, type OwnedHandle } from "./handles";
 // The read is the ownership check. `ownedHandle` is a filtered query: a
 // number this account does not hold is null here, and the PUT is never made.
 
+import { revalidatePath, revalidateTag } from "next/cache";
+
 export type ProfileInput = components["schemas"]["ProfileInput"];
 
 /** What the edit form opens on: the stored row, as the backend wants it back. */
 export function toProfileInput(h: OwnedHandle): ProfileInput {
   return {
-    name: h.ism,
+    name: h.ism || h.raqam,
     bio: h.bio,
     position: h.lavozim,
     company: h.kompaniya,
@@ -64,7 +66,16 @@ export async function saveProfile(
       params: { path: { raqam: handle.raqam } },
       body: change(toProfileInput(handle)),
     });
-    if (!error) return "ok";
+    if (!error) {
+      try {
+        revalidateTag(`profile-${handle.raqam}`, "max");
+        revalidateTag("profiles", "max");
+        revalidatePath(`/${handle.raqam}`);
+        revalidatePath(`/p/${handle.raqam}`, "layout");
+        revalidatePath(`/p/${handle.raqam}`, "page");
+      } catch {}
+      return "ok";
+    }
     if (response.status === 404) return "notFound";
     if (response.status === 422) return "invalid";
     console.error("cabinet: profile not saved", response.status, error);

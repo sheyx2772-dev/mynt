@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 import { askForDesign, type AskResult } from "@/lib/cabinet/design";
 import { saveProfile, type SaveResult } from "@/lib/cabinet/profile";
@@ -21,7 +21,16 @@ export async function chooseTheme(
     ...p,
     cardDesign: chosen,
   }));
-  if (result === "ok") revalidatePath("/[locale]/cabinet", "layout");
+  if (result === "ok") {
+    try {
+      revalidateTag(`profile-${raqam}`, "max");
+      revalidateTag("profiles", "max");
+      revalidatePath(`/${raqam}`);
+      revalidatePath(`/p/${raqam}`, "layout");
+      revalidatePath(`/p/${raqam}`, "page");
+      revalidatePath("/[locale]/cabinet", "layout");
+    } catch {}
+  }
   return result;
 }
 

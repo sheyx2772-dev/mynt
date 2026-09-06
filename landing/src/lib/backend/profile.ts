@@ -43,12 +43,16 @@ export type PublicProfile = {
  * a page that will eventually forget.
  */
 export async function ownerOf(handle: string): Promise<PublicProfile | null> {
+  const norm = handle.toUpperCase();
   const { data, error, response } = await backend.GET("/profil/{raqam}", {
-    params: { path: { raqam: handle } },
+    params: { path: { raqam: norm } },
     // A number's owner changes at most once. Held briefly so a visitor trying
-    // six numbers does not make six round trips to Frankfurt, and briefly
-    // enough that a number bought a minute ago stops looking free.
-    next: { revalidate: 60 },
+    // six numbers does not make six round trips to Frankfurt, and tagged so
+    // that saving a theme or profile in cabinet revalidates immediately.
+    next: {
+      revalidate: 60,
+      tags: [`profile-${norm}`, "profiles"],
+    },
   });
 
   if (response.status === 404) return null;

@@ -19,6 +19,8 @@ import "../../../globals.css";
 // from the reader's cookie and `Accept-Language`. `<html lang>` has to say the
 // same thing, or a screen reader pronounces a Russian profile in Uzbek.
 
+export const dynamic = "force-dynamic";
+
 export default async function ProfileLayout({
   children,
   params,
@@ -40,8 +42,16 @@ export default async function ProfileLayout({
       style={theme.style}
       className={`${inter.variable} ${mono.variable} ${serif.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-[var(--p-ground)] text-[var(--p-text)] transition-colors duration-300">
-        {children}
+      <body className="relative min-h-full bg-[var(--p-ground)] text-[var(--p-text)] transition-colors duration-300">
+        {/* Themed Ambient Pattern Backdrop */}
+        {theme.patternStyle && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none fixed inset-0 z-0 opacity-70 transition-opacity duration-500"
+            style={theme.patternStyle}
+          />
+        )}
+        <div className="relative z-10">{children}</div>
       </body>
     </html>
   );
