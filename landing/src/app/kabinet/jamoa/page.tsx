@@ -104,7 +104,7 @@ export default async function JamoaPage() {
         </div>
       </div>
 
-      <section className="mt-8 rounded-tile border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <section className="mt-8 rounded-tile border border-ink-line bg-ink-s1 p-7">
         <h2 className="font-display text-lg font-semibold tracking-tight">
           Jamoa bo&apos;yicha
         </h2>
@@ -123,7 +123,7 @@ export default async function JamoaPage() {
         </div>
       </section>
 
-      <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-7">
         <h2 className="font-display text-lg font-semibold tracking-tight">Raqamlar</h2>
 
         {handles.length === 0 ? (
@@ -165,7 +165,7 @@ export default async function JamoaPage() {
         )}
       </section>
 
-      <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-7">
         <h2 className="font-display text-lg font-semibold tracking-tight">To&apos;lov</h2>
         <p className="mt-1 mb-5 text-sm text-paper-2">
           Firma to&apos;lovi bank o&apos;tkazmasi orqali. Hisob-fakturani

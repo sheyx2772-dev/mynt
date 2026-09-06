@@ -36,7 +36,7 @@ export default async function XabarlarPage() {
         )}
       </div>
 
-      <section className="mt-8 rounded-tile border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <section className="mt-8 rounded-tile border border-ink-line bg-ink-s1 p-7">
         <h2 className="font-display text-lg font-semibold tracking-tight">Telegram</h2>
         <div className="mt-3">
           {linkState.available ? (
@@ -54,7 +54,7 @@ export default async function XabarlarPage() {
         </div>
       </section>
 
-      <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <section className="mt-6 rounded-tile border border-ink-line bg-ink-s1 p-7">
         <h2 className="font-display text-lg font-semibold tracking-tight">Barchasi</h2>
 
         {notifications.length === 0 ? (

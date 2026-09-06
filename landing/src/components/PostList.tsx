@@ -66,7 +66,7 @@ export default function PostList({
       {posts.map((post, i) => (
         <li
           key={post.id}
-          className="rise rounded-card border border-line bg-white px-5 py-4 text-ink transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
+          className="rise rounded-card border border-line bg-white px-5 py-4 text-ink"
           // Capped: past the eighth row nobody is watching the animation.
           style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
         >

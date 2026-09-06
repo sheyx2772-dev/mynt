@@ -34,7 +34,7 @@ function Tile({
   return (
     <Link
       href={href}
-      className="flex flex-col justify-between rounded-tile border border-line-soft bg-white px-4 py-4 shadow-[0_2px_10px_-6px_rgba(14,10,27,0.25)] transition-transform active:scale-[0.98]"
+      className="flex flex-col justify-between rounded-tile border border-line-soft bg-white px-4 py-4 shadow-photo transition-transform active:scale-[0.98]"
     >
       <Icon className="h-6 w-6 text-ink-2" strokeWidth={1.6} />
       <span className="mt-6 text-sm leading-tight font-medium">{label}</span>

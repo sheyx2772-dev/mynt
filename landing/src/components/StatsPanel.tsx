@@ -64,7 +64,7 @@ export default function StatsPanel({ stats, plan }: { stats: HandleStats; plan: 
   const busiest = stats.daily.find((d) => d.views === peak && peak > 0);
 
   return (
-    <section className="rounded-tile border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+    <section className="rounded-tile border border-ink-line bg-ink-s1 p-7">
       <h2 className="font-display text-lg font-semibold tracking-tight">Statistika</h2>
       <p className="mt-1 text-sm text-paper-2">So&apos;nggi 30 kun.</p>
 

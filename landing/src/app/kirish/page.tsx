@@ -29,7 +29,7 @@ export default async function SignInPage(props: PageProps<"/kirish">) {
 
   return (
     <PageShell>
-      <div className="rounded-tile border border-line bg-white p-8 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <div className="rounded-tile border border-line bg-white p-8">
         <h1 className="font-display text-2xl font-semibold tracking-tight">Hisobingizga kiring</h1>
         <p className="mt-2 mb-7 text-sm text-ink-2">
           Raqam band qilish va profilni tahrirlash uchun avval kiring.

@@ -546,7 +546,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                   // being pointed at.
                   className={`flex flex-col rounded-card border bg-white p-5 transition-shadow ${
                     p.lead
-                      ? "border-line-lead shadow-[0_14px_36px_-22px_rgba(14,10,27,0.4)]"
+                      ? "border-line-lead shadow-photo"
                       : "border-line"
                   }`}
                 >
@@ -620,7 +620,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             {copy.faqs.map((item) => (
               <details
                 key={item.q}
-                className="reveal group rounded-card border border-line bg-white p-5 transition-shadow duration-300 open:shadow-[0_12px_30px_-16px_rgba(14,10,27,0.2)]"
+                className="reveal group rounded-card border border-line bg-white p-5 transition-shadow duration-300 open:shadow-photo"
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between font-medium marker:content-none">
                   {item.q}

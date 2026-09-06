@@ -103,7 +103,7 @@ export default async function NetworkPage({
 
   const pill = (active: boolean) =>
     active
-      ? "flex shrink-0 items-center gap-1.5 rounded-input bg-ink-s2 px-3.5 py-2 text-[12px] font-semibold text-paper shadow-[0_4px_14px_-6px_rgba(14,10,27,0.6)]"
+      ? "flex shrink-0 items-center gap-1.5 rounded-input bg-ink-s2 px-3.5 py-2 text-[12px] font-semibold text-paper"
       : "flex shrink-0 items-center gap-1.5 rounded-input bg-ink-s2 px-3.5 py-2 text-[12px] font-medium text-paper-2 transition-all hover:bg-ink-s2 hover:text-paper";
 
   return (

@@ -91,7 +91,7 @@ export default function VenuePicker({
           {shots[vertical].map((src) => (
             <div
               key={src}
-              className="relative aspect-[16/9] overflow-hidden rounded-tile bg-flex-black shadow-[0_30px_70px_-40px_rgba(14,10,27,0.6)]"
+              className="relative aspect-[16/9] overflow-hidden rounded-tile bg-flex-black shadow-card"
             >
               <Image
                 src={src}
@@ -145,7 +145,7 @@ export default function VenuePicker({
       </div>
 
       {/* How big, and what that costs */}
-      <div className="mt-10 rounded-tile border border-line bg-white p-6 shadow-[0_30px_60px_-40px_rgba(14,10,27,0.3)] sm:p-8">
+      <div className="mt-10 rounded-tile border border-line bg-white p-6 shadow-photo sm:p-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <label

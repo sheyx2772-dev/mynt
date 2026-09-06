@@ -133,7 +133,7 @@ export default async function QueuePage() {
               return (
                 <li
                   key={order.id}
-                  className="rise relative overflow-hidden rounded-card border border-ink-line bg-ink-s1 transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
+                  className="rise relative overflow-hidden rounded-card border border-ink-line bg-ink-s1"
                   style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
                 >
                   <span
@@ -218,7 +218,7 @@ export default async function QueuePage() {
                           <input type="hidden" name="to" value={next} />
                           <button
                             type="submit"
-                            className="flex items-center gap-1.5 rounded-input bg-ink-s2 px-4 py-2 text-[12px] font-semibold text-paper shadow-[0_6px_18px_-8px_rgba(14,10,27,0.7)] transition-transform hover:scale-[1.02] active:scale-[0.99]"
+                            className="flex items-center gap-1.5 rounded-input bg-ink-s2 px-4 py-2 text-[12px] font-semibold text-paper transition-transform hover:scale-[1.02] active:scale-[0.99]"
                           >
                             <FulfilmentIcon state={next} className="h-3.5 w-3.5" />
                             {advanceLabel(order.fulfilment, LANG)}

@@ -27,7 +27,7 @@ export default function LeadsPanel({
 }) {
   if (plan === "free") {
     return (
-      <section className="rounded-tile border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+      <section className="rounded-tile border border-ink-line bg-ink-s1 p-7">
         <h2 className="font-display text-lg font-semibold tracking-tight">Kelgan kontaktlar</h2>
         <p className="mt-1 text-sm text-paper-2">
           Profilingizni ochgan odam o&apos;z ismi va telefonini sizga qoldira oladi.
@@ -53,7 +53,7 @@ export default function LeadsPanel({
   }
 
   return (
-    <section className="rounded-tile border border-ink-line bg-ink-s1 p-7 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)]">
+    <section className="rounded-tile border border-ink-line bg-ink-s1 p-7">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="font-display text-lg font-semibold tracking-tight">

@@ -102,9 +102,9 @@ export default function PricingCalculator({
   return (
     <div className="relative w-full max-w-xl">
       <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-lime/10 blur-3xl" />
-      <div className="rounded-tile border border-line bg-white p-6 shadow-[0_30px_60px_-30px_rgba(14,10,27,0.25)] sm:p-8">
+      <div className="rounded-tile border border-line bg-white p-6 sm:p-8">
         <div className="mb-7 flex flex-wrap items-center gap-3">
-          <div className="flex overflow-hidden rounded-card border-2 border-flex-black/90 font-display text-2xl font-semibold tracking-tight shadow-[0_6px_16px_-8px_rgba(14,10,27,0.4)]">
+          <div className="flex overflow-hidden rounded-card border-2 border-flex-black/90 font-display text-2xl font-semibold tracking-tight shadow-photo">
             <input
               aria-label="Harflar"
               ref={lettersRef}

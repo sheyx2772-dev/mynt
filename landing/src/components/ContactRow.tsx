@@ -63,7 +63,7 @@ export default function ContactRow({
 
   return (
     <li
-      className="rise relative overflow-hidden rounded-card border border-ink-line bg-ink-s1 transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
+      className="rise relative overflow-hidden rounded-card border border-ink-line bg-ink-s1"
       style={{ animationDelay: `${delayMs}ms` }}
     >
       {reason && (
@@ -162,7 +162,7 @@ export default function ContactRow({
                   type="submit"
                   className={
                     stage === contact.stage
-                      ? "flex items-center gap-1.5 rounded-plate bg-ink-s1 px-3 py-1.5 text-[12px] font-semibold shadow-[0_1px_3px_rgba(14,10,27,0.12)]"
+                      ? "flex items-center gap-1.5 rounded-plate bg-ink-s1 px-3 py-1.5 text-[12px] font-semibold"
                       : "flex items-center gap-1.5 rounded-plate px-3 py-1.5 text-[12px] text-paper-3 transition-colors hover:text-paper-2"
                   }
                 >

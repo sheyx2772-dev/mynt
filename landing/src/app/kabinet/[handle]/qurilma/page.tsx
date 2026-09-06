@@ -58,7 +58,7 @@ export default async function DeviceOrderPage({
                 >
                   <Link
                     href={`/kabinet/buyurtma/${order.id}`}
-                    className="flex items-center gap-3.5 rounded-card border border-ink-line bg-ink-s1 py-3.5 pr-4 pl-4 transition-shadow duration-300 hover:shadow-[0_6px_20px_-8px_rgba(14,10,27,0.18)]"
+                    className="flex items-center gap-3.5 rounded-card border border-ink-line bg-ink-s1 py-3.5 pr-4 pl-4"
                   >
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-input bg-ink-s2 text-paper">
                       {order.status === "pending" ? (
