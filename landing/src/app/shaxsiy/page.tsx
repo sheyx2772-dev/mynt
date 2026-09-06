@@ -18,6 +18,12 @@ import { deviceStrip } from "@/lib/strip-items";
 import { dict, site, landing, catalogue, picker } from "@/lib/i18n";
 import { formatUZS } from "@/lib/format";
 import { DEVICE_TYPES } from "@/lib/devices";
+import { social } from "@/lib/seo";
+import { SITE_HOST } from "@/lib/site-url";
+import { service } from "@/lib/schema";
+import JsonLd from "@/components/JsonLd";
+import { BASE_PRICE } from "@/lib/pricing";
+import { PLANS } from "@/lib/plans";
 
 // The personal product, whole, on one page.
 //
@@ -33,8 +39,14 @@ export async function generateMetadata({
   searchParams,
 }: PageProps<"/shaxsiy">): Promise<Metadata> {
   const { til } = await searchParams;
-  const s = site(await getLang(til));
-  return { title: `${s.wayPersonal} — flex.com.uz`, description: s.wayPersonalDesc };
+  const lang = await getLang(til);
+  const s = site(lang);
+  const title = s.personalMetaTitle;
+  return {
+    title,
+    description: s.wayPersonalDesc,
+    ...social({ title, description: s.wayPersonalDesc, path: "/shaxsiy", lang }),
+  };
 }
 
 export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy">) {
@@ -51,8 +63,25 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
   const familyShot = productShot("oila");
   const carShot = productShot("avtovizitka");
 
+  const premiumPlan = PLANS.find((x) => x.id === "premium")!;
+
   return (
     <div className="flex min-h-full flex-col overflow-x-clip">
+      {/* Both prices the page quotes, in the graph: the number is bought once,
+          the plan is charged monthly, and a result that shows only one of the
+          two is misleading either way. */}
+      <JsonLd
+        data={service({
+          name: s.wayPersonal,
+          description: s.wayPersonalDesc,
+          path: "/shaxsiy",
+          serviceType: "NFC business card",
+          offers: [
+            { price: BASE_PRICE, description: s.pricePersonalNote },
+            { price: premiumPlan.monthly, description: c.plans.premium.tagline, recurring: true },
+          ],
+        })}
+      />
       <header className="sticky top-0 z-30 border-b border-ink-line bg-flex-black/85 text-white backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link
@@ -366,7 +395,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
       <footer className="border-t border-line-soft py-10">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 text-sm text-ink-3">
           <Link href="/" className="hover:text-flex-black">
-            flex.com.uz
+            {SITE_HOST}
           </Link>
           <Link href="/biznes" className="hover:text-flex-black">
             {s.navBusiness}

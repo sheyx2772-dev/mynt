@@ -1,5 +1,6 @@
 import React from "react";
 import type { Profile } from "./profiles";
+import { SITE_HOST } from "@/lib/site-url";
 
 // ── Brand banner images ──────────────────────────────────────────────────────
 const imgMarkaziyBank = "/figma-make/image-10.webp";
@@ -449,7 +450,7 @@ export default function ProfileCard({ profile, lang, theme, banner: bannerProp }
       {/* Footer */}
       <div style={{ textAlign: "center", paddingBottom: 14 }}>
         <span style={{ fontSize: 8, fontFamily: "monospace", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.12)" }}>
-          NFC Digital · flex.com.uz
+          NFC Digital · {SITE_HOST}
         </span>
       </div>
     </div>

@@ -310,6 +310,15 @@ const SITE = {
     offerAuthority: "Ushbu hujjatning asl matni o'zbek tilida tuzilgan. Rus va ingliz tilidagi versiyalar qulaylik uchun berilgan; nizo yuzaga kelganda o'zbek tilidagi matn hisobga olinadi.",
     tagline: "Sizning raqamli shaxsingiz",
     metaDescription: "Noyob raqam, shaxsiy profil va NFC karta. Bir tegish bilan profilingizni ulashing; jamoangiz uchun raqamlar chiqaring va kontakt yig'ing.",
+    // The homepage title. Kept apart from `tagline`, which is the brand line
+    // in the footer: a search result has to say what is sold, a footer does not.
+    metaTitle: "Flex — NFC vizitka va noyob raqam",
+    personalMetaTitle: "Shaxsiy NFC vizitka: karta, uzuk, braslet",
+    residentsMetaTitle: "Rezidentlar — raqam egalari katalogi",
+    residentsMetaDescription:
+      "Flex raqamini olgan odamlar va kompaniyalar: ism, shahar yoki yo'nalish bo'yicha qidiring, profilni bir bosishda oching.",
+    termsMetaDescription:
+      "Flex xizmatining ommaviy oferta shartlari: narxlar, yetkazib berish, qaytarish va firma rekvizitlari.",
     product: "Mahsulot",
     whyFlex: "Nega Flex?",
     tiers: { common: "Oddiy", rare: "Noyob", epic: "Epik", legendary: "Afsonaviy", genesis: "Genesis" },
@@ -467,6 +476,13 @@ const SITE = {
     offerAuthority: "Оригинал этого документа составлен на узбекском языке. Русская и английская версии приведены для удобства; при разногласиях применяется узбекский текст.",
     tagline: "Ваша цифровая личность",
     metaDescription: "Уникальный номер, личный профиль и NFC-карта. Делитесь собой одним касанием; выдавайте номера команде и собирайте контакты.",
+    metaTitle: "Flex — NFC-визитка и уникальный номер",
+    personalMetaTitle: "Личная NFC-визитка: карта, кольцо, браслет",
+    residentsMetaTitle: "Резиденты — каталог владельцев номеров",
+    residentsMetaDescription:
+      "Люди и компании с номером Flex: поиск по имени, городу или направлению, профиль открывается одним нажатием.",
+    termsMetaDescription:
+      "Условия публичной оферты Flex: цены, доставка, возврат и реквизиты компании.",
     product: "Продукт",
     whyFlex: "Почему Flex?",
     tiers: { common: "Обычный", rare: "Редкий", epic: "Эпический", legendary: "Легендарный", genesis: "Genesis" },
@@ -622,6 +638,13 @@ const SITE = {
     offerAuthority: "The original of this document is drawn up in Uzbek. The Russian and English versions are provided for convenience; in the event of a discrepancy the Uzbek text governs.",
     tagline: "Your digital identity",
     metaDescription: "A unique handle, your own profile and an NFC card. Share yourself with one tap; issue handles to your team and collect contacts.",
+    metaTitle: "Flex — NFC business card and a unique handle",
+    personalMetaTitle: "Personal NFC business card: card, ring, bracelet",
+    residentsMetaTitle: "Residents — the directory of handle owners",
+    residentsMetaDescription:
+      "People and companies with a Flex handle: search by name, city or field and open any profile in one tap.",
+    termsMetaDescription:
+      "The terms of the Flex public offer: prices, delivery, returns and company details.",
     product: "Product",
     whyFlex: "Why Flex?",
     tiers: { common: "Common", rare: "Rare", epic: "Epic", legendary: "Legendary", genesis: "Genesis" },
@@ -696,7 +719,7 @@ const LANDING = {
     consumer: [
       {
         title: "Shaxsiy profil",
-        desc: "flex.com.uz/HANDLE — barcha havolalaringiz, ijtimoiy tarmoqlaringiz va vizit ma'lumotlaringiz bitta sahifada.",
+        desc: "Flex profilingiz — barcha havolalaringiz, ijtimoiy tarmoqlaringiz va vizit ma'lumotlaringiz bitta sahifada.",
       },
       {
         title: "Qurilmani o'zingiz tanlaysiz",
@@ -748,7 +771,7 @@ const LANDING = {
       },
       {
         q: "NFC qurilma qanday ishlaydi?",
-        a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, sizning flex.com.uz profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC ishlamaydigan telefonlar uchun NFC yo'q telefonlarda QR-kod orqali ochiladi.",
+        a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, sizning Flex profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC ishlamaydigan telefonlar uchun NFC yo'q telefonlarda QR-kod orqali ochiladi.",
       },
       {
         q: "Kafe yoki mehmonxonaga nima beradi?",
@@ -768,7 +791,7 @@ const LANDING = {
     consumer: [
       {
         title: "Личный профиль",
-        desc: "flex.com.uz/НОМЕР — все ваши ссылки, соцсети и контактные данные на одной странице.",
+        desc: "Профиль Flex — все ваши ссылки, соцсети и контактные данные на одной странице.",
       },
       {
         title: "Устройство выбираете сами",
@@ -820,7 +843,7 @@ const LANDING = {
       },
       {
         q: "Как работает NFC-устройство?",
-        a: "Подносите устройство (карту, кольцо или браслет) к чужому телефону — ваш профиль flex.com.uz открывается сам. Приложение никому ставить не нужно. Для телефонов без NFC есть QR-код.",
+        a: "Подносите устройство (карту, кольцо или браслет) к чужому телефону — ваш профиль Flex открывается сам. Приложение никому ставить не нужно. Для телефонов без NFC есть QR-код.",
       },
       {
         q: "Что это даёт кафе или отелю?",
@@ -840,7 +863,7 @@ const LANDING = {
     consumer: [
       {
         title: "Your own profile",
-        desc: "flex.com.uz/HANDLE — every link, social account and contact detail you have, on one page.",
+        desc: "Your Flex profile — every link, social account and contact detail you have, on one page.",
       },
       {
         title: "You pick the device",
@@ -892,7 +915,7 @@ const LANDING = {
       },
       {
         q: "How does the NFC device work?",
-        a: "Hold the device — card, ring or bracelet — to somebody's phone and your flex.com.uz profile opens by itself. Nobody installs an app. Phones without NFC use the QR code instead.",
+        a: "Hold the device — card, ring or bracelet — to somebody's phone and your Flex profile opens by itself. Nobody installs an app. Phones without NFC use the QR code instead.",
       },
       {
         q: "What does it do for a cafe or a hotel?",
@@ -1075,7 +1098,7 @@ export function catalogue(lang: Lang): CatalogueDict {
 
 const B2B = {
   uz: {
-    metaTitle: "Biznes uchun — flex.com.uz",
+    metaTitle: "Kafe, restoran va mehmonxona uchun NFC menyu",
     metaDescription:
       "Kafe, restoran va mehmonxonalar uchun NFC: menyu, xona xizmatlari, so'rovlar va statistika. Bir panel, uch til.",
     eyebrow: "Biznes uchun",
@@ -1244,6 +1267,7 @@ const B2B = {
     pointsLabel: "Nuqtalar soni",
     monthlyWord: "oyiga",
     perPointWord: "bitta nuqtaga",
+    bandUpTo: (n: number) => `${n} tagacha nuqta`,
     negotiated: "Narxi kelishiladi",
     negotiatedNote: "Tarmoq yoki katta obyekt — narxni gaplashib kelishamiz.",
     bandNames: ["15 nuqtagacha", "40 nuqtagacha", "40 dan ortiq"],
@@ -1286,7 +1310,7 @@ const B2B = {
   },
 
   ru: {
-    metaTitle: "Для бизнеса — flex.com.uz",
+    metaTitle: "NFC-меню и вызов официанта для кафе и отелей",
     metaDescription:
       "NFC для кафе, ресторанов и отелей: меню, обслуживание в номере, запросы и статистика. Одна панель, три языка.",
     eyebrow: "Для бизнеса",
@@ -1455,6 +1479,7 @@ const B2B = {
     pointsLabel: "Число точек",
     monthlyWord: "в месяц",
     perPointWord: "за одну точку",
+    bandUpTo: (n: number) => `до ${n} точек`,
     negotiated: "По договорённости",
     negotiatedNote: "Сеть или крупный объект — цену определим в разговоре.",
     bandNames: ["до 15 точек", "до 40 точек", "больше 40"],
@@ -1497,7 +1522,7 @@ const B2B = {
   },
 
   en: {
-    metaTitle: "For business — flex.com.uz",
+    metaTitle: "NFC menu and guest requests for cafes and hotels",
     metaDescription:
       "NFC for cafes, restaurants and hotels: menus, in-room service, requests and statistics. One panel, three languages.",
     eyebrow: "For business",
@@ -1666,6 +1691,7 @@ const B2B = {
     pointsLabel: "Number of points",
     monthlyWord: "a month",
     perPointWord: "per point",
+    bandUpTo: (n: number) => `up to ${n} points`,
     negotiated: "By agreement",
     negotiatedNote: "A chain or a large venue — we settle the price in conversation.",
     bandNames: ["up to 15 points", "up to 40 points", "more than 40"],
@@ -1923,7 +1949,7 @@ export function venueScreen(lang: Lang, vertical: "cafe" | "hotel" | "shop" | "o
 
 const PICKER = {
   uz: {
-    metaTitle: "Tanlang — flex.com.uz",
+    metaTitle: "NFC qurilmalar: karta, uzuk, braslet, avtovizitka",
     metaDescription:
       "Flex qurilmalari va yo'nalishlari: karta, uzuk, braslet, avtovizitka; kafe, mehmonxona va do'kon uchun NFC.",
     title: "Nimani tanlaysiz?",
@@ -1967,7 +1993,7 @@ const PICKER = {
   },
 
   ru: {
-    metaTitle: "Выбор — flex.com.uz",
+    metaTitle: "NFC-устройства: карта, кольцо, браслет, автовизитка",
     metaDescription:
       "Устройства и направления Flex: карта, кольцо, браслет, автовизитка; NFC для кафе, отелей и магазинов.",
     title: "Что выбираете?",
@@ -2009,7 +2035,7 @@ const PICKER = {
   },
 
   en: {
-    metaTitle: "Choose — flex.com.uz",
+    metaTitle: "NFC devices: card, ring, bracelet, car card",
     metaDescription:
       "Flex devices and directions: card, ring, bracelet, car card; NFC for cafes, hotels and shops.",
     title: "What are you choosing?",

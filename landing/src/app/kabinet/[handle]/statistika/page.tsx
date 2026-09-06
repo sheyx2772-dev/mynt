@@ -8,7 +8,7 @@ import { requireOwnHandle } from "@/lib/kabinet";
 import { listLeads } from "@/lib/leads";
 import { getHandleStats } from "@/lib/analytics";
 
-export const metadata: Metadata = { title: "Statistika — flex.com.uz", robots: { index: false } };
+export const metadata: Metadata = { title: "Statistika", robots: { index: false } };
 
 // Contacts before counts: a name and a phone number is something to act on
 // today, and a thirty-day chart is something to look at.

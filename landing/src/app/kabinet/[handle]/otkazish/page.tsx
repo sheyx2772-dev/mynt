@@ -6,7 +6,7 @@ import TransferPanel from "@/components/TransferPanel";
 import { requireOwnHandle } from "@/lib/kabinet";
 import { listTransfersForHandle } from "@/lib/transfers";
 
-export const metadata: Metadata = { title: "O'tkazish — flex.com.uz", robots: { index: false } };
+export const metadata: Metadata = { title: "O'tkazish", robots: { index: false } };
 
 export default async function TransferPage({ params }: PageProps<"/kabinet/[handle]/otkazish">) {
   const { handle } = await params;

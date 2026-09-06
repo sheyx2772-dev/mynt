@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
+import JsonLd from "@/components/JsonLd";
 import Mark from "@/components/Mark";
 import LangSwitch from "@/components/LangSwitch";
 import LoadoutTile from "@/components/LoadoutTile";
@@ -15,6 +16,8 @@ import {
   devicePriceOrNull,
   UNPRICED_DEVICE,
 } from "@/lib/loadout";
+import { social } from "@/lib/seo";
+import { itemList } from "@/lib/schema";
 
 // The shelf.
 //
@@ -30,8 +33,13 @@ export async function generateMetadata({
   searchParams,
 }: PageProps<"/qurilmalar">): Promise<Metadata> {
   const { til } = await searchParams;
-  const p = picker(await getLang(til));
-  return { title: p.metaTitle, description: p.metaDescription };
+  const lang = await getLang(til);
+  const p = picker(lang);
+  return {
+    title: p.metaTitle,
+    description: p.metaDescription,
+    ...social({ title: p.metaTitle, description: p.metaDescription, path: "/qurilmalar", lang }),
+  };
 }
 
 export default async function DevicesPage({ searchParams }: PageProps<"/qurilmalar">) {
@@ -43,6 +51,16 @@ export default async function DevicesPage({ searchParams }: PageProps<"/qurilmal
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[#0a0715] text-white">
+      {/* The four product pages, linked in the graph as one list rather than
+          as four pages a crawler has to find separately. */}
+      <JsonLd
+        data={itemList(
+          LOADOUT_DEVICES.map((id) => ({
+            url: `/qurilmalar/${id}`,
+            name: id === UNPRICED_DEVICE ? p.avtovizitka.name : c.devices[id].name,
+          })),
+        )}
+      />
       <div className="absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-lime/[0.12] blur-[130px]" />
 
       <div className="relative mx-auto max-w-5xl px-6 py-14 sm:py-16">

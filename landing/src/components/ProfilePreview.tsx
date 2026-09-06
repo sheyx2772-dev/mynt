@@ -1,4 +1,5 @@
 import { Eye } from "lucide-react";
+import { SITE_HOST } from "@/lib/site-url";
 
 
 
@@ -30,7 +31,7 @@ export default function ProfilePreview({ labels }: { labels: PreviewLabels }) {
           AR
         </div>
         <p className="relative mt-4 font-display text-xl font-semibold">Aziza Rahimova</p>
-        <p className="relative mt-0.5 font-tabular text-xs text-paper-3">flex.com.uz/TOS001</p>
+        <p className="relative mt-0.5 font-tabular text-xs text-paper-3">{SITE_HOST}/TOS001</p>
         <p className="relative mt-3 text-sm text-paper-2">{labels.role}</p>
 
         <div className="relative mt-4 flex gap-2">

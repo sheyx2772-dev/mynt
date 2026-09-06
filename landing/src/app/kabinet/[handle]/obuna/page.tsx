@@ -11,7 +11,7 @@ import { venueMonthly } from "@/lib/venues";
 import { venueWords } from "@/lib/venue-words";
 import { formatDate } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Obuna — flex.com.uz", robots: { index: false } };
+export const metadata: Metadata = { title: "Obuna", robots: { index: false } };
 
 export default async function SubscriptionPage({
   params,

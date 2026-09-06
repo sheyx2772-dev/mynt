@@ -7,7 +7,7 @@ import NewVenueForm from "@/components/NewVenueForm";
 import { requireOwnHandle } from "@/lib/kabinet";
 import { getOwnedVenue } from "@/lib/menu";
 
-export const metadata: Metadata = { title: "Obyekt — flex.com.uz", robots: { index: false } };
+export const metadata: Metadata = { title: "Obyekt", robots: { index: false } };
 
 export default async function NewVenuePage({ params }: PageProps<"/kabinet/[handle]/obyekt">) {
   const { handle } = await params;

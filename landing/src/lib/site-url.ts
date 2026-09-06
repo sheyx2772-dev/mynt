@@ -19,6 +19,12 @@ export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://flex.com.uz"
 ).replace(/\/$/, "");
 
+// The bare host, for the places that show the address to a reader instead of
+// linking to it — under a QR code, on a drawn card, beside a handle. It was
+// spelled as a literal at forty-odd call sites, so a build served from any
+// other domain advertised one it does not own.
+export const SITE_HOST = new URL(SITE_URL).host;
+
 /**
  * A profile's address, optionally carrying where the visit came from.
  *

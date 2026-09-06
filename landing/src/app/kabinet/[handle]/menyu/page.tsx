@@ -29,7 +29,7 @@ import DishPhotoButton from "@/components/DishPhotoButton";
 import { venueWords } from "@/lib/venue-words";
 
 export const metadata: Metadata = {
-  title: "Ro'yxat — flex.com.uz",
+  title: "Ro'yxat",
   robots: { index: false },
 };
 

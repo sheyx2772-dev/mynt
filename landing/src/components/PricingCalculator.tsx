@@ -7,6 +7,7 @@ import { formatUZS, formatNumber } from "@/lib/format";
 import type { Lang } from "@/lib/i18n";
 import { BASE_PRICE, letterRarity, digitRarity, rarityTier, isBlocked } from "@/lib/pricing";
 import { useSanitisedInput } from "@/lib/use-sanitised-input";
+import { SITE_HOST } from "@/lib/site-url";
 
 const onlyLetters = (raw: string) => raw.replace(/[^A-Za-z]/g, "").toUpperCase();
 const onlyDigits = (raw: string) => raw.replace(/\D/g, "");
@@ -128,7 +129,7 @@ export default function PricingCalculator({
             />
           </div>
           <span className="font-tabular text-sm text-black/40">
-            flex.com.uz/{cleanLetters}
+            {SITE_HOST}/{cleanLetters}
             {cleanDigits}
           </span>
 

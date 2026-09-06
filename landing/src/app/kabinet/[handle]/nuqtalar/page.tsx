@@ -8,7 +8,7 @@ import { requireOwnHandle } from "@/lib/kabinet";
 import { getOwnedVenue } from "@/lib/menu";
 import { venueWords } from "@/lib/venue-words";
 
-export const metadata: Metadata = { title: "Nuqtalar — flex.com.uz", robots: { index: false } };
+export const metadata: Metadata = { title: "Nuqtalar", robots: { index: false } };
 
 export default async function PointsPage({ params }: PageProps<"/kabinet/[handle]/nuqtalar">) {
   const { handle } = await params;

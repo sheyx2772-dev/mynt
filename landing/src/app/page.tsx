@@ -96,7 +96,7 @@ export async function generateMetadata({
   const { til } = await searchParams;
   const lang = await getLang(til);
   const t = site(lang);
-  const title = `Flex — ${t.tagline}`;
+  const title = t.metaTitle;
   return {
     // Absolute: the layout's template would otherwise append the brand to a
     // title that opens with it.

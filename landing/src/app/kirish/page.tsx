@@ -7,7 +7,7 @@ import { getUser } from "@/lib/auth";
 import { safePath } from "@/lib/safe-path";
 
 export const metadata: Metadata = {
-  title: "Kirish — flex.com.uz",
+  title: "Kirish",
   robots: { index: false },
 };
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { isVertical } from "@/lib/venues";
+import { VENUE_BANDS, isVertical } from "@/lib/venues";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -23,6 +23,10 @@ import { getLang } from "@/lib/lang";
 import { productShot } from "@/lib/product-shots";
 import { formatUZS } from "@/lib/format";
 import { TEAM_SEAT_MONTHLY, MIN_TEAM_SEATS } from "@/lib/plans";
+import { social } from "@/lib/seo";
+import { SITE_HOST } from "@/lib/site-url";
+import { service } from "@/lib/schema";
+import JsonLd from "@/components/JsonLd";
 
 // The venue product, on its own page.
 //
@@ -43,8 +47,13 @@ export async function generateMetadata({
   searchParams,
 }: PageProps<"/biznes">): Promise<Metadata> {
   const { til } = await searchParams;
-  const t = b2b(await getLang(til));
-  return { title: t.metaTitle, description: t.metaDescription };
+  const lang = await getLang(til);
+  const t = b2b(lang);
+  return {
+    title: t.metaTitle,
+    description: t.metaDescription,
+    ...social({ title: t.metaTitle, description: t.metaDescription, path: "/biznes", lang }),
+  };
 }
 
 export default async function BusinessPage({ searchParams }: PageProps<"/biznes">) {
@@ -57,6 +66,21 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
 
   return (
     <div className="flex min-h-full flex-col overflow-x-clip">
+      {/* The published bands only. The open-ended one is negotiated, and a
+          price of "null" in a graph is worse than no offer at all. */}
+      <JsonLd
+        data={service({
+          name: t.metaTitle,
+          description: t.metaDescription,
+          path: "/biznes",
+          serviceType: "NFC menu",
+          offers: VENUE_BANDS.filter((b) => b.monthly !== null).map((b) => ({
+            price: b.monthly!,
+            description: t.bandUpTo(b.maxPoints),
+            recurring: true,
+          })),
+        })}
+      />
       <header className="sticky top-0 z-30 border-b border-ink-line bg-flex-black/85 text-white backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link
@@ -373,7 +397,7 @@ export default async function BusinessPage({ searchParams }: PageProps<"/biznes"
       <footer className="border-t border-line-soft py-10">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 text-sm text-ink-3">
           <Link href="/" className="hover:text-flex-black">
-            flex.com.uz
+            {SITE_HOST}
           </Link>
           <Link href="/shartlar" className="hover:text-flex-black">
             {s.footerTerms}

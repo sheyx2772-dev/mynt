@@ -15,7 +15,7 @@ import { parseHandle } from "@/lib/pricing";
 import { markDoneAction } from "./actions";
 
 export const metadata: Metadata = {
-  title: "So'rovlar — flex.com.uz",
+  title: "So'rovlar",
   robots: { index: false },
 };
 

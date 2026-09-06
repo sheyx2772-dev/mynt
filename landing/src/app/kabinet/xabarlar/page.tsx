@@ -9,7 +9,7 @@ import { timeAgo } from "@/lib/relative-time";
 import { dismissAll } from "./actions";
 
 export const metadata: Metadata = {
-  title: "Xabarlar — flex.com.uz",
+  title: "Xabarlar",
   robots: { index: false },
 };
 

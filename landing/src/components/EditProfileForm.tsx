@@ -8,6 +8,7 @@ import { updateProfile, type UpdateResult } from "@/app/kabinet/[handle]/actions
 import DevicePicker from "@/components/DevicePicker";
 import type { CardDesignId } from "@/lib/card-designs";
 import type { DeviceTypeId } from "@/lib/devices";
+import { SITE_HOST } from "@/lib/site-url";
 
 const initialState: UpdateResult = { ok: false };
 
@@ -251,7 +252,7 @@ export default function EditProfileForm({
         <input
           id="website"
           name="website"
-          placeholder="flex.com.uz"
+          placeholder={SITE_HOST}
           defaultValue={defaults.website}
           className={inputClass}
         />

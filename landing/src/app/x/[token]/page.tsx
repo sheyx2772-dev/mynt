@@ -6,6 +6,7 @@ import { getTagByToken } from "@/lib/object-tags";
 import { tagWords } from "@/lib/tags";
 import { getLang } from "@/lib/lang";
 import { sendFromTag } from "./actions";
+import { SITE_HOST } from "@/lib/site-url";
 
 // Never indexed and never named. The title would otherwise put somebody's car
 // in a browser history, and the address is printed on a sticker anybody can
@@ -68,7 +69,7 @@ export default async function TagPage({
           not the introduction — but the stranger who used it is the person
           most likely to want one of these themselves tomorrow. */}
       <p className="mt-auto pt-10 text-center text-[12px] text-ink-3">
-        flex.com.uz
+        {SITE_HOST}
       </p>
     </main>
   );

@@ -8,7 +8,7 @@ import { requireOwnHandle } from "@/lib/kabinet";
 import { getOwnedVenue, getMenu, getMenuItem } from "@/lib/menu";
 import { venueWords } from "@/lib/venue-words";
 
-export const metadata: Metadata = { title: "Tahrirlash — flex.com.uz", robots: { index: false } };
+export const metadata: Metadata = { title: "Tahrirlash", robots: { index: false } };
 
 // One row, on its own screen.
 //

@@ -3,7 +3,7 @@ import { WifiOff } from "lucide-react";
 import PageShell from "@/components/PageShell";
 
 export const metadata: Metadata = {
-  title: "Internet yo'q — flex.com.uz",
+  title: "Internet yo'q",
   robots: { index: false },
 };
 

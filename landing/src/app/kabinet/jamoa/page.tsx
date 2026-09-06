@@ -12,7 +12,7 @@ import InvoiceRequest from "@/components/InvoiceRequest";
 import { listInvoices } from "@/lib/invoices";
 
 export const metadata: Metadata = {
-  title: "Firma — flex.com.uz",
+  title: "Firma",
   robots: { index: false },
 };
 

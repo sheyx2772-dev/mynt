@@ -8,7 +8,7 @@ import { CARD_DESIGNS } from "@/lib/card-designs";
 import { LAYOUTS } from "@/components/ui/LayoutSamples";
 
 export const metadata: Metadata = {
-  title: "Mavzular — flex.com.uz",
+  title: "Mavzular",
   robots: { index: false },
 };
 

@@ -6,7 +6,7 @@ import DesignRequestForm from "@/components/DesignRequestForm";
 import { requireOwnHandle } from "@/lib/kabinet";
 import { listDesignRequests } from "@/lib/design-requests";
 
-export const metadata: Metadata = { title: "Dizayn — flex.com.uz", robots: { index: false } };
+export const metadata: Metadata = { title: "Dizayn", robots: { index: false } };
 
 export default async function DesignPage({ params }: PageProps<"/kabinet/[handle]/dizayn">) {
   const { handle } = await params;

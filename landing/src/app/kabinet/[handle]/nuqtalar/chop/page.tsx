@@ -9,7 +9,7 @@ import { getOwnedVenue } from "@/lib/menu";
 import { venueWords } from "@/lib/venue-words";
 import { profileUrl } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Chop etish — flex.com.uz", robots: { index: false } };
+export const metadata: Metadata = { title: "Chop etish", robots: { index: false } };
 
 // The sheet that gets cut up and put on the tables.
 //

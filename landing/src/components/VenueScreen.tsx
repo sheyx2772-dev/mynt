@@ -1,5 +1,6 @@
 import { Wifi, Check, CreditCard } from "lucide-react";
 import type { VenueScreenDict } from "@/lib/i18n";
+import { SITE_HOST } from "@/lib/site-url";
 
 // What the guest's phone actually shows, drawn rather than described.
 //
@@ -28,7 +29,7 @@ export default function VenueScreen({
           <p className="truncate font-display text-base font-semibold tracking-tight">
             {screen.venue}
           </p>
-          <p className="mt-0.5 text-[11px] text-paper-3">flex.com.uz</p>
+          <p className="mt-0.5 text-[11px] text-paper-3">{SITE_HOST}</p>
         </div>
         <span className="shrink-0 rounded-plate bg-ink-s2 px-2.5 py-1 font-tabular text-[11px] font-medium text-paper">
           {screen.point}

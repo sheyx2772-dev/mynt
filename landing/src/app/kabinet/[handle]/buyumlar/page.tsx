@@ -12,7 +12,7 @@ import { timeAgo } from "@/lib/relative-time";
 import { asReader } from "@/lib/backend/client";
 
 export const metadata: Metadata = {
-  title: "Buyumlar — flex.com.uz",
+  title: "Buyumlar",
   robots: { index: false },
 };
 

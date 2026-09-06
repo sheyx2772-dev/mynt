@@ -8,11 +8,32 @@ import { Eye, MapPin, Search, Trophy } from "lucide-react";
 import { listResidents, getTopHandles, getDirectoryCounts } from "@/lib/handles";
 import { formatNumber } from "@/lib/format";
 import { timeAgo } from "@/lib/relative-time";
+import { social } from "@/lib/seo";
+import { itemList } from "@/lib/schema";
+import JsonLd from "@/components/JsonLd";
+import { SITE_HOST } from "@/lib/site-url";
 
-export const metadata: Metadata = {
-  title: "Rezidentlar — flex.com.uz",
-  description: "Flex handle egalari: shaxsiy profillar, shaharlar va yo'nalishlar.",
-};
+export async function generateMetadata({
+  searchParams,
+}: PageProps<"/rezidentlar">): Promise<Metadata> {
+  const { til, q } = await searchParams;
+  const lang = await getLang(til);
+  const t = site(lang);
+  return {
+    title: t.residentsMetaTitle,
+    description: t.residentsMetaDescription,
+    // A search result page is the same directory in a different order. It is
+    // worth following — the profiles behind it are the point — and not worth
+    // indexing under every query somebody has ever typed.
+    ...(q ? { robots: { index: false, follow: true } } : {}),
+    ...social({
+      title: t.residentsMetaTitle,
+      description: t.residentsMetaDescription,
+      path: "/rezidentlar",
+      lang,
+    }),
+  };
+}
 
 function Avatar({ name, url }: { name: string; url: string | null }) {
   if (url) {
@@ -46,6 +67,14 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
 
   return (
     <div className="relative min-h-full overflow-hidden">
+      {/* This page is the only place every public profile is linked from, so
+          the list is what a crawler follows to find them. Only the rows the
+          reader can actually see are in it. */}
+      <JsonLd
+        data={itemList(
+          residents.map((r) => ({ url: `/${r.normalized}`, name: r.name || r.normalized })),
+        )}
+      />
       <div className="absolute -top-24 right-[-6rem] h-80 w-80 rounded-full bg-lime/20 blur-[100px]" />
 
       <div className="relative mx-auto max-w-3xl px-6 py-16">
@@ -112,7 +141,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
                   <span className="relative font-display text-xs text-lime">#{index + 1}</span>
                   <p className="relative mt-3 font-display font-semibold">{entry.name}</p>
                   <p className="relative font-tabular text-xs text-paper-3">
-                    flex.com.uz/{entry.normalized}
+                    {SITE_HOST}/{entry.normalized}
                   </p>
                   <p className="relative mt-3 flex items-center gap-1.5 font-tabular text-xs text-paper-3">
                     <Eye className="h-3 w-3" />
@@ -154,7 +183,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
                       <div className="min-w-0 flex-1">
                         <p className="truncate font-medium">{resident.name}</p>
                         <p className="font-tabular text-xs text-ink-3">
-                          flex.com.uz/{resident.normalized}
+                          {SITE_HOST}/{resident.normalized}
                         </p>
                         {resident.tags.length > 0 && (
                           <p className="mt-1 truncate text-xs text-ink-3">

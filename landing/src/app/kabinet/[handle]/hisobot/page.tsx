@@ -13,7 +13,7 @@ import { venueWords } from "@/lib/venue-words";
 import { planState } from "@/lib/venue-billing";
 import { formatNumber } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Hisobot — flex.com.uz", robots: { index: false } };
+export const metadata: Metadata = { title: "Hisobot", robots: { index: false } };
 
 // How the room did, as opposed to what it wants right now.
 //

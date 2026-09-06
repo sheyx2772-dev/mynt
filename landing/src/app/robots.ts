@@ -21,6 +21,10 @@ export default function robots(): MetadataRoute.Robots {
         "/buyurtma/",
         "/x/",
         "/z/",
+        // Every outbound link on a profile goes through a counting redirect.
+        // Ten of them per profile, none with anything at the other end that
+        // belongs to this site.
+        "/*/go",
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,

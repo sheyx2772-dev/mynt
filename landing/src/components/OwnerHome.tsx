@@ -4,6 +4,7 @@ import { QrCode, Pencil, Nfc, ChevronRight, Inbox } from "lucide-react";
 import { formatNumber } from "@/lib/format";
 import type { OwnedHandle } from "@/lib/handles";
 import type { site } from "@/lib/i18n";
+import { SITE_HOST } from "@/lib/site-url";
 
 // The phone's home screen for somebody who already bought.
 //
@@ -46,7 +47,7 @@ export default function OwnerHome({
               {handle.normalized}
             </p>
             <p className="mt-0.5 truncate text-sm text-paper">
-              {handle.name || `flex.com.uz/${handle.normalized}`}
+              {handle.name || `${SITE_HOST}/${handle.normalized}`}
             </p>
           </div>
           {handle.plan === "premium" && (

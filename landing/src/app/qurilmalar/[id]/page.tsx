@@ -23,6 +23,7 @@ import {
   devicePriceOrNull,
   UNPRICED_DEVICE,
 } from "@/lib/loadout";
+import { social } from "@/lib/seo";
 
 // One item, opened.
 //
@@ -49,7 +50,24 @@ export async function generateMetadata({
   const description =
     id === UNPRICED_DEVICE ? p.avtovizitka.description : c.devices[id].description;
 
-  return { title: `${name} — flex.com.uz`, description };
+  // The price belongs in the title: it is the thing somebody scanning a
+  // results page is deciding on, and it is the only line of the result that
+  // can carry it.
+  const price = devicePriceOrNull(id);
+  const title =
+    price === null ? `${name} — NFC` : `NFC ${name.toLowerCase()} — ${formatUZS(price, lang)}`;
+
+  return {
+    title,
+    description,
+    ...social({
+      title,
+      description,
+      path: `/qurilmalar/${id}`,
+      lang,
+      image: productShot(deviceShot(id)) ?? undefined,
+    }),
+  };
 }
 
 export default async function DevicePage({

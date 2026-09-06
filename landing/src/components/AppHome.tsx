@@ -9,6 +9,7 @@ import type { OwnedHandle } from "@/lib/handles";
 import { formatNumber } from "@/lib/format";
 import type { Resident } from "@/lib/handles";
 import type { site } from "@/lib/i18n";
+import { SITE_HOST } from "@/lib/site-url";
 
 // The phone's home screen.
 //
@@ -291,7 +292,7 @@ export default function AppHome({
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium">{r.name}</p>
                     <p className="font-tabular text-xs text-ink-3">
-                      flex.com.uz/{r.normalized}
+                      {SITE_HOST}/{r.normalized}
                     </p>
                   </div>
                   <ChevronRight className="h-4 w-4 shrink-0 text-ink-3" />

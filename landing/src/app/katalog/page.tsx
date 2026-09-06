@@ -14,6 +14,7 @@ import ProfileCard from "@/components/figma/ProfileCard";
 import { profiles } from "@/components/figma/profiles";
 import { LAYOUTS } from "@/components/ui/LayoutSamples";
 import "@/components/figma/katalog.css";
+import { SITE_HOST } from "@/lib/site-url";
 
 type Lang  = "uz" | "ru";
 type Theme = "dark" | "light";
@@ -264,7 +265,7 @@ export default function KatalogPage() {
       <footer style={{ background: "var(--header-bg)", padding: "16px 16px calc(96px + var(--safe-bottom))", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>
-            O&apos;zbekiston Respublikasi · flex.com.uz
+            O&apos;zbekiston Respublikasi · {SITE_HOST}
           </span>
           <span style={{ fontSize: 10, fontFamily: "monospace", color: "rgba(255,255,255,0.25)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
             FLEX · 2026

@@ -21,7 +21,7 @@ import { formatUZS } from "@/lib/format";
 import { timeAgo } from "@/lib/relative-time";
 
 export const metadata: Metadata = {
-  title: "Buyurtmalar — flex.com.uz",
+  title: "Buyurtmalar",
   robots: { index: false },
 };
 

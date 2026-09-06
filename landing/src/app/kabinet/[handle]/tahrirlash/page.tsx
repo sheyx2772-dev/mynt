@@ -6,7 +6,7 @@ import EditProfileForm from "@/components/EditProfileForm";
 import { requireOwnHandle } from "@/lib/kabinet";
 import { linkFieldValue } from "@/lib/profile-form";
 
-export const metadata: Metadata = { title: "Tahrirlash — flex.com.uz", robots: { index: false } };
+export const metadata: Metadata = { title: "Tahrirlash", robots: { index: false } };
 
 export default async function EditProfilePage({
   params,

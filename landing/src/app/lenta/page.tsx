@@ -11,7 +11,7 @@ import { getTopHandles, listNewestResidents, touchLastSeen } from "@/lib/handles
 import { asReader } from "@/lib/backend/client";
 
 export const metadata: Metadata = {
-  title: "Postlar — flex.com.uz",
+  title: "Postlar",
   robots: { index: false },
 };
 

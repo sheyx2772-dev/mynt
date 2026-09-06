@@ -24,6 +24,7 @@ import { venueWords } from "@/lib/venue-words";
 import { planState } from "@/lib/venue-billing";
 import { isSetUp, type SetupState } from "@/lib/venue-setup";
 import VenueSetup from "@/components/VenueSetup";
+import { SITE_HOST } from "@/lib/site-url";
 
 // One number's home screen.
 //
@@ -75,7 +76,7 @@ export default function HandleHub({
               {handle.normalized}
             </p>
             <p className="mt-1 truncate font-tabular text-sm text-paper">
-              flex.com.uz/{handle.normalized}
+              {SITE_HOST}/{handle.normalized}
             </p>
           </div>
 

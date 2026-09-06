@@ -4,8 +4,9 @@ import { Download } from "lucide-react";
 import PageShell from "@/components/PageShell";
 import { SubScreen } from "@/components/HandleHub";
 import { requireOwnHandle } from "@/lib/kabinet";
+import { SITE_HOST } from "@/lib/site-url";
 
-export const metadata: Metadata = { title: "QR-kod — flex.com.uz", robots: { index: false } };
+export const metadata: Metadata = { title: "QR-kod", robots: { index: false } };
 
 // Held up across a table, so it is the whole screen rather than a panel at the
 // bottom of one. The SVG is the same file the card is printed from.
@@ -31,7 +32,7 @@ export default async function QrPage({ params }: PageProps<"/kabinet/[handle]/qr
           </div>
 
           <p className="mt-5 font-tabular text-sm text-paper-3">
-            flex.com.uz/{normalized}
+            {SITE_HOST}/{normalized}
           </p>
 
           <a

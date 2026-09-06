@@ -16,13 +16,19 @@ import { LOADOUT_DEVICES } from "@/lib/loadout";
 // image was built.
 export const revalidate = 3600;
 
+// The static pages change when somebody edits them, which is a deploy. Stamping
+// them with the build date says that; stamping them with `new Date()` said that
+// every page changed the moment the crawler asked, which is how a lastmod stops
+// being read at all.
+const RELEASED = new Date(process.env.BUILD_DATE ?? "2026-09-06T00:00:00Z");
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const handles = await listPublicHandles();
 
   return [
     {
       url: SITE_URL,
-      lastModified: new Date(),
+      lastModified: RELEASED,
       changeFrequency: "weekly",
       priority: 1,
     },
@@ -31,13 +37,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // land on.
     {
       url: `${SITE_URL}/shaxsiy`,
-      lastModified: new Date(),
+      lastModified: RELEASED,
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${SITE_URL}/biznes`,
-      lastModified: new Date(),
+      lastModified: RELEASED,
       changeFrequency: "monthly",
       priority: 0.9,
     },
@@ -45,7 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // looks for before approving.
     {
       url: `${SITE_URL}/qurilmalar`,
-      lastModified: new Date(),
+      lastModified: RELEASED,
       changeFrequency: "monthly",
       priority: 0.8,
     },
@@ -54,7 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // more to a buyer than the index above them.
     ...LOADOUT_DEVICES.map((id) => ({
       url: `${SITE_URL}/qurilmalar/${id}`,
-      lastModified: new Date(),
+      lastModified: RELEASED,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
@@ -62,13 +68,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // anyway, and the page itself is the one place they are all linked from.
     {
       url: `${SITE_URL}/rezidentlar`,
-      lastModified: new Date(),
+      lastModified: RELEASED,
       changeFrequency: "daily",
       priority: 0.7,
     },
     {
       url: `${SITE_URL}/shartlar`,
-      lastModified: new Date(),
+      lastModified: RELEASED,
       changeFrequency: "yearly",
       priority: 0.5,
     },

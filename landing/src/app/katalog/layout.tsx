@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 // link, which is how it is shown to somebody, and not indexed. Lift the
 // noindex once the people on it have agreed.
 export const metadata: Metadata = {
-  title: "Namunalar — flex.com.uz",
+  title: "Namunalar",
   description: "NFC vizitka namunalari: tashkilotlar, rahbarlar va maketlar.",
   robots: { index: false, follow: false },
 };

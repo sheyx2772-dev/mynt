@@ -6,6 +6,7 @@ import { Car, Check, Copy, Dog, Package, Plus, QrCode } from "lucide-react";
 import { addTag, toggleTag, type TagState } from "@/app/kabinet/[handle]/buyumlar/actions";
 import { TAG_KINDS, type TagKind } from "@/lib/tags";
 import type { Tag } from "@/lib/object-tags";
+import { SITE_URL } from "@/lib/site-url";
 
 // The owner's list of things, and the addresses printed on them.
 //
@@ -27,7 +28,7 @@ const KIND_NAME: Record<TagKind, string> = {
 
 function TagAddress({ token }: { token: string }) {
   const [copied, setCopied] = useState(false);
-  const url = `https://flex.com.uz/x/${token}`;
+  const url = `${SITE_URL}/x/${token}`;
 
   return (
     <div className="mt-3 flex items-center gap-2">

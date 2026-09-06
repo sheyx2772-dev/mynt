@@ -3,6 +3,7 @@ import { Nfc } from "lucide-react";
 import { SKINS } from "@/lib/device-skins";
 import { cardDesign, type CardDesignId } from "@/lib/card-designs";
 import type { DeviceTypeId } from "@/lib/devices";
+import { SITE_HOST } from "@/lib/site-url";
 
 // The same handle rendered on whichever object its owner chose to carry it.
 // Drawn rather than photographed: there is no product photography yet, and a
@@ -70,7 +71,7 @@ function Card({ design, handle, compact, customImage }: FaceProps) {
             </span>
           </div>
           {!compact && (
-            <p className={`mt-1 font-tabular text-[11px] ${skin.muted}`}>flex.com.uz/{handle}</p>
+            <p className={`mt-1 font-tabular text-[11px] ${skin.muted}`}>${SITE_HOST}/{handle}</p>
           )}
         </div>
       </div>

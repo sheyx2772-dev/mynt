@@ -7,7 +7,7 @@ import { inter, mono, serif } from "./fonts";
 import "./globals.css";
 import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
 import JsonLd from "@/components/JsonLd";
-import { SITE_NAME, social } from "@/lib/seo";
+import { SITE_NAME } from "@/lib/seo";
 import { SITE_URL } from "@/lib/site-url";
 import { organisation, website } from "@/lib/schema";
 
@@ -19,18 +19,18 @@ export const metadata: Metadata = {
   // The default for pages that set none. The landing page overrides both in
   // the reader's language; this is the Uzbek fallback.
   title: {
-    default: `Flex — ${site("uz").tagline}`,
+    default: site("uz").metaTitle,
     // A page that sets a title gets the brand appended once, here, rather than
     // writing "— Flex" at forty call sites and forgetting it at six.
     template: `%s — ${SITE_NAME}`,
   },
   description: site("uz").metaDescription,
-  ...social({
-    title: `Flex — ${site("uz").tagline}`,
-    description: site("uz").metaDescription,
-    path: "/",
-    lang: "uz",
-  }),
+  // No openGraph or alternates here on purpose. Next merges those two objects
+  // shallowly, so a canonical set in the layout is inherited by every page
+  // that does not set its own — which told a crawler that /shaxsiy, /biznes,
+  // /qurilmalar and /rezidentlar were all duplicates of the homepage. Each
+  // indexable page calls social() with its own path instead; the pages that
+  // are noindex emit no canonical at all, which is what they should do.
   // iOS reads these rather than the manifest when added to the home screen.
   appleWebApp: {
     capable: true,

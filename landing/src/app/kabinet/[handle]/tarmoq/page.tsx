@@ -20,7 +20,7 @@ import {
 } from "@/lib/crm";
 
 export const metadata: Metadata = {
-  title: "Tarmoq — flex.com.uz",
+  title: "Tarmoq",
   robots: { index: false },
 };
 

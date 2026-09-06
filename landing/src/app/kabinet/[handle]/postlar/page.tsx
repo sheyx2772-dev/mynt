@@ -8,7 +8,7 @@ import PostList from "@/components/PostList";
 import { requireOwnHandle } from "@/lib/kabinet";
 import { listPostsForHandle } from "@/lib/posts";
 
-export const metadata: Metadata = { title: "Postlar — flex.com.uz", robots: { index: false } };
+export const metadata: Metadata = { title: "Postlar", robots: { index: false } };
 
 export default async function PostsPage({ params }: PageProps<"/kabinet/[handle]/postlar">) {
   const { handle } = await params;

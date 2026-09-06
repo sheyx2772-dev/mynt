@@ -21,6 +21,11 @@ export const LANG_COOKIE = "til";
 export async function getLang(param?: unknown): Promise<Lang> {
   if (isLang(param)) return param;
 
+  // The proxy copies ?til= into a header so the root layout, which never sees
+  // searchParams, can still set <html lang> to the language on the page.
+  const fromUrl = (await headers()).get("x-til");
+  if (isLang(fromUrl)) return fromUrl;
+
   const chosen = (await cookies()).get(LANG_COOKIE)?.value;
   if (isLang(chosen)) return chosen;
 

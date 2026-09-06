@@ -8,7 +8,7 @@ import { getPurchase } from "@/lib/purchase";
 import { formatUZS } from "@/lib/format";
 
 export const metadata: Metadata = {
-  title: "Buyurtma — flex.com.uz",
+  title: "Buyurtma",
   robots: { index: false },
 };
 

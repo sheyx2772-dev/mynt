@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Nfc } from "lucide-react";
+import { SITE_HOST } from "@/lib/site-url";
 
 // The hero object, lit like a product shot rather than drawn like a diagram:
 // one key light from the upper left, a lime rim on the opposite edge, a contact
@@ -71,7 +72,7 @@ function Face() {
       <div className="relative mt-12 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
         MYN<span className="text-lime">042</span>
       </div>
-      <p className="relative mt-1 font-tabular text-sm text-paper-3">flex.com.uz/MYN042</p>
+      <p className="relative mt-1 font-tabular text-sm text-paper-3">{SITE_HOST}/MYN042</p>
 
       <div className="relative mt-8 flex items-center justify-between text-[11px] font-medium tracking-wide text-paper-3 uppercase">
         <span>Tegizing</span>

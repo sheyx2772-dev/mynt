@@ -1,4 +1,5 @@
 import Plate from "@/components/ui/Plate";
+import { SITE_HOST } from "@/lib/site-url";
 
 // The receipt.
 //
@@ -43,7 +44,7 @@ export default function ReceiptProfile({
         <p className="text-center text-[16px] tracking-[0.3em] uppercase">
           Flex
         </p>
-        <p className="mt-1 text-center text-[16px] text-mute">flex.com.uz</p>
+        <p className="mt-1 text-center text-[16px] text-mute">{SITE_HOST}</p>
 
         <div className="my-5 border-t border-dashed border-ink/30" />
 

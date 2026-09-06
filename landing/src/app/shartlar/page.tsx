@@ -1,18 +1,23 @@
 import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
-import { catalogue } from "@/lib/i18n";
+import { catalogue, site } from "@/lib/i18n";
 import { terms } from "@/lib/terms";
 import { getLang } from "@/lib/lang";
 import LangSwitch from "@/components/LangSwitch";
 import { COMPANY } from "@/lib/company";
 import { DEVICE_TYPES } from "@/lib/devices";
 import { formatUZS } from "@/lib/format";
+import { social } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Ommaviy oferta va shartlar — flex.com.uz",
-  description:
-    "Flex xizmatining ommaviy oferta shartlari: narxlar, yetkazib berish, qaytarish va firma rekvizitlari.",
-};
+export async function generateMetadata({
+  searchParams,
+}: PageProps<"/shartlar">): Promise<Metadata> {
+  const { til } = await searchParams;
+  const lang = await getLang(til);
+  const title = terms(lang).title;
+  const description = site(lang).termsMetaDescription;
+  return { title, description, ...social({ title, description, path: "/shartlar", lang }) };
+}
 
 // Everything a buyer is entitled to know before paying, on one page: who is
 // selling, what they get, when it arrives and what happens if it is faulty.

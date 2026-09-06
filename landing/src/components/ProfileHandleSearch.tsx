@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { parseHandle } from "@/lib/pricing";
+import { SITE_HOST } from "@/lib/site-url";
 
 // A profile is where most people meet Flex for the first time — a card is
 // tapped, a link is forwarded — and until now that page had no way to ask the
@@ -34,7 +35,7 @@ export default function ProfileHandleSearch() {
       className="mb-4"
     >
       <div className="flex items-center gap-2 rounded-input border border-line bg-white px-4 py-2.5 shadow-sm">
-        <span className="font-tabular text-sm text-ink-3">flex.com.uz/</span>
+        <span className="font-tabular text-sm text-ink-3">{SITE_HOST}/</span>
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}

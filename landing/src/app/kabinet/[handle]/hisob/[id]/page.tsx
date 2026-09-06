@@ -9,7 +9,7 @@ import { COMPANY, VAT } from "@/lib/company";
 import { formatUZS } from "@/lib/format";
 
 export const metadata: Metadata = {
-  title: "Hisob-faktura — flex.com.uz",
+  title: "Hisob-faktura",
   robots: { index: false },
 };
 

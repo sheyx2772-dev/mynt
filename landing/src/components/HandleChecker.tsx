@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { parseHandle } from "@/lib/pricing";
 import { useSanitisedInput } from "@/lib/use-sanitised-input";
+import { SITE_HOST } from "@/lib/site-url";
 
 // The two halves of a handle, cleaned per character so the caret can be put
 // back where it was. Truncation is not here: it depends on what is already in
@@ -84,7 +85,7 @@ export default function HandleChecker({
                 : "pl-3 font-tabular text-sm text-ink-3"
             }
           >
-            flex.com.uz/
+            {SITE_HOST}/
           </span>
           <input
             aria-label={labels.letters}

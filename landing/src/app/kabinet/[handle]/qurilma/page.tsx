@@ -15,7 +15,7 @@ import { DEFAULT_DEVICE_TYPE } from "@/lib/devices";
 import { DEFAULT_CARD_DESIGN } from "@/lib/card-designs";
 
 export const metadata: Metadata = {
-  title: "Qurilma buyurtma qilish — flex.com.uz",
+  title: "Qurilma buyurtma qilish",
   robots: { index: false },
 };
 

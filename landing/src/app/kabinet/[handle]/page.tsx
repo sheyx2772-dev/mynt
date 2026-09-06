@@ -14,7 +14,7 @@ export async function generateMetadata(
   props: PageProps<"/kabinet/[handle]">
 ): Promise<Metadata> {
   const { handle } = await props.params;
-  return { title: `${handle.toUpperCase()} — flex.com.uz`, robots: { index: false } };
+  return { title: `${handle.toUpperCase()}`, robots: { index: false } };
 }
 
 // One number's home screen, reached from the cabinet or directly.

@@ -7,7 +7,7 @@ import { parseHandle, parseGenesisSerial, priceForHandle, letterRarity, digitRar
 import { formatUZS } from "@/lib/format";
 import { getClaimedProfile, getGenesisCard } from "@/lib/handles";
 import { linkValue } from "@/lib/links";
-import { dict, menuBar, type Lang } from "@/lib/i18n";
+import { dict, menuBar, site as siteWords, type Lang } from "@/lib/i18n";
 import { venueWords } from "@/lib/venue-words";
 import { planState } from "@/lib/venue-billing";
 import { getLang } from "@/lib/lang";
@@ -45,13 +45,14 @@ import FollowButton from "@/components/FollowButton";
 import PostList from "@/components/PostList";
 import JsonLd from "@/components/JsonLd";
 import { social } from "@/lib/seo";
-import { profilePage, breadcrumbs } from "@/lib/schema";
+import { breadcrumbs, profilePage, venueSchema } from "@/lib/schema";
+import { SITE_HOST } from "@/lib/site-url";
 
 export async function generateMetadata(props: PageProps<"/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
   const { til } = await props.searchParams;
   const lang = await getLang(til);
-  const title = `${handle.toUpperCase()} — flex.com.uz`;
+  const title = `${handle.toUpperCase()} — ${SITE_HOST}`;
 
   // Only pages with a real person or a real card behind them are worth
   // indexing. An unclaimed handle is a price quote, and there are 17.5M of
@@ -196,6 +197,16 @@ async function VanityHandlePage({
               cabinet they will never have. This was on the profile branch
               below and missing here, so every cafe menu carried it. */}
           <span data-no-app-bar hidden />
+          <JsonLd
+            data={venueSchema({
+              name: venue.name,
+              kind: venue.kind,
+              path: `/${normalized}`,
+              hours: venue.hours,
+              address: venue.address,
+              categories,
+            })}
+          />
 
           <div className="mx-auto w-full max-w-md px-4 pt-5 pb-[120px]">
             <div className="mb-4 flex h-11 items-center justify-between">
@@ -355,7 +366,7 @@ async function VanityHandlePage({
         <JsonLd
           data={breadcrumbs([
             { name: "Flex", path: "/" },
-            { name: "Rezidentlar", path: "/rezidentlar" },
+            { name: siteWords(lang).navResidents, path: "/rezidentlar" },
             { name: normalized, path: `/${normalized}` },
           ])}
         />
@@ -688,7 +699,7 @@ async function VanityHandlePage({
           Bo&apos;sh
         </p>
         <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">{normalized}</h1>
-        <p className="mt-1 text-sm text-ink-2">flex.com.uz/{normalized}</p>
+        <p className="mt-1 text-sm text-ink-2">{SITE_HOST}/{normalized}</p>
 
         <div className="mt-8 space-y-1 text-left font-tabular text-sm">
           <div className="flex justify-between border-b border-line-soft py-2.5">
@@ -729,7 +740,7 @@ async function GenesisCardPage({ serial }: { serial: string }) {
         <div className="relative mt-10 font-display text-4xl font-semibold tracking-tight">
           #<span className="text-lime">{serial}</span>
         </div>
-        <p className="relative mt-1 text-center font-tabular text-sm text-paper-3">flex.com.uz/{serial}</p>
+        <p className="relative mt-1 text-center font-tabular text-sm text-paper-3">{SITE_HOST}/{serial}</p>
 
         {card?.status === "claimed" ? (
           <div className="relative mt-8 border-t border-ink-line pt-6">
@@ -750,7 +761,7 @@ async function GenesisCardPage({ serial }: { serial: string }) {
 
       {card?.status === "claimed" && card.ownerHandle && (
         <Link
-          href={`/${card.ownerHandle.toLowerCase()}`}
+          href={`/${card.ownerHandle}`}
           className="mt-6 block rounded-full bg-lime px-6 py-3 text-center font-medium text-flex-black transition-transform hover:scale-[1.01]"
         >
           Profilni ko&apos;rish

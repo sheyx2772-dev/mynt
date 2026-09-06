@@ -22,7 +22,7 @@ import { countWaiting, countAllRequests } from "@/lib/venue-requests";
 import { asReader } from "@/lib/backend/client";
 
 export const metadata: Metadata = {
-  title: "Kabinet — flex.com.uz",
+  title: "Kabinet",
   robots: { index: false },
 };
 

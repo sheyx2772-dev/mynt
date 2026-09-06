@@ -14,7 +14,7 @@ import { catalogue } from "@/lib/i18n";
 import { formatUZS } from "@/lib/format";
 
 export const metadata: Metadata = {
-  title: "Buyurtma — flex.com.uz",
+  title: "Buyurtma",
   robots: { index: false },
 };
 
