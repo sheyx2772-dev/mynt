@@ -3,6 +3,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Every quality a component is allowed to ask for.
+    //
+    // Next 16 refuses any value not on this list with a 400 and no image at
+    // all — which is worse than the soft tile it was meant to fix, and it
+    // fails silently: the markup is right, the file is right, and the picture
+    // is simply absent. 90 is here because a 276-pixel tile has few pixels to
+    // spend and every artefact at 75 lands on a face.
+    qualities: [75, 90],
+
     // Every host an avatar may come from, named exactly.
     //
     // `next/image` optimises a remote file by fetching it FROM THE SERVER, so

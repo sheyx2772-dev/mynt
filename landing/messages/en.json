@@ -208,7 +208,11 @@
     "note1": "NFC and QR on a table stand or a sticker",
     "note2": "A stand in the room or a tag on the door — it replaces the leather folder",
     "note3": "By the chair — prices, free slots, that stylist's own work",
-    "note4": "At reception or on the door — booking, what to bring, results"
+    "note4": "At reception or on the door — booking, what to bring, results",
+    "name5": "Shop",
+    "note5": "At the till or on a product label — same object, different page",
+    "name6": "Anything else",
+    "note6": "A bus, a museum, a car park, an office — anywhere the tag sits"
   },
   "counter": {
     "eyebrow": "So far",

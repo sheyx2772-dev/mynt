@@ -208,7 +208,11 @@
     "note1": "Stol ustidagi taglik yoki stikerda NFC va QR",
     "note2": "Xonadagi taglik yoki eshikdagi teg — charm papkani almashtiradi",
     "note3": "Usta o'rindig'i yonida — narxlar, bo'sh vaqtlar, o'sha ustaning ishlari",
-    "note4": "Qabulxonada yoki shifokor eshigida — yozilish, tayyorgarlik, natijalar"
+    "note4": "Qabulxonada yoki shifokor eshigida — yozilish, tayyorgarlik, natijalar",
+    "name5": "Do'kon",
+    "note5": "Kassa oldida yoki mahsulot yorlig'ida — shakl o'sha, sahifa boshqacha",
+    "name6": "Boshqa obyektlar",
+    "note6": "Avtobus, muzey, avtoturargoh, ofis — belgisi turgan har qanday joy"
   },
   "counter": {
     "eyebrow": "Hozirgacha",

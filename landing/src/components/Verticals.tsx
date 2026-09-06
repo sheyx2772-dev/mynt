@@ -9,24 +9,32 @@ import { Link } from "@/i18n/navigation";
 // Photographs here, not drawings, and that is not a contradiction of the
 // devices shelf. A card is one object and a drawing of it is exact; a cafe is
 // a room, and the thing being sold is a stand on a table in it — which a
-// visitor recognises from a photograph in a second and from a line drawing
-// not at all.
+// visitor recognises from a photograph in a second and from a line drawing not
+// at all.
+//
+// Six rather than four. Four covered the trades we had photographs of and left
+// out the shop and the everything-else, which is where most of the questions
+// actually come from — a bus company, a museum, a car park. A visitor whose
+// own trade is missing from a list of four reads the list as "not for me".
 //
 // Each is cropped to 3:4 at whatever the source actually holds, and that is
 // the whole reason they are sharp. They were landscape before, poured into a
 // portrait tile: `sizes` describes the box's WIDTH, so Next served a 640-wide
 // file, `object-cover` kept the middle third of it, and a 250-pixel-wide sliver
-// was stretched across a 528-pixel-wide tile. The picture was never the problem
-// — the crop was being done by the browser, after the file had been chosen.
-//
-// So the crop happens at build time now, and none of these is upscaled by a
-// pixel: 576 wide is the smallest of them, against the 528 a two-times screen
-// asks for.
+// was stretched across the tile. The picture was never the problem — the crop
+// was being done by the browser, after the file had been chosen. It happens at
+// build time now, and none of these is upscaled by a pixel.
 const TILES = [
-  { photo: "/mahsulot/kafe.webp", href: "/business" },
-  { photo: "/mahsulot/mehmonxona.webp", href: "/business#hotels" },
-  { photo: "/mahsulot/salon.webp", href: "/business#salons" },
-  { photo: "/mahsulot/klinika.webp", href: "/business#clinics" },
+  { photo: "kafe", href: "/business#cafes" },
+  { photo: "mehmonxona", href: "/business#hotels" },
+  { photo: "salon", href: "/business#salons" },
+  { photo: "klinika", href: "/business#clinics" },
+  // The last two land on the enquiry rather than a section, because there is
+  // no shop section and no everything-else section to land on — and a link
+  // that jumps to an anchor which does not exist silently drops the reader at
+  // the top of the page, looking at cafes. The form's own list covers both.
+  { photo: "dokon", href: "/business#enquiry" },
+  { photo: "boshqa", href: "/business#enquiry" },
 ] as const;
 
 export default async function Verticals() {
@@ -37,7 +45,7 @@ export default async function Verticals() {
       <p className="cap text-ink-3">{t("eyebrow")}</p>
       <p className="mt-2 max-w-xl text-ink-2">{t("note")}</p>
 
-      <ul className="mt-8 grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+      <ul className="mt-8 grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         {TILES.map((tile, i) => (
           <li key={tile.photo}>
             <Link
@@ -45,14 +53,22 @@ export default async function Verticals() {
               className="group relative flex aspect-[3/4] flex-col justify-end overflow-hidden rounded-card"
             >
               <Image
-                src={tile.photo}
+                src={`/mahsulot/${tile.photo}.webp`}
                 alt=""
                 fill
-                sizes="(min-width: 1024px) 276px, (min-width: 640px) 50vw, 100vw"
+                // Wider than the box on purpose. The tile is 358 CSS pixels,
+                // but this screen is at 1.33 device pixels per CSS pixel and a
+                // phone is at 3, and the browser picks the candidate nearest
+                // the number it is given — so a truthful 358 fetches a file
+                // that has to be stretched by a third before it is drawn. This
+                // buys the next size up, which is a few kilobytes against a
+                // tile that is actually in focus.
+                sizes="(min-width: 1024px) 480px, (min-width: 640px) 50vw, 100vw"
                 // 75 is the default and it is tuned for a photograph shown
-                // large. These are 276 wide, where the encoder has few pixels
-                // to spend and every artefact lands on a face; the file is a
-                // few kilobytes bigger and the tile stops looking hazy.
+                // large. Here the encoder has few pixels to spend and every
+                // artefact lands on a face; the file is a few kilobytes bigger
+                // and the tile stops looking hazy. `next.config.ts` has to list
+                // this number or the request comes back 400 with no picture.
                 quality={90}
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none"
               />
@@ -63,9 +79,8 @@ export default async function Verticals() {
 
                   It used to reach 55% at the midpoint, which is halfway up the
                   photograph — enough to grey the whole tile and read as a soft
-                  picture rather than a deliberate one. The stops are pushed
-                  down instead: clear to just under half, then it falls. */}
-              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 via-45% to-transparent to-70%" />
+                  picture rather than a deliberate one. */}
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-45% via-ink/45 to-70% to-transparent" />
 
               <div className="relative p-4 text-white">
                 <h3 className="font-semibold">{t(`name${i + 1}`)}</h3>
