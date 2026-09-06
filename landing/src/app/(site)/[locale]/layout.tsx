@@ -7,14 +7,15 @@ import { NextIntlClientProvider } from "next-intl";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { routing } from "@/i18n/routing";
-import { inter, mono, serif } from "../fonts";
-import "../globals.css";
+import { inter, mono, serif } from "../../fonts";
+import "../../globals.css";
 
-// Every page in the product hangs under a language.
+// The site: every marketing page, under a language it announces in its path.
 //
-// The root layout lives here rather than at `app/layout.tsx` because `<html
-// lang>` is one of the things being translated, and a layout above this one
-// would have to guess it before the segment was read.
+// It carries `<html>` itself rather than inheriting one from `app/layout.tsx`,
+// because `lang` is a translated value and a layout above this could not read
+// the segment that decides it. `(profile)` carries its own for the same reason
+// and a stronger one — it is a different document with none of this chrome.
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

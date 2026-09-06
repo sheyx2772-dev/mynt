@@ -27,7 +27,7 @@
     "business": "Biznes",
     "cafe": "Kafe va restoran",
     "hotel": "Mehmonxona",
-    "shop": "Do'kon",
+    "clinic": "Klinika va salon",
     "team": "Jamoa uchun",
     "company": "Kompaniya",
     "contact": "Aloqa",
@@ -89,15 +89,68 @@
     "eyebrow": "Nimada olib yurasiz",
     "note": "Bitta raqam, bir nechta buyum. Hammasi bitta profilga olib boradi.",
     "seeAll": "Barcha qurilmalar",
-    "name1": "Karta",
-    "name2": "Uzuk",
-    "name3": "Braslet",
-    "name4": "Avto vizitka",
-    "price1": "200 000",
-    "price2": "350 000",
-    "price3": "250 000",
-    "price4": "150 000",
-    "soum": "so'm"
+    "soum": "so'm",
+    "title": "Qurilmalar",
+    "lead": "Raqam sizniki. Qurilma — uni qayerda olib yurishingiz. Bittasini olasizmi, hammasinimi — bari o'sha bitta profilni ochadi.",
+    "buy": "Buyurtma berish",
+    "back": "Qurilmalar",
+    "specTitle": "Xususiyatlari",
+    "boxTitle": "Qutida",
+    "alsoTitle": "Bularni ham ko'ring",
+    "chip": "NTAG213 chipi, 144 bayt — havolaga yetadi va ortiqchasi yo'q",
+    "battery": "Batareyasi yo'q. Zaryad ham, almashtirish ham kerak emas",
+    "app": "Ilova o'rnatilmaydi — na sizga, na tegizgan odamga",
+    "rewrite": "Raqamni istagan payt qayta yozasiz. Buyum o'zgarmaydi",
+    "items": {
+      "card": {
+        "name": "Karta",
+        "tagline": "Hamyondagi joyini oqlaydi",
+        "body": "Bank kartasi o'lchamida, 0,8 mm qalinlikda. Matt qora PVC — barmoq izi qolmaydi, cho'ntakda ishqalanmaydi. Ismingiz va raqamingiz lazerda o'yiladi, ustiga bosilmaydi: bo'yoq o'chadi, o'yiq o'chmaydi. Uzatilganda qaytarib olinadigan kartaga o'xshamaydi — qoladi.",
+        "spec1": "85,6 × 54 mm, 0,8 mm — bank kartasi o'lchamida",
+        "spec2": "Matt qora PVC, lazer o'yiq",
+        "spec3": "Suvga chidamli, egilishga chidamli"
+      },
+      "ring": {
+        "name": "Uzuk",
+        "tagline": "Qo'l uzatasiz — profil ochiladi",
+        "body": "Seramika va zanglamas po'lat. Qo'l uzatgan payt telefonga tegadi, alohida harakat kerak emas — shu bilan hamyonni izlash tugaydi. O'lchamni buyurtmadan oldin yuboramiz: qog'oz lenta, besh daqiqa. Noto'g'ri chiqsa bir marta bepul almashtiramiz.",
+        "spec1": "Seramika qoplama, ichi po'lat",
+        "spec2": "6, 7, 8 mm kenglik — 16 dan 23 gacha o'lcham",
+        "spec3": "Suvda yechilmaydi, sportda xalaqit qilmaydi"
+      },
+      "band": {
+        "name": "Braslet",
+        "tagline": "Qo'lda qoladi, qo'lda ishlaydi",
+        "body": "Italyan terisi, po'lat magnit qulf. Soatning tagida ham, o'rniga ham yuradi. Ter va suvdan qo'rqmaydi; teri vaqt o'tib to'qroq tortadi — bu nuqson emas, teri shunday qariydi. Uzunligini o'zingiz kesib olasiz, ichida chizg'ich bor.",
+        "spec1": "Italyan terisi, po'lat magnit qulf",
+        "spec2": "Bilak 15–21 sm — kesib moslanadi",
+        "spec3": "Terga va yomg'irga chidamli"
+      },
+      "cartag": {
+        "name": "Avto vizitka",
+        "tagline": "Mashina oynasida — raqamingiz o'rniga",
+        "body": "Oyna ortiga qo'yiladigan qora plastina. Telefon raqamingizni ko'z-ko'z qilib yozib qo'yishning o'rniga: tegizgan odam sizga yozadi yoki qo'ng'iroq qiladi, raqamingizni ko'rmaydi. Xalaqit bergan joyga qo'ygan bo'lsangiz, o'sha odam sizni to'g'ridan-to'g'ri topadi — evakuatorni kutmasdan.",
+        "spec1": "Oyna ortiga qo'yiladigan tayanch bilan",
+        "spec2": "Quyoshda so'lmaydi, sovuqda yorilmaydi",
+        "spec3": "Telefon raqamingiz ochiq ko'rinmaydi"
+      },
+      "pettag": {
+        "name": "Hayvon tegi",
+        "tagline": "Yo'qolsa — topgan odam telefonini tegizadi",
+        "body": "Bo'yinbog'ga taqiladigan yengil teg. Topgan odam telefonini tegizadi va sizning ismingiz, telefoningiz, hayvonning dorisi haqidagi eslatma chiqadi. Ilova kerak emas — shuning uchun ishlaydi: topgan odam hech narsa o'rnatmaydi. Ma'lumotni istagan payt o'zgartirasiz, teg o'sha teg bo'lib qoladi.",
+        "spec1": "28 mm, 6 g — kichik itga ham yengil",
+        "spec2": "Po'lat karabin, bo'yinbog'dan chiqib ketmaydi",
+        "spec3": "Yomg'ir va hovuz — muammo emas"
+      },
+      "stand": {
+        "name": "Stend",
+        "tagline": "Stol ustida turadi, mijoz o'zi tegizadi",
+        "body": "Kafe, salon va qabulxona uchun. Stolda turadi: menyu, izoh qoldirish, Telegram kanal — qaysi biriga olib borishini o'zingiz belgilaysiz. Bir tomonida NFC, ikkinchisida QR, chunki har bir telefon NFCni ochiq tutmaydi. Og'irligi bor — shamolda ham, qo'l tekkanda ham joyida qoladi.",
+        "spec1": "Bir yuzi NFC, ikkinchisi QR",
+        "spec2": "Og'irlashtirilgan tayanch — surilmaydi",
+        "spec3": "Havolani istagan payt o'zgartirasiz"
+      }
+    }
   },
   "price": {
     "eyebrow": "Narx",
@@ -131,11 +184,11 @@
     "open": "Ochish",
     "name1": "Kafe va restoran",
     "name2": "Mehmonxona",
-    "name3": "Salon va klinika",
-    "name4": "Avto vizitka",
+    "name3": "Salon",
+    "name4": "Klinika",
     "note1": "Stol ustidagi taglik yoki stikerda NFC va QR",
     "note2": "Xonadagi taglik yoki eshikdagi teg — charm papkani almashtiradi",
-    "note3": "Usta o'rindig'i yoki shifokor eshigi — narx, yozilish, izohlar",
-    "note4": "Kassa oldida yoki mahsulot yorlig'ida — shakl o'sha, sahifa boshqacha"
+    "note3": "Usta o'rindig'i yonida — narxlar, bo'sh vaqtlar, o'sha ustaning ishlari",
+    "note4": "Qabulxonada yoki shifokor eshigida — yozilish, tayyorgarlik, natijalar"
   }
 }

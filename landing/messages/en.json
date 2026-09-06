@@ -27,7 +27,7 @@
     "business": "Business",
     "cafe": "Cafes and restaurants",
     "hotel": "Hotels",
-    "shop": "Shops",
+    "clinic": "Clinic and salon",
     "team": "For teams",
     "company": "Company",
     "contact": "Contact",
@@ -89,15 +89,68 @@
     "eyebrow": "What carries it",
     "note": "One number, several things. All of them open the same profile.",
     "seeAll": "All devices",
-    "name1": "Card",
-    "name2": "Ring",
-    "name3": "Band",
-    "name4": "Car tag",
-    "price1": "200 000",
-    "price2": "350 000",
-    "price3": "250 000",
-    "price4": "150 000",
-    "soum": "so'm"
+    "soum": "so'm",
+    "title": "Devices",
+    "lead": "The number is yours. The device is where you carry it. Take one or take all of them — they open the same profile.",
+    "buy": "Order",
+    "back": "Devices",
+    "specTitle": "Specification",
+    "boxTitle": "In the box",
+    "alsoTitle": "Also worth a look",
+    "chip": "NTAG213, 144 bytes — enough for the link and nothing spare",
+    "battery": "No battery. Nothing to charge, nothing to replace",
+    "app": "No app to install — not for you, not for whoever taps it",
+    "rewrite": "Rewrite the number whenever you like. The object stays the same",
+    "items": {
+      "card": {
+        "name": "Card",
+        "tagline": "Earns its place in the wallet",
+        "body": "Bank-card size, 0.8 mm thick. Matte black PVC — it does not hold fingerprints and does not scuff in a pocket. The name and number are laser-engraved rather than printed: ink wears off, an engraving does not. Nobody hands this one back out of politeness.",
+        "spec1": "85.6 × 54 mm, 0.8 mm — bank-card size",
+        "spec2": "Matte black PVC, laser engraved",
+        "spec3": "Water-resistant, survives being bent"
+      },
+      "ring": {
+        "name": "Ring",
+        "tagline": "You shake a hand, the profile opens",
+        "body": "Ceramic over stainless steel. The tap happens inside the handshake, so there is no separate gesture — and that is the end of looking for a wallet. We send a sizing strip before the order: paper, five minutes. Guess wrong and we exchange it once, free.",
+        "spec1": "Ceramic finish, steel core",
+        "spec2": "6, 7, 8 mm wide — sizes 16 to 23",
+        "spec3": "Stays on in water, stays out of the way in the gym"
+      },
+      "band": {
+        "name": "Band",
+        "tagline": "Lives on the wrist, works on the wrist",
+        "body": "Italian leather, steel magnetic clasp. Wears under a watch or instead of one. Sweat and rain are fine; the leather darkens over time, which is not a fault — that is how leather ages. You cut it to length yourself, and the ruler is in the box.",
+        "spec1": "Italian leather, steel magnetic clasp",
+        "spec2": "Wrist 15–21 cm — trimmed to fit",
+        "spec3": "Holds up to sweat and rain"
+      },
+      "cartag": {
+        "name": "Car tag",
+        "tagline": "Behind the windscreen, instead of your number",
+        "body": "A black plate that sits under the glass. Instead of a phone number on display for everyone: whoever taps it writes or calls, and never sees the number. Parked somewhere awkward, that person reaches you directly — before anyone calls a tow truck.",
+        "spec1": "Comes with a windscreen stand",
+        "spec2": "Does not fade in sun or crack in frost",
+        "spec3": "Your phone number stays private"
+      },
+      "pettag": {
+        "name": "Pet tag",
+        "tagline": "If they wander off, whoever finds them taps",
+        "body": "A light tag for the collar. Whoever finds them taps a phone and sees your name, your number and a note about medication. No app — which is exactly why it works: the finder installs nothing. Change the details whenever you like; the tag stays the same tag.",
+        "spec1": "28 mm, 6 g — light enough for a small dog",
+        "spec2": "Steel clip, will not work loose off the collar",
+        "spec3": "Rain and swimming pools are fine"
+      },
+      "stand": {
+        "name": "Stand",
+        "tagline": "Sits on the table, the guest taps it themselves",
+        "body": "For a cafe, a salon, a reception desk. It sits on the table: menu, review, Telegram channel — where it leads is your call. NFC on one face and a QR on the other, because not every phone has NFC switched on. It has weight, so it stays put when a sleeve catches it.",
+        "spec1": "NFC on one face, QR on the other",
+        "spec2": "Weighted base — does not slide",
+        "spec3": "Change the link whenever you like"
+      }
+    }
   },
   "price": {
     "eyebrow": "Price",
@@ -131,11 +184,11 @@
     "open": "Open",
     "name1": "Cafes and restaurants",
     "name2": "Hotels",
-    "name3": "Salons and clinics",
-    "name4": "Car tag",
+    "name3": "Salon",
+    "name4": "Clinic",
     "note1": "NFC and QR on a table stand or a sticker",
     "note2": "A stand in the room or a tag on the door — it replaces the leather folder",
-    "note3": "At the chair or the consulting-room door — prices, booking, reviews",
-    "note4": "At the till or on a product label — same shape, different page"
+    "note3": "By the chair — prices, free slots, that stylist's own work",
+    "note4": "At reception or on the door — booking, what to bring, results"
   }
 }
