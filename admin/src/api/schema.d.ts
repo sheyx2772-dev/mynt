@@ -411,7 +411,7 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Email va parol bilan kirish
+         * Username yoki email va parol bilan kirish
          * @description Parolni o'rnatish uchun avval havola bilan kirib, keyin uni belgilang.
          */
         post: operations["kirish-parol"];
@@ -2584,6 +2584,7 @@ export interface components {
         };
         Link: {
             href: string;
+            kind?: string;
             label: string;
         };
         LinkInput: {
@@ -2591,6 +2592,7 @@ export interface components {
             facebook?: string;
             instagram?: string;
             linkedin?: string;
+            payment?: string;
             telegram?: string;
             website?: string;
             whatsapp?: string;
@@ -2885,7 +2887,8 @@ export interface components {
              * @example /v1/schemas/PasswordInputBody.json
              */
             readonly $schema?: string;
-            email: string;
+            /** @description Username yoki email */
+            login: string;
             parol: string;
         };
         Patch: {

@@ -2,7 +2,7 @@ import { api } from "./client";
 
 // Signing in to the panel.
 //
-// An address and a password, and nothing else. The panel could once mail
+// A username or an address, and a password. The panel could once mail
 // itself a link; that door is gone, because a link is a door that opens for
 // whoever reads the mailbox and this panel hands out numbers worth millions.
 // A forgotten password is reset at the server with `cmd/admin`.
@@ -11,9 +11,9 @@ import { api } from "./client";
 // decides that, and it lives where somebody holding this bundle cannot read
 // it — so a stranger who signs in successfully still sees nothing.
 
-export async function signInWithPassword(email: string, parol: string) {
+export async function signInWithPassword(login: string, parol: string) {
 	const { data, error } = await api.POST("/kirish/parol", {
-		body: { email, parol },
+		body: { login, parol },
 	});
 	if (error || !data) {
 		// The server's own sentence, which is deliberately the same for a wrong

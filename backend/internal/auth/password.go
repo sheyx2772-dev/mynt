@@ -40,7 +40,7 @@ const MinPasswordLength = 10
 
 var (
 	ErrPasswordTooShort = fmt.Errorf("parol kamida %d ta belgidan iborat bo'lsin", MinPasswordLength)
-	ErrBadPassword      = errors.New("email yoki parol noto'g'ri")
+	ErrBadPassword      = errors.New("login yoki parol noto'g'ri")
 )
 
 // HashPassword returns a PHC string carrying the parameters, salt and hash.

@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 
 // The panel's front door, and the only one.
 //
-// An address and a password. There used to be a second way in — the panel
-// could mail itself a link — and it is gone on purpose: an emailed link is a
+// A username or an address, and a password. There used to be a second way in —
+// the panel could mail itself a link — and it is gone on purpose: an emailed link is a
 // door that opens for whoever reads the mailbox, and this panel gives away
 // numbers worth millions and shows every buyer's address. A handful of
 // operators do not need a self-service way back in; they need one fewer way
@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 // server does. An outsider who guesses a password here sees nothing, and is
 // told nothing about what they cannot see.
 export default function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
-	const [email, setEmail] = useState("");
+	const [login, setLogin] = useState("");
 	const [parol, setParol] = useState("");
 	const [busy, setBusy] = useState(false);
 	const [problem, setProblem] = useState("");
@@ -34,7 +34,7 @@ export default function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
 		setProblem("");
 
 		try {
-			await signInWithPassword(email.trim(), parol);
+			await signInWithPassword(login.trim(), parol);
 			onSignedIn();
 		} catch (error) {
 			setProblem((error as Error).message);
@@ -51,12 +51,18 @@ export default function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
 			<h1 className="mt-2 font-semibold text-3xl">Boshqaruv</h1>
 
 			<form onSubmit={submit} className="mt-6 space-y-3">
+				{/* Not type="email": the field takes a username, and the browser
+				    would otherwise refuse to submit `admin` as a malformed
+				    address. Both are accepted, so neither can be validated here. */}
 				<Input
-					type="email"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
-					placeholder="siz@example.com"
+					type="text"
+					value={login}
+					onChange={(e) => setLogin(e.target.value)}
+					placeholder="admin"
 					autoComplete="username"
+					autoCapitalize="none"
+					autoCorrect="off"
+					spellCheck={false}
 					className="h-11"
 				/>
 
