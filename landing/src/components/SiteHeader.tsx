@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import LangSwitch from "@/components/LangSwitch";
 import Mark from "@/components/Mark";
 import MobileMenu from "@/components/MobileMenu";
+import NavLink from "@/components/NavLink";
 import { Link } from "@/i18n/navigation";
 
 // The one header, on every page.
@@ -26,8 +27,11 @@ export type Session = {
 export default async function SiteHeader({ session }: { session?: Session }) {
   const t = await getTranslations("nav");
 
+  // `anchor` names the block on the entry page, where one exists. Only the
+  // price has a twin: personal, business and residents are pages of their own
+  // and there is nothing on the entry page to scroll to.
   const items = [
-    { href: "/pricing", label: t("pricing") },
+    { href: "/pricing", anchor: "narx", label: t("pricing") },
     { href: "/personal", label: t("personal") },
     { href: "/business", label: t("business") },
     { href: "/residents", label: t("residents") },
@@ -62,13 +66,14 @@ export default async function SiteHeader({ session }: { session?: Session }) {
 
         <nav className="hidden gap-8 text-sm font-medium text-paper-2 lg:flex">
           {items.map((item) => (
-            <Link
+            <NavLink
               key={item.href}
               href={item.href}
+              anchor={item.anchor}
               className="transition-colors hover:text-white"
             >
               {item.label}
-            </Link>
+            </NavLink>
           ))}
         </nav>
 
