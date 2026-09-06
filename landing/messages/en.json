@@ -20,7 +20,7 @@
     "cta": "Get a number"
   },
   "footer": {
-    "blurb": "A digital business card shared with one tap.",
+    "blurb": "An NFC card, ring or bracelet. Each bound to one number.",
     "product": "Product",
     "devices": "Devices",
     "posts": "Posts",
@@ -35,5 +35,25 @@
     "terms": "Terms of use",
     "privacy": "Privacy",
     "taxId": "Tax ID"
+  },
+  "hero": {
+    "badge": "One tap. No app to install.",
+    "titleA": "Flex —",
+    "titleMark": "your digital",
+    "titleB": "business card",
+    "pickHandle": "Pick a number",
+    "letters": "Letters",
+    "digits": "Digits",
+    "check": "Check if it's free",
+    "cardHint": "If it's free, you can take it right here."
+  },
+  "ways": {
+    "eyebrow": "What do you need?",
+    "personal": "Personal NFC",
+    "personalDesc": "Meeting someone ends in one tap: your contact is saved to their phone there and then. No paper card, no reading a number out, no typos.",
+    "personalCta": "Pick a number",
+    "business": "NFC for business",
+    "businessDesc": "It goes on a table, in a room or at the till: menu, call button, requests and statistics. Unlike a printed menu it is edited at any moment and counts how often it was opened.",
+    "businessCta": "The business section"
   }
 }

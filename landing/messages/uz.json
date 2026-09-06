@@ -20,7 +20,7 @@
     "cta": "Raqam olish"
   },
   "footer": {
-    "blurb": "Bir tegish bilan ulashiladigan raqamli vizitka.",
+    "blurb": "NFC vizitka, uzuk va braslet. Har biri bitta raqamga bog'lanadi.",
     "product": "Mahsulot",
     "devices": "Qurilmalar",
     "posts": "Postlar",
@@ -35,5 +35,25 @@
     "terms": "Foydalanish shartlari",
     "privacy": "Maxfiylik",
     "taxId": "STIR"
+  },
+  "hero": {
+    "badge": "Bir tegish. Ilova kerak emas.",
+    "titleA": "Flex —",
+    "titleMark": "raqamli",
+    "titleB": "vizitkangiz",
+    "pickHandle": "Raqam tanlang",
+    "letters": "Harflar",
+    "digits": "Raqamlar",
+    "check": "Bandligini tekshirish",
+    "cardHint": "Bo'sh raqamni shu yerda band qilasiz."
+  },
+  "ways": {
+    "eyebrow": "Nima kerak?",
+    "personal": "Shaxsiy NFC",
+    "personalDesc": "Tanishuv bir tegishda tugaydi: kontaktingiz darhol uning telefoniga saqlanadi. Qog'oz vizitka ham, raqamni aytib turish ham, xato terish ham kerak emas.",
+    "personalCta": "Raqam tanlash",
+    "business": "Biznes uchun NFC",
+    "businessDesc": "Stol, xona yoki kassaga qo'yiladi: menyu, chaqiruv, so'rov va statistika. Bosilgan menyudan farqi — istalgan payt tahrirlanadi va necha marta ochilganini sanaydi.",
+    "businessCta": "Biznes bo'limi"
   }
 }
