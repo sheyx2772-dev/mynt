@@ -917,3 +917,20 @@ body:has([data-no-app-bar]) {
     transition-delay: 0s, 0.08s, 0s;
   }
 }
+
+/* The mark waking up: it arrives already lit and settles, rather than fading
+ * in from nothing — a logo that fades in reads as a page loading, and a phone
+ * waking does not fade, it comes up to brightness and holds. */
+@keyframes tap-intro {
+  0%   { opacity: 0; transform: scale(0.94); }
+  38%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.tap-intro-mark {
+  animation: tap-intro 620ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tap-intro-mark { animation: none; }
+}

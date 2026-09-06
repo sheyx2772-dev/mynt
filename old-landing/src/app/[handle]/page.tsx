@@ -20,6 +20,7 @@ import Mark from "@/components/Mark";
 import MenuView from "@/components/MenuView";
 import Plate from "@/components/ui/Plate";
 import NfcCardProfile from "@/components/ui/NfcCardProfile";
+import TapIntro from "@/components/TapIntro";
 import ShareButton from "@/components/ShareButton";
 import MenuRequests from "@/components/MenuRequests";
 import { getVenueByHandle, getMenu } from "@/lib/menu";
@@ -195,6 +196,7 @@ async function VanityHandlePage({
               cabinet they will never have. This was on the profile branch
               below and missing here, so every cafe menu carried it. */}
           <span data-no-app-bar hidden />
+          {(source === "nfc" || source === "qr") && <TapIntro handle={normalized} />}
           <JsonLd
             data={venueSchema({
               name: venue.name,
@@ -344,6 +346,10 @@ async function VanityHandlePage({
       >
         {/* Keeps the app bar off somebody else's card. */}
         <span data-no-app-bar hidden />
+
+        {/* The beat between the tap and the page. Only for a tap — see the
+            component for the four rules that keep it from being a delay. */}
+        {(source === "nfc" || source === "qr") && <TapIntro handle={normalized} />}
 
         {/* What this page is, said in the vocabulary a search engine reads: a
             page about somebody, not the somebody itself. Everything in it is
