@@ -40,8 +40,13 @@ type PublicProfile struct {
 	// says "premium"; what a visitor should see is what is paid for now.
 	Plan string `json:"tarif"`
 
-	Views    int64      `json:"korishlar"`
-	LastSeen *time.Time `json:"oxirgi_faollik,omitempty"`
+	Views     int64      `json:"korishlar"`
+	Followers int64      `json:"obunachilar"`
+	LastSeen  *time.Time `json:"oxirgi_faollik,omitempty"`
+
+	// Closed: a stranger sees the name, the picture and the number, and the
+	// rest after the owner has accepted them. See ForStranger.
+	Private bool `json:"yopiq"`
 
 	// Whether the reader owns this number.
 	//
@@ -57,6 +62,8 @@ type PublicProfile struct {
 	// and it would otherwise ask three times for one screen.
 	Following   bool `json:"obunaman"`
 	Recommended bool `json:"tavsiya_qilganman"`
+	// Asked a closed profile and not yet answered. Drawn as "so'rov yuborildi".
+	Pending bool `json:"sorov_kutilmoqda"`
 }
 
 // Public reads one claimed profile. A number that is unclaimed, reserved or
@@ -93,9 +100,48 @@ func (s *Store) Public(ctx context.Context, normalized, viewerID string) (Public
 		Design:   CardDesign(row.CardDesign),
 		Device:   DeviceType(row.DeviceType),
 		Plan:     EffectivePlan(row.Plan, optionalTime(row.PlanExpiresAt)),
-		Views:    row.ViewCount,
-		LastSeen: optionalTime(row.LastSeenAt),
+		Views:     row.ViewCount,
+		Followers: row.FollowerCount,
+		LastSeen:  optionalTime(row.LastSeenAt),
+		Private:   row.Yopiq,
 	}, nil
+}
+
+// ForStranger is the closed profile as somebody outside it sees it.
+//
+// Cut here, on the server, rather than hidden by the page: a field that is
+// hidden is still in the response, and a response is a file anybody can read.
+// What survives is what a locked account shows on the networks people already
+// use — who this is, what they look like, how many follow them — and nothing
+// that would let a stranger reach them.
+//
+// A no-op for an open profile, for the owner, and for an accepted follower,
+// so the route can call it unconditionally once it knows all three.
+func (p PublicProfile) ForStranger(following bool) PublicProfile {
+	if !p.Private || p.Mine || following {
+		return p
+	}
+	return PublicProfile{
+		Handle:    p.Handle,
+		Name:      p.Name,
+		Avatar:    p.Avatar,
+		Banner:    p.Banner,
+		Design:    p.Design,
+		Plan:      p.Plan,
+		Followers: p.Followers,
+		Private:   true,
+		Mine:      false,
+		Following: false,
+		// The one thing a stranger is told about their own standing: that
+		// they asked and are waiting. Without it the button offers to ask
+		// again the moment the page reloads.
+		Pending: p.Pending,
+		// Empty rather than nil, so the JSON says [] and a client that
+		// iterates does not have to guard against null.
+		Links:    []Link{},
+		Services: []Service{},
+		Tags:     []string{},
+	}
 }
 
 // A profile with no name on it is shown by its number rather than as a blank.

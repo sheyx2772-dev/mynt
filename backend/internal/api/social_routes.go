@@ -43,6 +43,29 @@ type followInput struct {
 type followOutput struct {
 	Body struct {
 		Obuna bool `json:"obuna"`
+		// Where the reader now stands: obuna, kutilmoqda (a closed profile
+		// has been asked) or yoq. `obuna` stays for the clients that read it.
+		Holat social.FollowState `json:"holat" enum:"obuna,kutilmoqda,yoq"`
+	}
+}
+
+type followRequestsInput struct {
+	Raqam string `path:"raqam" pattern:"^[A-Za-z]{3}[0-9]{3}$"`
+	Limit int    `query:"soni" minimum:"1" maximum:"100" default:"50"`
+}
+
+type followRequestsOutput struct {
+	Body struct {
+		Requests []social.FollowRequest `json:"sorovlar"`
+		Soni     int64                  `json:"soni"`
+	}
+}
+
+type decideInput struct {
+	Raqam string `path:"raqam" pattern:"^[A-Za-z]{3}[0-9]{3}$"`
+	User  string `path:"foydalanuvchi" format:"uuid"`
+	Body  struct {
+		Qabul bool `json:"qabul"`
 	}
 }
 
@@ -164,14 +187,79 @@ func (s *Server) registerSocial(api huma.API) {
 			return nil, huma.Error404NotFound("Bunday raqam yo'q.")
 		}
 
-		on, err := s.social.SetFollowing(ctx, account.ID, raqam, in.Body.Obuna)
+		// The store decides whether this is a follow or a request, from the
+		// stored row — a closed profile cannot be followed by asking nicely.
+		var state social.FollowState
+		if in.Body.Obuna {
+			state, err = s.social.Ask(ctx, account.ID, raqam)
+		} else {
+			state, err = social.FollowStateNone, s.social.Leave(ctx, account.ID, raqam)
+		}
 		if err != nil {
 			return nil, internalError(err, "obuna o'zgarmadi")
 		}
 
 		out := &followOutput{}
-		out.Body.Obuna = on
+		out.Body.Holat = state
+		out.Body.Obuna = state == social.FollowStateFollowing
 		return out, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID: "obuna-sorovlari",
+		Method:      http.MethodGet,
+		Path:        "/raqamlar/{raqam}/obuna-sorovlari",
+		Summary:     "Yopiq profilga kim kirmoqchi",
+		Description: "Faqat egasi. Boshqaning raqami — bo'sh ro'yxat.",
+		Tags:        []string{"profil"},
+	}, func(ctx context.Context, in *followRequestsInput) (*followRequestsOutput, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+		raqam, ok := number(in.Raqam)
+		if !ok {
+			return nil, huma.Error404NotFound("Bunday raqam yo'q.")
+		}
+
+		list, err := s.social.PendingRequests(ctx, account.ID, raqam, int32(in.Limit))
+		if err != nil {
+			return nil, internalError(err, "so'rovlar o'qilmadi")
+		}
+
+		out := &followRequestsOutput{}
+		out.Body.Requests = list
+		out.Body.Soni = s.social.CountPending(ctx, account.ID, raqam)
+		return out, nil
+	})
+
+	huma.Register(api, huma.Operation{
+		OperationID:   "obuna-sorovini-hal-qilish",
+		Method:        http.MethodPut,
+		Path:          "/raqamlar/{raqam}/obuna-sorovlari/{foydalanuvchi}",
+		Summary:       "So'rovni qabul qilish yoki rad etish",
+		Description:   "Qabul — obuna yoziladi. Rad — so'rov yopiladi va qayta so'rab bo'lmaydi.",
+		Tags:          []string{"profil"},
+		DefaultStatus: http.StatusNoContent,
+	}, func(ctx context.Context, in *decideInput) (*struct{}, error) {
+		account, err := requireAccount(ctx)
+		if err != nil {
+			return nil, err
+		}
+		raqam, ok := number(in.Raqam)
+		if !ok {
+			return nil, huma.Error404NotFound("Bunday raqam yo'q.")
+		}
+
+		done, err := s.social.Decide(ctx, account.ID, raqam, in.User, in.Body.Qabul)
+		if err != nil {
+			return nil, internalError(err, "so'rov hal bo'lmadi")
+		}
+		if !done {
+			// Not the owner, already decided, or never asked: one answer.
+			return nil, huma.Error404NotFound("So'rov topilmadi.")
+		}
+		return nil, nil
 	})
 
 	huma.Register(api, huma.Operation{

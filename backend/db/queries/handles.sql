@@ -28,7 +28,8 @@ select id, name from teams where id = any(sqlc.arg(ids)::uuid[]);
 select normalized, user_id, owner_name, bio, avatar_url, banner_url, links, services,
        city, contact_email, phone, position, company, tags,
        card_design, device_type, custom_design_url,
-       plan, plan_expires_at, view_count, last_seen_at
+       plan, plan_expires_at, view_count, last_seen_at,
+       yopiq, follower_count
 from handles
 where normalized = sqlc.arg(normalized) and status = 'claimed';
 
@@ -55,7 +56,8 @@ update handles set
   -- uploaded before asking; nothing here fetches or trusts what is at them.
   avatar_url = sqlc.narg(avatar_url),
   banner_url = sqlc.narg(banner_url),
-  comments_open = sqlc.arg(comments_open)
+  comments_open = sqlc.arg(comments_open),
+  yopiq = sqlc.arg(yopiq)
 where normalized = sqlc.arg(normalized)
   and user_id = sqlc.arg(user_id)
 returning *;

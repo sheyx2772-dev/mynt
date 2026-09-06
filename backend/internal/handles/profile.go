@@ -37,6 +37,7 @@ type Profile struct {
 	AvatarURL    string
 	BannerURL    string
 	CommentsOpen bool
+	Private      bool
 }
 
 // ProfileInput is what arrives from a form or an app.
@@ -66,6 +67,9 @@ type ProfileInput struct {
 	// Whether strangers may write on the profile. Sent every time, because it
 	// is a switch: absent would be indistinguishable from off.
 	CommentsOpen bool `json:"commentsOpen"`
+	// Closed profile: strangers see the face and ask to see the rest. A switch
+	// like commentsOpen, and sent every time for the same reason.
+	Yopiq bool `json:"yopiq"`
 }
 
 // ReadProfile turns an edit into something storable, or says what is wrong.
@@ -106,6 +110,7 @@ func ReadProfile(in ProfileInput, plan string) (Profile, string) {
 		AvatarURL:    trim(in.AvatarURL, 500),
 		BannerURL:    trim(in.BannerURL, 500),
 		CommentsOpen: in.CommentsOpen,
+		Private:      in.Yopiq,
 	}, ""
 }
 

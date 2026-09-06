@@ -54,6 +54,7 @@ func (s *Store) SaveProfile(ctx context.Context, normalized, userID string, in P
 		AvatarUrl:    optional(profile.AvatarURL),
 		BannerUrl:    optional(profile.BannerURL),
 		CommentsOpen: profile.CommentsOpen,
+		Yopiq:        profile.Private,
 		Normalized:   &normalized,
 		UserID:       &id,
 	})

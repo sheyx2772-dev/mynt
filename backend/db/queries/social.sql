@@ -35,6 +35,63 @@ on conflict do nothing;
 delete from follows
 where follower_user_id = sqlc.arg(user_id) and followed_handle = sqlc.arg(handle);
 
+-- Yopiq profil va so'rovlar --------------------------------------------------
+--
+-- A closed profile takes a request where an open one takes a follow. The
+-- decision is one statement in each direction so a refused request can never
+-- half-happen: accepting writes the follow and marks the request together.
+
+-- name: IsPrivate :one
+select yopiq from handles where normalized = sqlc.arg(handle) and status = 'claimed';
+
+-- name: RequestFollow :one
+-- Asks, or reports what was already asked. A refused request is not asked
+-- again: the conflict target is the key, and `do update` on a `rad` row
+-- leaves it `rad`.
+insert into follow_requests (requester_user_id, handle)
+values (sqlc.arg(user_id), sqlc.arg(handle))
+on conflict (requester_user_id, handle) do update
+  set holat = follow_requests.holat
+returning holat;
+
+-- name: FollowRequestState :one
+select holat from follow_requests
+where requester_user_id = sqlc.arg(user_id) and handle = sqlc.arg(handle);
+
+-- name: WithdrawFollowRequest :exec
+-- Only a pending one. A decided request is the owner's record, not the asker's.
+delete from follow_requests
+where requester_user_id = sqlc.arg(user_id) and handle = sqlc.arg(handle)
+  and holat = 'kutilmoqda';
+
+-- name: PendingFollowRequests :many
+-- The owner's inbox. Ownership is the join: a number that is not the reader's
+-- yields no rows, the same as one with nothing waiting.
+select r.requester_user_id, r.created_at,
+       asker.normalized as asker_handle, asker.owner_name as asker_name, asker.avatar_url as asker_avatar
+from follow_requests r
+join handles h on h.normalized = r.handle and h.user_id = sqlc.arg(owner_id)
+left join handles asker on asker.user_id = r.requester_user_id and asker.status = 'claimed'
+where r.handle = sqlc.arg(handle) and r.holat = 'kutilmoqda'
+order by r.created_at desc
+limit sqlc.arg(page_size)::int;
+
+-- name: CountPendingFollowRequests :one
+select count(*) from follow_requests r
+join handles h on h.normalized = r.handle and h.user_id = sqlc.arg(owner_id)
+where r.handle = sqlc.arg(handle) and r.holat = 'kutilmoqda';
+
+-- name: DecideFollowRequest :execrows
+-- The owner's answer. The ownership filter is the authorization, and only a
+-- pending request can be decided — deciding twice matches nothing.
+update follow_requests r
+set holat = sqlc.arg(holat), decided_at = now()
+from handles h
+where h.normalized = r.handle and h.user_id = sqlc.arg(owner_id)
+  and r.handle = sqlc.arg(handle)
+  and r.requester_user_id = sqlc.arg(requester_id)
+  and r.holat = 'kutilmoqda';
+
 -- name: CountFollowing :one
 select count(*) from follows where follower_user_id = sqlc.arg(user_id);
 

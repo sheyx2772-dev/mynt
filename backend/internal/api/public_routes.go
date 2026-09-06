@@ -8,6 +8,7 @@ import (
 	"github.com/danielgtaylor/huma/v2"
 
 	"github.com/sheyx2772-dev/flex/backend/internal/handles"
+	"github.com/sheyx2772-dev/flex/backend/internal/social"
 )
 
 // What anybody can read without signing in.
@@ -77,7 +78,13 @@ func (s *Server) registerPublic(api huma.API) {
 		if viewer.ID != "" {
 			profile.Following = s.social.IsFollowing(ctx, viewer.ID, parsed.Normalized())
 			profile.Recommended = s.social.IsRecommended(ctx, viewer.ID, parsed.Normalized())
+			profile.Pending = s.social.State(ctx, viewer.ID, parsed.Normalized()) == social.FollowStatePending
 		}
+
+		// A closed profile is cut here, after the three facts that open it are
+		// known. Cut on the server rather than hidden by the page: a hidden
+		// field is still in the response, and a response is a file.
+		profile = profile.ForStranger(profile.Following)
 
 		out := &publicProfileOutput{}
 		out.Body.Profile = profile

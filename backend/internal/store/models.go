@@ -109,6 +109,14 @@ type Follow struct {
 	CreatedAt      pgtype.Timestamptz `json:"created_at"`
 }
 
+type FollowRequest struct {
+	RequesterUserID uuid.UUID          `json:"requester_user_id"`
+	Handle          string             `json:"handle"`
+	Holat           string             `json:"holat"`
+	CreatedAt       pgtype.Timestamptz `json:"created_at"`
+	DecidedAt       pgtype.Timestamptz `json:"decided_at"`
+}
+
 type GenesisCard struct {
 	ID          uuid.UUID          `json:"id"`
 	Serial      int32              `json:"serial"`
@@ -159,6 +167,7 @@ type Handle struct {
 	PlanRemindedFor pgtype.Timestamptz `json:"plan_reminded_for"`
 	CommentsOpen    bool               `json:"comments_open"`
 	RecommendCount  int32              `json:"recommend_count"`
+	Yopiq           bool               `json:"yopiq"`
 }
 
 type HandleTransfer struct {

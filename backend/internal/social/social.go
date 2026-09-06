@@ -91,6 +91,175 @@ func (s *Store) SetFollowing(ctx context.Context, userID, handle string, on bool
 	return on, err
 }
 
+// FollowState is where a reader stands with a number: following it, waiting to
+// be let in, or neither.
+type FollowState string
+
+const (
+	FollowStateNone      FollowState = "yoq"
+	FollowStateFollowing FollowState = "obuna"
+	FollowStatePending   FollowState = "kutilmoqda"
+)
+
+// Ask follows an open number and asks to follow a closed one, and answers with
+// where the reader now stands. The distinction is made here, from the stored
+// row, so a client cannot follow a closed profile by calling the open path.
+//
+// A request that was refused stays refused: the insert reports `rad`, and
+// that is answered as "none" — the asker is not told they were turned down,
+// because being told is a nudge to try from another account.
+func (s *Store) Ask(ctx context.Context, userID, handle string) (FollowState, error) {
+	id, err := uuid.Parse(userID)
+	if err != nil {
+		return FollowStateNone, err
+	}
+
+	private, err := s.queries.IsPrivate(ctx, optional(handle))
+	if err != nil {
+		// No claimed row: nothing to follow. Reported as none rather than as
+		// an error, so an unclaimed number and a refused one read alike.
+		return FollowStateNone, nil
+	}
+	if !private {
+		if err := s.queries.Follow(ctx, store.FollowParams{UserID: id, Handle: handle}); err != nil {
+			return FollowStateNone, err
+		}
+		return FollowStateFollowing, nil
+	}
+
+	holat, err := s.queries.RequestFollow(ctx, store.RequestFollowParams{UserID: id, Handle: handle})
+	if err != nil {
+		return FollowStateNone, err
+	}
+	switch holat {
+	case "qabul":
+		return FollowStateFollowing, nil
+	case "kutilmoqda":
+		return FollowStatePending, nil
+	default:
+		return FollowStateNone, nil
+	}
+}
+
+// Leave stops following and withdraws any request still waiting.
+func (s *Store) Leave(ctx context.Context, userID, handle string) error {
+	id, err := uuid.Parse(userID)
+	if err != nil {
+		return err
+	}
+	if err := s.queries.Unfollow(ctx, store.UnfollowParams{UserID: id, Handle: handle}); err != nil {
+		return err
+	}
+	return s.queries.WithdrawFollowRequest(ctx, store.WithdrawFollowRequestParams{UserID: id, Handle: handle})
+}
+
+// State answers where a reader stands, for the page that draws the button.
+func (s *Store) State(ctx context.Context, userID, handle string) FollowState {
+	if s.IsFollowing(ctx, userID, handle) {
+		return FollowStateFollowing
+	}
+	id, err := uuid.Parse(userID)
+	if err != nil {
+		return FollowStateNone
+	}
+	holat, err := s.queries.FollowRequestState(ctx, store.FollowRequestStateParams{UserID: id, Handle: handle})
+	if err == nil && holat == "kutilmoqda" {
+		return FollowStatePending
+	}
+	return FollowStateNone
+}
+
+// FollowRequest is somebody waiting at the door of a closed profile.
+type FollowRequest struct {
+	UserID string    `json:"foydalanuvchi"`
+	Handle string    `json:"raqam,omitempty"`
+	Name   string    `json:"ism,omitempty"`
+	Avatar string    `json:"rasm,omitempty"`
+	Asked  time.Time `json:"sorlagan"`
+}
+
+// PendingRequests is the owner's inbox for one of their numbers. Ownership is
+// in the query: somebody else's number yields nothing.
+func (s *Store) PendingRequests(ctx context.Context, ownerID, handle string, limit int32) ([]FollowRequest, error) {
+	id, err := uuid.Parse(ownerID)
+	if err != nil {
+		return nil, err
+	}
+	rows, err := s.queries.PendingFollowRequests(ctx, store.PendingFollowRequestsParams{
+		OwnerID: &id, Handle: handle, PageSize: limit,
+	})
+	if err != nil {
+		return nil, err
+	}
+	out := make([]FollowRequest, 0, len(rows))
+	for _, r := range rows {
+		out = append(out, FollowRequest{
+			UserID: r.RequesterUserID.String(),
+			Handle: deref(r.AskerHandle),
+			Name:   deref(r.AskerName),
+			Avatar: deref(r.AskerAvatar),
+			Asked:  r.CreatedAt.Time,
+		})
+	}
+	return out, nil
+}
+
+// CountPending is the badge on the owner's number.
+func (s *Store) CountPending(ctx context.Context, ownerID, handle string) int64 {
+	id, err := uuid.Parse(ownerID)
+	if err != nil {
+		return 0
+	}
+	n, err := s.queries.CountPendingFollowRequests(ctx, store.CountPendingFollowRequestsParams{OwnerID: &id, Handle: handle})
+	if err != nil {
+		return 0
+	}
+	return n
+}
+
+// Decide is the owner's answer to one request. Accepting writes the follow,
+// which is what moves the follower count, in the same transaction as the mark
+// — so a request cannot be accepted without the follow existing, or the
+// follow exist without the request being closed.
+func (s *Store) Decide(ctx context.Context, ownerID, handle, requesterID string, accept bool) (bool, error) {
+	owner, err := uuid.Parse(ownerID)
+	if err != nil {
+		return false, err
+	}
+	asker, err := uuid.Parse(requesterID)
+	if err != nil {
+		return false, err
+	}
+
+	tx, err := s.pool.Begin(ctx)
+	if err != nil {
+		return false, err
+	}
+	defer tx.Rollback(ctx)
+	q := s.queries.WithTx(tx)
+
+	holat := "rad"
+	if accept {
+		holat = "qabul"
+	}
+	n, err := q.DecideFollowRequest(ctx, store.DecideFollowRequestParams{
+		Holat: holat, OwnerID: &owner, Handle: handle, RequesterID: asker,
+	})
+	if err != nil {
+		return false, err
+	}
+	if n == 0 {
+		// Not the owner, not pending, or never asked: the same nothing.
+		return false, nil
+	}
+	if accept {
+		if err := q.Follow(ctx, store.FollowParams{UserID: asker, Handle: handle}); err != nil {
+			return false, err
+		}
+	}
+	return true, tx.Commit(ctx)
+}
+
 func (s *Store) CountFollowing(ctx context.Context, userID string) int64 {
 	id, err := uuid.Parse(userID)
 	if err != nil {

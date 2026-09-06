@@ -138,6 +138,24 @@ func (q *Queries) CountFollowing(ctx context.Context, userID uuid.UUID) (int64, 
 	return count, err
 }
 
+const countPendingFollowRequests = `-- name: CountPendingFollowRequests :one
+select count(*) from follow_requests r
+join handles h on h.normalized = r.handle and h.user_id = $1
+where r.handle = $2 and r.holat = 'kutilmoqda'
+`
+
+type CountPendingFollowRequestsParams struct {
+	OwnerID *uuid.UUID `json:"owner_id"`
+	Handle  string     `json:"handle"`
+}
+
+func (q *Queries) CountPendingFollowRequests(ctx context.Context, arg CountPendingFollowRequestsParams) (int64, error) {
+	row := q.db.QueryRow(ctx, countPendingFollowRequests, arg.OwnerID, arg.Handle)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const countRecentPosts = `-- name: CountRecentPosts :one
 select count(*) from posts
 where user_id = $1 and created_at >= now() - interval '1 hour'
@@ -162,6 +180,38 @@ func (q *Queries) CountRecommendations(ctx context.Context, handle *string) (int
 	var count int64
 	err := row.Scan(&count)
 	return count, err
+}
+
+const decideFollowRequest = `-- name: DecideFollowRequest :execrows
+update follow_requests r
+set holat = $1, decided_at = now()
+from handles h
+where h.normalized = r.handle and h.user_id = $2
+  and r.handle = $3
+  and r.requester_user_id = $4
+  and r.holat = 'kutilmoqda'
+`
+
+type DecideFollowRequestParams struct {
+	Holat       string     `json:"holat"`
+	OwnerID     *uuid.UUID `json:"owner_id"`
+	Handle      string     `json:"handle"`
+	RequesterID uuid.UUID  `json:"requester_id"`
+}
+
+// The owner's answer. The ownership filter is the authorization, and only a
+// pending request can be decided — deciding twice matches nothing.
+func (q *Queries) DecideFollowRequest(ctx context.Context, arg DecideFollowRequestParams) (int64, error) {
+	result, err := q.db.Exec(ctx, decideFollowRequest,
+		arg.Holat,
+		arg.OwnerID,
+		arg.Handle,
+		arg.RequesterID,
+	)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
 }
 
 const deleteComment = `-- name: DeleteComment :execrows
@@ -275,6 +325,23 @@ func (q *Queries) Follow(ctx context.Context, arg FollowParams) error {
 	return err
 }
 
+const followRequestState = `-- name: FollowRequestState :one
+select holat from follow_requests
+where requester_user_id = $1 and handle = $2
+`
+
+type FollowRequestStateParams struct {
+	UserID uuid.UUID `json:"user_id"`
+	Handle string    `json:"handle"`
+}
+
+func (q *Queries) FollowRequestState(ctx context.Context, arg FollowRequestStateParams) (string, error) {
+	row := q.db.QueryRow(ctx, followRequestState, arg.UserID, arg.Handle)
+	var holat string
+	err := row.Scan(&holat)
+	return holat, err
+}
+
 const followedHandles = `-- name: FollowedHandles :many
 select followed_handle from follows where follower_user_id = $1
 `
@@ -320,6 +387,23 @@ func (q *Queries) IsFollowing(ctx context.Context, arg IsFollowingParams) (bool,
 	return exists, err
 }
 
+const isPrivate = `-- name: IsPrivate :one
+
+select yopiq from handles where normalized = $1 and status = 'claimed'
+`
+
+// Yopiq profil va so'rovlar --------------------------------------------------
+//
+// A closed profile takes a request where an open one takes a follow. The
+// decision is one statement in each direction so a refused request can never
+// half-happen: accepting writes the follow and marks the request together.
+func (q *Queries) IsPrivate(ctx context.Context, handle *string) (bool, error) {
+	row := q.db.QueryRow(ctx, isPrivate, handle)
+	var yopiq bool
+	err := row.Scan(&yopiq)
+	return yopiq, err
+}
+
 const isRecommended = `-- name: IsRecommended :one
 
 select exists (
@@ -340,6 +424,59 @@ func (q *Queries) IsRecommended(ctx context.Context, arg IsRecommendedParams) (b
 	var exists bool
 	err := row.Scan(&exists)
 	return exists, err
+}
+
+const pendingFollowRequests = `-- name: PendingFollowRequests :many
+select r.requester_user_id, r.created_at,
+       asker.normalized as asker_handle, asker.owner_name as asker_name, asker.avatar_url as asker_avatar
+from follow_requests r
+join handles h on h.normalized = r.handle and h.user_id = $1
+left join handles asker on asker.user_id = r.requester_user_id and asker.status = 'claimed'
+where r.handle = $2 and r.holat = 'kutilmoqda'
+order by r.created_at desc
+limit $3::int
+`
+
+type PendingFollowRequestsParams struct {
+	OwnerID  *uuid.UUID `json:"owner_id"`
+	Handle   string     `json:"handle"`
+	PageSize int32      `json:"page_size"`
+}
+
+type PendingFollowRequestsRow struct {
+	RequesterUserID uuid.UUID          `json:"requester_user_id"`
+	CreatedAt       pgtype.Timestamptz `json:"created_at"`
+	AskerHandle     *string            `json:"asker_handle"`
+	AskerName       *string            `json:"asker_name"`
+	AskerAvatar     *string            `json:"asker_avatar"`
+}
+
+// The owner's inbox. Ownership is the join: a number that is not the reader's
+// yields no rows, the same as one with nothing waiting.
+func (q *Queries) PendingFollowRequests(ctx context.Context, arg PendingFollowRequestsParams) ([]PendingFollowRequestsRow, error) {
+	rows, err := q.db.Query(ctx, pendingFollowRequests, arg.OwnerID, arg.Handle, arg.PageSize)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []PendingFollowRequestsRow{}
+	for rows.Next() {
+		var i PendingFollowRequestsRow
+		if err := rows.Scan(
+			&i.RequesterUserID,
+			&i.CreatedAt,
+			&i.AskerHandle,
+			&i.AskerName,
+			&i.AskerAvatar,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const postsForHandle = `-- name: PostsForHandle :many
@@ -499,6 +636,29 @@ func (q *Queries) RecordView(ctx context.Context, arg RecordViewParams) error {
 	return err
 }
 
+const requestFollow = `-- name: RequestFollow :one
+insert into follow_requests (requester_user_id, handle)
+values ($1, $2)
+on conflict (requester_user_id, handle) do update
+  set holat = follow_requests.holat
+returning holat
+`
+
+type RequestFollowParams struct {
+	UserID uuid.UUID `json:"user_id"`
+	Handle string    `json:"handle"`
+}
+
+// Asks, or reports what was already asked. A refused request is not asked
+// again: the conflict target is the key, and `do update` on a `rad` row
+// leaves it `rad`.
+func (q *Queries) RequestFollow(ctx context.Context, arg RequestFollowParams) (string, error) {
+	row := q.db.QueryRow(ctx, requestFollow, arg.UserID, arg.Handle)
+	var holat string
+	err := row.Scan(&holat)
+	return holat, err
+}
+
 const unfollow = `-- name: Unfollow :exec
 delete from follows
 where follower_user_id = $1 and followed_handle = $2
@@ -527,5 +687,22 @@ type UnrecommendParams struct {
 
 func (q *Queries) Unrecommend(ctx context.Context, arg UnrecommendParams) error {
 	_, err := q.db.Exec(ctx, unrecommend, arg.Handle, arg.UserID)
+	return err
+}
+
+const withdrawFollowRequest = `-- name: WithdrawFollowRequest :exec
+delete from follow_requests
+where requester_user_id = $1 and handle = $2
+  and holat = 'kutilmoqda'
+`
+
+type WithdrawFollowRequestParams struct {
+	UserID uuid.UUID `json:"user_id"`
+	Handle string    `json:"handle"`
+}
+
+// Only a pending one. A decided request is the owner's record, not the asker's.
+func (q *Queries) WithdrawFollowRequest(ctx context.Context, arg WithdrawFollowRequestParams) error {
+	_, err := q.db.Exec(ctx, withdrawFollowRequest, arg.UserID, arg.Handle)
 	return err
 }
