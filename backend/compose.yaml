@@ -74,6 +74,12 @@ services:
 
   # Makes the bucket once and exits. Without it the first upload fails against
   # a store that is running and empty, which reads like a permission problem.
+  #
+  # The policy is spelled out rather than `mc anonymous set download`, which
+  # grants ListBucket too — a listable bucket hands out the index of every
+  # upload, not just the ones whose URL was shared. It matters less here, where
+  # the store is on localhost, than it does on the server; it is written the
+  # same way in both so that what is tested is what ships.
   minio-setup:
     image: minio/mc:latest
     depends_on:
@@ -83,7 +89,8 @@ services:
       sh -c "
       mc alias set local http://minio:9000 flexflex flexflex &&
       mc mb --ignore-existing local/flex-images &&
-      mc anonymous set download local/flex-images
+      printf '%s' '{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::flex-images/*\"]}]}' > /tmp/ochiq.json &&
+      mc anonymous set-json /tmp/ochiq.json local/flex-images
       "
 
 volumes:
