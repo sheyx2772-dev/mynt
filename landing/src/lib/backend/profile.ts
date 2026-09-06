@@ -20,6 +20,7 @@ export type PublicProfile = {
   dizayn: string;
   tarif: string;
   korishlar: number;
+  obunachilar?: number;
   havolalar: Link[];
   xizmatlar: Service[];
   teglar: string[];
@@ -73,6 +74,7 @@ export async function ownerOf(handle: string): Promise<PublicProfile | null> {
     dizayn: p.dizayn,
     tarif: p.tarif,
     korishlar: p.korishlar,
+    obunachilar: p.obunachilar ?? 0,
     havolalar: p.havolalar ?? [],
     xizmatlar: p.xizmatlar ?? [],
     teglar: p.teglar ?? [],

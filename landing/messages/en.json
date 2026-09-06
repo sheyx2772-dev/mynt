@@ -780,6 +780,13 @@
   "cabinet": {
     "title": "Cabinet",
     "signOut": "Sign out",
+    "chrome": {
+      "home": "Home",
+      "numbers": "Numbers",
+      "account": "Account",
+      "orders": "Orders",
+      "signOut": "Sign out"
+    },
     "empty": {
       "title": "No number yet",
       "body": "Pick three letters and three digits — it stays yours for life. Once payment clears, the number shows up here.",
@@ -875,7 +882,18 @@
       "pictures": "Pictures",
       "avatar": "Profile picture",
       "banner": "Cover picture",
-      "pictureHint": "The address of an uploaded file. Uploading is done in the app for now.",
+      "pictureHint": "Upload directly or provide a link.",
+      "uploadAvatar": "Upload picture",
+      "changeAvatar": "Change",
+      "removeAvatar": "Remove",
+      "avatarHint": "JPG, PNG or WEBP. Recommended: 400×400 px, up to 10 MB.",
+      "uploadBanner": "Upload cover",
+      "changeBanner": "Change",
+      "removeBanner": "Remove",
+      "bannerHint": "Wide landscape picture (recommended 1200×400 px).",
+      "orEnterUrl": "Or enter image URL",
+      "uploading": "Uploading…",
+      "uploadFailed": "Could not upload image. Please try again.",
       "contacts": "Contact",
       "phone": "Phone",
       "email": "Email",

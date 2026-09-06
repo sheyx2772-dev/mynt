@@ -6,8 +6,9 @@ import ProfileContacts from "@/components/profile/ProfileContacts";
 import ProfileFooter from "@/components/profile/ProfileFooter";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import ProfileLinks from "@/components/profile/ProfileLinks";
+import ProfileParticles from "@/components/profile/ProfileParticles";
 import ProfileServices from "@/components/profile/ProfileServices";
-import ProfileTags from "@/components/profile/ProfileTags";
+import ProfileTabsView from "@/components/profile/ProfileTabsView";
 import { ownerOf, type PublicProfile } from "@/lib/backend/profile";
 import { imageSrc } from "@/lib/profile/links";
 import { themeFor } from "@/lib/profile/theme";
@@ -128,20 +129,19 @@ export default async function ProfilePage({
     <main
       data-theme={theme.id}
       style={theme.style}
-      className="mx-auto flex w-full max-w-md flex-col gap-8 px-5 pt-10 pb-14"
+      className="relative mx-auto flex w-full max-w-md flex-col gap-6 px-5 pt-10 pb-14"
     >
+      {/* Falling & Floating Particles Overlay */}
+      <ProfileParticles themeId={theme.id} />
+
       <ProfileHeader profile={owner} numberLabel={t("numberLabel")} />
 
-      {owner.tavsif && (
-        <p className="-mt-2 text-center text-[15px] leading-6 text-pretty text-[var(--p-text-2)]">
-          {owner.tavsif}
-        </p>
-      )}
-
-      <ProfileContacts telefon={owner.telefon} email={owner.email} />
-      <ProfileLinks links={owner.havolalar} />
-      <ProfileServices services={owner.xizmatlar} />
-      <ProfileTags tags={owner.teglar} />
+      {/* Tabs View: Asosiy | Postlar | Haqida */}
+      <ProfileTabsView profile={owner}>
+        <ProfileContacts telefon={owner.telefon} email={owner.email} />
+        <ProfileLinks links={owner.havolalar} />
+        <ProfileServices services={owner.xizmatlar} />
+      </ProfileTabsView>
 
       <ProfileFooter
         handle={owner.raqam}

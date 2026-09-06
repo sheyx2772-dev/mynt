@@ -780,6 +780,13 @@
   "cabinet": {
     "title": "Kabinet",
     "signOut": "Chiqish",
+    "chrome": {
+      "home": "Bosh sahifa",
+      "numbers": "Raqamlar",
+      "account": "Hisob",
+      "orders": "Buyurtmalar",
+      "signOut": "Chiqish"
+    },
     "empty": {
       "title": "Hali raqamingiz yo'q",
       "body": "Uch harf va uch raqam tanlang — u umrbod sizniki bo'ladi. To'lov o'tgach raqam shu yerda paydo bo'ladi.",
@@ -875,7 +882,18 @@
       "pictures": "Rasmlar",
       "avatar": "Profil rasmi",
       "banner": "Muqova rasmi",
-      "pictureHint": "Yuklangan rasmning manzili. Yuklash hozircha ilova orqali.",
+      "pictureHint": "Rasmni to'g'ridan-to'g'ri yuklang yoki havolasini kiriting.",
+      "uploadAvatar": "Rasm yuklash",
+      "changeAvatar": "O'zgartirish",
+      "removeAvatar": "O'chirish",
+      "avatarHint": "JPG, PNG yoki WEBP. Tavsiya: 400×400 px, 10 MB gacha.",
+      "uploadBanner": "Muqova yuklash",
+      "changeBanner": "O'zgartirish",
+      "removeBanner": "O'chirish",
+      "bannerHint": "Keng formatli rasm (tavsiya 1200×400 px).",
+      "orEnterUrl": "Yoki rasm URL manzilini kiritish",
+      "uploading": "Yuklanmoqda…",
+      "uploadFailed": "Rasmni yuklab bo'lmadi. Qaytadan urinib ko'ring.",
       "contacts": "Aloqa",
       "phone": "Telefon",
       "email": "Email",

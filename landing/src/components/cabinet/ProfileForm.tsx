@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import Field, { Group, inputClass } from "./Field";
+import ImageUploadField from "./ImageUploadField";
 import LinkFields from "./LinkFields";
 import ServiceFields from "./ServiceFields";
 import { Button } from "@/components/ui/button";
@@ -116,28 +117,29 @@ export default function ProfileForm({
       </Group>
 
       <Group title={t("pictures")}>
-        <Field id="avatarUrl" label={t("avatar")} hint={t("pictureHint")}>
-          <Input
-            id="avatarUrl"
-            name="avatarUrl"
-            type="url"
-            inputMode="url"
-            maxLength={500}
-            defaultValue={defaults.avatarUrl}
-            className={inputClass}
-          />
-        </Field>
-        <Field id="bannerUrl" label={t("banner")}>
-          <Input
-            id="bannerUrl"
-            name="bannerUrl"
-            type="url"
-            inputMode="url"
-            maxLength={500}
-            defaultValue={defaults.bannerUrl}
-            className={inputClass}
-          />
-        </Field>
+        <div className="flex flex-col gap-5">
+          <div>
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {t("avatar")}
+            </label>
+            <ImageUploadField
+              kind="avatar"
+              name="avatarUrl"
+              initialUrl={defaults.avatarUrl ?? ""}
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {t("banner")}
+            </label>
+            <ImageUploadField
+              kind="banner"
+              name="bannerUrl"
+              initialUrl={defaults.bannerUrl ?? ""}
+            />
+          </div>
+        </div>
       </Group>
 
       <Group title={t("contacts")}>

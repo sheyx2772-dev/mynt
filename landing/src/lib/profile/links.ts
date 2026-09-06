@@ -60,10 +60,17 @@ export function actionHref(raw: string): string | null {
  */
 export function imageSrc(raw: string | undefined): string | null {
   if (!raw) return null;
-  const url = parse(raw);
+  const trimmed = raw.trim();
+  if (trimmed.startsWith("/") && !trimmed.startsWith("//")) {
+    return trimmed;
+  }
+  const url = parse(trimmed);
   if (!url || (url.protocol !== "https:" && url.protocol !== "http:"))
     return null;
   if (url.username || url.password) return null;
+  if (url.pathname.startsWith("/uploads/")) {
+    return url.pathname;
+  }
   return url.href;
 }
 

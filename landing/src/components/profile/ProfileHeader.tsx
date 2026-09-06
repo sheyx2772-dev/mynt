@@ -1,14 +1,8 @@
-import { MapPin } from "lucide-react";
+import { Check, Crown, MapPin, Sparkles } from "lucide-react";
 
 import type { PublicProfile } from "@/lib/backend/profile";
 import { imageSrc } from "@/lib/profile/links";
-
-// The face, the name, the number. Everything else on the page is detail.
-//
-// Big and centred because of where it is read: somebody has just touched two
-// phones together and is holding one at arm's length to see who they met. The
-// picture is the answer to that, so it gets the top of the screen rather than a
-// thumbnail beside a heading.
+import ProfileInteractions from "./ProfileInteractions";
 
 function Initials({ name }: { name: string }) {
   const initials =
@@ -20,7 +14,7 @@ function Initials({ name }: { name: string }) {
       .join("") || "?";
 
   return (
-    <span className="flex size-28 items-center justify-center rounded-full bg-[var(--p-surface-2)] font-mono text-3xl font-semibold text-[var(--p-text-2)]">
+    <span className="flex size-24 items-center justify-center rounded-full bg-[var(--p-surface-2)] font-mono text-3xl font-semibold text-[var(--p-text-2)]">
       {initials}
     </span>
   );
@@ -34,50 +28,97 @@ export default function ProfileHeader({
   numberLabel: string;
 }) {
   const avatar = imageSrc(profile.rasm);
+  const banner = imageSrc(profile.banner);
   const role = [profile.lavozim, profile.kompaniya].filter(Boolean).join(" · ");
 
   return (
-    <header className="flex flex-col items-center px-2 text-center">
-      {avatar ? (
-        // Not next/image: one picture, already sized by the uploader, on our
-        // own object store. A loader for it would be a round trip to save a
-        // round trip.
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={avatar}
-          alt={profile.ism}
-          width={112}
-          height={112}
-          className="size-28 rounded-full object-cover ring-1 ring-[var(--p-line)]"
-        />
-      ) : (
-        <Initials name={profile.ism} />
-      )}
+    <header className="relative flex flex-col items-center text-center">
+      {/* Cover Banner Header */}
+      <div className="relative -mx-5 -mt-10 h-36 w-[calc(100%+2.5rem)] overflow-hidden rounded-b-3xl bg-gradient-to-b from-[var(--p-surface-2)] via-[var(--p-surface)] to-[var(--p-ground)] sm:h-44">
+        {banner ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={banner}
+            alt={profile.ism}
+            className="size-full object-cover opacity-90"
+          />
+        ) : (
+          <div className="relative size-full opacity-60">
+            {/* Atmospheric mountain twilight silhouette fallback */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--p-ground)] via-transparent to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-16 bg-[radial-gradient(ellipse_at_center,_var(--p-accent)_0%,_transparent_70%)] opacity-30" />
+          </div>
+        )}
+      </div>
 
-      <h1 className="mt-5 text-[28px] leading-8 font-semibold tracking-tight text-balance text-[var(--p-text)]">
-        {profile.ism}
-      </h1>
+      {/* Avatar with Glowing Halo Ring */}
+      <div className="relative -mt-14 mb-3.5 flex items-center justify-center">
+        <div className="rounded-full bg-[var(--p-ground)] p-1 ring-3 ring-[var(--p-accent)] shadow-[0_0_25px_var(--p-accent)] transition-all">
+          {avatar ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={avatar}
+              alt={profile.ism}
+              width={96}
+              height={96}
+              className="size-24 rounded-full object-cover"
+            />
+          ) : (
+            <Initials name={profile.ism} />
+          )}
+        </div>
+      </div>
+
+      {/* Name and Badges */}
+      <div className="flex flex-wrap items-center justify-center gap-1.5 px-2">
+        <span className="text-[var(--p-accent)]">✦</span>
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--p-text)]">
+          {profile.ism}
+        </h1>
+        <span className="text-[var(--p-accent)]">✦</span>
+
+        {/* Verified Checkmark Badge */}
+        <span
+          title="Tasdiqlangan profil"
+          className="inline-flex size-4.5 items-center justify-center rounded-full bg-blue-500 text-white shadow-sm"
+        >
+          <Check className="size-3" strokeWidth={3} />
+        </span>
+
+        {/* Crown Badge */}
+        <Crown className="size-4 text-amber-400 drop-shadow" />
+
+        {/* Glowing Flex Gold Tag */}
+        <span className="ml-1 inline-flex items-center gap-1 rounded-full border border-[var(--p-accent)]/50 bg-[var(--p-surface)] px-2.5 py-0.5 font-mono text-[10px] font-bold text-[var(--p-accent)] shadow-[0_0_10px_var(--p-accent)]">
+          <Sparkles className="size-2.5" /> FLEX GOLD
+        </span>
+      </div>
 
       {role && (
-        <p className="mt-1.5 text-[15px] leading-5 text-pretty text-[var(--p-text-2)]">
+        <p className="mt-1 text-sm font-medium text-[var(--p-text-2)]">
           {role}
         </p>
       )}
 
       {profile.shahar && (
-        <p className="mt-2 flex items-center gap-1.5 text-[13px] text-[var(--p-text-3)]">
-          <MapPin aria-hidden className="size-3.5" strokeWidth={1.75} />
+        <p className="mt-1.5 flex items-center gap-1 text-xs text-[var(--p-text-3)]">
+          <MapPin aria-hidden className="size-3" strokeWidth={2} />
           {profile.shahar}
         </p>
       )}
 
-      {/* The plate. This is the product — the thing engraved on the card in the
-          reader's hand — so it is stamped under the name rather than left in
-          the address bar. */}
-      <p className="mt-5 rounded-plate bg-[var(--p-surface)] px-3.5 py-1.5 font-mono text-sm font-semibold tracking-[0.22em] text-[var(--p-accent)]">
+      {/* The Plate Number */}
+      <div className="mt-3 mb-5 rounded-plate bg-[var(--p-surface)] px-3.5 py-1 font-mono text-xs font-bold tracking-[0.2em] text-[var(--p-accent)] shadow-inner">
         <span className="sr-only">{numberLabel}: </span>
-        {profile.raqam}
-      </p>
+        {profile.raqam} · Gold Premium
+      </div>
+
+      {/* Interactive Follow, Reactions, and Stats */}
+      <ProfileInteractions
+        followersCount={profile.obunachilar}
+        viewsCount={profile.korishlar}
+        raqam={profile.raqam}
+      />
     </header>
   );
 }
