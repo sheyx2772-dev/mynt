@@ -27,7 +27,7 @@ export default async function PointsPage({ params }: PageProps<"/kabinet/[handle
       <SubScreen
         handle={normalized}
         title={w.pointsTitle}
-        hint={`Har biriga o'z QR kodi va o'z NFC manzili tegadi — so'rov qaysi ${w.pointPrefix.toLowerCase()}dan kelganini shu hal qiladi.`}
+        hint={`Har biriga o'z QR kodi va o'z NFC manzili beriladi — so'rov qaysi ${w.pointPrefix.toLowerCase()}dan kelganini shu hal qiladi.`}
       >
         <PointsEditor handle={normalized} points={venue.points} w={w} />
       </SubScreen>

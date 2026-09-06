@@ -52,7 +52,7 @@ export function setupSteps(state: SetupState, words: { listTitle: string; points
       hint:
         state.points > 0
           ? `${state.points} ta — kodlarni chop eting va joyiga qo'ying.`
-          : `Har ${point}ning o'z kodi bo'ladi. Ro'yxatni yozing.`,
+          : `Har bir ${point}ning o'z kodi bo'ladi. Ro'yxatni yozing.`,
       screen: "nuqtalar",
       done: state.points > 0,
     },

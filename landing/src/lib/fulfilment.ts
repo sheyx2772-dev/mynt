@@ -118,7 +118,7 @@ const WORDS: Record<Lang, Record<Fulfilment, Words>> = {
       action: "Yasashga olish",
     },
     making: {
-      label: "Yasalyapti",
+      label: "Yasalmoqda",
       buyer: "Qurilmangiz yasalyapti",
       action: "Yuborildi deb belgilash",
     },

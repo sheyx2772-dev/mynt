@@ -459,20 +459,27 @@ export default function ProfileCard({ profile, lang, theme, banner: bannerProp }
   );
 }
 
-// ── Bio texts ────────────────────────────────────────────────────────────────
+// One plain clause each, naming what the organisation is and nothing more.
+//
+// These are sample cards, and the line's job is to show that a bio fits in the
+// space. It was doing a second job it had no business doing: fourteen
+// unsourced paragraphs calling real ministries and banks "leading",
+// "principal" and "modern", written in the superlative-and-triplet shape that
+// reads as generated the moment you see two of them side by side. Two profiles
+// at the same ministry also carried two different descriptions of it.
 const BIO: Record<string, string> = {
-  "tashkent-inn": "Toshkent Innovatsiya Markazi — shahar miqyosida innovatsion loyihalar, raqamli iqtisodiyot va texnologik startaplarni qo'llab-quvvatlash uchun tashkil etilgan markaz.",
-  "hokimiyat":    "Toshkent shahar hokimiyati — shahar infratuzilmasi, qurilish, kommunal xo'jalik va aholi xizmatlarini boshqaruvchi mahalliy ijroiya organ.",
-  "moliya":       "O'zbekiston Respublikasi Moliya Vazirligi — davlat moliya siyosati, byudjet rejalashtirish va soliq-bojxona tizimini boshqaruvchi asosiy idora.",
-  "iqtisodiyot":  "ATKRV — axborot texnologiyalari, raqamli infratuzilma va kommunikatsiya sohasini rivojlantirishga, investitsiyalarni jalb qilishga mas'ul vazirlik.",
-  "raqamli":      "ATKRV — O'zbekistonni raqamlashtirish, e-hukumat xizmatlarini kengaytirish va IT infratuzilmasini modernizatsiya qilishga mas'ul davlat idorasi.",
-  "nbu":          "O'zbekiston Respublikasi Markaziy Banki — milliy valyuta barqarorligi, pul-kredit siyosati va mamlakatning butun bank tizimini nazorat qiluvchi davlat muassasasi.",
-  "agrobank":     "Agrosanoat Banki — qishloq xo'jaligi va oziq-ovqat sanoatiga ixtisoslashgan, fermerlar va agrobiznesni kredit bilan ta'minlovchi yetakchi bank.",
-  "kapitalbank":  "Kapital Bank — innovatsion raqamli bank xizmatlari, to'lov kartalari va fintech mahsulotlari bilan O'zbekiston bank tizimida zamonaviy yetakchi.",
-  "yakubov":      "Yoshlar Ventures — erta bosqichdagi ta'sischilarni qo'llab-quvvatlovchi venchur fond; Markaziy Osiyo va yoshlar innovatsion ekotizimiga yo'naltirilgan.",
-  "uzv-fund":     "Yoshlar Ventures — yosh tadbirkorlar va texnologiya startaplarini seed va Series A bosqichlarda investitsiya, mentorlik hamda tarmoq bilan qo'llab-quvvatlash.",
-  "uzfar":        "United Ventures — iqtisodiy islohotlar va tezkor rivojlanish strategiyalarini ishlab chiqish hamda amalga oshirishga ixtisoslashgan strategik investitsiya fondi.",
-  "itpark":       "IT Park Uzbekistan — mamlakatimizdagi IT tarmog'ini rivojlantirish, startaplarga inkubatsiya, akseleratsiya va soliq imtiyozlarini taqdim etuvchi asosiy ekotizim.",
-  "chamber":      "Startup Garage — yosh tadbirkorlar va startaplarni qo'llab-quvvatlash, biznes akseleratsiya va texnologik loyihalarni rivojlantirishga ixtisoslashgan markaz.",
-  "uzreport":     "ICT Week Uzbekistan — axborot-kommunikatsiya texnologiyalari sohasidagi eng yirik yillik xalqaro forum, innovatsiya va raqamlashtirish markazi.",
+  "tashkent-inn": "Toshkent shahridagi innovatsiya va startap markazi.",
+  "hokimiyat":    "Toshkent shahrining mahalliy ijroiya hokimiyat organi.",
+  "moliya":       "O'zbekiston Respublikasining davlat byudjeti va moliya siyosati bilan shug'ullanadigan vazirligi.",
+  "iqtisodiyot":  "Axborot texnologiyalari va kommunikatsiyalar sohasidagi vazirlik.",
+  "raqamli":      "Axborot texnologiyalari va kommunikatsiyalar sohasidagi vazirlik.",
+  "nbu":          "O'zbekiston Respublikasining markaziy banki.",
+  "agrobank":     "Qishloq xo'jaligi va agrosanoatga xizmat ko'rsatadigan tijorat banki.",
+  "kapitalbank":  "O'zbekistondagi tijorat banki.",
+  "yakubov":      "Erta bosqichdagi startaplarga investitsiya qiladigan venchur fond.",
+  "uzv-fund":     "Erta bosqichdagi startaplarga investitsiya qiladigan venchur fond.",
+  "uzfar":        "O'zbekistonda ishlaydigan investitsiya fondi.",
+  "itpark":       "IT kompaniyalari va startaplar uchun texnologik park.",
+  "chamber":      "Startaplar uchun akselerator.",
+  "uzreport":     "Axborot-kommunikatsiya texnologiyalari bo'yicha yillik forum.",
 };

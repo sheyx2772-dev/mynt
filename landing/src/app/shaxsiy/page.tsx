@@ -270,7 +270,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
           <div className="mx-auto grid max-w-6xl gap-14 px-6 lg:grid-cols-[1fr_320px] lg:gap-20">
             <div>
               <p className="mb-3 text-ink-3 text-xs font-semibold tracking-widest uppercase">
-                Shaxsiy
+                {s.sectionPersonal}
               </p>
               <h2 className="max-w-md font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
                 {s.oneTap}
@@ -347,7 +347,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
         <section id="narx" className="scroll-mt-20 mx-auto max-w-6xl px-6 py-16 sm:py-24">
           <div className="mb-12 max-w-lg">
             <p className="mb-3 text-lime/80 [-webkit-text-stroke:0.3px_rgba(14,10,27,0.4)] text-xs font-semibold tracking-widest uppercase">
-              Narxlash
+              {s.navPricing}
             </p>
             <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-4xl">
               {s.priceOpen}
@@ -378,7 +378,7 @@ export default async function PersonalPage({ searchParams }: PageProps<"/shaxsiy
         <section id="tarif" className="mx-auto max-w-6xl px-6 pb-24">
           <div className="mb-10 max-w-lg">
             <p className="mb-3 text-ink-3 text-xs font-semibold tracking-widest uppercase">
-              Obuna
+              {s.sectionSubscription}
             </p>
             <h2 className="font-display text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
               {s.priceThree}

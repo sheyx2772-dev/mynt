@@ -56,5 +56,5 @@ export async function requestDesign(handle: string, wish: string): Promise<Reque
     params: { path: { raqam: handle } },
     body: { tilak: wish },
   });
-  return error ? { ok: false, error: "Bu handle sizniki emas." } : { ok: true };
+  return error ? { ok: false, error: "Bu raqam sizniki emas." } : { ok: true };
 }

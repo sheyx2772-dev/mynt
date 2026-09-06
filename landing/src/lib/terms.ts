@@ -189,13 +189,13 @@ export function terms(lang: Lang): {
     title: "Ommaviy oferta va shartlar",
     intro: `Bu sahifa ${COMPANY.legalName} va xaridor o'rtasidagi shartlarni belgilaydi. Saytda buyurtma berish va to'lovni amalga oshirish shu shartlarga rozilik bildirish hisoblanadi.`,
     authority:
-      "Ushbu hujjatning asl matni o'zbek tilida tuzilgan. Rus va ingliz tilidagi versiyalar qulaylik uchun berilgan; nizo yuzaga kelganda o'zbek tilidagi matn hisobga olinadi.",
+      "Ushbu hujjatning asl matni o'zbek tilida tuzilgan. Rus va ingliz tilidagi versiyalar qulaylik uchun berilgan; nizo yuzaga kelganda o'zbek tilidagi matn asosiy hisoblanadi.",
     devicePriceTitle: "Qurilma narxlari",
     sections: [
       {
         title: "Xizmat nima",
         body: [
-          "Flex — noyob raqam (handle) va u ochadigan shaxsiy profil. Raqam 3 ta harf va 3 ta raqamdan iborat, masalan FLX007. U flex.com.uz/FLX007 manzilida xaridorning profilini ochadi.",
+          "Flex — noyob raqam va u ochadigan shaxsiy profil. Raqam 3 ta harf va 3 ta raqamdan iborat, masalan FLX007. U flex.com.uz/FLX007 manzilida xaridorning profilini ochadi.",
           "Raqamni jismoniy qurilmada olib yurish mumkin: NFC karta, uzuk yoki braslet. Qurilma alohida mahsulot sifatida sotiladi.",
         ],
       },
@@ -211,7 +211,7 @@ export function terms(lang: Lang): {
         body: [
           `Raqam va qurilma bir marta to'lanadi. Profilning ishlab turishi uchun platformaga obuna alohida to'lanadi: oyiga ${money(premium.monthly)} yoki yiliga ${money(premium.yearly)}.`,
           `Obunasiz ham profil ishlaydi va raqam sizniki bo'lib qoladi — u hech qachon o'chirilmaydi. Oddiy tarifda ${FREE_LINK_LIMIT} tagacha havola, ${SERVICE_LIMIT.free} tagacha xizmat va narx, QR-kod va umumiy tashriflar soni mavjud. Obuna cheksiz havolalar, ${SERVICE_LIMIT.premium} tagacha xizmat, to'liq analitika, kelgan kontaktlar va ularni chiqarish, o'z fon rasmingiz hamda sahifadagi Flex yozuvini olib tashlashni ochadi.`,
-          "Obuna to'xtatilsa, profil oddiy rejaga qaytadi. Ma'lumotlar o'chirilmaydi.",
+          "Obuna to'xtatilsa, profil oddiy tarifga qaytadi. Ma'lumotlar o'chirilmaydi.",
         ],
       },
       {
@@ -239,7 +239,7 @@ export function terms(lang: Lang): {
       {
         title: "Raqamni boshqa odamga o'tkazish",
         body: [
-          "Raqam egasi uni istalgan vaqtda boshqa odamga o'tkazishi mumkin — kabinetdan, qabul qiluvchining elektron pochtasi orqali. O'tkazishda profil ma'lumotlari (ism, bio, havolalar, postlar, obunachilar) tozalanadi va yangi egaga o'tmaydi.",
+          "Raqam egasi uni istalgan vaqtda boshqa odamga o'tkazishi mumkin — kabinetdan, qabul qiluvchining elektron pochtasi orqali. O'tkazishda profil ma'lumotlari (ism, bio, havolalar, postlar, obunachilar) o'chiriladi va yangi egaga o'tmaydi.",
         ],
       },
       {
@@ -251,7 +251,7 @@ export function terms(lang: Lang): {
       {
         title: "Aloqa",
         body: [
-          "Savol yoki shikoyat bo'lsa shu manzillarga murojaat qiling. Har bir murojaat ish kuni davomida ko'rib chiqiladi.",
+          "Savol yoki shikoyat bo'lsa shu manzillarga murojaat qiling. Har bir murojaat bir ish kuni ichida ko'rib chiqiladi.",
         ],
       },
     ],

@@ -103,7 +103,7 @@ export default async function ResidentsPage(props: PageProps<"/rezidentlar">) {
           href="/katalog"
           className="mt-3 inline-flex items-center gap-1.5 text-sm text-ink-2 underline-offset-4 hover:text-flex-black hover:underline"
         >
-          {lang === "ru" ? "Образцы карточек и макеты" : "Karta namunalari va maketlar"}
+          {t.sampleLink}
           <span aria-hidden>→</span>
         </Link>
 

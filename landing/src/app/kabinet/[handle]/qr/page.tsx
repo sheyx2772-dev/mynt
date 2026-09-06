@@ -19,7 +19,7 @@ export default async function QrPage({ params }: PageProps<"/kabinet/[handle]/qr
       <SubScreen
         handle={normalized}
         title="QR-kod"
-        hint="NFC yo'q telefonlar uchun. Kartaga bosish uchun ham shu kod. Kartaga bosish uchun ham shu kod."
+        hint="NFC yo'q telefonlar uchun. Kartaga bosish uchun ham shu kod."
       >
         <div className="rounded-tile border border-ink-line bg-ink-s1 p-6 sm:p-8 text-center">
           <div className="mx-auto w-64 max-w-full rounded-card border border-ink-line p-5">

@@ -30,7 +30,7 @@ const HOME = {
     heroSecondary: "Ishlayotganini ko'rish",
     heroFacts: [
       "Toshkentda ertaga yetkazamiz",
-      "Payme · Click · Uzum",
+      "Payme · Click",
       "NFC yo'q bo'lsa QR bor",
     ],
     heroPhotoAlt: "Kartani telefonga tegizish lahzasi",
@@ -89,7 +89,7 @@ const HOME = {
       {
         name: "Kompaniya",
         points: [
-          "Har xodimga raqam, dizayn bitta",
+          "Har bir xodimga raqam, dizayn bitta",
           "Xodim ketsa — raqam kompaniyada qoladi",
           "Hisob-faktura, bitta to'lov",
         ],
@@ -98,7 +98,7 @@ const HOME = {
       {
         name: "Kafe va do'kon",
         points: [
-          "Har stolda QR va NFC — menyu uch tilda",
+          "Har bir stolda QR va NFC — menyu uch tilda",
           "Mehmon suv so'raydi — ofitsiantning Telegram'iga keladi",
           "Oy oxirida bitta hisobot",
         ],
@@ -116,11 +116,11 @@ const HOME = {
     trust: [
       {
         q: "NFC — yangi emas",
-        a: "Humo va Uzcard kartangizdagi kontaktsiz to'lov — o'sha texnologiya. Telefonlar 2018 yildan beri o'qiydi.",
+        a: "Humo va Uzcard kartangizdagi kontaktsiz to'lov — o'sha texnologiya. Telefonlar buni ancha yillardan beri o'qiydi.",
       },
       {
         q: "Telefonda NFC yo'qmi?",
-        a: "Har buyumda QR ham bor. Kamera bilan ochiladi.",
+        a: "Har bir buyumda QR ham bor. Kamera bilan ochiladi.",
       },
       {
         q: "Karta yo'qolsa?",
@@ -139,7 +139,7 @@ const HOME = {
     pricesAfter: "Obuna tugasa",
     pricesFree: "Bepul",
     perMonth: "oyiga",
-    perSeat: "xodimga",
+    perSeat: "o'ringa",
     pricesCta: "Tanlash",
 
     // -- 9. faq -----------------------------------------------------------
@@ -151,7 +151,7 @@ const HOME = {
       },
       {
         q: "iPhone'da ishlaydimi?",
-        a: "iPhone 7 dan boshlab hammasida. Android — 2018 yildan keyingi deyarli hammasi. Eskiroq telefonlar uchun har buyumda QR bor.",
+        a: "iPhone 7 dan boshlab hammasida. Android — 2018 yildan keyingi deyarli hammasi. Eskiroq telefonlar uchun har bir buyumda QR bor.",
       },
       {
         q: "Kartani kimdir tegizib olsa, nima ko'radi?",
@@ -167,7 +167,7 @@ const HOME = {
       },
       {
         q: "To'lov qanday?",
-        a: "Payme, Click, Uzum. Yuridik shaxslar uchun hisob-faktura.",
+        a: "Payme va Click. Yuridik shaxslar uchun hisob-faktura.",
       },
     ],
 
@@ -206,7 +206,7 @@ const HOME = {
     heroSecondary: "Посмотреть, как работает",
     heroFacts: [
       "По Ташкенту — завтра",
-      "Payme · Click · Uzum",
+      "Payme · Click",
       "Нет NFC — есть QR",
     ],
     heroPhotoAlt: "Момент касания карты телефоном",
@@ -335,7 +335,7 @@ const HOME = {
       },
       {
         q: "Как оплатить?",
-        a: "Payme, Click, Uzum. Для юридических лиц — счёт-фактура.",
+        a: "Payme и Click. Для юридических лиц — счёт-фактура.",
       },
     ],
 
@@ -372,7 +372,7 @@ const HOME = {
     heroSecondary: "See it working",
     heroFacts: [
       "Next-day delivery in Tashkent",
-      "Payme · Click · Uzum",
+      "Payme · Click",
       "No NFC? Every item carries a QR",
     ],
     heroPhotoAlt: "A card being touched to a phone",
@@ -501,7 +501,7 @@ const HOME = {
       },
       {
         q: "How do I pay?",
-        a: "Payme, Click, Uzum. Companies can be invoiced.",
+        a: "Payme and Click. Companies can be invoiced.",
       },
     ],
 

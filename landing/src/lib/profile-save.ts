@@ -25,7 +25,7 @@ export async function saveProfile(
   formData: FormData,
 ): Promise<SaveProfileResult> {
   const current = await getOwnedHandle(normalized);
-  if (!current) return { ok: false, error: "Bu handle sizga tegishli emas." };
+  if (!current) return { ok: false, error: "Bu raqam sizga tegishli emas." };
 
   const read = await readProfileForm(
     formData,

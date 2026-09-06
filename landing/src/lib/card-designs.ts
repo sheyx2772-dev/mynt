@@ -93,7 +93,7 @@ export const CARD_DESIGNS = [
     id: "paper",
     theme: "qogoz",
     name: "Paper",
-    description: "Oq, deyarli bo'sh. Faqat handle va ingichka chegara.",
+    description: "Oq, deyarli bo'sh. Faqat raqam va ingichka chegara.",
     accent: "steel",
   },
   {

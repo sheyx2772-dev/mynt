@@ -191,8 +191,8 @@ export const LAYOUTS = [
   },
   {
     name: "NFC vizitka — tungi",
-    note: "Xuddi shu joylashuv, qora fonda.",
-    who: "Qora fon, to'q sariq aksent. Kechqurun va yorug'da bir xil o'qiladi.",
+    note: "Xuddi shu joylashuv, qora fonda. To'q sariq aksent — kechqurun va yorug'da bir xil o'qiladi.",
+    who: "Kechqurun ishlaydigan joy — restoran, klub, tungi xizmat.",
     render: () => <NfcSample theme="nfc-tun" />,
   },
   {

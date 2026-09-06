@@ -41,7 +41,7 @@ const STRINGS = {
     company: "Kompaniya",
     note: "Izoh — nima haqida gaplashmoqchisiz",
     send: "Yuborish",
-    sending: "Yuborilyapti",
+    sending: "Yuborilmoqda",
     cancel: "Bekor qilish",
     reachYou: (name: string) => `${name} siz bilan bog'lana olishi uchun`,
     contactHint: (name: string) =>
@@ -51,7 +51,7 @@ const STRINGS = {
     comments: "Izohlar",
     commentPlaceholder: "Izoh yozing",
     commentSend: "Yuborish",
-    commentSending: "Yuborilyapti",
+    commentSending: "Yuborilmoqda",
     commentsEmpty: "Hali izoh yo'q.",
     commentSignIn: "Izoh yozish uchun kiring",
     recommend: "Tavsiya qilaman",
@@ -59,7 +59,7 @@ const STRINGS = {
     whoRecommended: "Tavsiya qilganlar",
     noPosts: "Bu profilda hali post yo'q.",
     ownItTitle: "Bu — Flex",
-    ownItLead: "Bir tegish bilan ochiladigan raqamli shaxs. Noyob raqam, shaxsiy profil va NFC karta.",
+    ownItLead: "Bir tegish bilan ochiladigan raqamli vizitka. Noyob raqam, shaxsiy profil va NFC karta.",
     ownItCta: "O'zingiznikini oling",
   },
   ru: {
@@ -206,6 +206,9 @@ export function pickLang(param: unknown, acceptLanguage: string | null): Lang {
 const SITE = {
   uz: {
     navPricing: "Narxlar",
+    sectionPersonal: "Shaxsiy",
+    sectionSubscription: "Obuna",
+    sampleLink: "Karta namunalari va maketlar",
     navPersonal: "Shaxsiy",
     navBusiness: "Biznes",
     navFaq: "Savollar",
@@ -228,7 +231,7 @@ const SITE = {
     pickDevice: "Qurilmani tanlang",
     pickDeviceDesc: "Karta, uzuk yoki braslet. Dizaynni ham o'zingiz tanlaysiz.",
     limited: "Cheklangan miqdor",
-    priceOpen: "Narx — to'liq shaffof",
+    priceOpen: "Narx — to'liq ochiq",
     priceThree: "Narx uch qismdan iborat",
     oneTap: "Bir tegish — va butun profilingiz ochiladi",
     devices: "Qurilmalar",
@@ -239,7 +242,6 @@ const SITE = {
     compare: "Taqqoslash",
     feature: "Xususiyat",
     faq: "Savol-javob",
-    footerTagline: "Bir tegish — va sizni to'liq ko'radi.",
     personalProfile: "Shaxsiy profil",
     teamCards: "Jamoa kartalari",
     contactCollection: "Kontakt yig'ish",
@@ -263,14 +265,13 @@ const SITE = {
     demoTagTwo: "UX",
     company: "Kompaniya",
     delivery: "Yetkazib berish va qaytarish shartlari",
-    heroTitleA: "Flex — sizning",
+    heroTitleA: "Flex —",
     heroTitleMark: "raqamli",
-    heroTitleB: "shaxsingiz",
+    heroTitleB: "vizitkangiz",
     heroLead: "Siz noyob raqam sotib olasiz — u umrbod sizniki. Uni karta, uzuk yoki braslet ko'rinishida olib yurasiz, tanlov sizniki. Uchalasi ham bitta profilni ochadi.",
     stepTap: "Tegizing",
     stepTapDesc: "Telefonga tegizasiz, profilingiz ochiladi. Hech kim ilova o'rnatmaydi.",
     stepHandleDesc: "3 harf + 3 raqam. Narx darhol ko'rinadi — yashirin to'lov yo'q.",
-    namespaceDesc: "Mumkin bo'lgan raqamlar shuncha — ortiq chiqmaydi. Har biri bittagina odamniki bo'ladi. Kombinatsiya qanchalik kamyob bo'lsa, u shunchalik qadrli.",
     pricingDesc: "Har bir raqam narxi ochiq formula bilan hisoblanadi: boshlang'ich narx × harf kamyobligi × raqam kamyobligi. Pastda o'zingiz sinab ko'ring.",
     subscriptionDesc: "Raqamni bir marta sotib olasiz va u sizniki. Qurilma — karta, uzuk yoki braslet — alohida mahsulot. Profil esa har oy ishlab turadi, shuning uchun platformaga obuna alohida.",
     tapDesc: "Kartani tegizasiz, brauzer o'zi ochiladi. Hech kim hech narsa o'rnatmaydi.",
@@ -285,7 +286,7 @@ const SITE = {
     checkFree: "Bandligini tekshirish",
     letters: "Harflar",
     digits: "Raqamlar",
-    basePrice: "Bazaviy narx",
+    basePrice: "Boshlang'ich narx",
     letterRarity: "Harf kamyobligi",
     digitRarity: "Raqam kamyobligi",
     totalPrice: "Jami narx",
@@ -304,11 +305,10 @@ const SITE = {
     pickHandleCta: "Raqam tanlash",
     searchPlaceholder: "Ism, raqam yoki shahar",
     searchWord: "Qidirish",
-    nothingFound: (q: string) => `"${q}" bo'yicha hech kim topilmadi.`,
-    handleCounts: (taken: string, free: string) => `${taken} ta handle band · ${free} ta bo'sh`,
+    nothingFound: (q: string) => `«${q}» bo'yicha hech kim topilmadi.`,
+    handleCounts: (taken: string, free: string) => `${taken} ta raqam band · ${free} ta bo'sh`,
     offerTitle: "Ommaviy oferta",
-    offerAuthority: "Ushbu hujjatning asl matni o'zbek tilida tuzilgan. Rus va ingliz tilidagi versiyalar qulaylik uchun berilgan; nizo yuzaga kelganda o'zbek tilidagi matn hisobga olinadi.",
-    tagline: "Sizning raqamli shaxsingiz",
+    tagline: "Raqamli vizitkangiz",
     metaDescription: "Noyob raqam, shaxsiy profil va NFC karta. Bir tegish bilan profilingizni ulashing; jamoangiz uchun raqamlar chiqaring va kontakt yig'ing.",
     // The homepage title. Kept apart from `tagline`, which is the brand line
     // in the footer: a search result has to say what is sold, a footer does not.
@@ -321,9 +321,9 @@ const SITE = {
       "Flex xizmatining ommaviy oferta shartlari: narxlar, yetkazib berish, qaytarish va firma rekvizitlari.",
     product: "Mahsulot",
     whyFlex: "Nega Flex?",
-    tiers: { common: "Oddiy", rare: "Noyob", epic: "Epik", legendary: "Afsonaviy", genesis: "Genesis" },
+    tiers: { common: "Oddiy", rare: "Kamyob", epic: "Epik", legendary: "Afsonaviy", genesis: "Genesis" },
     randomise: "Tasodifiy tanlash",
-    takeHandle: "{handle} ni band qilish",
+    takeHandle: "{handle}ni band qilish",
     formulaLabel: "Hisob",
     notForSale: "Bu raqam sotuvda emas.",
     takenWord: "raqam band",
@@ -351,7 +351,7 @@ const SITE = {
     menuReviewPlaceholder: "Nima yoqdi, nima yoqmadi?",
     menuReviewSend: "Yuborish",
     menuNoPoint: "Stol raqami",
-    yourHandle: "Sizning raqamingiz",
+    yourHandle: "Raqamingiz",
     statViews: "Ko'rish",
     statToday: "Bugun",
     statLeads: "Kontakt",
@@ -372,6 +372,9 @@ const SITE = {
   },
   ru: {
     navPricing: "Цены",
+    sectionPersonal: "Личное",
+    sectionSubscription: "Подписка",
+    sampleLink: "Образцы карточек и макеты",
     navPersonal: "Личный",
     navBusiness: "Бизнес",
     navFaq: "Вопросы",
@@ -405,7 +408,6 @@ const SITE = {
     compare: "Сравнение",
     feature: "Возможность",
     faq: "Вопросы и ответы",
-    footerTagline: "Одно касание — и вас видят полностью.",
     personalProfile: "Личный профиль",
     teamCards: "Карты для команды",
     contactCollection: "Сбор контактов",
@@ -436,7 +438,6 @@ const SITE = {
     stepTap: "Поднесите",
     stepTapDesc: "Подносите к телефону — профиль открывается. Приложение никому ставить не нужно.",
     stepHandleDesc: "3 буквы + 3 цифры. Цена видна сразу — скрытых платежей нет.",
-    namespaceDesc: "Столько номеров возможно — и больше не будет. Каждый принадлежит одному человеку. Чем реже сочетание, тем оно дороже.",
     pricingDesc: "Цена каждого номера считается по открытой формуле: базовая цена × редкость букв × редкость цифр. Проверьте расчёт ниже.",
     subscriptionDesc: "Номер покупается один раз и остаётся вашим. Устройство — карта, кольцо или браслет — отдельный товар. А профиль работает каждый месяц, поэтому подписка на платформу отдельно.",
     tapDesc: "Подносите карту — браузер открывается сам. Никто ничего не устанавливает.",
@@ -473,7 +474,6 @@ const SITE = {
     nothingFound: (q: string) => `По запросу "${q}" никого не нашлось.`,
     handleCounts: (taken: string, free: string) => `${taken} номеров занято · ${free} свободно`,
     offerTitle: "Публичная оферта",
-    offerAuthority: "Оригинал этого документа составлен на узбекском языке. Русская и английская версии приведены для удобства; при разногласиях применяется узбекский текст.",
     tagline: "Ваша цифровая личность",
     metaDescription: "Уникальный номер, личный профиль и NFC-карта. Делитесь собой одним касанием; выдавайте номера команде и собирайте контакты.",
     metaTitle: "Flex — NFC-визитка и уникальный номер",
@@ -534,6 +534,9 @@ const SITE = {
   },
   en: {
     navPricing: "Pricing",
+    sectionPersonal: "Personal",
+    sectionSubscription: "Subscription",
+    sampleLink: "Card samples and layouts",
     navPersonal: "Personal",
     navBusiness: "Business",
     navFaq: "FAQ",
@@ -567,7 +570,6 @@ const SITE = {
     compare: "Compared",
     feature: "Feature",
     faq: "Questions",
-    footerTagline: "One tap, and they see all of you.",
     personalProfile: "Personal profile",
     teamCards: "Team cards",
     contactCollection: "Contact collection",
@@ -598,7 +600,6 @@ const SITE = {
     stepTap: "Tap it",
     stepTapDesc: "Hold it to a phone and your profile opens. Nobody installs an app.",
     stepHandleDesc: "Three letters, three digits. The price is shown straight away — nothing hidden.",
-    namespaceDesc: "That is how many handles exist, and there will be no more. Each belongs to one person, and the rarer the combination the more it is worth.",
     pricingDesc: "Every handle is priced by a formula you can see: a base price × how rare the letters are × how rare the digits are. Try it below.",
     subscriptionDesc: "The handle is bought once and stays yours. The device — card, ring or bracelet — is a separate product. The profile runs every month, so the platform is subscribed to separately.",
     tapDesc: "Tap the card and the browser opens by itself. Nobody installs anything.",
@@ -635,7 +636,6 @@ const SITE = {
     nothingFound: (q: string) => `Nobody found for "${q}".`,
     handleCounts: (taken: string, free: string) => `${taken} handles taken · ${free} free`,
     offerTitle: "Public offer",
-    offerAuthority: "The original of this document is drawn up in Uzbek. The Russian and English versions are provided for convenience; in the event of a discrepancy the Uzbek text governs.",
     tagline: "Your digital identity",
     metaDescription: "A unique handle, your own profile and an NFC card. Share yourself with one tap; issue handles to your team and collect contacts.",
     metaTitle: "Flex — NFC business card and a unique handle",
@@ -719,15 +719,15 @@ const LANDING = {
     consumer: [
       {
         title: "Shaxsiy profil",
-        desc: "Flex profilingiz — barcha havolalaringiz, ijtimoiy tarmoqlaringiz va vizit ma'lumotlaringiz bitta sahifada.",
+        desc: "Flex profilingiz — barcha havolalaringiz, ijtimoiy tarmoqlaringiz va kontakt ma'lumotlaringiz bitta sahifada.",
       },
       {
         title: "Qurilmani o'zingiz tanlaysiz",
-        desc: "Karta, uzuk yoki braslet — uchalasi ham bir tegishda o'sha profilni ochadi. NFC yo'q telefonlar uchun NFC yo'q telefonlarda QR-kod ishlaydi.",
+        desc: "Karta, uzuk yoki braslet — uchalasi ham bir tegishda o'sha profilni ochadi. NFC yo'q telefonlarda QR-kod ishlaydi.",
       },
       {
         title: "Kamyob raqam",
-        desc: "3 harf + 3 raqam — cheklangan miqdor. Kamyob kombinatsiyalar qimmatroq, shaffof narx bilan.",
+        desc: "3 harf + 3 raqam — cheklangan miqdor. Kamyob kombinatsiyalar qimmatroq, narxi ochiq hisoblanadi.",
       },
       {
         title: "Analitika",
@@ -735,7 +735,7 @@ const LANDING = {
       },
       {
         title: "Avtovizitka",
-        desc: "Mashinangiz old oynasiga QR va NFC plastina. Yo'lda to'sib qo'ysangiz yoki faralaringiz yoniq qolsa — sizga xabar keladi, telefon raqamingiz esa ochilmaydi.",
+        desc: "Mashinangiz old oynasiga QR va NFC plastina. Yo'lda to'sib qo'ysangiz yoki chiroqlaringiz yoniq qolsa — sizga xabar keladi, telefon raqamingiz esa ochilmaydi.",
       },
     ],
     business: [
@@ -758,7 +758,7 @@ const LANDING = {
     ],
     comparison: [
       "Kamyob raqam",
-      "Shaffof narx hisoblagichi",
+      "Ochiq narx hisoblagichi",
       "Jismoniy NFC karta",
       "Jamoa tarifi",
       "Kontakt yig'ish",
@@ -767,15 +767,15 @@ const LANDING = {
     faqs: [
       {
         q: "Raqam nima va u qanday narxlanadi?",
-        a: "Raqam — 3 harf + 3 raqamdan iborat noyob kod (masalan FLX007), sizning profilingiz manzili bo'ladi. Narx bazaviy summadan, harflar va raqamlarning kamyobligiga qarab ko'payadigan koeffitsientlardan hisoblanadi. Narxlash sahifasida istalgan kombinatsiyani yozib, narxini darhol ko'rasiz.",
+        a: "Raqam — 3 harf + 3 raqamdan iborat noyob kod (masalan FLX007), profilingiz manzili bo'ladi. Narx bazaviy summadan, harflar va raqamlarning kamyobligiga qarab ko'payadigan koeffitsientlardan hisoblanadi. Narxlar sahifasida istalgan kombinatsiyani yozib, narxini darhol ko'rasiz.",
       },
       {
         q: "NFC qurilma qanday ishlaydi?",
-        a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, sizning Flex profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC ishlamaydigan telefonlar uchun NFC yo'q telefonlarda QR-kod orqali ochiladi.",
+        a: "Qurilmani (karta, uzuk yoki braslet) boshqa telefonga tegizganingizda, Flex profilingiz avtomatik ochiladi. Hech kim ilova o'rnatmaydi. NFC ishlamaydigan telefonlarda QR-kod orqali ochiladi.",
       },
       {
         q: "Kafe yoki mehmonxonaga nima beradi?",
-        a: "Har stol yoki xonaga alohida QR va NFC belgisi tegadi. Mehmon tegizadi — menyu yoki xizmatlar ro'yxati ochiladi, u yerdan ofitsiantni chaqiradi, hisob so'raydi yoki izoh qoldiradi. So'rov qaysi stoldan kelgani bilan kassadagi telefonda ovoz bilan chiqadi. Oyiga o'rtacha javob vaqti va qaysi stol ko'p chaqirgani hisobotda ko'rinadi.",
+        a: "Har bir stol yoki xonaga alohida QR va NFC belgisi beriladi. Mehmon tegizadi — menyu yoki xizmatlar ro'yxati ochiladi, u yerdan ofitsiantni chaqiradi, hisob so'raydi yoki izoh qoldiradi. So'rov qaysi stoldan kelgani bilan kassadagi telefonda ovoz bilan chiqadi. Oylik hisobotda o'rtacha javob vaqti va qaysi stol ko'p chaqirgani ko'rinadi.",
       },
       {
         q: "Jamoa uchun qancha xodim qo'shsam bo'ladi?",
@@ -783,7 +783,7 @@ const LANDING = {
       },
       {
         q: "Qanday to'layman?",
-        a: "Raqam va shaxsiy obuna uchun — Payme. Kafe, mehmonxona va firmalar uchun — hisob-faktura va bank o'tkazmasi: hujjatni kabinetdan o'zingiz olasiz, pul kelgach obuna uzayadi.",
+        a: "Raqam va shaxsiy obuna uchun — Payme. Kafe, mehmonxona va firmalar uchun — hisob-faktura va bank o'tkazmasi: hujjatni kabinetdan o'zingiz olasiz, pul kelgach obuna uzaytiriladi.",
       },
     ],
   },
@@ -1114,7 +1114,7 @@ const B2B = {
     ],
     pilotTitle: "Ishlab turibdi — hozir ochib ko'ring",
     pilotBody:
-      "Kafe va mehmonxona modullari tayyor: menyu yoki xizmatlar ro'yxati, har stol va xonaga alohida QR va NFC, mehmondan keladigan chaqiruv, kassa telefonida ovozli ro'yxat va hisobot. Quyidagi demo — haqiqiy obyekt, telefoningizda oching.",
+      "Kafe va mehmonxona modullari tayyor: menyu yoki xizmatlar ro'yxati, har bir stol va xonaga alohida QR va NFC, mehmondan keladigan chaqiruv, kassa telefonida ovozli ro'yxat va hisobot. Quyidagi demo — haqiqiy obyekt, telefoningizda oching.",
     pilotCta: "Demo menyuni ochish",
 
     coreEyebrow: "Qanday ishlaydi",
@@ -1124,7 +1124,7 @@ const B2B = {
     core: [
       {
         title: "Nuqta",
-        desc: "Stol 1–20, xona 101–250, eshik, basseyn. Har biri alohida manzil — qaysi biridan kelinganini o'zi biladi.",
+        desc: "Stol 1–20, xona 101–250, eshik, basseyn. Har biri alohida manzil — tizim qaysi biridan kelinganini o'zi biladi.",
       },
       {
         title: "So'rovlar qutisi",
@@ -1166,7 +1166,7 @@ const B2B = {
         ],
         staff: [],
         why: [
-          "Menyu narxi o'zgarsa qayta chop etiladi — dizayn, bosma, kutish. Bu yerda narx o'zgarishi bepul va bir daqiqa.",
+          "Menyudagi narx o'zgarsa, menyu qayta chop etiladi — dizayn, bosma, kutish. Bu yerda narxni o'zgartirish bepul va bir daqiqa.",
           "Norozi mehmon izohni Google yoki Yandex xaritasiga yozadi va u o'sha yerda qoladi. Bu yerda izoh avval egasiga keladi — muammoni mehmon ketguncha hal qilish imkoni bo'ladi.",
         ],
       },
@@ -1185,12 +1185,12 @@ const B2B = {
         ],
         owner: [
           "So'rovlar qutisi — xona raqami o'zi biriktiriladi",
-          "Bajarildi / kutmoqda holati",
+          "Bajarildi / kutilmoqda holati",
           "Restoran va spa bronlari",
           "Xona bo'yicha statistika",
         ],
         staff: [
-          "Farrosh eshikdagi tegga tegizadi — xona «tozalangan» bo'lib belgilanadi, vaqti bilan",
+          "Farrosh telefonini eshikdagi tegga tegizadi — xona «tozalangan» bo'lib belgilanadi, vaqti bilan",
           "Qog'oz varaq ham, alohida qurilma ham kerak emas",
         ],
         why: [
@@ -1241,7 +1241,7 @@ const B2B = {
         ],
         staff: [],
         why: [
-          "Sizning yo'nalishingiz ro'yxatda yo'qmi — so'rov qoldiring. Shakl bitta: buyumga tegiziladi, sahifa ochiladi, bitta ish bajariladi.",
+          "Yo'nalishingiz ro'yxatda yo'qmi — so'rov qoldiring. Shakl bitta: buyumga tegiziladi, sahifa ochiladi, bitta ish bajariladi.",
         ],
       },
     },
@@ -1249,7 +1249,7 @@ const B2B = {
     otherEyebrow: "Yana qayerda",
     otherTitle: "Boshqa xizmat obyektlari",
     otherLede:
-      "Mezon bitta: «buyumga tegiziladi → sahifa ochiladi va bitta ish bajariladi» degan shakl o'sha yerda haqiqiy muammoni yechadimi.",
+      "Mezon bitta: «buyumga tegiziladi → sahifa ochiladi va bitta ish bajariladi» degan shakl o'sha joyda haqiqiy muammoni yechadimi, yo'qmi.",
     tableHead: ["Yo'nalish", "Nuqta", "Nima qiladi"],
     others: [
       ["Go'zallik saloni, sartaroshxona", "Usta o'rindig'i", "Narxlar, ustaga yozilish, ishlari, izohlar"],
@@ -1263,7 +1263,7 @@ const B2B = {
     priceEyebrow: "Narx",
     priceTitle: "O'rin emas, obyekt",
     priceLede:
-      "To'lov obyekt bo'yicha, nuqta soniga qarab pog'onalanadi. Qurilmalar (taglik, stiker, teg) alohida va bir martalik.",
+      "To'lov obyekt uchun olinadi va nuqta soniga qarab bosqichlarga bo'linadi. Qurilmalar (taglik, stiker, teg) alohida va bir martalik.",
     pointsLabel: "Nuqtalar soni",
     monthlyWord: "oyiga",
     perPointWord: "bitta nuqtaga",
@@ -1772,8 +1772,8 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "shop" | "other", Screen>>
       chips: ["Salatlar", "Issiq taomlar", "Ichimlik"],
       rows: [
         ["Lag'mon", "Cho'zma, achchiq", "38 000"],
-        ["Achichuk salat", "Pomidor, piyoz, rayhon", "18 000"],
-        ["Choy — ko'k", "Choynak, 1 litr", "9 000"],
+        ["Achchiq-chuchuk", "Pomidor, piyoz, rayhon", "18 000"],
+        ["Ko'k choy", "Choynak, 1 litr", "9 000"],
       ],
       actions: [],
       primary: "Ofitsiantni chaqirish",
@@ -1799,7 +1799,7 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "shop" | "other", Screen>>
       rows: [
         ["Click orqali to'lash", "Summani o'zingiz kiritasiz", ""],
         ["Payme orqali to'lash", "", ""],
-        ["Karta raqami", "8600 •••• •••• 1234", "Nusxa"],
+        ["Karta raqami", "8600 •••• •••• 1234", "Nusxa olish"],
       ],
       actions: ["Firma rekvizitlari", "Tovarlar katalogi"],
       primary: "To'lash",
@@ -1810,7 +1810,7 @@ const SCREENS: Record<Lang, Record<"cafe" | "hotel" | "shop" | "other", Screen>>
       point: "Usta 3",
       chips: ["Dilnoza R. · stilist, 6 yil"],
       rows: [
-        ["Soch turmagi", "Yuvish bilan", "120 000"],
+        ["Soch olish", "Yuvish bilan", "120 000"],
         ["Bo'yash", "Uzunligiga qarab", "350 000"],
         ["Manikyur", "Gel-lak", "150 000"],
       ],
@@ -1955,7 +1955,7 @@ const PICKER = {
     metaDescription:
       "Flex qurilmalari va yo'nalishlari: karta, uzuk, braslet, avtovizitka; kafe, mehmonxona va do'kon uchun NFC.",
     title: "Nimani tanlaysiz?",
-    lead: "Raqamingizni qaysi buyumda olib yurasiz, yoki qaysi yo'nalishda ishlatasiz. Rasmni bosing — ichida hammasi bor.",
+    lead: "Raqamingizni qaysi buyumda olib yurasiz yoki qaysi yo'nalishda ishlatasiz. Rasmni bosing — ichida hammasi bor.",
     groupDevices: "Qurilmalar",
     groupDevicesNote: "Bittasini tanlaysiz, keyin ham almashtira olasiz",
     groupDirections: "Yo'nalishlar",
@@ -1990,7 +1990,7 @@ const PICKER = {
       name: "Avtovizitka",
       tagline: "Mashina old oynasida",
       description:
-        "QR va NFC plastina. Yo'lda to'sib qo'ysangiz yoki faralaringiz yoniq qolsa — sizga xabar keladi, telefon raqamingiz esa ochilmaydi.",
+        "QR va NFC plastina. Yo'lda to'sib qo'ysangiz yoki chiroqlaringiz yoniq qolsa — sizga xabar keladi, telefon raqamingiz esa ochilmaydi.",
     },
   },
 
