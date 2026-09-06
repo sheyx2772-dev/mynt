@@ -60,7 +60,7 @@ function Move({
       <input type="hidden" name="direction" value={direction} />
       <button
         title={direction === "up" ? "Yuqoriga" : "Pastga"}
-        className="flex h-8 w-6 items-center justify-center rounded-lg text-paper-3 hover:bg-ink-s2 hover:text-paper"
+        className="flex size-11 items-center justify-center rounded-lg text-paper-3 hover:bg-ink-s2 hover:text-paper"
       >
         {direction === "up" ? (
           <ChevronUp className="h-4 w-4" />
@@ -138,7 +138,7 @@ export default async function MenuAdminPage({
                 <Link
                   href={`/kabinet/${normalized}/menyu/bolim/${category.id}`}
                   title="Nomini o'zgartirish"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg text-paper-3 hover:bg-ink-s2 hover:text-paper"
+                  className="flex size-11 items-center justify-center rounded-lg text-paper-3 hover:bg-ink-s2 hover:text-paper"
                 >
                   <Pencil className="h-3.5 w-3.5" />
                 </Link>
@@ -227,7 +227,7 @@ export default async function MenuAdminPage({
                   <Link
                     href={`/kabinet/${normalized}/menyu/${item.id}`}
                     title="Tahrirlash"
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink-line text-paper-2 hover:bg-ink-s2"
+                    className="flex size-11 shrink-0 items-center justify-center rounded-lg border border-ink-line text-paper-2 hover:bg-ink-s2"
                   >
                     <Pencil className="h-4 w-4" />
                   </Link>
@@ -252,7 +252,7 @@ export default async function MenuAdminPage({
                           ? `${w.soldOut} deb belgilash`
                           : "Ro'yxatga qaytarish"
                       }
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-ink-line text-paper-2 hover:bg-ink-s2"
+                      className="flex size-11 items-center justify-center rounded-lg border border-ink-line text-paper-2 hover:bg-ink-s2"
                     >
                       {item.available ? (
                         <Eye className="h-4 w-4" />

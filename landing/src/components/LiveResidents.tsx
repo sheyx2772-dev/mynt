@@ -51,7 +51,7 @@ export default function LiveResidents({
                   key={r.normalized}
                   href={`/${r.normalized}`}
                   title={r.name}
-                  className="rounded-lg border border-ink-line bg-white/[0.06] px-2.5 py-1 font-tabular text-xs text-paper-2 transition-colors hover:border-paper-3 hover:text-white"
+                  className="rounded-lg border border-ink-line bg-white/[0.06] px-2.5 py-2.5 font-tabular text-xs text-paper-2 transition-colors hover:border-paper-3 hover:text-white"
                 >
                   {r.normalized}
                 </Link>

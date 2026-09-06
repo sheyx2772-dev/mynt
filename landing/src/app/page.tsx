@@ -711,20 +711,20 @@ export default async function Home({ searchParams }: PageProps<"/">) {
                 <li>
                   <a
                     href="#savollar"
-                    className="block py-1.5 transition-colors hover:text-white"
+                    className="block py-2.5 transition-colors hover:text-white"
                   >
                     {s.navFaq}
                   </a>
                 </li>
                 <li>
-                  <Link href="/shartlar" className="block py-1.5 transition-colors hover:text-white">
+                  <Link href="/shartlar" className="block py-2.5 transition-colors hover:text-white">
                     {s.footerTerms}
                   </Link>
                 </li>
                 <li>
                   <a
                     href={`tel:${COMPANY.phoneHref}`}
-                    className="block py-1.5 transition-colors hover:text-white"
+                    className="block py-2.5 transition-colors hover:text-white"
                   >
                     {COMPANY.phone}
                   </a>
@@ -737,7 +737,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               &copy; {new Date().getFullYear()} Flex &mdash; {COMPANY.legalName}. STIR{" "}
               {COMPANY.inn}.
             </p>
-            <Link href="/shartlar" className="block py-1.5 transition-colors hover:text-paper-2">
+            <Link href="/shartlar" className="block py-2.5 transition-colors hover:text-paper-2">
               {s.delivery}
             </Link>
           </div>

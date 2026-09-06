@@ -637,7 +637,7 @@ async function VanityHandlePage({
           {isOwner && (
             <Link
               href={`/kabinet/${normalized}`}
-              className="mt-6 flex h-10 items-center justify-center rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
+              className="mt-6 flex h-11 items-center justify-center rounded-md bg-slab text-[11px] font-bold tracking-[0.04em] text-on-slab uppercase"
             >
               Tahrirlash
             </Link>

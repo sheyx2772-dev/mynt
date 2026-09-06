@@ -63,7 +63,7 @@ function DraftActions({ draft, phone }: { draft: string; phone: string | null })
           href={`https://t.me/+${phone.replace(/[^0-9]/g, "")}`}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center gap-1.5 rounded-lg bg-ink-s1/10 px-2.5 py-1.5 text-[12px] font-medium text-paper transition-colors hover:bg-ink-s1/15"
+          className="flex items-center gap-1.5 rounded-lg bg-ink-s1/10 px-2.5 py-2.5 text-[12px] font-medium text-paper transition-colors hover:bg-ink-s1/15"
         >
           <Send className="h-3 w-3" />
           Telegram

@@ -133,7 +133,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
           <Link
             href="/kabinet/xabarlar"
             aria-label="Xabarlar"
-            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-ink-line text-paper-2 transition-colors hover:bg-ink-s2"
+            className="relative flex h-11 w-10 items-center justify-center rounded-full border border-ink-line text-paper-2 transition-colors hover:bg-ink-s2"
           >
             <Bell className="h-4 w-4" />
             {/* A count rather than a dot: "three leads waiting" is worth
@@ -147,7 +147,7 @@ export default async function CabinetPage(props: PageProps<"/kabinet">) {
           <Link
             href="/lenta"
             aria-label="Lenta"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-ink-line text-paper-2 transition-colors hover:bg-ink-s2 lg:flex"
+            className="flex h-11 w-10 items-center justify-center rounded-full border border-ink-line text-paper-2 transition-colors hover:bg-ink-s2 lg:flex"
           >
             <Rss className="h-4 w-4" />
           </Link>

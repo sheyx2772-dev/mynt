@@ -59,7 +59,7 @@ export default function AssignHandleForm({ handle }: { handle: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-ink-s2 px-3.5 py-1.5 text-xs font-medium text-paper disabled:opacity-50"
+        className="rounded-lg bg-ink-s2 px-3.5 py-2.5 text-xs font-medium text-paper disabled:opacity-50"
       >
         {pending ? "..." : "Yuborish"}
       </button>

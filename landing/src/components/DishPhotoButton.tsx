@@ -63,7 +63,7 @@ export default function DishPhotoButton({
           <input type="hidden" name="remove" value="1" />
           <button
             title="Rasmni olib tashlash"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-ink-line text-paper-3 hover:bg-danger-ink/10 hover:text-danger-ink"
+            className="flex size-11 items-center justify-center rounded-lg border border-ink-line text-paper-3 hover:bg-danger-ink/10 hover:text-danger-ink"
           >
             <ImageOff className="h-4 w-4" />
           </button>

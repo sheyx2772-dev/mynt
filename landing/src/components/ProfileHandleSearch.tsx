@@ -46,7 +46,7 @@ export default function ProfileHandleSearch() {
           type="submit"
           disabled={parseHandle(value) === null}
           aria-label="Qidirish"
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-flex-black text-white transition-opacity disabled:opacity-25"
+          className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-flex-black text-white transition-opacity disabled:opacity-25"
         >
           <Search className="h-4 w-4" />
         </button>
