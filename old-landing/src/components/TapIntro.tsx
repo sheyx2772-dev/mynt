@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 
 import Mark from "@/components/Mark";
 
@@ -29,42 +29,55 @@ import Mark from "@/components/Mark";
 const KEY = "flex:tapped";
 const HOLD = 900;
 
-export default function TapIntro({ handle }: { handle: string }) {
-  // Starts closed and opens in an effect rather than starting open: the server
-  // renders this too, and a splash in the HTML would cover the profile for
-  // anyone whose JavaScript never arrives.
-  const [shown, setShown] = useState(false);
-  const [leaving, setLeaving] = useState(false);
+// Decided once per handle, the first time the client asks, and remembered:
+// the same tap must answer the same way for the whole visit, and reading
+// storage afresh on every render would say "seen" the moment it was marked.
+const decided = new Map<string, boolean>();
 
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+function freshTap(handle: string): boolean {
+  const known = decided.get(handle);
+  if (known !== undefined) return known;
 
-    let seen = false;
+  let fresh = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (fresh) {
     try {
-      seen = sessionStorage.getItem(KEY) === handle;
+      fresh = sessionStorage.getItem(KEY) !== handle;
       sessionStorage.setItem(KEY, handle);
     } catch {
-      // A private window can refuse storage. Showing it once more is a smaller
-      // fault than not showing it at all, so this carries on.
+      // A private window can refuse storage. Showing it once more is a
+      // smaller fault than not showing it at all, so this carries on.
     }
-    if (seen) return;
+  }
+  decided.set(handle, fresh);
+  return fresh;
+}
 
-    setShown(true);
-    const fade = window.setTimeout(() => setLeaving(true), HOLD);
-    const gone = window.setTimeout(() => setShown(false), HOLD + 420);
+const never = () => () => {};
+
+export default function TapIntro({ handle }: { handle: string }) {
+  // Closed on the server and opened by the client's own answer, rather than
+  // starting open: a splash in the HTML would cover the profile for anyone
+  // whose JavaScript never arrives.
+  const fresh = useSyncExternalStore(never, () => freshTap(handle), () => false);
+  const [phase, setPhase] = useState<"lit" | "fading" | "done">("lit");
+
+  useEffect(() => {
+    if (!fresh) return;
+    const fade = window.setTimeout(() => setPhase("fading"), HOLD);
+    const gone = window.setTimeout(() => setPhase("done"), HOLD + 420);
     return () => {
       window.clearTimeout(fade);
       window.clearTimeout(gone);
     };
-  }, [handle]);
+  }, [fresh]);
 
-  if (!shown) return null;
+  if (!fresh || phase === "done") return null;
 
   return (
     <div
       aria-hidden
       className={`fixed inset-0 z-[100] flex items-center justify-center bg-black transition-opacity duration-[420ms] ease-out ${
-        leaving ? "pointer-events-none opacity-0" : "opacity-100"
+        phase === "fading" ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
     >
       <span className="tap-intro-mark flex items-center gap-3 text-white">
